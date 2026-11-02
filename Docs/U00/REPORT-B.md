@@ -1,6 +1,6 @@
 ﻿# REPORT-B — U00-B
 
-Trạng thái: BLOCKED — quyền ghi metadata Git local. Không bắt đầu U00-C.
+Trạng thái hiện tại: READY_FOR_REVIEW — kiểm tra baseline GitHub và clone khôi phục đã đạt ngày 2026-11-02. Không bắt đầu U00-C. Các mục BLOCKED bên dưới là lịch sử được giữ nguyên.
 
 ## Phạm vi và kết quả
 
@@ -58,3 +58,36 @@ git -C <absolute-new-restore-directory> rev-parse HEAD
 So SHA256 từng Content với ASSET_REGISTER; xác nhận .uasset/.umap là binary thật, không bắt đầu bằng LFS pointer header. So Git tree/blob text với baseline và working tree sạch thay vì so byte CRLF/LF. Xác nhận token key không có trong config tracked và AFS false. Clone cùng ổ chỉ kiểm tái lập, không bảo vệ hỏng ổ; GitHub là nguồn ngoài máy. Chưa chạy những lệnh khôi phục này, không coi đã đạt.
 
 Đề nghị giám sát xử lý quyền filesystem .git rồi giao tiếp tục B. Chưa thể READY_FOR_REVIEW cho nghiệm thu B; không khẳng định người giám sát đã nghiệm thu. Không bắt đầu C.
+
+## Xác minh nghiệm thu bổ sung — 2026-11-02
+
+Baseline đã tồn tại khi bắt đầu lượt xác minh: `999057852192ca51d3cf45598bf7e06cf45b8eee` (Initial commit). Không tạo lại hoặc sửa commit này. `git ls-remote origin refs/heads/main` trả đúng SHA trên; local HEAD khớp. Remote: https://github.com/HoangAnh411/ANIMEMMORPG. Lỗi quyền Git trước đây được giữ làm lịch sử; lượt này không sửa ACL.
+
+| Kiểm tra thực chạy | Kết quả |
+| --- | --- |
+| Danh sách tracked baseline | 855 file; 0 file trong Binaries/Intermediate/Saved/DerivedDataCache/Artifacts/.vs/.codex |
+| git lfs ls-files | 753 file; attributes uasset/umap là LFS, -text |
+| Quét text từ git show HEAD:path | 0 file khớp private-key header, GitHub/AWS token hoặc assignment SecurityToken/Password/ClientSecret/ApiKey/AccessToken có giá trị; không bảo đảm phát hiện mọi loại bí mật |
+| Config trong commit | Không có SecurityToken; AFS bEnablePlugin=False |
+| git clone từ GitHub | Thành công vào Artifacts/U00/RestoreCheck-20261102-122426 |
+| git lfs pull; git lfs fsck trong clone | Exit 0; Git LFS fsck OK |
+| Content clone so manifest | Đủ 753/753; SHA-256 mismatch 0; LFS pointer còn lại 0 |
+| Git tree và mọi entry blob/mode/path | Baseline và clone cùng tree de7534708d9ee1c0513fdec2aa9befd7ffc36689; khác biệt 0, bao gồm text blob |
+| git status --porcelain trong clone | Rỗng, working tree sạch |
+
+Bằng chứng máy đọc: `Artifacts/U00/verification-B.json`; thư mục Artifacts được ignore, không đưa clone/build output vào commit. Phép đọc trong sandbox có cảnh báo không đọc được global ignore tại profile; lệnh vẫn exit 0. Trạng thái clone cũng được kiểm lại ngoài sandbox trước commit tài liệu. Lượt đọc mạng đầu bị allowlist chặn; retry được duyệt thành công. Không có lỗi kiểm chứng nội dung hoặc LFS.
+
+### Khôi phục đúng baseline đã kiểm chứng
+
+Dùng một đường dẫn mới chưa tồn tại; không ghi đè thư mục có dữ liệu:
+
+```powershell
+git clone https://github.com/HoangAnh411/ANIMEMMORPG <absolute-new-restore-directory>
+git -C <absolute-new-restore-directory> checkout --detach 999057852192ca51d3cf45598bf7e06cf45b8eee
+git -C <absolute-new-restore-directory> lfs pull
+git -C <absolute-new-restore-directory> lfs fsck
+git -C <absolute-new-restore-directory> status --porcelain
+git -C <absolute-new-restore-directory> rev-parse HEAD
+```
+
+Kiểm Content theo SHA256 trong ASSET_REGISTER.csv; đếm file và kiểm pointer như bảng trên. Để lấy tài liệu mới nhất thay vì baseline cố định, dùng main và ghi lại SHA thực tế. Clone cùng ổ là kiểm tra khôi phục từ remote, không bảo vệ hỏng ổ đĩa. Chưa build, Play, test Unreal, package hoặc bắt đầu U00-C. READY_FOR_REVIEW là trạng thái chờ giám sát, không tuyên bố đã được giám sát nghiệm thu.
