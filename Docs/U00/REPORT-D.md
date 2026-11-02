@@ -2,6 +2,14 @@
 
 Trạng thái: BLOCKED phần kiểm chứng Automation C++; phần triển khai và kiểm tra script sẵn sàng review. Không báo đạt 0 test. Full build được người dùng dời sang nghiệm thu tích hợp riêng và không là lý do yêu cầu đóng Editor trong lượt này.
 
+## Sửa lỗi compile C4459 — 2026-11-02
+
+Live Coding do người dùng kích hoạt gặp C4459: hằng Tolerance ở anonymous namespace trong FoundationTests.cpp đụng tham số cùng tên của engine khi unity build ghép file. Đã chuyển hằng vào hai hàm test sử dụng; không sửa engine, tắt warning hoặc đổi compiler.
+
+AI trực tiếp chạy UBT qua Build.bat với -LiveCoding, LiveCodingModules/LiveCodingManifest hiện có, -WaitMutex -LiveCodingLimit=100. Lượt mặc định PASS exit 0 (19.13s), adaptive build tách FoundationTests.cpp. Kiểm lại với -DisableAdaptiveUnity: Module.AnimeMMORPG.cpp PASS exit 0 (16.72s), không còn C4459. Log: Artifacts/U00/D-C4459-Fix/LiveCodingCompile.log và LiveCodingUnityCompile.log. Còn warning preferred compiler/C4996 đã biết.
+
+Editor giữ mở. Kết quả UBT -LiveCoding chỉ chứng minh compile, không chứng minh Console đã link/apply patch. Automation C++ vẫn NOT-RUN; chưa nâng nghiệm thu D. MCP discovery thành công; engine có console command LiveCoding.Compile/CompileSync nhưng chưa xác minh được tool gọi command trong Editor. Không yêu cầu người dùng build lại để xác minh lỗi compile này. Không Play/package/full build.
+
 ## Nguồn và phần thực hiện
 
 Project D:/Data/AnimeMMORPG/AnimeMMORPG.uproject; commit nền 6f042e9c9942a3cbe0aff852f6ffae070fe5c108, nhánh u00/d-foundation. Đọc Description/ROADMAP/REPORT-C và quy tắc U00 trong giao việc; không tìm thấy AGENTS.md ở phép dò project. Token AFS local tiếp tục ngoài commit; không sửa Config, không đóng/kill Editor, không bỏ nội dung chưa lưu. Không thay luật Description để làm test đạt.

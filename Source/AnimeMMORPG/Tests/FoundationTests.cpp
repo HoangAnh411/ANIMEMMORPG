@@ -4,11 +4,11 @@
 #include "Math/Transform.h"
 
 using namespace AnimeMMORPG::Foundation;
-namespace { constexpr double Tolerance = 1.e-9; }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU00Units, "AnimeMMORPG.U00.Foundation.Units", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 bool FU00Units::RunTest(const FString& Parameters)
 {
+    constexpr double Tolerance = 1.e-9;
     const double Meters[] = {0.0, 1.0, 10.0, -2.5};
     const double Centimeters[] = {0.0, 100.0, 1000.0, -250.0};
     for (int32 I = 0; I < 4; ++I)
@@ -27,6 +27,7 @@ bool FU00Units::RunTest(const FString& Parameters)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU00Axes, "AnimeMMORPG.U00.Foundation.Axes", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 bool FU00Axes::RunTest(const FString& Parameters)
 {
+    constexpr double Tolerance = 1.e-9;
     TestTrue(TEXT("Forward +X"), FVector::ForwardVector.Equals(FVector(1, 0, 0), Tolerance));
     TestTrue(TEXT("Right +Y"), FVector::RightVector.Equals(FVector(0, 1, 0), Tolerance));
     TestTrue(TEXT("Up +Z"), FVector::UpVector.Equals(FVector(0, 0, 1), Tolerance));
