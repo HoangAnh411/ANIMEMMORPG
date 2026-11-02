@@ -43,3 +43,9 @@ Editor hiện để mở, không tự đóng/kill/discard nội dung. Khi khởi
 Chỉ commit Scripts/U00.ps1 và Docs/U00/REPORT-C.md trên u00/c-build; SHA commit và kết quả push đối chiếu bằng git log/ls-remote sau commit. Config local có token tự sinh được giữ ngoài index. Không git add toàn workspace; Artifacts/log/binary không commit. Git sandbox không ghi được index.lock nên thao tác nhánh/commit dùng tài khoản chủ máy với safe.directory giới hạn từng lệnh, không đổi global policy/ACL.
 
 Không chạy Automation test (đợt D), Play hoặc package. Chưa nghiệm thu U01/gameplay, U04/performance hoặc U05/network. Đề nghị giám sát review C, xử lý config local khi cần, merge vào main sau nghiệm thu rồi mới giao D từ commit đã merge; không tự bắt đầu D.
+
+## Điều chỉnh quy tắc Editor sau nghiệm thu C
+
+Theo chỉ thị mới của người dùng: đọc/MCP/tài liệu/review/commit không yêu cầu đóng Editor; asset giữ Editor mở và lưu trước commit. Build đầy đủ module Editor mới yêu cầu đóng Editor của đúng project. Scripts/U00.ps1 nay đọc command line qua Win32_Process và so khớp đường dẫn project tuyệt đối, không chặn chỉ vì Editor của project khác đang chạy. Nếu không đọc được process/command line, báo lỗi không xác định được project thay vì kết luận mọi Editor đều xung đột. Không tự đóng tiến trình.
+
+Token AFS local được giữ ngoài commit khi làm việc; không yêu cầu đóng Editor/xóa token cho mỗi commit. Việc nhỏ riêng chưa triển khai: điều tra và ngăn AFS tự ghi token vào tracked config dù đã tắt AFS, dựa source config lifecycle; tiêu chí là mở lại Editor không thêm secret vào tracked config, không làm xác thực optional và không đổi plugin/renderer ngoài nhiệm vụ được giao. Không sửa config trong lượt điều chỉnh này. Commit 2e3547c đã nghiệm thu được giữ nguyên; sửa script là bổ sung cần review, không tuyên bố build lại.
