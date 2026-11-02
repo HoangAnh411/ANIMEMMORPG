@@ -4,6 +4,35 @@
  [Parameter(Mandatory=$true)][string]$EngineRoot,
  [Parameter(Mandatory=$true)][string]$OutputRoot
 )
+function Assert-EditorProjectSafe {
+ param([string]$CommandLine,[int]$EditorPid,[string]$TargetProject)
+ $unknown="Cannot identify project for Editor PID $EditorPid; inspect its project before building"
+ if([string]::IsNullOrWhiteSpace($CommandLine)){throw $unknown}
+ # Accept only balanced, plainly quoted Windows arguments; ambiguous input fails closed.
+ if(([regex]::Matches($CommandLine,'"').Count % 2) -ne 0){throw $unknown}
+ $tokens=@([regex]::Matches($CommandLine,'(?:[^\s"]+|"[^"]*")+') | ForEach-Object {$_.Value.Replace('"','')})
+ if($tokens.Count -lt 2){throw $unknown}
+ $candidates=@()
+ for($i=1;$i -lt $tokens.Count;$i++){
+  $token=$tokens[$i]
+  if($token -match '^(?i)-project=(.*)$'){$candidates+= $Matches[1]}
+  elseif($token -ieq '-project'){
+   if($i+1 -ge $tokens.Count){throw $unknown}
+   $i++; $candidates+=$tokens[$i]
+  }
+  elseif($i -eq 1 -and !$token.StartsWith('-')){$candidates+=$token}
+ }
+ if($candidates.Count -ne 1){throw $unknown}
+ $candidate=$candidates[0].Replace('/','\')
+ # Drive-relative, root-relative and project-name arguments are not proof of another project.
+ if($candidate -notmatch '^(?:[A-Za-z]:\\|\\\\[^\\]+\\[^\\]+\\)' -or [IO.Path]::GetExtension($candidate) -ine '.uproject'){throw $unknown}
+ if(!(Test-Path -LiteralPath $candidate -PathType Leaf)){throw $unknown}
+ $identified=(Resolve-Path -LiteralPath $candidate).ProviderPath
+ $target=(Resolve-Path -LiteralPath $TargetProject).ProviderPath
+ if([string]::Equals($identified,$target,[StringComparison]::OrdinalIgnoreCase)){
+  throw "Save and close Editor PID $EditorPid for this project before full build"
+ }
+}
 $ErrorActionPreference='Stop'
 try {
  foreach($path in @($ProjectPath,$EngineRoot,$OutputRoot)){if(![IO.Path]::IsPathRooted($path)){throw 'All paths must be absolute'}}
@@ -15,10 +44,7 @@ try {
  if(!(Test-Path -LiteralPath $build)){throw 'Build.bat missing'}
  $editors=@(Get-CimInstance Win32_Process -Filter "Name='UnrealEditor.exe'")
  foreach($editor in $editors){
-  if([string]::IsNullOrWhiteSpace($editor.CommandLine)){throw "Cannot identify project for Editor PID $($editor.ProcessId); inspect its project before building"}
-  $command=$editor.CommandLine.Replace('/','\')
-  $projectPattern='(?i)(?:^|[\s"=])'+[regex]::Escape($ProjectPath.Replace('/','\'))+'(?=$|[\s"])'
-  if($command -match $projectPattern){throw "Save and close Editor PID $($editor.ProcessId) for this project before full build"}
+  Assert-EditorProjectSafe -CommandLine $editor.CommandLine -EditorPid $editor.ProcessId -TargetProject $ProjectPath
  }
  $run=Join-Path $OutputRoot ('Build-'+(Get-Date -Format 'yyyyMMdd-HHmmss-fff')+'-'+[guid]::NewGuid().ToString('N').Substring(0,8))
  New-Item -ItemType Directory -Path $run | Out-Null
