@@ -1,5 +1,5 @@
 ﻿param(
- [Parameter(Mandatory=$true)][ValidateSet('Build')][string]$Task,
+ [Parameter(Mandatory=$true)][ValidateSet('Build','Test')][string]$Task,
  [Parameter(Mandatory=$true)][string]$ProjectPath,
  [Parameter(Mandatory=$true)][string]$EngineRoot,
  [Parameter(Mandatory=$true)][string]$OutputRoot
@@ -33,6 +33,21 @@ function Assert-EditorProjectSafe {
   throw "Save and close Editor PID $EditorPid for this project before full build"
  }
 }
+function Assert-U00AutomationReport {
+ param([string]$ReportPath,[string]$LogPath)
+ $result=Get-Content -Raw -LiteralPath $ReportPath | ConvertFrom-Json
+ $tests=@($result.tests | Where-Object {$null -ne $_})
+ if($tests.Count -eq 0){throw 'Zero Automation tests executed'}
+ $expected=@('Units','Axes','HalfOpenInterval','CallOrder') | ForEach-Object {'AnimeMMORPG.U00.Foundation.'+$_}
+ $actual=@($tests | ForEach-Object {$_.fullTestPath})
+ if(@(Compare-Object $expected $actual).Count -ne 0){throw 'Expected U00 test set missing or unexpected'}
+ foreach($test in $tests){if($test.state -cne 'Success'){throw 'Failed or incomplete Automation test'}}
+ foreach($field in @('failed','notRun','inProcess')){if($null -eq $result.$field -or $result.$field -ne 0){throw 'Incomplete or failed Automation summary'}}
+ if(($result.succeeded+$result.succeededWithWarnings) -ne $tests.Count){throw 'Inconsistent Automation success count'}
+ $text=Get-Content -Raw -LiteralPath $LogPath
+ if($text -notmatch 'Automation Test Queue Empty\s+([1-9][0-9]*) tests performed' -or [int]$Matches[1] -ne $tests.Count){throw 'Missing or inconsistent test queue completion'}
+ return $tests.Count
+}
 $ErrorActionPreference='Stop'
 try {
  foreach($path in @($ProjectPath,$EngineRoot,$OutputRoot)){if(![IO.Path]::IsPathRooted($path)){throw 'All paths must be absolute'}}
@@ -42,6 +57,26 @@ try {
  $version=Get-Content -Raw (Join-Path $EngineRoot 'Engine/Build/Build.version') | ConvertFrom-Json
  if($version.MajorVersion -ne 5 -or $version.MinorVersion -ne 8 -or $version.PatchVersion -ne 4 -or $version.Changelist -ne 58902052){throw 'Engine must be UE 5.8.4 CL 58902052'}
  if(!(Test-Path -LiteralPath $build)){throw 'Build.bat missing'}
+ if($Task -eq 'Test'){
+  $run=Join-Path $OutputRoot ('Test-'+(Get-Date -Format 'yyyyMMdd-HHmmss-fff')+'-'+[guid]::NewGuid().ToString('N').Substring(0,8))
+  New-Item -ItemType Directory -Path $run | Out-Null
+  $exe=Join-Path $EngineRoot 'Engine/Binaries/Win64/UnrealEditor-Cmd.exe'
+  if(!(Test-Path -LiteralPath $exe)){throw 'UnrealEditor-Cmd.exe missing'}
+  $report=Join-Path $run 'Report'
+  $log=Join-Path $run 'Automation.log'
+  $arguments=@(('"'+$ProjectPath+'"'),'-unattended','-nop4','-nosplash','-NullRHI','-nosound','-ExecCmds="Automation RunTests AnimeMMORPG.U00"','-TestExit="Automation Test Queue Empty"',('-ReportExportPath="'+$report+'"'),('-abslog="'+$log+'"'))
+  @{StartedAt=(Get-Date -Format o);Executable=$exe;Arguments=$arguments;Project=$ProjectPath} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $run 'Test.command.json')
+  $process=Start-Process -FilePath $exe -ArgumentList $arguments -WindowStyle Hidden -PassThru
+  if(!$process.WaitForExit(600000)){throw "Automation timed out; process PID $($process.Id) left running for inspection"}
+  $process.Refresh()
+  if($process.ExitCode -ne 0){throw "Automation process exit code $($process.ExitCode)"}
+  $index=Join-Path $report 'index.json'
+  if(!(Test-Path -LiteralPath $index)){throw 'Automation report missing; no success inferred from process exit'}
+  $count=Assert-U00AutomationReport -ReportPath $index -LogPath $log
+  @{CompletedAt=(Get-Date -Format o);ExitCode=0;Executed=$count;Report=$index} | ConvertTo-Json | Set-Content (Join-Path $run 'Test.result.json')
+  Write-Output "PASS: $count completed tests; evidence: $run"
+  exit 0
+ }
  $editors=@(Get-CimInstance Win32_Process -Filter "Name='UnrealEditor.exe'")
  foreach($editor in $editors){
   Assert-EditorProjectSafe -CommandLine $editor.CommandLine -EditorPid $editor.ProcessId -TargetProject $ProjectPath
