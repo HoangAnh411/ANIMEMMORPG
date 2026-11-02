@@ -46,3 +46,35 @@ Bằng chứng tóm tắt máy đọc: Artifacts/U00/D-Static-20261102-191907/ve
 Cần phiên có công cụ Editor hoặc một lượt người giám sát chạy Live Coding và Automation prefix AnimeMMORPG.U00 trong đúng Editor để có bằng chứng tests mới đã được đăng ký/thực chạy. Nếu Live Coding không nhận translation unit/test mới, ghi kết quả đó và để phần kiểm chứng C++ sang lượt tích hợp đã lên lịch; không yêu cầu đóng Editor ngay trong vòng D này. Sau đó chạy Task Test bằng binary đã tích hợp, đối chiếu report, số test và trạng thái. Chưa xác nhận Script Test với report thật engine hoặc compile C++ D.
 
 Chỉ stage helper/tests, FOUNDATION.md, Scripts/U00.ps1, test validator và REPORT-D.md; không git add ., không đưa Config/token/log/binary vào commit. Commit/push nhánh D, không merge. Commit SHA và push kết quả bàn giao sau commit. Chưa bắt đầu E, chưa tạo map, chưa Play/package hoặc triển khai gameplay. Đề nghị review phần độc lập D và lên lịch kiểm chứng còn thiếu, không tự đánh dấu D hoàn thành.
+
+## Kiểm chứng tiếp từ 2d726bd — discovery đầy đủ 2026-11-02 19:31–19:33 +07:00
+
+Trạng thái cập nhật: BLOCKED tại đường gọi compile/apply và Automation trong Editor; không phải lỗi kết nối MCP. HEAD lúc bắt đầu 2d726bd7d388e68356eb4d49f0389dfb9b0449e5 trên u00/d-foundation; chỉ Config/DefaultEngine.ini có thay đổi token local, giữ ngoài commit.
+
+Xác minh project: Get-CimInstance Win32_Process trả hai Editor PID 15712 và 20804, cả hai command line đều chỉ D:/Data/AnimeMMORPG/AnimeMMORPG.uproject, executable UE_5.8. MCP GetLogEntries trả log -abslog trùng command line PID 15712; engine 5.8.4 CL 58902052. IsPIERunning trả false. Vì có hai instance, không gộp log/patch state của chúng. Bằng chứng đọc MCP trong lượt này thuộc PID 15712.
+
+Đã gọi list_toolsets rồi describe_toolset đủ 19 toolset, tổng 255 tool. Lưu schema đầy đủ dưới Artifacts/U00/D-MCP-20261102-193219/discovery.json; log thật đã lọc dưới editor-log.json. Các phép đọc đều thành công, không có lỗi transport. Các schema liên quan:
+
+- EditorToolset.EditorAppToolset có 21 tool; SearchCVars chỉ tìm console variables, không thực thi console command. Không có ExecuteConsoleCommand/LiveCoding compile/Automation runner.
+- LogsToolset có GetLogEntries/GetLogCategories/GetVerbosity/SetVerbosity; đọc log không kích hoạt compile/test.
+- ProgrammaticToolset: execute_tool_script chỉ điều phối execute_tool tới registered tools. Đã gọi get_execution_environment và đọc instructions: supported imports json/math/datetime/copy/re/time, không có unreal/os/subprocess hoặc general Python execution. Không gọi import trái phép, không thử vượt sandbox. Vì không có registered command execution tool, wrapper không tạo ra khả năng thực thi command mới.
+- ObjectTools chỉ reset/set/get/list properties, get_class và search_subclasses; không có invoke/call UFunction. AssetTools chỉ thao tác asset/file theo vùng cho phép; BlueprintTools có graph/compile Blueprint nhưng không có thực thi graph/function tùy ý. Rà mọi toolset còn lại không tìm thấy command/Automation execution interface. Không tạo asset/Blueprint cầu nối ngoài phạm vi để lách hạn chế này.
+
+Đối chiếu source engine LiveCodingModule.cpp:431,438 xác nhận LiveCoding.Compile và LiveCoding.CompileSync được đăng ký console command; CompileSync gọi WaitForCompletion. Đây chỉ chứng minh command tồn tại trong engine, chưa có tool gọi chúng. Không gửi tên command vào SearchCVars và coi là đã execute.
+
+Kết quả từng bước:
+
+| Bước | Kết quả thực tế |
+| --- | --- |
+| Commit/nhánh/project | PASS đúng nguồn và instance MCP xác định bằng log/command line |
+| Discovery MCP/schema | PASS 19/19 toolset, 255 tool; không tìm thấy đường thực thi cần thiết |
+| Kích hoạt Live Coding từ Editor | NOT-RUN: thiếu tool console execution hoặc Live Coding activation |
+| Link/apply patch D vào Editor | CHƯA XÁC MINH; log PID 15712 chỉ có compile bắt đầu 12:24:22 UTC rồi Live coding failed 12:24:37 UTC từ lượt trước; không có link/apply thành công trong phép đọc này |
+| UBT -LiveCoding hai lượt trước | Compile đạt theo bổ sung 2d726bd; không chạy lại và không nâng thành patch-applied |
+| Discovery bốn Automation tests trong Editor | CHƯA XÁC MINH: không có Automation list/run tool; không suy từ macro trong source thành tests đã đăng ký runtime |
+| Units / Axes / HalfOpenInterval / CallOrder | Mỗi test NOT-RUN trong lượt này; completed 0, không đạt nghiệm thu |
+| Full build và U00.ps1 -Task Test | DEFERRED, không chạy; Task Test là tiến trình khác, không dùng kiểm chứng patch |
+
+Không có Automation report thật mới vì chưa thể phát lệnh chạy test. Không tạo report giả; không lấy UBT Succeeded làm bằng chứng test/patch. Không yêu cầu đóng Editor, không kill, không bấm phím, không cài plugin, không sửa engine/config hoặc mất nội dung chưa lưu.
+
+Điểm thiếu cụ thể để tiếp tục: một API/tool đã được expose có thể gọi console command trong đúng Editor (hoặc API compile/apply riêng), và API list/run Automation với log/report completion trong chính instance đó. Sau khi có đường gọi, phải thấy patch link/apply thành công rồi xác minh đủ bốn tên đầy đủ AnimeMMORPG.U00.Foundation.Units/Axes/HalfOpenInterval/CallOrder và chạy hoàn tất 4/4. Không bắt đầu E hoặc tự merge. Lượt này chỉ commit báo cáo bổ sung, giữ mọi lịch sử lỗi trước; bằng chứng dung lượng lớn ở Artifacts đã ignore.
