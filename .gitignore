@@ -19,3 +19,9 @@ Artifacts/
 !.env.example
 *.pem
 *.key
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+

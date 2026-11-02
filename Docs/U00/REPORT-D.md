@@ -83,3 +83,36 @@ Không có Automation report thật mới vì chưa thể phát lệnh chạy te
 Người dùng chạy đủ 4 tests trong Editor: Units/CallOrder/HalfOpenInterval Success; Axes Fail tại Negative yaw turns forward to -Y. Log Saved/Logs/AnimeMMORPG.log xác nhận ngày 2026-11-02 12:40 UTC. Chưa nghiệm thu D.
 Đối chiếu source UE: UnrealMath.cpp RotateVector dùng TRotationMatrix; RotationTranslationMatrix.h dùng GlobalVectorConstants::DEG_TO_RAD; UnrealMathVectorConstants.h.inl khai báo hằng này VectorRegister4Float. Ngưỡng 1e-9 không phù hợp độ chính xác đường tính này. Sửa riêng kiểm tra RotateVector thành 1e-6 và thêm log vector thực 17 chữ số; không đổi hướng kỳ vọng, helper hoặc biên thời gian. Chờ chạy lại tests sau áp patch; chưa báo 4/4 đạt.
 Compile bản sửa bằng UBT -LiveCoding -DisableAdaptiveUnity: PASS exit 0, 18.43s. Log Artifacts/U00/D-Axes-Fix/LiveCodingCompile.log; chưa chứng minh apply patch hoặc chạy lại Automation.
+
+
+## Nghiệm thu hoàn tất đợt D — Gỡ bỏ Blocker bằng Unreal MCP Toolset (2026-11-02 21:14+07:00)
+
+**Trạng thái:** **PASS 4/4 Automation Tests** trong Unreal Editor 5.8.4. Gỡ bỏ hoàn toàn điểm nghẽn (Blocker) về công cụ điều khiển trong Editor.
+
+### 1. Triển khai giải pháp hạ tầng Toolset MCP
+- Khởi tạo plugin Content-only `TestRunner` tại `Plugins/TestRunner`, cấu hình phụ thuộc `ToolsetRegistry`.
+- Xây dựng toolset Python `TestRunnerTools` kế thừa `unreal.ToolsetDefinition` tuân thủ quy ước decorator `@toolset_registry.tool_call` và `@staticmethod`:
+  - `run_automation_tests(filter: str)`: Kích hoạt automation tests theo filter (chạy ngầm, không block).
+  - `stop_automation_tests()`: Dừng/hủy khẩn cấp các test đang chạy trong queue.
+  - `live_coding_compile()`: Kích hoạt lệnh `LiveCoding.Compile` trong Editor.
+  - `execute_console_command(command: str)`: Thực thi console command tùy ý (`stat fps`, `RestartLevel`, v.v.).
+  - `save_all_dirty_assets()`: Lưu toàn bộ map và content assets dirty qua `EditorLoadingAndSavingUtils.save_dirty_packages(True, True)`.
+- Cấu hình tắt `bThrottleCPUWhenNotForeground` trong `EditorPerformanceSettings` để FPS đạt ~38–40 FPS khi chạy background, giải quyết triệt để việc hàng đợi test bị kẹt ở `FWaitForInteractiveFrameRate` (FPS < 10).
+- Thiết lập tài liệu hướng dẫn AI chuẩn mực tại `AGENTS.md`.
+
+### 2. Kết quả kiểm chứng thực tế qua MCP
+Thực hiện chu trình khép kín hoàn toàn qua MCP client:
+1. **Live Coding:** Gọi `live_coding_compile()`. Log nhận được từ category `LogLiveCoding`:
+   - `[LogLiveCoding] Display: Starting Live Coding compile.`
+   - `[LogLiveCoding] Display: Live coding succeeded`
+2. **Automation Tests:** Gọi `run_automation_tests("AnimeMMORPG.U00.Foundation")`. Kết quả thực tế từ `LogAutomationController`:
+   - `Name={Axes} Path={AnimeMMORPG.U00.Foundation.Axes}`: **Result={Success}** (đã áp dụng ngưỡng sai số SIMD $10^{-6}$, vector thực khớp kỳ vọng).
+   - `Name={CallOrder} Path={AnimeMMORPG.U00.Foundation.CallOrder}`: **Result={Success}**
+   - `Name={HalfOpenInterval} Path={AnimeMMORPG.U00.Foundation.HalfOpenInterval}`: **Result={Success}**
+   - `Name={Units} Path={AnimeMMORPG.U00.Foundation.Units}`: **Result={Success}**
+   - `[LogAutomationCommandLine] Display: ...Automation Test Queue Empty 4 tests performed.`
+
+### 3. Kết luận đợt D
+- Toàn bộ 4/4 Automation tests của Foundation đạt chuẩn 100%.
+- Điểm nghẽn về việc thiếu công cụ kích hoạt Live Coding và Automation test trong Editor đã được giải quyết hoàn toàn bằng giải pháp native ToolsetRegistry/MCP.
+- Đợt D đủ điều kiện chuyển sang đợt E (Tạo Map Lab và sân thử nghiệm).
