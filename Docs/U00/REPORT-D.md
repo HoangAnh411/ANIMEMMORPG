@@ -1,4 +1,4 @@
-﻿# U00-D — Foundation và Automation
+# U00-D — Foundation và Automation
 
 Trạng thái: BLOCKED phần kiểm chứng Automation C++; phần triển khai và kiểm tra script sẵn sàng review. Không báo đạt 0 test. Full build được người dùng dời sang nghiệm thu tích hợp riêng và không là lý do yêu cầu đóng Editor trong lượt này.
 
@@ -78,3 +78,8 @@ Kết quả từng bước:
 Không có Automation report thật mới vì chưa thể phát lệnh chạy test. Không tạo report giả; không lấy UBT Succeeded làm bằng chứng test/patch. Không yêu cầu đóng Editor, không kill, không bấm phím, không cài plugin, không sửa engine/config hoặc mất nội dung chưa lưu.
 
 Điểm thiếu cụ thể để tiếp tục: một API/tool đã được expose có thể gọi console command trong đúng Editor (hoặc API compile/apply riêng), và API list/run Automation với log/report completion trong chính instance đó. Sau khi có đường gọi, phải thấy patch link/apply thành công rồi xác minh đủ bốn tên đầy đủ AnimeMMORPG.U00.Foundation.Units/Axes/HalfOpenInterval/CallOrder và chạy hoàn tất 4/4. Không bắt đầu E hoặc tự merge. Lượt này chỉ commit báo cáo bổ sung, giữ mọi lịch sử lỗi trước; bằng chứng dung lượng lớn ở Artifacts đã ignore.
+
+## Automation thực chạy và sửa Axes
+Người dùng chạy đủ 4 tests trong Editor: Units/CallOrder/HalfOpenInterval Success; Axes Fail tại Negative yaw turns forward to -Y. Log Saved/Logs/AnimeMMORPG.log xác nhận ngày 2026-11-02 12:40 UTC. Chưa nghiệm thu D.
+Đối chiếu source UE: UnrealMath.cpp RotateVector dùng TRotationMatrix; RotationTranslationMatrix.h dùng GlobalVectorConstants::DEG_TO_RAD; UnrealMathVectorConstants.h.inl khai báo hằng này VectorRegister4Float. Ngưỡng 1e-9 không phù hợp độ chính xác đường tính này. Sửa riêng kiểm tra RotateVector thành 1e-6 và thêm log vector thực 17 chữ số; không đổi hướng kỳ vọng, helper hoặc biên thời gian. Chờ chạy lại tests sau áp patch; chưa báo 4/4 đạt.
+Compile bản sửa bằng UBT -LiveCoding -DisableAdaptiveUnity: PASS exit 0, 18.43s. Log Artifacts/U00/D-Axes-Fix/LiveCodingCompile.log; chưa chứng minh apply patch hoặc chạy lại Automation.

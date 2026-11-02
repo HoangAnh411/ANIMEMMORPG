@@ -36,7 +36,13 @@ bool FU00Axes::RunTest(const FString& Parameters)
     TestTrue(TEXT("Yaw +90 turns right to -X"), Pose.TransformVectorNoScale(FVector::RightVector).Equals(FVector(-1, 0, 0), Tolerance));
     TestTrue(TEXT("Yaw preserves up"), Pose.TransformVectorNoScale(FVector::UpVector).Equals(FVector(0, 0, 1), Tolerance));
     TestTrue(TEXT("Local 1m position rotates and translates to world cm"), Pose.TransformPosition(FVector(MetersToCentimeters(1), 0, 0)).Equals(FVector(100, 300, 300), Tolerance));
-    TestTrue(TEXT("Negative yaw turns forward to -Y"), FRotator(0, -90, 0).RotateVector(FVector::ForwardVector).Equals(FVector(0, -1, 0), Tolerance));
+    // RotateVector uses the SIMD rotation-matrix path, whose degree conversion
+    // and trigonometry do not promise 1e-9 accuracy even for double vectors.
+    constexpr double RotationComponentTolerance = 1.e-6;
+    const FVector NegativeYaw = FRotator(0, -90, 0).RotateVector(FVector::ForwardVector);
+    AddInfo(FString::Printf(TEXT("Yaw -90 actual=(%.17g, %.17g, %.17g), expected=(0,-1,0), component tolerance=%.17g"),
+        NegativeYaw.X, NegativeYaw.Y, NegativeYaw.Z, RotationComponentTolerance));
+    TestTrue(TEXT("Negative yaw turns forward to -Y"), NegativeYaw.Equals(FVector(0, -1, 0), RotationComponentTolerance));
     return true;
 }
 
