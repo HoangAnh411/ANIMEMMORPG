@@ -1,0 +1,21 @@
+# Generated Unreal and local tooling state
+.vs/
+.codex/
+Binaries/
+Intermediate/
+DerivedDataCache/
+Saved/
+Artifacts/
+*.sln
+*.slnx
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+# Local credentials and environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
