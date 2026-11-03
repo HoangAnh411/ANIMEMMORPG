@@ -21,7 +21,7 @@ public class AnimeMMORPG : ModuleRules
 			"Slate"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[] { "SlateCore", "ApplicationCore", "Json" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"AnimeMMORPG",
