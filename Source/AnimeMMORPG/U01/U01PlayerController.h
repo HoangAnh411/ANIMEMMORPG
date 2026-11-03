@@ -55,6 +55,7 @@ private:
     float ProbeSeconds = 0;
     FString RunId;
     void ActivationChanged(bool bActive);
+    void ReconcilePhysicalReleases();
     void LockControls(EU01ControlState NewState, const TCHAR* Reason);
     void ApplyPlayingInputMode();
     void MoveDirection(const FInputActionValue& Value, int32 DirectionIndex);

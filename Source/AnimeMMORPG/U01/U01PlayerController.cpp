@@ -22,6 +22,9 @@
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
 #include "HAL/FileManager.h"
+#if PLATFORM_WINDOWS
+#include "Windows/WindowsHWrapper.h"
+#endif
 
 DEFINE_LOG_CATEGORY_STATIC(LogU01Control, Log, All);
 
@@ -130,6 +133,7 @@ void AU01PlayerController::PlayerTick(float DeltaTime)
     const bool bActive = IsGameWindowActive();
     if (bWasWindowActive && !bActive) LockControls(EU01ControlState::AwaitingResume, TEXT("WindowDeactivated"));
     bWasWindowActive = bActive;
+    if (bActive) ReconcilePhysicalReleases();
     if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(bMotorLocked);
 }
 
@@ -152,6 +156,21 @@ void AU01PlayerController::UpdateCameraManager(float DeltaSeconds)
         ProbeSeconds = 0;
         UKismetSystemLibrary::QuitGame(this, this, EQuitPreference::Quit, false);
     }
+#endif
+}
+
+void AU01PlayerController::ReconcilePhysicalReleases()
+{
+#if PLATFORM_WINDOWS
+    // Enhanced Input/Slate may flush or miss KeyUp while inactive. Read the actual OS
+    // high bit, never the flushed PlayerInput state. Returning focus alone is not a release.
+    const TPair<FKey, int32> Keys[] = {
+        {EKeys::W, 'W'}, {EKeys::S, 'S'}, {EKeys::A, 'A'}, {EKeys::D, 'D'},
+        {EKeys::SpaceBar, VK_SPACE}, {EKeys::LeftControl, VK_LCONTROL},
+        {EKeys::RightControl, VK_RCONTROL}, {EKeys::V, 'V'}, {EKeys::G, 'G'}, {EKeys::Escape, VK_ESCAPE}
+    };
+    for (const auto& Entry : Keys)
+        if ((::GetAsyncKeyState(Entry.Value) & 0x8000) == 0) ReleaseGate.Up(Entry.Key);
 #endif
 }
 
@@ -247,6 +266,7 @@ void AU01PlayerController::ApplyPlayingInputMode()
 void AU01PlayerController::ResumePlaying()
 {
     if (!IsLocalPlayerController() || !IsGameWindowActive()) return;
+    ReconcilePhysicalReleases();
     if (MenuWidget) MenuWidget->RemoveFromParent();
     FlushPressedKeys();
     ControlState = EU01ControlState::Playing;
