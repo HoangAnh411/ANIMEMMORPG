@@ -1,7 +1,12 @@
-﻿# U00-E — Ba map và menu thử nghiệm
+# U00-E — Ba map và menu thử nghiệm
 
-Trạng thái: BLOCKED kiểm chứng runtime còn thiếu. Nền 743bfaa0391b5434918da1f25aae2266a37eb8fb; nhánh u00/e-maps. Không merge, chưa bắt đầu F, không tuyên bố U00 tổng thể đạt.
+Trạng thái hiện tại: ĐÃ NGHIỆM THU U00-E theo xác nhận người dùng. Nền 743bfaa0391b5434918da1f25aae2266a37eb8fb; nhánh u00/e-maps. Báo cáo chốt trước fast-forward E; chưa tuyên bố U00 tổng thể đạt.
 
+## Xác nhận nghiệm thu E — 2026-11-03
+
+Người dùng chấp nhận kết quả kiểm tra thủ công: di chuyển, chuyển sân/quay menu hoạt động; nút Thoát đóng game và giữ Editor mở. Camera cần giữ chuột là giới hạn template U00, chuyển U01. Không được cung cấp thêm số vòng, PID, video hoặc kết quả quét log cho lần xác nhận này; không tự bổ sung các bằng chứng đó. Đây là xác nhận của người dùng, không phải AI chạy lại. Các mục BLOCKED/checklist phía dưới giữ làm lịch sử trước nghiệm thu và được thay thế bởi kết luận hiện tại.
+
+Full build D, -Task Test trên binary đĩa và dependency/tool registration sau khởi động mới tiếp tục được kiểm trong F trên clone riêng. Không tính nghiệm thu E là những kiểm chứng tích hợp đó đã đạt. Token và mọi thay đổi local ngoài báo cáo giữ ngoài commit.
 ## Triển khai đã lưu
 
 Tạo bằng API Unreal Editor qua MCP, không chỉnh binary bằng text hoặc thêm C++/plugin. Engine hiện chạy 5.8.4; instance xác nhận bằng Python os.getpid là 14544, project path đối chiếu D:/Data/AnimeMMORPG/AnimeMMORPG.uproject. Thời gian lượt E: 2026-11-03 khoảng 13:52–14:12 +07:00 (log UTC 06:52–07:12).
