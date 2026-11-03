@@ -1,5 +1,5 @@
 ﻿param(
- [Parameter(Mandatory=$true)][ValidateSet('Build','Test')][string]$Task,
+ [Parameter(Mandatory=$true)][ValidateSet('Build','Test','Package','Verify')][string]$Task,
  [Parameter(Mandatory=$true)][string]$ProjectPath,
  [Parameter(Mandatory=$true)][string]$EngineRoot,
  [Parameter(Mandatory=$true)][string]$OutputRoot
@@ -57,6 +57,46 @@ try {
  $version=Get-Content -Raw (Join-Path $EngineRoot 'Engine/Build/Build.version') | ConvertFrom-Json
  if($version.MajorVersion -ne 5 -or $version.MinorVersion -ne 8 -or $version.PatchVersion -ne 4 -or $version.Changelist -ne 58902052){throw 'Engine must be UE 5.8.4 CL 58902052'}
  if(!(Test-Path -LiteralPath $build)){throw 'Build.bat missing'}
+ if($Task -eq 'Verify'){
+  $run=Join-Path $OutputRoot ('Verify-'+(Get-Date -Format 'yyyyMMdd-HHmmss-fff')+'-'+[guid]::NewGuid().ToString('N').Substring(0,8))
+  New-Item -ItemType Directory -Path $run | Out-Null
+  foreach($childTask in @('Build','Test','Package')){
+   $childArgs=@('-NoProfile','-ExecutionPolicy','Bypass','-File',$PSCommandPath,'-Task',$childTask,'-ProjectPath',$ProjectPath,'-EngineRoot',$EngineRoot,'-OutputRoot',$run)
+   @{StartedAt=(Get-Date -Format o);Executable='powershell.exe';Arguments=$childArgs} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $run ($childTask+'.command.json'))
+   $ErrorActionPreference='Continue'
+   & powershell.exe @childArgs 2>&1 | ForEach-Object {"$_"} | Tee-Object (Join-Path $run ($childTask+'.log'))
+   $code=$LASTEXITCODE
+   $ErrorActionPreference='Stop'
+   @{CompletedAt=(Get-Date -Format o);ExitCode=$code} | ConvertTo-Json | Set-Content (Join-Path $run ($childTask+'.result.json'))
+   if($code -ne 0){exit $code}
+  }
+  Write-Output "Verify succeeded: $run"
+  exit 0
+ }
+ if($Task -eq 'Package'){
+  $run=Join-Path $OutputRoot ('Package-'+(Get-Date -Format 'yyyyMMdd-HHmmss-fff')+'-'+[guid]::NewGuid().ToString('N').Substring(0,8))
+  New-Item -ItemType Directory -Path $run | Out-Null
+  foreach($editor in @(Get-CimInstance Win32_Process -Filter "Name='UnrealEditor.exe'")){
+   Assert-EditorProjectSafe -CommandLine $editor.CommandLine -EditorPid $editor.ProcessId -TargetProject $ProjectPath
+  }
+  $uat=Join-Path $EngineRoot 'Engine/Build/BatchFiles/RunUAT.bat'
+  if(!(Test-Path -LiteralPath $uat)){throw 'RunUAT.bat missing'}
+  $config=Get-Content -Raw -LiteralPath (Join-Path (Split-Path $ProjectPath) 'Config/DefaultGame.ini')
+  $maps=@([regex]::Matches($config,'(?m)^\+MapsToCook=\(FilePath="([^"]+)"\)') | ForEach-Object {$_.Groups[1].Value})
+  $expected=@('/Game/AnimeMMORPG/Maps/L_Boot','/Game/AnimeMMORPG/Maps/L_CharacterCombatLab','/Game/AnimeMMORPG/Maps/L_NetworkLab')
+  if(@(Compare-Object $expected $maps).Count -ne 0 -or $maps.Count -ne 3){throw 'Cook map configuration must contain exactly the three U00 maps'}
+  $archive=Join-Path $run 'Archive'
+  $uatArgs=@('BuildCookRun',"-project=$ProjectPath",'-noP4','-platform=Win64','-clientconfig=Development','-build','-cook','-stage','-pak','-archive',"-archivedirectory=$archive",('-map='+($maps -join '+')),'-unattended','-utf8output','-nocompileeditor')
+  @{StartedAt=(Get-Date -Format o);Executable=$uat;Arguments=$uatArgs;Project=$ProjectPath;Engine=$version} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $run 'Package.command.json')
+  $ErrorActionPreference='Continue'
+  & $uat @uatArgs 2>&1 | ForEach-Object {"$_"} | Tee-Object (Join-Path $run 'Package.log')
+  $code=$LASTEXITCODE
+  $ErrorActionPreference='Stop'
+  @{CompletedAt=(Get-Date -Format o);ExitCode=$code;Archive=$archive} | ConvertTo-Json | Set-Content (Join-Path $run 'Package.result.json')
+  if($code -ne 0){exit $code}
+  Write-Output "Package succeeded: $archive"
+  exit 0
+ }
  if($Task -eq 'Test'){
   $run=Join-Path $OutputRoot ('Test-'+(Get-Date -Format 'yyyyMMdd-HHmmss-fff')+'-'+[guid]::NewGuid().ToString('N').Substring(0,8))
   New-Item -ItemType Directory -Path $run | Out-Null
@@ -64,7 +104,7 @@ try {
   if(!(Test-Path -LiteralPath $exe)){throw 'UnrealEditor-Cmd.exe missing'}
   $report=Join-Path $run 'Report'
   $log=Join-Path $run 'Automation.log'
-  $arguments=@(('"'+$ProjectPath+'"'),'-unattended','-nop4','-nosplash','-NullRHI','-nosound','-ExecCmds="Automation RunTests AnimeMMORPG.U00"','-TestExit="Automation Test Queue Empty"',('-ReportExportPath="'+$report+'"'),('-abslog="'+$log+'"'))
+  $arguments=@(('"'+$ProjectPath+'"'),'-unattended','-nop4','-nosplash','-ModelContextProtocolPort=18001','-NullRHI','-nosound','-ExecCmds="Automation RunTests AnimeMMORPG.U00"','-TestExit="Automation Test Queue Empty"',('-ReportExportPath="'+$report+'"'),('-abslog="'+$log+'"'))
   @{StartedAt=(Get-Date -Format o);Executable=$exe;Arguments=$arguments;Project=$ProjectPath} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $run 'Test.command.json')
   $process=Start-Process -FilePath $exe -ArgumentList $arguments -WindowStyle Hidden -PassThru
   if(!$process.WaitForExit(600000)){throw "Automation timed out; process PID $($process.Id) left running for inspection"}
@@ -88,8 +128,10 @@ try {
   $log=Join-Path $run ($step.Name+'.log')
   $argsForBuild=$step.Args
   @{StartedAt=(Get-Date -Format o);Executable=$build;Arguments=$argsForBuild;Project=$ProjectPath;Engine=$version} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $run ($step.Name+'.command.json'))
+  $ErrorActionPreference='Continue'
   & $build @argsForBuild 2>&1 | ForEach-Object {"$_"} | Tee-Object -FilePath $log
   $code=$LASTEXITCODE
+  $ErrorActionPreference='Stop'
   @{CompletedAt=(Get-Date -Format o);ExitCode=$code} | ConvertTo-Json | Set-Content (Join-Path $run ($step.Name+'.result.json'))
   if($code -ne 0){exit $code}
  }
