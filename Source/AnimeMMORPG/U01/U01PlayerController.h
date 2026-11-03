@@ -23,6 +23,7 @@ public:
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
     virtual void SetupInputComponent() override;
     virtual void PlayerTick(float DeltaTime) override;
+    virtual void UpdateCameraManager(float DeltaSeconds) override;
 
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputMappingContext> MappingContext;
     // W,S,A,D order; one action per direction leaves rebind local to E.

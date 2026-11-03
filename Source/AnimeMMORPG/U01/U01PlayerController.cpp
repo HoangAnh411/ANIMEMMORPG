@@ -131,7 +131,14 @@ void AU01PlayerController::PlayerTick(float DeltaTime)
     if (bWasWindowActive && !bActive) LockControls(EU01ControlState::AwaitingResume, TEXT("WindowDeactivated"));
     bWasWindowActive = bActive;
     if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(bMotorLocked);
-    TraceElapsed += DeltaTime;
+}
+
+void AU01PlayerController::UpdateCameraManager(float DeltaSeconds)
+{
+    Super::UpdateCameraManager(DeltaSeconds);
+    if (!IsLocalPlayerController() || GetNetMode() == NM_DedicatedServer) return;
+    // Sample after PCM has resolved this frame's view, never its previous-frame cache.
+    TraceElapsed += DeltaSeconds;
     if (bTrace && TraceElapsed >= .2f)
     {
         UE_LOG(LogU01Control, Display, TEXT("Metrics %s"), *GetMetricsJson());
@@ -292,6 +299,10 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetStringField(TEXT("resolvedCameraWorldCm"), PlayerCameraManager->GetCameraLocation().ToString());
     Json->SetStringField(TEXT("aimDirectionWorld"), PlayerCameraManager->GetCameraRotation().Vector().ToString());
     Json->SetStringField(TEXT("aimYawPitchDegrees"), GetControlRotation().ToString());
+    Json->SetNumberField(TEXT("fovDegrees"), PlayerCameraManager->GetFOVAngle());
+    Json->SetNumberField(TEXT("sweepRadiusCm"), 12);
+    if (const auto* LP = GetLocalPlayer()) if (const UGameViewportClient* Viewport = LP->ViewportClient.Get())
+        Json->SetNumberField(TEXT("mouseCaptureMode"), int32(Viewport->GetMouseCaptureMode()));
     Json->SetNumberField(TEXT("cameraPivotDistanceCm"), ControlledCharacter->CameraDistance);
     Json->SetNumberField(TEXT("shoulderOffsetCm"), ControlledCharacter->ShoulderOffset);
     Json->SetBoolField(TEXT("cameraHit"), ControlledCharacter->bCameraHit);
