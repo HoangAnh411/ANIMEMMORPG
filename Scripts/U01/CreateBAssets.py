@@ -53,7 +53,9 @@ for name, key, axis in [('Forward','W',False),('Backward','S',False),('Left','A'
                         ('Shoulder','V',False),('Menu','Escape',False)]:
     action = asset('Input', 'IA_U01_' + name, unreal.InputAction)
     action.set_editor_property('value_type', unreal.InputActionValueType.AXIS1D if axis else unreal.InputActionValueType.BOOLEAN)
-    context.map_key(action, unreal.Key(key))
+    input_key = unreal.Key()
+    input_key.set_editor_property('key_name', key)
+    context.map_key(action, input_key)
     actions[name] = action
 
 char = blueprint('BP_U01Character', unreal.load_class(None, '/Script/AnimeMMORPG.U01Character'))
