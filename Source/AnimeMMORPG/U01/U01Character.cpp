@@ -87,9 +87,9 @@ void AU01Character::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)
     if (CameraDistance < 80) bOwnerMeshHidden = true;
     else if (CameraDistance > 100) bOwnerMeshHidden = false;
     GetMesh()->SetOwnerNoSee(bOwnerMeshHidden);
-    TArray<USceneComponent*> Children;
-    GetMesh()->GetChildrenComponents(true, Children);
-    for (USceneComponent* Child : Children)
+    TArray<USceneComponent*> MeshChildren;
+    GetMesh()->GetChildrenComponents(true, MeshChildren);
+    for (USceneComponent* Child : MeshChildren)
         if (UPrimitiveComponent* Primitive = Cast<UPrimitiveComponent>(Child)) Primitive->SetOwnerNoSee(bOwnerMeshHidden);
     FollowCamera->SetWorldLocationAndRotation(Resolved, Aim);
     FollowCamera->GetCameraView(DeltaTime, OutResult);

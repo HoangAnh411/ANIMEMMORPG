@@ -130,7 +130,7 @@ void AU01PlayerController::PlayerTick(float DeltaTime)
     const bool bActive = IsGameWindowActive();
     if (bWasWindowActive && !bActive) LockControls(EU01ControlState::AwaitingResume, TEXT("WindowDeactivated"));
     bWasWindowActive = bActive;
-    if (auto* Character = Cast<AU01Character>(GetPawn())) Character->SetControlLocked(bMotorLocked);
+    if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(bMotorLocked);
     TraceElapsed += DeltaTime;
     if (bTrace && TraceElapsed >= .2f)
     {
@@ -155,7 +155,7 @@ void AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown)
     else
     {
         ReleaseGate.Up(Key);
-        if (Key == EKeys::SpaceBar) if (auto* Character = Cast<AU01Character>(GetPawn())) Character->StopJumping();
+        if (Key == EKeys::SpaceBar) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->StopJumping();
         UE_LOG(LogU01Control, Verbose, TEXT("PhysicalRelease/Rearm key=%s"), *Key.ToString());
     }
 }
@@ -168,11 +168,11 @@ bool AU01PlayerController::Accepts(FKey Key) const
 void AU01PlayerController::MoveDirection(const FInputActionValue& Value, int32 DirectionIndex)
 {
     if (DirectionIndex < 0 || DirectionIndex > 3 || !Value.Get<bool>() || !Accepts(DirectionKeys[DirectionIndex])) return;
-    if (auto* Character = Cast<AU01Character>(GetPawn()))
+    if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn()))
     {
         const FRotationMatrix Yaw(FRotator(0, GetControlRotation().Yaw, 0));
         const FVector Direction = Yaw.GetUnitAxis(DirectionIndex < 2 ? EAxis::X : EAxis::Y);
-        Character->AddMovementInput(Direction, (DirectionIndex == 1 || DirectionIndex == 2) ? -1 : 1);
+        ControlledCharacter->AddMovementInput(Direction, (DirectionIndex == 1 || DirectionIndex == 2) ? -1 : 1);
     }
 }
 
@@ -188,11 +188,11 @@ void AU01PlayerController::MouseY(const FInputActionValue& Value)
 }
 void AU01PlayerController::JumpPressed()
 {
-    if (Accepts(EKeys::SpaceBar)) if (auto* Character = Cast<AU01Character>(GetPawn())) Character->Jump();
+    if (Accepts(EKeys::SpaceBar)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->Jump();
 }
 void AU01PlayerController::ShoulderPressed()
 {
-    if (Accepts(EKeys::V)) if (auto* Character = Cast<AU01Character>(GetPawn())) Character->ToggleShoulder();
+    if (Accepts(EKeys::V)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->ToggleShoulder();
 }
 void AU01PlayerController::MenuPressed() { LockControls(EU01ControlState::Menu, TEXT("Escape")); }
 
@@ -202,7 +202,7 @@ void AU01PlayerController::LockControls(EU01ControlState NewState, const TCHAR* 
     ReleaseGate.Lock();
     ControlState = NewState;
     bMotorLocked = true;
-    if (auto* Character = Cast<AU01Character>(GetPawn())) Character->SetControlLocked(true);
+    if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(true);
     FlushPressedKeys();
     bShowMouseCursor = true;
     if (MenuWidget)
@@ -210,7 +210,7 @@ void AU01PlayerController::LockControls(EU01ControlState NewState, const TCHAR* 
         if (!MenuWidget->IsInViewport()) MenuWidget->AddToPlayerScreen(100);
         SetInputMode(FInputModeUIOnly().SetWidgetToFocus(MenuWidget->TakeWidget()).SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock));
     }
-    if (auto* LP = GetLocalPlayer()) if (auto* Viewport = LP->ViewportClient)
+    if (auto* LP = GetLocalPlayer()) if (UGameViewportClient* Viewport = LP->ViewportClient.Get())
     {
         Viewport->SetMouseCaptureMode(EMouseCaptureMode::NoCapture);
         Viewport->SetMouseLockMode(EMouseLockMode::DoNotLock);
@@ -223,7 +223,7 @@ void AU01PlayerController::ApplyPlayingInputMode()
 {
     bShowMouseCursor = false;
     SetInputMode(FInputModeGameOnly().SetConsumeCaptureMouseDown(false));
-    if (auto* LP = GetLocalPlayer()) if (auto* Viewport = LP->ViewportClient)
+    if (auto* LP = GetLocalPlayer()) if (UGameViewportClient* Viewport = LP->ViewportClient.Get())
     {
         Viewport->SetMouseCaptureMode(EMouseCaptureMode::CapturePermanently_IncludingInitialMouseDown);
         Viewport->SetMouseLockMode(EMouseLockMode::LockOnCapture);
@@ -238,7 +238,7 @@ void AU01PlayerController::ResumePlaying()
     FlushPressedKeys();
     ControlState = EU01ControlState::Playing;
     bMotorLocked = false;
-    if (auto* Character = Cast<AU01Character>(GetPawn())) Character->SetControlLocked(false);
+    if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(false);
     ApplyPlayingInputMode();
     UE_LOG(LogU01Control, Display, TEXT("Resume PID=%u world=%s held keys remain quarantined"), FPlatformProcess::GetCurrentProcessId(), *GetWorld()->GetPathName());
 }
@@ -253,9 +253,9 @@ void AU01PlayerController::QuitToDesktop()
 
 FString AU01PlayerController::GetMetricsJson() const
 {
-    const AU01Character* Character = Cast<AU01Character>(GetPawn());
-    const UWorld* World = Character ? Character->GetWorld() : nullptr;
-    if (!World || (World->WorldType != EWorldType::Game && World->WorldType != EWorldType::PIE) || Character->GetController() != this)
+    const AU01Character* ControlledCharacter = Cast<AU01Character>(GetPawn());
+    const UWorld* World = ControlledCharacter ? ControlledCharacter->GetWorld() : nullptr;
+    if (!World || (World->WorldType != EWorldType::Game && World->WorldType != EWorldType::PIE) || ControlledCharacter->GetController() != this)
         return TEXT("{\"error\":\"No unambiguous owned Game/PIE U01 pawn\"}");
     auto Json = MakeShared<FJsonObject>();
     FString SourceSHA;
@@ -271,25 +271,25 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetNumberField(TEXT("netMode"), int32(World->GetNetMode()));
     if (const FWorldContext* Context = GEngine->GetWorldContextFromWorld(World)) Json->SetStringField(TEXT("worldContext"), Context->ContextHandle.ToString());
     Json->SetNumberField(TEXT("worldSeconds"), World->GetTimeSeconds());
-    Json->SetStringField(TEXT("pawn"), Character->GetPathName());
+    Json->SetStringField(TEXT("pawn"), ControlledCharacter->GetPathName());
     Json->SetStringField(TEXT("controller"), GetPathName());
-    Json->SetStringField(TEXT("owner"), GetPathNameSafe(Character->GetOwner()));
-    Json->SetNumberField(TEXT("localRole"), int32(Character->GetLocalRole()));
-    Json->SetNumberField(TEXT("remoteRole"), int32(Character->GetRemoteRole()));
-    Json->SetBoolField(TEXT("locallyControlled"), Character->IsLocallyControlled());
+    Json->SetStringField(TEXT("owner"), GetPathNameSafe(ControlledCharacter->GetOwner()));
+    Json->SetNumberField(TEXT("localRole"), int32(ControlledCharacter->GetLocalRole()));
+    Json->SetNumberField(TEXT("remoteRole"), int32(ControlledCharacter->GetRemoteRole()));
+    Json->SetBoolField(TEXT("locallyControlled"), ControlledCharacter->IsLocallyControlled());
     Json->SetNumberField(TEXT("localPlayers"), GetGameInstance()->GetNumLocalPlayers());
-    Json->SetStringField(TEXT("capsuleCenterWorldCm"), Character->GetActorLocation().ToString());
-    Json->SetStringField(TEXT("velocityCmPerSec"), Character->GetVelocity().ToString());
-    Json->SetStringField(TEXT("accelerationCmPerSec2"), Character->GetCharacterMovement()->GetCurrentAcceleration().ToString());
-    Json->SetStringField(TEXT("pivotWorldCm"), Character->CameraPivot.ToString());
-    Json->SetStringField(TEXT("desiredCameraWorldCm"), Character->DesiredCamera.ToString());
+    Json->SetStringField(TEXT("capsuleCenterWorldCm"), ControlledCharacter->GetActorLocation().ToString());
+    Json->SetStringField(TEXT("velocityCmPerSec"), ControlledCharacter->GetVelocity().ToString());
+    Json->SetStringField(TEXT("accelerationCmPerSec2"), ControlledCharacter->GetCharacterMovement()->GetCurrentAcceleration().ToString());
+    Json->SetStringField(TEXT("pivotWorldCm"), ControlledCharacter->CameraPivot.ToString());
+    Json->SetStringField(TEXT("desiredCameraWorldCm"), ControlledCharacter->DesiredCamera.ToString());
     Json->SetStringField(TEXT("resolvedCameraWorldCm"), PlayerCameraManager->GetCameraLocation().ToString());
     Json->SetStringField(TEXT("aimDirectionWorld"), PlayerCameraManager->GetCameraRotation().Vector().ToString());
     Json->SetStringField(TEXT("aimYawPitchDegrees"), GetControlRotation().ToString());
-    Json->SetNumberField(TEXT("cameraPivotDistanceCm"), Character->CameraDistance);
-    Json->SetNumberField(TEXT("shoulderOffsetCm"), Character->ShoulderOffset);
-    Json->SetBoolField(TEXT("cameraHit"), Character->bCameraHit);
-    Json->SetBoolField(TEXT("ownerMeshHidden"), Character->bOwnerMeshHidden);
+    Json->SetNumberField(TEXT("cameraPivotDistanceCm"), ControlledCharacter->CameraDistance);
+    Json->SetNumberField(TEXT("shoulderOffsetCm"), ControlledCharacter->ShoulderOffset);
+    Json->SetBoolField(TEXT("cameraHit"), ControlledCharacter->bCameraHit);
+    Json->SetBoolField(TEXT("ownerMeshHidden"), ControlledCharacter->bOwnerMeshHidden);
     Json->SetBoolField(TEXT("windowActive"), IsGameWindowActive());
     Json->SetBoolField(TEXT("cursorVisible"), bShowMouseCursor);
     Json->SetBoolField(TEXT("motorLocked"), bMotorLocked);
