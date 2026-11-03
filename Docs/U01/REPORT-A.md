@@ -1,5 +1,7 @@
 # U01-A — Hợp đồng và phép thử khả thi
 
+Người dùng đã nghiệm thu A tại `4216ff874872f5d7112cc792b52d008937441f7c`. Đã fast-forward/push đúng commit này vào main theo giao việc tiếp theo; không đóng Editor. Phần READY_FOR_REVIEW bên dưới là hồ sơ trước nghiệm thu. B thực hiện trên nhánh riêng `u01/b-camera`, không kế thừa nghiệm thu input/mạng F từ A.
+
 Trạng thái: **READY_FOR_REVIEW** cho phạm vi A. Chưa nghiệm thu B–G, chưa server packaging. Nhánh `u01/a-contracts`; commit/push được xác định bằng HEAD nhánh bàn giao và ref remote, không tự merge/đi tiếp.
 
 ## Nguồn và phạm vi
