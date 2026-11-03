@@ -48,7 +48,7 @@
 			"Enabled": true
 		},
 		{
-			"Name": "AllToolsets",
+			"Name": "AutomationTestToolset",
 			"Enabled": true
 		},
 		{

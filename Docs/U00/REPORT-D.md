@@ -1,5 +1,23 @@
 # U00-D — Foundation và Automation
 
+Trạng thái hiện tại (2026-11-03): READY_FOR_REVIEW phần thu gọn công cụ/báo cáo; Foundation và Automation trong Editor đã được người giám sát nghiệm thu. Chưa merge nhánh D và chưa bắt đầu E.
+
+Người giám sát xác nhận đã tự chạy lại MCP: Live Coding thành công; Units, Axes, HalfOpenInterval và CallOrder đều Success; queue xác nhận 4 tests performed. Axes ghi sai số X khoảng 1.22e-8, phù hợp lý do ngưỡng 1e-9 quá chặt trên đường SIMD và thay riêng tolerance RotateVector thành 1e-6. Đây là kết quả do giám sát cung cấp, không phải AI chạy lại trong lượt thu gọn.
+
+Full build D và -Task Test với binary trên đĩa vẫn DEFERRED cho lượt tích hợp riêng; không ghi là đạt. Working tree vẫn có Config/DefaultEngine.ini local khác commit, không stage token, không tự đóng Editor.
+
+## Thu gọn sau review e1f63c9 — 2026-11-03
+
+- Thay AllToolsets (aggregator 21 dependency trong engine cài) bằng AutomationTestToolset rõ mục đích discovery/list/run Automation. EditorToolset/MCPClientToolset đã có từ nền C; TestRunner giữ dependency ToolsetRegistry. ToolsetRegistry kéo PythonScriptPlugin, EditorScriptingUtilities và FileSandbox cần cho Python tool registration. Không thêm ConfigSettingsToolset khi không có nhu cầu mới trong D.
+- Bỏ get_player_pawn_metrics và mục quảng bá tool đó trong AGENTS.md; hoãn U01, cần chọn đúng PIE world và kiểm chứng riêng. Giữ các tool compile/test/console, lưu asset và summary đang có; không mở rộng gameplay.
+- Gỡ section AssetManager thêm trong e1f63c9: không cần GameFeatureData AlwaysCook hoặc các override scan/cook đi kèm. Không thêm GameFeatures dependency; rà plugin descriptor không có tham chiếu trực tiếp GameFeatures/GameFeaturesToolset sau bỏ aggregator. Không sửa engine để che warning. Việc resolve dependency thực tế sau khởi động/full build thuộc lượt tích hợp, chưa tuyên bố plugin đã unload khỏi phiên Editor hiện mở.
+- Kiểm tĩnh JSON descriptor, Python AST và danh sách tool; diff whitespace; config DefaultGame.ini trở về nội dung baseline C. Không thay đổi helper hoặc Automation tests đã nghiệm thu. Không chạy lại Live Coding/tests theo yêu cầu người giám sát.
+
+Lượt này chỉ chỉnh nguồn plugin/descriptor/config/tài liệu trên u00/d-foundation, không hot reload plugin hoặc sửa setting runtime. Khi tích hợp sau, kiểm plugin loading/dependency và schema mới; Editor hiện tại có thể còn tool cũ do đã load trước thay đổi, không lấy danh sách runtime cũ làm bằng chứng descriptor mới đã hiệu lực. Không tự merge.
+
+## Lịch sử khảo sát và lỗi (giữ nguyên diễn biến trước nghiệm thu)
+
+Các trạng thái BLOCKED/NOT-RUN và kết luận chuyển E bên dưới là lịch sử từng lượt; trạng thái đầu báo cáo thay thế chúng. Việc mở E vẫn cần giao việc sau merge, không tự suy từ 4/4 PASS.
 Trạng thái: BLOCKED phần kiểm chứng Automation C++; phần triển khai và kiểm tra script sẵn sàng review. Không báo đạt 0 test. Full build được người dùng dời sang nghiệm thu tích hợp riêng và không là lý do yêu cầu đóng Editor trong lượt này.
 
 ## Sửa lỗi compile C4459 — 2026-11-02
@@ -116,3 +134,7 @@ Thực hiện chu trình khép kín hoàn toàn qua MCP client:
 - Toàn bộ 4/4 Automation tests của Foundation đạt chuẩn 100%.
 - Điểm nghẽn về việc thiếu công cụ kích hoạt Live Coding và Automation test trong Editor đã được giải quyết hoàn toàn bằng giải pháp native ToolsetRegistry/MCP.
 - Đợt D đủ điều kiện chuyển sang đợt E (Tạo Map Lab và sân thử nghiệm).
+
+## Bằng chứng lượt thu gọn 2026-11-03
+
+Kiểm tra tĩnh lưu tại Artifacts/U00/D-Trim-20261103/check.py và check.log. Lần đầu gọi Python qua -c bị PowerShell làm mất quote, SyntaxError trước khi kiểm tra source; không là lỗi plugin. Chuyển sang file kiểm tra riêng: exit 0, PASS JSON descriptor/Python AST/đúng 7 tool/không AllToolsets hoặc GameFeatures trực tiếp/không GameFeatureData AlwaysCook. git diff 6f042e9 -- Config/DefaultGame.ini rỗng; git diff --check đạt. Không chạy lại Automation, build hoặc restart nên chưa xác minh dependency resolution ở phiên khởi động mới. Không sửa gameplay/helpers/tests đã nghiệm thu.

@@ -27,7 +27,6 @@ Toolset name: **`test_runner.toolsets.test_runner.TestRunnerTools`**
 | `save_all_dirty_assets` | `{}` | Saves all modified (dirty) packages, maps, and content assets to disk. |
 | `save_current_level` | `{}` | Saves the currently active level map asset to disk. |
 | `get_editor_summary` | `{}` | Returns JSON summary of active level, actor count, selected actors, and status. |
-| `get_player_pawn_metrics` | `{}` | Returns real-time player location, velocity (m/s), speed (m/s), rotation, and movement mode in PIE (for U01 verification). |
 
 ---
 
@@ -110,3 +109,5 @@ For fine-grained test listing or stopping tests:
    - If *"Use Less CPU when in Background"* is enabled in Editor Preferences, the Editor throttles background framerate to ~3 FPS.
    - Automation runner queues tests with `FWaitForInteractiveFrameRate: Starting wait for framerate of >= 10 FPS`.
    - Ensure `bThrottleCPUWhenNotForeground` is set to `false` in `EditorPerformanceSettings` so tests run automatically without needing manual focus.
+
+Pawn metrics are deferred to U01. The current TestRunner exposes no PIE pawn metrics tool; do not use Editor world as evidence of a PIE pawn. Project toolset dependencies are explicit; do not enable AllToolsets to hide missing tools or GameFeatures warnings.
