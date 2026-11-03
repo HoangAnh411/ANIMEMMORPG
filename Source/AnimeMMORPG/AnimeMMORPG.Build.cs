@@ -22,6 +22,10 @@ public class AnimeMMORPG : ModuleRules
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "SlateCore", "ApplicationCore", "Json" });
+		if (Target.Platform == UnrealTargetPlatform.Win64)
+		{
+			PublicSystemLibraries.Add("user32.lib"); // Physical key state used by the local Windows focus gate.
+		}
 
 		PublicIncludePaths.AddRange(new string[] {
 			"AnimeMMORPG",
