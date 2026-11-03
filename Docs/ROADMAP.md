@@ -4,7 +4,7 @@
 
 Project chính: `D:\Data\AnimeMMORPG`; engine mục tiêu Unreal Engine 5.8.4. Thiết kế tại [Description.md](Description.md), lịch sử và lưu ý chuyển engine tại [UNITY_REFERENCE.md](UNITY_REFERENCE.md).
 
-Khảo sát chỉ đọc 2026-11-02: project Third Person C++ có ba variant Combat/Platforming/SideScrolling; EngineAssociation ghi 5.8. Đã đối chiếu Editor 5.8.4, CL 58902052 tại `D:/Software/UE_5.8` bằng Build.version và log đọc qua MCP. MCP đọc map hiện tại, actor được chọn, log và trạng thái PIE thành công; chưa xác minh API trả đường dẫn active project. Có Visual Studio 2026, MSVC 14.51.36231 và Windows SDK 10.0.26100.0 nhưng chưa compile/package để xác nhận tương thích. Git chưa khởi tạo; Git LFS 3.7.1 có trên máy. Receipt build cũ không chứng minh nguồn hiện tại build sạch. Tất cả checkbox dưới đây chưa nghiệm thu; không kế thừa trạng thái hoàn thành Unity.
+Baseline khảo sát 2026-11-02: project Third Person C++ có ba variant Combat/Platforming/SideScrolling; EngineAssociation ghi 5.8. Lịch sử khảo sát lưu tại [REPORT-A](U00/REPORT-A.md) và [ENVIRONMENT](U00/ENVIRONMENT.md). Hiện U00 đã được người dùng nghiệm thu sau lượt F: clone GitHub/LFS, compile Editor/Game, 4/4 Automation tests trên binary đĩa, tool registration sau khởi động mới, package Windows và kiểm tra thủ công packaged game đủ 5 vòng, Thoát/mở lại đều đạt. Nguồn build `9d6a81b24c9dbf75ad8fcf4c47de78c72f95eb80`; UE 5.8.4 CL 58902052; UBT chọn MSVC 14.51.36260, SDK 10.0.26100.0. Xem [REPORT-F](U00/REPORT-F.md), [manifest](U00/F-MANIFEST.json) và [hash artifact](U00/F-ARTIFACTS.csv). Không kế thừa nghiệm thu Unity; U01 chưa bắt đầu.
 
 Bản thử kín: Kiếm Vũ và Cơ Xạ, một trung tâm nhỏ, một vùng, dungeon bốn người, PvP 1v1 không xếp hạng, tiến trình lưu được cấp 1–10. Đích đầy đủ: sáu nghề, cấp 50, raid tám người, phân khu 40 người, PvP 1v1/3v3.
 
@@ -14,12 +14,14 @@ Mỗi đợt bàn giao có commit, test, nguồn/build, bằng chứng và giớ
 
 ### U00 — Công cụ và nền project
 
-- [ ] U00.01 Xác nhận Editor 5.8.4, toolchain C++, compile và Windows packaging.
-- [ ] U00.02 Gọi tool/MCP đọc project/map/actor/log thật; phân biệt cấu hình, kết nối và gọi thành công.
-- [ ] U00.03 Git/LFS/ignore, quyền phân phối asset, cấu hình máy và khôi phục.
-- [ ] U00.04 Khảo sát template hiện có; tổ chức C++/Blueprint/data/UI/test, không xóa source tùy tiện.
-- [ ] U00.05 Map khởi động, sân nhân vật/combat, map thử mạng và menu chuyển map.
-- [ ] U00.06 Chốt đơn vị/hướng/clock; test tự động và build Windows tối thiểu.
+- [x] U00.01 Xác nhận Editor 5.8.4, toolchain C++, compile và Windows packaging. Bằng chứng: [C](U00/REPORT-C.md), [F](U00/REPORT-F.md).
+- [x] U00.02 Gọi tool/MCP đọc project/map/actor/log thật; phân biệt cấu hình, kết nối và gọi thành công. Bằng chứng: [A](U00/REPORT-A.md), [D](U00/REPORT-D.md), [F: đăng ký sau khởi động mới](U00/REPORT-F.md).
+- [x] U00.03 Git/LFS/ignore, quyền phân phối asset, cấu hình máy và khôi phục. Bằng chứng: [B](U00/REPORT-B.md), [kiểm kê asset](U00/ASSET_REGISTER.csv), [F: clone và hash](U00/REPORT-F.md). Phân loại/quyền giữ theo nguồn và phạm vi đã ghi; không áp giấy phép chung lên asset Epic.
+- [x] U00.04 Khảo sát template hiện có; tổ chức C++/Blueprint/data/UI/test, không xóa source tùy tiện. Bằng chứng: [A](U00/REPORT-A.md), [D](U00/REPORT-D.md), [E](U00/REPORT-E.md).
+- [x] U00.05 Map khởi động, sân nhân vật/combat, map thử mạng và menu chuyển map. Bằng chứng: [E](U00/REPORT-E.md), [F: packaged game, xác nhận thủ công người dùng](U00/REPORT-F.md).
+- [x] U00.06 Chốt đơn vị/hướng/clock; test tự động và build Windows tối thiểu. Bằng chứng: [hợp đồng Foundation](U00/FOUNDATION.md), [D](U00/REPORT-D.md), [F: 4/4 tests và build](U00/REPORT-F.md).
+
+U00 đã nghiệm thu theo xác nhận người dùng. Kết quả packaged UI là xác nhận thủ công, không phải AI điều khiển input. Giữ lịch sử lỗi/warning trong báo cáo; camera template cần giữ chuột là giới hạn U00, không nghiệm thu điều khiển U01, hiệu năng U04 hoặc mạng U05.
 
 Phạm vi U00: giữ một runtime module hiện có; chỉ tạo nền tối thiểu, không triển khai điều khiển U01, combat, backend hoặc framework dự phòng. Giữ template làm baseline; chỉ xóa/di chuyển sau kiểm tra tham chiếu và có nhiệm vụ riêng.
 

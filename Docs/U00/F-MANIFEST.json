@@ -79,7 +79,7 @@
                       "Method":  "direct map URL + ExecCmds Quit; not UI/button verification"
                   }
               ],
-    "PackagedUI":  "PENDING_MANUAL",
+    "PackagedUI":  "PASS_USER_CONFIRMED_5_LOOPS_QUIT_REOPEN",
     "SharedMachineEngineAndDDC":  true,
     "GeneratedCloneChanges":  [
                                   "Config/DefaultEngine.ini: regenerated AFS token, not committed",

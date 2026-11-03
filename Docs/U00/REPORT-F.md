@@ -1,6 +1,12 @@
 # U00-F — Windows package và kiểm chứng tích hợp
 
-Trạng thái: **BLOCKED — chỉ còn kiểm chứng thao tác UI/input trên packaged game**. Build, Automation, dependency sau khởi động mới và package đã PASS. Chưa đề nghị nghiệm thu toàn U00; chưa merge F hoặc bắt đầu U01.
+Trạng thái: **ĐÃ NGHIỆM THU U00-F VÀ HOÀN TẤT U00 theo xác nhận người dùng**. Build, Automation, dependency sau khởi động mới và package đã PASS; kiểm chứng packaged UI/input đã được người dùng xác nhận đạt. Nguồn build giữ nguyên 9d6a81b24c9dbf75ad8fcf4c47de78c72f95eb80. Chưa bắt đầu U01.
+
+## Xác nhận khép hồ sơ
+
+Người dùng xác nhận nghiệm thu F và toàn U00: clone/LFS, build Editor/Game, 4/4 tests, đăng ký tool sau khởi động mới, package và kiểm tra thủ công bản đóng gói đủ 5 vòng, Thoát/mở lại đều đạt. Đây là kết quả thủ công do người dùng xác nhận, không phải AI điều khiển chuột/phím; không bổ sung PID, video, thời điểm chạy hoặc quét log chưa được cung cấp. Camera giữ chuột tiếp tục là giới hạn template U00 đã chấp nhận.
+
+Theo chỉ thị khép hồ sơ, commit tài liệu riêng và push nhánh F trước khi fast-forward vào main; đối chiếu ref GitHub sau push. Không chạy lại build/tests, không đổi nguồn build hoặc artifact. Những phần NOT-RUN/BLOCKED bên dưới được giữ như lịch sử trước xác nhận này và được thay thế bởi trạng thái hiện tại.
 
 ## Nguồn và phạm vi
 
@@ -29,7 +35,7 @@ Mọi đường dẫn bằng chứng dưới đây tương đối với `Artifac
 | Editor clone khởi động mới, khoảng 19:24 | Đúng project, module/toolset đăng ký thật | PASS: PID 20184, native ToolsetRegistry xác nhận TestRunnerTools, AutomationTestToolset và EditorAppToolset; Python module TestRunner đến từ clone. EditorRegistration2.json/.log/.command.json. MCP riêng 18002, không chiếm 8000; tiến trình kiểm chứng tự thoát sau script |
 | RunUAT BuildCookRun, 19:19–19:27 | Cook/package/archive thành công | PASS: exit 0, BUILD SUCCESSFUL, cook 0 errors/0 warnings. V/Package-20261103-191930-356-0536b45e chứa command/result/log và Archive |
 | Executable thật, direct map URL + ExecCmds Quit, 19:28–19:30 | Ba map tải và thoát không crash/missing map | PASS: Boot, CharacterCombatLab, NetworkLab đều LoadMap confirmed, exit 0; không thấy Error:/Fatal/BlueprintRuntimeError/missing-map trong log lượt này. Smoke-20261103-192818/results.json, command JSON và từng log |
-| Click menu, di chuyển, quay menu, Quit bằng nút trong packaged game | Đủ tuyến và input thật | **NOT-RUN**, cần checklist gộp bên dưới. Direct map URL/console Quit không thay bằng chứng nút UI |
+| Click menu, di chuyển, quay menu, Quit bằng nút trong packaged game | Đủ tuyến và input thật | **PASS theo xác nhận thủ công người dùng**: đủ 5 vòng, Thoát/mở lại đạt. AI không chạy input; direct map URL/console Quit chỉ là smoke tự động riêng |
 
 Bốn tests thực chạy: AnimeMMORPG.U00.Foundation.Axes, AnimeMMORPG.U00.Foundation.CallOrder, AnimeMMORPG.U00.Foundation.HalfOpenInterval, AnimeMMORPG.U00.Foundation.Units — tất cả Success. Full build D, Test trên binary đĩa và đăng ký dependency sau khởi động mới được khép PASS bằng lượt clone này; không dựa vào Live Coding cũ.
 
@@ -57,11 +63,11 @@ F-ARTIFACTS.csv ghi 48 file đóng gói và SHA-256, loại Saved sinh khi chạ
 - Sau chạy, clone phát sinh token AFS trong Config/DefaultEngine.ini và tài nguyên Build/. Không stage chúng; trạng thái sạch chỉ được xác nhận **trước** chạy. Config local project gốc giữ ngoài commit, không xuất giá trị token. Không sửa asset/source gốc hoặc đóng Editor người dùng.
 - Discovery công cụ phiên này không có desktop mouse/keyboard hoặc tool điều khiển widget của packaged executable. MCP của Editor không thay thế input trên game đóng gói. Xác nhận thủ công E không được tái sử dụng làm PASS cho packaged game F.
 
-## Một checklist thủ công gộp — đúng bản đóng gói trên
+## Lịch sử checklist thủ công gộp — đã được người dùng xác nhận đạt
 
 1. Mở bootstrap exe từ thư mục Windows; xác nhận Boot/menu xuất hiện.
 2. Bấm sân nhân vật/combat, dùng input template di chuyển, bấm Về menu. Bấm sân mạng, di chuyển và bấm Về menu.
 3. Thực hiện tổng tối thiểu năm vòng Boot → sân → Boot, luân phiên hai sân; kiểm tra không nhân widget/mất nút. Camera giữ chuột là giới hạn template đã chấp nhận.
 4. Bấm Thoát; xác nhận game đóng và Editor gốc vẫn mở. Mở lại executable, xác nhận Boot. Gửi kết quả từng mục và lỗi nếu có; chưa có xác nhận/số vòng/video/PID nào được tự ghi nhận trước khi người dùng cung cấp.
 
-Sau xác nhận packaged UI mới cập nhật kết luận nghiệm thu. Hiện bàn giao nhánh F để review với trạng thái BLOCKED tại cổng input/UI thủ công duy nhất; không tự merge F, không nghiệm thu U01, hiệu năng U04 hoặc mạng U05.
+Kết luận hiện tại: U00-F và toàn U00 đã được người dùng nghiệm thu; cổng input/UI thủ công đã khép. Giữ lịch sử lỗi và giới hạn trên; không nghiệm thu U01, hiệu năng U04 hoặc mạng U05. Chỉ khép tài liệu và fast-forward F theo quyền người dùng đã giao, không bắt đầu U01.
