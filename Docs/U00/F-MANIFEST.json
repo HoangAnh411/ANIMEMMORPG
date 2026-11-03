@@ -1,0 +1,106 @@
+﻿{
+    "SourceSHA":  "9d6a81b24c9dbf75ad8fcf4c47de78c72f95eb80",
+    "MergedE":  "b281662d31a4c5df29730c75213fda52b7b3131b",
+    "Remote":  "https://github.com/HoangAnh411/ANIMEMMORPG",
+    "Branch":  "u00/f-package",
+    "EngineVersion":  "5.8.4",
+    "EngineCL":  58902052,
+    "EngineRoot":  "D:/Software/UE_5.8",
+    "Compiler":  "MSVC 14.51.36260",
+    "SDK":  "10.0.26100.0",
+    "Configuration":  "Win64 Development",
+    "DefaultRHI":  "DX12",
+    "ShaderFormats":  [
+                          "PCD3D_SM6",
+                          "PCD3D_SM5"
+                      ],
+    "ArtifactRoot":  "Artifacts/U00/F-20261103-191300",
+    "ArchiveRelative":  "Evidence/Verify-20261103-191513-678-5b1c4f1f/Package-20261103-191930-356-0536b45e/Archive",
+    "ExecutableRelative":  "Evidence/Verify-20261103-191513-678-5b1c4f1f/Package-20261103-191930-356-0536b45e/Archive/Windows/AnimeMMORPG.exe",
+    "BootstrapSHA256":  "DE088F5191B0CDBA77E47F71FBAE8321FE128C6EDDE75975A34037F432A5272E",
+    "GameBinarySHA256":  "7F9D8F7D3A1E743F04E3D075766681EA8B6D038AF00152A769A81DA3B607C630",
+    "ArtifactFiles":  48,
+    "ArtifactManifestSHA256":  "C6453EAFA2624182B9804ED9C7BEFC5EB7557C421F4E6AB3A6BF714268C08E3C",
+    "CloneInitialClean":  true,
+    "CloneInitialBinaries":  false,
+    "CloneInitialIntermediate":  false,
+    "LFSFiles":  765,
+    "LFsFsck":  "PASS",
+    "AssetHashMismatch":  0,
+    "RemainingPointers":  0,
+    "BuildEditorExit":  0,
+    "BuildGameExit":  0,
+    "Tests":  [
+                  {
+                      "State":  "Success",
+                      "Name":  "AnimeMMORPG.U00.Foundation.Axes"
+                  },
+                  {
+                      "State":  "Success",
+                      "Name":  "AnimeMMORPG.U00.Foundation.CallOrder"
+                  },
+                  {
+                      "State":  "Success",
+                      "Name":  "AnimeMMORPG.U00.Foundation.HalfOpenInterval"
+                  },
+                  {
+                      "State":  "Success",
+                      "Name":  "AnimeMMORPG.U00.Foundation.Units"
+                  }
+              ],
+    "QueueCompleted":  4,
+    "EditorRegistration":  {
+                               "test_runner.toolsets.test_runner.TestRunnerTools":  true,
+                               "AutomationTestToolset.AutomationTestToolset":  true,
+                               "EditorToolset.EditorAppToolset":  true
+                           },
+    "EditorRegistrationPass":  true,
+    "VerificationMCPPort":  18002,
+    "PackageExit":  0,
+    "CookErrors":  0,
+    "CookWarnings":  0,
+    "Smoke":  [
+                  {
+                      "ExitCode":  0,
+                      "LoadMapConfirmed":  true,
+                      "Map":  "L_Boot",
+                      "Method":  "direct map URL + ExecCmds Quit; not UI/button verification"
+                  },
+                  {
+                      "ExitCode":  0,
+                      "LoadMapConfirmed":  true,
+                      "Map":  "L_CharacterCombatLab",
+                      "Method":  "direct map URL + ExecCmds Quit; not UI/button verification"
+                  },
+                  {
+                      "ExitCode":  0,
+                      "LoadMapConfirmed":  true,
+                      "Map":  "L_NetworkLab",
+                      "Method":  "direct map URL + ExecCmds Quit; not UI/button verification"
+                  }
+              ],
+    "PackagedUI":  "PENDING_MANUAL",
+    "SharedMachineEngineAndDDC":  true,
+    "GeneratedCloneChanges":  [
+                                  "Config/DefaultEngine.ini: regenerated AFS token, not committed",
+                                  "Build/: generated resource files, not committed"
+                              ],
+    "GeneratedAt":  "2026-11-03T19:31:24.5098542+07:00",
+    "Windows":  {
+                    "Build":  "26200",
+                    "Version":  "10.0.26200",
+                    "Caption":  "Microsoft Windows 11 Pro",
+                    "RAMGiB":  31.77,
+                    "GPU":  [
+                                {
+                                    "Name":  "Intel(R) UHD Graphics",
+                                    "DriverVersion":  "30.0.101.1273"
+                                },
+                                {
+                                    "Name":  "NVIDIA GeForce RTX 3050 Ti Laptop GPU",
+                                    "DriverVersion":  "32.0.16.2101"
+                                }
+                            ],
+                    "CPU":  "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz"
+                }
+}
