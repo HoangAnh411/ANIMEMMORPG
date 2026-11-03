@@ -35,7 +35,7 @@ public:
     virtual void Tick(float, FSlateApplication&, TSharedRef<ICursor>) override {}
     virtual bool HandleKeyDownEvent(FSlateApplication&, const FKeyEvent& Event) override
     {
-        if (PC.IsValid()) PC->ObservePhysicalKey(Event.GetKey(), true);
+        if (PC.IsValid() && !Event.IsRepeat()) PC->ObservePhysicalKey(Event.GetKey(), true);
         return false;
     }
     virtual bool HandleKeyUpEvent(FSlateApplication&, const FKeyEvent& Event) override
@@ -151,12 +151,18 @@ void AU01PlayerController::PlayerTick(float DeltaTime)
 void AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown)
 {
     if (!IsGameWindowActive()) return; // Do not interpret another window's releases as re-arming gameplay.
-    if (bDown) ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing);
+    if (bDown)
+    {
+        ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing);
+        UE_LOG(LogU01Control, Display, TEXT("PhysicalPress key=%s state=%d accepted=%d reason=%s"),
+            *Key.ToString(), int32(ControlState), Accepts(Key),
+            ControlState != EU01ControlState::Playing ? TEXT("ControlLocked") : (ReleaseGate.Allows(Key) ? TEXT("Ready") : TEXT("AwaitingPhysicalRelease")));
+    }
     else
     {
         ReleaseGate.Up(Key);
         if (Key == EKeys::SpaceBar) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->StopJumping();
-        UE_LOG(LogU01Control, Verbose, TEXT("PhysicalRelease/Rearm key=%s"), *Key.ToString());
+        UE_LOG(LogU01Control, Display, TEXT("PhysicalRelease/Rearm key=%s"), *Key.ToString());
     }
 }
 
