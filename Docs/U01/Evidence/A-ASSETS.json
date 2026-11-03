@@ -1,0 +1,102 @@
+﻿[
+    {
+        "path":  "/Game/Characters/Mannequins/Meshes/SKM_Manny_Simple.SKM_Manny_Simple",
+        "assetClass":  "SkeletalMesh",
+        "skeleton":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "enableRootMotion":  null,
+        "lengthSeconds":  null,
+        "sha256":  "BE9F011191EE1887B97CD13BCE09886A6066C2FD62C619991070EC142184E1BF",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Meshes\\SKM_Manny_Simple.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "assetClass":  "Skeleton",
+        "skeleton":  null,
+        "enableRootMotion":  null,
+        "lengthSeconds":  null,
+        "sha256":  "22029D47455F24471195B26A0E04A1E1389F27D6A924E88C9F46A0F600C9A530",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Meshes\\SK_Mannequin.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Anims/Unarmed/MM_Idle.MM_Idle",
+        "assetClass":  "AnimSequence",
+        "skeleton":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "enableRootMotion":  "False",
+        "lengthSeconds":  "7.566666603088379",
+        "sha256":  "11EE7FDEB84DB89C1A66785B43B9BFC1415782122B8AC229517F4C5125D9CB0D",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\MM_Idle.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd.MF_Unarmed_Walk_Fwd",
+        "assetClass":  "AnimSequence",
+        "skeleton":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "enableRootMotion":  "True",
+        "lengthSeconds":  "1.5",
+        "sha256":  "C74B2FC0CB651C4924804B364E534856A1B44DEE818127C408DC055E4BDA5ED9",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Fwd.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd.MF_Unarmed_Jog_Fwd",
+        "assetClass":  "AnimSequence",
+        "skeleton":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "enableRootMotion":  "True",
+        "lengthSeconds":  "1.7666666507720947",
+        "sha256":  "0CCBE851F85A6D4CD7C6438C219CB6AF8E281784107B5BE8E9B052E4DF3069CB",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Fwd.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Jump.MM_Jump",
+        "assetClass":  "AnimSequence",
+        "skeleton":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "enableRootMotion":  "False",
+        "lengthSeconds":  "0.8666666746139526",
+        "sha256":  "252CBF69B07B797D3C3C6177D3AE9DF17E9873F4872C4FA040C0D441DC3B3CEF",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jump\\MM_Jump.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Fall_Loop.MM_Fall_Loop",
+        "assetClass":  "AnimSequence",
+        "skeleton":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "enableRootMotion":  "False",
+        "lengthSeconds":  "3.0",
+        "sha256":  "408BE742C63ADFFE8C6C1D22442E99EA34A7618CD33C6E78E0EED3D7DB877433",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jump\\MM_Fall_Loop.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Land.MM_Land",
+        "assetClass":  "AnimSequence",
+        "skeleton":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "enableRootMotion":  "False",
+        "lengthSeconds":  "0.8666666746139526",
+        "sha256":  "A00DE25A6BECA56FF6D8077081531E5CEF238C92825B6C184351D0AA99EF3FCB",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jump\\MM_Land.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Anims/Unarmed/ABP_Unarmed.ABP_Unarmed",
+        "assetClass":  "AnimBlueprint",
+        "skeleton":  null,
+        "enableRootMotion":  null,
+        "lengthSeconds":  null,
+        "sha256":  "60AE8C970189979D9E070BEB0FD8675F4AFB2B04D8AAA8D11A0F03C5B7EBF4B2",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\ABP_Unarmed.uasset"
+    },
+    {
+        "path":  "/Game/Characters/Mannequins/Anims/Unarmed/BS_Idle_Walk_Run.BS_Idle_Walk_Run",
+        "assetClass":  "BlendSpace",
+        "skeleton":  "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+        "enableRootMotion":  null,
+        "lengthSeconds":  null,
+        "sha256":  "BC71AF8768B569695D4BCB69C79867F998E085693F5E8230854D228DE359F5BB",
+        "u00HashMatch":  true,
+        "origin":  "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\BS_Idle_Walk_Run.uasset"
+    }
+]

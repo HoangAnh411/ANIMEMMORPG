@@ -1,0 +1,154 @@
+﻿{
+    "sourceBaseSHA":  "f10e9252767f134e8e6d5698c326a2b045b8f1d3",
+    "engine":  "5.8.4 CL 58902052",
+    "originalEditorPID":  19808,
+    "method":  "UnrealEditor.exe -server + two headless -game clients, existing disk binaries; not a clean build or F acceptance",
+    "renderer":  "NullRHI for connection probe only; project renderer unchanged",
+    "termination":  "Only three probe processes stopped by launcher; not graceful Quit validation",
+    "processes":  [
+                      {
+                          "role":  "Server",
+                          "pid":  15820,
+                          "arguments":  [
+                                            "\"D:\\Data\\AnimeMMORPG\\AnimeMMORPG.uproject\"",
+                                            "/Game/AnimeMMORPG/Maps/L_NetworkLab",
+                                            "-server",
+                                            "-port=17777",
+                                            "-NullRHI",
+                                            "-nosound",
+                                            "-unattended",
+                                            "-nop4",
+                                            "-nosplash",
+                                            "-NoLiveCoding",
+                                            "-ModelContextProtocolPort=18110",
+                                            "-UserDir=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\Server\"",
+                                            "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\Server\\Server.log\"",
+                                            "-LogCmds=\"LogNet Verbose,LogSpawn Verbose\""
+                                        ],
+                          "log":  "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\Server\\Server.log",
+                          "logSha256":  "544C978BA782ECC12E828C4307E3E933CD939955EBFDDC21523B45E15096C9FD",
+                          "proof":  [
+                                        "[2026.11.03-17.40.34:414][  0]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.34:414][  0]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.34:416][  0]LogNet: Verbose: AActor::SetNetUpdateFrequency(): SKEL_BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__SKEL_BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.34:416][  0]LogNet: Verbose: AActor::SetNetUpdateFrequency(): SKEL_BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__SKEL_BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.34:419][  0]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.34:420][  0]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.34:946][  0]LogNet: Name:GameNetDriver Def:GameNetDriver IpNetDriver_0 IpNetDriver listening on port 17777",
+                                        "[2026.11.03-17.40.50:779][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027ToolsetDefinition\u0027",
+                                        "[2026.11.03-17.40.50:826][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027AgentSkill\u0027",
+                                        "[2026.11.03-17.40.50:854][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027PythonTestRunner\u0027",
+                                        "[2026.11.03-17.40.50:888][  1]LogNet: NotifyAcceptedConnection: Name: L_NetworkLab, TimeStamp: 11/04/26 00:40:50, [UNetConnection] RemoteAddr: 127.0.0.1:59799, Name: IpConnection_0, Driver: Name:GameNetDriver Def:GameNetDriver IpNetDriver_0, IsServer: YES, PC: NULL, Owner: NULL, UniqueId: INVALID",
+                                        "[2026.11.03-17.40.50:888][  1]LogNet: AddClientConnection: Added client connection: [UNetConnection] RemoteAddr: 127.0.0.1:59799, Name: IpConnection_0, Driver: Name:GameNetDriver Def:GameNetDriver IpNetDriver_0, IsServer: YES, PC: NULL, Owner: NULL, UniqueId: INVALID",
+                                        "[2026.11.03-17.40.51:757][ 27]LogScript: Warning: Accessed None trying to read (real) property CallFunc_Create_ReturnValue in not an UClass",
+                                        "[2026.11.03-17.40.51:760][ 27]LogSpawn: BP_NetworkController_C_0 got player IpConnection_0 [HoangAnh-B56A8D22488700F211B0169C3993A99C]",
+                                        "[2026.11.03-17.40.51:767][ 27]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_0 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:767][ 27]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_0 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:821][ 27]LogNet: Join succeeded: HoangAnh-B56A8D22488",
+                                        "[2026.11.03-17.41.00:267][281]LogNet: NotifyAcceptedConnection: Name: L_NetworkLab, TimeStamp: 11/04/26 00:41:00, [UNetConnection] RemoteAddr: 127.0.0.1:59800, Name: IpConnection_1, Driver: Name:GameNetDriver Def:GameNetDriver IpNetDriver_0, IsServer: YES, PC: NULL, Owner: NULL, UniqueId: INVALID",
+                                        "[2026.11.03-17.41.00:267][281]LogNet: AddClientConnection: Added client connection: [UNetConnection] RemoteAddr: 127.0.0.1:59800, Name: IpConnection_1, Driver: Name:GameNetDriver Def:GameNetDriver IpNetDriver_0, IsServer: YES, PC: NULL, Owner: NULL, UniqueId: INVALID",
+                                        "[2026.11.03-17.41.01:201][309]LogScript: Warning: Accessed None trying to read (real) property CallFunc_Create_ReturnValue in not an UClass",
+                                        "[2026.11.03-17.41.01:202][309]LogSpawn: BP_NetworkController_C_1 got player IpConnection_1 [HoangAnh-9643A98B44CD3AAA777F758B3295B1BD]",
+                                        "[2026.11.03-17.41.01:203][309]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_1 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.01:203][309]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_1 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.01:206][309]LogNet: Join succeeded: HoangAnh-9643A98B44C"
+                                    ]
+                      },
+                      {
+                          "role":  "ClientA",
+                          "pid":  14100,
+                          "arguments":  [
+                                            "\"D:\\Data\\AnimeMMORPG\\AnimeMMORPG.uproject\"",
+                                            "127.0.0.1:17777",
+                                            "-game",
+                                            "-NullRHI",
+                                            "-nosound",
+                                            "-unattended",
+                                            "-nop4",
+                                            "-nosplash",
+                                            "-NoLiveCoding",
+                                            "-ModelContextProtocolPort=18111",
+                                            "-UserDir=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\ClientA\"",
+                                            "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\ClientA\\ClientA.log\"",
+                                            "-LogCmds=\"LogNet Verbose,LogSpawn Verbose\""
+                                        ],
+                          "log":  "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\ClientA\\ClientA.log",
+                          "logSha256":  "05E17C51CDF80EFCA58424217AE5C89CFB8C64E3A4B8011E959A5310AB64B53E",
+                          "proof":  [
+                                        "[2026.11.03-17.40.50:820][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027ToolsetDefinition\u0027",
+                                        "[2026.11.03-17.40.50:826][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027AgentSkill\u0027",
+                                        "[2026.11.03-17.40.50:854][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027PythonTestRunner\u0027",
+                                        "[2026.11.03-17.40.50:954][152]LogNet: Welcomed by server (Level: /Game/AnimeMMORPG/Maps/L_NetworkLab, Game: /Game/AnimeMMORPG/Blueprints/BP_NetworkLabGameMode.BP_NetworkLabGameMode_C)",
+                                        "[2026.11.03-17.40.51:269][152]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:270][152]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:271][152]LogNet: Verbose: AActor::SetNetUpdateFrequency(): SKEL_BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__SKEL_BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:271][152]LogNet: Verbose: AActor::SetNetUpdateFrequency(): SKEL_BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__SKEL_BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:274][152]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:274][152]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:838][415]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_0 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.40.51:839][415]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_0 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.01:209][786]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_1 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.01:209][786]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_1 Frequency=100.000000 HasActorBegunPlay()=0"
+                                    ]
+                      },
+                      {
+                          "role":  "ClientB",
+                          "pid":  21360,
+                          "arguments":  [
+                                            "\"D:\\Data\\AnimeMMORPG\\AnimeMMORPG.uproject\"",
+                                            "127.0.0.1:17777",
+                                            "-game",
+                                            "-NullRHI",
+                                            "-nosound",
+                                            "-unattended",
+                                            "-nop4",
+                                            "-nosplash",
+                                            "-NoLiveCoding",
+                                            "-ModelContextProtocolPort=18112",
+                                            "-UserDir=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\ClientB\"",
+                                            "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\ClientB\\ClientB.log\"",
+                                            "-LogCmds=\"LogNet Verbose,LogSpawn Verbose\""
+                                        ],
+                          "log":  "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\A\\Network-20261104-004025\\ClientB\\ClientB.log",
+                          "logSha256":  "41546CA5DCDDF06AC248BAF5DB2D6BE45036C8D3E5AD3715651766BB07F806DB",
+                          "proof":  [
+                                        "[2026.11.03-17.41.00:338][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027ToolsetDefinition\u0027",
+                                        "[2026.11.03-17.41.00:342][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027AgentSkill\u0027",
+                                        "[2026.11.03-17.41.00:365][  0]LogPython: Error: AttributeError: module \u0027unreal\u0027 has no attribute \u0027PythonTestRunner\u0027",
+                                        "[2026.11.03-17.41.00:434][ 94]LogNet: Welcomed by server (Level: /Game/AnimeMMORPG/Maps/L_NetworkLab, Game: /Game/AnimeMMORPG/Blueprints/BP_NetworkLabGameMode.BP_NetworkLabGameMode_C)",
+                                        "[2026.11.03-17.41.00:713][ 94]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.00:713][ 94]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.00:715][ 94]LogNet: Verbose: AActor::SetNetUpdateFrequency(): SKEL_BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__SKEL_BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.00:715][ 94]LogNet: Verbose: AActor::SetNetUpdateFrequency(): SKEL_BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__SKEL_BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.00:718][ 94]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.00:719][ 94]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.Default__BP_ThirdPersonCharacter_C Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.01:235][159]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_0 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.01:235][159]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_0 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.01:240][159]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_1 Frequency=100.000000 HasActorBegunPlay()=0",
+                                        "[2026.11.03-17.41.01:240][159]LogNet: Verbose: AActor::SetNetUpdateFrequency(): BP_ThirdPersonCharacter_C /Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_ThirdPersonCharacter_C_1 Frequency=100.000000 HasActorBegunPlay()=0"
+                                    ]
+                      }
+                  ],
+    "aliveBeforeCleanup":  {
+                               "value":  [
+                                             {
+                                                 "role":  "Server",
+                                                 "pid":  15820,
+                                                 "alive":  true
+                                             },
+                                             {
+                                                 "role":  "ClientA",
+                                                 "pid":  14100,
+                                                 "alive":  true
+                                             },
+                                             {
+                                                 "role":  "ClientB",
+                                                 "pid":  21360,
+                                                 "alive":  true
+                                             }
+                                         ],
+                               "Count":  3
+                           },
+    "editorBinarySha256":  "A423AB94410AA4F4CC34D99A2AF75240C5D0E376A33D903A3E819FECF1177143",
+    "projectModuleSha256":  "AE6372CA73B3DC5AFC0811F6C734D05C28A0028DBCEE05A6548C00152AACFA4F"
+}

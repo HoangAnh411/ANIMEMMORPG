@@ -4,7 +4,7 @@
 
 Project chính: `D:\Data\AnimeMMORPG`; engine mục tiêu Unreal Engine 5.8.4. Thiết kế tại [Description.md](Description.md), lịch sử và lưu ý chuyển engine tại [UNITY_REFERENCE.md](UNITY_REFERENCE.md).
 
-Baseline khảo sát 2026-11-02: project Third Person C++ có ba variant Combat/Platforming/SideScrolling; EngineAssociation ghi 5.8. Lịch sử khảo sát lưu tại [REPORT-A](U00/REPORT-A.md) và [ENVIRONMENT](U00/ENVIRONMENT.md). Hiện U00 đã được người dùng nghiệm thu sau lượt F: clone GitHub/LFS, compile Editor/Game, 4/4 Automation tests trên binary đĩa, tool registration sau khởi động mới, package Windows và kiểm tra thủ công packaged game đủ 5 vòng, Thoát/mở lại đều đạt. Nguồn build `9d6a81b24c9dbf75ad8fcf4c47de78c72f95eb80`; UE 5.8.4 CL 58902052; UBT chọn MSVC 14.51.36260, SDK 10.0.26100.0. Xem [REPORT-F](U00/REPORT-F.md), [manifest](U00/F-MANIFEST.json) và [hash artifact](U00/F-ARTIFACTS.csv). Không kế thừa nghiệm thu Unity; U01 chưa bắt đầu.
+Baseline khảo sát 2026-11-02: project Third Person C++ có ba variant Combat/Platforming/SideScrolling; EngineAssociation ghi 5.8. Lịch sử khảo sát lưu tại [REPORT-A](U00/REPORT-A.md) và [ENVIRONMENT](U00/ENVIRONMENT.md). Hiện U00 đã được người dùng nghiệm thu sau lượt F: clone GitHub/LFS, compile Editor/Game, 4/4 Automation tests trên binary đĩa, tool registration sau khởi động mới, package Windows và kiểm tra thủ công packaged game đủ 5 vòng, Thoát/mở lại đều đạt. Nguồn build `9d6a81b24c9dbf75ad8fcf4c47de78c72f95eb80`; UE 5.8.4 CL 58902052; UBT chọn MSVC 14.51.36260, SDK 10.0.26100.0. Xem [REPORT-F](U00/REPORT-F.md), [manifest](U00/F-MANIFEST.json) và [hash artifact](U00/F-ARTIFACTS.csv). Không kế thừa nghiệm thu Unity; U01-A đang bàn giao hợp đồng/khả thi, chưa nghiệm thu gameplay.
 
 Bản thử kín: Kiếm Vũ và Cơ Xạ, một trung tâm nhỏ, một vùng, dungeon bốn người, PvP 1v1 không xếp hạng, tiến trình lưu được cấp 1–10. Đích đầy đủ: sáu nghề, cấp 50, raid tám người, phân khu 40 người, PvP 1v1/3v3.
 
@@ -42,20 +42,24 @@ Quản lý asset: ghi nguồn/giấy phép; quy ước tên và đường dẫn;
 
 Cổng: mở, compile, test và packaged Windows vào được sân thử từ nguồn quản lý phiên bản. Tên plugin không chứng minh kết nối.
 
-### U01 — Nhân vật có animation thật
+### U01 — Điều khiển, camera, animation và mạng cơ bản (kỹ thuật)
 
 Phụ thuộc: U00.
 
-- [ ] U01.01 Chọn humanoid rig/kiếm/clip hợp giấy phép; mannequin chưa là nghiệm thu art anime.
+U01-A bắt đầu từ main U00 `f10e9252767f134e8e6d5698c326a2b045b8f1d3`. Quyết định người dùng: kỹ thuật trước bằng mannequin/clip hiện có và kiếm hình khối; camera/chuột là ưu tiên chơi thử đầu tiên, di chuột xoay ngay không giữ nút. Nghiệm thu kỹ thuật tách khỏi art sản phẩm. Model/rig/kiếm anime **DEFERRED**, chưa hoàn thành và không chặn cổng kỹ thuật. Không sửa luật gameplay trong Description. Hợp đồng, asset và ma trận tại [Docs/U01](U01/CONTRACTS.md), [báo cáo A](U01/REPORT-A.md).
+
+Mỗi đợt riêng trên `u01/<tên-đợt>` từ main đã nghiệm thu; commit/push, bàn giao rồi dừng, không tự merge hoặc chuyển đợt: A hợp đồng/khả thi → B camera/chuột/menu tối thiểu → C motor/sân đo → D animation/kiếm thử → E rebind/settings/khóa → F server riêng/hai client → G Windows tích hợp. B–F có smoke packaged phần mới; G full build/Automation/package từ clone SHA đã push, giữ Editor gốc mở.
+
+- [ ] U01.01 Chốt mannequin/clip nguồn theo register U00 cho phép thử kỹ thuật. Model/rig/kiếm anime hợp giấy phép: **DEFERRED**, nghiệm thu art riêng.
 - [ ] U01.02 Character/CharacterMovement và Enhanced Input: đi 5 m/s, sprint 7 m/s, nhảy 1,2 m, dốc 45°, đi chéo không nhanh hơn.
 - [ ] U01.03 Camera tự do/đổi vai/tránh vật cản, tách hướng thân/di chuyển/ngắm.
 - [ ] U01.04 Skeleton/retarget/socket kiếm, Animation Blueprint idle/đi/chạy/nhảy/rơi/tiếp đất; motor giữ quyền dịch chuyển.
 - [ ] U01.05 Menu/focus/Resume, rebind/settings; camera dùng được khi khóa hành động, xóa lệnh cũ.
-- [ ] U01.06 Sân dốc/bậc/trần/vực/hành lang/vật cản; build thử với model thật.
+- [ ] U01.06 Sân dốc/bậc/trần/vực/hành lang/vật cản có số đo; Windows chơi được với mannequin kỹ thuật.
 - [ ] U01.07 Chốt chính sách root motion cho bộ clip đầu: CharacterMovement giữ quyền dịch chuyển cơ bản, AnimBP trình bày; không để root motion và code cùng dịch chuyển một hành động. Ghi rõ ngoại lệ nếu có và kiểm thử displacement thực.
-- [ ] U01.08 Xác minh đường build dedicated server với engine hiện có trước thử mạng; ghi target, loại engine và lệnh. Nếu cần engine/toolchain khác, trình phương án và chi phí trước thay đổi. Chạy một server riêng và hai client: spawn/possess đúng, mỗi client chỉ điều khiển pawn của mình, server ghi nhận và hai client thấy di chuyển. Bàn giao log từng tiến trình và bằng chứng quyền server/client; chưa làm prediction combat hoặc ma trận mạng xấu.
+- [ ] U01.08 Thử kỹ thuật bằng UnrealEditor.exe -server và hai client riêng localhost ngay từ A; phân biệt với target Server đóng gói, không mặc định installed engine hỗ trợ. Nếu không chạy được, bàn giao lỗi và phương án engine, không tự tải source/nâng engine. F kiểm spawn/possess/ownership, server ghi nhận đi/sprint/nhảy, hai client thấy di chuyển/animation, reconnect và settings độc lập; log từng PID/world/net mode/pawn. Chưa prediction combat hoặc mạng xấu U05.
 
-Cổng: Windows điều khiển được, chuyển tư thế/camera ổn, không trượt chân nghiêm trọng; đo hành vi theo Description (G01 chỉ là tham chiếu lịch sử), không dùng ảnh thay số đo. Thử mạng cơ bản U01.08 đạt trước U02; mannequin có thể dùng cho phép thử kỹ thuật nhưng không thay nghiệm thu art U01.
+Cổng kỹ thuật: Windows điều khiển được, chuột xoay ngay, menu/focus/Resume/settings đúng; motor và animation đo theo Description, không trượt chân nghiêm trọng. U00 Foundation 4/4 và ma trận U01 thực chạy, có source SHA/log/video; server riêng/hai client đạt trước U02. Art anime vẫn DEFERRED, mannequin không là nghiệm thu hình ảnh sản phẩm. Xem [ma trận](U01/TEST-MATRIX.md).
 
 ### U02 — Một đòn đánh hoàn chỉnh
 
