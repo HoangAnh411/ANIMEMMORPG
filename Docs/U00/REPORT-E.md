@@ -63,3 +63,29 @@ Commit/push riêng nhánh u00/e-maps; SHA và ref đối chiếu sau commit. Sta
 Bước còn lại để nghiệm thu E: kiểm chuột thực ổn định (đặc biệt Về menu), input sân Network, chạy lại UI sau sửa focus cuối cùng, kiểm Standalone đủ hai tuyến và Quit bằng nút với bằng chứng đúng process. Các việc này không đòi mở rộng toolset hoặc đóng Editor; chưa chọn cách vượt giới hạn hiện tại. Full build D, -Task Test binary đĩa và dependency/tool registration sau khởi động mới giữ trong checklist tích hợp riêng. Chưa bắt đầu F.
 
 補 sung kiểm tra Git cuối: hunk startup ban đầu có CR cuối dòng bị git diff --cached --check báo trailing whitespace; baseline asset commit vẫn được lưu/push, không tính check đó PASS. Commit nối tiếp chỉ chuẩn hóa line ending index của config đã sạch token và ghi lỗi này; không stage config local có token. 12/12 asset mới đã xác minh index là LFS pointer và upload LFS thành công. Không thay nội dung asset vì lỗi line ending.
+
+## Kiểm chứng bổ sung từ 24dc4e7 — 2026-11-03 19:03 +07:00
+
+Trạng thái các cổng runtime còn thiếu không đổi; không làm lại phần đã đạt. HEAD bắt đầu 24dc4e7ecb417dd15acc03a6c10b76c412d64ccf, nhánh u00/e-maps; chỉ DefaultEngine.ini local còn khác commit. Đọc lại AGENTS.md và phần bàn giao E. GetEditorSummary xác nhận L_Boot, 0 actor; Python đọc project path đúng, PID 13444; dirty map/content đều []; IsPIERunning=false. Không sửa/lưu asset, config hoặc đóng Editor trong lượt bổ sung.
+
+### Điểm thiếu công cụ đã xác định
+
+list_toolsets và describe_toolset thực gọi thành công. Phiên mới không expose SlateInspectorToolset hoặc UMGToolSet; ALL_TOOLS cũng không có desktop/computer mouse/keyboard tool. TestRunner có execute_console_command, compile/test/save/summary nhưng không có mouse click/key down/up hoặc điều khiển HWND ngoài process. EditorApp có StartPIE/StopPIE: schema StartPIE ghi rõ out-of-process/NewProcess bị downgrade về PlayMode_InViewPort, do đó không thể gọi nó rồi tính là Standalone. Không gọi tool không tồn tại hoặc tự enable aggregator/plugin để lấy lại khả năng UI.
+
+Chưa có đường nhập chuột/phím đã xác minh để chạy lại hai tuyến sau focus fix, giữ W ở sân Network, hoặc điều khiển UI tiến trình Standalone. Console Open, trực tiếp broadcast OnClicked, AddMovementInput/teleport hoặc inject action không thay bằng chứng các cổng này. Không tái chạy thử foreground Win32 vốn đã bị từ chối ở lượt trước khi chưa có thay đổi công cụ/quyền focus. Không tạo game process mới mà không có đường thao tác nó. Không báo đã chạy các test runtime mới.
+
+Bằng chứng máy đọc mới: Artifacts/U00/E-Supplement-20261103-190337/discovery.json, gồm toolset list, schema TestRunner/EditorApp/Logs, PID/project/dirty state và bước thiếu. Đây là bằng chứng giới hạn công cụ, không phải bằng chứng các tuyến UI đạt. Kết quả đạt trước giữ nguyên, chưa có kết quả runtime mới để nâng E.
+
+### Checklist thủ công gộp duy nhất để khép các cổng còn thiếu
+
+Thực hiện trong một phiên review trên nhánh u00/e-maps với asset tại 24dc4e7 (các commit tài liệu sau đó không đổi asset). Giữ Editor mở. Không cần chạy lại phép đo/compile đã đạt. Ghi một video liên tục hoặc ảnh mốc kèm giờ và log cho phiên này; ghi rõ PID Editor và PID Standalone riêng.
+
+- [ ] PIE từ L_Boot: dùng chuột thật bấm Sân nhân vật/combat → Về menu, lặp 3 lần; tiếp tục Sân mạng → Về menu, lặp 3 lần. Xác nhận sau focus fix không còn lỗi InputMode:UIOnly, nút luôn thấy/bấm được, mỗi world chỉ một menu/overlay. Không dùng console Open hoặc Enter thay click chuột cho cổng này.
+- [ ] Trong một vòng sân Network ở trên: click vùng game để lấy focus, giữ W rồi A/S/D để xác nhận input template di chuyển; quan sát pawn đứng trên sàn, không rơi xuyên; sau đó dùng chuột bấm Về menu. Ghi hình trước/sau di chuyển. Không yêu cầu tốc độ/camera đạt U01.
+- [ ] Kết thúc PIE bằng nút Thoát ở Boot; Editor còn chạy. Nếu có package ngoài E dirty, không tự save/discard để chuyển map.
+- [ ] Từ menu Play của Editor chọn Standalone Game thật; ghi PID/command line có -game và đúng project. Không tính cửa sổ PIE có nhãn NetMode Standalone là tiến trình Standalone độc lập.
+- [ ] Trong chính game Standalone: dùng chuột chạy Boot → sân nhân vật/combat → Boot và Boot → sân mạng → Boot, mỗi tuyến 3 vòng; trong mỗi sân dùng W/A/S/D để di chuyển, xác nhận không rơi sàn, không mất/nhân overlay và nút Về menu còn bấm được. Ghi đủ các mốc UI và di chuyển; không dùng console travel.
+- [ ] Tại Boot Standalone bấm Thoát bằng chuột; xác nhận đúng PID game kết thúc bình thường, cửa sổ game đóng và Editor vẫn chạy. Giữ log có LoadMap hai sân/Boot và shutdown, không có crash/missing reference/Blueprint runtime error mới. Không chỉ bấm X cửa sổ thay nút Thoát.
+- [ ] Bàn giao gộp video/ảnh, khoảng thời gian, PID, log và pass/fail từng mục ở trên; ghi lỗi cụ thể nếu có. AI đối chiếu một lần và cập nhật kết luận E, không yêu cầu chạy lại từng mục rời rạc nếu bằng chứng đã đủ.
+
+Chỉ khi các mục trên đạt mới nâng READY_FOR_REVIEW E. Full build D, -Task Test binary đĩa và dependency/tool registration sau restart tiếp tục ở checklist tích hợp riêng, không được tính đạt từ discovery hiện tại. Lượt bổ sung chỉ commit/push báo cáo, token vẫn ngoài commit; không merge và chưa bắt đầu F.
