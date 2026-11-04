@@ -1,5 +1,5 @@
 {
-  "basis": "Measured HandBeforeLit hand-space knuckles/palm and ref joint axes; first candidate for rendered calibration, not final until observed",
+  "basis": "Calibrated from HandBeforeLit/HandBeforeVerified geometry and ref axes, then inspected on actual mesh in HandCandidateVerified idle/run/land; finger-only layer, wrist and arm retained",
   "socketLocation": [
     -6.5,
     2,
