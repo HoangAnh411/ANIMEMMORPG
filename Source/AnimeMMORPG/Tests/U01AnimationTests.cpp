@@ -92,6 +92,9 @@ bool FU01DAssets::RunTest(const FString&)
     if(!TestNotNull(TEXT("Own BlendSpace"),Blend)) return false;
     TestEqual(TEXT("Four calibrated samples"),Blend->GetBlendSamples().Num(),4);
     for(const auto& Sample:Blend->GetBlendSamples()) TestTrue(TEXT("Bounded play rates"),Sample.RateScale>=.6 && Sample.RateScale<=2.5);
+    TArray<FBlendSampleData> Weights; int32 CachedIndex=INDEX_NONE;
+    TestTrue(TEXT("Serialized interpolation produces a pose at 500cm/s"),Blend->GetSamplesFromBlendInput(FVector(500,0,0),Weights,CachedIndex,true));
+    TestTrue(TEXT("Nonempty evaluated samples"),Weights.Num()>0);
     return true;
 }
 
@@ -131,15 +134,31 @@ bool FU01DTransitions::RunTest(const FString&)
     TestEqual(TEXT("Moving"),F.Anim->PoseIndex,1);
     double HandChange=0,SocketError=0,RootDrift=0;
     const FVector Root=F.Pawn->GetMesh()->GetSocketTransform(TEXT("root"),RTS_Component).GetLocation();
+    const FVector MovingHand=F.Pawn->GetMesh()->GetSocketTransform(TEXT("hand_r"),RTS_Component).GetLocation();
+    const FVector MovingFoot=F.Pawn->GetMesh()->GetSocketTransform(TEXT("foot_r"),RTS_Component).GetLocation();
+    double WalkHandCycle=0,WalkFootCycle=0;
     for(int I=0;I<120;++I)
     {
         F.Step(1.f/60,FVector::ForwardVector);
         auto* Mesh=F.Pawn->GetMesh();
+        WalkHandCycle=FMath::Max(WalkHandCycle,FVector::Distance(MovingHand,Mesh->GetSocketTransform(TEXT("hand_r"),RTS_Component).GetLocation()));
+        WalkFootCycle=FMath::Max(WalkFootCycle,FVector::Distance(MovingFoot,Mesh->GetSocketTransform(TEXT("foot_r"),RTS_Component).GetLocation()));
         HandChange=FMath::Max(HandChange,FVector::Distance(IdleHand,Mesh->GetSocketTransform(TEXT("hand_r"),RTS_Component).GetLocation()));
         RootDrift=FMath::Max(RootDrift,FVector::Distance(Root,Mesh->GetSocketTransform(TEXT("root"),RTS_Component).GetLocation()));
         SocketError=FMath::Max(SocketError,FVector::Distance(F.Pawn->SwordRoot->GetComponentLocation(),Mesh->GetSocketTransform(TEXT("U01_Sword_R"),RTS_World).GetLocation()));
     }
     TestTrue(TEXT("Evaluated moving bone pose, not reference pose"),HandChange>5);
+    TestTrue(TEXT("Steady walk hand cycles, not frozen pose"),WalkHandCycle>5);
+    TestTrue(TEXT("Steady walk foot cycles, not frozen pose"),WalkFootCycle>10);
+    F.Tick(1,FVector::ForwardVector,true);
+    const FVector SprintFoot=F.Pawn->GetMesh()->GetSocketTransform(TEXT("foot_r"),RTS_Component).GetLocation();
+    double SprintFootCycle=0;
+    for(int I=0;I<120;++I)
+    {
+        F.Step(1.f/60,FVector::ForwardVector,true);
+        SprintFootCycle=FMath::Max(SprintFootCycle,FVector::Distance(SprintFoot,F.Pawn->GetMesh()->GetSocketTransform(TEXT("foot_r"),RTS_Component).GetLocation()));
+    }
+    TestTrue(TEXT("Steady sprint foot cycles"),SprintFootCycle>10);
     TestTrue(TEXT("Root does not drift"),RootDrift<.5);
     TestTrue(TEXT("Sword attached to animated hand"),SocketError<.1);
     F.Tick(1); F.Pawn->Jump();
@@ -158,7 +177,7 @@ bool FU01DTransitions::RunTest(const FString&)
     }
     TestEqual(TEXT("Capsule radius unchanged"),F.Pawn->GetCapsuleComponent()->GetUnscaledCapsuleRadius(),42.f);
     TestEqual(TEXT("Capsule height unchanged"),F.Pawn->GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight(),96.f);
-    F.Record(TEXT("pose-attachment"),FString::Printf(TEXT("handChangeCm=%.9f rootDriftCm=%.9f socketErrorCm=%.9f"),HandChange,RootDrift,SocketError));
+    F.Record(TEXT("pose-attachment"),FString::Printf(TEXT("handChangeCm=%.9f rootDriftCm=%.9f socketErrorCm=%.9f walkHandCycleCm=%.9f walkFootCycleCm=%.9f sprintFootCycleCm=%.9f"),HandChange,RootDrift,SocketError,WalkHandCycle,WalkFootCycle,SprintFootCycle));
     FAnimatedFixture Ledge(*this); if(!Ledge.Start(true)) return false;
     bool SawFall=false,SawJump=false;
     for(int I=0;I<60;++I){Ledge.Step(1.f/60,FVector::ForwardVector);SawFall|=Ledge.Anim->PoseIndex==3;SawJump|=Ledge.Anim->PoseIndex==2;}

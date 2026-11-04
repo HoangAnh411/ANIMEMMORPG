@@ -118,7 +118,7 @@ FString UU01AnimationEditor::BuildDAssets()
     FScriptArrayHelper Helper(Samples,Samples->ContainerPtrToValuePtr<void>(Blend));
     reinterpret_cast<FBlendSample*>(Helper.GetRawPtr(2))->RateScale=500/JogSpeed;
     reinterpret_cast<FBlendSample*>(Helper.GetRawPtr(3))->RateScale=700/JogSpeed;
-    Blend->ValidateSampleData(); Blend->PostEditChange();
+    Blend->ValidateSampleData(); Blend->ResampleData(); Blend->PostEditChange();
     FAssetRegistryModule::AssetCreated(Blend);
     auto* Factory=NewObject<UAnimBlueprintFactory>();
     Factory->ParentClass=UU01AnimInstance::StaticClass(); Factory->TargetSkeleton=Skeleton; Factory->PreviewSkeletalMesh=Mesh;
@@ -167,6 +167,20 @@ FString UU01AnimationEditor::BuildDAssets()
     bool Saved=SaveD(Skeleton)&&SaveD(Mesh)&&SaveD(Blend)&&SaveD(BP)&&SaveD(CharacterBP);
     for(auto* Clip:Clips) Saved=SaveD(Clip)&&Saved;
     return Saved ? FString::Printf(TEXT("SUCCESS walk=%.6f jog=%.6f jogRates=%.6f/%.6f"),WalkSpeed,JogSpeed,500/JogSpeed,700/JogSpeed) : TEXT("ERROR: saving assets");
+#else
+    return TEXT("ERROR: editor only");
+#endif
+}
+
+FString UU01AnimationEditor::FinalizeDBlendSpace()
+{
+#if WITH_EDITOR
+    FString Dir=FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()); Dir.ReplaceInline(TEXT("\\"),TEXT("/"));
+    if(!Dir.Contains(TEXT("/Artifacts/U01/D/Source/"))) return TEXT("ERROR: requires isolated D source clone");
+    auto* Blend=LoadObject<UBlendSpace1D>(nullptr,*(DRoot+TEXT("/BS_U01_Locomotion")));
+    if(!Blend) return TEXT("ERROR: missing own D BlendSpace");
+    Blend->ValidateSampleData(); Blend->ResampleData(); Blend->PostEditChange();
+    return SaveD(Blend)?TEXT("SUCCESS: serialized D BlendSpace interpolation rebuilt"):TEXT("ERROR: save failed");
 #else
     return TEXT("ERROR: editor only");
 #endif

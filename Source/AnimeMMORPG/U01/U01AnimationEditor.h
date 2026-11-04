@@ -11,4 +11,6 @@ public:
     // Narrow asset-authoring entry point; refuses the original workspace, editor only.
     UFUNCTION(BlueprintCallable, Category="U01|Authoring")
     static FString BuildDAssets();
+    UFUNCTION(BlueprintCallable, Category="U01|Authoring")
+    static FString FinalizeDBlendSpace();
 };
