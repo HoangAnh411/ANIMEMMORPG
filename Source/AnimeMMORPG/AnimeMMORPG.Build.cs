@@ -24,7 +24,7 @@ public class AnimeMMORPG : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] { "SlateCore", "ApplicationCore", "Json", "AnimGraphRuntime" });
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AnimGraph", "BlueprintGraph", "AssetTools", "AssetRegistry", "ControlRig" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AnimGraph", "BlueprintGraph", "AssetTools", "AssetRegistry", "ControlRig", "RenderCore" });
 		}
 		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{

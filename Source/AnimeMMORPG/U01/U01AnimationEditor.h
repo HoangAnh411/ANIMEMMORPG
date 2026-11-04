@@ -13,4 +13,8 @@ public:
     static FString BuildDAssets();
     UFUNCTION(BlueprintCallable, Category="U01|Authoring")
     static FString FinalizeDBlendSpace();
+    UFUNCTION(BlueprintCallable, Category="U01|Authoring")
+    static FString InspectDHand(const FString& OutputDirectory);
+    UFUNCTION(BlueprintCallable, Category="U01|Authoring")
+    static FString ReviseDAssets(const FString& ConfigFile);
 };

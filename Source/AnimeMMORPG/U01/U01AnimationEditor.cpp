@@ -28,6 +28,12 @@
 #include "ControlRig.h"
 #include "ControlRigObjectBinding.h"
 #include "UObject/UObjectHash.h"
+#include "Animation/PoseAsset.h"
+#include "AnimGraphNode_PoseByName.h"
+#include "AnimGraphNode_LayeredBoneBlend.h"
+#include "Misc/FileHelper.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonSerializer.h"
 
 namespace
 {
@@ -181,6 +187,77 @@ FString UU01AnimationEditor::FinalizeDBlendSpace()
     if(!Blend) return TEXT("ERROR: missing own D BlendSpace");
     Blend->ValidateSampleData(); Blend->ResampleData(); Blend->PostEditChange();
     return SaveD(Blend)?TEXT("SUCCESS: serialized D BlendSpace interpolation rebuilt"):TEXT("ERROR: save failed");
+#else
+    return TEXT("ERROR: editor only");
+#endif
+}
+
+FString UU01AnimationEditor::ReviseDAssets(const FString& ConfigFile)
+{
+#if WITH_EDITOR
+    FString Dir=FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()); Dir.ReplaceInline(TEXT("\\"),TEXT("/"));
+    if(!Dir.Contains(TEXT("/Artifacts/U01/D/Source/"))) return TEXT("ERROR: clone only");
+    auto* BP=LoadObject<UAnimBlueprint>(nullptr,*(DRoot+TEXT("/ABP_U01")));
+    UEdGraph* Graph=nullptr; UAnimGraphNode_Root* Root=nullptr; UAnimGraphNode_BlendListByInt* Select=nullptr;
+    UAnimGraphNode_LayeredBoneBlend* Layer=nullptr;
+    for(auto G:BP->FunctionGraphs) for(auto N:G->Nodes)
+    {
+        if(auto* R=Cast<UAnimGraphNode_Root>(N)){Graph=G;Root=R;}
+        if(auto* S=Cast<UAnimGraphNode_BlendListByInt>(N))Select=S;
+        if(auto* L=Cast<UAnimGraphNode_LayeredBoneBlend>(N))Layer=L;
+    }
+    if(!Root||!Select)return TEXT("ERROR: missing own pose selector");
+    auto* Times=FindFProperty<FArrayProperty>(FAnimNode_BlendListBase::StaticStruct(),TEXT("BlendTime"));
+    FScriptArrayHelper TimeValues(Times,Times->ContainerPtrToValuePtr<void>(&Select->Node));
+    if(TimeValues.Num()!=5)return TEXT("ERROR: expected five poses");
+    for(int I=0;I<5;++I)*reinterpret_cast<float*>(TimeValues.GetRawPtr(I))=.10f;
+    Select->ReconstructNode();
+    for(auto* Pin:Select->Pins)if(Pin->PinName.ToString().StartsWith(TEXT("BlendTime_")))Pin->DefaultValue=TEXT("0.100000");
+    if(!ConfigFile.IsEmpty())
+    {
+        FString Text;TSharedPtr<FJsonObject> Config;
+        if(!FFileHelper::LoadFileToString(Text,*ConfigFile)||!FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text),Config))return TEXT("ERROR: grip config");
+        auto* Skeleton=LoadObject<USkeleton>(nullptr,*(DRoot+TEXT("/SK_U01")));
+        auto* Socket=Skeleton->FindSocket(TEXT("U01_Sword_R"));
+        const auto& Loc=Config->GetArrayField(TEXT("socketLocation"));const auto& Rot=Config->GetArrayField(TEXT("socketRotation"));
+        Socket->RelativeLocation=FVector(Loc[0]->AsNumber(),Loc[1]->AsNumber(),Loc[2]->AsNumber());
+        Socket->RelativeRotation=FRotator(Rot[0]->AsNumber(),Rot[1]->AsNumber(),Rot[2]->AsNumber());
+        const auto& Ref=Skeleton->GetReferenceSkeleton();TArray<FTransform> Pose=Ref.GetRefBonePose();
+        const auto& Fingers=Config->GetArrayField(TEXT("fingers"));
+        if(Fingers.Num()!=15)return TEXT("ERROR: expected 15 finger joints only");
+        for(auto Value:Fingers)
+        {
+            const auto J=Value->AsObject();const FString Bone=J->GetStringField(TEXT("bone"));
+            if(!Bone.EndsWith(TEXT("_r"))||!(Bone.StartsWith(TEXT("index_0"))||Bone.StartsWith(TEXT("middle_0"))||Bone.StartsWith(TEXT("ring_0"))||Bone.StartsWith(TEXT("pinky_0"))||Bone.StartsWith(TEXT("thumb_0"))))return TEXT("ERROR: non-finger change");
+            const int Index=Ref.FindBoneIndex(*Bone);if(Index==INDEX_NONE)return TEXT("ERROR: finger missing");
+            const auto& R=J->GetArrayField(TEXT("rotation"));
+            Pose[Index].SetRotation((Pose[Index].GetRotation()*FRotator(R[0]->AsNumber(),R[1]->AsNumber(),R[2]->AsNumber()).Quaternion()).GetNormalized());
+        }
+        auto* Grip=LoadObject<UPoseAsset>(nullptr,*(DRoot+TEXT("/PA_U01_RightGrip")));
+        if(!Grip){Grip=NewObject<UPoseAsset>(CreatePackage(*(DRoot+TEXT("/PA_U01_RightGrip"))),TEXT("PA_U01_RightGrip"),RF_Public|RF_Standalone);Grip->SetSkeleton(Skeleton);FAssetRegistryModule::AssetCreated(Grip);}
+        Grip->AddReferencePose(TEXT("RightGrip"),Ref);
+        auto* Container=FindFProperty<FStructProperty>(UPoseAsset::StaticClass(),TEXT("PoseContainer"))->ContainerPtrToValuePtr<FPoseDataContainer>(Grip);
+        Container->AddOrUpdatePose(TEXT("RightGrip"),Pose,TArray<float>());
+        Grip->ConvertSpace(false,INDEX_NONE);
+        if(!Layer)
+        {
+            auto* GripNode=Node<UAnimGraphNode_PoseByName>(Graph,-200,1000);
+            GripNode->Node.SetPoseAsset(Grip);GripNode->Node.PoseName=TEXT("RightGrip");GripNode->ReconstructNode();
+            Layer=Node<UAnimGraphNode_LayeredBoneBlend>(Graph,100,0);
+            Layer->Node.LayerSetup.SetNum(1);Layer->Node.BlendWeights.SetNum(1);Layer->Node.BlendWeights[0]=1;
+            for(const TCHAR* Bone:{TEXT("thumb_01_r"),TEXT("index_01_r"),TEXT("middle_01_r"),TEXT("ring_01_r"),TEXT("pinky_01_r")})
+            {FBranchFilter Filter;Filter.BoneName=Bone;Filter.BlendDepth=0;Layer->Node.LayerSetup[0].BranchFilters.Add(Filter);}
+            Layer->ReconstructNode();
+            Root->FindPin(TEXT("Result"))->BreakAllPinLinks();
+            Link(Graph,Select,TEXT("Pose"),Layer,TEXT("BasePose"));
+            Link(Graph,GripNode,TEXT("Pose"),Layer,TEXT("BlendPoses_0"));
+            Link(Graph,Layer,TEXT("Pose"),Root,TEXT("Result"));
+        }
+        if(!SaveD(Grip)||!SaveD(Skeleton))return TEXT("ERROR: grip/socket save");
+    }
+    FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(BP);FKismetEditorUtilities::CompileBlueprint(BP);
+    if(BP->Status==BS_Error||!SaveD(BP))return TEXT("ERROR: revised AnimBP compile/save");
+    return TEXT("SUCCESS: explicit 0.100s pose blends; optional finger-only grip/socket revision");
 #else
     return TEXT("ERROR: editor only");
 #endif

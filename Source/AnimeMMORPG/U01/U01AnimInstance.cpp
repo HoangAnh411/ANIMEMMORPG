@@ -24,9 +24,11 @@ void UU01AnimInstance::NativeUpdateAnimation(float Dt)
     bGrounded = Motor->IsMovingOnGround();
     bFalling = Motor->IsFalling();
     bSprinting = Motor->IsSprinting();
-    if (bPreviouslyFalling && bGrounded) LandingRemaining = .25f;
+    if (bPreviouslyFalling && bGrounded && GroundSpeed <= 3.f) LandingRemaining = .25f;
     else LandingRemaining = FMath::Max(0.f, LandingRemaining - Dt);
-    if (bFalling) LandingRemaining = 0;
+    // Presentation never delays movement: moving landings and movement begun
+    // during a stationary landing immediately relinquish the landing pose.
+    if (bFalling || !bGrounded || GroundSpeed > 3.f || LandingRemaining < 1.e-6f) LandingRemaining = 0;
     PoseIndex = bFalling ? (VerticalSpeed > 10.f ? 2 : 3)
         : (LandingRemaining > 0 ? 4 : (GroundSpeed > 3.f ? 1 : 0));
     bPreviouslyFalling = bFalling;
