@@ -1,0 +1,1056 @@
+{
+  "project": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\C\\Source\\AnimeMMORPG.uproject",
+  "fixtures": [
+    {
+      "label": "U01C_Runway",
+      "centerCm": [
+        4000,
+        -4000,
+        -50
+      ],
+      "localDimensionsCm": [
+        9000,
+        600,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        4000.0,
+        -4000.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        4500.0,
+        300.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark0",
+      "centerCm": [
+        0,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        0.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark10",
+      "centerCm": [
+        1000,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        1000.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark20",
+      "centerCm": [
+        2000,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        2000.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark30",
+      "centerCm": [
+        3000,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        3000.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark40",
+      "centerCm": [
+        4000,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        4000.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark50",
+      "centerCm": [
+        5000,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        5000.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark60",
+      "centerCm": [
+        6000,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        6000.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark70",
+      "centerCm": [
+        7000,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        7000.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_RunwayMark80",
+      "centerCm": [
+        8000,
+        -4000,
+        1
+      ],
+      "localDimensionsCm": [
+        5,
+        600,
+        2
+      ],
+      "measuredBoundsCenterCm": [
+        8000.0,
+        -4000.0,
+        1.0
+      ],
+      "measuredBoundsExtentCm": [
+        2.5,
+        300.0,
+        1.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Approach30",
+      "centerCm": [
+        -400,
+        2500,
+        -50
+      ],
+      "localDimensionsCm": [
+        800,
+        500,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        -400.0,
+        2500.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        400.0,
+        250.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Slope30",
+      "centerCm": [
+        351.4101615137755,
+        2500,
+        191.33974596215558
+      ],
+      "localDimensionsCm": [
+        800,
+        400,
+        20
+      ],
+      "measuredBoundsCenterCm": [
+        351.41016151377556,
+        2500.0,
+        191.33974596215558
+      ],
+      "measuredBoundsExtentCm": [
+        351.4101615137755,
+        200.0,
+        208.66025403784448
+      ],
+      "measuredNormal": [
+        -0.5000000000000002,
+        0.0,
+        0.8660254037844386
+      ],
+      "measuredAngleDegrees": 30.000000000000004
+    },
+    {
+      "label": "U01C_Approach44",
+      "centerCm": [
+        -400,
+        3500,
+        -50
+      ],
+      "localDimensionsCm": [
+        800,
+        500,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        -400.0,
+        3500.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        400.0,
+        250.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Slope44",
+      "centerCm": [
+        294.68250384005046,
+        3500,
+        270.66995018021237
+      ],
+      "localDimensionsCm": [
+        800,
+        400,
+        20
+      ],
+      "measuredBoundsCenterCm": [
+        294.6825038400505,
+        3500.0,
+        270.66995018021237
+      ],
+      "measuredBoundsExtentCm": [
+        294.68250384005046,
+        200.0,
+        285.0567461869854
+      ],
+      "measuredNormal": [
+        -0.6946583704589973,
+        0.0,
+        0.7193398003386511
+      ],
+      "measuredAngleDegrees": 44.00000000000001
+    },
+    {
+      "label": "U01C_Approach45",
+      "centerCm": [
+        -400,
+        4500,
+        -50
+      ],
+      "localDimensionsCm": [
+        800,
+        500,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        -400.0,
+        4500.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        400.0,
+        250.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Slope45",
+      "centerCm": [
+        289.9137802864845,
+        4500,
+        275.77164466275354
+      ],
+      "localDimensionsCm": [
+        800,
+        400,
+        20
+      ],
+      "measuredBoundsCenterCm": [
+        289.9137802864845,
+        4500.0,
+        275.77164466275354
+      ],
+      "measuredBoundsExtentCm": [
+        289.91378028648427,
+        200.0,
+        289.9137802864846
+      ],
+      "measuredNormal": [
+        -0.7071067811865479,
+        0.0,
+        0.707106781186547
+      ],
+      "measuredAngleDegrees": 45.00000000000004
+    },
+    {
+      "label": "U01C_Approach46",
+      "centerCm": [
+        -400,
+        5500,
+        -50
+      ],
+      "localDimensionsCm": [
+        800,
+        500,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        -400.0,
+        5500.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        400.0,
+        250.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Slope46",
+      "centerCm": [
+        285.0567461869854,
+        5500,
+        280.78933643087055
+      ],
+      "localDimensionsCm": [
+        800,
+        400,
+        20
+      ],
+      "measuredBoundsCenterCm": [
+        285.0567461869853,
+        5500.0,
+        280.78933643087055
+      ],
+      "measuredBoundsExtentCm": [
+        285.05674618698515,
+        200.0,
+        294.6825038400506
+      ],
+      "measuredNormal": [
+        -0.7193398003386515,
+        0.0,
+        0.6946583704589968
+      ],
+      "measuredAngleDegrees": 46.00000000000004
+    },
+    {
+      "label": "U01C_Approach60",
+      "centerCm": [
+        -400,
+        6500,
+        -50
+      ],
+      "localDimensionsCm": [
+        800,
+        500,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        -400.0,
+        6500.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        400.0,
+        250.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Slope60",
+      "centerCm": [
+        208.66025403784445,
+        6500,
+        341.41016151377545
+      ],
+      "localDimensionsCm": [
+        800,
+        400,
+        20
+      ],
+      "measuredBoundsCenterCm": [
+        208.66025403784442,
+        6500.0,
+        341.41016151377545
+      ],
+      "measuredBoundsExtentCm": [
+        208.6602540378443,
+        200.0,
+        351.41016151377545
+      ],
+      "measuredNormal": [
+        -0.8660254037844386,
+        0.0,
+        0.4999999999999998
+      ],
+      "measuredAngleDegrees": 60.00000000000001
+    },
+    {
+      "label": "U01C_StepFloor20",
+      "centerCm": [
+        200,
+        8000,
+        -50
+      ],
+      "localDimensionsCm": [
+        2000,
+        400,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        200.0,
+        8000.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        1000.0,
+        200.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Step20",
+      "centerCm": [
+        200,
+        8000,
+        10.0
+      ],
+      "localDimensionsCm": [
+        400,
+        400,
+        20
+      ],
+      "measuredBoundsCenterCm": [
+        200.0,
+        8000.0,
+        10.0
+      ],
+      "measuredBoundsExtentCm": [
+        200.0,
+        200.0,
+        10.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_StepFloor40",
+      "centerCm": [
+        200,
+        8500,
+        -50
+      ],
+      "localDimensionsCm": [
+        2000,
+        400,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        200.0,
+        8500.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        1000.0,
+        200.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Step40",
+      "centerCm": [
+        200,
+        8500,
+        20.0
+      ],
+      "localDimensionsCm": [
+        400,
+        400,
+        40
+      ],
+      "measuredBoundsCenterCm": [
+        200.0,
+        8500.0,
+        20.0
+      ],
+      "measuredBoundsExtentCm": [
+        200.0,
+        200.0,
+        20.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_StepFloor60",
+      "centerCm": [
+        200,
+        9000,
+        -50
+      ],
+      "localDimensionsCm": [
+        2000,
+        400,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        200.0,
+        9000.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        1000.0,
+        200.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Step60",
+      "centerCm": [
+        200,
+        9000,
+        30.0
+      ],
+      "localDimensionsCm": [
+        400,
+        400,
+        60
+      ],
+      "measuredBoundsCenterCm": [
+        200.0,
+        9000.0,
+        30.0
+      ],
+      "measuredBoundsExtentCm": [
+        200.0,
+        200.0,
+        30.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_CeilingFloor180",
+      "centerCm": [
+        500,
+        10000,
+        -50
+      ],
+      "localDimensionsCm": [
+        1800,
+        400,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        500.0,
+        10000.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        900.0,
+        200.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Ceiling180",
+      "centerCm": [
+        500,
+        10000,
+        190
+      ],
+      "localDimensionsCm": [
+        1000,
+        400,
+        20
+      ],
+      "measuredBoundsCenterCm": [
+        500.0,
+        10000.0,
+        190.0
+      ],
+      "measuredBoundsExtentCm": [
+        500.0,
+        200.0,
+        10.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_CeilingFloor260",
+      "centerCm": [
+        500,
+        10500,
+        -50
+      ],
+      "localDimensionsCm": [
+        1800,
+        400,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        500.0,
+        10500.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        900.0,
+        200.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_Ceiling260",
+      "centerCm": [
+        500,
+        10500,
+        270
+      ],
+      "localDimensionsCm": [
+        1000,
+        400,
+        20
+      ],
+      "measuredBoundsCenterCm": [
+        500.0,
+        10500.0,
+        270.0
+      ],
+      "measuredBoundsExtentCm": [
+        500.0,
+        200.0,
+        10.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_LedgePlatform",
+      "centerCm": [
+        0,
+        12000,
+        250
+      ],
+      "localDimensionsCm": [
+        800,
+        400,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        0.0,
+        12000.0,
+        250.0
+      ],
+      "measuredBoundsExtentCm": [
+        400.0,
+        200.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_LedgeLanding",
+      "centerCm": [
+        1100,
+        12000,
+        -50
+      ],
+      "localDimensionsCm": [
+        1400,
+        1000,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        1100.0,
+        12000.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        700.0,
+        500.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_CorridorFloor",
+      "centerCm": [
+        500,
+        13500,
+        -50
+      ],
+      "localDimensionsCm": [
+        1400,
+        600,
+        100
+      ],
+      "measuredBoundsCenterCm": [
+        500.0,
+        13500.0,
+        -50.0
+      ],
+      "measuredBoundsExtentCm": [
+        700.0,
+        300.0,
+        50.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_CorridorWallA",
+      "centerCm": [
+        500,
+        13430,
+        150
+      ],
+      "localDimensionsCm": [
+        1000,
+        20,
+        300
+      ],
+      "measuredBoundsCenterCm": [
+        500.0,
+        13430.0,
+        150.0
+      ],
+      "measuredBoundsExtentCm": [
+        500.0,
+        10.0,
+        150.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_CorridorWallB",
+      "centerCm": [
+        500,
+        13570,
+        150
+      ],
+      "localDimensionsCm": [
+        1000,
+        20,
+        300
+      ],
+      "measuredBoundsCenterCm": [
+        500.0,
+        13570.0,
+        150.0
+      ],
+      "measuredBoundsExtentCm": [
+        500.0,
+        10.0,
+        150.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    },
+    {
+      "label": "U01C_CorridorCorner",
+      "centerCm": [
+        1000,
+        13670,
+        150
+      ],
+      "localDimensionsCm": [
+        20,
+        200,
+        300
+      ],
+      "measuredBoundsCenterCm": [
+        1000.0,
+        13670.0,
+        150.0
+      ],
+      "measuredBoundsExtentCm": [
+        10.0,
+        100.0,
+        150.0
+      ],
+      "measuredNormal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "measuredAngleDegrees": 0.0
+    }
+  ],
+  "sourceInput": "/Game/AnimeMMORPG/U01/Input/IA_U01_Sprint.IA_U01_Sprint",
+  "stationCount": 13,
+  "measuredRunwayCm": 8000,
+  "sprintKeys": [
+    "LeftControl",
+    "RightControl"
+  ]
+}
