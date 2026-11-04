@@ -10,7 +10,7 @@
 TSharedRef<SWidget> UU01Menu::RebuildWidget()
 {
     SetIsFocusable(true);
-    if (WidgetTree->RootWidget) return Super::RebuildWidget();
+    if (WidgetTree->RootWidget) { UpdateFixtureStatus(); return Super::RebuildWidget(); }
     UBorder* Border = WidgetTree->ConstructWidget<UBorder>();
     Border->SetBrushColor(FLinearColor(.025f, .035f, .05f, .94f));
     Border->SetPadding(FMargin(32));
@@ -37,7 +37,20 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
         return Result;
     };
     Button(TEXT("Resume"))->OnClicked.AddDynamic(this, &UU01Menu::ResumeClicked);
-    Text(TEXT("WASD move | Mouse look | Space jump | V shoulder | Esc menu"));
+    Text(TEXT("WASD move | Ctrl sprint | Space jump | Mouse look | V shoulder"));
+#if !UE_BUILD_SHIPPING
+    if (const auto* PC = Cast<AU01PlayerController>(GetOwningPlayer()); PC && PC->HasTerrainFixtures())
+    {
+    Text(TEXT("Lab fixtures (test tools, not respawn)"));
+    FixtureStatus = WidgetTree->ConstructWidget<UTextBlock>();
+    Box->AddChildToVerticalBox(FixtureStatus)->SetPadding(FMargin(8));
+    UpdateFixtureStatus();
+    Button(TEXT("Fixture: reset runway"))->OnClicked.AddDynamic(this, &UU01Menu::ResetFixtureClicked);
+    Button(TEXT("Fixture: next terrain station"))->OnClicked.AddDynamic(this, &UU01Menu::NextFixtureClicked);
+    Button(TEXT("Fixture: toggle Interacting lock"))->OnClicked.AddDynamic(this, &UU01Menu::InteractingFixtureClicked);
+    Button(TEXT("Fixture: toggle Defeated lock"))->OnClicked.AddDynamic(this, &UU01Menu::DefeatedFixtureClicked);
+    }
+#endif
     Button(TEXT("Back to Boot"))->OnClicked.AddDynamic(this, &UU01Menu::BootClicked);
     Button(TEXT("Quit"))->OnClicked.AddDynamic(this, &UU01Menu::QuitClicked);
     return Super::RebuildWidget();
@@ -52,3 +65,11 @@ FReply UU01Menu::NativeOnKeyDown(const FGeometry& Geometry, const FKeyEvent& Eve
 void UU01Menu::ResumeClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->ResumePlaying(); }
 void UU01Menu::BootClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->ReturnToBoot(); }
 void UU01Menu::QuitClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->QuitToDesktop(); }
+void UU01Menu::UpdateFixtureStatus()
+{
+    if (FixtureStatus) if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) FixtureStatus->SetText(FText::FromString(PC->GetFixtureStatus()));
+}
+void UU01Menu::ResetFixtureClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->ResetRunwayFixture(); UpdateFixtureStatus(); }
+void UU01Menu::NextFixtureClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->NextFixtureStation(); UpdateFixtureStatus(); }
+void UU01Menu::InteractingFixtureClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->ToggleInteractingFixture(); UpdateFixtureStatus(); }
+void UU01Menu::DefeatedFixtureClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->ToggleDefeatedFixture(); UpdateFixtureStatus(); }

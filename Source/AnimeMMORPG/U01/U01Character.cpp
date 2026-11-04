@@ -7,23 +7,100 @@
 
 void UU01CharacterMovement::SetControlLocked(bool bLocked)
 {
-    bControlLocked = bLocked;
-    if (bLocked)
+    SetMotorLock(EU01MotorLock::Control, bLocked);
+}
+
+void UU01CharacterMovement::SetMotorLock(EU01MotorLock Reason, bool bEnabled)
+{
+    const uint8 Bit = static_cast<uint8>(Reason);
+    if (bEnabled) LockMask |= Bit;
+    else LockMask &= ~Bit;
+    if (IsMotorLocked())
     {
         ConsumeInputVector();
         Velocity.X = Velocity.Y = 0;
         Acceleration = FVector::ZeroVector;
+        bSprintRequested = false;
+        JumpWindow.ClearInput();
+        if (auto* MotorPawn = Cast<AU01Character>(CharacterOwner)) MotorPawn->ClearEngineJumpInput();
     }
+}
+
+bool UU01CharacterMovement::IsSprinting() const
+{
+    return !IsMotorLocked() && bSprintRequested && Acceleration.SizeSquared2D() > UE_SMALL_NUMBER;
+}
+
+float UU01CharacterMovement::GetMaxSpeed() const
+{
+    return IsMotorLocked() ? 0.f : (IsSprinting() ? 700.f : 500.f);
 }
 
 void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
 {
-    if (bControlLocked)
+    FrameStartSeconds = GetWorld()->GetTimeSeconds();
+    FrameDeltaSeconds = DeltaSeconds;
+    if (IsMotorLocked())
     {
         Acceleration = FVector::ZeroVector;
         Velocity.X = Velocity.Y = 0;
     }
     Super::PerformMovement(DeltaSeconds); // Keep vertical movement and world simulation alive.
+}
+
+void UU01CharacterMovement::StartFalling(int32 Iterations, float RemainingTime, float TimeTick, const FVector& Delta, const FVector& SubLocation)
+{
+    const double DesiredDistance = Delta.Size();
+    const double ActualDistance = ProjectToGravityFloor(UpdatedComponent->GetComponentLocation() - SubLocation).Size();
+    const double UsedFraction = DesiredDistance > UE_KINDA_SMALL_NUMBER ? FMath::Min(1., ActualDistance / DesiredDistance) : 0.;
+    const double UsedSeconds = FMath::Clamp(double(FrameDeltaSeconds - RemainingTime - TimeTick) + TimeTick * UsedFraction, 0., double(FrameDeltaSeconds));
+    TGuardValue<TOptional<double>> EventScope(EventSeconds, FrameStartSeconds + UsedSeconds);
+    Super::StartFalling(Iterations, RemainingTime, TimeTick, Delta, SubLocation);
+}
+
+void UU01CharacterMovement::ProcessLanded(const FHitResult& Hit, float RemainingTime, int32 Iterations)
+{
+    TGuardValue<TOptional<double>> EventScope(EventSeconds, FrameStartSeconds + FMath::Clamp(double(FrameDeltaSeconds - RemainingTime), 0., double(FrameDeltaSeconds)));
+    Super::ProcessLanded(Hit, RemainingTime, Iterations);
+}
+
+void UU01CharacterMovement::SetPostLandedPhysics(const FHitResult& Hit)
+{
+    Super::SetPostLandedPhysics(Hit);
+    // Consume in the landing substep, before the remaining part of this frame is simulated.
+    if (IsMovingOnGround()) TryJump(EventSeconds.Get(GetWorld()->GetTimeSeconds()), FrameDeltaSeconds);
+}
+
+void UU01CharacterMovement::ObserveMovementMode(EMovementMode PreviousMode)
+{
+    if (IsMovingOnGround()) JumpWindow.Land();
+    else if ((PreviousMode == MOVE_Walking || PreviousMode == MOVE_NavWalking) && IsFalling())
+        JumpWindow.LeaveGround(EventSeconds.Get(GetWorld()->GetTimeSeconds()), bAttemptingJump);
+}
+
+bool UU01CharacterMovement::TryJump(double Now, float DeltaSeconds)
+{
+    const bool bGrounded = IsMovingOnGround();
+    if (IsMotorLocked() || !JumpWindow.CanConsume(Now, bGrounded)) return false;
+    auto* MotorPawn = Cast<AU01Character>(CharacterOwner);
+    if (!MotorPawn) return false;
+    const float GravityMagnitude = FMath::Abs(GetGravityZ());
+    if (GravityMagnitude <= UE_SMALL_NUMBER) return false;
+    JumpZVelocity = FMath::Sqrt(2.f * GravityMagnitude * 120.f);
+    TGuardValue<bool> JumpScope(bAttemptingJump, true);
+    if (!MotorPawn->ExecuteMotorJump(DeltaSeconds)) return false;
+    JumpWindow.Consume(Now, bGrounded);
+    return true;
+}
+
+void UU01CharacterMovement::ResetFixtureState()
+{
+    LockMask &= static_cast<uint8>(EU01MotorLock::Control);
+    bSprintRequested = false;
+    JumpWindow.ResetSession();
+    StopMovementImmediately();
+    ConsumeInputVector();
+    EventSeconds.Reset();
 }
 
 AU01Character::AU01Character(const FObjectInitializer& ObjectInitializer)
@@ -34,7 +111,9 @@ AU01Character::AU01Character(const FObjectInitializer& ObjectInitializer)
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0, 500, 0);
     GetCharacterMovement()->MaxWalkSpeed = 500.f;
-    GetCharacterMovement()->JumpZVelocity = 500.f; // C will calibrate the 120 cm apex.
+    GetCharacterMovement()->JumpZVelocity = FMath::Sqrt(2.f * 980.f * 120.f); // Recomputed from actual gravity at takeoff.
+    GetCharacterMovement()->SetWalkableFloorAngle(45.f);
+    GetCharacterMovement()->MaxStepHeight = 45.f;
     GetCharacterMovement()->AirControl = .35f;
     JumpMaxCount = 1;
     JumpMaxHoldTime = 0;
@@ -46,8 +125,27 @@ AU01Character::AU01Character(const FObjectInitializer& ObjectInitializer)
 
 void AU01Character::SetControlLocked(bool bLocked)
 {
-    CastChecked<UU01CharacterMovement>(GetCharacterMovement())->SetControlLocked(bLocked);
-    if (bLocked) { StopJumping(); ConsumeMovementInputVector(); }
+    GetU01Movement()->SetControlLocked(bLocked);
+    if (bLocked) ConsumeMovementInputVector();
+}
+
+UU01CharacterMovement* AU01Character::GetU01Movement() const { return CastChecked<UU01CharacterMovement>(GetCharacterMovement()); }
+void AU01Character::Jump() { GetU01Movement()->PressJump(GetWorld()->GetTimeSeconds()); }
+void AU01Character::StopJumping() { GetU01Movement()->ReleaseJump(); Super::StopJumping(); }
+void AU01Character::CheckJumpInput(float DeltaTime) { GetU01Movement()->TryJump(GetWorld()->GetTimeSeconds(), DeltaTime); }
+bool AU01Character::CanJumpWhileFalling() const { return GetU01Movement()->CanUseCoyote(GetWorld()->GetTimeSeconds()); }
+void AU01Character::OnMovementModeChanged(EMovementMode PreviousMode, uint8 PreviousCustomMode)
+{
+    Super::OnMovementModeChanged(PreviousMode, PreviousCustomMode);
+    GetU01Movement()->ObserveMovementMode(PreviousMode);
+}
+bool AU01Character::ExecuteMotorJump(float DeltaSeconds)
+{
+    const int32 PreviousCount = JumpCurrentCount;
+    bPressedJump = true;
+    Super::CheckJumpInput(DeltaSeconds);
+    bPressedJump = false;
+    return JumpCurrentCount > PreviousCount && GetCharacterMovement()->IsFalling();
 }
 
 void AU01Character::ToggleShoulder()

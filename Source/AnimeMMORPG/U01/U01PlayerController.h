@@ -31,6 +31,7 @@ public:
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> MouseXAction;
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> MouseYAction;
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> JumpAction;
+    UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> SprintAction;
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> ShoulderAction;
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> MenuAction;
     UPROPERTY(EditDefaultsOnly, Category="U01|UI") TSubclassOf<UU01Menu> MenuClass;
@@ -40,6 +41,14 @@ public:
     UFUNCTION(BlueprintCallable, Category="U01") void ReturnToBoot();
     UFUNCTION(BlueprintCallable, Category="U01") void QuitToDesktop();
     UFUNCTION(Exec) void U01Metrics();
+    UFUNCTION(Exec) void U01FixtureReset(const FString& Station);
+    UFUNCTION(Exec) void U01FixtureLock(const FString& Reason, bool bEnabled);
+    UFUNCTION(BlueprintCallable, Category="U01|Lab") void ResetRunwayFixture();
+    UFUNCTION(BlueprintCallable, Category="U01|Lab") void NextFixtureStation();
+    UFUNCTION(BlueprintCallable, Category="U01|Lab") void ToggleInteractingFixture();
+    UFUNCTION(BlueprintCallable, Category="U01|Lab") void ToggleDefeatedFixture();
+    FString GetFixtureStatus() const;
+    bool HasTerrainFixtures() const;
     FString GetMetricsJson() const;
     void ObservePhysicalKey(FKey Key, bool bDown);
     bool IsGameWindowActive() const;
@@ -62,7 +71,12 @@ private:
     void MouseX(const FInputActionValue& Value);
     void MouseY(const FInputActionValue& Value);
     void JumpPressed();
+    void Sprint(const FInputActionValue& Value);
+    void SprintReleased();
     void ShoulderPressed();
     void MenuPressed();
     bool Accepts(FKey Key) const;
+    bool FixtureAllowed() const;
+    int32 FixtureStationIndex = 0;
+    FString FixtureStation = TEXT("Runway");
 };

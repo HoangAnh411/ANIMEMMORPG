@@ -31,6 +31,13 @@ DEFINE_LOG_CATEGORY_STATIC(LogU01Control, Log, All);
 namespace
 {
 const FKey DirectionKeys[] = { EKeys::W, EKeys::S, EKeys::A, EKeys::D };
+bool IsMotorKey(FKey Key)
+{
+    return Key == EKeys::W || Key == EKeys::S || Key == EKeys::A || Key == EKeys::D ||
+        Key == EKeys::SpaceBar || Key == EKeys::LeftControl || Key == EKeys::RightControl;
+}
+const TCHAR* FixtureStations[] = { TEXT("Runway"), TEXT("Slope30"), TEXT("Slope44"), TEXT("Slope45"), TEXT("Slope46"), TEXT("Slope60"),
+    TEXT("Step20"), TEXT("Step40"), TEXT("Step60"), TEXT("Ceiling180"), TEXT("Ceiling260"), TEXT("Ledge"), TEXT("Corridor120") };
 class FU01PhysicalObserver final : public IInputProcessor
 {
 public:
@@ -104,6 +111,12 @@ void AU01PlayerController::SetupInputComponent()
         if (MouseXAction) Input->BindAction(MouseXAction, ETriggerEvent::Triggered, this, &AU01PlayerController::MouseX);
         if (MouseYAction) Input->BindAction(MouseYAction, ETriggerEvent::Triggered, this, &AU01PlayerController::MouseY);
         if (JumpAction) Input->BindAction(JumpAction, ETriggerEvent::Started, this, &AU01PlayerController::JumpPressed);
+        if (SprintAction)
+        {
+            Input->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AU01PlayerController::Sprint);
+            Input->BindAction(SprintAction, ETriggerEvent::Completed, this, &AU01PlayerController::SprintReleased);
+            Input->BindAction(SprintAction, ETriggerEvent::Canceled, this, &AU01PlayerController::SprintReleased);
+        }
         if (ShoulderAction) Input->BindAction(ShoulderAction, ETriggerEvent::Started, this, &AU01PlayerController::ShoulderPressed);
         if (MenuAction) Input->BindAction(MenuAction, ETriggerEvent::Started, this, &AU01PlayerController::MenuPressed);
     }
@@ -170,7 +183,11 @@ void AU01PlayerController::ReconcilePhysicalReleases()
         {EKeys::RightControl, VK_RCONTROL}, {EKeys::V, 'V'}, {EKeys::G, 'G'}, {EKeys::Escape, VK_ESCAPE}
     };
     for (const auto& Entry : Keys)
-        if ((::GetAsyncKeyState(Entry.Value) & 0x8000) == 0) ReleaseGate.Up(Entry.Key);
+        if ((::GetAsyncKeyState(Entry.Value) & 0x8000) == 0)
+        {
+            ReleaseGate.Up(Entry.Key);
+            if (Entry.Key == EKeys::SpaceBar) if (auto* MotorPawn = Cast<AU01Character>(GetPawn())) MotorPawn->StopJumping();
+        }
 #endif
 }
 
@@ -179,10 +196,12 @@ void AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown)
     if (!IsGameWindowActive()) return; // Do not interpret another window's releases as re-arming gameplay.
     if (bDown)
     {
-        ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing);
+        const auto* MotorPawn = Cast<AU01Character>(GetPawn());
+        const bool bFixtureBlocked = MotorPawn && MotorPawn->GetU01Movement()->IsMotorLocked() && IsMotorKey(Key);
+        ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing || bFixtureBlocked);
         UE_LOG(LogU01Control, Display, TEXT("PhysicalPress key=%s state=%d accepted=%d reason=%s"),
-            *Key.ToString(), int32(ControlState), Accepts(Key),
-            ControlState != EU01ControlState::Playing ? TEXT("ControlLocked") : (ReleaseGate.Allows(Key) ? TEXT("Ready") : TEXT("AwaitingPhysicalRelease")));
+            *Key.ToString(), int32(ControlState), IsMotorKey(Key) ? Accepts(Key) : (ControlState == EU01ControlState::Playing && ReleaseGate.Allows(Key)),
+            ControlState != EU01ControlState::Playing ? TEXT("ControlLocked") : bFixtureBlocked ? TEXT("MotorFixtureLocked") : (ReleaseGate.Allows(Key) ? TEXT("Ready") : TEXT("AwaitingPhysicalRelease")));
     }
     else
     {
@@ -194,7 +213,9 @@ void AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown)
 
 bool AU01PlayerController::Accepts(FKey Key) const
 {
-    return ControlState == EU01ControlState::Playing && !bMotorLocked && ReleaseGate.Allows(Key) && IsGameWindowActive();
+    const auto* MotorPawn = Cast<AU01Character>(GetPawn());
+    return ControlState == EU01ControlState::Playing && !bMotorLocked && ReleaseGate.Allows(Key) && IsGameWindowActive()
+        && MotorPawn && !MotorPawn->GetU01Movement()->IsMotorLocked();
 }
 
 void AU01PlayerController::MoveDirection(const FInputActionValue& Value, int32 DirectionIndex)
@@ -222,9 +243,20 @@ void AU01PlayerController::JumpPressed()
 {
     if (Accepts(EKeys::SpaceBar)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->Jump();
 }
+void AU01PlayerController::Sprint(const FInputActionValue& Value)
+{
+    if (auto* MotorPawn = Cast<AU01Character>(GetPawn()))
+        MotorPawn->GetU01Movement()->SetSprintRequested(Value.Get<bool>() &&
+            ((IsInputKeyDown(EKeys::LeftControl) && Accepts(EKeys::LeftControl)) || (IsInputKeyDown(EKeys::RightControl) && Accepts(EKeys::RightControl))));
+}
+void AU01PlayerController::SprintReleased()
+{
+    if (auto* MotorPawn = Cast<AU01Character>(GetPawn())) MotorPawn->GetU01Movement()->SetSprintRequested(false);
+}
 void AU01PlayerController::ShoulderPressed()
 {
-    if (Accepts(EKeys::V)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->ToggleShoulder();
+    if (ControlState == EU01ControlState::Playing && ReleaseGate.Allows(EKeys::V) && IsGameWindowActive())
+        if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->ToggleShoulder();
 }
 void AU01PlayerController::MenuPressed() { LockControls(EU01ControlState::Menu, TEXT("Escape")); }
 
@@ -314,6 +346,15 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetStringField(TEXT("capsuleCenterWorldCm"), ControlledCharacter->GetActorLocation().ToString());
     Json->SetStringField(TEXT("velocityCmPerSec"), ControlledCharacter->GetVelocity().ToString());
     Json->SetStringField(TEXT("accelerationCmPerSec2"), ControlledCharacter->GetCharacterMovement()->GetCurrentAcceleration().ToString());
+    Json->SetStringField(TEXT("feetWorldCm"), ControlledCharacter->GetU01Movement()->GetActorFeetLocation().ToString());
+    Json->SetNumberField(TEXT("movementMode"), int32(ControlledCharacter->GetCharacterMovement()->MovementMode));
+    Json->SetBoolField(TEXT("sprinting"), ControlledCharacter->GetU01Movement()->IsSprinting());
+    Json->SetNumberField(TEXT("maxSpeedCmPerSec"), ControlledCharacter->GetU01Movement()->GetMaxSpeed());
+    Json->SetNumberField(TEXT("jumpCount"), ControlledCharacter->JumpCurrentCount);
+    Json->SetNumberField(TEXT("gravityCmPerSec2"), ControlledCharacter->GetU01Movement()->GetGravityZ());
+    Json->SetNumberField(TEXT("jumpZVelocityCmPerSec"), ControlledCharacter->GetU01Movement()->JumpZVelocity);
+    Json->SetNumberField(TEXT("motorLockMask"), ControlledCharacter->GetU01Movement()->GetLockMask());
+    Json->SetBoolField(TEXT("bufferedJump"), ControlledCharacter->GetU01Movement()->HasBufferedJump(World->GetTimeSeconds()));
     Json->SetStringField(TEXT("pivotWorldCm"), ControlledCharacter->CameraPivot.ToString());
     Json->SetStringField(TEXT("desiredCameraWorldCm"), ControlledCharacter->DesiredCamera.ToString());
     Json->SetStringField(TEXT("resolvedCameraWorldCm"), PlayerCameraManager->GetCameraLocation().ToString());
@@ -329,11 +370,85 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetBoolField(TEXT("ownerMeshHidden"), ControlledCharacter->bOwnerMeshHidden);
     Json->SetBoolField(TEXT("windowActive"), IsGameWindowActive());
     Json->SetBoolField(TEXT("cursorVisible"), bShowMouseCursor);
-    Json->SetBoolField(TEXT("motorLocked"), bMotorLocked);
+    Json->SetBoolField(TEXT("motorLocked"), ControlledCharacter->GetU01Movement()->IsMotorLocked());
     Json->SetNumberField(TEXT("controlState"), int32(ControlState));
     FString Result;
     FJsonSerializer::Serialize(Json, TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>::Create(&Result));
     return Result;
+}
+
+bool AU01PlayerController::FixtureAllowed() const
+{
+#if UE_BUILD_SHIPPING
+    return false;
+#else
+    return IsLocalPlayerController() && GetNetMode() == NM_Standalone && GetPawn() &&
+        (GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab")) || GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab")));
+#endif
+}
+
+bool AU01PlayerController::HasTerrainFixtures() const
+{
+    return GetWorld() && GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab"));
+}
+
+void AU01PlayerController::U01FixtureReset(const FString& Station)
+{
+    if (!FixtureAllowed()) return;
+    const FName Tag(*(TEXT("U01C_Reset_") + Station));
+    TArray<AActor*> Points;
+    UGameplayStatics::GetAllActorsWithTag(this, Tag, Points);
+    auto* MotorPawn = Cast<AU01Character>(GetPawn());
+    if (Points.Num() != 1 || !MotorPawn)
+    {
+        UE_LOG(LogU01Control, Warning, TEXT("Fixture reset rejected station=%s points=%d"), *Station, Points.Num());
+        return;
+    }
+    ReleaseGate.Lock();
+    FlushPressedKeys();
+    MotorPawn->GetU01Movement()->ResetFixtureState();
+    MotorPawn->SetActorLocation(Points[0]->GetActorLocation(), false, nullptr, ETeleportType::TeleportPhysics);
+    MotorPawn->SetActorRotation(FRotator::ZeroRotator);
+    MotorPawn->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+    SetControlRotation(FRotator::ZeroRotator);
+    FixtureStation = Station;
+    UE_LOG(LogU01Control, Display, TEXT("LabFixtureReset station=%s PID=%u world=%s pawn=%s positionCm=%s"),
+        *Station, FPlatformProcess::GetCurrentProcessId(), *GetWorld()->GetPathName(), *MotorPawn->GetPathName(), *MotorPawn->GetActorLocation().ToString());
+}
+
+void AU01PlayerController::U01FixtureLock(const FString& Reason, bool bEnabled)
+{
+    if (!FixtureAllowed()) return;
+    auto* MotorPawn = Cast<AU01Character>(GetPawn());
+    if (!MotorPawn || (Reason != TEXT("Interacting") && Reason != TEXT("Defeated"))) return;
+    ReleaseGate.Lock();
+    FlushPressedKeys();
+    MotorPawn->GetU01Movement()->SetMotorLock(Reason == TEXT("Interacting") ? EU01MotorLock::Interacting : EU01MotorLock::Defeated, bEnabled);
+    UE_LOG(LogU01Control, Display, TEXT("LabFixtureLock reason=%s enabled=%d mask=%d world=%s pawn=%s"),
+        *Reason, bEnabled, MotorPawn->GetU01Movement()->GetLockMask(), *GetWorld()->GetPathName(), *MotorPawn->GetPathName());
+}
+void AU01PlayerController::ResetRunwayFixture() { U01FixtureReset(TEXT("Runway")); }
+void AU01PlayerController::NextFixtureStation()
+{
+    FixtureStationIndex = (FixtureStationIndex + 1) % UE_ARRAY_COUNT(FixtureStations);
+    U01FixtureReset(FixtureStations[FixtureStationIndex]);
+}
+void AU01PlayerController::ToggleInteractingFixture()
+{
+    if (auto* MotorPawn = Cast<AU01Character>(GetPawn()))
+        U01FixtureLock(TEXT("Interacting"), (MotorPawn->GetU01Movement()->GetLockMask() & uint8(EU01MotorLock::Interacting)) == 0);
+}
+void AU01PlayerController::ToggleDefeatedFixture()
+{
+    if (auto* MotorPawn = Cast<AU01Character>(GetPawn()))
+        U01FixtureLock(TEXT("Defeated"), (MotorPawn->GetU01Movement()->GetLockMask() & uint8(EU01MotorLock::Defeated)) == 0);
+}
+FString AU01PlayerController::GetFixtureStatus() const
+{
+    const auto* MotorPawn = Cast<AU01Character>(GetPawn());
+    return FString::Printf(TEXT("Lab fixture: %s | Interacting=%d Defeated=%d"), *FixtureStation,
+        MotorPawn ? bool(MotorPawn->GetU01Movement()->GetLockMask() & uint8(EU01MotorLock::Interacting)) : false,
+        MotorPawn ? bool(MotorPawn->GetU01Movement()->GetLockMask() & uint8(EU01MotorLock::Defeated)) : false);
 }
 
 void AU01PlayerController::U01Metrics()
