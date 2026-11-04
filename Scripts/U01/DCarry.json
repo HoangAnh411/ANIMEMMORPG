@@ -1,0 +1,8 @@
+{
+  "basis": "Carry/Before actual mesh component-space right shoulder x=-19,z=144; unarmed running wrist swings inward to x=-8.4. Right is -X, forward +Y. Candidate holds wrist outside torso and blade further out/forward/up; verify rendered poses and sampled transitions before accepting.",
+  "clavicleDeltaPitchYawRoll": [0, 0, 0],
+  "wristComponentCm": [-42, 12, 112],
+  "elbowPoleComponentCm": [-55, -15, 125],
+  "bladeDirectionComponent": [-0.25, 0.65, 0.72],
+  "fingerDirectionComponent": [0, 0, -1]
+}
