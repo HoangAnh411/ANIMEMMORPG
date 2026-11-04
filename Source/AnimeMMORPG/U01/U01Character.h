@@ -7,6 +7,7 @@
 #include "U01Character.generated.h"
 
 class UCameraComponent;
+class UStaticMeshComponent;
 
 enum class EU01MotorLock : uint8 { Control = 1, Interacting = 2, Defeated = 4 };
 
@@ -67,6 +68,15 @@ public:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U01|Camera")
     TObjectPtr<UCameraComponent> FollowCamera;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U01|Blockout")
+    TObjectPtr<USceneComponent> SwordRoot;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U01|Blockout")
+    TObjectPtr<UStaticMeshComponent> SwordBlade;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U01|Blockout")
+    TObjectPtr<UStaticMeshComponent> SwordGuard;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U01|Blockout")
+    TObjectPtr<UStaticMeshComponent> SwordGrip;
 
     FVector CameraPivot = FVector::ZeroVector;
     FVector DesiredCamera = FVector::ZeroVector;

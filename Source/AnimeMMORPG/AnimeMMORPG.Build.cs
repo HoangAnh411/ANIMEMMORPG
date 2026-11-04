@@ -21,7 +21,11 @@ public class AnimeMMORPG : ModuleRules
 			"Slate"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "SlateCore", "ApplicationCore", "Json" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "SlateCore", "ApplicationCore", "Json", "AnimGraphRuntime" });
+		if (Target.bBuildEditor)
+		{
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AnimGraph", "BlueprintGraph", "AssetTools", "AssetRegistry" });
+		}
 		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
 			PublicSystemLibraries.Add("user32.lib"); // Physical key state used by the local Windows focus gate.

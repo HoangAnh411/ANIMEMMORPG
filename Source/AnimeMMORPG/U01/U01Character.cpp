@@ -3,6 +3,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 
 void UU01CharacterMovement::BeginPlay()
@@ -131,6 +132,24 @@ AU01Character::AU01Character(const FObjectInitializer& ObjectInitializer)
     FollowCamera->SetupAttachment(RootComponent);
     FollowCamera->bUsePawnControlRotation = false;
     FollowCamera->FieldOfView = 90;
+    SwordRoot = CreateDefaultSubobject<USceneComponent>(TEXT("U01SwordRoot"));
+    SwordRoot->SetupAttachment(GetMesh(), TEXT("U01_Sword_R"));
+    SwordBlade = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("U01SwordBlade"));
+    SwordGuard = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("U01SwordGuard"));
+    SwordGrip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("U01SwordGrip"));
+    for (auto* Part : {SwordBlade.Get(), SwordGuard.Get(), SwordGrip.Get()})
+    {
+        Part->SetupAttachment(SwordRoot);
+        Part->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        Part->SetGenerateOverlapEvents(false);
+        Part->SetCanEverAffectNavigation(false);
+        Part->SetCastShadow(true);
+    }
+    SwordGrip->SetRelativeScale3D(FVector(.18,.03,.03));
+    SwordGuard->SetRelativeLocation(FVector(10,0,0));
+    SwordGuard->SetRelativeScale3D(FVector(.04,.18,.04));
+    SwordBlade->SetRelativeLocation(FVector(56,0,0));
+    SwordBlade->SetRelativeScale3D(FVector(.88,.06,.025));
 }
 
 void AU01Character::SetControlLocked(bool bLocked)
