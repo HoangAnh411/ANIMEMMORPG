@@ -65,6 +65,7 @@ public:
     virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
     void SetControlLocked(bool bLocked);
     void ToggleShoulder();
+    void SetDefaultShoulder(bool bRight,bool bImmediate=false);
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U01|Camera")
     TObjectPtr<UCameraComponent> FollowCamera;

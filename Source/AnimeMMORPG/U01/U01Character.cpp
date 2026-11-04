@@ -184,6 +184,12 @@ void AU01Character::ToggleShoulder()
     ShoulderElapsed = 0;
 }
 
+void AU01Character::SetDefaultShoulder(bool bRight,bool bImmediate)
+{
+    ShoulderStart=ShoulderOffset;ShoulderTarget=bRight?45.f:-45.f;ShoulderElapsed=0;
+    if(bImmediate){ShoulderStart=ShoulderOffset=ShoulderTarget;ShoulderElapsed=.15f;}
+}
+
 void AU01Character::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)
 {
     if (!IsLocallyControlled()) { Super::CalcCamera(DeltaTime, OutResult); return; }

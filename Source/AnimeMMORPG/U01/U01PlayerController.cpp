@@ -5,6 +5,7 @@
 #include "U01Menu.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "InputMappingContext.h"
 #include "Engine/LocalPlayer.h"
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"
@@ -32,11 +33,19 @@ DEFINE_LOG_CATEGORY_STATIC(LogU01Control, Log, All);
 
 namespace
 {
-const FKey DirectionKeys[] = { EKeys::W, EKeys::S, EKeys::A, EKeys::D };
-bool IsMotorKey(FKey Key)
+bool PhysicalDown(FKey Key)
 {
-    return Key == EKeys::W || Key == EKeys::S || Key == EKeys::A || Key == EKeys::D ||
-        Key == EKeys::SpaceBar || Key == EKeys::LeftControl || Key == EKeys::RightControl;
+#if PLATFORM_WINDOWS
+    uint32 Code=0;const uint32* KeyCode=nullptr;const uint32* CharCode=nullptr;
+    FInputKeyManager::Get().GetCodesFromKey(Key,KeyCode,CharCode);
+    if(KeyCode)Code=*KeyCode;
+    if(Key==EKeys::MiddleMouseButton)Code=VK_MBUTTON;
+    if(Key==EKeys::ThumbMouseButton)Code=VK_XBUTTON1;
+    if(Key==EKeys::ThumbMouseButton2)Code=VK_XBUTTON2;
+    return Code && (::GetAsyncKeyState(Code)&0x8000)!=0;
+#else
+    return false;
+#endif
 }
 const TCHAR* FixtureStations[] = { TEXT("Runway"), TEXT("Slope30"), TEXT("Slope44"), TEXT("Slope45"), TEXT("Slope46"), TEXT("Slope60"),
     TEXT("Step20"), TEXT("Step40"), TEXT("Step60"), TEXT("Ceiling180"), TEXT("Ceiling260"), TEXT("Ledge"), TEXT("Corridor120") };
@@ -47,14 +56,21 @@ public:
     virtual void Tick(float, FSlateApplication&, TSharedRef<ICursor>) override {}
     virtual bool HandleKeyDownEvent(FSlateApplication&, const FKeyEvent& Event) override
     {
-        if (PC.IsValid() && !Event.IsRepeat()) PC->ObservePhysicalKey(Event.GetKey(), true);
+        if (PC.IsValid() && !Event.IsRepeat())return PC->ObservePhysicalKey(Event.GetKey(),true,
+            Event.IsShiftDown()||Event.IsAltDown()||Event.IsCommandDown()||(Event.IsControlDown()&&Event.GetKey()!=EKeys::LeftControl&&Event.GetKey()!=EKeys::RightControl));
         return false;
     }
     virtual bool HandleKeyUpEvent(FSlateApplication&, const FKeyEvent& Event) override
     {
-        if (PC.IsValid()) PC->ObservePhysicalKey(Event.GetKey(), false);
+        if (PC.IsValid())return PC->ObservePhysicalKey(Event.GetKey(),false);
         return false;
     }
+    virtual bool HandleMouseButtonDownEvent(FSlateApplication&,const FPointerEvent& Event) override
+    {return PC.IsValid()&&PC->ObservePhysicalKey(Event.GetEffectingButton(),true,Event.IsShiftDown()||Event.IsControlDown()||Event.IsAltDown()||Event.IsCommandDown());}
+    virtual bool HandleMouseButtonUpEvent(FSlateApplication&,const FPointerEvent& Event) override
+    {return PC.IsValid()&&PC->ObservePhysicalKey(Event.GetEffectingButton(),false);}
+    virtual bool HandleMouseWheelOrGestureEvent(FSlateApplication&,const FPointerEvent&,const FPointerEvent*) override
+    {return PC.IsValid()&&PC->GetPendingRebind()!=INDEX_NONE&&PC->ObservePhysicalKey(EKeys::MouseScrollUp,true);}
 private:
     TWeakObjectPtr<AU01PlayerController> PC;
 };
@@ -68,8 +84,9 @@ void AU01PlayerController::BeginPlay()
     RunId = FGuid::NewGuid().ToString(EGuidFormats::Digits);
     bTrace = FParse::Param(FCommandLine::Get(), TEXT("U01Trace"));
     FParse::Value(FCommandLine::Get(), TEXT("U01ProbeSeconds="), ProbeSeconds);
-    if (auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-        if (MappingContext) Subsystem->AddMappingContext(MappingContext, 0);
+    Settings=ULocalPlayer::GetSubsystem<UU01SettingsSubsystem>(GetLocalPlayer());
+    if(Settings)Settings->EnsureLoaded();
+    RebuildLocalMapping();ApplyPreferences();
     if (MenuClass) MenuWidget = CreateWidget<UU01Menu>(this, MenuClass);
     if (FSlateApplication::IsInitialized())
     {
@@ -98,7 +115,8 @@ void AU01PlayerController::EndPlay(const EEndPlayReason::Type Reason)
         }
         PhysicalInputObserver.Reset();
         if (auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-            if (MappingContext) Subsystem->RemoveMappingContext(MappingContext);
+            if (LocalMapping) Subsystem->RemoveMappingContext(LocalMapping);
+        LocalMapping=nullptr;PendingRebind=INDEX_NONE;ObservedKeys.Empty();
     }
     Super::EndPlay(Reason);
 }
@@ -121,6 +139,7 @@ void AU01PlayerController::SetupInputComponent()
         }
         if (ShoulderAction) Input->BindAction(ShoulderAction, ETriggerEvent::Started, this, &AU01PlayerController::ShoulderPressed);
         if (MenuAction) Input->BindAction(MenuAction, ETriggerEvent::Started, this, &AU01PlayerController::MenuPressed);
+        if (InteractAction) Input->BindAction(InteractAction,ETriggerEvent::Started,this,&AU01PlayerController::InteractPressed);
     }
 }
 
@@ -150,6 +169,7 @@ void AU01PlayerController::PlayerTick(float DeltaTime)
     bWasWindowActive = bActive;
     if (bActive) ReconcilePhysicalReleases();
     if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(bMotorLocked);
+    if(PresentationPawn.Get()!=GetPawn()){ApplyPreferences();PresentationPawn=GetPawn();}
 }
 
 void AU01PlayerController::UpdateCameraManager(float DeltaSeconds)
@@ -179,25 +199,37 @@ void AU01PlayerController::ReconcilePhysicalReleases()
 #if PLATFORM_WINDOWS
     // Enhanced Input/Slate may flush or miss KeyUp while inactive. Read the actual OS
     // high bit, never the flushed PlayerInput state. Returning focus alone is not a release.
-    const TPair<FKey, int32> Keys[] = {
-        {EKeys::W, 'W'}, {EKeys::S, 'S'}, {EKeys::A, 'A'}, {EKeys::D, 'D'},
-        {EKeys::SpaceBar, VK_SPACE}, {EKeys::LeftControl, VK_LCONTROL},
-        {EKeys::RightControl, VK_RCONTROL}, {EKeys::V, 'V'}, {EKeys::G, 'G'}, {EKeys::Escape, VK_ESCAPE}
-    };
-    for (const auto& Entry : Keys)
-        if ((::GetAsyncKeyState(Entry.Value) & 0x8000) == 0)
+    TSet<FKey> Keys=ObservedKeys;
+    for(FKey Binding:GetPreferences().Keys)for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(Binding))Keys.Add(Key);
+    Keys.Add(EKeys::Escape);
+    for (FKey Key:Keys)
+        if (!PhysicalDown(Key))
         {
-            ReleaseGate.Up(Entry.Key);
-            if (Entry.Key == EKeys::SpaceBar) if (auto* MotorPawn = Cast<AU01Character>(GetPawn())) MotorPawn->StopJumping();
+            ReleaseGate.Up(Key);ObservedKeys.Remove(Key);
         }
+    bool JumpHeld=false;for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(ControlKey(AnimeMMORPG::U01::Jump)))JumpHeld|=PhysicalDown(Key);
+    if(!JumpHeld)if(auto* Pawn=Cast<AU01Character>(GetPawn()))Pawn->StopJumping();
 #endif
 }
 
-void AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown)
+bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
 {
-    if (!IsGameWindowActive()) return; // Do not interpret another window's releases as re-arming gameplay.
+    if (!IsGameWindowActive()) return false; // Another window's releases never re-arm gameplay.
     if (bDown)
     {
+        ObservedKeys.Add(Key);
+        if(PendingRebind!=INDEX_NONE)
+        {
+            ReleaseGate.Down(Key,true);
+            if(Key==EKeys::Escape){CancelRebind();return true;}
+            if(Settings&&Settings->Bind(PendingRebind,Key,bChord))
+            {
+                UE_LOG(LogU01Control,Display,TEXT("Rebind action=%d key=%s localPlayer=%s"),PendingRebind,*Key.ToString(),*GetPathNameSafe(GetLocalPlayer()));
+                PendingRebind=INDEX_NONE;QuarantineHeldKeys();FlushPressedKeys();RebuildLocalMapping();
+            }
+            else UE_LOG(LogU01Control,Display,TEXT("RebindRejected key=%s reason=%s"),*Key.ToString(),*GetSettingsStatus());
+            return true;
+        }
         const auto* MotorPawn = Cast<AU01Character>(GetPawn());
         const bool bFixtureBlocked = MotorPawn && MotorPawn->GetU01Movement()->IsMotorLocked() && IsMotorKey(Key);
         ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing || bFixtureBlocked);
@@ -207,10 +239,11 @@ void AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown)
     }
     else
     {
-        ReleaseGate.Up(Key);
-        if (Key == EKeys::SpaceBar) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->StopJumping();
+        ReleaseGate.Up(Key);ObservedKeys.Remove(Key);
+        if (AnimeMMORPG::U01::CanonicalKey(Key)==ControlKey(AnimeMMORPG::U01::Jump)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->StopJumping();
         UE_LOG(LogU01Control, Display, TEXT("PhysicalRelease/Rearm key=%s"), *Key.ToString());
     }
+    return false;
 }
 
 bool AU01PlayerController::Accepts(FKey Key) const
@@ -220,9 +253,90 @@ bool AU01PlayerController::Accepts(FKey Key) const
         && MotorPawn && !MotorPawn->GetU01Movement()->IsMotorLocked();
 }
 
+const AnimeMMORPG::U01::FPreferences& AU01PlayerController::GetPreferences() const
+{
+    static const AnimeMMORPG::U01::FPreferences Defaults;
+    return Settings?Settings->Get():Defaults;
+}
+FKey AU01PlayerController::ControlKey(int32 Action) const
+{
+    return GetPreferences().Keys.IsValidIndex(Action)?GetPreferences().Keys[Action]:FKey();
+}
+bool AU01PlayerController::IsMotorKey(FKey Key) const
+{
+    for(int32 I=0;I<=AnimeMMORPG::U01::Sprint;++I)
+        if(AnimeMMORPG::U01::CanonicalKey(Key)==ControlKey(I))return true;
+    return false;
+}
+bool AU01PlayerController::AcceptsAction(int32 Action,bool bRequireMotor) const
+{
+    if(ControlState!=EU01ControlState::Playing||bMotorLocked||!IsGameWindowActive())return false;
+    const auto* Character=Cast<AU01Character>(GetPawn());
+    if(!Character||(bRequireMotor&&Character->GetU01Movement()->IsMotorLocked()))return false;
+    for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(ControlKey(Action)))
+        if(IsInputKeyDown(Key)&&ReleaseGate.Allows(Key))return true;
+    return false;
+}
+void AU01PlayerController::QuarantineHeldKeys()
+{
+    for(FKey Binding:GetPreferences().Keys)for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(Binding))
+        if(PhysicalDown(Key))ReleaseGate.Down(Key,true);
+    ReleaseGate.Lock();
+}
+bool AU01PlayerController::RebuildLocalMapping()
+{
+    if(!GetLocalPlayer())return false;
+    TArray<const UInputAction*> Actions;
+    for(int32 I=0;I<4;++I)Actions.Add(DirectionActions.IsValidIndex(I)?DirectionActions[I].Get():nullptr);
+    Actions.Append({JumpAction.Get(),SprintAction.Get(),ShoulderAction.Get(),InteractAction.Get()});
+    auto* NewMapping=AnimeMMORPG::U01::MakeLocalMapping(GetLocalPlayer(),MappingContext,GetPreferences(),Actions);
+    auto* Input=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+    if(!NewMapping||!Input)
+    {
+        if(Settings)Settings->SetNotice(TEXT("Input configuration missing: cannot apply controls."));
+        UE_LOG(LogU01Control,Error,TEXT("Local mapping configuration incomplete"));return false;
+    }
+    if(LocalMapping)Input->RemoveMappingContext(LocalMapping);
+    LocalMapping=NewMapping;
+    FModifyContextOptions Options;Options.bIgnoreAllPressedKeysUntilRelease=true;
+    Input->AddMappingContext(LocalMapping,0,Options);
+    return true;
+}
+void AU01PlayerController::ApplyPreferences()
+{
+    if(auto* Character=Cast<AU01Character>(GetPawn()))
+        Character->SetDefaultShoulder(GetPreferences().bRightShoulder,PresentationPawn.Get()!=GetPawn());
+}
+void AU01PlayerController::BeginRebind(int32 Action)
+{
+    if(!Settings||ControlState==EU01ControlState::Playing||Action<0||Action>=AnimeMMORPG::U01::ControlCount)return;
+    PendingRebind=Action;Settings->SetNotice(TEXT("Nhấn một phím/nút chuột. Escape hủy. Không nhận tổ hợp."));
+}
+void AU01PlayerController::CancelRebind()
+{
+    if(PendingRebind!=INDEX_NONE&&Settings)Settings->SetNotice(TEXT("Đã hủy đổi phím."));
+    PendingRebind=INDEX_NONE;
+}
+FString AU01PlayerController::GetSettingsStatus() const {return Settings?Settings->GetStatus():TEXT("Settings unavailable");}
+bool AU01PlayerController::SaveSettings(bool bExplicit)
+{
+    const bool Result=!Settings||Settings->Save(bExplicit);
+    if(!Result)UE_LOG(LogU01Control,Warning,TEXT("SettingsSaveFailed %s"),*GetSettingsStatus());
+    return Result;
+}
+void AU01PlayerController::ChangeSensitivity(float Value){if(Settings)Settings->SetSensitivity(Value);}
+void AU01PlayerController::ChangeInvertY(bool Value){if(Settings)Settings->SetInvertY(Value);}
+void AU01PlayerController::ChangeRightShoulder(bool Value){if(Settings){Settings->SetRightShoulder(Value);ApplyPreferences();}}
+void AU01PlayerController::RestoreControlDefaults()
+{
+    if(!Settings)return;
+    QuarantineHeldKeys();CancelRebind();FlushPressedKeys();Settings->RestoreDefaults();RebuildLocalMapping();ApplyPreferences();
+}
+void AU01PlayerController::OpenControls(){if(MenuWidget)MenuWidget->ShowControls();}
+
 void AU01PlayerController::MoveDirection(const FInputActionValue& Value, int32 DirectionIndex)
 {
-    if (DirectionIndex < 0 || DirectionIndex > 3 || !Value.Get<bool>() || !Accepts(DirectionKeys[DirectionIndex])) return;
+    if (DirectionIndex < 0 || DirectionIndex > 3 || !Value.Get<bool>() || !AcceptsAction(DirectionIndex)) return;
     if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn()))
     {
         const FRotationMatrix Yaw(FRotator(0, GetControlRotation().Yaw, 0));
@@ -234,22 +348,22 @@ void AU01PlayerController::MoveDirection(const FInputActionValue& Value, int32 D
 void AU01PlayerController::MouseX(const FInputActionValue& Value)
 {
     if (ControlState == EU01ControlState::Playing && IsGameWindowActive())
-        SetControlRotation(AnimeMMORPG::U01::ApplyMouse(GetControlRotation(), Value.Get<float>(), 0, 1));
+        SetControlRotation(AnimeMMORPG::U01::ApplyMouse(GetControlRotation(), Value.Get<float>(), 0, GetPreferences().Sensitivity));
 }
 void AU01PlayerController::MouseY(const FInputActionValue& Value)
 {
     if (ControlState == EU01ControlState::Playing && IsGameWindowActive())
-        SetControlRotation(AnimeMMORPG::U01::ApplyMouse(GetControlRotation(), 0, Value.Get<float>(), 1));
+        SetControlRotation(AnimeMMORPG::U01::ApplyMouse(GetControlRotation(), 0, Value.Get<float>()*(GetPreferences().bInvertY?-1:1), GetPreferences().Sensitivity));
 }
 void AU01PlayerController::JumpPressed()
 {
-    if (Accepts(EKeys::SpaceBar)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->Jump();
+    if (AcceptsAction(AnimeMMORPG::U01::Jump)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->Jump();
 }
 void AU01PlayerController::Sprint(const FInputActionValue& Value)
 {
     if (auto* MotorPawn = Cast<AU01Character>(GetPawn()))
         MotorPawn->GetU01Movement()->SetSprintRequested(Value.Get<bool>() &&
-            ((IsInputKeyDown(EKeys::LeftControl) && Accepts(EKeys::LeftControl)) || (IsInputKeyDown(EKeys::RightControl) && Accepts(EKeys::RightControl))));
+            AcceptsAction(AnimeMMORPG::U01::Sprint));
 }
 void AU01PlayerController::SprintReleased()
 {
@@ -257,15 +371,19 @@ void AU01PlayerController::SprintReleased()
 }
 void AU01PlayerController::ShoulderPressed()
 {
-    if (ControlState == EU01ControlState::Playing && ReleaseGate.Allows(EKeys::V) && IsGameWindowActive())
+    if (AcceptsAction(AnimeMMORPG::U01::Shoulder,false))
         if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->ToggleShoulder();
 }
 void AU01PlayerController::MenuPressed() { LockControls(EU01ControlState::Menu, TEXT("Escape")); }
+void AU01PlayerController::InteractPressed()
+{
+    if(AcceptsAction(AnimeMMORPG::U01::Interact,false)&&FixtureAllowed())ToggleInteractingFixture();
+}
 
 void AU01PlayerController::LockControls(EU01ControlState NewState, const TCHAR* Reason)
 {
     if (!IsLocalPlayerController()) return;
-    ReleaseGate.Lock();
+    QuarantineHeldKeys();CancelRebind();
     ControlState = NewState;
     bMotorLocked = true;
     if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(true);
@@ -273,6 +391,7 @@ void AU01PlayerController::LockControls(EU01ControlState NewState, const TCHAR* 
     bShowMouseCursor = true;
     if (MenuWidget)
     {
+        MenuWidget->ShowMainMenu();
         if (!MenuWidget->IsInViewport()) MenuWidget->AddToPlayerScreen(100);
         SetInputMode(FInputModeUIOnly().SetWidgetToFocus(MenuWidget->TakeWidget()).SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock));
     }
@@ -300,6 +419,8 @@ void AU01PlayerController::ApplyPlayingInputMode()
 void AU01PlayerController::ResumePlaying()
 {
     if (!IsLocalPlayerController() || !IsGameWindowActive()) return;
+    if(!SaveSettings())return;
+    CancelRebind();
     ReconcilePhysicalReleases();
     if (MenuWidget) MenuWidget->RemoveFromParent();
     FlushPressedKeys();
@@ -311,11 +432,11 @@ void AU01PlayerController::ResumePlaying()
 }
 void AU01PlayerController::ReturnToBoot()
 {
-    if (IsLocalPlayerController()) UGameplayStatics::OpenLevel(this, TEXT("/Game/AnimeMMORPG/Maps/L_Boot"));
+    if (IsLocalPlayerController()&&SaveSettings()) UGameplayStatics::OpenLevel(this, TEXT("/Game/AnimeMMORPG/Maps/L_Boot"));
 }
 void AU01PlayerController::QuitToDesktop()
 {
-    if (IsLocalPlayerController()) UKismetSystemLibrary::QuitGame(this, this, EQuitPreference::Quit, false);
+    if (IsLocalPlayerController()&&SaveSettings()) UKismetSystemLibrary::QuitGame(this, this, EQuitPreference::Quit, false);
 }
 
 FString AU01PlayerController::GetMetricsJson() const
@@ -385,6 +506,14 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetBoolField(TEXT("cursorVisible"), bShowMouseCursor);
     Json->SetBoolField(TEXT("motorLocked"), ControlledCharacter->GetU01Movement()->IsMotorLocked());
     Json->SetNumberField(TEXT("controlState"), int32(ControlState));
+    Json->SetStringField(TEXT("settings"),AnimeMMORPG::U01::EncodePreferences(GetPreferences()));
+    Json->SetStringField(TEXT("settingsStatus"),GetSettingsStatus());
+    Json->SetBoolField(TEXT("settingsDirty"),Settings&&Settings->IsDirty());
+    Json->SetNumberField(TEXT("pendingRebind"),PendingRebind);
+    Json->SetStringField(TEXT("localMapping"),GetPathNameSafe(LocalMapping));
+    Json->SetBoolField(TEXT("menuVisible"),MenuWidget&&MenuWidget->IsInViewport());
+    if(const auto* Input=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+        Json->SetNumberField(TEXT("mappingContextCount"),Input->GetAppliedInputContexts().Num());
     FString Result;
     FJsonSerializer::Serialize(Json, TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>::Create(&Result));
     return Result;
@@ -417,7 +546,7 @@ void AU01PlayerController::U01FixtureReset(const FString& Station)
         UE_LOG(LogU01Control, Warning, TEXT("Fixture reset rejected station=%s points=%d"), *Station, Points.Num());
         return;
     }
-    ReleaseGate.Lock();
+    QuarantineHeldKeys();
     FlushPressedKeys();
     MotorPawn->GetU01Movement()->ResetFixtureState();
     MotorPawn->SetActorLocation(Points[0]->GetActorLocation(), false, nullptr, ETeleportType::TeleportPhysics);
@@ -441,7 +570,7 @@ void AU01PlayerController::U01FixtureLock(const FString& Reason, bool bEnabled)
     if (!FixtureAllowed()) return;
     auto* MotorPawn = Cast<AU01Character>(GetPawn());
     if (!MotorPawn || (Reason != TEXT("Interacting") && Reason != TEXT("Defeated"))) return;
-    ReleaseGate.Lock();
+    QuarantineHeldKeys();
     FlushPressedKeys();
     MotorPawn->GetU01Movement()->SetMotorLock(Reason == TEXT("Interacting") ? EU01MotorLock::Interacting : EU01MotorLock::Defeated, bEnabled);
     UE_LOG(LogU01Control, Display, TEXT("LabFixtureLock reason=%s enabled=%d mask=%d world=%s pawn=%s"),

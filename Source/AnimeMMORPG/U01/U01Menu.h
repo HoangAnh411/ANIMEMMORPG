@@ -11,7 +11,34 @@ class ANIMEMMORPG_API UU01Menu : public UUserWidget
 public:
     virtual TSharedRef<SWidget> RebuildWidget() override;
     virtual FReply NativeOnKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;
+    virtual void NativeTick(const FGeometry& Geometry,float DeltaSeconds) override;
+    void ShowMainMenu();
+    void ShowControls();
 private:
+    UPROPERTY(Transient) TObjectPtr<class UWidgetSwitcher> Pages;
+    UPROPERTY(Transient) TObjectPtr<class UTextBlock> SettingsStatus;
+    UPROPERTY(Transient) TArray<TObjectPtr<class UTextBlock>> BindingLabels;
+    UPROPERTY(Transient) TObjectPtr<class USlider> Sensitivity;
+    UPROPERTY(Transient) TObjectPtr<class UTextBlock> SensitivityLabel;
+    UPROPERTY(Transient) TObjectPtr<class UCheckBox> InvertY;
+    UPROPERTY(Transient) TObjectPtr<class UCheckBox> RightShoulder;
+    void RefreshSettings();
+    UFUNCTION() void ControlsClicked();
+    UFUNCTION() void BackClicked();
+    UFUNCTION() void SaveClicked();
+    UFUNCTION() void DefaultsClicked();
+    UFUNCTION() void SensitivityChanged(float Value);
+    UFUNCTION() void SliderReleased();
+    UFUNCTION() void InvertChanged(bool Value);
+    UFUNCTION() void ShoulderChanged(bool Value);
+    UFUNCTION() void BindForward();
+    UFUNCTION() void BindBackward();
+    UFUNCTION() void BindLeft();
+    UFUNCTION() void BindRight();
+    UFUNCTION() void BindJump();
+    UFUNCTION() void BindSprint();
+    UFUNCTION() void BindShoulder();
+    UFUNCTION() void BindInteract();
     UPROPERTY(Transient) TObjectPtr<class UTextBlock> FixtureStatus;
     void UpdateFixtureStatus();
     UFUNCTION() void ResetFixtureClicked();

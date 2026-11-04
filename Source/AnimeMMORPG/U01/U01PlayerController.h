@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "U01ControlPolicy.h"
+#include "U01Settings.h"
 #include "U01PlayerController.generated.h"
 
 class UInputAction;
@@ -34,6 +35,7 @@ public:
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> SprintAction;
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> ShoulderAction;
     UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> MenuAction;
+    UPROPERTY(EditDefaultsOnly, Category="U01|Input") TObjectPtr<UInputAction> InteractAction;
     UPROPERTY(EditDefaultsOnly, Category="U01|UI") TSubclassOf<UU01Menu> MenuClass;
     UPROPERTY(BlueprintReadOnly, Category="U01") EU01ControlState ControlState = EU01ControlState::Playing;
 
@@ -50,10 +52,26 @@ public:
     FString GetFixtureStatus() const;
     bool HasTerrainFixtures() const;
     FString GetMetricsJson() const;
-    void ObservePhysicalKey(FKey Key, bool bDown);
+    bool ObservePhysicalKey(FKey Key, bool bDown, bool bChord=false);
     bool IsGameWindowActive() const;
+    const AnimeMMORPG::U01::FPreferences& GetPreferences() const;
+    void BeginRebind(int32 Action);
+    void CancelRebind();
+    int32 GetPendingRebind() const {return PendingRebind;}
+    FString GetSettingsStatus() const;
+    bool SaveSettings(bool bExplicit=false);
+    void ChangeSensitivity(float Value);
+    void ChangeInvertY(bool Value);
+    void ChangeRightShoulder(bool Value);
+    void RestoreControlDefaults();
+    void OpenControls();
 private:
     UPROPERTY(Transient) TObjectPtr<UU01Menu> MenuWidget;
+    UPROPERTY(Transient) TObjectPtr<UU01SettingsSubsystem> Settings;
+    UPROPERTY(Transient) TObjectPtr<UInputMappingContext> LocalMapping;
+    TWeakObjectPtr<APawn> PresentationPawn;
+    TSet<FKey> ObservedKeys;
+    int32 PendingRebind=INDEX_NONE;
     TSharedPtr<IInputProcessor> PhysicalInputObserver;
     AnimeMMORPG::U01::FReleaseGate ReleaseGate;
     FDelegateHandle ActivationHandle;
@@ -65,6 +83,12 @@ private:
     FString RunId;
     void ActivationChanged(bool bActive);
     void ReconcilePhysicalReleases();
+    void QuarantineHeldKeys();
+    bool RebuildLocalMapping();
+    void ApplyPreferences();
+    FKey ControlKey(int32 Action) const;
+    bool AcceptsAction(int32 Action,bool bRequireMotor=true) const;
+    bool IsMotorKey(FKey Key) const;
     void LockControls(EU01ControlState NewState, const TCHAR* Reason);
     void ApplyPlayingInputMode();
     void MoveDirection(const FInputActionValue& Value, int32 DirectionIndex);
@@ -75,6 +99,7 @@ private:
     void SprintReleased();
     void ShoulderPressed();
     void MenuPressed();
+    void InteractPressed();
     bool Accepts(FKey Key) const;
     bool FixtureAllowed() const;
     int32 FixtureStationIndex = 0;
