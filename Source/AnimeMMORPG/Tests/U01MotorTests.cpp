@@ -199,6 +199,19 @@ bool FU01JumpPhysicsTest::RunTest(const FString&)
         Fixture.Record(TEXT("LandingBuffer"), {{TEXT("jumped"), bBufferedTakeoff ? 1. : 0.}});
     }
     {
+        FU01PhysicsFixture Fixture(*this); Fixture.FlatFloor(); if (!Fixture.Start()) return false;
+        Fixture.Pawn->SetActorLocation(FVector(0,0,110), false, nullptr, ETeleportType::TeleportPhysics);
+        auto* Movement = Fixture.Pawn->GetU01Movement();
+        Movement->SetMovementMode(MOVE_Falling);
+        Movement->Velocity = FVector(0,0,-400);
+        Movement->SetControlLocked(true); Movement->SetControlLocked(false); // Remove ledge grace; exercise landing buffer only.
+        Fixture.Pawn->Jump(); Fixture.Pawn->StopJumping();
+        Fixture.Step(.15f); // Deadline lies inside this frame; floor is reached before it.
+        const bool bSubstepJump = Fixture.Pawn->JumpCurrentCount == 1 && Fixture.Pawn->GetVelocity().Z > 0;
+        TestTrue(TEXT("Buffer consumed at early landing even when frame end is past deadline"), bSubstepJump);
+        Fixture.Record(TEXT("LandingSubstepBuffer"), {{TEXT("frameSeconds"), .15}, {TEXT("jumped"), bSubstepJump ? 1. : 0.}});
+    }
+    {
         FU01PhysicsFixture Fixture(*this);
         Fixture.Box(FVector(0,0,250), FVector(400,400,100));
         if (!Fixture.Start(FVector(0,0,410))) return false;
@@ -305,6 +318,9 @@ bool FU01MotorLockTest::RunTest(const FString&)
     Movement->SetMotorLock(EU01MotorLock::Defeated,false);
     TestFalse(TEXT("All reasons removed unlocks motor"),Movement->IsMotorLocked());
     Fixture.Record(TEXT("MotorLocks"),{{TEXT("fallCm"),Start-Fixture.FeetZ()},{TEXT("verticalVelocityCmPerSec"),Fixture.Pawn->GetVelocity().Z}});
+    const double ClockBeforeReset = Movement->GetMotorTimeSeconds();
+    Movement->ResetFixtureState();
+    TestEqual(TEXT("Fixture reset clears deadlines without shifting world motor clock"), Movement->GetMotorTimeSeconds(), ClockBeforeReset);
     return true;
 }
 #endif

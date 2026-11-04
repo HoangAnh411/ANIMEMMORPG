@@ -108,7 +108,6 @@ void UU01CharacterMovement::ResetFixtureState()
     LockMask &= static_cast<uint8>(EU01MotorLock::Control);
     bSprintRequested = false;
     JumpWindow.ResetSession();
-    SimulationSeconds = GetWorld()->GetTimeSeconds();
     StopMovementImmediately();
     ConsumeInputVector();
     EventSeconds.Reset();
