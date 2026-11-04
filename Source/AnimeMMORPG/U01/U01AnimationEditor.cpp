@@ -83,7 +83,7 @@ FString UU01AnimationEditor::BuildDAssets()
     {
         const FString Source=FString(TEXT("/Game/Characters/Mannequins/Anims/Unarmed/"))+Paths[I];
         auto* Clip=DuplicateD<UAnimSequence>(*Source,Names[I]);
-        const double Speed=Clip->ExtractRootMotionFromRange(0,Clip->GetPlayLength()).GetTranslation().Size2D()/Clip->GetPlayLength();
+        const double Speed=Clip->ExtractRootMotionFromRange(0,Clip->GetPlayLength(),FAnimExtractContext()).GetTranslation().Size2D()/Clip->GetPlayLength();
         if(I==1) WalkSpeed=Speed; if(I==2) JogSpeed=Speed;
         UE_LOG(LogTemp,Display,TEXT("U01D_ASSET %s length=%.6f authoredRootSpeed=%.6f cm/s"),*Source,Clip->GetPlayLength(),Speed);
         Clip->SetSkeleton(Skeleton);
@@ -95,14 +95,14 @@ FString UU01AnimationEditor::BuildDAssets()
     auto* Blend=NewObject<UBlendSpace1D>(CreatePackage(*(DRoot+TEXT("/BS_U01_Locomotion"))),TEXT("BS_U01_Locomotion"),RF_Public|RF_Standalone);
     Blend->SetSkeleton(Skeleton);
     // Editor axis/sample fields have no setter; edit reflected asset data, never source assets.
-    auto* Axes=FindFPropertyChecked<FStructProperty>(UBlendSpace::StaticClass(),TEXT("BlendParameters"));
+    auto* Axes=FindFProperty<FStructProperty>(UBlendSpace::StaticClass(),TEXT("BlendParameters")); check(Axes);
     auto* Axis=Axes->ContainerPtrToValuePtr<FBlendParameter>(Blend,0);
     Axis->DisplayName=TEXT("GroundSpeed"); Axis->Min=0; Axis->Max=700; Axis->GridNum=7;
     Blend->AddSample(Clips[0],FVector::ZeroVector);
     Blend->AddSample(Clips[1],FVector(WalkSpeed,0,0));
     Blend->AddSample(Clips[2],FVector(500,0,0));
     Blend->AddSample(Clips[2],FVector(700,0,0));
-    auto* Samples=FindFPropertyChecked<FArrayProperty>(UBlendSpace::StaticClass(),TEXT("SampleData"));
+    auto* Samples=FindFProperty<FArrayProperty>(UBlendSpace::StaticClass(),TEXT("SampleData")); check(Samples);
     FScriptArrayHelper Helper(Samples,Samples->ContainerPtrToValuePtr<void>(Blend));
     reinterpret_cast<FBlendSample*>(Helper.GetRawPtr(2))->RateScale=500/JogSpeed;
     reinterpret_cast<FBlendSample*>(Helper.GetRawPtr(3))->RateScale=700/JogSpeed;
@@ -112,11 +112,11 @@ FString UU01AnimationEditor::BuildDAssets()
     Factory->ParentClass=UU01AnimInstance::StaticClass(); Factory->TargetSkeleton=Skeleton; Factory->PreviewSkeletalMesh=Mesh;
     auto* BP=CastChecked<UAnimBlueprint>(FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().CreateAsset(TEXT("ABP_U01"),DRoot,UAnimBlueprint::StaticClass(),Factory));
     UEdGraph* Graph=nullptr; UAnimGraphNode_Root* Root=nullptr;
-    for(auto* G:BP->FunctionGraphs) for(auto* N:G->Nodes) if(auto* R=Cast<UAnimGraphNode_Root>(N)) { Graph=G; Root=R; }
+    for(auto G:BP->FunctionGraphs) for(auto N:G->Nodes) if(auto* R=Cast<UAnimGraphNode_Root>(N)) { Graph=G; Root=R; }
     if (!Graph || !Root) return TEXT("ERROR: missing AnimGraph root");
     auto* Select=Node<UAnimGraphNode_BlendListByInt>(Graph,-350,0);
     for(int32 I=0;I<3;++I) Select->Node.AddPose(); // Constructor + PostPlacedNewNode supply the first two.
-    auto* Mode=FindFPropertyChecked<FEnumProperty>(FAnimNode_BlendListBase::StaticStruct(),TEXT("ChildUpateMode"));
+    auto* Mode=FindFProperty<FEnumProperty>(FAnimNode_BlendListBase::StaticStruct(),TEXT("ChildUpateMode")); check(Mode);
     Mode->GetUnderlyingProperty()->SetIntPropertyValue(Mode->ContainerPtrToValuePtr<void>(&Select->Node),int64(EBlendListChildUpdateMode::ResetChildOnActivate));
     Select->ReconstructNode();
     auto* Phase=Node<UK2Node_VariableGet>(Graph,-650,-220);

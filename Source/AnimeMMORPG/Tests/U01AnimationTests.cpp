@@ -99,7 +99,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01DMovement,"AnimeMMORPG.U01.D.AnimatedMotor"
 bool FU01DMovement::RunTest(const FString&)
 {
     FAnimatedFixture F(*this); if(!F.Start()) return false;
-    TestEqual(TEXT("Discard extracted motion"),int(F.Anim->GetRootMotionMode()),int(ERootMotionMode::IgnoreRootMotion));
+    TestEqual(TEXT("Discard extracted motion"),int(F.Anim->RootMotionMode),int(ERootMotionMode::IgnoreRootMotion));
     F.Tick(1,FVector::ForwardVector);
     double Start=F.Pawn->GetActorLocation().X; F.Tick(10,FVector::ForwardVector);
     double Walk=F.Pawn->GetActorLocation().X-Start;
@@ -150,7 +150,7 @@ bool FU01DTransitions::RunTest(const FString&)
     TestEqual(TEXT("No stuck landing/falling"),F.Anim->PoseIndex,0);
     for(auto* Part:{F.Pawn->SwordBlade.Get(),F.Pawn->SwordGuard.Get(),F.Pawn->SwordGrip.Get()})
     {
-        TestNotNull(TEXT("Visible block mesh"),Part->GetStaticMesh());
+        TestNotNull(TEXT("Visible block mesh"),Part->GetStaticMesh().Get());
         TestEqual(TEXT("No collision"),Part->GetCollisionEnabled(),ECollisionEnabled::NoCollision);
         TestFalse(TEXT("No overlap"),Part->GetGenerateOverlapEvents());
         TestFalse(TEXT("No physics"),Part->IsSimulatingPhysics());
