@@ -24,6 +24,7 @@ p.add_argument('--out', type=Path, required=True)
 p.add_argument('--actions', type=Path)
 p.add_argument('--duration', type=float, default=22)
 p.add_argument('--inspect', action='store_true')
+p.add_argument('--hz', type=int, default=60, choices=[30,60])
 a = p.parse_args()
 if not 0 < a.duration <= 60:
     raise RuntimeError('Evidence run limited to 60 seconds')
@@ -118,7 +119,7 @@ guard()
 ImageGrab.grab(bbox=bounds(), all_screens=True).save(a.out / 'initial.png')
 meta = {'pid': a.pid, 'hwnd': hwnd, 'executable': str(exe), 'binarySHA256': hashlib.sha256(exe.read_bytes()).hexdigest(),
         'utc': datetime.now(timezone.utc).isoformat(), 'method': 'Win32 SendInput guarded by foreground package HWND/PID; client-area capture',
-        'opencv': cv2.__version__, 'captureTargetHz': 10, 'events': []}
+        'opencv': cv2.__version__, 'captureTargetHz': a.hz, 'events': []}
 if a.inspect:
     (a.out / 'process.json').write_text(json.dumps(meta, indent=2), encoding='utf-8')
     raise SystemExit(0)
@@ -126,11 +127,32 @@ actions = json.loads(a.actions.read_text(encoding='utf-8-sig'))
 if actions != sorted(actions, key=lambda item: item['time']):
     raise RuntimeError('Actions must be time ordered')
 left, top, right, bottom = bounds()
-video = cv2.VideoWriter(str(a.out / 'Play-D.mp4'), cv2.VideoWriter_fourcc(*'mp4v'), 10, (right-left, bottom-top))
+video = cv2.VideoWriter(str(a.out / 'Play-D.mp4'), cv2.VideoWriter_fourcc(*'mp4v'), a.hz, (right-left, bottom-top))
 if not video.isOpened():
     raise RuntimeError('Video encoder unavailable')
 frames, pending, times = 0, list(actions), []
 last_frame, duplicated = None, 0
+# Capture the verified client DC directly: desktop PIL capture was too slow to
+# assess a 100ms transition. Keep measured unique-frame timestamps, not just FPS metadata.
+gdi = c.WinDLL('gdi32', use_last_error=True)
+user.GetDC.argtypes=[w.HWND]; user.GetDC.restype=w.HDC
+user.ReleaseDC.argtypes=[w.HWND,w.HDC]
+gdi.CreateCompatibleDC.argtypes=[w.HDC];gdi.CreateCompatibleDC.restype=w.HDC
+gdi.SelectObject.argtypes=[w.HDC,w.HANDLE];gdi.SelectObject.restype=w.HANDLE
+gdi.DeleteObject.argtypes=[w.HANDLE];gdi.DeleteDC.argtypes=[w.HDC]
+gdi.BitBlt.argtypes=[w.HDC,c.c_int,c.c_int,c.c_int,c.c_int,w.HDC,c.c_int,c.c_int,w.DWORD]
+class BitmapHeader(c.Structure):
+    _fields_=[('size',w.DWORD),('width',w.LONG),('height',w.LONG),('planes',w.WORD),('bits',w.WORD),('compression',w.DWORD),('imageBytes',w.DWORD),('xppm',w.LONG),('yppm',w.LONG),('used',w.DWORD),('important',w.DWORD)]
+class BitmapInfo(c.Structure):
+    _fields_=[('header',BitmapHeader),('colors',w.DWORD*3)]
+gdi.CreateDIBSection.argtypes=[w.HDC,c.POINTER(BitmapInfo),w.UINT,c.POINTER(c.c_void_p),w.HANDLE,w.DWORD]
+gdi.CreateDIBSection.restype=w.HANDLE
+dc=user.GetDC(hwnd); memory_dc=gdi.CreateCompatibleDC(dc)
+info=BitmapInfo(header=BitmapHeader(size=c.sizeof(BitmapHeader),width=right-left,height=-(bottom-top),planes=1,bits=32))
+pixels=c.c_void_p();bitmap=gdi.CreateDIBSection(dc,c.byref(info),0,c.byref(pixels),None,0)
+if not bitmap or not pixels.value:raise RuntimeError('Client DIB capture unavailable')
+previous=gdi.SelectObject(memory_dc,bitmap)
+pixel_array=np.ctypeslib.as_array((c.c_ubyte*((right-left)*(bottom-top)*4)).from_address(pixels.value)).reshape(bottom-top,right-left,4)
 start, next_frame = time.perf_counter(), 0.
 try:
     while (elapsed := time.perf_counter() - start) < a.duration:
@@ -151,23 +173,28 @@ try:
                 raise RuntimeError('Unknown evidence action')
             meta['events'].append(dict(event, actualTime=elapsed, utc=datetime.now(timezone.utc).isoformat()))
         if elapsed >= next_frame:
-            # Preserve wall-clock duration if capture is briefly slower than 10 Hz.
-            while last_frame is not None and frames < int(elapsed*10):
+            while last_frame is not None and frames < int(elapsed*a.hz):
                 video.write(last_frame); times.append(None); frames += 1; duplicated += 1
-            image = ImageGrab.grab(bbox=bounds(), all_screens=True)
-            last_frame = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
+            if bounds() != (left,top,right,bottom):raise RuntimeError('Game client moved/resized during capture')
+            if not gdi.BitBlt(memory_dc,0,0,right-left,bottom-top,dc,0,0,0x40CC0020):raise RuntimeError('Client BitBlt failed')
+            last_frame = cv2.cvtColor(pixel_array,cv2.COLOR_BGRA2BGR)
             video.write(last_frame)
-            if frames % 5 == 0:
-                image.save(a.out / f'frame-{frames:04}.png')
-            times.append(elapsed); frames += 1; next_frame = frames/10
+            if frames % a.hz == 0:cv2.imwrite(str(a.out/f'frame-{frames:04}.png'),last_frame)
+            times.append(elapsed); frames += 1; next_frame = frames/a.hz
         time.sleep(.005)
     meta['completed'] = True
 finally:
     for key in list(held): send_key(key, False)
     video.release()
+    gdi.SelectObject(memory_dc,previous);gdi.DeleteObject(bitmap);gdi.DeleteDC(memory_dc);user.ReleaseDC(hwnd,dc)
     meta['frames'] = frames
     meta['duplicatedFrames'] = duplicated
     meta['frameTimesSeconds'] = times
     meta['wallSeconds'] = time.perf_counter()-start
+    unique=[t for t in times if t is not None]
+    gaps=np.diff(unique)
+    meta['uniqueCaptureHz']=(len(unique)-1)/(unique[-1]-unique[0]) if len(unique)>1 else 0
+    meta['uniqueFrameGapP95Seconds']=float(np.percentile(gaps,95)) if len(gaps) else None
+    meta['uniqueFrameGapMaxSeconds']=float(max(gaps)) if len(gaps) else None
     (a.out / 'process.json').write_text(json.dumps(meta, indent=2), encoding='utf-8')
 print(json.dumps({'frames': frames, 'wallSeconds': meta['wallSeconds'], 'out': str(a.out)}))

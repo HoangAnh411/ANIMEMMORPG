@@ -237,7 +237,7 @@ FString UU01AnimationEditor::ReviseDAssets(const FString& ConfigFile)
         if(!Grip){Grip=NewObject<UPoseAsset>(CreatePackage(*(DRoot+TEXT("/PA_U01_RightGrip"))),TEXT("PA_U01_RightGrip"),RF_Public|RF_Standalone);Grip->SetSkeleton(Skeleton);FAssetRegistryModule::AssetCreated(Grip);}
         Grip->AddReferencePose(TEXT("RightGrip"),Ref);
         auto* Container=FindFProperty<FStructProperty>(UPoseAsset::StaticClass(),TEXT("PoseContainer"))->ContainerPtrToValuePtr<FPoseDataContainer>(Grip);
-        Container->AddOrUpdatePose(TEXT("RightGrip"),Pose,TArray<float>());
+        Container->FindPoseData(TEXT("RightGrip"))->SourceLocalSpacePose=Pose;
         Grip->ConvertSpace(false,INDEX_NONE);
         if(!Layer)
         {

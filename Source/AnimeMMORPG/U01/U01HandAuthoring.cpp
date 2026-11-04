@@ -78,7 +78,7 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
         Poses.Add(MakeShared<FJsonValueObject>(Json));
     }
     Root->SetArrayField(TEXT("poses"),Poses);
-    FString Text; FJsonSerializer::Serialize(Root.ToSharedRef(),TJsonWriterFactory<>::Create(&Text));
+    FString Text; FJsonSerializer::Serialize(Root,TJsonWriterFactory<>::Create(&Text));
     FFileHelper::SaveStringToFile(Text,*(OutputDirectory/TEXT("Hand.json")));
     World->DestroyActor(Pawn); World->DestroyActor(CameraActor);
     return TEXT("SUCCESS: nine hand closeups and hand-space diagnostic transforms");
