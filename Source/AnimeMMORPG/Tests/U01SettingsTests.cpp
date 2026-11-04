@@ -93,7 +93,7 @@ bool FU01EStorage::RunTest(const FString&)
     TArray<uint8> Oversized;Oversized.SetNumZeroed(65537);BadCases.Add(Oversized);
     for(const auto& Bad:BadCases)
     {
-        TestTrue(TEXT("Store malformed binary fixture"),UGameplayStatics::SaveDataToSlot(Bad,Slot,0));
+        TestTrue(TEXT("Store malformed binary fixture"),FFileHelper::SaveArrayToFile(Bad,*Path));
         TestFalse(TEXT("Malformed binary safely rejected"),Controls::ReadPreferences(Slot,0,Out,Message));
         TestFalse(TEXT("Malformed binary reports recovery"),Message.IsEmpty());
         TestEqual(TEXT("Binary damage uses default binding"),Out.Keys[AnimeMMORPG::U01::Forward],EKeys::W);
