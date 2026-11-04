@@ -12,10 +12,12 @@ import hashlib
 import json
 from pathlib import Path
 import time
+import zlib
 
 import cv2
 import numpy as np
 from PIL import ImageGrab
+cv2.setNumThreads(1) # Avoid oversubscribing the foreground game's CPU workers.
 
 p = argparse.ArgumentParser()
 p.add_argument('--pid', type=int, required=True)
@@ -25,6 +27,11 @@ p.add_argument('--actions', type=Path)
 p.add_argument('--duration', type=float, default=22)
 p.add_argument('--inspect', action='store_true')
 p.add_argument('--hz', type=int, default=60, choices=[30,60])
+p.add_argument('--window-dc', action='store_true', help='Use exact client DC instead of bounded screen DC')
+p.add_argument('--us-layout', action='store_true', help='Temporarily request US layout only on target game thread; restore afterwards')
+p.add_argument('--game-log', type=Path, help='Require runtime movement confirmation for injected W/Ctrl')
+p.add_argument('--virtual-keys', action='store_true', help='Use Win32 virtual-key injection instead of scan-code injection')
+p.add_argument('--ime-toggle-ctrl-shift', action='store_true', help='Probe W in locked menu; toggle external input method only if needed, restore if changed')
 a = p.parse_args()
 if not 0 < a.duration <= 60:
     raise RuntimeError('Evidence run limited to 60 seconds')
@@ -101,10 +108,11 @@ class Payload(c.Union):
 class Input(c.Structure):
     _fields_ = [('type', w.DWORD), ('payload', Payload)]
 user.SendInput.argtypes = [w.UINT, c.POINTER(Input), c.c_int]
-keys = {'W': 0x11, 'A': 0x1e, 'S': 0x1f, 'D': 0x20, 'Ctrl': 0x1d, 'Space': 0x39, 'V': 0x2f, 'Escape': 0x01}
+keys = {'W': 0x11, 'A': 0x1e, 'S': 0x1f, 'D': 0x20, 'Ctrl': 0x1d, 'Shift':0x2a,'Space': 0x39, 'V': 0x2f, 'Escape': 0x01}
+virtual_keys={'W':0x57,'A':0x41,'S':0x53,'D':0x44,'Ctrl':0xa2,'Shift':0xa0,'Space':0x20,'V':0x56,'Escape':0x1b}
 held = set()
 def send_key(key, down):
-    event = Input(type=1, payload=Payload(key=Key(scan=keys[key], flags=8 | (0 if down else 2))))
+    event = Input(type=1, payload=Payload(key=Key(vk=virtual_keys[key] if a.virtual_keys else 0,scan=keys[key], flags=(0 if a.virtual_keys else 8) | (0 if down else 2))))
     if user.SendInput(1, c.byref(event), c.sizeof(Input)) != 1:
         raise c.WinError(c.get_last_error())
     if down: held.add(key)
@@ -118,8 +126,9 @@ a.out.mkdir(parents=True, exist_ok=False)
 guard()
 ImageGrab.grab(bbox=bounds(), all_screens=True).save(a.out / 'initial.png')
 meta = {'pid': a.pid, 'hwnd': hwnd, 'executable': str(exe), 'binarySHA256': hashlib.sha256(exe.read_bytes()).hexdigest(),
-        'utc': datetime.now(timezone.utc).isoformat(), 'method': 'Win32 SendInput guarded by foreground package HWND/PID; client-area capture',
+        'utc': datetime.now(timezone.utc).isoformat(), 'method': 'Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC',
         'opencv': cv2.__version__, 'captureTargetHz': a.hz, 'events': []}
+meta['captureDC']='window-client' if a.window_dc else 'screen-client-bounds'
 if a.inspect:
     (a.out / 'process.json').write_text(json.dumps(meta, indent=2), encoding='utf-8')
     raise SystemExit(0)
@@ -132,8 +141,18 @@ if not video.isOpened():
     raise RuntimeError('Video encoder unavailable')
 frames, pending, times = 0, list(actions), []
 last_frame, duplicated = None, 0
-# Capture the verified client DC directly: desktop PIL capture was too slow to
-# assess a 100ms transition. Keep measured unique-frame timestamps, not just FPS metadata.
+image_hashes=set()
+validation_due=[]
+user.GetKeyboardLayout.argtypes=[w.DWORD];user.GetKeyboardLayout.restype=w.HANDLE
+user.LoadKeyboardLayoutW.argtypes=[w.LPCWSTR,w.UINT];user.LoadKeyboardLayoutW.restype=w.HANDLE
+user.PostMessageW.argtypes=[w.HWND,w.UINT,w.WPARAM,w.LPARAM]
+game_thread=user.GetWindowThreadProcessId(hwnd,None)
+old_layout=user.GetKeyboardLayout(game_thread)
+meta['keyboardLayoutBefore']=hex(old_layout)
+meta['keyInjection']='virtual-key SendInput' if a.virtual_keys else 'scan-code SendInput'
+# Read only the verified game client bounds. Window DC is an experimental option:
+# flip-model surfaces may be stale. Count distinct images and retain real frame
+# timestamps; encoder FPS alone is never evidence of capture or transition quality.
 gdi = c.WinDLL('gdi32', use_last_error=True)
 user.GetDC.argtypes=[w.HWND]; user.GetDC.restype=w.HDC
 user.ReleaseDC.argtypes=[w.HWND,w.HDC]
@@ -147,20 +166,72 @@ class BitmapInfo(c.Structure):
     _fields_=[('header',BitmapHeader),('colors',w.DWORD*3)]
 gdi.CreateDIBSection.argtypes=[w.HDC,c.POINTER(BitmapInfo),w.UINT,c.POINTER(c.c_void_p),w.HANDLE,w.DWORD]
 gdi.CreateDIBSection.restype=w.HANDLE
-dc=user.GetDC(hwnd); memory_dc=gdi.CreateCompatibleDC(dc)
+source_hwnd=hwnd if a.window_dc else None
+dc=user.GetDC(source_hwnd); memory_dc=gdi.CreateCompatibleDC(dc)
 info=BitmapInfo(header=BitmapHeader(size=c.sizeof(BitmapHeader),width=right-left,height=-(bottom-top),planes=1,bits=32))
 pixels=c.c_void_p();bitmap=gdi.CreateDIBSection(dc,c.byref(info),0,c.byref(pixels),None,0)
 if not bitmap or not pixels.value:raise RuntimeError('Client DIB capture unavailable')
 previous=gdi.SelectObject(memory_dc,bitmap)
 pixel_array=np.ctypeslib.as_array((c.c_ubyte*((right-left)*(bottom-top)*4)).from_address(pixels.value)).reshape(bottom-top,right-left,4)
 start, next_frame = time.perf_counter(), 0.
+ime_toggled=False
+def toggle_input_method():
+    guard();send_key('Ctrl',True);send_key('Shift',True);time.sleep(.06)
+    send_key('Shift',False);send_key('Ctrl',False);time.sleep(.15)
+def live_metrics():
+    with a.game_log.open('rb') as log:
+        log.seek(0,2);log.seek(max(0,log.tell()-48000));tail=log.read().decode('utf-8',errors='replace')
+    observed=[]
+    for line in tail.splitlines():
+        if 'Metrics {' in line:
+            try: observed.append(json.loads(line.split('Metrics ',1)[1]))
+            except json.JSONDecodeError: pass
+    if not observed or observed[-1]['pid']!=a.pid:raise RuntimeError('No unambiguous current game metrics')
+    return observed[-1]
+def probe_w():
+    offset=a.game_log.stat().st_size
+    send_key('W',True);time.sleep(.05);send_key('W',False)
+    for _ in range(10):
+        time.sleep(.05)
+        with a.game_log.open('rb') as log:
+            log.seek(offset);text=log.read().decode('utf-8',errors='replace')
+        if 'PhysicalPress key=W ' in text:return 'W'
+        if 'PhysicalPress key=None ' in text:return 'None'
+    raise RuntimeError('No game key observation for safe menu W probe')
 try:
+    if a.us_layout:
+        us_layout=user.LoadKeyboardLayoutW('00000409',0x80)
+        user.PostMessageW(hwnd,0x50,0,c.c_ssize_t(us_layout).value)
+        time.sleep(.25)
+        if user.GetKeyboardLayout(game_thread)&0xffff != 0x0409:raise RuntimeError('Target game did not accept US layout request')
+    if a.game_log:
+        current=live_metrics();meta['preflightControlState']=current['controlState']
+        if current['controlState']==0:
+            send_key('Escape',True);time.sleep(.03);send_key('Escape',False);time.sleep(.25)
+    if a.ime_toggle_ctrl_shift:
+        if not a.game_log:raise RuntimeError('Adaptive IME setup requires game log')
+        meta['menuWProbeBefore']=probe_w()
+        if meta['menuWProbeBefore']!='W':
+            toggle_input_method();ime_toggled=True;meta['externalInputMethodToggle']='Ctrl+Shift only after observed W conversion; restored on exit'
+            meta['menuWProbeAfter']=probe_w()
+            if meta['menuWProbeAfter']!='W':raise RuntimeError('Input method still replaces W; reject setup')
+    meta['keyboardLayoutDuring']=hex(user.GetKeyboardLayout(game_thread))
+    start=time.perf_counter();meta['utc']=datetime.now(timezone.utc).isoformat()
     while (elapsed := time.perf_counter() - start) < a.duration:
         guard()
+        for check in list(validation_due):
+            if elapsed >= check['due']:
+                latest=live_metrics()
+                if latest['pid']!=a.pid or latest['controlState']!=0 or latest['animationGroundSpeedCmPerSec']<=check['minimum']:
+                    raise RuntimeError('Injected movement not confirmed by game; reject capture')
+                meta.setdefault('inputValidation',[]).append(dict(check,observedUtc=latest['utc'],speed=latest['animationGroundSpeedCmPerSec']))
+                validation_due.remove(check)
         while pending and elapsed >= pending[0]['time']:
             event = pending.pop(0)
             if event['action'] in ('down', 'up'):
                 send_key(event['key'], event['action'] == 'down')
+                if a.game_log and event['action']=='down' and event['key'] in ('W','Ctrl'):
+                    validation_due.append({'due':elapsed+.4,'key':event['key'],'minimum':3 if event['key']=='W' else 650})
             elif event['action'] == 'move':
                 mouse(1, event['dx'], event['dy'])
             elif event['action'] == 'click':
@@ -168,6 +239,7 @@ try:
                 if not 0 <= x < right-left or not 0 <= y < bottom-top:
                     raise RuntimeError('Click outside game client')
                 user.SetCursorPos(left+x, top+y)
+                time.sleep(.06) # Let Slate process pointer motion before hit testing the press.
                 mouse(2); time.sleep(.03); mouse(4)
             else:
                 raise RuntimeError('Unknown evidence action')
@@ -176,17 +248,28 @@ try:
             while last_frame is not None and frames < int(elapsed*a.hz):
                 video.write(last_frame); times.append(None); frames += 1; duplicated += 1
             if bounds() != (left,top,right,bottom):raise RuntimeError('Game client moved/resized during capture')
-            if not gdi.BitBlt(memory_dc,0,0,right-left,bottom-top,dc,0,0,0x40CC0020):raise RuntimeError('Client BitBlt failed')
+            if not gdi.BitBlt(memory_dc,0,0,right-left,bottom-top,dc,0 if a.window_dc else left,0 if a.window_dc else top,0x40CC0020):raise RuntimeError('Client-area BitBlt failed')
             last_frame = cv2.cvtColor(pixel_array,cv2.COLOR_BGRA2BGR)
+            image_hashes.add(zlib.crc32(last_frame))
             video.write(last_frame)
             if frames % a.hz == 0:cv2.imwrite(str(a.out/f'frame-{frames:04}.png'),last_frame)
             times.append(elapsed); frames += 1; next_frame = frames/a.hz
         time.sleep(.005)
     meta['completed'] = True
 finally:
+    meta['captureActiveSeconds']=time.perf_counter()-start
     for key in list(held): send_key(key, False)
+    if ime_toggled:
+        try:
+            toggle_input_method();meta['externalInputMethodRestoreChordSent']=True
+        except RuntimeError as error:
+            meta['externalInputMethodRestoreError']=str(error)
+    meta['externalInputMethodRestored']=not ime_toggled or meta.get('externalInputMethodRestoreChordSent',False)
     video.release()
-    gdi.SelectObject(memory_dc,previous);gdi.DeleteObject(bitmap);gdi.DeleteDC(memory_dc);user.ReleaseDC(hwnd,dc)
+    if a.us_layout:
+        user.PostMessageW(hwnd,0x50,0,c.c_ssize_t(old_layout).value);time.sleep(.15)
+        meta['keyboardLayoutRestored']=user.GetKeyboardLayout(game_thread)==old_layout
+    gdi.SelectObject(memory_dc,previous);gdi.DeleteObject(bitmap);gdi.DeleteDC(memory_dc);user.ReleaseDC(source_hwnd,dc)
     meta['frames'] = frames
     meta['duplicatedFrames'] = duplicated
     meta['frameTimesSeconds'] = times
@@ -194,7 +277,12 @@ finally:
     unique=[t for t in times if t is not None]
     gaps=np.diff(unique)
     meta['uniqueCaptureHz']=(len(unique)-1)/(unique[-1]-unique[0]) if len(unique)>1 else 0
+    meta['distinctImageCount']=len(image_hashes)
+    meta['distinctImageHz']=(len(image_hashes)-1)/(unique[-1]-unique[0]) if len(unique)>1 else 0
+    meta['staticCaptureRejected']=len(image_hashes)<min(20,len(unique)/2)
     meta['uniqueFrameGapP95Seconds']=float(np.percentile(gaps,95)) if len(gaps) else None
     meta['uniqueFrameGapMaxSeconds']=float(max(gaps)) if len(gaps) else None
     (a.out / 'process.json').write_text(json.dumps(meta, indent=2), encoding='utf-8')
 print(json.dumps({'frames': frames, 'wallSeconds': meta['wallSeconds'], 'out': str(a.out)}))
+if meta.get('externalInputMethodRestoreError'):raise RuntimeError('Input-method restoration not confirmed; inspect capture metadata')
+if meta['staticCaptureRejected']:raise RuntimeError('Readback images are static; reject stale-DC video')

@@ -1,0 +1,12 @@
+{
+    "args":  [
+                 "\"D:/Data/AnimeMMORPG/Artifacts/U01/D/Source/AnimeMMORPG.uproject\"",
+                 "-unattended",
+                 "-NoLiveCoding",
+                 "-nosound",
+                 "-ExecutePythonScript=\"D:/Data/AnimeMMORPG/Artifacts/U01/D/Source/Scripts/U01/InspectDHand.py D:/Data/AnimeMMORPG/Artifacts/U01/D/Revision/HandBeforeVerified\"",
+                 "-abslog=\"D:/Data/AnimeMMORPG/Artifacts/U01/D/Revision/HandBeforeVerified/Editor.log\""
+             ],
+    "pid":  20868,
+    "assets":  "Baseline941 assets hash-verified; current diagnostic native tool; no gameplay metrics"
+}

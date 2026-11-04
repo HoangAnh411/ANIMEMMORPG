@@ -1,66 +1,75 @@
-# U01-D — Animation in-place và kiếm blockout
+# U01-D — Bản sửa landing và cầm kiếm (D1/D2/D3)
 
-**READY_FOR_REVIEW**, chưa phải xác nhận nghiệm thu D của người dùng. Nhánh `u01/d-animation`, từ main `868df83e096748991ccd861da3f98b64c409dcbd`. C đã khép REPORT-C/checklist theo xác nhận package tại `0cba933aa56379b1be064be40aaa0d9b3dbddb59`, commit/push hồ sơ và fast-forward main tới 868df83 trước khi tạo D. Nguồn build/test/package D cuối: **`715238443e33e1a2760ea3d89f4d1698f092e511`**. Commit bàn giao tài liệu phía sau không thay binary/asset nguồn này. Không merge D hoặc bắt đầu E.
+**READY_FOR_REVIEW**, chưa nghiệm thu D. Tiếp tục nhánh u01/d-animation từ 941bc3d3b7216355557053078c89b35a2b0a6477. Nguồn game/build/tests/package sửa: **819fbd041b8bc1f8463d6a075a4c6c29215b1f9c**. Commit hồ sơ/tool capture phía sau không đổi runtime hoặc asset của nguồn này. Main giữ 868df83e096748991ccd861da3f98b64c409dcbd; không merge D/chạy E.
 
-## Thay đổi
+Người dùng phát hiện hai lỗi sau bàn giao941: giữ pose landing khi đang di chuyển, và kiếm bám socket nhưng đặt/hướng sai, ngón tay chưa nắm cán. Lịch sử bàn giao cũ giữ nguyên tại [REPORT-D-941-HISTORY](REPORT-D-941-HISTORY.md), [checklist cũ](D-CHECKLIST-941-HISTORY.md), cùng Evidence/D-* cũ. Kết quả14/14 hoặc video cũ không thay nghiệm thu bản sửa.
 
-- Bộ riêng `/Game/AnimeMMORPG/U01/Animation`: skeleton SK_U01, mesh SKM_U01, sáu sequence, BS_U01_Locomotion và ABP_U01. BP_U01Character gán mesh/AnimBP và Cube cho kiếm. Không sửa map, Description, template/variant, mesh/skeleton/clip nguồn. Hash11 asset thay đổi và diff template tại [D-ASSETS.json](Evidence/D-ASSETS.json).
-- UU01AnimInstance đọc velocity ngang/dọc, acceleration, grounded/falling và sprint từ motor thực. AnimBP blend5 pose: idle, locomotion BlendSpace, jump-up, fall-loop, land. Rời mép đi thẳng vào fall; landing giữ0,25s rồi thoát; tái kích hoạt child reset thời gian clip. Animation không ra lệnh đi/nhảy, teleport hoặc đổi movement mode.
-- Walk nguồn có root speed300cm/s; jog600,340651cm/s. Mẫu BlendSpace: idle0/rate1, walk300/rate1, jog500/rate0,832860, jog700/rate1,166005. Giới hạn kiểm rate0,6–2,5. Lệnh “đi”5m/s dùng chu kỳ jog đã chỉnh tốc độ; walk nguồn tham gia ở giai đoạn tăng tốc thấp hơn. Đây là bộ kỹ thuật hiện có, không chọn thêm art.
-- Sequence bản sao bật extraction, ForceRootLock/AnimFirstFrame; AnimBP IgnoreRootMotion. Root track nguồn còn dữ liệu, nhưng pose trình bày in-place và motion bị discard, không cộng lên capsule. Mesh riêng bỏ post-process AnimBP của skeleton nguồn; không thêm foot IK/framework.
-- Socket `U01_Sword_R` trên `hand_r` của skeleton riêng. Kiếm gồm ba Cube native components: grip18×3×3cm, guard4×18×4cm, blade88×6×2,5cm; Blueprint gán mesh. Collision/overlap/physics/navigation tắt, không damage. Cơ chế owner-hide gần camera của B áp dụng cả kiếm là con mesh. Clip unarmed chưa có pose nắm kiếm sản phẩm.
-- File native: U01AnimInstance, U01AnimationEditor, U01Character, U01PlayerController metrics, U01AnimationTests và Build.cs. Helper authoring chỉ chạy trong Editor clone D; rebind FK ControlRig của clip bản sao trước validation, không sửa nguồn. Thêm dependency editor có sẵn để author graph, không cài/bật plugin mới hoặc tạo runtime module mới. Scripts CreateDAssets/FinalizeDAssets, VerifyDTests, CaptureDPlay, SummarizeD/RecordDEvidence giữ phép kiểm tái đọc được.
+## D1 — Landing
 
-## Build, Automation và số đo
+UU01AnimInstance chỉ đổi chọn pose: chạm đất với speed ngang >3cm/s vào locomotion ngay; <=3cm/s giữ landing tối đa0,25s rồi idle. Bắt đầu chạy trong hold hủy hold cùng update; nhảy lại/rơi được ưu tiên ngay. AnimBP lưu **0,100s tường minh cho cả5 pose** ở node và pin default, không dựa AddPose mặc định. Không khóa đi, sửa gia tốc/gravity/jump, coyote/buffer hoặc input để đợi animation. Git diff941→819 xác nhận các file Character/motor/input/controller, input assets, map và template không đổi.
 
-UE5.8.4 CL58902052, MSVC14.51.36260 (thư mục toolset14.51.36231), SDK10.0.26100.0. Clone GitHub tại `Artifacts/U01/D/Source`, seed cache object LFS từ C rồi fsck OK; không copy Binaries/Intermediate. Clone ban đầu ở source đã push, sau đó fast-forward đến7152384. Full native rebuild ở `Build-20261104-144328-366-7006a6c3`; sau commit chỉ sửa asset BlendSpace, UBT Editor/Game tại `Build-20261104-144803-468-388ab013` đều exit0/up-to-date từ đĩa. Không dùng patch Live Coding làm bằng chứng.
+Hai tests hồi quy mới chạy trên BP/mesh/AnimBP thật:
 
-MCP TestRunner trên **cold clone Editor PID22856**, `MCPTests-20261104-144814`, đọc log mới đến “14 tests performed”: **14/14 PASS**. Tên/kết quả nguyên dòng trong [D-RESULTS.json](Evidence/D-RESULTS.json):
+- AnimeMMORPG.U01.D.LandingTransitions: W–jump, W+Ctrl–jump, stationary landing, bắt đầu chạy trong hold, buffer trước touchdown, nhảy/rơi ngắt hold, đi khỏi mép collision thật tới nền thấp rồi tiếp tục chạy. Kiểm pose ngay tại contact/update; thời gian giữ <=0,25s cộng độ phân giải sample; compiled blend times đều0,100s, target chưa full ở đầu blend và full sau deadline cộng sample tolerance. Không chỉ kiểm từng thấy landing.
+- AnimeMMORPG.U01.D.GripIsolationAndAttachment: pose ngón thực thay đổi; tắt/bật layer ở cùng thời điểm để so tất cả local transform ngoài15 ngón, gồm cổ tay/cánh tay, sai số0,001; attachment kiểm cả vị trí và quaternion; camera sát tường ẩn cả mesh/ba phần kiếm và hiện lại sau hết cản.
 
-| Nhóm | Tests thực chạy |
-|---|---|
-| U00.Foundation —4/4 | Axes, CallOrder, HalfOpenInterval, Units |
-| U01.B —2/2 | CameraPolicy, ReleaseGate |
-| U01.C —5/5 | FlatMovement, JumpPhysics, JumpWindows, MotorLocks, Terrain |
-| U01.D —3/3 mới | AssetPolicy, AnimatedMotor, TransitionsAndAttachment |
+## D2 — Chẩn đoán và giá trị cuối
 
-D tạo **Game physics worlds**, spawn BP_U01Character có mesh/AnimBP D thật, AIController sở hữu để cấp input fixture; không lấy Editor world làm số đo. Mỗi record có sourceSHA, UTC, PID, world/context/type, net mode, pawn/controller/owner/roles, mesh và anim class. Đây là input fixture, tách khỏi input Windows của video. Kết quả:
+Đã chụp trước chỉnh trên mesh thực: socket gốc(0,0,0) ở cổ tay, lưỡi theo+X hand hướng về phía cổ tay; các ngón từ clip unarmed còn mở. Số đo hand-space cho knuckle khoảngX=-8 đến-9,5cm và ngón cái về phía+Z. Bộ ảnh trước cuối dùng byte ABP/SK của941 đối chiếu hash; không lấy attachment khớp làm chứng minh cách cầm đúng.
 
-| Phép đo với animation | Kết quả |
+Giữ kích thước grip18×3×3, guard4×18×4, blade88×6×2,5cm. Socket **U01_Sword_R/hand_r** trên skeleton U01 riêng chốt **location(-6,5; 2; -0,5)cm**, **rotation Pitch90/Yaw0/Roll90 độ**. Tâm cán vào vùng lòng bàn tay, lưỡi theo+Z hand phía ngón cái, guard ngoài nắm tay. Pose riêng **PA_U01_RightGrip/RightGrip** được lưu bằng công cụ PoseAsset sẵn có, đặt sau selector với Layered Blend per Bone chỉ5 nhánh ngón01 bên phải. Không đổi cổ tay/cánh tay/metacarpal, skeleton/clip nguồn, không thêm clip chuyển động, IK toàn thân, plugin hoặc animation chiến đấu.
+
+Các góc dưới đây là **delta Pitch/Yaw/Roll so với ref local rotation**, áp RefQuaternion * DeltaQuaternion; không phải Euler world. Chúng được chọn sau đọc hình/axes rồi quan sát candidate trên mesh idle/run/landing; giá trị đầy đủ trong [DGrip.json](../../Scripts/U01/DGrip.json).
+
+| Ngón | Joint01 delta P/Y/R | Joint02 | Joint03 |
+|---|---|---|---|
+| index | 0 / -61,627 / 0 | 0 / -60,107432 / 0 | 0 / -37,483599 / 0 |
+| middle | 0 / -58,427318 / 0 | 0 / -49,230790 / 0 | 0 / -40 / 0 |
+| ring | 0 / -65,585518 / 0 | 0 / -56,036 / 0 | 0 / -45,832 / 0 |
+| pinky | 0 / -85,166319 / 0 | 0 / -58,713001 / 0 | 0 / -50,083 / 0 |
+| thumb | 12 / -18 / -10 | 0 / -25 / 0 | 0 / -35 / 0 |
+
+Ảnh [trước](Evidence/D-Revision/Hands/Before) / [sau](Evidence/D-Revision/Hands/After) có Front/Side/Top cho idle/run/landing, thêm Palm/ThumbSide/FingerEnd để nhìn rõ khi arm/blade che góc trực diện. Ví dụ [run trước](Evidence/D-Revision/Hands/Before/Run-Front.png), [run sau](Evidence/D-Revision/Hands/After/Run-Front.png), [nắm cán](Evidence/D-Revision/Hands/After/Run-FingerEnd.png), [landing](Evidence/D-Revision/Hands/After/Land-Palm.png). Đây là **Editor pose preview**, có đèn fill tạm và sampler velocity/mode để chẩn đoán; không dùng làm số đo gameplay/FPS. Landing preview lấy đầu chuyển tiếp; thao tác landing thực kiểm riêng bằng tests/video. Một lỗi cache GPU khi chụp nhiều pose cùng frame đã được sửa bằng recreate render proxy; ảnh HandCandidate1 cũ bị thay bằng HandCandidateVerified, không dùng ảnh stale làm kết luận.
+
+Kiếm vẫn blockout một tay, collision/overlap/physics/nav tắt, không damage. Chưa làm combat stance; clip unarmed có thể đưa kiếm qua thân ở một số góc, đúng giới hạn người dùng. Cách cầm vẫn chờ review hình ảnh trên package, không suy PASS thẩm mỹ từ sai lệch socket0.
+
+## D3 — Kiểm chứng
+
+UE5.8.4 CL58902052, MSVC14.51.36260/toolset14.51.36231, Windows SDK10.0.26100.0. Dùng clone riêng Artifacts/U01/D/Source, không copy binaries/Intermediate hoặc dùng patch Live Coding. GitHub có các lỗi500: phần độc lập từng build từ Git local và được ghi nguồn chưa push; **819fbd0 sau đó đã push, full build từ đĩa và cold-test**. Native rebuild Revision/Build-20261104-182743-101-c6712605; source build Revision/Build-20261104-183208-319-cbeba78e Editor/Game exit0 (asset-only change nên UBT up-to-date).
+
+Cold clone **MCP TestRunner PID9760**, Revision/MCPTests-20261104-183218: **16/16 PASS**, đọc log mới tới queue-empty16. U00.Foundation4/4 (Axes/CallOrder/HalfOpenInterval/Units), B2/2 (CameraPolicy/ReleaseGate), C5/5 (FlatMovement/JumpPhysics/JumpWindows/MotorLocks/Terrain), D5/5 (AnimatedMotor/AssetPolicy/TransitionsAndAttachment/LandingTransitions/GripIsolationAndAttachment). Kỳ vọng cũ giữ landing chỉ còn ở ca đứng yên; ca đang chạy bắt buộc locomotion. [Kết quả và record identity](Evidence/D-Revision/RESULTS.json).
+
+Fixture spawn pawn BP có AnimBP/mesh thật trong **Game physics world**, AIController cấp controlled input; mọi record có UTC/sourceSHA/PID/world/context/type/netMode/pawn/controller/owner/roles/mesh/anim class. Không dùng Editor world hoặc suy PIE từ tên actor.
+
+| Đo lại với animation/grip | Kết quả |
 |---|---:|
-| Đi ổn định10s | 5000,000260770cm |
-| Sprint ổn định10s | 7000,000365078cm |
-| Apex dt1/30s | 119,987106204cm |
-| Apex dt1/60s | 119,987106189cm |
-| Apex dt1/120s | 119,994960187cm |
-| Gravity | −980cm/s² |
-| Root pose drift trong chu kỳ locomotion | 0,000000000cm |
-| Sai lệch vị trí SwordRoot với socket | 0,000000000cm |
-| Biên thay đổi xương tay/chân khi đi ổn định | 72,493673 /106,318791cm |
-| Biên thay đổi xương chân khi sprint ổn định | 91,656429cm |
+| Đi10s sau tăng tốc | 5000,000260770cm |
+| Sprint10s sau tăng tốc | 7000,000365078cm |
+| Apex dt1/30;1/60;1/120s | 119,987106204;119,987106189;119,994960187cm |
+| Gravity | -980cm/s² |
+| Hold stationary quan sát ở dt1/120 | 0,250000089s (sai số float/sample) |
+| Target weight sau blend deadline | 1,000000 |
+| Attachment max position/angle error | 0cm /0 độ |
+| Root drift locomotion | 0cm |
 
-Các biên xương chứng minh pose chạy qua nhiều frame, không là phép đo foot sliding. Test còn kiểm idle/move/jump/fall/land/idle, không kẹt landing, rời mép không jump-up giả, capsule42/96cm và kiếm không collision/physics. Bước tích phân1/30–1/120s **không phải FPS render đã đo**.
+Độ phân giải tích phân không là FPS render. Owner-hide cả mesh/kiếm đã assert hide/restore trong test mới. Package cuối Artifacts/U01/D/Revision/Package-20261104-183402-258-c983dd92/Archive/Windows: BuildCookRun exit0, đủ48file, [hash package](Evidence/D-Revision/PACKAGE.csv). Smoke Revision/SmokeB-20261104-184708: Boot/CharacterCombatLab/NetworkLab **3/3 PASS**, lab PID19712/3400; NetworkLab ở đây standalone, không nghiệm thu F.
 
-## Windows và input thật
+## Video input thực và giới hạn capture
 
-Package cuối `Artifacts/U01/D/Package-20261104-144914-755-2b8e3bc6/Archive/Windows`, BuildCookRun exit0; cook summary0 error/0 warning. Giữ đủ48 file; hash từng file ở [D-ARTIFACTS.csv](Evidence/D-ARTIFACTS.csv). Smoke `SmokeB-20261104-145341`: Boot/CharacterCombatLab/NetworkLab **3/3 PASS**, exit0, lab PID4592/17960 có sourceSHA và mesh/AnimBP D đúng. NetworkLab ở smoke là standalone, không phải kiểm mạng F.
+[Trước sửa11s](Evidence/D-Revision/Before.mp4) / [sau sửa11s](Evidence/D-Revision/After.mp4) dùng cùng timeline W–Space, rồi W+Ctrl–Space. [Ca mở rộng25s](Evidence/D-Revision/Coverage.mp4): đứng yên đáp, bắt đầu chạy trong landing, thử buffer/nhảy lại, chọn fixture Ledge rồi tiếp tục chạy. Raw events, identity và samples trong RESULTS.json. Log trước thực ghi pose4 ở500/700cm/s; log sau không có pose4 khi speed>3, có locomotion tại touchdown. Ledge sau có fall rồi locomotion, không ascent giả. Biên buffer/coyote chính xác do Automation chứng minh; video/trace5Hz không đo được thời điểm0,099s.
 
-[Video D27 giây](Evidence/D-PLAY.mp4), [ảnh đi](Evidence/D-WALK.png), [sprint](Evidence/D-SPRINT.png), [nhảy](Evidence/D-JUMP.png), [tiếp đất](Evidence/D-LAND.png). Video gốc và log tại `Artifacts/U01/D/PlayCaptureFinal`; bootstrapPID14268, gamePID**22692**, HWND/đường dẫn exe/hash được khóa trước input. CaptureDPlay dùng **Win32 SendInput** cho click Reset/Resume, W/Ctrl/Space/Escape và mouse delta; dừng nếu mất foreground, nhả phím trong finally. Không gọi AddMovementInput để thay input trong video. Log nhận PhysicalPress accepted=1 và reset đúng fixture Runway/Ledge.
+Capture dùng **SendInput Windows**, khóa đúng exe/PID/HWND/foreground, xác minh W/sprint từ log. UniKey từng biến W thành None; tool mới probe W trong menu đang khóa, chỉ chuyển tạm nếu cần và khôi phục nếu đã đổi. Các lượt bàn giao cuối probe nhận W đúng sẵn, không cần đổi mode. Không sửa input game. Capture cuối là screen BitBlt giới hạn vùng client, kiểm cả số ảnh khác nhau; không dùng window-client DC giữ ảnh menu cũ.
 
-27,0036s, 270 frame ở10Hz, có18 frame lặp để giữ thời gian thực khi capture chậm; **10Hz không là FPS của game**. D-RESULTS giữ137 samples đúng Game world/type1, net mode0, owned local pawn và source7152384. Đoạn đi/sprint ổn định trong log đúng500/700cm/s; đủ pose indices0–4. Ở fixture Ledge, log ghi fall với velocityZ âm rồi land, không jump-up; sau đó trở lại idle. AI đã xem các ảnh mẫu pose và attachment, video dành cho người review đánh giá chuyển động/trượt chân. Chưa tự đánh dấu xác nhận thẩm mỹ hoặc toàn bộ checklist người dùng PASS.
+| Clip | Frame đọc mới/giây và ảnh khác/giây | Khoảng frame lớn nhất | Frame lặp để giữ thời gian |
+|---|---:|---:|---:|
+| Before | 25,869 | 131ms | 45/330 |
+| After | 25,919 | 137ms | 44/330 |
+| Coverage | 24,866 | 149ms | 128/750 |
 
-## Lịch sử lỗi và giới hạn
+File encoder30FPS **không có nghĩa capture30FPS hoặc game30FPS**. 285/286/622 ảnh khác nhau được xác nhận và ảnh trích đã xem. Không dùng các video này hoặc video10Hz cũ để khẳng định blend100ms mượt; test compiled graph kiểm deadline, người review đánh giá cảm giác trên package cuối. Các lượt capture cũ đã loại vì W=None, Resume chưa thực hiện, readback<1Hz, hoặc DC stale dù metadata đọc50–60Hz. Raw logs/metadata giữ trong Revision, không sửa thành PASS. [Manifest và lịch sử](Evidence/D-Revision/MANIFEST.json), [hash ảnh/video](Evidence/D-Revision/EVIDENCE.csv).
 
-1. Compile đầu lỗi API extraction context/FindFProperty/TObjectPtr; Game build kế tiếp lỗi accessor chỉ có trong Editor. Đã sửa, các log Build-* lỗi vẫn giữ; không đổi compiler/engine hoặc bỏ test.
-2. Authoring đầu `Authoring-20261104-142401` báo FK rig bản sao còn bound SK_Mannequin. Giữ file lỗi trong PreservedAssets, sửa binding chỉ nested rig bản sao; authoring sau `Authoring-20261104-142947` SUCCESS. ConditionalPostLoad import-data warnings của lần duplicate còn trong log, không che lỗi binding.
-3. Source07fbb3e đạt14/14 tests ban đầu nhưng **video PlayCapture/Run3 phát hiện pose locomotion đứng cứng**: thiếu dữ liệu nội suy đã bake của BlendSpace. Lượt này bị loại, không dùng làm bằng chứng đạt. Bổ sung assert lấy sample runtime và chu kỳ xương ở tốc độ ổn định; `MCPTests-20261104-144514` chạy asset cũ đạt12/14, đúng hai test AssetPolicy/TransitionsAndAttachment FAIL. Sau ResampleData/save,7152384 cold-load đạt14/14 và video mới có locomotion. Lịch sử này giữ trong manifest, không suy thành kiểm chứng hình ảnh từ lượt PASS cũ.
-4. Capture setup Run1 lỗi BOM trước input; Run2 từ chối foreground trước input. Dùng attach input queue một lần lúc startup để xin foreground; trong lượt ghi vẫn abort khi mất focus, không giành lại focus liên tục. Capture cuối hoàn tất.
-5. Compiler14.51 mới hơn preferred14.50 và C4996 engine header còn; smoke giữ optional profiler DLL/audio diagnostics đã phân loại theo validator B. Không thay renderer để làm số đo đẹp. Python/toolset init ở đường Editor executable -game/-server từ A vẫn để xử lý trước F/tích hợp; D không giả báo đã sửa tồn tại đó.
+Compiler vẫn mới hơn preferred14.50; các C4996 engine và warning diagnostic API giữ trong log. Các lỗi compile/link helper pose riêng (private accessor/export/editor-only accessor) đã sửa, không bỏ tests. Optional profiler/audio diagnostics của smoke được giữ theo validator B. Không đổi renderer, engine hoặc cài plugin. Tồn tại Python/toolset của đường Editor -game/-server từ A vẫn để F/tích hợp; không giả báo đã xử lý trong D.
 
-Editor gốc vẫn mở **PID19924**, MCP summary Boot/0actor. Marker LogPython mới UTC07:56:22.230 xác nhận project gốc. **Chưa xác nhận nạp native B/C/D mới trong Editor gốc**; reflection/layout mới cần cold build/restart trước khi dùng lớp mới ở đó. Không yêu cầu đóng Editor để khép C, build clone hoặc bàn giao package D.
+AI không đóng/restart Editor gốc. Cuối kiểm **PID20412, project gốc, Boot0actor**, marker MCP UTC12:09:56.665; native D mới trong Editor gốc **chưa xác nhận**. Header/UFUNCTION mới cần full build/restart trước dùng ở Editor đó, package clone đã nạp lạnh. Config/token local ngoài Git.
 
-Art anime **DEFERRED**. Chưa chạy E/F/G, Server packaging, mạng hai client, các mức FPS render30/60/120 hoặc phiên10 phút của G. Chưa có damage/combo/né/đỡ/skills/AI chiến đấu. Không đổi luật Description.
-
-## Bàn giao
-
-Chạy `Artifacts/U01/D/Play-D.cmd` để vào Boot của đúng package7152384, chọn CharacterCombatLab; local logs/settings ở `Artifacts/U01/D/Review`. Có thể sao chép nguyên thư mục Windows48file sang máy khác. [Checklist review D](D-MANUAL-CHECKLIST.md) chỉ còn xác nhận chuyển động/foot sliding và trải nghiệm kiếm trên package. Source/binary/video hashes, đường dẫn log và lỗi lịch sử ở [D-MANIFEST.json](Evidence/D-MANIFEST.json). D được push riêng để review, main giữ868df83; chờ người dùng nghiệm thu trước merge/chuyển E.
+Art anime **DEFERRED**. Chưa nghiệm thu D tổng thể, chưa E/F/G, Server packaging hoặc combat. Chạy **Artifacts/U01/D/Play-D.cmd** để vào Boot của package819fbd0, logs ở Artifacts/U01/D/Revision/Review; giữ nguyên thư mục Windows48file khi sao chép. [Checklist ngắn](D-MANUAL-CHECKLIST.md) chỉ còn cảm giác chuyển động/cách cầm trên bản cuối; dừng chờ review, không tự merge.

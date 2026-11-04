@@ -1,23 +1,12 @@
-# U01-D — Checklist review package
+# U01-D sửa — Review package cuối
 
-**READY_FOR_REVIEW; chưa có xác nhận nghiệm thu D của người dùng.** Source package `715238443e33e1a2760ea3d89f4d1698f092e511`. Chạy `Artifacts/U01/D/Play-D.cmd`, vào CharacterCombatLab. Original Editor không phải bản dùng để nghiệm thu này. Xem [REPORT-D](REPORT-D.md), [video27s](Evidence/D-PLAY.mp4).
+**READY_FOR_REVIEW**, chưa nghiệm thu. Source game **819fbd041b8bc1f8463d6a075a4c6c29215b1f9c**. Chạy Artifacts/U01/D/Play-D.cmd → CharacterCombatLab. Original Editor chưa xác nhận nạp D, không dùng để review bản này.
 
-| Mục | Bằng chứng đã chạy | Trạng thái |
-|---|---|---|
-| Idle/move/sprint/jump-up/fall/land, không kẹt | 3 tests D; input Windows/capturePID22692, samples đủ0–4 | PASS tự động/tool |
-| Rời mép không jump-up giả, land rồi về idle | Game fixture + thao tác menu chọn Ledge và W thật | PASS tự động/tool |
-| Animation không cộng tốc độ/apex | BP/mesh/AnimBP thật: đi50m/sprint70m mỗi10s, apex~1,20m | PASS tự động |
-| Pose thực chạy nhiều frame khi ổn định | Test chu kỳ tay/chân, sample interpolation cold-load; video locomotion mới | PASS tự động/tool |
-| Kiếm bám tay, collision không ảnh hưởng motor | Socket riêng, sai lệch vị trí0cm; video move/jump/land; collision/overlap/physics/nav tắt | PASS tự động/tool |
-| Không sửa shared skeleton/template, không anime art | Hash11 asset riêng và Git diff nguồn | PASS phạm vi; anime DEFERRED |
-| Foot sliding/cảm giác chuyển động có chấp nhận được | Video10Hz có18frame lặp/270; AI xem ảnh mẫu, chưa thay đánh giá của người review | PENDING REVIEW |
-| Xác nhận chơi thử package D tổng thể | Chưa có xác nhận người dùng cho D | PENDING USER |
+Đã PASS: full build,16/16 tests, motor/apex trong sai số C, attachment vị trí+hướng, layer chỉ ngón tay, owner-hide mesh/kiếm, smoke3/3. Không cần người dùng đo lại bằng stopwatch. [Báo cáo](REPORT-D.md), [video trước](Evidence/D-Revision/Before.mp4), [sau](Evidence/D-Revision/After.mp4), [ca mở rộng](Evidence/D-Revision/Coverage.mp4), [ảnh tay](Evidence/D-Revision/Hands/After).
 
-Review gộp, không cần stopwatch để thay số đo tự động:
+Chỉ còn hai mục cảm nhận cần review:
 
-1. Resume, đứng yên rồi W; giữ Ctrl khi di chuyển, nhả; quan sát chân khi chạy thẳng ổn định. Có thể Escape → Fixture reset runway → Resume để quay lại đường80m.
-2. Nhấn Space ngắn/dài, nhảy lúc đứng/chạy; nhìn tư thế lên/rơi/land rồi idle hoặc tiếp tục chạy, không đứng cứng/kẹt fall. Escape → Next terrain station tới Ledge → Resume, đi khỏi mép để xem fall trực tiếp.
-3. Xoay camera khi đứng/di chuyển để xem kiếm theo tay phải trong các pose. Kiếm khối và clip unarmed chỉ kiểm attachment; chưa có tư thế nắm kiếm/art anime sản phẩm. Chọn V/đứng gần vật cản để xem cơ chế owner-hide của mesh/kiếm nếu cần review thêm.
-4. Nếu có trượt chân rõ kéo dài, pose bất thường hoặc kiếm rời tay, ghi vị trí/trạng thái hoặc đoạn video cần sửa. Chưa đánh dấu toàn checklist PASS chỉ từ kết quả tests.
+1. **Landing:** giữ W khi nhảy, rồi W+Ctrl khi nhảy; không còn giữ tư thế đáp trong khi chạy, blend không giật rõ. Thử nhảy đứng yên rồi bắt đầu chạy lúc vừa đáp; thử nhấn nhảy gần touchdown/nhảy lại, hoặc chọn fixture Ledge và chạy tiếp. Nhận xét cảm giác trên package; video chỉ khoảng25–26FPS thực, không tự chứng minh100ms mượt.
+2. **Cầm kiếm:** nhìn từ nhiều góc trong idle/đi/sprint/nhảy/đáp: cán trong nắm tay, ngón ôm cán hợp lý, chắn tay ngoài nắm, lưỡi về phía ngón cái; không đảo/rời tay khi đổi pose. Đây vẫn là blockout và clip unarmed, không yêu cầu combat stance hoặc tuyệt đối không xuyên thân.
 
-Không dùng checklist này nghiệm thu rebind/settings E, mạng F, full lifecycle/FPS/10phút G hoặc art anime. Main chưa merge D.
+Hai mục trên **PENDING USER REVIEW**, chưa tự ghi PASS. Nếu cần sửa, nêu tình huống/đoạn video cụ thể. Lịch sử checklist941 ở [bản cũ](D-CHECKLIST-941-HISTORY.md). Art anime DEFERRED; chưa merge D hoặc làm E.
