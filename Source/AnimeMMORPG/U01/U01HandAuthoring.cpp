@@ -6,6 +6,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/PointLightComponent.h"
 #include "Engine/TextureRenderTarget2D.h"
 #include "Engine/SkeletalMesh.h"
 #include "ImageUtils.h"
@@ -37,6 +38,7 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
     Target->RenderTargetFormat=RTF_RGBA8; Target->InitAutoFormat(1024,1024);
     Capture->TextureTarget=Target; Capture->CaptureSource=SCS_FinalColorLDR;
     Capture->bCaptureEveryFrame=false; Capture->bCaptureOnMovement=false; Capture->FOVAngle=35;
+    auto* Light=NewObject<UPointLightComponent>(CameraActor);Light->RegisterComponent();Light->SetIntensity(800);Light->SetAttenuationRadius(250);Light->SetCastShadows(false);
     IFileManager::Get().MakeDirectory(*OutputDirectory,true);
     auto Root=MakeShared<FJsonObject>();
     Root->SetStringField(TEXT("method"),TEXT("Editor pose preview only; NOT gameplay measurement. Own BP/mesh/AnimBP, explicit velocity and mode for diagnostic pose sampling."));
@@ -54,21 +56,27 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
         Json->SetStringField(TEXT("handWorld"),Hand.ToString());
         Json->SetStringField(TEXT("socketRelativeToHand"),Mesh->GetSocketTransform(TEXT("U01_Sword_R"),RTS_World).GetRelativeTransform(Hand).ToString());
         auto Bones=MakeShared<FJsonObject>();
+        auto Reference=MakeShared<FJsonObject>();
         const auto& Ref=Mesh->GetSkeletalMeshAsset()->GetRefSkeleton();
         for(int I=0;I<Ref.GetNum();++I)
         {
             const FString Bone=Ref.GetBoneName(I).ToString();
             if(Bone.EndsWith(TEXT("_r")) && (Bone.Contains(TEXT("index"))||Bone.Contains(TEXT("middle"))||Bone.Contains(TEXT("ring"))||Bone.Contains(TEXT("pinky"))||Bone.Contains(TEXT("thumb"))))
+            {
                 Bones->SetStringField(Bone,Mesh->GetSocketTransform(Ref.GetBoneName(I),RTS_World).GetRelativeTransform(Hand).ToString());
+                Reference->SetStringField(Bone,Ref.GetRefBonePose()[I].ToString());
+            }
         }
         Json->SetObjectField(TEXT("bonesInHandSpace"),Bones);
+        Json->SetObjectField(TEXT("referenceLocalBones"),Reference);
         const FVector Aim=(Hand.GetLocation()+Mesh->GetSocketLocation(TEXT("middle_01_r")))*.5;
-        const FVector Directions[]={FVector(1,0,0),FVector(0,1,0),FVector(0,0,1)};
-        const TCHAR* Angles[]={TEXT("Front"),TEXT("Side"),TEXT("Top")};
-        for(int View=0;View<3;++View)
+        const FVector Directions[]={FVector(1,0,0),FVector(0,1,0),FVector(0,0,1),Hand.GetUnitAxis(EAxis::Y),Hand.GetUnitAxis(EAxis::Z),-Hand.GetUnitAxis(EAxis::X)};
+        const TCHAR* Angles[]={TEXT("Front"),TEXT("Side"),TEXT("Top"),TEXT("Palm"),TEXT("ThumbSide"),TEXT("FingerEnd")};
+        for(int View=0;View<6;++View)
         {
             Capture->SetWorldLocation(Aim+Directions[View]*42);
             Capture->SetWorldRotation((Aim-Capture->GetComponentLocation()).Rotation());
+            Light->SetWorldLocation(Capture->GetComponentLocation());
             Mesh->MarkRenderDynamicDataDirty(); World->SendAllEndOfFrameUpdates(); FlushRenderingCommands();
             Capture->CaptureScene(); FlushRenderingCommands();
             TArray64<uint8> Png; FMemoryWriter64 Writer(Png);
@@ -81,7 +89,7 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
     FString Text; FJsonSerializer::Serialize(Root,TJsonWriterFactory<>::Create(&Text));
     FFileHelper::SaveStringToFile(Text,*(OutputDirectory/TEXT("Hand.json")));
     World->DestroyActor(Pawn); World->DestroyActor(CameraActor);
-    return TEXT("SUCCESS: nine hand closeups and hand-space diagnostic transforms");
+    return TEXT("SUCCESS: eighteen lit hand closeups, three actor axes plus three hand axes, and diagnostic transforms");
 }
 #else
 FString UU01AnimationEditor::InspectDHand(const FString&) { return TEXT("ERROR: editor only"); }

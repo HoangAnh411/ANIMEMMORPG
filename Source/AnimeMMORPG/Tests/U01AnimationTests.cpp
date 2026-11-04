@@ -62,6 +62,13 @@ public:
         Box->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
         Box->SetCollisionObjectType(ECC_WorldStatic); Box->SetCollisionResponseToAllChannels(ECR_Block);
         Floor->SetActorLocation(FVector(0,0,-50)); Box->RegisterComponent();
+        if(bShortFloor)
+        {
+            auto* Landing=World->SpawnActor<AActor>();auto* Shape=NewObject<UBoxComponent>(Landing);Landing->SetRootComponent(Shape);
+            Shape->SetBoxExtent(FVector(1500,1000,50));Shape->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+            Shape->SetCollisionObjectType(ECC_WorldStatic);Shape->SetCollisionResponseToAllChannels(ECR_Block);
+            Landing->SetActorLocation(FVector(1500,0,-350));Shape->RegisterComponent();
+        }
         auto* Class=LoadClass<AU01Character>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Blueprints/BP_U01Character.BP_U01Character_C"));
         if(!Class){Test.AddError(TEXT("D BP missing"));return false;}
         Pawn=World->SpawnActor<AU01Character>(Class,FVector(0,0,110),FRotator::ZeroRotator);
@@ -286,12 +293,10 @@ bool FU01DLanding::RunTest(const FString&)
         TestEqual(TEXT("Falling interrupts stationary land immediately"),F.Anim->PoseIndex,3);
     }
     {
-        FAnimatedFixture F(*this);if(!F.Start())return false;
-        // Descending fixture over the real floor, then keep running through contact.
-        F.Tick(1,FVector::ForwardVector);F.Pawn->AddActorWorldOffset(FVector(0,0,300));
-        F.Pawn->GetU01Movement()->SetMovementMode(MOVE_Falling);F.Pawn->GetU01Movement()->Velocity=FVector(500,0,-10);
+        FAnimatedFixture F(*this);if(!F.Start(true))return false;
+        // Run off actual collision geometry to the lower landing surface.
         bool Fall=false,Land=false;
-        for(int I=0;I<150;++I){F.Step(1.f/120,FVector::ForwardVector);Fall|=F.Anim->PoseIndex==3;if(Fall&&F.Anim->bGrounded){Land=true;TestEqual(TEXT("Ledge descent resumes run at contact"),F.Anim->PoseIndex,1);break;}}
+        for(int I=0;I<300;++I){F.Step(1.f/120,FVector::ForwardVector);Fall|=F.Anim->PoseIndex==3;if(Fall&&F.Anim->bGrounded){Land=true;TestEqual(TEXT("Ledge descent resumes run at contact"),F.Anim->PoseIndex,1);break;}}
         TestTrue(TEXT("Descending contact reached"),Land);BlendDeadline(F,FVector::ForwardVector,false);
     }
     return true;
@@ -304,7 +309,7 @@ bool FU01DGrip::RunTest(const FString&)
     auto* Grip=LoadObject<UPoseAsset>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/PA_U01_RightGrip"));
     if(!TestNotNull(TEXT("Own grip pose asset"),Grip))return false;
     TestEqual(TEXT("Named authored grip pose"),Grip->GetPoseIndexByName(TEXT("RightGrip")),0);
-    TestEqual(TEXT("No extra grip pose"),Grip->GetPoseNameByIndex(1),NAME_None);
+    TestEqual(TEXT("One grip pose"),Grip->GetNumPoses(),1);
     auto* Mesh=F.Pawn->GetMesh();auto* Layer=AnimNode<FAnimNode_LayeredBoneBlend>(F.Anim);
     if(!TestNotNull(TEXT("Finger-only layer after selector"),Layer))return false;
     for(const FVector Input:{FVector::ZeroVector,FVector::ForwardVector})
