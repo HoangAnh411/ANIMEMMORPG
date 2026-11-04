@@ -35,6 +35,20 @@ template<class T> T* AnimNode(UAnimInstance* Anim)
         if(Property->Struct==T::StaticStruct())return Property->ContainerPtrToValuePtr<T>(Anim);
     return nullptr;
 }
+FAnimNode_LayeredBoneBlend* ArmLayer(UAnimInstance* Anim,bool Carry)
+{
+    auto* Interface=IAnimClassInterface::GetFromClass(Anim->GetClass());
+    for(auto* Property:Interface->GetAnimNodeProperties())if(Property->Struct==FAnimNode_LayeredBoneBlend::StaticStruct())
+    {
+        auto* Node=Property->ContainerPtrToValuePtr<FAnimNode_LayeredBoneBlend>(Anim);
+        if(Node->LayerSetup.Num()&&Node->LayerSetup[0].BranchFilters.Num())
+        {
+            const bool IsCarry=Node->LayerSetup[0].BranchFilters[0].BoneName==TEXT("clavicle_r");
+            if(Carry==IsCarry)return Node;
+        }
+    }
+    return nullptr;
+}
 float ActiveBlendWeight(UAnimInstance* Anim)
 {
     auto* Node=AnimNode<FAnimNode_BlendListByInt>(Anim);if(!Node)return -1;
@@ -178,8 +192,8 @@ bool FU01DTransitions::RunTest(const FString&)
         RootDrift=FMath::Max(RootDrift,FVector::Distance(Root,Mesh->GetSocketTransform(TEXT("root"),RTS_Component).GetLocation()));
         SocketError=FMath::Max(SocketError,FVector::Distance(F.Pawn->SwordRoot->GetComponentLocation(),Mesh->GetSocketTransform(TEXT("U01_Sword_R"),RTS_World).GetLocation()));
     }
-    TestTrue(TEXT("Evaluated moving bone pose, not reference pose"),HandChange>5);
-    TestTrue(TEXT("Steady walk hand cycles, not frozen pose"),WalkHandCycle>5);
+    // Carry deliberately damps the right arm. Foot cycles remain the proof that
+    // locomotion is animated; do not demand the old unarmed hand swing.
     TestTrue(TEXT("Steady walk foot cycles, not frozen pose"),WalkFootCycle>10);
     F.Tick(1,FVector::ForwardVector,true);
     const FVector SprintFoot=F.Pawn->GetMesh()->GetSocketTransform(TEXT("foot_r"),RTS_Component).GetLocation();
@@ -310,7 +324,7 @@ bool FU01DGrip::RunTest(const FString&)
     if(!TestNotNull(TEXT("Own grip pose asset"),Grip))return false;
     TestEqual(TEXT("Named authored grip pose"),Grip->GetPoseIndexByName(TEXT("RightGrip")),0);
     TestEqual(TEXT("One grip pose"),Grip->GetNumPoses(),1);
-    auto* Mesh=F.Pawn->GetMesh();auto* Layer=AnimNode<FAnimNode_LayeredBoneBlend>(F.Anim);
+    auto* Mesh=F.Pawn->GetMesh();auto* Layer=ArmLayer(F.Anim,false);
     if(!TestNotNull(TEXT("Finger-only layer after selector"),Layer))return false;
     for(const FVector Input:{FVector::ZeroVector,FVector::ForwardVector})
     {
@@ -348,6 +362,66 @@ bool FU01DGrip::RunTest(const FString&)
     Wall->Destroy();for(int I=0;I<120;++I)F.Pawn->CalcCamera(.016,View);
     TestFalse(TEXT("Clear camera restores mesh"),Mesh->bOwnerNoSee);
     for(auto* Part:{F.Pawn->SwordGrip.Get(),F.Pawn->SwordGuard.Get(),F.Pawn->SwordBlade.Get()})TestFalse(TEXT("Clear camera restores sword"),Part->bOwnerNoSee);
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01DCarry,"AnimeMMORPG.U01.D.CarryTrajectory",DFlags)
+bool FU01DCarry::RunTest(const FString&)
+{
+    FAnimatedFixture F(*this);if(!F.Start())return false;
+    auto* Mesh=F.Pawn->GetMesh();auto* Layer=ArmLayer(F.Anim,true);
+    if(!TestNotNull(TEXT("Carry layer before accepted grip"),Layer))return false;
+    auto* Pose=LoadObject<UPoseAsset>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/PA_U01_RightCarry"));
+    if(!TestNotNull(TEXT("Own right carry pose"),Pose))return false;
+    TestEqual(TEXT("Single carry pose"),Pose->GetNumPoses(),1);
+    const auto& Ref=Mesh->GetSkeletalMeshAsset()->GetRefSkeleton();
+    // A/B evaluate at the same player time: outside the right shoulder branch,
+    // including every leg/root/spine/left-arm bone, the carry layer is identity.
+    F.Tick(.5,FVector::ForwardVector,true);
+    const auto With=Mesh->GetBoneSpaceTransforms();Layer->BlendWeights[0]=0;Mesh->TickAnimation(0,false);Mesh->RefreshBoneTransforms();const auto Without=Mesh->GetBoneSpaceTransforms();
+    const int Clavicle=Ref.FindBoneIndex(TEXT("clavicle_r"));int ArmChanges=0;
+    for(int I=0;I<With.Num();++I)
+    {
+        int Parent=I;while(Parent>=0&&Parent!=Clavicle)Parent=Ref.GetParentIndex(Parent);
+        if(Parent<0)TestTrue(TEXT("Carry preserves legs/motor root/spine/left arm"),With[I].Equals(Without[I],.001));
+        else if(Ref.GetBoneName(I)==TEXT("upperarm_r")||Ref.GetBoneName(I)==TEXT("lowerarm_r")||Ref.GetBoneName(I)==TEXT("hand_r"))
+            ArmChanges+=With[I].GetRotation().AngularDistance(Without[I].GetRotation())>.05;
+    }
+    TestTrue(TEXT("Carry changes actual upper/lower/wrist pose"),ArmChanges>=2);
+    Layer->BlendWeights[0]=1;Mesh->TickAnimation(0,false);Mesh->RefreshBoneTransforms();
+    double MinClearance=1.e9,MaxAngle=0,MaxGripError=0,MaxBladeStep=0;FVector PreviousTip=FVector::ZeroVector;bool HaveTip=false;
+    TSet<int> Phases;int Samples=0;
+    // Conservative bone-following body capsules, fixture only: not sword collision
+    // and not a proof of triangle-perfect nonintersection from every camera angle.
+    struct FBody{const TCHAR* A;const TCHAR* B;double Radius;};
+    const FBody Bodies[]={{TEXT("pelvis"),TEXT("spine_02"),17},{TEXT("spine_02"),TEXT("neck_01"),19},{TEXT("neck_01"),TEXT("head"),12},{TEXT("thigh_r"),TEXT("calf_r"),10},{TEXT("thigh_l"),TEXT("calf_l"),10}};
+    auto Sample=[&]()
+    {
+        const auto Sword=F.Pawn->SwordBlade->GetComponentTransform();
+        const FVector A=Sword.TransformPosition(FVector(-50,0,0)),B=Sword.TransformPosition(FVector(50,0,0));
+        for(const auto& Body:Bodies)
+        {
+            FVector OnSword,OnBody;
+            FMath::SegmentDistToSegmentSafe(A,B,Mesh->GetSocketLocation(Body.A),Mesh->GetSocketLocation(Body.B),OnSword,OnBody);
+            MinClearance=FMath::Min(MinClearance,FVector::Distance(OnSword,OnBody)-Body.Radius-3.25);
+        }
+        const FTransform Socket=Mesh->GetSocketTransform(TEXT("U01_Sword_R"),RTS_World);
+        MaxAngle=FMath::Max(MaxAngle,double(FMath::RadiansToDegrees(Socket.GetRotation().AngularDistance(F.Pawn->SwordRoot->GetComponentQuat()))));
+        MaxGripError=FMath::Max(MaxGripError,FVector::Distance(Socket.GetLocation(),F.Pawn->SwordRoot->GetComponentLocation()));
+        const FVector TipCS=Mesh->GetComponentTransform().InverseTransformPosition(B);
+        if(HaveTip)MaxBladeStep=FMath::Max(MaxBladeStep,FVector::Distance(TipCS,PreviousTip));
+        PreviousTip=TipCS;HaveTip=true;Phases.Add(F.Anim->PoseIndex);++Samples;
+    };
+    auto Run=[&](int Frames,FVector Direction,bool Sprint){for(int I=0;I<Frames;++I){F.Step(1.f/120,Direction,Sprint);Sample();}};
+    Run(120,FVector::ZeroVector,false);Run(180,FVector::ForwardVector,false);Run(180,FVector::ForwardVector,true);
+    F.Pawn->Jump();Run(150,FVector::ForwardVector,true);F.Pawn->StopJumping();
+    Run(120,FVector::RightVector,true);Run(120,-FVector::ForwardVector,true);Run(120,-FVector::RightVector,true);
+    Run(120,FVector::ZeroVector,false);F.Pawn->Jump();Run(160,FVector::ZeroVector,false);F.Pawn->StopJumping();
+    for(int Phase:{0,1,2,3,4})TestTrue(FString::Printf(TEXT("Trajectory includes pose %d"),Phase),Phases.Contains(Phase));
+    TestTrue(TEXT("Blade clears body proxy through locomotion/jump/land/turn transitions"),MinClearance>0);
+    TestTrue(TEXT("No abrupt component-space blade jump at 120Hz fixture"),MaxBladeStep<8);
+    TestTrue(TEXT("Grip attachment position unchanged"),MaxGripError<.1);TestTrue(TEXT("Grip attachment orientation unchanged"),MaxAngle<.01);
+    for(auto* Part:{F.Pawn->SwordBlade.Get(),F.Pawn->SwordGuard.Get(),F.Pawn->SwordGrip.Get()})TestEqual(TEXT("Sword collision remains off"),Part->GetCollisionEnabled(),ECollisionEnabled::NoCollision);
+    F.Record(TEXT("carry-trajectory"),FString::Printf(TEXT("samples=%d minBodyProxyClearanceCm=%.6f maxTipStepComponentCm=%.6f socketPositionErrorCm=%.6f socketAngleErrorDegrees=%.6f"),Samples,MinClearance,MaxBladeStep,MaxGripError,MaxAngle));
     return true;
 }
 #endif
