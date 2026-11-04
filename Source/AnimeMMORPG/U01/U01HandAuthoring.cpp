@@ -42,6 +42,16 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
     IFileManager::Get().MakeDirectory(*OutputDirectory,true);
     auto Root=MakeShared<FJsonObject>();
     Root->SetStringField(TEXT("method"),TEXT("Editor pose preview only; NOT gameplay measurement. Own BP/mesh/AnimBP, explicit velocity and mode for diagnostic pose sampling."));
+    auto RefJson=MakeShared<FJsonObject>();
+    const auto& SkeletonRef=Mesh->GetSkeletalMeshAsset()->GetRefSkeleton();
+    TArray<FTransform> RefCS;
+    for(int I=0;I<SkeletonRef.GetNum();++I)
+    {
+        const int Parent=SkeletonRef.GetParentIndex(I);
+        RefCS.Add(Parent>=0?SkeletonRef.GetRefBonePose()[I]*RefCS[Parent]:SkeletonRef.GetRefBonePose()[I]);
+        RefJson->SetStringField(SkeletonRef.GetBoneName(I).ToString(),RefCS[I].ToString());
+    }
+    Root->SetObjectField(TEXT("referenceComponentSpace"),RefJson);
     TArray<TSharedPtr<FJsonValue>> Poses;
     for(int Phase=0;Phase<3;++Phase)
     {
@@ -57,6 +67,10 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
         Json->SetStringField(TEXT("pose"),Name);
         const FTransform Hand=Mesh->GetSocketTransform(TEXT("hand_r"),RTS_World);
         Json->SetStringField(TEXT("handWorld"),Hand.ToString());
+        auto ArmJson=MakeShared<FJsonObject>();
+        for(const TCHAR* Bone:{TEXT("clavicle_r"),TEXT("upperarm_r"),TEXT("lowerarm_r"),TEXT("hand_r"),TEXT("pelvis"),TEXT("spine_03"),TEXT("neck_01")})
+            ArmJson->SetStringField(Bone,Mesh->GetSocketTransform(Bone,RTS_Component).ToString());
+        Json->SetObjectField(TEXT("armComponentSpace"),ArmJson);
         Json->SetStringField(TEXT("socketRelativeToHand"),Mesh->GetSocketTransform(TEXT("U01_Sword_R"),RTS_World).GetRelativeTransform(Hand).ToString());
         auto Bones=MakeShared<FJsonObject>();
         auto Reference=MakeShared<FJsonObject>();
@@ -86,6 +100,18 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
             if(!FImageUtils::ExportRenderTarget2DAsPNG(Target,Writer)||!FFileHelper::SaveArrayToFile(Png,*(OutputDirectory/(Name+TEXT("-")+Angles[View]+TEXT(".png")))))
                 return TEXT("ERROR: capture export");
         }
+        const FVector BodyAim=Pawn->GetActorLocation()+FVector(0,0,5);
+        const FVector BodyViews[]={FVector(240,0,40),FVector(0,240,40),FVector(-240,0,40),FVector(0,-240,40)};
+        for(int View=0;View<4;++View)
+        {
+            Capture->FOVAngle=65;
+            Capture->SetWorldLocation(BodyAim+BodyViews[View]);Capture->SetWorldRotation((BodyAim-Capture->GetComponentLocation()).Rotation());
+            Light->SetWorldLocation(Capture->GetComponentLocation());Light->SetAttenuationRadius(600);Light->SetIntensity(2500);
+            World->SendAllEndOfFrameUpdates();FlushRenderingCommands();Capture->CaptureScene();FlushRenderingCommands();
+            TArray64<uint8> Png;FMemoryWriter64 Writer(Png);
+            if(!FImageUtils::ExportRenderTarget2DAsPNG(Target,Writer)||!FFileHelper::SaveArrayToFile(Png,*(OutputDirectory/(Name+FString::Printf(TEXT("-Body%d.png"),View)))))return TEXT("ERROR: body preview");
+        }
+        Capture->FOVAngle=35;Light->SetAttenuationRadius(250);Light->SetIntensity(800);
         Poses.Add(MakeShared<FJsonValueObject>(Json));
     }
     Root->SetArrayField(TEXT("poses"),Poses);

@@ -17,4 +17,6 @@ public:
     static FString InspectDHand(const FString& OutputDirectory);
     UFUNCTION(BlueprintCallable, Category="U01|Authoring")
     static FString ReviseDAssets(const FString& ConfigFile);
+    UFUNCTION(BlueprintCallable, Category="U01|Authoring")
+    static FString ReviseDCarry(const FString& ConfigFile);
 };

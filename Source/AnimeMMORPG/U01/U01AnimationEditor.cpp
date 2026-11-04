@@ -266,3 +266,78 @@ FString UU01AnimationEditor::ReviseDAssets(const FString& ConfigFile)
     return TEXT("ERROR: editor only");
 #endif
 }
+
+FString UU01AnimationEditor::ReviseDCarry(const FString& ConfigFile)
+{
+#if WITH_EDITOR
+    FString Dir=FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());Dir.ReplaceInline(TEXT("\\"),TEXT("/"));
+    if(!Dir.Contains(TEXT("/Artifacts/U01/D/Source/")))return TEXT("ERROR: clone only");
+    FString Text;TSharedPtr<FJsonObject> Config;
+    if(!FFileHelper::LoadFileToString(Text,*ConfigFile)||!FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text),Config))return TEXT("ERROR: carry config");
+    auto Vector=[&](const TCHAR* Key){const auto& V=Config->GetArrayField(Key);check(V.Num()==3);return FVector(V[0]->AsNumber(),V[1]->AsNumber(),V[2]->AsNumber());};
+    auto* Skeleton=LoadObject<USkeleton>(nullptr,*(DRoot+TEXT("/SK_U01")));
+    const auto& Ref=Skeleton->GetReferenceSkeleton();TArray<FTransform> Local=Ref.GetRefBonePose(),CS;
+    auto Recompute=[&](){CS.SetNum(Local.Num());for(int I=0;I<Local.Num();++I){int P=Ref.GetParentIndex(I);CS[I]=P<0?Local[I]:Local[I]*CS[P];}};
+    Recompute();
+    const int Clavicle=Ref.FindBoneIndex(TEXT("clavicle_r")),Upper=Ref.FindBoneIndex(TEXT("upperarm_r")),Lower=Ref.FindBoneIndex(TEXT("lowerarm_r")),Hand=Ref.FindBoneIndex(TEXT("hand_r"));
+    if(Clavicle<0||Upper<0||Lower<0||Hand<0)return TEXT("ERROR: missing arm chain");
+    const FVector ClavicleDelta=Vector(TEXT("clavicleDeltaPitchYawRoll"));
+    Local[Clavicle].SetRotation((Local[Clavicle].GetRotation()*FRotator(ClavicleDelta.X,ClavicleDelta.Y,ClavicleDelta.Z).Quaternion()).GetNormalized());Recompute();
+    const FVector Shoulder=CS[Upper].GetLocation(),Goal=Vector(TEXT("wristComponentCm")),Pole=Vector(TEXT("elbowPoleComponentCm"));
+    const double A=FVector::Distance(CS[Upper].GetLocation(),CS[Lower].GetLocation()),B=FVector::Distance(CS[Lower].GetLocation(),CS[Hand].GetLocation());
+    const double D=FVector::Distance(Shoulder,Goal);
+    if(D>=A+B-.01||D<=FMath::Abs(A-B)+.01)return TEXT("ERROR: wrist outside reachable arm range");
+    const FVector Axis=(Goal-Shoulder)/D;
+    const FVector PoleDirection=((Pole-Shoulder)-Axis*FVector::DotProduct(Pole-Shoulder,Axis)).GetSafeNormal();
+    const double Along=(A*A-B*B+D*D)/(2*D),Height=FMath::Sqrt(FMath::Max(0.,A*A-Along*Along));
+    const FVector Elbow=Shoulder+Axis*Along+PoleDirection*Height;
+    auto AimBone=[&](int Bone,int Child,FVector Target)
+    {
+        const FQuat Desired=FQuat::FindBetweenNormals((CS[Child].GetLocation()-CS[Bone].GetLocation()).GetSafeNormal(),(Target-CS[Bone].GetLocation()).GetSafeNormal())*CS[Bone].GetRotation();
+        Local[Bone].SetRotation((CS[Ref.GetParentIndex(Bone)].GetRotation().Inverse()*Desired).GetNormalized());Recompute();
+    };
+    AimBone(Upper,Lower,Elbow);AimBone(Lower,Hand,Goal);
+    // Accepted socket maps sword +X to hand +Z. Keep socket/grip bytes intact;
+    // orient the wrist from blade direction and the hand/finger axis instead.
+    const FQuat HandCS=FRotationMatrix::MakeFromZX(Vector(TEXT("bladeDirectionComponent")),Vector(TEXT("fingerDirectionComponent"))).ToQuat();
+    Local[Hand].SetRotation((CS[Lower].GetRotation().Inverse()*HandCS).GetNormalized());Recompute();
+    auto* Carry=LoadObject<UPoseAsset>(nullptr,*(DRoot+TEXT("/PA_U01_RightCarry")));
+    if(!Carry){Carry=NewObject<UPoseAsset>(CreatePackage(*(DRoot+TEXT("/PA_U01_RightCarry"))),TEXT("PA_U01_RightCarry"),RF_Public|RF_Standalone);Carry->SetSkeleton(Skeleton);FAssetRegistryModule::AssetCreated(Carry);}
+    Carry->AddReferencePose(TEXT("RightCarry"),Ref);
+    auto* Container=FindFProperty<FStructProperty>(UPoseAsset::StaticClass(),TEXT("PoseContainer"))->ContainerPtrToValuePtr<FPoseDataContainer>(Carry);
+    auto* P=FindFProperty<FArrayProperty>(FPoseDataContainer::StaticStruct(),TEXT("Poses"));FScriptArrayHelper Values(P,P->ContainerPtrToValuePtr<void>(Container));
+    if(Values.Num()!=1)return TEXT("ERROR: expected one carry pose");
+    *FindFProperty<FArrayProperty>(FPoseData::StaticStruct(),TEXT("SourceLocalSpacePose"))->ContainerPtrToValuePtr<TArray<FTransform>>(Values.GetRawPtr(0))=Local;
+    Carry->ConvertSpace(false,INDEX_NONE);
+    auto* BP=LoadObject<UAnimBlueprint>(nullptr,*(DRoot+TEXT("/ABP_U01")));UEdGraph* Graph=nullptr;UAnimGraphNode_BlendListByInt* Select=nullptr;UAnimGraphNode_LayeredBoneBlend* GripLayer=nullptr;UAnimGraphNode_LayeredBoneBlend* CarryLayer=nullptr;
+    for(auto G:BP->FunctionGraphs)for(auto N:G->Nodes)
+    {
+        if(auto* S=Cast<UAnimGraphNode_BlendListByInt>(N)){Graph=G;Select=S;}
+        if(auto* L=Cast<UAnimGraphNode_LayeredBoneBlend>(N))
+        {
+            if(L->Node.LayerSetup.Num()&&L->Node.LayerSetup[0].BranchFilters.Num()&&L->Node.LayerSetup[0].BranchFilters[0].BoneName==TEXT("clavicle_r"))CarryLayer=L;
+            else GripLayer=L;
+        }
+    }
+    if(!Graph||!Select||!GripLayer)return TEXT("ERROR: missing accepted locomotion/grip graph");
+    if(!CarryLayer)
+    {
+        auto* Player=Node<UAnimGraphNode_PoseByName>(Graph,-550,1250);Player->Node.SetPoseAsset(Carry);Player->Node.PoseName=TEXT("RightCarry");Player->ReconstructNode();
+        CarryLayer=Node<UAnimGraphNode_LayeredBoneBlend>(Graph,-100,0);
+        CarryLayer->Node.LayerSetup.SetNum(1);CarryLayer->Node.BlendWeights.SetNum(1);CarryLayer->Node.BlendWeights[0]=1.f;
+        FBranchFilter Filter;Filter.BoneName=TEXT("clavicle_r");Filter.BlendDepth=0;CarryLayer->Node.LayerSetup[0].BranchFilters.Add(Filter);
+        // Component-space rotations hold a stable carry silhouette while the
+        // spine bends/jumps underneath it; only the right shoulder branch blends.
+        CarryLayer->Node.bMeshSpaceRotationBlend=true;
+        CarryLayer->ReconstructNode();
+        GripLayer->FindPin(TEXT("BasePose"))->BreakAllPinLinks();
+        Link(Graph,Select,TEXT("Pose"),CarryLayer,TEXT("BasePose"));Link(Graph,Player,TEXT("Pose"),CarryLayer,TEXT("BlendPoses_0"));Link(Graph,CarryLayer,TEXT("Pose"),GripLayer,TEXT("BasePose"));
+    }
+    FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(BP);FKismetEditorUtilities::CompileBlueprint(BP);
+    if(BP->Status==BS_Error||!SaveD(Carry)||!SaveD(BP))return TEXT("ERROR: carry compile/save");
+    UE_LOG(LogTemp,Display,TEXT("U01D_CARRY shoulder=%s elbow=%s wrist=%s handCS=%s"),*Shoulder.ToString(),*CS[Lower].GetLocation().ToString(),*CS[Hand].GetLocation().ToString(),*CS[Hand].Rotator().ToString());
+    return TEXT("SUCCESS: owned shoulder/arm carry pose before unchanged accepted grip; motor untouched");
+#else
+    return TEXT("ERROR: editor only");
+#endif
+}
