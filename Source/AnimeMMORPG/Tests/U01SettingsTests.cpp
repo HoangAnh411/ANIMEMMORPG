@@ -12,7 +12,7 @@
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
 using namespace AnimeMMORPG::U01;
-static constexpr uint32 EFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
+static constexpr EAutomationTestFlags EFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01EBindings,"AnimeMMORPG.U01.E.BindingValidation",EFlags)
 bool FU01EBindings::RunTest(const FString&)
 {
@@ -48,7 +48,7 @@ bool FU01ERecovery::RunTest(const FString&)
     const FString Notice=DecodePreferences(Text,Out);TestFalse(TEXT("Recovery reports fields"),Notice.IsEmpty());
     TestEqual(TEXT("Wrong type number restored"),Out.Sensitivity,1.f);TestTrue(TEXT("Keep valid invert"),Out.bInvertY);TestFalse(TEXT("Keep valid shoulder"),Out.bRightShoulder);
     TestEqual(TEXT("Keep independent valid jump"),Out.Keys[Jump],EKeys::H);
-    TestEqual(TEXT("Conflict closure restored forward"),Out.Keys[Forward],EKeys::W);TestEqual(TEXT("Conflict closure restored backward"),Out.Keys[Backward],EKeys::S);
+    TestEqual(TEXT("Conflict closure restored forward"),Out.Keys[AnimeMMORPG::U01::Forward],EKeys::W);TestEqual(TEXT("Conflict closure restored backward"),Out.Keys[Backward],EKeys::S);
     TestEqual(TEXT("Triple conflict third restored"),Out.Keys[Interact],EKeys::G);
     for(int32 I=0;I<ControlCount;++I)TestTrue(TEXT("Recovery leaves no duplicate/reserved binding"),BindingError(Out,I,Out.Keys[I]).IsEmpty());
     TestFalse(TEXT("Malformed JSON feedback"),DecodePreferences(TEXT("broken"),Out).IsEmpty());
@@ -61,10 +61,10 @@ bool FU01EStorage::RunTest(const FString&)
 {
     const FString Slot=TEXT("U01E_Test_")+FGuid::NewGuid().ToString(EGuidFormats::Digits);
     const FString Path=FPaths::Combine(FPaths::ProjectSavedDir(),TEXT("SaveGames"),Slot+TEXT(".sav"));
-    FPreferences P,Out;FString Message;P.Keys[Forward]=EKeys::H;P.Sensitivity=2;P.bInvertY=true;P.bRightShoulder=false;
+    FPreferences P,Out;FString Message;P.Keys[AnimeMMORPG::U01::Forward]=EKeys::H;P.Sensitivity=2;P.bInvertY=true;P.bRightShoulder=false;
     TestTrue(TEXT("Missing file defaults"),ReadPreferences(Slot,0,Out,Message));TestFalse(TEXT("Load missing does not create file"),UGameplayStatics::DoesSaveGameExist(Slot,0));
     TestTrue(TEXT("Actual SaveGame write"),WritePreferences(Slot,0,P,Message));TestTrue(TEXT("Actual SaveGame read"),ReadPreferences(Slot,0,Out,Message));
-    TestEqual(TEXT("Binding persists"),Out.Keys[Forward],EKeys::H);TestEqual(TEXT("Sensitivity persists"),Out.Sensitivity,2.f);TestTrue(TEXT("Invert persists"),Out.bInvertY);TestFalse(TEXT("Shoulder persists"),Out.bRightShoulder);
+    TestEqual(TEXT("Binding persists"),Out.Keys[AnimeMMORPG::U01::Forward],EKeys::H);TestEqual(TEXT("Sensitivity persists"),Out.Sensitivity,2.f);TestTrue(TEXT("Invert persists"),Out.bInvertY);TestFalse(TEXT("Shoulder persists"),Out.bRightShoulder);
     auto* Corrupt=NewObject<UU01ControlSave>();Corrupt->Payload=TEXT("{\"version\":1,\"sensitivity\":2,\"invertY\":true,\"rightShoulder\":false,\"bindings\":{\"Jump\":\"H\"}}");
     TestTrue(TEXT("Write partial fixture"),UGameplayStatics::SaveGameToSlot(Corrupt,Slot,0));
     TArray<uint8> Before,After;FFileHelper::LoadFileToArray(Before,*Path);
@@ -82,7 +82,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01ELocalMapping,"AnimeMMORPG.U01.E.LocalMappi
 bool FU01ELocalMapping::RunTest(const FString&)
 {
     auto* Template=NewObject<UInputMappingContext>();TArray<const UInputAction*> Actions;
-    FPreferences Defaults,A;A.Keys[Forward]=EKeys::H;A.Keys[Jump]=EKeys::ThumbMouseButton;
+    FPreferences Defaults,A;A.Keys[AnimeMMORPG::U01::Forward]=EKeys::H;A.Keys[Jump]=EKeys::ThumbMouseButton;
     for(int32 I=0;I<ControlCount;++I){auto* Action=NewObject<UInputAction>();Actions.Add(Action);Template->MapKey(Action,Defaults.Keys[I]);}
     auto* Look=NewObject<UInputAction>();Template->MapKey(Look,EKeys::MouseX);
     auto* PlayerA=NewObject<ULocalPlayer>();auto* PlayerB=NewObject<ULocalPlayer>();
@@ -90,9 +90,9 @@ bool FU01ELocalMapping::RunTest(const FString&)
     TestNotNull(TEXT("Local A context"),ContextA);TestNotNull(TEXT("Local B context"),ContextB);if(!ContextA||!ContextB)return false;
     TestTrue(TEXT("Separate object and owner"),ContextA!=ContextB&&ContextA!=Template&&ContextA->GetOuter()==PlayerA&&ContextB->GetOuter()==PlayerB);
     auto Has=[](const UInputMappingContext* C,const UInputAction* Action,FKey Key){for(const auto& Map:C->GetMappings())if(Map.Action==Action&&Map.Key==Key)return true;return false;};
-    TestTrue(TEXT("A rebound key active"),Has(ContextA,Actions[Forward],EKeys::H));TestFalse(TEXT("A old key removed"),Has(ContextA,Actions[Forward],EKeys::W));
-    TestTrue(TEXT("B unchanged"),Has(ContextB,Actions[Forward],EKeys::W));TestFalse(TEXT("B never receives A binding"),Has(ContextB,Actions[Forward],EKeys::H));
-    TestTrue(TEXT("Template unchanged"),Has(Template,Actions[Forward],EKeys::W));TestFalse(TEXT("Template not mutated"),Has(Template,Actions[Forward],EKeys::H));
+    TestTrue(TEXT("A rebound key active"),Has(ContextA,Actions[AnimeMMORPG::U01::Forward],EKeys::H));TestFalse(TEXT("A old key removed"),Has(ContextA,Actions[AnimeMMORPG::U01::Forward],EKeys::W));
+    TestTrue(TEXT("B unchanged"),Has(ContextB,Actions[AnimeMMORPG::U01::Forward],EKeys::W));TestFalse(TEXT("B never receives A binding"),Has(ContextB,Actions[AnimeMMORPG::U01::Forward],EKeys::H));
+    TestTrue(TEXT("Template unchanged"),Has(Template,Actions[AnimeMMORPG::U01::Forward],EKeys::W));TestFalse(TEXT("Template not mutated"),Has(Template,Actions[AnimeMMORPG::U01::Forward],EKeys::H));
     TestTrue(TEXT("Fixed mouse axis preserved"),Has(ContextA,Look,EKeys::MouseX));TestTrue(TEXT("Right Ctrl default alias mapped"),Has(ContextA,Actions[Sprint],EKeys::RightControl));
     TestTrue(TEXT("Mouse rebind mapped"),Has(ContextA,Actions[Jump],EKeys::ThumbMouseButton));
     FReleaseGate Gate;Gate.Down(EKeys::H,false);Gate.Down(EKeys::ThumbMouseButton,false);Gate.Lock();
