@@ -1,6 +1,6 @@
 # U01-D — Hoàn thiện tư thế mang kiếm một tay
 
-**READY_FOR_REVIEW**, chưa nghiệm thu D. Tiếp tục `u01/d-animation` từ `4c8de13a1d2dca986e683bf63c0bca86397a3d22`. Nguồn runtime/asset, full build, tests và package mới: **`6ef6ec3125ed455e3963a687df481eb138629df6`**. Commit hồ sơ/tool capture sau đó không đổi binary nguồn. Main giữ `868df83e096748991ccd861da3f98b64c409dcbd`; không merge D hoặc bắt đầu E.
+**ĐÃ NGHIỆM THU U01-D kỹ thuật/blockout theo xác nhận người dùng tại `1e46f710cec8fbb0dd9de2e6be7d35519bf45d83`.** Checklist PASS theo xác nhận đó; carry là tư thế mang kiếm tạm phục vụ U01, được thay/tinh chỉnh theo nhân vật, vũ khí và bộ động tác chính thức sau này. **Art anime và animation chiến đấu DEFERRED, chưa nghiệm thu trong D.** Nguồn runtime/asset/build/tests/package giữ nguyên **`6ef6ec3125ed455e3963a687df481eb138629df6`**; giữ lịch sử kiểm chứng phía dưới. Người dùng cho phép commit/push hồ sơ, fast-forward D vào main rồi triển khai riêng E; không cần đóng Editor gốc để khép D. D bắt đầu từ main868df83, lần carry tiếp tục từ4c8de13.
 
 Người dùng đã xác nhận **cách nắm kiếm ổn**, nhưng chỉ rõ lỗi còn lại là quỹ đạo vai/cánh tay từ clip tay không khiến kiếm xuyên thân. Lần này sửa riêng pose mang kiếm; không coi việc socket khớp là bằng chứng hết xuyên người. Báo cáo/checklist trước giữ nguyên trong [REPORT-D-4c8-HISTORY](REPORT-D-4c8-HISTORY.md), [checklist4c8](D-CHECKLIST-4c8-HISTORY.md). Lịch sử941 và bộ bằng chứng D-Revision vẫn giữ.
 
@@ -57,4 +57,4 @@ Compiler mới hơn preferred14.50 và các C4996 engine/C4305 của harness cũ
 
 MCP marker cuối UTC15:06:26.814 xác nhận **Editor gốc PID21452**, đúng project gốc, Boot0actor. AI không đóng/restart Editor gốc; native D trong đó **chưa xác nhận nạp**. Full build clone đã nạp lạnh các lớp mới; muốn dùng reflection/header mới trong Editor gốc cần mốc full build/restart riêng. Config/token local ngoài Git.
 
-Art anime **DEFERRED**. D chưa nghiệm thu, chưa merge và chưa bắt đầu E. Pose carry này là hoàn thiện blockout một tay, chưa phải tư thế tấn công hoặc bộ animation vũ khí sản phẩm.
+Tại bàn giao1e46f71, D chưa nghiệm thu/merge và E chưa chạy; đây là lịch sử, đã được cập nhật bằng xác nhận người dùng ở đầu báo cáo. Chỉ nghiệm thu kỹ thuật/blockout: carry tạm cầm đúng tay, tránh xuyên thân rõ rệt và hoạt động ổn khi di chuyển/nhảy. Art anime và animation chiến đấu **DEFERRED**, sẽ thay/tinh chỉnh carry sau; không coi mannequin hoặc carry hiện tại là nghiệm thu hình ảnh sản phẩm.

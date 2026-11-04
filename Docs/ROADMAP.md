@@ -60,6 +60,8 @@ Bản sửa D1/D2/D3 sau review941bc3d dùng source **819fbd0**: landing đang d
 
 Bổ sung carry sau review4c8: người dùng xác nhận cách nắm, còn quỹ đạo tay không làm kiếm xuyên thân. Source **6ef6ec3** thêm PoseAsset mang kiếm nhánh vai/cánh tay phải trước grip đã xác nhận; socket/grip giữ nguyên hash, motor/chân không đổi. Full build/MCP **17/17**, smoke **3/3**, test1270mẫu có clearance proxy dương và video input thật từ sau/trước qua sprint–nhảy–đáp/đổi hướng. [Báo cáo mới](U01/REPORT-D.md), [video](U01/Evidence/D-Carry/Front.mp4). **READY_FOR_REVIEW**, còn review quỹ đạo/độ tự nhiên của carry; chưa nghiệm thu/merge D hoặc làm E, anime DEFERRED. Các đoạn715/819 phía trên giữ lịch sử.
 
+D được người dùng **nghiệm thu kỹ thuật/blockout tại1e46f71**. Carry hiện tại là tư thế tạm: cầm đúng tay, tránh xuyên thân rõ rệt, ổn khi đi/nhảy; art anime và animation chiến đấu **DEFERRED**, chưa nghiệm thu, sẽ thay/tinh chỉnh theo bộ chính thức. Hồ sơ khép D giữ source package6ef6ec3 và lịch sử kiểm chứng; người dùng cho phép push hồ sơ/fast-forward D vào main rồi triển khai riêng **E rebind/settings/khóa điều khiển**. Không coi đây là nghiệm thu tổng hợp U01 hoặc F/G.
+
 - [ ] U01.01 Chốt mannequin/clip nguồn theo register U00 cho phép thử kỹ thuật. Model/rig/kiếm anime hợp giấy phép: **DEFERRED**, nghiệm thu art riêng.
 - [ ] U01.02 Character/CharacterMovement và Enhanced Input: đi 5 m/s, sprint 7 m/s, nhảy 1,2 m, dốc 45°, đi chéo không nhanh hơn.
 - [ ] U01.03 Camera tự do/đổi vai/tránh vật cản, tách hướng thân/di chuyển/ngắm.

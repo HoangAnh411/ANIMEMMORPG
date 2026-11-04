@@ -1,9 +1,9 @@
 {
-  "status": "READY_FOR_REVIEW",
+  "status": "ACCEPTED_TECHNICAL_BLOCKOUT_BY_USER",
   "branch": "u01/d-animation",
   "baseSHA": "4c8de13a1d2dca986e683bf63c0bca86397a3d22",
   "sourceSHA": "6ef6ec3125ed455e3963a687df481eb138629df6",
-  "userAcceptance": "Grip accepted by user after4c8de13; arm/sword trajectory still required correction; D overall NOT accepted",
+  "userAcceptance": "D technical/blockout accepted by user at1e46f71; temporary carry, art anime and combat animation not accepted",
   "mainUnchanged": "868df83e096748991ccd861da3f98b64c409dcbd",
   "engine": "5.8.4 CL58902052",
   "toolchain": "MSVC14.51.36260/toolset14.51.36231; SDK10.0.26100.0",
@@ -4523,8 +4523,10 @@
     "Old unarmed hand-cycle expectations removed from TransitionsAndAttachment because carry intentionally suppresses right arm swing; foot-cycle assertions and all movement/root tests retained."
   ],
   "pending": [
-    "Review right-arm/sword trajectory through transitions and direction changes in final package",
-    "No D acceptance/merge or E work yet"
+    "Art anime and combat animation DEFERRED; carry will be replaced/refined later",
+    "Original Editor native D code not verified",
+    "E/F/G outside D acceptance"
   ],
-  "artAnime": "DEFERRED"
+  "artAnime": "DEFERRED",
+  "acceptedAtCommit": "1e46f710cec8fbb0dd9de2e6be7d35519bf45d83"
 }

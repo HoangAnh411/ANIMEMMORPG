@@ -1,6 +1,6 @@
 # U01-D carry — Checklist review package cuối
 
-**READY_FOR_REVIEW**, source package **6ef6ec3125ed455e3963a687df481eb138629df6**. Chạy `Artifacts/U01/D/Play-D.cmd` → CharacterCombatLab. Original Editor chưa xác nhận nạp native D.
+**PASS theo xác nhận người dùng khi nghiệm thu kỹ thuật/blockout D tại `1e46f710cec8fbb0dd9de2e6be7d35519bf45d83`.** Source package giữ nguyên **6ef6ec3125ed455e3963a687df481eb138629df6**. Carry là tư thế tạm cho U01; art anime và animation chiến đấu DEFERRED, sẽ thay/tinh chỉnh theo bộ chính thức. Không xác nhận Editor gốc nạp native D hoặc suy nghiệm thu hình ảnh sản phẩm. Các bước dưới giữ để tái kiểm, không yêu cầu người dùng chạy lại phần đã chấp nhận.
 
 **Cách nắm đã được người dùng xác nhận.** Skeleton/socket và PA_U01_RightGrip giữ nguyên hash; lần này chỉ hoàn thiện quỹ đạo vai/cánh tay khi mang kiếm. Build,17/17 tests, motor/apex, attachment, owner-hide và smoke3/3 đã PASS; không cần đo lại bằng stopwatch.
 
@@ -12,4 +12,4 @@ Chỉ còn review các hành vi mới:
 
 [Video chuyển tiếp24s](Evidence/D-Carry/Transitions.mp4) · [Góc trước15s](Evidence/D-Carry/Front.mp4) · [Báo cáo](REPORT-D.md). Capture thực23–24FPS, không tự chứng minh blend100ms mượt. Test quỹ đạo dùng proxy thân/chân, không thay review mesh thực.
 
-Các mục trên **PENDING USER REVIEW**; D chưa nghiệm thu/merge hoặc làm E. Collision kiếm vẫn tắt. Art anime DEFERRED. Hồ sơ/checklist lần trước tại [lịch sử4c8](D-CHECKLIST-4c8-HISTORY.md).
+Các mục trên **PASS theo xác nhận người dùng**; không bổ sung video/PID/thời gian chơi chưa được cung cấp. Người dùng cho phép khép hồ sơ, fast-forward D vào main rồi làm riêng E. Collision kiếm vẫn tắt. Art anime/animation chiến đấu DEFERRED. Hồ sơ/checklist lần trước tại [lịch sử4c8](D-CHECKLIST-4c8-HISTORY.md).
