@@ -29,6 +29,20 @@ static constexpr EAutomationTestFlags EFlags=EAutomationTestFlags::EditorContext
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01EBindings,"AnimeMMORPG.U01.E.BindingValidation",EFlags)
 bool FU01EBindings::RunTest(const FString&)
 {
+    Controls::FSingleKeyCapture Capture;
+    using Decision=Controls::ECaptureDecision;
+    TestTrue(TEXT("Ctrl down waits for release"),Capture.Observe(EKeys::LeftControl,true,false)==Decision::Wait);
+    TestTrue(TEXT("Ctrl plus key rejected before binding"),Capture.Observe(EKeys::H,true,true)==Decision::RejectChord);
+    TestTrue(TEXT("Chord release cannot commit Ctrl"),Capture.Observe(EKeys::LeftControl,false,false)==Decision::Wait);
+    TestTrue(TEXT("Plain Ctrl down waits"),Capture.Observe(EKeys::RightControl,true,false)==Decision::Wait);
+    TestTrue(TEXT("Plain Ctrl up commits"),Capture.Observe(EKeys::RightControl,false,false)==Decision::Commit);
+    Capture.Observe(EKeys::LeftControl,true,false);
+    TestTrue(TEXT("Escape cancels deferred modifier"),Capture.Observe(EKeys::Escape,true,true)==Decision::Cancel);
+    TestTrue(TEXT("Cancelled modifier release ignored"),Capture.Observe(EKeys::LeftControl,false,false)==Decision::Wait);
+    Capture.Observe(EKeys::LeftControl,true,false);Capture.Reset();
+    TestTrue(TEXT("Focus/capture reset drops deferred Ctrl"),Capture.Observe(EKeys::LeftControl,false,false)==Decision::Wait);
+    TestTrue(TEXT("Keyboard key commits on down"),Capture.Observe(EKeys::H,true,false)==Decision::Commit);
+    TestTrue(TEXT("Mouse with modifier rejected"),Capture.Observe(EKeys::MiddleMouseButton,true,true)==Decision::RejectChord);
     Controls::FPreferences P;
     for(int32 I=0;I<Controls::ControlCount;++I){TestTrue(TEXT("Single unused key accepted per action"),Controls::BindingError(P,I,EKeys::H).IsEmpty());TestFalse(TEXT("Other binding rejected without swapping"),Controls::BindingError(P,I,P.Keys[(I+1)%Controls::ControlCount]).IsEmpty());}
     TestTrue(TEXT("Right Ctrl canonical family"),Controls::BindingError(P,Controls::Sprint,EKeys::RightControl).IsEmpty());

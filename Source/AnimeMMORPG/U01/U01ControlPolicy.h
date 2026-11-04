@@ -5,6 +5,28 @@
 
 namespace AnimeMMORPG::U01
 {
+enum class ECaptureDecision : uint8 { Wait, Commit, RejectChord, Cancel };
+// Ctrl is bindable on its own. Delay that modifier until release so Ctrl+key
+// cannot accidentally commit Ctrl before the second key is observed.
+class FSingleKeyCapture
+{
+public:
+    void Reset(){Modifier=FKey();}
+    ECaptureDecision Observe(FKey Key,bool bDown,bool bChord)
+    {
+        if(bDown)
+        {
+            if(Key==EKeys::Escape){Reset();return ECaptureDecision::Cancel;}
+            if(Modifier.IsValid()||bChord){Reset();return ECaptureDecision::RejectChord;}
+            if(Key==EKeys::LeftControl||Key==EKeys::RightControl){Modifier=Key;return ECaptureDecision::Wait;}
+            return ECaptureDecision::Commit;
+        }
+        if(Modifier==Key){Reset();return ECaptureDecision::Commit;}
+        return ECaptureDecision::Wait;
+    }
+private:
+    FKey Modifier;
+};
 // Physical key events are observed before UMG/Enhanced Input, including UI-only menus.
 class FReleaseGate
 {

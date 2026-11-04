@@ -216,21 +216,28 @@ void AU01PlayerController::ReconcilePhysicalReleases()
 bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
 {
     if (!IsGameWindowActive()) return false; // Another window's releases never re-arm gameplay.
+    if(PendingRebind!=INDEX_NONE)
+    {
+        if(bDown){ObservedKeys.Add(Key);ReleaseGate.Down(Key,true);}
+        else{ObservedKeys.Remove(Key);ReleaseGate.Up(Key);}
+        const auto Decision=KeyCapture.Observe(Key,bDown,bChord);
+        if(Decision==AnimeMMORPG::U01::ECaptureDecision::Cancel){CancelRebind();return true;}
+        if(Decision==AnimeMMORPG::U01::ECaptureDecision::Wait)
+        {
+            if(bDown&&Settings)Settings->SetNotice(TEXT("Nhả Ctrl để gán phím đơn; không nhận tổ hợp Ctrl + phím khác."));
+            return true;
+        }
+        if(Settings&&Settings->Bind(PendingRebind,Key,Decision==AnimeMMORPG::U01::ECaptureDecision::RejectChord))
+        {
+            UE_LOG(LogU01Control,Display,TEXT("Rebind action=%d key=%s localPlayer=%s"),PendingRebind,*Key.ToString(),*GetPathNameSafe(GetLocalPlayer()));
+            PendingRebind=INDEX_NONE;KeyCapture.Reset();QuarantineHeldKeys();FlushPressedKeys();RebuildLocalMapping();
+        }
+        else UE_LOG(LogU01Control,Display,TEXT("RebindRejected key=%s reason=%s"),*Key.ToString(),*GetSettingsStatus());
+        return true;
+    }
     if (bDown)
     {
         ObservedKeys.Add(Key);
-        if(PendingRebind!=INDEX_NONE)
-        {
-            ReleaseGate.Down(Key,true);
-            if(Key==EKeys::Escape){CancelRebind();return true;}
-            if(Settings&&Settings->Bind(PendingRebind,Key,bChord))
-            {
-                UE_LOG(LogU01Control,Display,TEXT("Rebind action=%d key=%s localPlayer=%s"),PendingRebind,*Key.ToString(),*GetPathNameSafe(GetLocalPlayer()));
-                PendingRebind=INDEX_NONE;QuarantineHeldKeys();FlushPressedKeys();RebuildLocalMapping();
-            }
-            else UE_LOG(LogU01Control,Display,TEXT("RebindRejected key=%s reason=%s"),*Key.ToString(),*GetSettingsStatus());
-            return true;
-        }
         const auto* MotorPawn = Cast<AU01Character>(GetPawn());
         const bool bFixtureBlocked = MotorPawn && MotorPawn->GetU01Movement()->IsMotorLocked() && IsMotorKey(Key);
         ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing || bFixtureBlocked);
@@ -311,12 +318,12 @@ void AU01PlayerController::ApplyPreferences()
 void AU01PlayerController::BeginRebind(int32 Action)
 {
     if(!Settings||ControlState==EU01ControlState::Playing||Action<0||Action>=AnimeMMORPG::U01::ControlCount)return;
-    PendingRebind=Action;Settings->SetNotice(TEXT("Nhấn một phím/nút chuột. Escape hủy. Không nhận tổ hợp."));
+    KeyCapture.Reset();PendingRebind=Action;Settings->SetNotice(TEXT("Nhấn một phím/nút chuột. Escape hủy. Không nhận tổ hợp."));
 }
 void AU01PlayerController::CancelRebind()
 {
     if(PendingRebind!=INDEX_NONE&&Settings)Settings->SetNotice(TEXT("Đã hủy đổi phím."));
-    PendingRebind=INDEX_NONE;
+    PendingRebind=INDEX_NONE;KeyCapture.Reset();
 }
 FString AU01PlayerController::GetSettingsStatus() const {return Settings?Settings->GetStatus():TEXT("Settings unavailable");}
 bool AU01PlayerController::SaveSettings(bool bExplicit)

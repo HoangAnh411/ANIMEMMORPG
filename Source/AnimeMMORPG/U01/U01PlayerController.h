@@ -74,6 +74,7 @@ private:
     int32 PendingRebind=INDEX_NONE;
     TSharedPtr<IInputProcessor> PhysicalInputObserver;
     AnimeMMORPG::U01::FReleaseGate ReleaseGate;
+    AnimeMMORPG::U01::FSingleKeyCapture KeyCapture;
     FDelegateHandle ActivationHandle;
     bool bWasWindowActive = true;
     bool bMotorLocked = false;

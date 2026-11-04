@@ -261,6 +261,10 @@ try:
                 time.sleep(event.get('seconds',1.0));user.ShowWindow(hwnd,9)
                 user.SetForegroundWindow(hwnd);time.sleep(.5);guard()
                 meta.setdefault('focusChecks',[]).append(live_metrics() if a.game_log else {'method':'OS minimize/restore'})
+            elif event['action']=='wheel':
+                value=event.get('delta',120)
+                wheel_event=Input(type=0,payload=Payload(mouse=Mouse(data=value&0xffffffff,flags=0x800)))
+                if user.SendInput(1,c.byref(wheel_event),c.sizeof(Input))!=1:raise c.WinError(c.get_last_error())
             elif event['action']=='drag':
                 user.SetCursorPos(left+event['x'],top+event['y']);time.sleep(.08);mouse(2)
                 for step in range(1,11):
