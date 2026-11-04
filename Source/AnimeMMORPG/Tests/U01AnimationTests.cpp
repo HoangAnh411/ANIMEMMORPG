@@ -303,7 +303,8 @@ bool FU01DGrip::RunTest(const FString&)
     FAnimatedFixture F(*this);if(!F.Start())return false;
     auto* Grip=LoadObject<UPoseAsset>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/PA_U01_RightGrip"));
     if(!TestNotNull(TEXT("Own grip pose asset"),Grip))return false;
-    TArray<FName> Names;Grip->GetPoseNames(Names);TestEqual(TEXT("One authored grip pose"),Names.Num(),1);
+    TestEqual(TEXT("Named authored grip pose"),Grip->GetPoseIndexByName(TEXT("RightGrip")),0);
+    TestEqual(TEXT("No extra grip pose"),Grip->GetPoseNameByIndex(1),NAME_None);
     auto* Mesh=F.Pawn->GetMesh();auto* Layer=AnimNode<FAnimNode_LayeredBoneBlend>(F.Anim);
     if(!TestNotNull(TEXT("Finger-only layer after selector"),Layer))return false;
     for(const FVector Input:{FVector::ZeroVector,FVector::ForwardVector})
