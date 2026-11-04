@@ -92,7 +92,7 @@ FString UU01AnimationEditor::BuildDAssets()
         UE_LOG(LogTemp,Display,TEXT("U01D_ASSET %s length=%.6f authoredRootSpeed=%.6f cm/s"),*Source,Clip->GetPlayLength(),Speed);
         // UE5.8's duplicated sequencer data model can keep its transient FK rig bound
         // to the old skeleton. Rebind only nested, duplicated rigs before validation.
-        TArray<UObject*> Nested; GetObjectsWithOuter(Clip,Nested,true);
+        TArray<UObject*> Nested; GetObjectsWithOuter(Clip,Nested,EGetObjectsFlags::IncludeNestedObjects);
         for(auto* Object:Nested) if(auto* Rig=Cast<UControlRig>(Object))
         {
             Rig->SetObjectBinding(MakeShared<FControlRigObjectBinding>());

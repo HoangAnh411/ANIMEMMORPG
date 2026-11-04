@@ -1,5 +1,7 @@
 #include "U01PlayerController.h"
 #include "U01Character.h"
+#include "U01AnimInstance.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "U01Menu.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -349,6 +351,16 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetStringField(TEXT("feetWorldCm"), ControlledCharacter->GetU01Movement()->GetActorFeetLocation().ToString());
     Json->SetNumberField(TEXT("movementMode"), int32(ControlledCharacter->GetCharacterMovement()->MovementMode));
     Json->SetBoolField(TEXT("sprinting"), ControlledCharacter->GetU01Movement()->IsSprinting());
+    Json->SetStringField(TEXT("skeletalMesh"), GetPathNameSafe(ControlledCharacter->GetMesh()->GetSkeletalMeshAsset()));
+    Json->SetStringField(TEXT("animClass"), GetPathNameSafe(ControlledCharacter->GetMesh()->GetAnimClass()));
+    if (const auto* Anim = Cast<UU01AnimInstance>(ControlledCharacter->GetMesh()->GetAnimInstance()))
+    {
+        Json->SetNumberField(TEXT("animationPoseIndex"), Anim->PoseIndex);
+        Json->SetNumberField(TEXT("animationGroundSpeedCmPerSec"), Anim->GroundSpeed);
+        Json->SetNumberField(TEXT("animationVerticalSpeedCmPerSec"), Anim->VerticalSpeed);
+        Json->SetNumberField(TEXT("rootMotionMode"), int32(Anim->RootMotionMode));
+        Json->SetStringField(TEXT("poseRootComponentCm"), ControlledCharacter->GetMesh()->GetSocketTransform(TEXT("root"), RTS_Component).GetLocation().ToString());
+    }
     Json->SetNumberField(TEXT("maxSpeedCmPerSec"), ControlledCharacter->GetU01Movement()->GetMaxSpeed());
     Json->SetNumberField(TEXT("jumpCount"), ControlledCharacter->JumpCurrentCount);
     Json->SetNumberField(TEXT("gravityCmPerSec2"), ControlledCharacter->GetU01Movement()->GetGravityZ());
