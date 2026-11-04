@@ -90,7 +90,7 @@ bool FU01DAssets::RunTest(const FString&)
     }
     auto* Blend=LoadObject<UBlendSpace1D>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/BS_U01_Locomotion"));
     if(!TestNotNull(TEXT("Own BlendSpace"),Blend)) return false;
-    TestEqual(TEXT("Four calibrated samples"),Blend->GetNumberOfBlendSamples(),4);
+    TestEqual(TEXT("Four calibrated samples"),Blend->GetBlendSamples().Num(),4);
     for(const auto& Sample:Blend->GetBlendSamples()) TestTrue(TEXT("Bounded play rates"),Sample.RateScale>=.6 && Sample.RateScale<=2.5);
     return true;
 }
