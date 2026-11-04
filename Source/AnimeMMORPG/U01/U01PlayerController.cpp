@@ -5,7 +5,7 @@
 #include "U01Menu.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedPlayerInput.h"
+#include "UObject/UObjectIterator.h"
 #include "InputMappingContext.h"
 #include "Engine/LocalPlayer.h"
 #include "Engine/Engine.h"
@@ -514,7 +514,11 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetStringField(TEXT("localMapping"),GetPathNameSafe(LocalMapping));
     Json->SetBoolField(TEXT("menuVisible"),MenuWidget&&MenuWidget->IsInViewport());
     if(const auto* Input=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-        if(const auto* Player=Input->GetPlayerInput())Json->SetNumberField(TEXT("mappingContextCount"),Player->GetAppliedInputContextData().Num());
+    {
+        int32 ContextCount=0;
+        for(TObjectIterator<UInputMappingContext> It;It;++It)if(Input->HasMappingContext(*It))++ContextCount;
+        Json->SetNumberField(TEXT("mappingContextCount"),ContextCount);
+    }
     FString Result;
     FJsonSerializer::Serialize(Json, TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>::Create(&Result));
     return Result;
