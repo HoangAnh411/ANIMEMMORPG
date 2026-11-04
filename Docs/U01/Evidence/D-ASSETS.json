@@ -1,0 +1,106 @@
+{
+  "sourceSHA": "715238443e33e1a2760ea3d89f4d1698f092e511",
+  "ownedAssets": [
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Fall.uasset",
+      "bytes": 878360,
+      "SHA256": "0f84e1dfd9733a6aecdf559b985d13737cbe360881828c639a87428dbdc2d270"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Idle.uasset",
+      "bytes": 1394589,
+      "SHA256": "f650060a5b9295d376ab24fc6391dce0008505368cc3a182667cf2404c650534"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Jog.uasset",
+      "bytes": 526653,
+      "SHA256": "fe5f581f03c58c84a8d08861416c8b8817bf3e836a8ace074ce88741df00b9d8"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Jump.uasset",
+      "bytes": 356865,
+      "SHA256": "531dd85c6e47d62f62cb24e0a33cd76d9da355f5d00d804b6dcd02823fc434ba"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Land.uasset",
+      "bytes": 353569,
+      "SHA256": "3adf4a5c0929f0bd7a7d2786d0553390f32dc7e794df5d3527b580c76585aebc"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Walk.uasset",
+      "bytes": 470563,
+      "SHA256": "595293a474a04dd986d3be5e9a6343d94e8c7018673064651b0d84b7dec7ce64"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/ABP_U01.uasset",
+      "bytes": 120163,
+      "SHA256": "acc732db06eed263e2388f966cccd720a81a0fe5e1921cf379c86e97cfff5379"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/BS_U01_Locomotion.uasset",
+      "bytes": 4389,
+      "SHA256": "33cf6fcd8a58fcfb77aed00022ac67f1e0848c2159dc939477789859109408c1"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/SK_U01.uasset",
+      "bytes": 141314,
+      "SHA256": "b05872843acafebe81e48f1aadcb0c8b2c1c6f3448e4354dda3d7669a334f3a3"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/SKM_U01.uasset",
+      "bytes": 15819380,
+      "SHA256": "8d1a6dcc057446f0a60368b954897d64d21956b6c107745b7922cebad5224ca1"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Blueprints/BP_U01Character.uasset",
+      "bytes": 27446,
+      "SHA256": "d24ea36ba20081d3bd90bd51c52aa3e21d03e5e38e1a0843fee514d5406e837a"
+    }
+  ],
+  "sharedTemplateDiff": "",
+  "authoringLog": "Authoring-20261104-142947/Editor.log",
+  "finalizeLog": "Finalize-20261104-144649/Editor.log",
+  "rootPolicy": "Duplicate sequences: enable_root_motion=true, force_root_lock=true, AnimFirstFrame; AnimBP parent IgnoreRootMotion; source clips unchanged",
+  "sourceAuthoredRootSpeedCmPerSec": {
+    "walk": 300.0,
+    "jog": 600.340651
+  },
+  "samples": [
+    {
+      "speed": 0,
+      "clip": "A_U01_Idle",
+      "rate": 1
+    },
+    {
+      "speed": 300,
+      "clip": "A_U01_Walk",
+      "rate": 1
+    },
+    {
+      "speed": 500,
+      "clip": "A_U01_Jog",
+      "rate": 0.8328604754103184
+    },
+    {
+      "speed": 700,
+      "clip": "A_U01_Jog",
+      "rate": 1.1660046655744456
+    }
+  ],
+  "playRateBounds": [
+    0.6,
+    2.5
+  ],
+  "socket": {
+    "skeleton": "SK_U01",
+    "name": "U01_Sword_R",
+    "bone": "hand_r",
+    "rotationPitchYawRoll": [
+      0,
+      0,
+      90
+    ]
+  },
+  "sword": "Engine Cube components grip18x3x3cm, guard4x18x4cm, blade88x6x2.5cm; no collision/overlap/physics/navigation/damage",
+  "artAnime": "DEFERRED"
+}

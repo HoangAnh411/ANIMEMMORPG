@@ -54,6 +54,8 @@ B đã triển khai trên `u01/b-camera`: [báo cáo](U01/REPORT-B.md), [checkli
 
 C triển khai trên `u01/c-motor` từ main `72ad2be02364ace08588bb5e78aa3a491b3f2776`: [báo cáo](U01/REPORT-C.md), [checklist C](U01/C-MANUAL-CHECKLIST.md). Source `a374081a6c681662407c9024e36168a41c1e6111` full build, 11/11 tests và smoke Windows3/3 đạt; motor/slope đo bằng input fixture trong Game world. Checklist package C PASS theo xác nhận người dùng tại0cba933; đã cho phép khép hồ sơ/fast-forward main và triển khai riêng D. Editor gốc chưa xác nhận nạp native code mới. Các bước mô phỏng1/30–1/120s không là FPS render đã đo.
 
+D đã triển khai riêng trên `u01/d-animation` từ main868df83 (C đã khép hồ sơ/push/fast-forward): [báo cáo D](U01/REPORT-D.md), [checklist](U01/D-MANUAL-CHECKLIST.md), [video input Windows](U01/Evidence/D-PLAY.mp4). Source7152384 full build/cold MCP14/14, package/smoke3/3; mesh/skeleton/AnimBP/BlendSpace và kiếm khối riêng, motor/apex đo lại giữ kết quả C. Đã sửa lỗi dữ liệu BlendSpace đứng cứng do video phát hiện, có test hồi quy bắt lỗi cũ. **READY_FOR_REVIEW**, còn đánh giá foot sliding/chuyển động và xác nhận người dùng; chưa merge D/chạy E–G, art anime DEFERRED. Editor gốc giữ mở, chưa xác nhận nạp native mới.
+
 - [ ] U01.01 Chốt mannequin/clip nguồn theo register U00 cho phép thử kỹ thuật. Model/rig/kiếm anime hợp giấy phép: **DEFERRED**, nghiệm thu art riêng.
 - [ ] U01.02 Character/CharacterMovement và Enhanced Input: đi 5 m/s, sprint 7 m/s, nhảy 1,2 m, dốc 45°, đi chéo không nhanh hơn.
 - [ ] U01.03 Camera tự do/đổi vai/tránh vật cản, tách hướng thân/di chuyển/ngắm.

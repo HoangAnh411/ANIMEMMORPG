@@ -39,3 +39,5 @@ Tất cả B–G **NOT-RUN trong A**. A không thêm C++/gameplay/test giả. Ng
 | G-FPS | Game/package tại 30/60/120 FPS | Ghi FPS đo được, đo motor/camera/input/time tại mức thực đạt; mức máy không đạt ghi chưa kiểm chứng; không đổi renderer |
 
 Mỗi phép đo dùng identity schema CONTRACTS.md. Tests luật dùng clock/input fixture; cảm giác/chuột/focus/UI phải input thật và người review. Logs gắn UTC/run/PID/source SHA. Video không thay tốc độ/độ cao. F chỉ localhost bình thường; latency/loss/jitter và combat prediction/bù trễ ở U05. G vẫn ghi art anime DEFERRED.
+
+Kết quả D/source7152384: D-STATES/D-SWORD và phần số đo D-ROOT PASS bằng cold MCP14/14 (3 tests D mới), Game-world animated pawn và video input Windows27s. Kiểm chu kỳ xương ổn định và interpolation bắt được asset lỗi cũ12/14 trước khi bản sửa đạt14/14. Đánh giá foot sliding/cảm giác D-ROOT vẫn PENDING REVIEW trên video/package; D READY_FOR_REVIEW, chưa nghiệm thu/merge hoặc suy kết quả E–G. Chi tiết, identity, log và giới hạn tại REPORT-D/D-MANUAL-CHECKLIST.

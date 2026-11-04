@@ -18,3 +18,5 @@ Tất cả đường dẫn dưới `/Game/Characters/Mannequins/`. Mesh chọn `
 Nội dung đích `/Game/AnimeMMORPG/U01/Characters`, `Animations`, `Input`, `UI` chỉ tạo khi dùng trong B–E. Nếu thêm socket tay phải, duplicate skeleton/mesh liên quan vào U01 trước chỉnh; giữ template/variant và skeleton chung nguyên vẹn. Kiếm hình khối tự tạo trong D, chỉ attachment, collision/damage tắt. A không tạo kiếm hoặc duplicate asset.
 
 Model/rig/kiếm anime: **DEFERRED theo lựa chọn người dùng**, không được đánh dấu hoàn thành khi mannequin kỹ thuật đạt.
+
+D bàn giao bộ thực ở `/Game/AnimeMMORPG/U01/Animation` (tên thư mục cuối), gồm SK_U01/SKM_U01, sáu clip bản sao, BS_U01_Locomotion/ABP_U01. Nguồn giữ nguyên; socket U01_Sword_R chỉ trên SK_U01. Extraction/ForceRootLock/IgnoreRootMotion đã đo lại bằng pawn có animation; walk300cm/s và jog600,340651cm/s dùng calibrate BlendSpace cho motor500/700. [Register D](Evidence/D-ASSETS.json), [số đo/video](REPORT-D.md). Đây là implementation READY_FOR_REVIEW, không thay mục anime DEFERRED hoặc xác nhận foot sliding của người dùng.
