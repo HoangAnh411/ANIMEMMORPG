@@ -81,18 +81,26 @@ if user.GetForegroundWindow() != hwnd:
     # Coordinate with the existing foreground queue once at startup. During the
     # run we never steal focus back: guard() aborts if another window takes it.
     foreground_thread = user.GetWindowThreadProcessId(user.GetForegroundWindow(), None)
+    target_thread = user.GetWindowThreadProcessId(hwnd, None)
     current_thread = kernel.GetCurrentThreadId()
     user.AttachThreadInput(current_thread, foreground_thread, True)
+    target_attached=target_thread!=foreground_thread and bool(user.AttachThreadInput(current_thread,target_thread,True))
     try:
+        user.BringWindowToTop.argtypes=[w.HWND]
+        user.SetActiveWindow.argtypes=[w.HWND]
+        user.BringWindowToTop(hwnd)
+        user.SetActiveWindow(hwnd)
         user.SetForegroundWindow(hwnd)
     finally:
+        if target_attached:user.AttachThreadInput(current_thread,target_thread,False)
         user.AttachThreadInput(current_thread, foreground_thread, False)
 time.sleep(.8)
 def guard():
     pid = w.DWORD()
     user.GetWindowThreadProcessId(hwnd, c.byref(pid))
     if pid.value != a.pid or user.GetForegroundWindow() != hwnd:
-        raise RuntimeError('Game lost focus: abort input and release held keys')
+        active_pid=w.DWORD();user.GetWindowThreadProcessId(user.GetForegroundWindow(),c.byref(active_pid))
+        raise RuntimeError(f'Game lost focus (foreground PID={active_pid.value}, target PID={a.pid}): abort input and release held keys')
 def bounds():
     rect, point = w.RECT(), w.POINT()
     user.GetClientRect(hwnd, c.byref(rect))

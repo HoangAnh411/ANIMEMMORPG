@@ -1,0 +1,11 @@
+{
+    "args":  [
+                 "\"D:/Data/AnimeMMORPG/Artifacts/U01/D/Source/AnimeMMORPG.uproject\"",
+                 "-unattended",
+                 "-NoLiveCoding",
+                 "-nosound",
+                 "-ExecutePythonScript=\"D:/Data/AnimeMMORPG/Scripts/U01/ReviseDCarry.py D:/Data/AnimeMMORPG/Scripts/U01/DCarry.json D:/Data/AnimeMMORPG/Artifacts/U01/D/Carry/Candidate1\"",
+                 "-abslog=\"D:/Data/AnimeMMORPG/Artifacts/U01/D/Carry/Candidate1/Editor.log\""
+             ],
+    "pid":  8024
+}

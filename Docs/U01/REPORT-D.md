@@ -1,75 +1,60 @@
-# U01-D — Bản sửa landing và cầm kiếm (D1/D2/D3)
+# U01-D — Hoàn thiện tư thế mang kiếm một tay
 
-**READY_FOR_REVIEW**, chưa nghiệm thu D. Tiếp tục nhánh u01/d-animation từ 941bc3d3b7216355557053078c89b35a2b0a6477. Nguồn game/build/tests/package sửa: **819fbd041b8bc1f8463d6a075a4c6c29215b1f9c**. Commit hồ sơ/tool capture phía sau không đổi runtime hoặc asset của nguồn này. Main giữ 868df83e096748991ccd861da3f98b64c409dcbd; không merge D/chạy E.
+**READY_FOR_REVIEW**, chưa nghiệm thu D. Tiếp tục `u01/d-animation` từ `4c8de13a1d2dca986e683bf63c0bca86397a3d22`. Nguồn runtime/asset, full build, tests và package mới: **`6ef6ec3125ed455e3963a687df481eb138629df6`**. Commit hồ sơ/tool capture sau đó không đổi binary nguồn. Main giữ `868df83e096748991ccd861da3f98b64c409dcbd`; không merge D hoặc bắt đầu E.
 
-Người dùng phát hiện hai lỗi sau bàn giao941: giữ pose landing khi đang di chuyển, và kiếm bám socket nhưng đặt/hướng sai, ngón tay chưa nắm cán. Lịch sử bàn giao cũ giữ nguyên tại [REPORT-D-941-HISTORY](REPORT-D-941-HISTORY.md), [checklist cũ](D-CHECKLIST-941-HISTORY.md), cùng Evidence/D-* cũ. Kết quả14/14 hoặc video cũ không thay nghiệm thu bản sửa.
+Người dùng đã xác nhận **cách nắm kiếm ổn**, nhưng chỉ rõ lỗi còn lại là quỹ đạo vai/cánh tay từ clip tay không khiến kiếm xuyên thân. Lần này sửa riêng pose mang kiếm; không coi việc socket khớp là bằng chứng hết xuyên người. Báo cáo/checklist trước giữ nguyên trong [REPORT-D-4c8-HISTORY](REPORT-D-4c8-HISTORY.md), [checklist4c8](D-CHECKLIST-4c8-HISTORY.md). Lịch sử941 và bộ bằng chứng D-Revision vẫn giữ.
 
-## D1 — Landing
+## Thay đổi và phạm vi giữ nguyên
 
-UU01AnimInstance chỉ đổi chọn pose: chạm đất với speed ngang >3cm/s vào locomotion ngay; <=3cm/s giữ landing tối đa0,25s rồi idle. Bắt đầu chạy trong hold hủy hold cùng update; nhảy lại/rơi được ưu tiên ngay. AnimBP lưu **0,100s tường minh cho cả5 pose** ở node và pin default, không dựa AddPose mặc định. Không khóa đi, sửa gia tốc/gravity/jump, coyote/buffer hoặc input để đợi animation. Git diff941→819 xác nhận các file Character/motor/input/controller, input assets, map và template không đổi.
+- Thêm **PA_U01_RightCarry / RightCarry** riêng dưới `/Game/AnimeMMORPG/U01/Animation`. AnimBP: selector idle/locomotion/jump/fall/land → lớp carry nhánh **clavicle_r** → lớp grip ngón tay đã được chấp nhận → output. Lớp carry blend per bone với rotation trong mesh space, weight1; giữ tư thế cánh tay phải ổn định thay vì lấy độ vung tay không. Vẫn còn chuyển động tịnh tiến nhỏ của vai theo spine/breath/bob. Đây là pose blockout chủ ý khá chắc tay, chưa phải animation mang vũ khí đã polish.
+- Quan sát mesh trước sửa: component space bên phải là **−X**, hướng trước **+Y**. Shoulder nguồn khoảng(-19,−2,6,143,6)cm; wrist clip chạy quét vào X≈−8,4cm. Author pose đặt wrist **(-42,12,112)cm**, dùng elbow pole **(-55,−15,125)cm**. Giải hình học hai đoạn tay ở **Editor authoring**, lưu thành PoseAsset; không có runtime IK, constraint hoặc framework mới. Elbow tạo ra≈(-42,338,−8,635,129,797)cm; shoulder delta P/Y/R=(0,0,0). Trục lưỡi mục tiêu trong mesh space≈(-0,25;0,65;0,72), trục +X hand tham chiếu(0,0,−1), wrist component rotation≈P−44,046/Y111,038/R0 độ. [Cấu hình](../../Scripts/U01/DCarry.json) ghi rõ cơ sở số đo và giá trị authoring.
+- **Giữ nguyên byte skeleton/socket SK_U01 và PA_U01_RightGrip** đã xác nhận; cả mesh, sáu clip và BlendSpace nguồn D cũng không đổi hash. Không chỉnh socket/ngón để bù quỹ đạo. Grip là lớp cuối; tests A/B xác nhận lớp grip chỉ tác động ngón, carry không tác động các xương ngoài nhánh vai phải. Các metacarpal/twist thuộc nhánh vai phải nhận pose carry, sau đó pose ngón được áp lại.
+- Git diff từ4c8 tới6ef xác nhận không đổi Character/motor/controller/input, luật jump/coyote/buffer, map hay template. Lớp carry giữ nguyên root/spine/chân/tay trái trong phép so pose cùng thời điểm. Không sửa physics/collision để đẩy kiếm ra: collision/overlap/physics/nav/damage kiếm vẫn tắt. Không có animation tấn công, art anime, plugin/module runtime/IK toàn thân mới.
 
-Hai tests hồi quy mới chạy trên BP/mesh/AnimBP thật:
+## Build, tests và số đo
 
-- AnimeMMORPG.U01.D.LandingTransitions: W–jump, W+Ctrl–jump, stationary landing, bắt đầu chạy trong hold, buffer trước touchdown, nhảy/rơi ngắt hold, đi khỏi mép collision thật tới nền thấp rồi tiếp tục chạy. Kiểm pose ngay tại contact/update; thời gian giữ <=0,25s cộng độ phân giải sample; compiled blend times đều0,100s, target chưa full ở đầu blend và full sau deadline cộng sample tolerance. Không chỉ kiểm từng thấy landing.
-- AnimeMMORPG.U01.D.GripIsolationAndAttachment: pose ngón thực thay đổi; tắt/bật layer ở cùng thời điểm để so tất cả local transform ngoài15 ngón, gồm cổ tay/cánh tay, sai số0,001; attachment kiểm cả vị trí và quaternion; camera sát tường ẩn cả mesh/ba phần kiếm và hiện lại sau hết cản.
+UE5.8.4 CL58902052, MSVC14.51.36260/toolset14.51.36231, SDK10.0.26100.0. Clone `Artifacts/U01/D/Source` được fast-forward tới SHA đã push; full build từ đĩa tại `Carry/Build-20261104-215608-771-521adf60`, Editor và Game exit0. Không dùng Live Coding patch. Editor gốc tiếp tục mở.
 
-## D2 — Chẩn đoán và giá trị cuối
+Cold Editor clone **PID20304**, MCP TestRunner `Carry/MCPTests-20261104-215718`: **17/17 PASS**, đọc log mới tới queue empty17. U00.Foundation4/4, B2/2, C5/5, D6/6: AnimatedMotor, AssetPolicy, TransitionsAndAttachment, LandingTransitions, GripIsolationAndAttachment và **CarryTrajectory** mới. Danh sách/kết quả nguyên dòng và records tại [RESULTS.json](Evidence/D-Carry/RESULTS.json).
 
-Đã chụp trước chỉnh trên mesh thực: socket gốc(0,0,0) ở cổ tay, lưỡi theo+X hand hướng về phía cổ tay; các ngón từ clip unarmed còn mở. Số đo hand-space cho knuckle khoảngX=-8 đến-9,5cm và ngón cái về phía+Z. Bộ ảnh trước cuối dùng byte ABP/SK của941 đối chiếu hash; không lấy attachment khớp làm chứng minh cách cầm đúng.
+CarryTrajectory chạy trên **pawn Blueprint/mesh/AnimBP thật trong Game physics world**, controlled input do AIController sở hữu. Mỗi record có sourceSHA/UTC/PID/world/context/type/netMode/pawn/controller/owner/role/mesh/AnimBP. Không lấy Editor preview làm số đo gameplay. Test lấy **1.270 mẫu ở dt1/120s** qua idle → walk → sprint → jump/fall → moving land, đổi bốn hướng, dừng → stationary jump/land. Kiểm ngoài nhánh vai phải không đổi pose ở cùng thời điểm, chân vẫn có chu kỳ thực, attachment và collision giữ nguyên. Các assert yêu cầu tay phải vung như clip tay không đã được bỏ vì trái mục tiêu carry; assert chân, root và toàn bộ tests motor/landing vẫn giữ.
 
-Giữ kích thước grip18×3×3, guard4×18×4, blade88×6×2,5cm. Socket **U01_Sword_R/hand_r** trên skeleton U01 riêng chốt **location(-6,5; 2; -0,5)cm**, **rotation Pitch90/Yaw0/Roll90 độ**. Tâm cán vào vùng lòng bàn tay, lưỡi theo+Z hand phía ngón cái, guard ngoài nắm tay. Pose riêng **PA_U01_RightGrip/RightGrip** được lưu bằng công cụ PoseAsset sẵn có, đặt sau selector với Layered Blend per Bone chỉ5 nhánh ngón01 bên phải. Không đổi cổ tay/cánh tay/metacarpal, skeleton/clip nguồn, không thêm clip chuyển động, IK toàn thân, plugin hoặc animation chiến đấu.
-
-Các góc dưới đây là **delta Pitch/Yaw/Roll so với ref local rotation**, áp RefQuaternion * DeltaQuaternion; không phải Euler world. Chúng được chọn sau đọc hình/axes rồi quan sát candidate trên mesh idle/run/landing; giá trị đầy đủ trong [DGrip.json](../../Scripts/U01/DGrip.json).
-
-| Ngón | Joint01 delta P/Y/R | Joint02 | Joint03 |
-|---|---|---|---|
-| index | 0 / -61,627 / 0 | 0 / -60,107432 / 0 | 0 / -37,483599 / 0 |
-| middle | 0 / -58,427318 / 0 | 0 / -49,230790 / 0 | 0 / -40 / 0 |
-| ring | 0 / -65,585518 / 0 | 0 / -56,036 / 0 | 0 / -45,832 / 0 |
-| pinky | 0 / -85,166319 / 0 | 0 / -58,713001 / 0 | 0 / -50,083 / 0 |
-| thumb | 12 / -18 / -10 | 0 / -25 / 0 | 0 / -35 / 0 |
-
-Ảnh [trước](Evidence/D-Revision/Hands/Before) / [sau](Evidence/D-Revision/Hands/After) có Front/Side/Top cho idle/run/landing, thêm Palm/ThumbSide/FingerEnd để nhìn rõ khi arm/blade che góc trực diện. Ví dụ [run trước](Evidence/D-Revision/Hands/Before/Run-Front.png), [run sau](Evidence/D-Revision/Hands/After/Run-Front.png), [nắm cán](Evidence/D-Revision/Hands/After/Run-FingerEnd.png), [landing](Evidence/D-Revision/Hands/After/Land-Palm.png). Đây là **Editor pose preview**, có đèn fill tạm và sampler velocity/mode để chẩn đoán; không dùng làm số đo gameplay/FPS. Landing preview lấy đầu chuyển tiếp; thao tác landing thực kiểm riêng bằng tests/video. Một lỗi cache GPU khi chụp nhiều pose cùng frame đã được sửa bằng recreate render proxy; ảnh HandCandidate1 cũ bị thay bằng HandCandidateVerified, không dùng ảnh stale làm kết luận.
-
-Kiếm vẫn blockout một tay, collision/overlap/physics/nav tắt, không damage. Chưa làm combat stance; clip unarmed có thể đưa kiếm qua thân ở một số góc, đúng giới hạn người dùng. Cách cầm vẫn chờ review hình ảnh trên package, không suy PASS thẩm mỹ từ sai lệch socket0.
-
-## D3 — Kiểm chứng
-
-UE5.8.4 CL58902052, MSVC14.51.36260/toolset14.51.36231, Windows SDK10.0.26100.0. Dùng clone riêng Artifacts/U01/D/Source, không copy binaries/Intermediate hoặc dùng patch Live Coding. GitHub có các lỗi500: phần độc lập từng build từ Git local và được ghi nguồn chưa push; **819fbd0 sau đó đã push, full build từ đĩa và cold-test**. Native rebuild Revision/Build-20261104-182743-101-c6712605; source build Revision/Build-20261104-183208-319-cbeba78e Editor/Game exit0 (asset-only change nên UBT up-to-date).
-
-Cold clone **MCP TestRunner PID9760**, Revision/MCPTests-20261104-183218: **16/16 PASS**, đọc log mới tới queue-empty16. U00.Foundation4/4 (Axes/CallOrder/HalfOpenInterval/Units), B2/2 (CameraPolicy/ReleaseGate), C5/5 (FlatMovement/JumpPhysics/JumpWindows/MotorLocks/Terrain), D5/5 (AnimatedMotor/AssetPolicy/TransitionsAndAttachment/LandingTransitions/GripIsolationAndAttachment). Kỳ vọng cũ giữ landing chỉ còn ở ca đứng yên; ca đang chạy bắt buộc locomotion. [Kết quả và record identity](Evidence/D-Revision/RESULTS.json).
-
-Fixture spawn pawn BP có AnimBP/mesh thật trong **Game physics world**, AIController cấp controlled input; mọi record có UTC/sourceSHA/PID/world/context/type/netMode/pawn/controller/owner/roles/mesh/anim class. Không dùng Editor world hoặc suy PIE từ tên actor.
-
-| Đo lại với animation/grip | Kết quả |
+| Phép đo | Kết quả |
 |---|---:|
 | Đi10s sau tăng tốc | 5000,000260770cm |
 | Sprint10s sau tăng tốc | 7000,000365078cm |
 | Apex dt1/30;1/60;1/120s | 119,987106204;119,987106189;119,994960187cm |
-| Gravity | -980cm/s² |
-| Hold stationary quan sát ở dt1/120 | 0,250000089s (sai số float/sample) |
-| Target weight sau blend deadline | 1,000000 |
-| Attachment max position/angle error | 0cm /0 độ |
+| Gravity | −980cm/s² |
 | Root drift locomotion | 0cm |
+| Khoảng hở lưỡi/proxy thân-chân nhỏ nhất | **21,742434cm** |
+| Bước đầu lưỡi lớn nhất giữa hai mẫu, mesh component space | 4,879416cm |
+| Sai lệch attachment vị trí/hướng | 0cm /0 độ |
 
-Độ phân giải tích phân không là FPS render. Owner-hide cả mesh/kiếm đã assert hide/restore trong test mới. Package cuối Artifacts/U01/D/Revision/Package-20261104-183402-258-c983dd92/Archive/Windows: BuildCookRun exit0, đủ48file, [hash package](Evidence/D-Revision/PACKAGE.csv). Smoke Revision/SmokeB-20261104-184708: Boot/CharacterCombatLab/NetworkLab **3/3 PASS**, lab PID19712/3400; NetworkLab ở đây standalone, không nghiệm thu F.
+Proxy là các capsule theo xương pelvis/spine/neck/head và hai đùi; đoạn lưỡi có bán kính bao3,25cm. Đây là **fixture đo quỹ đạo**, không bật collision kiếm, không tuyên bố kiểm từng tam giác mesh hoặc mọi tư thế/camera có thể có. Khoảng hở dương là bằng chứng bổ trợ, còn hình ảnh thực xem trên video/package. Bước mô phỏng1/120s không là FPS render.
 
-## Video input thực và giới hạn capture
+## Windows và bằng chứng chuyển động
 
-[Trước sửa11s](Evidence/D-Revision/Before.mp4) / [sau sửa11s](Evidence/D-Revision/After.mp4) dùng cùng timeline W–Space, rồi W+Ctrl–Space. [Ca mở rộng25s](Evidence/D-Revision/Coverage.mp4): đứng yên đáp, bắt đầu chạy trong landing, thử buffer/nhảy lại, chọn fixture Ledge rồi tiếp tục chạy. Raw events, identity và samples trong RESULTS.json. Log trước thực ghi pose4 ở500/700cm/s; log sau không có pose4 khi speed>3, có locomotion tại touchdown. Ledge sau có fall rồi locomotion, không ascent giả. Biên buffer/coyote chính xác do Automation chứng minh; video/trace5Hz không đo được thời điểm0,099s.
+Package: `Artifacts/U01/D/Carry/Package-20261104-215800-485-e6e047e7/Archive/Windows`, BuildCookRun exit0, cook summary0 error/0 warning, giữ đủ48file. [Hash package](Evidence/D-Carry/PACKAGE.csv). Smoke `Carry/SmokeB-20261104-220617`: **Boot/CharacterCombatLab/NetworkLab3/3 PASS**, lab PID21488/15188; NetworkLab chạy standalone, không phải nghiệm thu F.
 
-Capture dùng **SendInput Windows**, khóa đúng exe/PID/HWND/foreground, xác minh W/sprint từ log. UniKey từng biến W thành None; tool mới probe W trong menu đang khóa, chỉ chuyển tạm nếu cần và khôi phục nếu đã đổi. Các lượt bàn giao cuối probe nhận W đúng sẵn, không cần đổi mode. Không sửa input game. Capture cuối là screen BitBlt giới hạn vùng client, kiểm cả số ảnh khác nhau; không dùng window-client DC giữ ảnh menu cũ.
+- [Video chuyển tiếp/đổi hướng24s](Evidence/D-Carry/Transitions.mp4): W, Ctrl, nhảy khi sprint, W→D→S→W và nhảy lại, dừng/nhảy đứng yên; idle/đi/sprint/jump/fall/land có trong trace.
+- [Video góc trước15s](Evidence/D-Carry/Front.mp4): camera yaw≈179,97° được log xác nhận, S để nhân vật đi/sprint về phía camera dọc đường thử, nhảy/đáp và D/A đổi hướng. Quan sát quỹ đạo lưỡi tách khỏi ngực; [lúc nhảy](Evidence/D-Carry/Front-4.9s.png), [sau đáp](Evidence/D-Carry/Front-5.6s.png), [đổi hướng](Evidence/D-Carry/Front-6.5s.png).
+- [Preview trước](Evidence/D-Carry/Preview/Before)/[sau](Evidence/D-Carry/Preview/After) là **Editor pose diagnostic**, không gameplay/FPS: full body idle/run/đầu landing từ bốn hướng, dữ liệu arm component space/refpose. Có đèn fill tạm của công cụ chụp; không đổi renderer/map sản phẩm. Closeup theo trục hand sau xoay cổ tay có thể đi vào forearm, đã loại khỏi hồ sơ mới; không dùng ảnh bị che để xác nhận grip.
 
-| Clip | Frame đọc mới/giây và ảnh khác/giây | Khoảng frame lớn nhất | Frame lặp để giữ thời gian |
+Video cuối dùng **input Windows SendInput**, kiểm đúng exe/hash/PID11332/HWND/foreground và runtime trace của pawn local sở hữu trong Game world. Có xác nhận đi500/sprint700cm/s, đủ pose indices0–4, không landing pose khi speed>3. Events/mapping camera, samples và metadata gắn source6ef trong RESULTS.json. AI đã xem các frame chuyển động/nhảy/đáp/đổi hướng trích từ video và chạy test quỹ đạo toàn chuỗi; chưa thay xác nhận cảm giác của người review.
+
+| Capture | Hình đọc mới và ảnh khác nhau/giây | Khoảng frame lớn nhất | Frame lặp |
 |---|---:|---:|---:|
-| Before | 25,869 | 131ms | 45/330 |
-| After | 25,919 | 137ms | 44/330 |
-| Coverage | 24,866 | 149ms | 128/750 |
+| Transitions | 23,176 | 148ms | 163/720 |
+| Front | 24,377 | 155ms | 84/450 |
 
-File encoder30FPS **không có nghĩa capture30FPS hoặc game30FPS**. 285/286/622 ảnh khác nhau được xác nhận và ảnh trích đã xem. Không dùng các video này hoặc video10Hz cũ để khẳng định blend100ms mượt; test compiled graph kiểm deadline, người review đánh giá cảm giác trên package cuối. Các lượt capture cũ đã loại vì W=None, Resume chưa thực hiện, readback<1Hz, hoặc DC stale dù metadata đọc50–60Hz. Raw logs/metadata giữ trong Revision, không sửa thành PASS. [Manifest và lịch sử](Evidence/D-Revision/MANIFEST.json), [hash ảnh/video](Evidence/D-Revision/EVIDENCE.csv).
+Encoder30FPS không là capture30FPS hoặc game30FPS. Không dùng video này để khẳng định blend0,10s mượt; LandingTransitions kiểm compiled times/deadline/weights, cảm giác và độ tự nhiên của pose mang kiếm chờ review trên package. Capture tool vẫn từ chối khi mất focus, kiểm ảnh khác nhau và movement từ log. Hai lượt Transitions/Transitions2 từ chối foreground trước input; sau khi phối hợp input queue lúc startup thì Transitions3 hoàn tất. Trong lượt ghi không giành lại focus. Front đầu camera chỉ12,6° bị loại làm bằng chứng góc trước; FrontVerified dùng scale chuột đo được để đạt179,97°. Không sửa độ nhạy game để làm bằng chứng. Probe W trong menu nhận đúng, không cần đổi bộ gõ ở các lượt bàn giao cuối; trạng thái input method được giữ.
 
-Compiler vẫn mới hơn preferred14.50; các C4996 engine và warning diagnostic API giữ trong log. Các lỗi compile/link helper pose riêng (private accessor/export/editor-only accessor) đã sửa, không bỏ tests. Optional profiler/audio diagnostics của smoke được giữ theo validator B. Không đổi renderer, engine hoặc cài plugin. Tồn tại Python/toolset của đường Editor -game/-server từ A vẫn để F/tích hợp; không giả báo đã xử lý trong D.
+## Bàn giao và giới hạn
 
-AI không đóng/restart Editor gốc. Cuối kiểm **PID20412, project gốc, Boot0actor**, marker MCP UTC12:09:56.665; native D mới trong Editor gốc **chưa xác nhận**. Header/UFUNCTION mới cần full build/restart trước dùng ở Editor đó, package clone đã nạp lạnh. Config/token local ngoài Git.
+Chạy **Artifacts/U01/D/Play-D.cmd**, vào CharacterCombatLab của package6ef; logs ở `Artifacts/U01/D/Carry/Review`. [Checklist ngắn](D-MANUAL-CHECKLIST.md) tập trung vào tay/kiếm trong chuyển tiếp và đổi hướng; cách nắm đã được người dùng xác nhận, không tự coi D tổng thể đạt. Hash ảnh/video/asset, lịch sử và identity tại [MANIFEST.json](Evidence/D-Carry/MANIFEST.json), [EVIDENCE.csv](Evidence/D-Carry/EVIDENCE.csv). Lịch sử lỗi/kiểm chứng cũ giữ nguyên.
 
-Art anime **DEFERRED**. Chưa nghiệm thu D tổng thể, chưa E/F/G, Server packaging hoặc combat. Chạy **Artifacts/U01/D/Play-D.cmd** để vào Boot của package819fbd0, logs ở Artifacts/U01/D/Revision/Review; giữ nguyên thư mục Windows48file khi sao chép. [Checklist ngắn](D-MANUAL-CHECKLIST.md) chỉ còn cảm giác chuyển động/cách cầm trên bản cuối; dừng chờ review, không tự merge.
+Compiler mới hơn preferred14.50 và các C4996 engine/C4305 của harness cũ còn trong log; không đổi engine/compiler/plugin hoặc bỏ tests. Optional profiler/audio diagnostics của smoke được phân loại theo validator B; Python/toolset init ở đường Editor -game/-server từ A vẫn phải xử lý ở F/tích hợp. Không chạy mạng F/Server packaging hoặc FPS/lifecycle10phút của G trong lần này.
+
+MCP marker cuối UTC15:06:26.814 xác nhận **Editor gốc PID21452**, đúng project gốc, Boot0actor. AI không đóng/restart Editor gốc; native D trong đó **chưa xác nhận nạp**. Full build clone đã nạp lạnh các lớp mới; muốn dùng reflection/header mới trong Editor gốc cần mốc full build/restart riêng. Config/token local ngoài Git.
+
+Art anime **DEFERRED**. D chưa nghiệm thu, chưa merge và chưa bắt đầu E. Pose carry này là hoàn thiện blockout một tay, chưa phải tư thế tấn công hoặc bộ animation vũ khí sản phẩm.

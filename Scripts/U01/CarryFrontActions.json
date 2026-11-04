@@ -1,0 +1,100 @@
+[
+  {
+    "time": 0.3,
+    "action": "click",
+    "x": 640,
+    "y": 368
+  },
+  {
+    "time": 0.7,
+    "action": "click",
+    "x": 640,
+    "y": 220
+  },
+  {
+    "time": 1.2,
+    "action": "move",
+    "dx": 2571,
+    "dy": 0
+  },
+  {
+    "time": 2.0,
+    "action": "down",
+    "key": "S"
+  },
+  {
+    "time": 3.0,
+    "action": "down",
+    "key": "Ctrl"
+  },
+  {
+    "time": 4.5,
+    "action": "down",
+    "key": "Space"
+  },
+  {
+    "time": 4.65,
+    "action": "up",
+    "key": "Space"
+  },
+  {
+    "time": 6.0,
+    "action": "down",
+    "key": "D"
+  },
+  {
+    "time": 6.3,
+    "action": "up",
+    "key": "D"
+  },
+  {
+    "time": 7.0,
+    "action": "down",
+    "key": "A"
+  },
+  {
+    "time": 7.3,
+    "action": "up",
+    "key": "A"
+  },
+  {
+    "time": 8.0,
+    "action": "down",
+    "key": "Space"
+  },
+  {
+    "time": 8.15,
+    "action": "up",
+    "key": "Space"
+  },
+  {
+    "time": 10.0,
+    "action": "up",
+    "key": "S"
+  },
+  {
+    "time": 10.1,
+    "action": "up",
+    "key": "Ctrl"
+  },
+  {
+    "time": 12.0,
+    "action": "down",
+    "key": "Space"
+  },
+  {
+    "time": 12.15,
+    "action": "up",
+    "key": "Space"
+  },
+  {
+    "time": 14.0,
+    "action": "down",
+    "key": "Escape"
+  },
+  {
+    "time": 14.1,
+    "action": "up",
+    "key": "Escape"
+  }
+]

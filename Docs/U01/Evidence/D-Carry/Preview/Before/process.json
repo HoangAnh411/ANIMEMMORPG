@@ -1,0 +1,12 @@
+{
+    "args":  [
+                 "\"D:/Data/AnimeMMORPG/Artifacts/U01/D/Source/AnimeMMORPG.uproject\"",
+                 "-unattended",
+                 "-NoLiveCoding",
+                 "-nosound",
+                 "-ExecutePythonScript=\"D:/Data/AnimeMMORPG/Artifacts/U01/D/Source/Scripts/U01/InspectDHand.py D:/Data/AnimeMMORPG/Artifacts/U01/D/Carry/Before\"",
+                 "-abslog=\"D:/Data/AnimeMMORPG/Artifacts/U01/D/Carry/Before/Editor.log\""
+             ],
+    "pid":  8636,
+    "source":  "cda814c, accepted grip assets unchanged"
+}

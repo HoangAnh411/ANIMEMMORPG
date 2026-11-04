@@ -20,3 +20,5 @@ Nội dung đích `/Game/AnimeMMORPG/U01/Characters`, `Animations`, `Input`, `UI
 Model/rig/kiếm anime: **DEFERRED theo lựa chọn người dùng**, không được đánh dấu hoàn thành khi mannequin kỹ thuật đạt.
 
 D bàn giao bộ thực ở `/Game/AnimeMMORPG/U01/Animation` (tên thư mục cuối), gồm SK_U01/SKM_U01, sáu clip bản sao, BS_U01_Locomotion/ABP_U01. Nguồn giữ nguyên; socket U01_Sword_R chỉ trên SK_U01. Extraction/ForceRootLock/IgnoreRootMotion đã đo lại bằng pawn có animation; walk300cm/s và jog600,340651cm/s dùng calibrate BlendSpace cho motor500/700. [Register D](Evidence/D-ASSETS.json), [số đo/video](REPORT-D.md). Đây là implementation READY_FOR_REVIEW, không thay mục anime DEFERRED hoặc xác nhận foot sliding của người dùng.
+
+Sau4c8, người dùng xác nhận cách nắm ở PA_U01_RightGrip/socket hiện tại. Bản carry6ef6ec3 giữ nguyên hash skeleton/grip/mesh/clip/BlendSpace, chỉ thêm PA_U01_RightCarry và lớp nhánh vai phải trước grip trong ABP_U01 để tránh quỹ đạo tay không xuyên thân. [Hash/bằng chứng carry](Evidence/D-Carry/MANIFEST.json); vẫn blockout, không animation tấn công/anime art. Quỹ đạo và độ tự nhiên của carry chờ review package, chưa nghiệm thu D.
