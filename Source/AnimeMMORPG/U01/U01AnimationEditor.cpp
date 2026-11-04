@@ -25,6 +25,9 @@
 #include "UObject/UnrealType.h"
 #include "Misc/Paths.h"
 #include "Misc/PackageName.h"
+#include "ControlRig.h"
+#include "ControlRigObjectBinding.h"
+#include "UObject/UObjectHash.h"
 
 namespace
 {
@@ -69,6 +72,7 @@ FString UU01AnimationEditor::BuildDAssets()
     auto* Skeleton=DuplicateD<USkeleton>(TEXT("/Game/Characters/Mannequins/Meshes/SK_Mannequin"),TEXT("SK_U01"));
     auto* Mesh=DuplicateD<USkeletalMesh>(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Manny_Simple"),TEXT("SKM_U01"));
     Mesh->SetSkeleton(Skeleton);
+    Mesh->SetPostProcessAnimBlueprint(nullptr); // Own graph supplies all poses; no source-skeleton post-process.
     Skeleton->SetPreviewMesh(Mesh);
     if (Skeleton->GetReferenceSkeleton().FindBoneIndex(TEXT("hand_r")) == INDEX_NONE) return TEXT("ERROR: hand_r missing");
     auto* Socket=NewObject<USkeletalMeshSocket>(Skeleton);
@@ -86,6 +90,14 @@ FString UU01AnimationEditor::BuildDAssets()
         const double Speed=Clip->ExtractRootMotionFromRange(0,Clip->GetPlayLength(),FAnimExtractContext()).GetTranslation().Size2D()/Clip->GetPlayLength();
         if(I==1) WalkSpeed=Speed; if(I==2) JogSpeed=Speed;
         UE_LOG(LogTemp,Display,TEXT("U01D_ASSET %s length=%.6f authoredRootSpeed=%.6f cm/s"),*Source,Clip->GetPlayLength(),Speed);
+        // UE5.8's duplicated sequencer data model can keep its transient FK rig bound
+        // to the old skeleton. Rebind only nested, duplicated rigs before validation.
+        TArray<UObject*> Nested; GetObjectsWithOuter(Clip,Nested,true);
+        for(auto* Object:Nested) if(auto* Rig=Cast<UControlRig>(Object))
+        {
+            Rig->SetObjectBinding(MakeShared<FControlRigObjectBinding>());
+            Rig->GetObjectBinding()->BindToObject(Skeleton);
+        }
         Clip->SetSkeleton(Skeleton);
         Clip->bEnableRootMotion=true; Clip->bForceRootLock=true;
         Clip->RootMotionRootLock=ERootMotionRootLock::AnimFirstFrame;
