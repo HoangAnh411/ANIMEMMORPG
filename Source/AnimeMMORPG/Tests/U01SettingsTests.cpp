@@ -11,6 +11,8 @@
 #include "HAL/FileManager.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
+namespace
+{
 using namespace AnimeMMORPG::U01;
 static constexpr EAutomationTestFlags EFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01EBindings,"AnimeMMORPG.U01.E.BindingValidation",EFlags)
@@ -100,5 +102,6 @@ bool FU01ELocalMapping::RunTest(const FString&)
     Gate.Up(EKeys::H);TestTrue(TEXT("Only physical release rearms movement"),Gate.Allows(EKeys::H));TestFalse(TEXT("Other mouse remains blocked"),Gate.Allows(EKeys::ThumbMouseButton));
     Gate.Up(EKeys::ThumbMouseButton);TestTrue(TEXT("Mouse release rearms jump"),Gate.Allows(EKeys::ThumbMouseButton));
     return true;
+}
 }
 #endif

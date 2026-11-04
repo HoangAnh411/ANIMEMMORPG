@@ -209,7 +209,7 @@ void AU01PlayerController::ReconcilePhysicalReleases()
             ReleaseGate.Up(Key);ObservedKeys.Remove(Key);
         }
     bool JumpHeld=false;for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(ControlKey(AnimeMMORPG::U01::Jump)))JumpHeld|=PhysicalDown(Key);
-    if(!JumpHeld)if(auto* Pawn=Cast<AU01Character>(GetPawn()))Pawn->StopJumping();
+    if(!JumpHeld)if(auto* InputPawn=Cast<AU01Character>(GetPawn()))InputPawn->StopJumping();
 #endif
 }
 
@@ -272,8 +272,8 @@ bool AU01PlayerController::IsMotorKey(FKey Key) const
 bool AU01PlayerController::AcceptsAction(int32 Action,bool bRequireMotor) const
 {
     if(ControlState!=EU01ControlState::Playing||bMotorLocked||!IsGameWindowActive())return false;
-    const auto* Character=Cast<AU01Character>(GetPawn());
-    if(!Character||(bRequireMotor&&Character->GetU01Movement()->IsMotorLocked()))return false;
+    const auto* InputCharacter=Cast<AU01Character>(GetPawn());
+    if(!InputCharacter||(bRequireMotor&&InputCharacter->GetU01Movement()->IsMotorLocked()))return false;
     for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(ControlKey(Action)))
         if(IsInputKeyDown(Key)&&ReleaseGate.Allows(Key))return true;
     return false;
@@ -305,8 +305,8 @@ bool AU01PlayerController::RebuildLocalMapping()
 }
 void AU01PlayerController::ApplyPreferences()
 {
-    if(auto* Character=Cast<AU01Character>(GetPawn()))
-        Character->SetDefaultShoulder(GetPreferences().bRightShoulder,PresentationPawn.Get()!=GetPawn());
+    if(auto* InputCharacter=Cast<AU01Character>(GetPawn()))
+        InputCharacter->SetDefaultShoulder(GetPreferences().bRightShoulder,PresentationPawn.Get()!=GetPawn());
 }
 void AU01PlayerController::BeginRebind(int32 Action)
 {
