@@ -1,0 +1,238 @@
+{
+  "sourceSHA": "c8df4ff2182c0006c11f65466ecec4b9223be5a3",
+  "method": "Postprocessing actual guarded Win32 input / owned packaged Game-world metrics; these are not additional Automation tests",
+  "checks": [
+    {
+      "check": "Owned Game-world identity UserA/Game",
+      "result": "PASS"
+    },
+    {
+      "check": "One active mapping UserA/Game",
+      "result": "PASS"
+    },
+    {
+      "check": "Orderly exit UserA/Game",
+      "result": "PASS"
+    },
+    {
+      "check": "Owned Game-world identity UserA/Reopen",
+      "result": "PASS"
+    },
+    {
+      "check": "One active mapping UserA/Reopen",
+      "result": "PASS"
+    },
+    {
+      "check": "Orderly exit UserA/Reopen",
+      "result": "PASS"
+    },
+    {
+      "check": "Owned Game-world identity UserB/Failure",
+      "result": "PASS"
+    },
+    {
+      "check": "One active mapping UserB/Failure",
+      "result": "PASS"
+    },
+    {
+      "check": "Orderly exit UserB/Failure",
+      "result": "PASS"
+    },
+    {
+      "check": "Owned Game-world identity CorruptUser/Corrupt",
+      "result": "PASS"
+    },
+    {
+      "check": "One active mapping CorruptUser/Corrupt",
+      "result": "PASS"
+    },
+    {
+      "check": "Orderly exit CorruptUser/Corrupt",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture CaptureEdges",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture Rebind",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture MotionLocks",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture DefeatedRestore",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture Persist",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture Lifecycle",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture NetworkReturn",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture SaveFailure",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture SaveRecovered",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed real input capture Corrupt",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual Ctrl chord leaves binding unchanged",
+      "result": "PASS"
+    },
+    {
+      "check": "Ctrl alone waits until key release",
+      "result": "PASS"
+    },
+    {
+      "check": "Plain Ctrl is bindable on release",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual wheel rejected without rebinding",
+      "result": "PASS"
+    },
+    {
+      "check": "Duplicate rejected without changing binding",
+      "result": "PASS"
+    },
+    {
+      "check": "Reserved rejected without changing binding",
+      "result": "PASS"
+    },
+    {
+      "check": "Escape cancels capture",
+      "result": "PASS"
+    },
+    {
+      "check": "All eight bindings applied",
+      "result": "PASS"
+    },
+    {
+      "check": "Slider applies while dragging",
+      "result": "PASS"
+    },
+    {
+      "check": "Slider release saves",
+      "result": "PASS"
+    },
+    {
+      "check": "Invert and default shoulder applied",
+      "result": "PASS"
+    },
+    {
+      "check": "Rebound move and sprint 500/700",
+      "result": "PASS"
+    },
+    {
+      "check": "Rebound mouse jump while sprinting",
+      "result": "PASS"
+    },
+    {
+      "check": "Old W and Space inactive",
+      "result": "PASS"
+    },
+    {
+      "check": "Old Ctrl does not sprint",
+      "result": "PASS"
+    },
+    {
+      "check": "Each rebound direction moves",
+      "result": "PASS"
+    },
+    {
+      "check": "Interacting blocks motor but retains gravity",
+      "result": "PASS"
+    },
+    {
+      "check": "Camera and shoulder continue under Interacting",
+      "result": "PASS"
+    },
+    {
+      "check": "Unlock still requires release",
+      "result": "PASS"
+    },
+    {
+      "check": "Menu held movement/jump/sprint stay disarmed",
+      "result": "PASS"
+    },
+    {
+      "check": "World gravity continues in menu",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual Alt-Tab waits for Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "Held input after focus remains disarmed",
+      "result": "PASS"
+    },
+    {
+      "check": "Defeated retains gravity and blocks motor",
+      "result": "PASS"
+    },
+    {
+      "check": "Defeated camera/menu still usable",
+      "result": "PASS"
+    },
+    {
+      "check": "Defeated unlock waits for release",
+      "result": "PASS"
+    },
+    {
+      "check": "Restore defaults applies immediately",
+      "result": "PASS"
+    },
+    {
+      "check": "Quit/reopen preserves binding and camera preferences",
+      "result": "PASS"
+    },
+    {
+      "check": "No write simply from reload/Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "Other user directory starts with defaults",
+      "result": "PASS"
+    },
+    {
+      "check": "Save failure visible and remains dirty",
+      "result": "PASS"
+    },
+    {
+      "check": "Save retry recovers without false success",
+      "result": "PASS"
+    },
+    {
+      "check": "Corrupt binary defaults with feedback, stays clean",
+      "result": "PASS"
+    },
+    {
+      "check": "Corrupt binary unchanged through load/Resume/Quit",
+      "result": "PASS"
+    },
+    {
+      "check": "Five Boot/lab/Boot cycles",
+      "result": "PASS"
+    },
+    {
+      "check": "Final package smoke three maps",
+      "result": "PASS"
+    }
+  ]
+}

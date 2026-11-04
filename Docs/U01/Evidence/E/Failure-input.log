@@ -1,0 +1,57 @@
+[2026.11.04-16.33.18:182][  0]LogU01Control: Display: ControlLock state=2 reason=InitialWindowInactive PID=9408 pawn=BP_U01Character_C_2147482379 world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab
+[2026.11.04-16.33.18:182][  0]LogU01Control: Display: Begin local PID=9408 world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab net=0 pawn=BP_U01Character_C_2147482379
+[2026.11.04-16.33.20:328][149]LogU01Control: Display: ControlLock state=2 reason=ApplicationDeactivated PID=9408 pawn=BP_U01Character_C_2147482379 world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab
+[2026.11.04-16.33.20:333][150]LogU01Control: Display: ControlLock state=2 reason=WindowDeactivated PID=9408 pawn=BP_U01Character_C_2147482379 world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab
+[2026.11.04-16.33.21:958][356]LogU01Control: Display: PhysicalPress key=None state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.21:958][356]LogU01Control: Display: PhysicalRelease/Rearm key=None
+[2026.11.04-16.33.22:010][363]LogU01Control: Display: PhysicalRelease/Rearm key=W
+[2026.11.04-16.33.22:129][379]LogU01Control: Display: PhysicalPress key=LeftControl state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.22:129][379]LogU01Control: Display: PhysicalPress key=LeftShift state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.22:188][387]LogU01Control: Display: PhysicalRelease/Rearm key=LeftShift
+[2026.11.04-16.33.22:188][387]LogU01Control: Display: PhysicalRelease/Rearm key=LeftControl
+[2026.11.04-16.33.22:341][407]LogU01Control: Display: PhysicalPress key=W state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.22:390][413]LogU01Control: Display: PhysicalRelease/Rearm key=W
+[2026.11.04-16.33.22:811][462]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.22:843][466]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.23:619][554]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.24:030][602]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.24:031][602]LogU01Control: Warning: SettingsSaveFailed Lưu thất bại. Thiết lập đang dùng chưa được lưu; hãy thử Save lại.
+[2026.11.04-16.33.25:118][727]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.25:156][732]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.25:156][732]LogU01Control: Warning: SettingsSaveFailed Lưu thất bại. Thiết lập đang dùng chưa được lưu; hãy thử Save lại.
+[2026.11.04-16.33.25:596][786]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.25:626][790]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.26:111][850]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.26:142][854]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.26:142][854]LogU01Control: Warning: SettingsSaveFailed Lưu thất bại. Thiết lập đang dùng chưa được lưu; hãy thử Save lại.
+[2026.11.04-16.33.27:536][ 23]LogU01Control: Display: PhysicalPress key=LeftControl state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.27:536][ 23]LogU01Control: Display: PhysicalPress key=LeftShift state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.27:598][ 31]LogU01Control: Display: PhysicalRelease/Rearm key=LeftShift
+[2026.11.04-16.33.27:598][ 31]LogU01Control: Display: PhysicalRelease/Rearm key=LeftControl
+[2026.11.04-16.33.30:071][321]LogU01Control: Display: PhysicalPress key=None state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.30:071][321]LogU01Control: Display: PhysicalRelease/Rearm key=None
+[2026.11.04-16.33.30:117][327]LogU01Control: Display: PhysicalRelease/Rearm key=W
+[2026.11.04-16.33.30:236][342]LogU01Control: Display: PhysicalPress key=LeftControl state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.30:236][342]LogU01Control: Display: PhysicalPress key=LeftShift state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.30:297][350]LogU01Control: Display: PhysicalRelease/Rearm key=LeftShift
+[2026.11.04-16.33.30:298][350]LogU01Control: Display: PhysicalRelease/Rearm key=LeftControl
+[2026.11.04-16.33.30:454][370]LogU01Control: Display: PhysicalPress key=W state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.30:500][376]LogU01Control: Display: PhysicalRelease/Rearm key=W
+[2026.11.04-16.33.30:915][426]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.30:948][430]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.31:406][486]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.31:431][489]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.32:120][570]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.32:153][574]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.32:505][616]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=2 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.32:537][620]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.32:537][620]LogU01Control: Display: Resume PID=9408 world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab held keys remain quarantined
+[2026.11.04-16.33.33:143][690]LogU01Control: Display: PhysicalPress key=W state=0 accepted=1 reason=Ready
+[2026.11.04-16.33.33:946][785]LogU01Control: Display: PhysicalRelease/Rearm key=W
+[2026.11.04-16.33.34:652][865]LogU01Control: Display: PhysicalPress key=Escape state=0 accepted=1 reason=Ready
+[2026.11.04-16.33.34:656][865]LogU01Control: Display: ControlLock state=1 reason=Escape PID=9408 pawn=BP_U01Character_C_2147482379 world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab
+[2026.11.04-16.33.34:804][881]LogU01Control: Display: PhysicalRelease/Rearm key=Escape
+[2026.11.04-16.33.35:523][959]LogU01Control: Display: PhysicalPress key=LeftMouseButton state=1 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.35:556][963]LogU01Control: Display: PhysicalRelease/Rearm key=LeftMouseButton
+[2026.11.04-16.33.35:556][963]LogU01Control: Display: PhysicalPress key=LeftControl state=1 accepted=0 reason=ControlLocked
+[2026.11.04-16.33.35:556][963]LogU01Control: Display: PhysicalPress key=LeftShift state=1 accepted=0 reason=ControlLocked

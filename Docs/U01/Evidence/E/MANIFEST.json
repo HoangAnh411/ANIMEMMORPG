@@ -1,0 +1,102 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "branch": "u01/e-settings",
+  "baseSHA": "e867af97c53bbf11ea141fe5f8f21efc1e31200a",
+  "sourceSHA": "c8df4ff2182c0006c11f65466ecec4b9223be5a3",
+  "engine": "UE 5.8.4 CL58902052",
+  "toolchain": "MSVC14.51.36260 / toolset14.51.36231 / SDK10.0.26100.0",
+  "build": "Artifacts/U01/E/Build-20261104-232437-531-46c7d54a",
+  "mcpTests": "Artifacts/U01/E/MCPTests-20261104-232558",
+  "automationTests": 21,
+  "packageRelativePath": "Artifacts/U01/E/Package-20261104-232646-531-8bba7fa6/Archive/Windows",
+  "packageFiles": 48,
+  "smoke": "Artifacts/U01/E/SmokeB-20261104-232759",
+  "physicalInputChecks": 58,
+  "captures": {
+    "CaptureEdges": {
+      "pid": 18956,
+      "uniqueCaptureHz": 24.883161990175488,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 6.30099230000269
+    },
+    "Rebind": {
+      "pid": 18956,
+      "uniqueCaptureHz": 24.99322169008327,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 25.00310659999741
+    },
+    "MotionLocks": {
+      "pid": 18956,
+      "uniqueCaptureHz": 22.95611443357322,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 29.009082299999136
+    },
+    "DefeatedRestore": {
+      "pid": 18956,
+      "uniqueCaptureHz": 21.336091756168514,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 13.912175099998422
+    },
+    "Persist": {
+      "pid": 21596,
+      "uniqueCaptureHz": 25.427914536598877,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 8.021810100002767
+    },
+    "Lifecycle": {
+      "pid": 21596,
+      "uniqueCaptureHz": 25.832413996432077,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 20.001516000000265
+    },
+    "NetworkReturn": {
+      "pid": 21596,
+      "uniqueCaptureHz": 24.092322216768235,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 5.600148100002116
+    },
+    "SaveFailure": {
+      "pid": 9408,
+      "uniqueCaptureHz": 21.338917634127025,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 5.000796399999672
+    },
+    "SaveRecovered": {
+      "pid": 9408,
+      "uniqueCaptureHz": 23.97795029392902,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 4.915382899998804
+    },
+    "Corrupt": {
+      "pid": 20936,
+      "uniqueCaptureHz": 23.84076437511581,
+      "method": "Win32 SendInput guarded by foreground package HWND/PID; client-area BitBlt capture, backend recorded in captureDC",
+      "seconds": 3.596814299999096
+    }
+  },
+  "originalEditor": {
+    "pid": 21452,
+    "project": "D:/Data/AnimeMMORPG/AnimeMMORPG.uproject",
+    "level": "/Game/AnimeMMORPG/Maps/L_Boot.L_Boot",
+    "actors": 0,
+    "nativeELoaded": "NOT VERIFIED; kept open, no restart"
+  },
+  "ctrlChordRegression": {
+    "beforeSource": "b8bda5842e8fdc66e44112f2a659e517e51f44f8",
+    "beforeEvidence": "History/CtrlBefore-b8bda58.mp4",
+    "beforeObservedBinding": "LeftControl after Ctrl+T",
+    "afterSource": "c8df4ff2182c0006c11f65466ecec4b9223be5a3",
+    "afterEvidence": "CaptureEdges.mp4",
+    "afterResult": "Ctrl+T rejected; plain Ctrl commits on release; wheel rejected"
+  },
+  "art": "Anime art and combat animation DEFERRED; accepted temporary D blockout carry unchanged",
+  "F_G": "NOT RUN; no network/server acceptance claimed",
+  "preliminaryHistory": {
+    "source": "1cca45f1f59ec209357e19cd035c7913bac5ea39",
+    "builds": "Artifacts/U01/E/Build-* before final build",
+    "tests": "Artifacts/U01/E/MCPTests-20261104-225138",
+    "package": "Artifacts/U01/E/Package-20261104-225239-671-b3874bf5",
+    "captures": "Artifacts/U01/E/Play",
+    "note": "Initial movement hit spawn obstacle; corrected to runway fixture. Final captures and tests above supersede preliminary results. Early compiler failures retained in Artifacts."
+  }
+}

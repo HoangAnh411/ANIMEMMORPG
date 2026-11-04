@@ -1,5 +1,7 @@
 # U01 — Ma trận nghiệm thu
 
+**Cập nhật mới nhất:** D kỹ thuật/blockout được người dùng nghiệm thu tại1e46f71, đã khép hồ sơ/fast-forward main e867af9. Carry tạm được chấp nhận; art anime/animation chiến đấu DEFERRED. E source **c8df4ff**: full build/package, MCP **21/21 PASS**, smoke ba map **3/3**, **58 kiểm tra hậu xử lý input thật PASS**. E-REBIND/E-SETTINGS/E-ISOLATION/E-GATE có bằng chứng tại [REPORT-E](REPORT-E.md), [manifest](Evidence/E/MANIFEST.json), [checklist review](E-MANUAL-CHECKLIST.md). Hai LocalPlayer/IMC được kiểm bằng Automation; hai thư mục settings được kiểm trên các process standalone riêng, không suy thành test dedicated-server F. Các lượt input bao gồm Ctrl đơn/tổ hợp/cuộn, Alt-Tab thật, gate binding bàn phím/mouse, gravity khi khóa, save lỗi/retry, file hỏng giữ hash, reopen và năm vòng Boot. E **READY_FOR_REVIEW**, còn xác nhận người dùng, chưa merge E/chạy F–G. Những đoạn kết quả cũ phía dưới giữ lịch sử theo nguồn tương ứng.
+
 Tất cả B–G **NOT-RUN trong A**. A không thêm C++/gameplay/test giả. Nguồn và kết quả A tại REPORT-A.md; các tên bên dưới là ID kế hoạch, không phải Automation tests đã đăng ký. Mỗi đợt riêng commit/push rồi dừng; chỉ bắt đầu từ main đã được nghiệm thu. Không tự merge.
 
 | ID / đợt | Phép kiểm và phương thức | Tiêu chí / bằng chứng |

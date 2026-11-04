@@ -62,6 +62,8 @@ Bổ sung carry sau review4c8: người dùng xác nhận cách nắm, còn qu�
 
 D được người dùng **nghiệm thu kỹ thuật/blockout tại1e46f71**. Carry hiện tại là tư thế tạm: cầm đúng tay, tránh xuyên thân rõ rệt, ổn khi đi/nhảy; art anime và animation chiến đấu **DEFERRED**, chưa nghiệm thu, sẽ thay/tinh chỉnh theo bộ chính thức. Hồ sơ khép D giữ source package6ef6ec3 và lịch sử kiểm chứng; người dùng cho phép push hồ sơ/fast-forward D vào main rồi triển khai riêng **E rebind/settings/khóa điều khiển**. Không coi đây là nghiệm thu tổng hợp U01 hoặc F/G.
 
+D đã khép hồ sơ và fast-forward/push vào main **e867af9**. E triển khai riêng trên `u01/e-settings`, source **c8df4ff**: menu Điều khiển, tám binding local, SaveGame versioned có phục hồi từng phần/kiểm hỏng binary, gate theo binding mới và fixtures Interacting/Defeated. Full build Editor/Game, MCP **21/21 PASS**, package/smoke **3/3**, **58 kiểm tra hậu xử lý input thật PASS**; có hồi quy Ctrl đơn/tổ hợp/cuộn, Alt-Tab, giữ input qua Resume, lưu/mở lại, lỗi file và năm vòng Boot. [REPORT-E](U01/REPORT-E.md), [checklist review](U01/E-MANUAL-CHECKLIST.md). **READY_FOR_REVIEW**, chưa nghiệm thu/merge E, chưa bắt đầu F/G. Editor gốc giữ mở, chưa xác nhận nạp native E; art anime/animation chiến đấu vẫn DEFERRED.
+
 - [ ] U01.01 Chốt mannequin/clip nguồn theo register U00 cho phép thử kỹ thuật. Model/rig/kiếm anime hợp giấy phép: **DEFERRED**, nghiệm thu art riêng.
 - [ ] U01.02 Character/CharacterMovement và Enhanced Input: đi 5 m/s, sprint 7 m/s, nhảy 1,2 m, dốc 45°, đi chéo không nhanh hơn.
 - [ ] U01.03 Camera tự do/đổi vai/tránh vật cản, tách hướng thân/di chuyển/ngắm.
