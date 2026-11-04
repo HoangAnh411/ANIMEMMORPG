@@ -413,6 +413,13 @@ void AU01PlayerController::U01FixtureReset(const FString& Station)
     MotorPawn->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
     SetControlRotation(FRotator::ZeroRotator);
     FixtureStation = Station;
+    for (int32 Index = 0; Index < UE_ARRAY_COUNT(FixtureStations); ++Index)
+        if (Station.Equals(FixtureStations[Index], ESearchCase::IgnoreCase))
+        {
+            FixtureStationIndex = Index;
+            FixtureStation = FixtureStations[Index];
+            break;
+        }
     UE_LOG(LogU01Control, Display, TEXT("LabFixtureReset station=%s PID=%u world=%s pawn=%s positionCm=%s"),
         *Station, FPlatformProcess::GetCurrentProcessId(), *GetWorld()->GetPathName(), *MotorPawn->GetPathName(), *MotorPawn->GetActorLocation().ToString());
 }
