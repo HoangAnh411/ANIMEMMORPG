@@ -1,5 +1,7 @@
 # U01-C — Kiểm package và fixture UI trong một phiên
 
+Trạng thái: **PASS theo xác nhận người dùng khi nghiệm thu0cba933**; áp dụng cả năm mục dưới đây trên package C đã bàn giao, không phải AI đã tự thao tác toàn checklist. Không có video/PID/giờ chơi mới được cung cấp và không xác nhận Editor gốc đã nạp native mới nhất. Các hướng dẫn giữ lại để tái kiểm khi cần, không yêu cầu người dùng chạy lại phần đã chấp nhận.
+
 Chạy `Artifacts/U01/C/Play-C.cmd` (source/package ghi trong REPORT-C), giữ Editor gốc mở. Motor đã có phép đo tự động bằng input fixture trong Game world; danh sách này bổ sung xác nhận bàn phím/UI và hình học của package, không yêu cầu đo lại bằng tay các trị số đã có log chính xác.
 
 1. Boot → sân nhân vật → Escape → **Fixture: reset runway** → Resume. Xác nhận chỉ một pawn được đưa tới đầu đường đo. W đi thường; Ctrl trái/phải + W sprint; A/D/W/S theo yaw camera và đi chéo không tăng tốc rõ. Mốc0–80m dùng đo; 5m mỗi đầu dành tăng tốc/phanh. Reset là chức năng sân thử, không phải hồi sinh sản phẩm.

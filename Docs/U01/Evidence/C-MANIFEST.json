@@ -1,6 +1,6 @@
 ﻿{
     "sdk":  "10.0.26100.0",
-    "manualInput":  "NOT-RUN for new C keyboard/UI fixtures; see C-MANUAL-CHECKLIST.md",
+    "manualInput":  "PASS per user acceptance of 0cba933aa56379b1be064be40aaa0d9b3dbddb59; packaged C only; no AI real-input/video claim; original Editor native code not verified",
     "geometry":  "C-LAB.json",
     "engine":  "5.8.4 CL58902052",
     "testMethod":  "MCP TestRunner, cold clone Editor disk binary; controlled input fixtures in real Game physics worlds",

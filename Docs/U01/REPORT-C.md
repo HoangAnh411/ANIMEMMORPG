@@ -1,6 +1,6 @@
 # U01-C — Motor, sprint, nhảy và địa hình
 
-Trạng thái: **BLOCKED ở xác nhận thao tác bàn phím/UI fixture mới trong package**. Implementation, full build, 11/11 Automation và smoke Windows3/3 đã đạt; các phép đo motor/địa hình tự động có bằng chứng. Chưa nghiệm thu C theo người dùng, chưa triển khai D. Nhánh `u01/c-motor`, không tự merge.
+Trạng thái hiện tại: **ĐÃ NGHIỆM THU U01-C theo xác nhận người dùng tại `0cba933aa56379b1be064be40aaa0d9b3dbddb59`**. Checklist package ghi PASS theo giao việc tiếp theo của người dùng. AI trước đó chỉ xác minh build/tests/smoke và input fixture tự động, chưa xác nhận toàn checklist bằng input thật; không ghi thành AI đã thao tác hoặc bổ sung video/PID/giờ chơi chưa được cung cấp. Nguồn build a374081 và lịch sử kiểm chứng giữ nguyên; Editor gốc chưa xác nhận nạp code mới nhất. Người dùng cho phép khép hồ sơ/push/fast-forward C vào main rồi làm riêng D, không cần đóng Editor.
 
 ## Nền và phạm vi
 
@@ -47,7 +47,7 @@ Clone GitHub tại `Artifacts/U01/C/Source`, cache LFS seed từ B rồi `git lf
 | MCP Automation trên binary đĩa clone | PASS11/11, queue11 complete; `MCPTests-20261104-133626` |
 | Cook/package | PASS ExitCode0/BUILD SUCCESSFUL, cook0error/0warning; `Package-20261104-133145-169-7c624294` |
 | Package smoke Boot/Character/Network | PASS3/3, LoadMap + exit0, không Error/Fatal/AccessedNone; `SmokeB-20261104-133628` (tái dùng runner SmokeB) |
-| Input tay/UI mới/fixture camera-menu trên package | NOT-RUN; cần xác nhận checklist C gộp, không kế thừa PASS B cho phần mới |
+| Input tay/UI mới/fixture camera-menu trên package | PASS theo xác nhận nghiệm thu người dùng tại0cba933; không phải AI input thật/video, không bổ sung bằng chứng chưa cung cấp |
 | FPS render30/60/120, mạng F, animation D | NOT-RUN trong C |
 
 VerifyCTests.ps1 mở Editor clone với port18013, MCP StartServer và U01SourceSHA; gọi TestRunner.run_automation_tests filter AnimeMMORPG, poll Logs.GetLogEntries mới, kiểm đúng11 paths/Success và queue11. Chỉ QUIT_EDITOR qua endpoint clone. Bốn U00: Axes, CallOrder, HalfOpenInterval, Units. Hai B: CameraPolicy, ReleaseGate. Năm C: **FlatMovement, JumpPhysics, JumpWindows, MotorLocks, Terrain** — tất cả Success. Không lấy kết quả Live Coding hoặc log cũ để thay tests cuối.
@@ -82,7 +82,7 @@ Package smoke riêng: game PID13788 và16276, WorldType1=Game, NetMode0=Standalo
 - Compiler14.51 mới hơn preferred14.50 và C4996 engine headers còn tồn tại. Cook0/0 là cook summary; startup optional profiler DLL/audio diagnostics được giữ trong smoke report theo validator B, không bỏ lỗi game content. Không thay renderer để làm đẹp số liệu.
 - Python/toolset init khi chạy Editor executable -game/-server từ A/B chưa xử lý, còn phải sửa trước nghiệm thu tích hợp và kiểm lại F. C không chạy network hoặc suy F từ hai standalone map; chưa saved move sprint/jump/custom replay/network clock.
 - File config local sinh token được giữ ngoài Git. Windows checkout không unlink29 file B do ownership; đã move từng file đã đối chiếu vào Artifacts/U01/C/MergePreserve rồi fast-forward, không delete/reset metadata hoặc bỏ thay đổi người dùng. Không đổi ACL/global Git policy.
-- Chưa có desktop/packaged-game input tool được xác minh; chưa tự click các nút fixture, thử Ctrl/Space/Alt-Tab hoặc có video C. Vì vậy giữ **BLOCKED ở xác nhận UI/input mới** và bàn giao checklist cụ thể, không tuyên bố người dùng đã thử C. Art anime và animation riêng vẫn DEFERRED/D.
+- Tại bàn giao0cba933 chưa có desktop/packaged-game input tool được xác minh; AI chưa tự click fixture, thử Ctrl/Space/Alt-Tab hoặc có video C. Trạng thái BLOCKED trước xác nhận người dùng được giữ như lịch sử; xác nhận mới chỉ áp dụng package C đã bàn giao, không chứng minh Editor gốc nạp code mới. Art anime vẫn DEFERRED; animation riêng được giao ở D sau nghiệm thu C.
 
 ## Bàn giao
 
@@ -90,4 +90,4 @@ Package smoke riêng: game PID13788 và16276, WorldType1=Game, NetMode0=Standalo
 
 Cuối kiểm còn Editor gốc PID19924, commandline đúng `D:/Data/AnimeMMORPG/AnimeMMORPG.uproject`; không dùng PID19808 của phiên B cũ làm chứng cứ hiện tại. Original chưa được xác nhận nạp native B/C mới nhất. Không thay Description, Boot, NetworkLab hoặc template trong C. Stage rõ file C/docs, không token/cache/binary/log thô.
 
-Commit/push `u01/c-motor`, đối chiếu ref rồi dừng. Main giữ72ad2be, không merge C hoặc bắt đầu D khi chưa được giao. Chỉ khép hồ sơ C sau xác nhận cần thiết; không đánh dấu U01 tổng hợp hoặc art anime hoàn thành.
+Tại bàn giao0cba933 đã push và dừng riêng C, main giữ72ad2be. Giao việc tiếp theo của người dùng cho phép push hồ sơ xác nhận này, fast-forward C vào main và tạo nhánh D từ main đã merge. Không đánh dấu U01 tổng hợp hoặc art anime hoàn thành.
