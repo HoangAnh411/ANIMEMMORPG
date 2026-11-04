@@ -1,0 +1,135 @@
+{
+  "basis": "Measured HandBeforeLit hand-space knuckles/palm and ref joint axes; first candidate for rendered calibration, not final until observed",
+  "socketLocation": [
+    -6.5,
+    2,
+    -0.5
+  ],
+  "socketRotation": [
+    90,
+    0,
+    90
+  ],
+  "fingers": [
+    {
+      "bone": "index_01_r",
+      "rotation": [
+        0,
+        -61.626999999999995,
+        0
+      ]
+    },
+    {
+      "bone": "index_02_r",
+      "rotation": [
+        0,
+        -60.107432,
+        0
+      ]
+    },
+    {
+      "bone": "index_03_r",
+      "rotation": [
+        0,
+        -37.483599,
+        0
+      ]
+    },
+    {
+      "bone": "middle_01_r",
+      "rotation": [
+        0,
+        -58.427318,
+        0
+      ]
+    },
+    {
+      "bone": "middle_02_r",
+      "rotation": [
+        0,
+        -49.23079,
+        0
+      ]
+    },
+    {
+      "bone": "middle_03_r",
+      "rotation": [
+        0,
+        -40.0,
+        0
+      ]
+    },
+    {
+      "bone": "ring_01_r",
+      "rotation": [
+        0,
+        -65.58551800000001,
+        0
+      ]
+    },
+    {
+      "bone": "ring_02_r",
+      "rotation": [
+        0,
+        -56.036,
+        0
+      ]
+    },
+    {
+      "bone": "ring_03_r",
+      "rotation": [
+        0,
+        -45.832,
+        0
+      ]
+    },
+    {
+      "bone": "pinky_01_r",
+      "rotation": [
+        0,
+        -85.166319,
+        0
+      ]
+    },
+    {
+      "bone": "pinky_02_r",
+      "rotation": [
+        0,
+        -58.713001,
+        0
+      ]
+    },
+    {
+      "bone": "pinky_03_r",
+      "rotation": [
+        0,
+        -50.083,
+        0
+      ]
+    },
+    {
+      "bone": "thumb_01_r",
+      "rotation": [
+        12,
+        -18,
+        -10
+      ]
+    },
+    {
+      "bone": "thumb_02_r",
+      "rotation": [
+        0,
+        -25,
+        0
+      ]
+    },
+    {
+      "bone": "thumb_03_r",
+      "rotation": [
+        0,
+        -35,
+        0
+      ]
+    }
+  ]
+}

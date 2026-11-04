@@ -49,6 +49,9 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
         if(Phase==2){Motor->SetMovementMode(MOVE_Falling);Motor->Velocity=FVector(0,0,-300);Mesh->TickAnimation(.1f,false);Mesh->RefreshBoneTransforms();}
         Motor->SetMovementMode(MOVE_Walking); Motor->Velocity=Phase==1?FVector(600,0,0):FVector::ZeroVector;
         Mesh->TickAnimation(Phase==2?.016f:.4f,false); Mesh->RefreshBoneTransforms(); Mesh->UpdateComponentToWorld();
+        // Multiple diagnostic poses are sampled within one editor frame. Recreate
+        // the render proxy so GPU skinning cannot reuse the previous pose revision.
+        Mesh->MarkRenderStateDirty();World->SendAllEndOfFrameUpdates();FlushRenderingCommands();
         auto Json=MakeShared<FJsonObject>();
         const FString Name=Phase==0?TEXT("Idle"):Phase==1?TEXT("Run"):TEXT("Land");
         Json->SetStringField(TEXT("pose"),Name);
