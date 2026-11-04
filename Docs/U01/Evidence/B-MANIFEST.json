@@ -1,6 +1,6 @@
 ﻿{
     "branch":  "u01/b-camera",
-    "manualInput":  "NOT-RUN; see B-MANUAL-CHECKLIST.md",
+    "manualInput":  "PASS per user acceptance of 2e0e89fdffd05b9dad86014fb3cb8ac0338ba60d; packaged build only; no AI input/video claim; original Editor code not verified",
     "engine":  "5.8.4 CL58902052",
     "artifactManifestSHA256":  "8CAA0DFD4E4BD8789A378522EF94757F8E9AB10CBC360B296C8B45F2C6F95DB9",
     "clone":  "Artifacts/U01/B/Source",

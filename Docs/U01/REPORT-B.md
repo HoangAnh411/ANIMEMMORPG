@@ -1,6 +1,6 @@
 # U01-B — Camera, chuột và menu/focus tối thiểu
 
-Trạng thái: **BLOCKED ở cổng input thật/video**, implementation và bản Windows đã chuẩn bị để review. Chưa tuyên bố nghiệm thu B, chưa bắt đầu C. Nhánh `u01/b-camera`; main chỉ fast-forward A đã nghiệm thu, không merge B.
+Trạng thái hiện tại: **ĐÃ NGHIỆM THU U01-B theo xác nhận người dùng tại `2e0e89fdffd05b9dad86014fb3cb8ac0338ba60d`**. Checklist package ghi PASS theo xác nhận người dùng trong giao việc tiếp theo, không phải AI đã chạy input/video. Trước xác nhận này AI chỉ kiểm build/tests/smoke; không có xác nhận trước đó của AI rằng toàn checklist thực đã đạt. Không bổ sung video, thời điểm chơi, PID hoặc số đo chưa được cung cấp. Editor gốc **chưa được xác nhận nạp code B mới nhất**; giữ lịch sử lỗi Live Coding bên dưới. Người dùng cho phép commit/push hồ sơ rồi fast-forward B vào main và triển khai riêng C; không cần đóng Editor để khép B.
 
 ## Nguồn và phần triển khai
 
@@ -31,7 +31,7 @@ UE5.8.4 CL58902052 tại D:/Software/UE_5.8. UBT thực chọn MSVC14.51.36260 (
 | Asset creation/compile | PASS | `CreateAssets2.log` U01B_ASSETS_SUCCESS, bốn Blueprint status up-to-date; B-Assets.json; không save asset gốc bằng patch class |
 | Automation source cuối qua MCP clone | PASS 6/6 | MCPTests-20261104-012551: sáu Success, queue6 hoàn tất, đúng source/PID trong manifest |
 | Smoke package source cuối | PASS 3/3 | SmokeB-20261104-012550: ba map tải/exit0, không Error/Fatal/AccessedNone; hai lab mỗi bên39metrics, đúng source/Game world/pawn local; chưa input thật |
-| Chuột thật/capture/đổi vai sát tường/mesh hide/Alt-Tab/Resume/held keys/gravity khi menu | NOT-RUN acceptance | Không có desktop/packaged UI input tool đã xác minh; cần một phiên checklist/video gộp |
+| Chuột thật/capture/đổi vai sát tường/mesh hide/Alt-Tab/Resume/held keys/gravity khi menu | PASS theo xác nhận người dùng | Áp dụng package B đã bàn giao; không phải AI thao tác input, không có video/PID/giờ chơi mới được cung cấp |
 | Server riêng hai client B/F, speed/apex/sprint/rebind/animation riêng/FPS | NOT-RUN | Ngoài B hoặc đợt sau; không kế thừa PASS mạng A |
 
 Để chạy full build/package: `Scripts/U00.ps1 -Task Build` rồi `-Task Package`, project/output tuyệt đối như manifest. Script guard đối chiếu đúng project đang mở, cho clone khác chạy; không đóng Editor gốc. `Scripts/U01/CreateBAssets.py` chỉ chạy trong clone đã build, từ chối original/overwrite; tạo/lưu asset qua Editor API. Asset được copy về source, commit/push rồi đối chiếu clone đúng SHA trước package.
@@ -54,8 +54,8 @@ Smoke cuối: game PID16092 (Character) và13100 (Network), WorldType1=Game, Net
 
 ## Chơi thử và bàn giao
 
-Mở `Artifacts/U01/B/Play-B.cmd` để vào Boot bằng package cuối, bật trace và lưu Review/Game.log riêng. Exe thật và SHA256 nằm manifest; giữ nguyên toàn thư mục Windows48file khi sao chép. Không dùng executable từ các thư mục Package cũ. [Checklist gộp](B-MANUAL-CHECKLIST.md) là phần còn thiếu duy nhất để review hành vi B thực; chuẩn bị video ngắn và PASS/FAIL từng mục, đối chiếu log/PID/sourceSHA. Không có video/xác nhận người dùng nên không tự ghi các cổng đó PASS.
+Mở `Artifacts/U01/B/Play-B.cmd` để vào Boot bằng package cuối, bật trace và lưu Review/Game.log riêng. Exe thật và SHA256 nằm manifest; giữ nguyên toàn thư mục Windows48file khi sao chép. [Checklist gộp](B-MANUAL-CHECKLIST.md) đã được người dùng xác nhận PASS khi nghiệm thu2e0e89f. Phần NOT-RUN và giới hạn input của các lượt AI tự động vẫn là lịch sử đúng; kết quả thủ công hiện tại chỉ dựa trên xác nhận người dùng, không tạo thêm bằng chứng.
 
 Files: Source/AnimeMMORPG/U01/*, Tests/U01CameraTests.cpp, AnimeMMORPG.Build.cs; 14asset U01 + hai lab; ba script B; ROADMAP/REPORT-A (ghi nghiệm thu A), báo cáo/checklist/evidence B. Config token local, Binaries, Intermediate, Saved, raw log/build/package đều ngoài commit. Không git add toàn bộ repo. Description/Boot/template không đổi trong commit.
 
-Commit/push riêng nhánh B và đối chiếu ref. Dừng sau bàn giao, không merge B hoặc bắt đầu C. Main giữ đúng4216ff8. Art anime vẫn DEFERRED; không nghiệm thu U01 kỹ thuật tổng hợp/mạng F/Server packaging hoặc sản phẩm anime.
+Quy trình bàn giao B ban đầu đã dừng, không merge tại2e0e89f. Giao việc tiếp theo của người dùng cho phép khép tài liệu, push và fast-forward B vào main rồi tạo nhánh C riêng từ main đã merge. Art anime vẫn DEFERRED; không nghiệm thu U01 kỹ thuật tổng hợp/mạng F/Server packaging hoặc sản phẩm anime.

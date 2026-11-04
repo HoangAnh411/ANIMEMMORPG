@@ -1,5 +1,7 @@
 # U01-B — Một phiên kiểm chứng input thật
 
+Trạng thái: **PASS theo xác nhận người dùng khi nghiệm thu U01-B tại2e0e89f**. Cả sáu mục dưới đây được chấp nhận trên package B đã bàn giao. AI không tự chạy toàn checklist và không có video/giờ chơi/PID mới được cung cấp; không diễn giải xác nhận này thành Editor gốc đã nạp native code mới nhất. Các hướng dẫn bên dưới giữ để tái kiểm khi cần, không phải yêu cầu người dùng chạy lại.
+
 Thực hiện trên bản Windows và source SHA ghi trong REPORT-B.md; giữ Editor gốc mở. `Artifacts/U01/B/Play-B.cmd` mở Boot, bật log trạng thái input/camera trong thư mục Review riêng. Đây là phép thử B; sprint/nhảy hiệu chỉnh/animation riêng/rebind chưa nghiệm thu ở B. Không chạy bằng patch Live Coding của Editor gốc.
 
 Ghi một video ngắn liên tục, giờ bắt đầu/kết thúc và kết quả từng mục; giữ log Review. Không cần chạy từng checklist rời rạc hoặc gửi lại phần đã có chứng cứ đủ.
