@@ -12,9 +12,19 @@
 #include "HAL/FileManager.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
+#include "Serialization/MemoryWriter.h"
+#include "Misc/Crc.h"
 namespace
 {
 namespace Controls=AnimeMMORPG::U01;
+// Author a valid envelope containing deliberately invalid SaveGame fields.
+static bool StoreFixture(UU01ControlSave* Save,const FString& Slot)
+{
+    TArray<uint8> Payload,Bytes;if(!UGameplayStatics::SaveGameToMemory(Save,Payload))return false;
+    uint32 Magic=0x45313055,Version=1,Length=Payload.Num(),CRC=FCrc::MemCrc32(Payload.GetData(),Payload.Num());
+    FMemoryWriter Writer(Bytes);Writer<<Magic<<Version<<Length<<CRC;Writer.Serialize(Payload.GetData(),Payload.Num());
+    return UGameplayStatics::SaveDataToSlot(Bytes,Slot,0);
+}
 static constexpr EAutomationTestFlags EFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01EBindings,"AnimeMMORPG.U01.E.BindingValidation",EFlags)
 bool FU01EBindings::RunTest(const FString&)
@@ -69,12 +79,27 @@ bool FU01EStorage::RunTest(const FString&)
     TestTrue(TEXT("Actual SaveGame write"),Controls::WritePreferences(Slot,0,P,Message));TestTrue(TEXT("Actual SaveGame read"),Controls::ReadPreferences(Slot,0,Out,Message));
     TestEqual(TEXT("Binding persists"),Out.Keys[AnimeMMORPG::U01::Forward],EKeys::H);TestEqual(TEXT("Sensitivity persists"),Out.Sensitivity,2.f);TestTrue(TEXT("Invert persists"),Out.bInvertY);TestFalse(TEXT("Shoulder persists"),Out.bRightShoulder);
     auto* Corrupt=NewObject<UU01ControlSave>();Corrupt->Payload=TEXT("{\"version\":1,\"sensitivity\":2,\"invertY\":true,\"rightShoulder\":false,\"bindings\":{\"Jump\":\"H\"}}");
-    TestTrue(TEXT("Write partial fixture"),UGameplayStatics::SaveGameToSlot(Corrupt,Slot,0));
+    TestTrue(TEXT("Write partial fixture"),StoreFixture(Corrupt,Slot));
     TArray<uint8> Before,After;FFileHelper::LoadFileToArray(Before,*Path);
     TestFalse(TEXT("Partial file reports recovery"),Controls::ReadPreferences(Slot,0,Out,Message));TestEqual(TEXT("Partial valid jump kept"),Out.Keys[Controls::Jump],EKeys::H);
     FFileHelper::LoadFileToArray(After,*Path);TestTrue(TEXT("Loading never overwrites damaged storage"),Before==After);
-    Corrupt->Version=99;TestTrue(TEXT("Write future schema fixture"),UGameplayStatics::SaveGameToSlot(Corrupt,Slot,0));
+    Corrupt->Version=99;TestTrue(TEXT("Write future schema fixture"),StoreFixture(Corrupt,Slot));
     TestFalse(TEXT("Future SaveGame rejected"),Controls::ReadPreferences(Slot,0,Out,Message));
+    TestTrue(TEXT("Write clean envelope before damage"),Controls::WritePreferences(Slot,0,P,Message));
+    TArray<uint8> Good;UGameplayStatics::LoadDataFromSlot(Good,Slot,0);
+    TArray<TArray<uint8>> BadCases={{},{0x55},{0x55,0x30,0x31,0x45}};
+    TArray<uint8> Truncated=Good;Truncated.SetNum(Good.Num()-1);BadCases.Add(Truncated);
+    TArray<uint8> Flipped=Good;Flipped.Last()^=0x40;BadCases.Add(Flipped);
+    TArray<uint8> Oversized;Oversized.SetNumZeroed(65537);BadCases.Add(Oversized);
+    for(const auto& Bad:BadCases)
+    {
+        TestTrue(TEXT("Store malformed binary fixture"),UGameplayStatics::SaveDataToSlot(Bad,Slot,0));
+        TestFalse(TEXT("Malformed binary safely rejected"),Controls::ReadPreferences(Slot,0,Out,Message));
+        TestFalse(TEXT("Malformed binary reports recovery"),Message.IsEmpty());
+        TestEqual(TEXT("Binary damage uses default binding"),Out.Keys[AnimeMMORPG::U01::Forward],EKeys::W);
+        TArray<uint8> Unchanged;UGameplayStatics::LoadDataFromSlot(Unchanged,Slot,0);
+        TestTrue(TEXT("Malformed binary never overwritten on load"),Bad==Unchanged);
+    }
     TestTrue(TEXT("Delete fixture save"),UGameplayStatics::DeleteGameInSlot(Slot,0));
     TestTrue(TEXT("Create deterministic write blocker at test-only save path"),IFileManager::Get().MakeDirectory(*Path,true));
     TestFalse(TEXT("Filesystem write failure propagated"),Controls::WritePreferences(Slot,0,P,Message));TestFalse(TEXT("Failure visible"),Message.IsEmpty());

@@ -5,6 +5,9 @@
 #include "InputAction.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
+#include "Serialization/MemoryReader.h"
+#include "Serialization/MemoryWriter.h"
+#include "Misc/Crc.h"
 
 namespace AnimeMMORPG::U01
 {
@@ -73,7 +76,19 @@ bool ReadPreferences(const FString& Slot,int32 User,FPreferences& Out,FString& M
 {
     Out=FPreferences();
     if(!UGameplayStatics::DoesSaveGameExist(Slot,User)){Message=TEXT("Chưa có file: dùng mặc định.");return true;}
-    auto* Save=Cast<UU01ControlSave>(UGameplayStatics::LoadGameFromSlot(Slot,User));
+    // Reject truncated/corrupted binary before UE reads variable-length strings
+    // in its SaveGame header. CRC detects accidental damage, not authenticity.
+    TArray<uint8> Bytes;uint32 Magic=0,StorageVersion=0,Length=0,Checksum=0;
+    bool Valid=UGameplayStatics::LoadDataFromSlot(Bytes,Slot,User)&&Bytes.Num()>=16&&Bytes.Num()<=65536;
+    if(Valid)
+    {
+        FMemoryReader Reader(Bytes);Reader<<Magic<<StorageVersion<<Length<<Checksum;
+        Valid=Magic==0x45313055&&StorageVersion==1&&Length==uint32(Bytes.Num()-16)&&Length>0
+            &&Checksum==FCrc::MemCrc32(Bytes.GetData()+16,Length);
+    }
+    if(!Valid){Message=TEXT("File thiết lập hỏng/không hỗ trợ (độ dài/checksum/version): dùng mặc định; chưa ghi đè file.");return false;}
+    Bytes.RemoveAt(0,16,EAllowShrinking::No);
+    auto* Save=Cast<UU01ControlSave>(UGameplayStatics::LoadGameFromMemory(Bytes));
     if(!Save){Message=TEXT("Không đọc được file thiết lập: dùng mặc định; chưa ghi đè file.");return false;}
     if(Save->Version!=1){Message=TEXT("Version SaveGame chưa hỗ trợ: dùng mặc định; chưa ghi đè file.");return false;}
     Message=DecodePreferences(Save->Payload,Out);return Message.IsEmpty();
@@ -81,7 +96,14 @@ bool ReadPreferences(const FString& Slot,int32 User,FPreferences& Out,FString& M
 bool WritePreferences(const FString& Slot,int32 User,const FPreferences& Data,FString& Message)
 {
     auto* Save=NewObject<UU01ControlSave>();Save->Payload=EncodePreferences(Data);
-    const bool Success=UGameplayStatics::SaveGameToSlot(Save,Slot,User);
+    TArray<uint8> Payload,Bytes;
+    bool Success=UGameplayStatics::SaveGameToMemory(Save,Payload)&&Payload.Num()>0&&Payload.Num()<=65520;
+    if(Success)
+    {
+        uint32 Magic=0x45313055,StorageVersion=1,Length=Payload.Num(),Checksum=FCrc::MemCrc32(Payload.GetData(),Payload.Num());
+        FMemoryWriter Writer(Bytes);Writer<<Magic<<StorageVersion<<Length<<Checksum;Writer.Serialize(Payload.GetData(),Payload.Num());
+        Success=UGameplayStatics::SaveDataToSlot(Bytes,Slot,User);
+    }
     Message=Success?TEXT("Đã lưu thiết lập local."):TEXT("Lưu thất bại. Thiết lập đang dùng chưa được lưu; hãy thử Save lại.");return Success;
 }
 UInputMappingContext* MakeLocalMapping(UObject* Owner,const UInputMappingContext* Template,const FPreferences& Data,const TArray<const UInputAction*>& Actions)

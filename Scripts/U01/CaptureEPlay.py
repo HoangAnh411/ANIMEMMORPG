@@ -118,9 +118,9 @@ class Input(c.Structure):
     _fields_ = [('type', w.DWORD), ('payload', Payload)]
 user.SendInput.argtypes = [w.UINT, c.POINTER(Input), c.c_int]
 keys = {'W': 0x11, 'A': 0x1e, 'S': 0x1f, 'D': 0x20, 'Ctrl': 0x1d, 'Shift':0x2a,'Space': 0x39, 'V': 0x2f, 'Escape': 0x01}
-keys.update({'H':0x23,'J':0x24,'L':0x26,'U':0x16,'T':0x14,'Y':0x15,'B':0x30,'N':0x31,'O':0x18,'P':0x19,'G':0x22,'Q':0x10,'F5':0x3f})
+keys.update({'Alt':0x38,'Tab':0x0f,'H':0x23,'J':0x24,'L':0x26,'U':0x16,'T':0x14,'Y':0x15,'B':0x30,'N':0x31,'O':0x18,'P':0x19,'G':0x22,'Q':0x10,'F5':0x3f})
 virtual_keys={'W':0x57,'A':0x41,'S':0x53,'D':0x44,'Ctrl':0xa2,'Shift':0xa0,'Space':0x20,'V':0x56,'Escape':0x1b}
-virtual_keys.update({k:ord(k) for k in ('H','J','L','U','T','Y','B','N','O','P','G','Q')});virtual_keys['F5']=0x74
+virtual_keys.update({k:ord(k) for k in ('H','J','L','U','T','Y','B','N','O','P','G','Q')});virtual_keys.update({'F5':0x74,'Alt':0xa4,'Tab':0x09})
 held = set()
 def send_key(key, down):
     if key in ('MiddleMouse','ThumbMouse','ThumbMouse2'):
@@ -193,6 +193,7 @@ if not bitmap or not pixels.value:raise RuntimeError('Client DIB capture unavail
 previous=gdi.SelectObject(memory_dc,bitmap)
 pixel_array=np.ctypeslib.as_array((c.c_ubyte*((right-left)*(bottom-top)*4)).from_address(pixels.value)).reshape(bottom-top,right-left,4)
 start, next_frame = time.perf_counter(), 0.
+stop_requested=False
 ime_toggled=False
 def toggle_input_method():
     guard();send_key('Ctrl',True);send_key('Shift',True);time.sleep(.06)
@@ -254,7 +255,10 @@ try:
             elif event['action']=='snapshot':
                 ImageGrab.grab(bbox=bounds(),all_screens=True).save(a.out/(event['name']+'.png'))
             elif event['action']=='focus-cycle':
-                user.ShowWindow(hwnd,6);time.sleep(event.get('seconds',1.0));user.ShowWindow(hwnd,9)
+                if event.get('method')=='Alt-Tab':
+                    send_key('Alt',True);send_key('Tab',True);time.sleep(.05);send_key('Tab',False);send_key('Alt',False)
+                else:user.ShowWindow(hwnd,6)
+                time.sleep(event.get('seconds',1.0));user.ShowWindow(hwnd,9)
                 user.SetForegroundWindow(hwnd);time.sleep(.5);guard()
                 meta.setdefault('focusChecks',[]).append(live_metrics() if a.game_log else {'method':'OS minimize/restore'})
             elif event['action']=='drag':
@@ -264,16 +268,18 @@ try:
                 mouse(4)
             elif event['action'] == 'move':
                 mouse(1, event['dx'], event['dy'])
-            elif event['action'] == 'click':
+            elif event['action'] in ('click','quit'):
                 x, y = event['x'], event['y']
                 if not 0 <= x < right-left or not 0 <= y < bottom-top:
                     raise RuntimeError('Click outside game client')
                 user.SetCursorPos(left+x, top+y)
                 time.sleep(.06) # Let Slate process pointer motion before hit testing the press.
                 mouse(2); time.sleep(.03); mouse(4)
+                if event['action']=='quit':stop_requested=True
             else:
                 raise RuntimeError('Unknown evidence action')
             meta['events'].append(dict(event, actualTime=elapsed, utc=datetime.now(timezone.utc).isoformat()))
+        if stop_requested:break
         if elapsed >= next_frame:
             while last_frame is not None and frames < int(elapsed*a.hz):
                 video.write(last_frame); times.append(None); frames += 1; duplicated += 1
