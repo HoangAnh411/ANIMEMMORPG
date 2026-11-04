@@ -44,7 +44,7 @@ FString UU01AnimationEditor::InspectDHand(const FString& OutputDirectory)
     for(int Phase=0;Phase<3;++Phase)
     {
         auto* Motor=Pawn->GetU01Movement();
-        if(Phase==2){Motor->SetMovementMode(MOVE_Falling);Motor->Velocity=FVector(0,0,-300);Mesh->TickAnimation(.1,false);Mesh->RefreshBoneTransforms();}
+        if(Phase==2){Motor->SetMovementMode(MOVE_Falling);Motor->Velocity=FVector(0,0,-300);Mesh->TickAnimation(.1f,false);Mesh->RefreshBoneTransforms();}
         Motor->SetMovementMode(MOVE_Walking); Motor->Velocity=Phase==1?FVector(600,0,0):FVector::ZeroVector;
         Mesh->TickAnimation(Phase==2?.016f:.4f,false); Mesh->RefreshBoneTransforms(); Mesh->UpdateComponentToWorld();
         auto Json=MakeShared<FJsonObject>();
