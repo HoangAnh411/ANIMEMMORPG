@@ -5,6 +5,7 @@
 #include "InputAction.h"
 #include "InputMappingContext.h"
 #include "Engine/LocalPlayer.h"
+#include "Engine/Engine.h"
 #include "Kismet/GameplayStatics.h"
 #include "Misc/Paths.h"
 #include "Misc/FileHelper.h"
@@ -27,7 +28,7 @@ bool FU01EBindings::RunTest(const FString&)
     TestFalse(TEXT("Reject chord"),Controls::BindingError(P,Controls::Jump,EKeys::H,true).IsEmpty());
     TestTrue(TEXT("Middle mouse valid"),Controls::BindingError(P,Controls::Jump,EKeys::MiddleMouseButton).IsEmpty());
     TestTrue(TEXT("Thumb mouse valid"),Controls::BindingError(P,Controls::Jump,EKeys::ThumbMouseButton).IsEmpty());
-    auto* State=NewObject<UU01SettingsSubsystem>(NewObject<ULocalPlayer>());
+    auto* State=NewObject<UU01SettingsSubsystem>(NewObject<ULocalPlayer>(GEngine));
     TestFalse(TEXT("Rejected edit returns false"),State->Bind(Controls::Jump,EKeys::W));TestEqual(TEXT("Rejected edit preserves jump"),State->Get().Keys[Controls::Jump],EKeys::SpaceBar);
     TestFalse(TEXT("Rejected edit leaves clean"),State->IsDirty());
     TestTrue(TEXT("Apply valid edit"),State->Bind(Controls::Jump,EKeys::H));TestTrue(TEXT("Edit marks dirty"),State->IsDirty());
@@ -44,7 +45,7 @@ bool FU01ERecovery::RunTest(const FString&)
     TestTrue(TEXT("Clean decode"),Controls::DecodePreferences(Controls::EncodePreferences(P),Out).IsEmpty());TestEqual(TEXT("Keep clean binding"),Out.Keys[Controls::Jump],EKeys::H);
     TSharedPtr<FJsonObject> Json;FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Controls::EncodePreferences(P)),Json);
     Json->SetStringField(TEXT("sensitivity"),TEXT("2.5"));
-    auto Bindings=Json->GetObjectField(TEXT("bindings"));Bindings->SetStringField(TEXT("Forward"),TEXT("Q"));Bindings->SetStringField(TEXT("Controls::Backward"),TEXT("W"));
+    auto Bindings=Json->GetObjectField(TEXT("bindings"));Bindings->SetStringField(TEXT("Forward"),TEXT("Q"));Bindings->SetStringField(TEXT("Backward"),TEXT("W"));
     Bindings->SetStringField(TEXT("Left"),TEXT("J"));Bindings->SetStringField(TEXT("Right"),TEXT("J"));Bindings->SetStringField(TEXT("Interact"),TEXT("J"));
     FString Text;FJsonSerializer::Serialize(Json.ToSharedRef(),TJsonWriterFactory<>::Create(&Text));
     const FString Notice=Controls::DecodePreferences(Text,Out);TestFalse(TEXT("Recovery reports fields"),Notice.IsEmpty());
@@ -66,7 +67,7 @@ bool FU01EStorage::RunTest(const FString&)
     Controls::FPreferences P,Out;FString Message;P.Keys[AnimeMMORPG::U01::Forward]=EKeys::H;P.Sensitivity=2;P.bInvertY=true;P.bRightShoulder=false;
     TestTrue(TEXT("Missing file defaults"),Controls::ReadPreferences(Slot,0,Out,Message));TestFalse(TEXT("Load missing does not create file"),UGameplayStatics::DoesSaveGameExist(Slot,0));
     TestTrue(TEXT("Actual SaveGame write"),Controls::WritePreferences(Slot,0,P,Message));TestTrue(TEXT("Actual SaveGame read"),Controls::ReadPreferences(Slot,0,Out,Message));
-    TestEqual(TEXT("Binding persists"),Out.Keys[AnimeMMORPG::U01::Forward],EKeys::H);TestEqual(TEXT("Sensitivity persists"),Out.Sensitivity,2.f);TestTrue(TEXT("Invert persists"),Out.bInvertY);TestFalse(TEXT("Controls::Shoulder persists"),Out.bRightShoulder);
+    TestEqual(TEXT("Binding persists"),Out.Keys[AnimeMMORPG::U01::Forward],EKeys::H);TestEqual(TEXT("Sensitivity persists"),Out.Sensitivity,2.f);TestTrue(TEXT("Invert persists"),Out.bInvertY);TestFalse(TEXT("Shoulder persists"),Out.bRightShoulder);
     auto* Corrupt=NewObject<UU01ControlSave>();Corrupt->Payload=TEXT("{\"version\":1,\"sensitivity\":2,\"invertY\":true,\"rightShoulder\":false,\"bindings\":{\"Jump\":\"H\"}}");
     TestTrue(TEXT("Write partial fixture"),UGameplayStatics::SaveGameToSlot(Corrupt,Slot,0));
     TArray<uint8> Before,After;FFileHelper::LoadFileToArray(Before,*Path);
@@ -87,7 +88,7 @@ bool FU01ELocalMapping::RunTest(const FString&)
     Controls::FPreferences Defaults,A;A.Keys[AnimeMMORPG::U01::Forward]=EKeys::H;A.Keys[Controls::Jump]=EKeys::ThumbMouseButton;
     for(int32 I=0;I<Controls::ControlCount;++I){auto* Action=NewObject<UInputAction>();Actions.Add(Action);Template->MapKey(Action,Defaults.Keys[I]);}
     auto* Look=NewObject<UInputAction>();Template->MapKey(Look,EKeys::MouseX);
-    auto* PlayerA=NewObject<ULocalPlayer>();auto* PlayerB=NewObject<ULocalPlayer>();
+    auto* PlayerA=NewObject<ULocalPlayer>(GEngine);auto* PlayerB=NewObject<ULocalPlayer>(GEngine);
     auto* ContextA=Controls::MakeLocalMapping(PlayerA,Template,A,Actions);auto* ContextB=Controls::MakeLocalMapping(PlayerB,Template,Defaults,Actions);
     TestNotNull(TEXT("Local A context"),ContextA);TestNotNull(TEXT("Local B context"),ContextB);if(!ContextA||!ContextB)return false;
     TestTrue(TEXT("Separate object and owner"),ContextA!=ContextB&&ContextA!=Template&&ContextA->GetOuter()==PlayerA&&ContextB->GetOuter()==PlayerB);
