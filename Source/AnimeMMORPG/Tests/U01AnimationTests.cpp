@@ -5,12 +5,17 @@
 #include "Tests/AutomationCommon.h"
 #include "AIController.h"
 #include "Components/BoxComponent.h"
+#include "Camera/CameraTypes.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Animation/AnimSequence.h"
 #include "Animation/BlendSpace1D.h"
 #include "Animation/Skeleton.h"
+#include "Animation/AnimClassInterface.h"
+#include "Animation/PoseAsset.h"
+#include "AnimNodes/AnimNode_BlendListByInt.h"
+#include "AnimNodes/AnimNode_LayeredBoneBlend.h"
 #include "Engine/SkeletalMesh.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
@@ -18,10 +23,29 @@
 #include "GameFramework/WorldSettings.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
+#include "UObject/UnrealType.h"
 
 namespace
 {
 constexpr auto DFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
+template<class T> T* AnimNode(UAnimInstance* Anim)
+{
+    auto* Interface=IAnimClassInterface::GetFromClass(Anim->GetClass());
+    for(auto* Property:Interface->GetAnimNodeProperties())
+        if(Property->Struct==T::StaticStruct())return Property->ContainerPtrToValuePtr<T>(Anim);
+    return nullptr;
+}
+float ActiveBlendWeight(UAnimInstance* Anim)
+{
+    auto* Node=AnimNode<FAnimNode_BlendListByInt>(Anim);if(!Node)return -1;
+    FNodeDebugData Debug(Anim);Node->GatherDebugData(Debug);
+    for(auto& Item:Debug.GetFlattenedDebugData())
+    {
+        FString Tail;
+        if(Item.DebugLine.Split(TEXT(" Weight: "),nullptr,&Tail))return FCString::Atof(*Tail)/100;
+    }
+    return -1;
+}
 class FAnimatedFixture : public FTestWorldWrapper
 {
 public:
@@ -182,6 +206,142 @@ bool FU01DTransitions::RunTest(const FString&)
     bool SawFall=false,SawJump=false;
     for(int I=0;I<60;++I){Ledge.Step(1.f/60,FVector::ForwardVector);SawFall|=Ledge.Anim->PoseIndex==3;SawJump|=Ledge.Anim->PoseIndex==2;}
     TestTrue(TEXT("Ledge directly falls"),SawFall); TestFalse(TEXT("No false ascent at ledge"),SawJump);
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01DLanding,"AnimeMMORPG.U01.D.LandingTransitions",DFlags)
+bool FU01DLanding::RunTest(const FString&)
+{
+    auto BlendDeadline=[this](FAnimatedFixture& F,FVector Input,bool Sprint)
+    {
+        auto* Node=AnimNode<FAnimNode_BlendListByInt>(F.Anim);
+        if(!TestNotNull(TEXT("Compiled selector"),Node))return;
+        for(float Time:Node->GetBlendTimes())TestTrue(TEXT("Every pose explicitly blends in .100s"),FMath::IsNearlyEqual(Time,.1f,1.e-6f));
+        F.Tick(.025f,Input,Sprint,1.f/120);
+        const float Early=ActiveBlendWeight(F.Anim);
+        TestTrue(TEXT("Transition blends rather than snapping"),Early>=0 && Early<.999f);
+        F.Tick(.084f,Input,Sprint,1.f/120);
+        TestTrue(TEXT("Target pose full weight by .100s plus sample tolerance"),ActiveBlendWeight(F.Anim)>.999f);
+    };
+    for(bool Sprint:{false,true})
+    {
+        FAnimatedFixture F(*this);if(!F.Start())return false;
+        F.Tick(1,FVector::ForwardVector,Sprint);F.Pawn->Jump();
+        bool Air=false,Land=false;
+        for(int I=0;I<160;++I)
+        {
+            F.Step(1.f/120,FVector::ForwardVector,Sprint);
+            Air|=F.Anim->bFalling;
+            if(Air && F.Anim->bGrounded){Land=true;TestEqual(TEXT("Moving touchdown goes directly to locomotion"),F.Anim->PoseIndex,1);break;}
+        }
+        F.Pawn->StopJumping();TestTrue(TEXT("Observed moving touchdown"),Land);
+        BlendDeadline(F,FVector::ForwardVector,Sprint);
+        TestEqual(TEXT("Still locomotion, no delayed land pose"),F.Anim->PoseIndex,1);
+        F.Record(Sprint?TEXT("sprint-jump-land"):TEXT("walk-jump-land"),FString::Printf(TEXT("pose=%d blendWeight=%.6f speed=%.6f"),F.Anim->PoseIndex,ActiveBlendWeight(F.Anim),F.Anim->GroundSpeed));
+    }
+    auto StationaryLand=[this](FAnimatedFixture& F)
+    {
+        F.Pawn->Jump();bool Air=false;
+        for(int I=0;I<150;++I){F.Step(1.f/120);Air|=F.Anim->bFalling;if(Air&&F.Anim->bGrounded){F.Pawn->StopJumping();return TestEqual(TEXT("Stationary touchdown enters land"),F.Anim->PoseIndex,4);}}
+        AddError(TEXT("No stationary touchdown"));return false;
+    };
+    {
+        FAnimatedFixture F(*this);if(!F.Start()||!StationaryLand(F))return false;
+        F.Tick(.15f,FVector::ZeroVector,false,1.f/120);TestEqual(TEXT("Stationary land retained before .25s"),F.Anim->PoseIndex,4);
+        float Since=.15f;
+        while(F.Anim->PoseIndex==4 && Since<.275f){F.Step(1.f/120);Since+=1.f/120;}
+        TestTrue(TEXT("Stationary hold expires at most .25s + one sample"),Since<=.25f+1.f/120+.00001);
+        TestEqual(TEXT("Stationary hold returns idle"),F.Anim->PoseIndex,0);
+        BlendDeadline(F,FVector::ZeroVector,false);
+        F.Record(TEXT("stationary-land"),FString::Printf(TEXT("holdSampleSeconds=%.9f idleWeight=%.6f"),Since,ActiveBlendWeight(F.Anim)));
+    }
+    {
+        FAnimatedFixture F(*this);if(!F.Start()||!StationaryLand(F))return false;
+        F.Tick(.05f);F.Step(1.f/120,FVector::ForwardVector);
+        TestTrue(TEXT("Actual speed exceeds locomotion threshold"),F.Anim->GroundSpeed>3);
+        TestEqual(TEXT("Movement cancels stationary hold in same animation update"),F.Anim->PoseIndex,1);
+        BlendDeadline(F,FVector::ForwardVector,false);
+    }
+    {
+        FAnimatedFixture F(*this);if(!F.Start())return false;
+        F.Pawn->Jump();bool Queued=false,SawAir=false,Rejump=false;
+        for(int I=0;I<300;++I)
+        {
+            F.Step(1.f/120);SawAir|=F.Anim->bFalling;
+            const double Feet=F.Pawn->GetU01Movement()->GetActorFeetLocation().Z;
+            if(SawAir&&!Queued&&F.Anim->VerticalSpeed < -200 && Feet<22)
+            {F.Pawn->StopJumping();F.Pawn->Jump();Queued=true;}
+            if(Queued && F.Anim->VerticalSpeed>200)
+            {Rejump=true;TestEqual(TEXT("Buffered jump immediately takes airborne priority"),F.Anim->PoseIndex,2);break;}
+        }
+        TestTrue(TEXT("Buffered at touchdown and jumped again"),Queued&&Rejump);F.Pawn->StopJumping();
+    }
+    {
+        FAnimatedFixture F(*this);if(!F.Start()||!StationaryLand(F))return false;
+        F.Pawn->Jump();F.Step(1.f/120);TestEqual(TEXT("New jump interrupts stationary land"),F.Anim->PoseIndex,2);F.Pawn->StopJumping();
+    }
+    {
+        FAnimatedFixture F(*this);if(!F.Start()||!StationaryLand(F))return false;
+        F.Pawn->GetU01Movement()->SetMovementMode(MOVE_Falling);F.Pawn->GetU01Movement()->Velocity=FVector(0,0,-100);
+        F.Pawn->AddActorWorldOffset(FVector(0,0,200));F.Step(1.f/120);
+        TestEqual(TEXT("Falling interrupts stationary land immediately"),F.Anim->PoseIndex,3);
+    }
+    {
+        FAnimatedFixture F(*this);if(!F.Start())return false;
+        // Descending fixture over the real floor, then keep running through contact.
+        F.Tick(1,FVector::ForwardVector);F.Pawn->AddActorWorldOffset(FVector(0,0,300));
+        F.Pawn->GetU01Movement()->SetMovementMode(MOVE_Falling);F.Pawn->GetU01Movement()->Velocity=FVector(500,0,-10);
+        bool Fall=false,Land=false;
+        for(int I=0;I<150;++I){F.Step(1.f/120,FVector::ForwardVector);Fall|=F.Anim->PoseIndex==3;if(Fall&&F.Anim->bGrounded){Land=true;TestEqual(TEXT("Ledge descent resumes run at contact"),F.Anim->PoseIndex,1);break;}}
+        TestTrue(TEXT("Descending contact reached"),Land);BlendDeadline(F,FVector::ForwardVector,false);
+    }
+    return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU01DGrip,"AnimeMMORPG.U01.D.GripIsolationAndAttachment",DFlags)
+bool FU01DGrip::RunTest(const FString&)
+{
+    FAnimatedFixture F(*this);if(!F.Start())return false;
+    auto* Grip=LoadObject<UPoseAsset>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/PA_U01_RightGrip"));
+    if(!TestNotNull(TEXT("Own grip pose asset"),Grip))return false;
+    TArray<FName> Names;Grip->GetPoseNames(Names);TestEqual(TEXT("One authored grip pose"),Names.Num(),1);
+    auto* Mesh=F.Pawn->GetMesh();auto* Layer=AnimNode<FAnimNode_LayeredBoneBlend>(F.Anim);
+    if(!TestNotNull(TEXT("Finger-only layer after selector"),Layer))return false;
+    for(const FVector Input:{FVector::ZeroVector,FVector::ForwardVector})
+    {
+        F.Tick(.5,Input);const auto With=Mesh->GetBoneSpaceTransforms();
+        Layer->BlendWeights[0]=0;Mesh->TickAnimation(0,false);Mesh->RefreshBoneTransforms();const auto Without=Mesh->GetBoneSpaceTransforms();
+        const auto& Ref=Mesh->GetSkeletalMeshAsset()->GetRefSkeleton();int Changed=0;
+        for(int I=0;I<With.Num();++I)
+        {
+            const FString N=Ref.GetBoneName(I).ToString();const bool Finger=N.EndsWith(TEXT("_r"))&&(N.StartsWith(TEXT("thumb_0"))||N.StartsWith(TEXT("index_0"))||N.StartsWith(TEXT("middle_0"))||N.StartsWith(TEXT("ring_0"))||N.StartsWith(TEXT("pinky_0")));
+            if(Finger)Changed+=With[I].GetRotation().AngularDistance(Without[I].GetRotation())>.05;
+            else TestTrue(TEXT("Grip preserves all non-finger local transforms including wrist/arm"),With[I].Equals(Without[I],.001));
+        }
+        TestTrue(TEXT("Grip actually changes finger joints"),Changed>=10);
+        Layer->BlendWeights[0]=1;Mesh->TickAnimation(0,false);Mesh->RefreshBoneTransforms();
+    }
+    double MaxAngle=0,MaxDistance=0;
+    F.Pawn->Jump();
+    for(int I=0;I<150;++I)
+    {
+        F.Step(1.f/120,FVector::ForwardVector,true);
+        const FTransform Socket=Mesh->GetSocketTransform(TEXT("U01_Sword_R"),RTS_World),Sword=F.Pawn->SwordRoot->GetComponentTransform();
+        MaxDistance=FMath::Max(MaxDistance,FVector::Distance(Socket.GetLocation(),Sword.GetLocation()));
+        MaxAngle=FMath::Max(MaxAngle,double(FMath::RadiansToDegrees(Socket.GetRotation().AngularDistance(Sword.GetRotation()))));
+    }
+    F.Pawn->StopJumping();TestTrue(TEXT("Attachment position"),MaxDistance<.1);TestTrue(TEXT("Attachment orientation"),MaxAngle<.01);
+    F.Record(TEXT("grip-attachment"),FString::Printf(TEXT("maxPositionErrorCm=%.9f maxAngleErrorDegrees=%.9f"),MaxDistance,MaxAngle));
+    F.Pawn->SetActorLocation(FVector(0,0,300));F.Pawn->GetU01Movement()->StopMovementImmediately();
+    auto* PC=F.Pawn->GetController();PC->SetControlRotation(FRotator::ZeroRotator);
+    // Place a wall 50cm behind the pivot, then remove it to exercise B's recursive owner-hide.
+    auto* Wall=F.GetTestWorld()->SpawnActor<AActor>();auto* Box=NewObject<UBoxComponent>(Wall);Wall->SetRootComponent(Box);
+    Box->SetBoxExtent(FVector(10,200,200));Box->SetCollisionEnabled(ECollisionEnabled::QueryOnly);Box->SetCollisionObjectType(ECC_WorldStatic);Box->SetCollisionResponseToAllChannels(ECR_Block);Wall->SetActorLocation(FVector(-55,0,370));Box->RegisterComponent();
+    FMinimalViewInfo View;F.Pawn->CalcCamera(.016,View);
+    TestTrue(TEXT("Close camera hides mesh"),Mesh->bOwnerNoSee);
+    for(auto* Part:{F.Pawn->SwordGrip.Get(),F.Pawn->SwordGuard.Get(),F.Pawn->SwordBlade.Get()})TestTrue(TEXT("Close camera hides sword"),Part->bOwnerNoSee);
+    Wall->Destroy();for(int I=0;I<120;++I)F.Pawn->CalcCamera(.016,View);
+    TestFalse(TEXT("Clear camera restores mesh"),Mesh->bOwnerNoSee);
+    for(auto* Part:{F.Pawn->SwordGrip.Get(),F.Pawn->SwordGuard.Get(),F.Pawn->SwordBlade.Get()})TestFalse(TEXT("Clear camera restores sword"),Part->bOwnerNoSee);
     return true;
 }
 #endif
