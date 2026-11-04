@@ -354,7 +354,8 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetNumberField(TEXT("gravityCmPerSec2"), ControlledCharacter->GetU01Movement()->GetGravityZ());
     Json->SetNumberField(TEXT("jumpZVelocityCmPerSec"), ControlledCharacter->GetU01Movement()->JumpZVelocity);
     Json->SetNumberField(TEXT("motorLockMask"), ControlledCharacter->GetU01Movement()->GetLockMask());
-    Json->SetBoolField(TEXT("bufferedJump"), ControlledCharacter->GetU01Movement()->HasBufferedJump(World->GetTimeSeconds()));
+    Json->SetNumberField(TEXT("motorTimeSeconds"), ControlledCharacter->GetU01Movement()->GetMotorTimeSeconds());
+    Json->SetBoolField(TEXT("bufferedJump"), ControlledCharacter->GetU01Movement()->HasBufferedJump(ControlledCharacter->GetU01Movement()->GetMotorTimeSeconds()));
     Json->SetStringField(TEXT("pivotWorldCm"), ControlledCharacter->CameraPivot.ToString());
     Json->SetStringField(TEXT("desiredCameraWorldCm"), ControlledCharacter->DesiredCamera.ToString());
     Json->SetStringField(TEXT("resolvedCameraWorldCm"), PlayerCameraManager->GetCameraLocation().ToString());

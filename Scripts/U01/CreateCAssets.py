@@ -29,7 +29,15 @@ for key_name in ('LeftControl','RightControl'):
 controller = unreal.load_asset(root + '/Blueprints/BP_U01Controller')
 unreal.get_default_object(controller.generated_class()).set_editor_property('sprint_action', sprint)
 unreal.BlueprintEditorLibrary.compile_blueprint(controller)
-for obj in (sprint,context,controller):
+character = unreal.load_asset(root + '/Blueprints/BP_U01Character')
+character_defaults = unreal.get_default_object(character.generated_class())
+character_defaults.set_editor_property('jump_max_count',1)
+character_defaults.set_editor_property('jump_max_hold_time',0)
+movement_defaults = character_defaults.get_component_by_class(unreal.CharacterMovementComponent)
+movement_defaults.set_walkable_floor_angle(45)
+movement_defaults.set_editor_property('max_step_height',45)
+unreal.BlueprintEditorLibrary.compile_blueprint(character)
+for obj in (sprint,context,controller,character):
     save(obj)
 
 dirty = unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages() + unreal.EditorLoadingAndSavingUtils.get_dirty_content_packages()

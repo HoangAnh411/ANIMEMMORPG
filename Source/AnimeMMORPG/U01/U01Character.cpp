@@ -5,6 +5,13 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 
+void UU01CharacterMovement::BeginPlay()
+{
+    Super::BeginPlay();
+    SimulationSeconds = GetWorld()->GetTimeSeconds();
+    JumpWindow.ResetSession();
+}
+
 void UU01CharacterMovement::SetControlLocked(bool bLocked)
 {
     SetMotorLock(EU01MotorLock::Control, bLocked);
@@ -38,7 +45,9 @@ float UU01CharacterMovement::GetMaxSpeed() const
 
 void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
 {
-    FrameStartSeconds = GetWorld()->GetTimeSeconds();
+    // Inputs use the last completed movement time. Substep contacts are timestamped
+    // within this interval, rather than at the frame-end world time twice.
+    FrameStartSeconds = SimulationSeconds;
     FrameDeltaSeconds = DeltaSeconds;
     if (IsMotorLocked())
     {
@@ -46,6 +55,7 @@ void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
         Velocity.X = Velocity.Y = 0;
     }
     Super::PerformMovement(DeltaSeconds); // Keep vertical movement and world simulation alive.
+    SimulationSeconds = FrameStartSeconds + DeltaSeconds;
 }
 
 void UU01CharacterMovement::StartFalling(int32 Iterations, float RemainingTime, float TimeTick, const FVector& Delta, const FVector& SubLocation)
@@ -68,14 +78,14 @@ void UU01CharacterMovement::SetPostLandedPhysics(const FHitResult& Hit)
 {
     Super::SetPostLandedPhysics(Hit);
     // Consume in the landing substep, before the remaining part of this frame is simulated.
-    if (IsMovingOnGround()) TryJump(EventSeconds.Get(GetWorld()->GetTimeSeconds()), FrameDeltaSeconds);
+    if (IsMovingOnGround()) TryJump(EventSeconds.Get(SimulationSeconds), FrameDeltaSeconds);
 }
 
 void UU01CharacterMovement::ObserveMovementMode(EMovementMode PreviousMode)
 {
     if (IsMovingOnGround()) JumpWindow.Land();
     else if ((PreviousMode == MOVE_Walking || PreviousMode == MOVE_NavWalking) && IsFalling())
-        JumpWindow.LeaveGround(EventSeconds.Get(GetWorld()->GetTimeSeconds()), bAttemptingJump);
+        JumpWindow.LeaveGround(EventSeconds.Get(SimulationSeconds), bAttemptingJump);
 }
 
 bool UU01CharacterMovement::TryJump(double Now, float DeltaSeconds)
@@ -98,6 +108,7 @@ void UU01CharacterMovement::ResetFixtureState()
     LockMask &= static_cast<uint8>(EU01MotorLock::Control);
     bSprintRequested = false;
     JumpWindow.ResetSession();
+    SimulationSeconds = GetWorld()->GetTimeSeconds();
     StopMovementImmediately();
     ConsumeInputVector();
     EventSeconds.Reset();
@@ -130,10 +141,10 @@ void AU01Character::SetControlLocked(bool bLocked)
 }
 
 UU01CharacterMovement* AU01Character::GetU01Movement() const { return CastChecked<UU01CharacterMovement>(GetCharacterMovement()); }
-void AU01Character::Jump() { GetU01Movement()->PressJump(GetWorld()->GetTimeSeconds()); }
+void AU01Character::Jump() { GetU01Movement()->PressJump(GetU01Movement()->GetMotorTimeSeconds()); }
 void AU01Character::StopJumping() { GetU01Movement()->ReleaseJump(); Super::StopJumping(); }
-void AU01Character::CheckJumpInput(float DeltaTime) { GetU01Movement()->TryJump(GetWorld()->GetTimeSeconds(), DeltaTime); }
-bool AU01Character::CanJumpWhileFalling() const { return GetU01Movement()->CanUseCoyote(GetWorld()->GetTimeSeconds()); }
+void AU01Character::CheckJumpInput(float DeltaTime) { GetU01Movement()->TryJump(GetU01Movement()->GetMotorTimeSeconds(), DeltaTime); }
+bool AU01Character::CanJumpWhileFalling() const { return GetU01Movement()->CanUseCoyote(GetU01Movement()->GetMotorTimeSeconds()); }
 void AU01Character::OnMovementModeChanged(EMovementMode PreviousMode, uint8 PreviousCustomMode)
 {
     Super::OnMovementModeChanged(PreviousMode, PreviousCustomMode);

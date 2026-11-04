@@ -7,6 +7,7 @@
 #include "AIController.h"
 #include "Components/BoxComponent.h"
 #include "Engine/World.h"
+#include "Engine/Engine.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/WorldSettings.h"
 #include "Dom/JsonObject.h"
@@ -71,11 +72,19 @@ public:
         Json->SetStringField(TEXT("case"), Case);
         Json->SetNumberField(TEXT("pid"), FPlatformProcess::GetCurrentProcessId());
         Json->SetStringField(TEXT("world"), GetTestWorld()->GetPathName());
+        Json->SetStringField(TEXT("utc"), FDateTime::UtcNow().ToIso8601());
+        Json->SetNumberField(TEXT("worldSeconds"), GetTestWorld()->GetTimeSeconds());
+        Json->SetNumberField(TEXT("motorTimeSeconds"), Pawn->GetU01Movement()->GetMotorTimeSeconds());
+        if (const FWorldContext* Context = GEngine->GetWorldContextFromWorld(GetTestWorld()))
+            Json->SetStringField(TEXT("worldContext"), Context->ContextHandle.ToString());
         Json->SetNumberField(TEXT("worldType"), int32(GetTestWorld()->WorldType));
         Json->SetNumberField(TEXT("netMode"), int32(GetTestWorld()->GetNetMode()));
         Json->SetStringField(TEXT("pawn"), Pawn->GetPathName());
         Json->SetStringField(TEXT("controller"), GetPathNameSafe(Pawn->GetController()));
         Json->SetNumberField(TEXT("localRole"), int32(Pawn->GetLocalRole()));
+        Json->SetNumberField(TEXT("remoteRole"), int32(Pawn->GetRemoteRole()));
+        Json->SetBoolField(TEXT("locallyControlled"), Pawn->IsLocallyControlled());
+        Json->SetStringField(TEXT("owner"), GetPathNameSafe(Pawn->GetOwner()));
         Json->SetStringField(TEXT("method"), TEXT("Controlled input fixture in real Game physics world; not keyboard/renderer FPS"));
         Json->SetStringField(TEXT("feetWorldCm"), Pawn->GetU01Movement()->GetActorFeetLocation().ToString());
         for (const auto& Value : Values) Json->SetNumberField(Value.Key, Value.Value);

@@ -16,6 +16,7 @@ class ANIMEMMORPG_API UU01CharacterMovement : public UCharacterMovementComponent
 {
     GENERATED_BODY()
 public:
+    virtual void BeginPlay() override;
     void SetControlLocked(bool bLocked);
     void SetMotorLock(EU01MotorLock Reason, bool bEnabled);
     bool IsMotorLocked() const { return LockMask != 0; }
@@ -33,12 +34,14 @@ public:
     void ReleaseJump() { JumpWindow.Release(); }
     bool CanUseCoyote(double Now) const { return !IsMotorLocked() && JumpWindow.HasCoyote(Now); }
     bool HasBufferedJump(double Now) const { return JumpWindow.HasBuffer(Now); }
+    double GetMotorTimeSeconds() const { return SimulationSeconds; }
     void ResetFixtureState();
 private:
     uint8 LockMask = 0;
     bool bSprintRequested = false;
     bool bAttemptingJump = false;
     double FrameStartSeconds = 0;
+    double SimulationSeconds = 0;
     float FrameDeltaSeconds = 0;
     TOptional<double> EventSeconds;
     AnimeMMORPG::U01::FJumpWindow JumpWindow;
