@@ -1,0 +1,13 @@
+# U02-A — Asset decision
+
+Read-only audit qua TestRunner `execute_console_command` chạy [InspectAAssets.py](../../Scripts/U02/InspectAAssets.py) trong Editor gốc PID3508. Log hoàn tất và metadata/hash thực tại [ASSETS.json](Evidence/A/ASSETS.json). Không save/chỉnh asset. Quét mọi AnimSequence/AnimMontage/Skeleton/SkeletalMesh/PoseAsset/AnimBlueprint/BlendSpace trong `/Game`, 120 assets tải được; không chỉ suy từ tên file. SHA256 tính file `.uasset` thực, không LFS pointer.
+
+U01 đang dùng `/Game/AnimeMMORPG/U01/Animation/SKM_U01`, `SK_U01`, sáu clip locomotion, `ABP_U01`, `BS_U01_Locomotion`, `PA_U01_RightGrip`, `PA_U01_RightCarry`. Mesh/clip cùng skeleton SK_U01 thực theo metadata. Socket `U01_Sword_R` và kiếm blockout hình khối tiếp tục tái sử dụng, căn cứ native authoring/character và hồ sơ nghiệm thu U01; A không thay socket/grip/carry. Kiếm hiển thị không quyết định collision.
+
+Có ba clip nguồn `MM_Attack_01/02/03` (1.0s mỗi clip) và `MM_ChargedAttack`, cùng skeleton gốc `SK_Mannequin`; có montage template `AM_ComboAttack/AM_ChargedAttack`. Ba clip attack bật root motion, force-root-lock false. Chúng không phải clip kiếm trên skeleton SK_U01 đã kiểm chứng cho timeline 0.40s/grip hiện tại. A không xác nhận suitability bằng tên “Attack”, không đổi root motion rồi tuyên bố đã đạt, không nhập montage template với notify gameplay.
+
+**Quyết định đã chốt cho C: tự tạo animation blockout kỹ thuật trên SK_U01**, tên đích dự kiến `/Game/AnimeMMORPG/U02/Animation/A_U02_Attack1` và `AM_U02_Attack1`. Không dùng/tải/mua clip ngoài hoặc nguồn chưa rõ quyền. C author local bone tracks tay/vai/thân trên skeleton kỹ thuật đã nghiệm thu, root transform cố định, giữ grip ngón tay và attachment; các key mốc0/0.16/0.22/0.40 thể hiện chuẩn bị/chém/thu đòn. Montage sections/play-rate map theo clock action; carry bị mask khỏi nhánh tay attack. Đây là ràng buộc kỹ thuật, không đặc tả mỹ thuật anime hoặc xác nhận cảm giác pose.
+
+Asset blockout mới chưa tạo trong A nên **chưa có hash/preview/cook**; C phải ghi hash thật, test root/grip/pose/missing-reference/cook và video. Không gán hash asset nguồn cho asset tương lai. Quyền clip tự tạo thuộc phần authoring dự án; quyền skeleton/mesh nguồn kế thừa baseline U00/U01 đã được người dùng cho phép sử dụng/upload và nghiệm thu, xem [U00-B](../U00/REPORT-B.md) và [U01 assets](../U01/ASSETS.md). Nhãn lịch sử `UPLOAD_NOT_CONFIRMED` trong register U00 chỉ là provenance snapshot cũ; A không cấp giấy phép mới hoặc suy hash là license proof. Không dùng clip attack nguồn cho U02.
+
+Art anime, model/rig/kiếm và carry sản phẩm vẫn **DEFERRED**. Inventory gồm template chỉ để truy vết lựa chọn, không tuyên bố mọi asset template đã đạt chất lượng/được dùng trong combat mới.

@@ -1,0 +1,1033 @@
+{
+  "pid": 3508,
+  "project": "D:\\Data\\AnimeMMORPG",
+  "read_only": true,
+  "assets": [
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/ABP_U01",
+      "asset_class": "AnimBlueprint",
+      "sha256": "008020d54d2771415dedcf6f920e2f9ede9adf8628529fab7919add2b78b8baf"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/A_U01_Fall",
+      "asset_class": "AnimSequence",
+      "sha256": "0f84e1dfd9733a6aecdf559b985d13737cbe360881828c639a87428dbdc2d270",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01",
+      "sequence_length": "3.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/A_U01_Idle",
+      "asset_class": "AnimSequence",
+      "sha256": "f650060a5b9295d376ab24fc6391dce0008505368cc3a182667cf2404c650534",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01",
+      "sequence_length": "7.566666603088379",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/A_U01_Jog",
+      "asset_class": "AnimSequence",
+      "sha256": "fe5f581f03c58c84a8d08861416c8b8817bf3e836a8ace074ce88741df00b9d8",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01",
+      "sequence_length": "1.7666666507720947",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/A_U01_Jump",
+      "asset_class": "AnimSequence",
+      "sha256": "531dd85c6e47d62f62cb24e0a33cd76d9da355f5d00d804b6dcd02823fc434ba",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01",
+      "sequence_length": "0.8666666746139526",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/A_U01_Land",
+      "asset_class": "AnimSequence",
+      "sha256": "3adf4a5c0929f0bd7a7d2786d0553390f32dc7e794df5d3527b580c76585aebc",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01",
+      "sequence_length": "0.8666666746139526",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/A_U01_Walk",
+      "asset_class": "AnimSequence",
+      "sha256": "595293a474a04dd986d3be5e9a6343d94e8c7018673064651b0d84b7dec7ce64",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01",
+      "sequence_length": "1.5",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/PA_U01_RightCarry",
+      "asset_class": "PoseAsset",
+      "sha256": "799d29aa825a7de14fb1b1ea4b5dc6acd18f5b96725ef8ea92bb5602736afd97",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/PA_U01_RightGrip",
+      "asset_class": "PoseAsset",
+      "sha256": "7e4a51c39170b7ba1067d814ae15e1ba75b95c66afb54ccde1aa51f94eb7b679",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/SKM_U01",
+      "asset_class": "SkeletalMesh",
+      "sha256": "8d1a6dcc057446f0a60368b954897d64d21956b6c107745b7922cebad5224ca1",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01"
+    },
+    {
+      "package": "/Game/AnimeMMORPG/U01/Animation/SK_U01",
+      "asset_class": "Skeleton",
+      "sha256": "16195ad7a62653c12ea5e9eaa7eb4edbfdc62f34102a7dffc79e2717bfb0d8b7"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Death/MM_Death_Back_01",
+      "asset_class": "AnimSequence",
+      "sha256": "fdee63c4a4dc23076dda04b32eb8505bcd41fb791e574a264026c43e700bf923",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.100000023841858",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_01",
+      "asset_class": "AnimSequence",
+      "sha256": "c9daa694dda4639b106a29401712b03376344b301b6161955a92ba64ea60ae6d",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.100000023841858",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_02",
+      "asset_class": "AnimSequence",
+      "sha256": "dda4f9d6a4c8fc3bf79458d4d2f490965ff01401256e90fdf98a938a58c61986",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.1333333253860474",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Death/MM_Death_Front_03",
+      "asset_class": "AnimSequence",
+      "sha256": "bf3a411d465002756eb1a19cdb2bef63b75a57a9fab7ce121ee71941e010d2cc",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.9333333373069763",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Death/MM_Death_Left_01",
+      "asset_class": "AnimSequence",
+      "sha256": "712a25024fe931bd518fff6c935b82bc0ee2070a77caef63edd0d6fc7ff66508",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.9666666388511658",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Death/MM_Death_Right_01",
+      "asset_class": "AnimSequence",
+      "sha256": "7968e7e1bc3d8e33c3f0d8479e6753d011ced0e05a831eb7f10e28ceb536b9a4",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.100000023841858",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Aim/MF_Pistol_Idle_ADS1",
+      "asset_class": "AnimSequence",
+      "sha256": "4d7113f1799219db01d8394c2984d5afd2957de07d66cfa463c9c33822e11d89",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "9.033333778381348",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Aim/MF_Pistol_Idle_ADS_AO_CD",
+      "asset_class": "AnimSequence",
+      "sha256": "2898b38d8ef305d1d2e285f519be72cde7e2b0106bb85657fda47e35dc27b15d",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.06666667014360428",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Aim/MF_Pistol_Idle_ADS_AO_CU",
+      "asset_class": "AnimSequence",
+      "sha256": "e5c5855b58743d51bf1abe11b470749f50ae6074fac734da446d1c4a9b076650",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.06666667014360428",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Bwd",
+      "asset_class": "AnimSequence",
+      "sha256": "f93aacabf40a36d906896e5c5998e4a63445749efa25c973092b9ae82ef1477f",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Bwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "dc8a45c6259a8a51808ff3de4688302a65ce4988a05a5b0f70fbced01001ea6b",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.9666666388511658",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Bwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "e6f80eb946a12e3056a53d67b8134f5e9bd028eb66333a8a665c13d6cf14d1ee",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.9666666388511658",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Fwd",
+      "asset_class": "AnimSequence",
+      "sha256": "caba32a2584600031bca7cec76875e50eb80e4c1d6fea3e249f2532388d4f221",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0666667222976685",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Fwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "8ed2295bbfbbe7800395b2fc2023e082f6c9b2b7127dd6ceb5c7ec055486c39b",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Fwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "d80c0c9bb0a8fae52095506f7f83c42bdd11b4d62ebfe57b1d9c7f40e8a9478a",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "4d8fcf3a8b6e581f4d06bc4fe2b307e1dcdcc7432cc114173c201a0115cad2c9",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "017f902b0a80b4fff2115c5c39f640b7622ad562a0ec137d25aae61d511d0b53",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jump/MM_Pistol_Jump_Fall_Loop",
+      "asset_class": "AnimSequence",
+      "sha256": "7b01836fa36515fcb523644e82f2f130289a69a14314b6b939d5a580b3c5950e",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "2.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jump/MM_Pistol_Jump_RecoveryAdditive",
+      "asset_class": "AnimSequence",
+      "sha256": "e9935321b5ee3fe9445cfa2a6c9f0d0391d888fbb9db71b1eaf76b3bc5345d6d",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.699999988079071",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Jump/MM_Pistol_Jump_Start",
+      "asset_class": "AnimSequence",
+      "sha256": "58c1e69b2690611740c465f92e3763fd9747b9a6e75fe6a7629b16c5fcc37e7a",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.20000000298023224",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/MF_Pistol_Idle_ADS",
+      "asset_class": "AnimSequence",
+      "sha256": "766a02544f06604946d8c47c47c6bb877e14208904306188bc1f5b174fd7715b",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "9.033333778381348",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/MM_Pistol_DryFire",
+      "asset_class": "AnimSequence",
+      "sha256": "64b3c6dc7357f8a1b380057ef76e1cbb984d69e7d0732eaefd70befe2be7b67f",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.800000011920929",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/MM_Pistol_Equip",
+      "asset_class": "AnimSequence",
+      "sha256": "7f5a1ed2c1b72a9bb27b417cb0d5315440af2b22b7b846254fbce50e2fbb3d17",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.399999976158142",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/MM_Pistol_Fire",
+      "asset_class": "AnimSequence",
+      "sha256": "ebd8467dbb3de5ba0e1b2eac0092352e270b37e616bc443872341cde2f5c22d8",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.6666666865348816",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/MM_Pistol_Fire_Montage",
+      "asset_class": "AnimMontage",
+      "sha256": "2eabacc1911be6c5b0dff7cf8a5c29c0506a25ffa6f3e7fa5946e76f992e38ee",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.6666666865348816"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/MM_Pistol_Reload",
+      "asset_class": "AnimSequence",
+      "sha256": "a821a774302ce5121efff744620da09587752290e35e4413b8e40db8ad9c0391",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "2.0",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Bwd",
+      "asset_class": "AnimSequence",
+      "sha256": "704dd7e116a755b086a8d685321f23e332bba6cb77dd6ae95542d38c462feb9b",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7666666507720947",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Bwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "fff084ed3ca270a8d926f810f078a69347507851744cf399f3142c97e36e2fa6",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7666666507720947",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Bwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "26a82255db90c0dc4e8c01d52a55f73b5f5a532ef161812faf63be65869f3504",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7666666507720947",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Fwd",
+      "asset_class": "AnimSequence",
+      "sha256": "7ac6171e3b841b09fff67dc4162b0c70f99f3107f549a20a213d5e05405dc69e",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.4333332777023315",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Fwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "bdd682c2a45cf6a73a34df6499f8bb4ccf8b68a42b8888c47b8532bfecb200d1",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.4333332777023315",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Fwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "b9b42e230d6fdf9f4f836592507c3f8a17dfd76d7b054b78b633a11722f94100",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.4333332777023315",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "bc5f5b9f355e755023d1aa153070a073156f6d902b08e7cf78463f5e0bc8f629",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7999999523162842",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "e72f68c9a306ec44f7bc4f37e3533f2918ee19d99a1d8e60986036f2a4405d68",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.8666666746139526",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/AIM/MM_Rifle_Idle_ADS_AO_CC",
+      "asset_class": "AnimSequence",
+      "sha256": "9521c1941980dc784cedb3df736d7c1edf56afaa0201f28b41c5ae9923e88bbb",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.03333333507180214",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/AIM/MM_Rifle_Idle_ADS_AO_CD",
+      "asset_class": "AnimSequence",
+      "sha256": "09b2c98aa7778b6a970b0d90882555cf920c03d761f1e50bb3feaf0e3c9a6fef",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.03333333507180214",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/AIM/MM_Rifle_Idle_ADS_AO_CU",
+      "asset_class": "AnimSequence",
+      "sha256": "60969c39ff3c1bd1e30e7c728a9dbe49c236857659b1ae8d20ae7605d8152324",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.03333333507180214",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Back_Med_01",
+      "asset_class": "AnimSequence",
+      "sha256": "ecb41ae9339d797408a7b9c0270dc1f917b680a21f1c189ac0e3890f41185e0b",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.8666666746139526",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Hvy_01",
+      "asset_class": "AnimSequence",
+      "sha256": "e5caf5938c73d131c9254c1af09cb7fd4335516c9a406be77c17ad5e1f2cdebe",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.800000011920929",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_01",
+      "asset_class": "AnimSequence",
+      "sha256": "ae8728f698434dd1e63978d5d92c5984d086d7ee39ce618598122b6fa87dc820",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.699999988079071",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_02",
+      "asset_class": "AnimSequence",
+      "sha256": "dcb6c068d81d5be1d84c88895805eb29c2f3f345668a10884836f00759b0647b",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.800000011920929",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_03",
+      "asset_class": "AnimSequence",
+      "sha256": "3949df1228e6c14047477538424f9440216915a0637da33cf6c7298400128073",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_04",
+      "asset_class": "AnimSequence",
+      "sha256": "e0ed26de9c333968631cc040e82aebac289a2fd655a1f348a3b09ce3b40f1ef5",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.2333333492279053",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Med_01",
+      "asset_class": "AnimSequence",
+      "sha256": "cca3c893d68d8270a9eec9eb7572f7ed6bfcfdf6ce6345dc8b2860d6135dbe00",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.7666666507720947",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Med_02",
+      "asset_class": "AnimSequence",
+      "sha256": "3acb6956f9eb6512e386b575c4c3e390f7d0280b037ca52e0eef813fb1f729d6",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.800000011920929",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Bwd",
+      "asset_class": "AnimSequence",
+      "sha256": "0fd489f5c8d4d63e84f8a25c2db46c3ae54eae828212b2a32622726e593b5d3c",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7999999523162842",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Bwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "c3939c4aa298e6be0834256ef6f642cff0465a40d676ec7e464aaf504b44f729",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7999999523162842",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Bwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "907cb106c1c466aac0b38753b7551af73a09c082a652c82c43df5418eb33b089",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7999999523162842",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Fwd",
+      "asset_class": "AnimSequence",
+      "sha256": "287d39883a65ccf6f89d91c7ca13b23184f04ae6eb5cc3867dd7ef7cfb35ec1c",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Fwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "4103ea6388d484e8f71cd30b955c3c954750d922a0c030bf3d902bdb3e02c13d",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Fwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "2ca8d8ec88d086d4cb6027a2eefdde258142587bca40e98dee021abe9c8824f8",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "4feaf1bd5b370e28f5dce611b28d955bbf84bbeb72b7e22972a0e143022621a7",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.46666666865348816",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "e3c5cae5448dbb8c4e3bda5406202a8e55b08247695082270e1fef3dbdd6e533",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0666667222976685",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Apex",
+      "asset_class": "AnimSequence",
+      "sha256": "39acbd6bcfc5ec2795ee2497bb353fbe954766bda545c3318c3cd6ee5f1ee008",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.6666666865348816",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Fall_Land",
+      "asset_class": "AnimSequence",
+      "sha256": "ce74e83b9b88fa3722951c1c6b2cc36ae7159b8141f5347e5b47d760cee41c42",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.4000000059604645",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Fall_Loop",
+      "asset_class": "AnimSequence",
+      "sha256": "d17c0a4fe1d9bb970b3208909e1c35b7183568c7968a0d6d0de391cca216b472",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "3.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_RecoveryAdditive",
+      "asset_class": "AnimSequence",
+      "sha256": "9d663743ac0fd361303751c55688a34053fbed145aaa88a004abd7b02533d5e5",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.9333333373069763",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Start",
+      "asset_class": "AnimSequence",
+      "sha256": "925f27182be45054a1bbb5d458cb53d38773b356dd61e18b82fa9a72880dc8e7",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.23333333432674408",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Start_Loop",
+      "asset_class": "AnimSequence",
+      "sha256": "c2da3d291df2070e1aaa62a45e445a7979948489b9e811e0d17f94b3e627d14e",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "2.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/MF_Rifle_Idle_ADS",
+      "asset_class": "AnimSequence",
+      "sha256": "cfa32b19207a25546bb5bc2dde8454dc633cc27c3de45747e941756e23da5d4d",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "8.0",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/MM_Rifle_DryFire",
+      "asset_class": "AnimSequence",
+      "sha256": "131e01f0a31f999e7fd09ef190b314314c851f39101412161dabdb00d2dda801",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.800000011920929",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/MM_Rifle_Equip",
+      "asset_class": "AnimSequence",
+      "sha256": "136b19498b8bac4119dde48236d22127e8463c0becff775069e0b6399b7939d6",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.6666666269302368",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/MM_Rifle_Fire",
+      "asset_class": "AnimSequence",
+      "sha256": "1c5b983bd6c09431c83866f772ccf13871ad9626426c86cc08a0c87c150555f7",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.5333333611488342",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/MM_Rifle_Reload",
+      "asset_class": "AnimSequence",
+      "sha256": "ac1e17d2acb7e3cea6e4c9ca967400dc3052d5ec6514e155b33d8e4701e80784",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "2.200000047683716",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Bwd",
+      "asset_class": "AnimSequence",
+      "sha256": "e1400dc7a7bfca224e0aa7796e5c230236ad634c808b2a1540cbad8903fa897b",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.2000000476837158",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Bwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "8d535eb181e756f56974efae068f34da050747fd8836fe2bb5f0c693f51325c2",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.1333333253860474",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Bwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "6e0bd9b3ba2e982ac9ffd60a643dab78cf886d194a26af518170a02dc4f3eac0",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.1333333253860474",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Fwd",
+      "asset_class": "AnimSequence",
+      "sha256": "540a6a77c48027e13be84d483c6afd18d82fb115b7532334597ebefe2249ecd0",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Fwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "f7797a7841cb86c3dc9e68dcdf968e538c9a7335abb1b0d9db95e0983b2226d7",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Fwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "787c7b69a054c6f2850503c016a2ef2fade7ad0941375c8e521c3534bf695d12",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "a99d18722e504801616e1c0c495711c43c2d82c4465f7f388cdae8a45502bd1e",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.2333333492279053",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "2c2c12d6a959d69c96962ca340bdfe984942df621ee2ff7e7e955662ddaee52a",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/ABP_Unarmed",
+      "asset_class": "AnimBlueprint",
+      "sha256": "60ae8c970189979d9e070beb0fd8675f4afb2b04d8aaa8d11a0f03c5b7ebf4b2"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01",
+      "asset_class": "AnimSequence",
+      "sha256": "f796113f17c91eca7e48ef57bbadc4fc36245a86b127e75a34ca4771500639ed",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_02",
+      "asset_class": "AnimSequence",
+      "sha256": "fb3c74b8e32fb5a88c6d659cae8717294af85d4eaa7f684b2a36c36d245559dc",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.0",
+      "enable_root_motion": "True",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_03",
+      "asset_class": "AnimSequence",
+      "sha256": "1c66016fc3bd386453ac7fb1229a5f0644c6bd5f98ead29f6e6a1be80632ba1f",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.6666666269302368",
+      "enable_root_motion": "True",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_ChargedAttack",
+      "asset_class": "AnimSequence",
+      "sha256": "5d9b0fc6892519095cb6930aba5c0dd063acf647612a06e0f2f7e19c463223ee",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.8333333730697632",
+      "enable_root_motion": "True",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/BS_Idle_Walk_Run",
+      "asset_class": "BlendSpace",
+      "sha256": "bc71af8768b569695d4bcb69c79867f998e085693f5e8230854d228de359f5bb",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Bwd",
+      "asset_class": "AnimSequence",
+      "sha256": "1f6e9448f0e0737f506d9e8f11b8d661d6d65c818f0e3160938f1e24082b16c3",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Bwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "e6e68e6cf4175f85c0e16a60f80335a1fab3f8c76a014d02bc0cd18aabe3314a",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Bwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "ee3137ff2b7d2cb721c935e2de91d55479e20f030ff230e9f912f6b70658c399",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd",
+      "asset_class": "AnimSequence",
+      "sha256": "0ccbe851f85a6d4cd7c6438c219cb6af8e281784107b5be8e9b052e4df3069cb",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7666666507720947",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "12ee5a11f277af90429980f120026f430ae1e438f6eae42c10222e175f9dbe12",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7666666507720947",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "66a7561d60453794864edd7e0c55487817068b6b66e31e179c98b9f2bab4c76b",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7666666507720947",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "f7842445f0c2b2f8d3cd9d43b9f58bc3ea888adeb1e161398b492097358431bd",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "208f642310d9627d12a5125889b480e051a1f1fc5397a10b83975903a0c59aea",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.7333333492279053",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Dash",
+      "asset_class": "AnimSequence",
+      "sha256": "8a1c964403b7b1d9d9f5e0dd8c20c1ae809606c5e8021b2983edfc65ac0a66f0",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.9666666388511658",
+      "enable_root_motion": "True",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Fall_Loop",
+      "asset_class": "AnimSequence",
+      "sha256": "408be742c63adffe8c6c1d22442e99ea34a7618cd33c6e78e0eed3d7db877433",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "3.0",
+      "enable_root_motion": "False",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Jump",
+      "asset_class": "AnimSequence",
+      "sha256": "252cbf69b07b797d3c3c6177d3ae9df17e9873f4872c4fa040c0d441dc3b3cef",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.8666666746139526",
+      "enable_root_motion": "False",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_Land",
+      "asset_class": "AnimSequence",
+      "sha256": "a00de25a6beca56ff6d8077081531e5cef238c92825b6c184351d0aa99ef3fcb",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.8666666746139526",
+      "enable_root_motion": "False",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Jump/MM_WallJump",
+      "asset_class": "AnimSequence",
+      "sha256": "e29af6dc13219cb813097e596c143d964a18c118caca138015574009e50859c0",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.46666666865348816",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/MM_Idle",
+      "asset_class": "AnimSequence",
+      "sha256": "11ee7fdeb84db89c1a66785b43b9bfc1415782122b8ac229517f4c5125d9cb0d",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "7.566666603088379",
+      "enable_root_motion": "False",
+      "force_root_lock": "False"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Bwd",
+      "asset_class": "AnimSequence",
+      "sha256": "ae0c2ee1c1178fd1b9493f6c327e52d10a3d6bbde29eae54dcb07c13a27dcf46",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "2.133333444595337",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Bwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "7c25a8eebb9883085ac8f82de3c83fc34fd19b02567f17fafde9dd60c09cf3e5",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "2.133333444595337",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Bwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "8c71b9bbf7b15d75cacddbeb8827e22888cfa63a359ecbc0e017aec822d1a522",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "2.133333444595337",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd",
+      "asset_class": "AnimSequence",
+      "sha256": "c74b2fc0cb651c4924804b364e534856a1b44dee818127c408dc055e4bda5ed9",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "a7d8ff5a55eb0c445da2c74b2fd9460b6a3aff0db206be9e99aed319158d5770",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "67d3d4fed066023a14220277f5598db83f19efee97de908b1397b0ae998e5599",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Left",
+      "asset_class": "AnimSequence",
+      "sha256": "81500e4fcdd9ae9aa6433e652e67dea8f9dd9fa7b9ef1714e29f6ab0a1bb9d97",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Right",
+      "asset_class": "AnimSequence",
+      "sha256": "f5922b4e632351353224b32f719af97e85512ab4f6553b15315cf14ad04f675f",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.5333333015441895",
+      "enable_root_motion": "True",
+      "force_root_lock": "True"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Meshes/SKM_Manny_Simple",
+      "asset_class": "SkeletalMesh",
+      "sha256": "be9f011191ee1887b97cd13bce09886a6066c2fd62c619991070ec142184e1bf",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Meshes/SKM_Quinn_Simple",
+      "asset_class": "SkeletalMesh",
+      "sha256": "1ef45d92507a76d74a5e06737f94cad40eb7d5f5769dfbb63f7f74e784a178c6",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin"
+    },
+    {
+      "package": "/Game/Characters/Mannequins/Meshes/SK_Mannequin",
+      "asset_class": "Skeleton",
+      "sha256": "22029d47455f24471195b26a0e04a1e1389f27d6a924e88c9f46a0f600c9a530"
+    },
+    {
+      "package": "/Game/Variant_Combat/Anims/ABP_Manny_Combat",
+      "asset_class": "AnimBlueprint",
+      "sha256": "4a57dd0385d2fe9fac3d8dde2baaeab04d66734176c4ce83bf9fce86e055d175"
+    },
+    {
+      "package": "/Game/Variant_Combat/Anims/AM_ChargedAttack",
+      "asset_class": "AnimMontage",
+      "sha256": "3d5459828534149aaa9493aa82e9185dc2de52c840c02c56493e193bbe10c2da",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "1.8333333730697632"
+    },
+    {
+      "package": "/Game/Variant_Combat/Anims/AM_ComboAttack",
+      "asset_class": "AnimMontage",
+      "sha256": "0f1a9b1308e320ea01da94b4b283d42518883888c5ad3857e397cc6194d61413",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "3.6666667461395264"
+    },
+    {
+      "package": "/Game/Variant_Platforming/Anims/ABP_Manny_Platforming",
+      "asset_class": "AnimBlueprint",
+      "sha256": "1760838d6900022e6ae7b2437ee69f8cf050a0e2a38d79fc757aac93b3a292bb"
+    },
+    {
+      "package": "/Game/Variant_Platforming/Anims/AM_Dash",
+      "asset_class": "AnimMontage",
+      "sha256": "10eb297b1a2e8803bec502b06838b077d716357f214c5c9ed40a212116986e2c",
+      "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+      "sequence_length": "0.9666666388511658"
+    },
+    {
+      "package": "/Game/Variant_SideScrolling/Anims/ABP_Manny_SideScroller",
+      "asset_class": "AnimBlueprint",
+      "sha256": "8b65c78083edc9907a8649cd9e8574aafcdc65af0c0fbbe52cbd8dec279233fc"
+    }
+  ]
+}
