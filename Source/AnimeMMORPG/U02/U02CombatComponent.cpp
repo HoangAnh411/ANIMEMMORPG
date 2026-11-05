@@ -39,6 +39,7 @@ void UU02CombatComponent::EndPlay(const EEndPlayReason::Type Reason)
 {
     if (Model) CancelAt(ECancel::Removed,GetWorld()->GetTimeSeconds());
     OnActiveInterval.Clear();
+    BeforeActionMutation.Unbind();
     Super::EndPlay(Reason);
 }
 void UU02CombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -76,6 +77,7 @@ void UU02CombatComponent::HandleAttack(uint64 Sequence, double LocalInputSeconds
     if (!Model || !Character()->HasAuthority()) return;
     // Mandatory adapter invariant: deliver the OLD interval before overwriting action.
     if (!AdvanceAuthority(Now)) return;
+    BeforeActionMutation.ExecuteIfBound(Now);
     auto* M = Character()->GetU01Movement();
     FAttackContext Context;
     Context.bPlaying = bAuthorityPlaying && !(M->GetLockMask() & uint8(EU01MotorLock::Control));
@@ -129,6 +131,7 @@ bool UU02CombatComponent::CancelAt(ECancel Reason, double Now)
     const bool WillCancel=Reason!=ECancel::Menu && Reason!=ECancel::Focus && Phase!=EPhase::Idle && Phase!=EPhase::Finished && Phase!=EPhase::Cancelled
         && ((Reason!=ECancel::Dodge && Reason!=ECancel::Guard) || Phase==EPhase::Startup);
     if(!AdvanceAuthority(Now,WillCancel))return false;
+    BeforeActionMutation.ExecuteIfBound(Now);
     const bool Cancelled = Model->CancelAction(Reason,Now);
     Publish(Now,true);
     Trace(Cancelled ? TEXT("Cancelled") : TEXT("CancelRejected"),Now,FString::Printf(TEXT("reason=%d"),int32(Reason)));
@@ -146,7 +149,9 @@ bool UU02CombatComponent::ResetLabCombat()
 #else
     if (!Model || !Character()->HasAuthority()) return false;
     const double Now = GetWorld()->GetTimeSeconds();
-    if (!AdvanceAuthority(Now,true) || !Model->ResetLabCombat(Now)) return false;
+    if (!AdvanceAuthority(Now,true)) return false;
+    BeforeActionMutation.ExecuteIfBound(Now);
+    if (!Model->ResetLabCombat(Now)) return false;
     Publish(Now,true); Trace(TEXT("Reset"),Now); return true;
 #endif
 }

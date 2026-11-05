@@ -25,6 +25,7 @@ struct FU02RepCombatSnapshot
 };
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FU02ActiveIntervalDelegate, const AnimeMMORPG::U02::FActionId&, const AnimeMMORPG::U02::FActiveSlice&);
+DECLARE_DELEGATE_OneParam(FU02BeforeActionMutation, double);
 
 // Server-owned action adapter only. D will subscribe the world collector; no hit/damage here.
 UCLASS(ClassGroup=(Combat))
@@ -45,6 +46,9 @@ public:
     const FU02RepCombatSnapshot& GetCombatSnapshot() const { return Snapshot; }
     TSharedRef<FJsonObject> GetDiagnostics() const;
     FU02ActiveIntervalDelegate OnActiveInterval;
+    // D binds the Game-world scheduler here: drain ALL sources/resolve old batch before mutation.
+    // Unbound in B because there are no hit candidates/vital results yet.
+    FU02BeforeActionMutation BeforeActionMutation;
     uint64 AcceptedCount = 0, RejectedCount = 0, IntervalCount = 0;
 private:
     friend struct FU02CombatTestAccess;

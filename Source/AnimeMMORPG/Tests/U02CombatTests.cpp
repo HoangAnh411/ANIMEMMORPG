@@ -52,6 +52,13 @@ bool FU02AdapterDrain::RunTest(const FString&)
     FU02CombatTestAccess::Attack(B,1,0,Start);
     TestEqual(TEXT("Initial accepted"),B->AcceptedCount,uint64(1));
     int32 Delivered=0;
+    int32 Barriers=0;
+    B->BeforeActionMutation.BindLambda([&](double)
+    {
+        ++Barriers;
+        TestEqual(TEXT("World barrier runs after old interval delivery, before action mutation"),Delivered,Barriers);
+        TestEqual(TEXT("World barrier observes old action identity"),B->GetCombatSnapshot().ActionSequence,uint64(Barriers));
+    });
     B->OnActiveInterval.AddLambda([&](const FActionId& Id,const FActiveSlice& Slice)
     {
         ++Delivered;
@@ -74,8 +81,10 @@ bool FU02AdapterDrain::RunTest(const FString&)
     TestEqual(TEXT("Replacement accepted after full drain"),B->AcceptedCount,uint64(2));
     TestTrue(TEXT("Forced invalidation accepted"),FU02CombatTestAccess::Cancel(B,ECancel::LostGround,Start+.68));
     TestEqual(TEXT("Both old intervals delivered"),Delivered,2);
+    TestEqual(TEXT("Both mutations passed world barrier"),Barriers,2);
     TestFalse(TEXT("Cancel released combat lock"),W.C->GetU01Movement()->IsMotorLocked());
     B->OnActiveInterval.Clear();
+    B->BeforeActionMutation.Unbind();
     AddInfo(TEXT("U02B_ASSERT adapter old interval delivered before replacement/cancel; full skipped active preserved; cancel endpoint excluded"));
     return true;
 }
