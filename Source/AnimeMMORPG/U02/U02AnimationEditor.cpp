@@ -61,7 +61,7 @@ FString UU02AnimationEditor::BuildCAssets()
     // Mesh component axes inherited U01: right=-X, forward=+Y, up=+Z.
     // Hand/blade key poses authored here, no third-party attack clip.
     const double Times[]={0,.16,.22,.40};
-    const FVector Wrists[]={FVector(-42,12,112),FVector(-42,0,151),FVector(20,48,112),FVector(-42,12,112)};
+    const FVector Wrists[]={FVector(-42,12,112),FVector(-42,0,151),FVector(-5,32,127),FVector(-42,12,112)};
     const FVector Blades[]={FVector(-.25,.65,.72),FVector(-.65,-.1,.75),FVector(.75,.55,-.35),FVector(-.25,.65,.72)};
     TArray<TArray<FTransform>> Keys;
     for(int32 K=0;K<4;++K)
