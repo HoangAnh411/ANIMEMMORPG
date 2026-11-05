@@ -24,7 +24,7 @@ struct FU02RepCombatSnapshot
     UPROPERTY() bool bYawLocked = false;
 };
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FU02ActiveInterval, const AnimeMMORPG::U02::FActionId&, const AnimeMMORPG::U02::FActiveSlice&);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FU02ActiveIntervalDelegate, const AnimeMMORPG::U02::FActionId&, const AnimeMMORPG::U02::FActiveSlice&);
 
 // Server-owned action adapter only. D will subscribe the world collector; no hit/damage here.
 UCLASS(ClassGroup=(Combat))
@@ -44,7 +44,7 @@ public:
     void LostGround();
     const FU02RepCombatSnapshot& GetCombatSnapshot() const { return Snapshot; }
     TSharedRef<FJsonObject> GetDiagnostics() const;
-    FU02ActiveInterval OnActiveInterval;
+    FU02ActiveIntervalDelegate OnActiveInterval;
     uint64 AcceptedCount = 0, RejectedCount = 0, IntervalCount = 0;
 private:
     friend struct FU02CombatTestAccess;

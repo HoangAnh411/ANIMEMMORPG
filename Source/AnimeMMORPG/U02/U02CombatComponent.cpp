@@ -191,6 +191,9 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
 {
     auto J=MakeShared<FJsonObject>();
     J->SetStringField(TEXT("pawnId"),Snapshot.PawnId.ToString());
+    J->SetStringField(TEXT("lifeId"),FString::Printf(TEXT("%s:%llu"),*Snapshot.PawnId.ToString(),Snapshot.LifeGeneration));
+    J->SetStringField(TEXT("actionId"),FString::Printf(TEXT("%s:%llu:%llu"),*Snapshot.PawnId.ToString(),Snapshot.LifeGeneration,Snapshot.ActionSequence));
+    J->SetStringField(TEXT("commandId"),FString::Printf(TEXT("%llu"),LastCommand));
     J->SetNumberField(TEXT("life"),Snapshot.LifeGeneration); J->SetNumberField(TEXT("action"),Snapshot.ActionSequence);
     J->SetNumberField(TEXT("phase"),Snapshot.Phase); J->SetNumberField(TEXT("start"),Snapshot.StartSeconds);
     J->SetNumberField(TEXT("activeStart"),Snapshot.StartSeconds+.16); J->SetNumberField(TEXT("activeEnd"),Snapshot.StartSeconds+.22);
