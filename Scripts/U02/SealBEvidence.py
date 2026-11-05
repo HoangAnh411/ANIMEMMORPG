@@ -13,6 +13,7 @@ import subprocess
 p=argparse.ArgumentParser()
 for name in ('build','tests','package','smoke','capture'):p.add_argument('--'+name,type=Path,required=True)
 a=p.parse_args();root=Path(__file__).resolve().parents[2];out=root/'Docs/U02/Evidence/B';out.mkdir(parents=True,exist_ok=True)
+for name in ('build','tests','package','smoke','capture'):setattr(a,name,getattr(a,name).resolve())
 def load(path):return json.loads(path.read_text(encoding='utf-8-sig'))
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def write(name,data):(out/name).write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')

@@ -1,0 +1,33 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "utc": "2026-11-05T14:27:54.387326+00:00",
+  "branch": "u02/b-action-input-motor",
+  "baseSHA": "0550254e702e406dcef6731900541a625dafb915",
+  "sourceSHA": "94ebcc73b27dc0d40b0f818491caef6217469e4c",
+  "moduleSHA256": "bae585417f9cc0b2319a9b8fdadf143f64216d81a095a2c07e5e869f7827e80c",
+  "gameExeSHA256": "ad9467b204a0ac4de7a8a06d4bc9504716b7b36809f953cb0d4ab143a3fa33aa",
+  "engineExeSHA256": "A423AB94410AA4F4CC34D99A2AF75240C5D0E376A33D903A3E819FECF1177143",
+  "packageRelativePath": "Artifacts/U02/B/Package-20261105-211051-062-781bdf0f/Archive/Windows",
+  "packageFiles": 48,
+  "buildRun": "Build-20261105-205203-468-c36b4343",
+  "testRun": "MCPTests-20261105-211013",
+  "packageRun": "Package-20261105-211051-062-781bdf0f",
+  "smokeRun": "SmokeB-20261105-211152",
+  "captureRun": "Capture",
+  "automationExecuted": 34,
+  "runtimeAssertions": 40,
+  "localConfigByteUnchanged": true,
+  "mainSHA": "0550254e702e406dcef6731900541a625dafb915",
+  "sourceEqualsHandoffRuntime": true,
+  "scope": "B action/input/motor; no montage/hit/damage; no U02 dedicated-network acceptance",
+  "sourceGitBlobs": {
+    "Source/AnimeMMORPG/Tests/U02CombatTests.cpp": "4192263115a6f0afb1554c80fad13cdf06b313c1",
+    "Source/AnimeMMORPG/U01/U01Character.cpp": "f280c5d7c623e39cd00979ec16ff74358e520b38",
+    "Source/AnimeMMORPG/U01/U01Character.h": "1934953d9d98d5687b798eca4d4b02e7462a8e48",
+    "Source/AnimeMMORPG/U01/U01NetworkMovement.cpp": "00f5d07f59d83cfb1e2da34d2f40fdee757a8ee7",
+    "Source/AnimeMMORPG/U01/U01PlayerController.cpp": "9f44730c5efcb2e3676b8a517f5a36cc3af91206",
+    "Source/AnimeMMORPG/U01/U01PlayerController.h": "1f222492483392200f9f1ee659feba6cce730f1b",
+    "Source/AnimeMMORPG/U02/U02CombatComponent.cpp": "e19f2ab8b809347bd98e67b46d6e8dda037ae60d",
+    "Source/AnimeMMORPG/U02/U02CombatComponent.h": "92aa1109a9a4fd888e9123c1f57782f5fb57c7c9"
+  }
+}

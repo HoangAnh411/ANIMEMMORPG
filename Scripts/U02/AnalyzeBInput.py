@@ -43,7 +43,11 @@ def main():
     check('Resume click did not attack',all(s['controlState']==0 and s['combat']['accepted']==3 for s in window(5.5,6.0)))
     check('Focus away enters AwaitingResume; accepted action finishes',any(s['controlState']==2 and not s['windowActive'] for s in window(7.2,7.9)) and any(s['controlState']==2 and s['combat']['phase']==4 for s in window(7.6,7.9)))
     check('Focus return alone remains AwaitingResume',any(s['controlState']==2 and s['windowActive'] for s in window(8.05,8.28)))
-    check('Menu release gate remains independent after combat finishes',all(speed(s)<.1 and not s['gateW'] for s in window(8.6,8.95)) and any(speed(s)>490 for s in window(9.45,9.65)))
+    # Assert observed movement, not an internal gate bit: Win32 injected-key state
+    # can be reset by focus/input-mode transitions. Gate policy is covered separately
+    # by U01/A/B tests; this capture cannot prove a physical key stayed down in hardware.
+    check('Menu/Resume does not replay queued movement after combat finish',all(speed(s)<.1 for s in window(5.5,5.9)))
+    check('Focus Resume does not auto-move; a fresh W edge works',all(speed(s)<.1 for s in window(8.6,8.95)) and any(speed(s)>490 for s in window(9.45,9.65)))
     check('Interacting rejected attack without action',any(s['motorLockMask']&2 and s['combat']['accepted']==5 for s in window(10.3,10.65)))
     check('Gravity remains under menu lock',any(s['controlState']==1 and s['animationVerticalSpeedCmPerSec']<-50 for s in window(11.9,12.25)))
     for action in accepted:

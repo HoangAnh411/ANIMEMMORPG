@@ -1,0 +1,502 @@
+[
+  {
+    "file": ".gitattributes",
+    "bytes": 29,
+    "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d"
+  },
+  {
+    "file": "AUTOMATION-RESULTS.json",
+    "bytes": 5077,
+    "sha256": "d244f26c993e64f96b81e6831696a7ef760542eefea09c90f8a4df28ef8e239a"
+  },
+  {
+    "file": "Build-20261105-202214-831-a65ade80-Editor.log.gz",
+    "bytes": 6121,
+    "sha256": "ce2b78a421c23f6261559887156a9e14858060d5d87eb836decd8a4e5d448503"
+  },
+  {
+    "file": "Build-20261105-202214-831-a65ade80-Generate.log.gz",
+    "bytes": 1131,
+    "sha256": "1bf65f560e027f3ea08ab104d6f86f0ffd728eff2092db810b7e69fd0f7ccdea"
+  },
+  {
+    "file": "Build-20261105-202534-126-f8e236ad-Editor.log.gz",
+    "bytes": 1998,
+    "sha256": "89d70ca071f641da2e3c526e64c275ac7afb7c0d0ebda4a7e8b9358f0310e562"
+  },
+  {
+    "file": "Build-20261105-202534-126-f8e236ad-Generate.log.gz",
+    "bytes": 1142,
+    "sha256": "d43c5ef3c44998267a2d4178df0f0d98fe8405ce9c9c9b206c485900b8ae4274"
+  },
+  {
+    "file": "Build-20261105-202751-149-d0602d04-Editor.log.gz",
+    "bytes": 1954,
+    "sha256": "bc3c9309a742777a07c6d41c416c1e830f7d08b050fc7714509a21e29ac4a416"
+  },
+  {
+    "file": "Build-20261105-202751-149-d0602d04-Game.log.gz",
+    "bytes": 3973,
+    "sha256": "b3cc4c0fb00106a2e0d2b9364658c605dfc8733aa1572dce62f2e1cd574e9313"
+  },
+  {
+    "file": "Build-20261105-202751-149-d0602d04-Generate.log.gz",
+    "bytes": 1145,
+    "sha256": "9b62b903ccd0976c82b94b01961e5d64c097844ec7d58e21b80418b7f1333edb"
+  },
+  {
+    "file": "Build-20261105-203210-946-caed6940-Editor.log.gz",
+    "bytes": 1996,
+    "sha256": "94e41d4c27ae239c263f3307f85f163be14cf4df96e3b0ae48f272c2713930ae"
+  },
+  {
+    "file": "Build-20261105-203210-946-caed6940-Game.log.gz",
+    "bytes": 1786,
+    "sha256": "eee0b8bd736058e17ea9784ca69a2b72e456faac6aa7f21df2550afb711d52df"
+  },
+  {
+    "file": "Build-20261105-203210-946-caed6940-Generate.log.gz",
+    "bytes": 1146,
+    "sha256": "79161bab1908f2145817e54f4e8bf48eb256d8568793ce146ab38bc2d3ce1fd2"
+  },
+  {
+    "file": "Build-20261105-203446-679-f438b64a-Editor.log.gz",
+    "bytes": 1982,
+    "sha256": "7b2bbd291567cb6efe1ead456b687ca9b8e1790f55562bf9c33c1ba81aa13697"
+  },
+  {
+    "file": "Build-20261105-203446-679-f438b64a-Game.log.gz",
+    "bytes": 1773,
+    "sha256": "6461e41fb578e4f503d9298d1e554948e3b279d36d3343145722e4fd2e98cd99"
+  },
+  {
+    "file": "Build-20261105-203446-679-f438b64a-Generate.log.gz",
+    "bytes": 1146,
+    "sha256": "90b6bea03c8f8988a5d7eb217bea799f4e933040e70c33f5434fe0f92c52defe"
+  },
+  {
+    "file": "Build-20261105-205203-468-c36b4343-Editor.log.gz",
+    "bytes": 1994,
+    "sha256": "98b45f446f1acfe5f83bc72ec73f843b1073777499106312173263dccb25a640"
+  },
+  {
+    "file": "Build-20261105-205203-468-c36b4343-Game.log.gz",
+    "bytes": 1788,
+    "sha256": "b85b41e397214de0aeef49eb3023410a7e6922914d150f343250f52c5057bfeb"
+  },
+  {
+    "file": "Build-20261105-205203-468-c36b4343-Generate.log.gz",
+    "bytes": 1140,
+    "sha256": "844e9892372c00087a64ae42c6bab6ce8dd7db299372eb371271fd1870f25f8f"
+  },
+  {
+    "file": "BUILD-RESULTS.json",
+    "bytes": 2636,
+    "sha256": "c09e2cc23c94ba24bd631881ed853491ca21d3856f104ecaa5b3fb45aeec38ca"
+  },
+  {
+    "file": "FAILED-RUNS.json",
+    "bytes": 10264,
+    "sha256": "d6181a0a5a8c29f13b06cd01306be9e046304463545dcd012da4f111f1882b86"
+  },
+  {
+    "file": "Final.png",
+    "bytes": 306295,
+    "sha256": "5ceac764df47f2e2e84c725992d10342ac7ada003c775ad42c9a9ffad25dd135"
+  },
+  {
+    "file": "History-assertions-closure94.log.gz",
+    "bytes": 767,
+    "sha256": "5f2ccdc4aa47d75fcb92d304949e7e8a51d117a82b0f71b463d06a954b991f9b"
+  },
+  {
+    "file": "History-assertions-console.log.gz",
+    "bytes": 836,
+    "sha256": "e5c6db3de5eb19aec37ef4f32851063b4428704c3b333d2182a07ca6f6c19935"
+  },
+  {
+    "file": "History-assertions-evidence94-final.log.gz",
+    "bytes": 326,
+    "sha256": "b9c4169933f7076ddddf9347a487ac089a78a57304c06f82c9e87783fc937263"
+  },
+  {
+    "file": "History-assertions-evidence94.log.gz",
+    "bytes": 776,
+    "sha256": "fa78cfae86bc9d5ff00c33843996620fc835bf6b85017c4909fb449c55a59a06"
+  },
+  {
+    "file": "History-assertions-retry-console.log.gz",
+    "bytes": 1034,
+    "sha256": "febc32917107fac65f14cdd65251abe8f673f6d53ba4f0a775698ab7abe58cbc"
+  },
+  {
+    "file": "History-assertions-review94.log.gz",
+    "bytes": 768,
+    "sha256": "5b1da3c40baff010e60a1bda83a93ebcf90e824133d0e7f955c3ec43358c9160"
+  },
+  {
+    "file": "History-assertions-source94.log.gz",
+    "bytes": 854,
+    "sha256": "0be0f8d51e13d70d6ae5cb90c9fbb09c17524d54cb1edae107df1692bb981e70"
+  },
+  {
+    "file": "History-build-barrier-console.log.gz",
+    "bytes": 2593,
+    "sha256": "69048712c17d2707486b14176829bc39e6a8977f055368e0837104c33669287c"
+  },
+  {
+    "file": "History-build-console.log.gz",
+    "bytes": 6576,
+    "sha256": "6376fb60085d98df1200ac2fff62ad7ba01626641d4a89a86a74ff19781a5667"
+  },
+  {
+    "file": "History-build-final-console.log.gz",
+    "bytes": 2610,
+    "sha256": "343bcbba99a7b066fb3338d48891cad691f13da5ffca01cca1829a87c9cb0033"
+  },
+  {
+    "file": "History-build-retry-console.log.gz",
+    "bytes": 2452,
+    "sha256": "12cf606f18b584efcea5c078a44ff0d0e3211d58d7f27e288c8546c0a681cb00"
+  },
+  {
+    "file": "History-build-sprint-console.log.gz",
+    "bytes": 2604,
+    "sha256": "784d3dcd99f224a9ec755ff094d33052f69d9613f9f09d50275f711b22c91d53"
+  },
+  {
+    "file": "History-build-third-console.log.gz",
+    "bytes": 4754,
+    "sha256": "7916c5bbffa6f378c17bfb938e5c66e4939966e3c19b6b1006805f5d9fcc7a68"
+  },
+  {
+    "file": "History-capture-after-user.log.gz",
+    "bytes": 157,
+    "sha256": "c0a10288065d5ec6b2305fcfbe830a478440e921ba4d09663e1d632741dad712"
+  },
+  {
+    "file": "History-capture-closure94.log.gz",
+    "bytes": 156,
+    "sha256": "86b471e54d32f4feca907fa76eb054e4e92f2d00bea7ac052e3fad1ccf89ab93"
+  },
+  {
+    "file": "History-capture-console.log.gz",
+    "bytes": 647,
+    "sha256": "d656c6bf3e2ae6a5c45d697b7ec3e6fcc18aa5c89f98c2c34cd1f211b67aca4d"
+  },
+  {
+    "file": "History-capture-evidence94.log.gz",
+    "bytes": 157,
+    "sha256": "a429ab669ab906f74bc0b75c686c9e017ac62a9ad1852ece947c20f425f9b4eb"
+  },
+  {
+    "file": "History-capture-final-console.log.gz",
+    "bytes": 655,
+    "sha256": "055f7746519ac30c425e51b99920e879b98024c083d1882889d821c4e52431b5"
+  },
+  {
+    "file": "History-capture-retry-console.log.gz",
+    "bytes": 623,
+    "sha256": "ea8b68cc3995922f9bfa0c4e42dfb01a54c6c67c4b94a471b4a72b690eb141f4"
+  },
+  {
+    "file": "History-capture-review94.log.gz",
+    "bytes": 155,
+    "sha256": "78240ea23f559c1fedde1c35dc5af85ae4d4d294f2b50cd14fdff181ee6c42da"
+  },
+  {
+    "file": "History-capture-source94-retry.log.gz",
+    "bytes": 687,
+    "sha256": "a7df6b613dfa186b5ad4a1e7d76e8678fad577c750e37085d937f5e9c87aef61"
+  },
+  {
+    "file": "History-capture-source94-retry2.log.gz",
+    "bytes": 689,
+    "sha256": "fe7720187d128e98601e1b1e691646fbd84837269382a8bb8768eb0ccb6354a8"
+  },
+  {
+    "file": "History-capture-sprint-console.log.gz",
+    "bytes": 698,
+    "sha256": "6429a2b20fb675c07b2fbb6507bb44c9ed959c2bd4ddf3362a1b93412d475c55"
+  },
+  {
+    "file": "History-capture-verified-console.log.gz",
+    "bytes": 163,
+    "sha256": "ecfa52db43bdc9e1c35681ee98b7ea64aeecd82a78cada90c4d13901885a6421"
+  },
+  {
+    "file": "History-clone-console.log.gz",
+    "bytes": 640,
+    "sha256": "10827970ac6e68a3684597732990111485688e37a64d6e5f5ba6e8ccf656b9a9"
+  },
+  {
+    "file": "History-inspect-console.log.gz",
+    "bytes": 873,
+    "sha256": "82dd88ef42008c4e971944845ce67ca56f8bf51e101c68c0bdac639bac57feb8"
+  },
+  {
+    "file": "History-inspect-retry-console.log.gz",
+    "bytes": 54,
+    "sha256": "e2365f34182f8f07cb7c3f7615b0a2c25312f70b2ffa6202488af0d728a3dc5c"
+  },
+  {
+    "file": "History-package-console.log.gz",
+    "bytes": 18559,
+    "sha256": "7631a297e1ea84f112b3bf0aed9b3a47b0afcd752a965007e3302ca909235c14"
+  },
+  {
+    "file": "History-package-sprint-console.log.gz",
+    "bytes": 18358,
+    "sha256": "45b1dedc3601a2dcfbb275fece9884a5023a12b3352cd710a29f6d4f7938cd73"
+  },
+  {
+    "file": "History-Play-2e06309-Capture.json",
+    "bytes": 3784,
+    "sha256": "fa3e23d5bd70873fc72c8b24a69a59e0f5769a34dda378898f8959d373667754"
+  },
+  {
+    "file": "History-Play-2e06309-Capture.mp4",
+    "bytes": 3611011,
+    "sha256": "3d600724abe75388a09fe8ff85eb37fcd78a11b6a340d250e0a7f99022afbf5c"
+  },
+  {
+    "file": "History-Play-94ebcc7-AfterUserClosedGame.json",
+    "bytes": 14788,
+    "sha256": "329938884375e48db97a75afff4c75ba0cdfe5d81df91067b73c7a93642fd827"
+  },
+  {
+    "file": "History-Play-94ebcc7-AfterUserClosedGame.mp4",
+    "bytes": 2474649,
+    "sha256": "360726f231c083085edc54ebe99f4a7c318e46e735aba523878174c1929b8b80"
+  },
+  {
+    "file": "History-Play-Closure94-Capture.json",
+    "bytes": 18411,
+    "sha256": "1c5fe7f07f25f85fcc67edb5d34c0103c24694f49d7141273ff8654bc6f97a03"
+  },
+  {
+    "file": "History-Play-Closure94-Capture.mp4",
+    "bytes": 4128717,
+    "sha256": "eaa63884a875f6152feecd10e2d2cbd5accabbc64e1df86c38394e4b9ff617f1"
+  },
+  {
+    "file": "History-Play-Final-2e06309-Capture.json",
+    "bytes": 3836,
+    "sha256": "2c8267d7c0e94a38f4c355710a23350a0470be7c1f8ab2c4364f5395633af241"
+  },
+  {
+    "file": "History-Play-Final-2e06309-Capture.mp4",
+    "bytes": 3489798,
+    "sha256": "75a2754892830a6426d262c1da8a7835a2bc3d3e86fc22f4c60b49f46ce5914e"
+  },
+  {
+    "file": "History-Play-Retry-2e06309-Capture.json",
+    "bytes": 1562,
+    "sha256": "b220f256900944ec8bb6482df4f8011a801627e37aa7b7eee9c8669821fae8d0"
+  },
+  {
+    "file": "History-Play-Review94-Capture.json",
+    "bytes": 18195,
+    "sha256": "58ae2f51910677fd0f47fa99f4af10f3fa342f9dbebfe2e672c51d1ddf1f4dfe"
+  },
+  {
+    "file": "History-Play-Review94-Capture.mp4",
+    "bytes": 4157586,
+    "sha256": "351be107c856846a0fd2949ef8763eb79472994409a39422904c830e25def208"
+  },
+  {
+    "file": "History-Play-Verified-2e06309-Capture.json",
+    "bytes": 18573,
+    "sha256": "2fb88cd13a0704ed987df500a481311518f4de8ece304141342c59fab8815af8"
+  },
+  {
+    "file": "History-Play-Verified-2e06309-Capture.mp4",
+    "bytes": 5668806,
+    "sha256": "c168f68eb31d21d48ec350a459ef37826d42860bb05fa127c4e5d812f95bb0e3"
+  },
+  {
+    "file": "History-seal.log.gz",
+    "bytes": 731,
+    "sha256": "6f155958c69cabd3f8aba9f369de028d5a7cb68595cde2b079608271e92d8be2"
+  },
+  {
+    "file": "History-smoke-console.log.gz",
+    "bytes": 586,
+    "sha256": "03da648c173ba1d76071a55d7a939e08353ef9df921457b0c89dc655ed031eaf"
+  },
+  {
+    "file": "History-smoke-final-console.log.gz",
+    "bytes": 201,
+    "sha256": "73fa8057e72c1b3d223aa0e9aeb58917a126bcb0908cd678f6fcf233282a7ded"
+  },
+  {
+    "file": "History-smoke-preflight-rejected.log.gz",
+    "bytes": 597,
+    "sha256": "53b1c3383de07dcdfe985e0df2bbe35b089e96bb8ab37ab6d5a308d657db75e7"
+  },
+  {
+    "file": "History-smoke-sprint-console.log.gz",
+    "bytes": 203,
+    "sha256": "eef38bde6e0007bd9ea223da487c3b0f8c3b7d58cc0e674312034b8802206e7a"
+  },
+  {
+    "file": "History-start-closure94.log.gz",
+    "bytes": 149,
+    "sha256": "e5ea4781d063ca32b16b9730918acded929a1841fbb043b146ceb9fde090fb82"
+  },
+  {
+    "file": "History-start-evidence94.log.gz",
+    "bytes": 150,
+    "sha256": "21fd8bcde4193d3668d93468212151dc667bc6c707b2bd1ae9d9dbcab9d81bdc"
+  },
+  {
+    "file": "History-start-final-console.log.gz",
+    "bytes": 157,
+    "sha256": "a3fd0ffa029c3ff68e1ea1405c10feefab674b7ea9b71b67f677ec26f4cbda7f"
+  },
+  {
+    "file": "History-start-play-console.log.gz",
+    "bytes": 150,
+    "sha256": "c41abf205520cdce630ed45e799880ddd2dcd04d03fe239dff40bbb6d651c536"
+  },
+  {
+    "file": "History-start-retry-console.log.gz",
+    "bytes": 156,
+    "sha256": "dec1bbb5df8ebf35eb22ce97512618fdd4f45dc59cfd47c862292fcfb5552a5b"
+  },
+  {
+    "file": "History-start-review94.log.gz",
+    "bytes": 148,
+    "sha256": "8507e5a5db6a748135fa25d7e5a421ae7f09ad2b7c47aba8dc1b02c895a4e025"
+  },
+  {
+    "file": "History-start-sprint-console.log.gz",
+    "bytes": 152,
+    "sha256": "a16ed38df0dc20804db130fb41c095455ef4e8e7e850d6d9228937e5dd52709e"
+  },
+  {
+    "file": "History-start-verified-console.log.gz",
+    "bytes": 164,
+    "sha256": "05d6d120836c36d0e8da53c4031e924fbdc1f10ea6bbf67aa7996f42195f0972"
+  },
+  {
+    "file": "History-tests-console.log.gz",
+    "bytes": 180,
+    "sha256": "a61e42c8e89ff2d80028e7105c889ee939c322d81f4935b4afdf03fe663c490e"
+  },
+  {
+    "file": "History-tests-final-console.log.gz",
+    "bytes": 187,
+    "sha256": "9ce9cbeeddfac8b5a9e481734066d94adddf7577d9580bf1a4f3d544a5c4453a"
+  },
+  {
+    "file": "History-tests-sprint-console.log.gz",
+    "bytes": 188,
+    "sha256": "9af5747a25a768171d57b0980f1b1851967547e9113fcf779e465ae8df3cf5d8"
+  },
+  {
+    "file": "Input-B.mp4",
+    "bytes": 4262988,
+    "sha256": "f98bd0cd3cd86e5b2cf08fee0634203c620e265a7bf184c1e3b5640cceaea221"
+  },
+  {
+    "file": "INPUT.json",
+    "bytes": 18683,
+    "sha256": "e1eb919388b06c26c74f0dd22ca435282e6272daff2069db8d5b21b65f52f693"
+  },
+  {
+    "file": "LOGS.json",
+    "bytes": 8390,
+    "sha256": "d2c96522072797c61452736e2fee6a0aa46010c30ca1a7f4aa9a4c14cd05adb1"
+  },
+  {
+    "file": "MANIFEST.json",
+    "bytes": 1931,
+    "sha256": "9c05be686b09e4103b112849ec88721d5b14a38d46ce2e183d21dca425c74925"
+  },
+  {
+    "file": "MCP-RESULTS.json",
+    "bytes": 143315,
+    "sha256": "99d9809b90d329be7d7ab48937013dc32ae3dbf8d7117b8aca1f94b74a8f6f87"
+  },
+  {
+    "file": "MCPTests-20261105-203023-Editor.log.gz",
+    "bytes": 86763,
+    "sha256": "0a7d377ec93ed3cc561429f08edce2a2f7916020b09eaf59c4ccad425e9d6b57"
+  },
+  {
+    "file": "MCPTests-20261105-203704-Editor.log.gz",
+    "bytes": 86211,
+    "sha256": "f0cceb6caa0f1482d121910732689461f1bc940529583c837bfb9f758560daa3"
+  },
+  {
+    "file": "MCPTests-20261105-211013-Editor.log.gz",
+    "bytes": 88286,
+    "sha256": "faa9357b3c8fc09e0da5f69256d0f96ec580f7dc836113e6fc75a8007d197598"
+  },
+  {
+    "file": "Package-20261105-211051-062-781bdf0f-Package.log.gz",
+    "bytes": 18359,
+    "sha256": "5128954d495769db73d2db36b6962217535802a0c74c0553648a45ec7234939a"
+  },
+  {
+    "file": "PACKAGE-RESULT.json",
+    "bytes": 183,
+    "sha256": "e8d64c40c68e251c251cecd73bf331c17a453fbe349c7a1d67ffabee7f1146ad"
+  },
+  {
+    "file": "PACKAGE.csv",
+    "bytes": 6135,
+    "sha256": "698c4b3d5871c76fda4f49443eef836090f57b4abc8e9490577853db17607305"
+  },
+  {
+    "file": "Play-Evidence94-Game.log.gz",
+    "bytes": 213991,
+    "sha256": "f5cbafd329cf0e780a64669168cff1f5cb103e1507ee322103a64218f6109dfe"
+  },
+  {
+    "file": "PROCESS.json",
+    "bytes": 1274,
+    "sha256": "5b173932be6e2b100b4b000dbd3523cee770de363da734acbcb2bda0dde9af9f"
+  },
+  {
+    "file": "RUN-HISTORY.json",
+    "bytes": 5696,
+    "sha256": "3e086ebec1d69dbd48c7ba9da07b5f22daefea7d5643bab6fd51418628d7663f"
+  },
+  {
+    "file": "RUNTIME-ASSERTIONS.json",
+    "bytes": 107808,
+    "sha256": "b6d39676f0732cffe7ba9d58728161e8c7953d0d1d01c7d5f7f41fd9227bdf15"
+  },
+  {
+    "file": "SMOKE.json",
+    "bytes": 173812,
+    "sha256": "22e73867d9d10fc70777c73cdd1583f0a70eaa9117f438a48eb95ad2d0cd4daf"
+  },
+  {
+    "file": "SmokeB-20261105-211152-L_Boot-Game.log.gz",
+    "bytes": 21059,
+    "sha256": "c8ab6d822f792c546779f57999e7c060a6ae9be98fe489dd9acff01363412b9f"
+  },
+  {
+    "file": "SmokeB-20261105-211152-L_CharacterCombatLab-Game.log.gz",
+    "bytes": 24680,
+    "sha256": "2cdf92d7042d5c84766b954a357041e5c3268aee1e7d765c1cfaccaa638a5a7a"
+  },
+  {
+    "file": "SmokeB-20261105-211152-L_NetworkLab-Game.log.gz",
+    "bytes": 24653,
+    "sha256": "b1c35801526d4132ae516dedee39736b45dfe68040f0b0c60516d4431e302ea7"
+  },
+  {
+    "file": "TIMELINE.log",
+    "bytes": 105937,
+    "sha256": "dd616d95e819bb54124430dbff2969b8fcf8a6c662113235d28e76e562622205"
+  },
+  {
+    "file": "WARNINGS.json",
+    "bytes": 6091323,
+    "sha256": "98beb62efaa8b67b6aecd3ba8731671c501344740b11e3e2f235d34b9214aecc"
+  }
+]

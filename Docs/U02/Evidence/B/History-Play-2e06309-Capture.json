@@ -1,0 +1,141 @@
+{
+  "process": {
+    "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Package-20261105-203809-164-e12423b8\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe",
+    "sourceSHA": "2e063093a246edba30056734554a8aa0210c8f7f",
+    "userDir": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Play-2e06309",
+    "role": "U02PackageB",
+    "log": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Play-2e06309\\Game.log",
+    "arguments": [
+      "/Game/AnimeMMORPG/Maps/L_CharacterCombatLab",
+      "-windowed",
+      "-ResX=1280",
+      "-ResY=720",
+      "-WinX=0",
+      "-WinY=30",
+      "-nosplash",
+      "-U01Trace",
+      "-U02Trace",
+      "-U01SourceSHA=2e063093a246edba30056734554a8aa0210c8f7f",
+      "-U02SourceSHA=2e063093a246edba30056734554a8aa0210c8f7f",
+      "-U02RunId=Play-2e06309",
+      "-UserDir=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Play-2e06309\"",
+      "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Play-2e06309\\Game.log\"",
+      "-ExecCmds=\"t.MaxFPS 60,t.IdleWhenNotForeground 0,r.ScreenPercentage 100\""
+    ],
+    "pid": 3832,
+    "utc": "2026-11-05T13:42:28.9144645Z",
+    "binarySHA256": "A6D6131A29AC67A4B63C29571FEC40231E042A0719E71B437B908A825AF4A6A2"
+  },
+  "method": "Windows SendInput + real native game metrics + bounded screen video",
+  "events": [
+    {
+      "label": "W down",
+      "scheduled": 1.0,
+      "actual": 1.0051395999980741
+    },
+    {
+      "label": "Ctrl down",
+      "scheduled": 1.05,
+      "actual": 1.0866392999960226
+    },
+    {
+      "label": "LMB hold",
+      "scheduled": 1.7,
+      "actual": 1.7275784999947064
+    },
+    {
+      "label": "startup aim",
+      "scheduled": 1.75,
+      "actual": 1.7671751999951084
+    },
+    {
+      "label": "jump while busy",
+      "scheduled": 1.78,
+      "actual": 1.8075606999991578
+    },
+    {
+      "label": "jump release",
+      "scheduled": 1.86,
+      "actual": 1.887142200001108
+    },
+    {
+      "label": "active camera turn",
+      "scheduled": 1.96,
+      "actual": 1.9676563999964856
+    },
+    {
+      "label": "LMB release",
+      "scheduled": 2.8,
+      "actual": 2.8337027999950806
+    },
+    {
+      "label": "attack edge",
+      "scheduled": 3.0,
+      "actual": 3.0770732999953907
+    },
+    {
+      "label": "busy attack edge",
+      "scheduled": 3.15,
+      "actual": 3.1951036999962525
+    },
+    {
+      "label": "W up",
+      "scheduled": 3.7,
+      "actual": 3.718368800000462
+    },
+    {
+      "label": "Ctrl up",
+      "scheduled": 3.72,
+      "actual": 3.7583511999982875
+    },
+    {
+      "label": "attack hold across menu",
+      "scheduled": 4.2,
+      "actual": 4.234472899996035
+    },
+    {
+      "label": "menu in action",
+      "scheduled": 4.27,
+      "actual": 4.2752146999991965
+    },
+    {
+      "label": "Escape release",
+      "scheduled": 4.32,
+      "actual": 4.356796399995801
+    },
+    {
+      "label": "LMB release in menu",
+      "scheduled": 5.0,
+      "actual": 5.0215674999999464
+    },
+    {
+      "label": "Resume click",
+      "scheduled": 5.2,
+      "actual": 5.396633999996993
+    },
+    {
+      "label": "fresh attack after Resume",
+      "scheduled": 6.1,
+      "actual": 6.16749770000024
+    },
+    {
+      "label": "W before focus",
+      "scheduled": 6.8,
+      "actual": 6.834813900000881
+    },
+    {
+      "label": "attack before focus",
+      "scheduled": 7.0,
+      "actual": 7.076096400000097
+    },
+    {
+      "label": "focus away during action",
+      "scheduled": 7.08,
+      "actual": 7.128355699998792
+    }
+  ],
+  "completed": false,
+  "baselineAccepted": 0,
+  "utc": "2026-11-05T13:43:16.345843+00:00",
+  "externalInputMethodRestored": true
+}

@@ -1,0 +1,181 @@
+{
+  "failed": 0,
+  "executed": 34,
+  "tests": [
+    "AnimeMMORPG.U00.Foundation.Units",
+    "AnimeMMORPG.U00.Foundation.Axes",
+    "AnimeMMORPG.U00.Foundation.HalfOpenInterval",
+    "AnimeMMORPG.U00.Foundation.CallOrder",
+    "AnimeMMORPG.U01.D.AssetPolicy",
+    "AnimeMMORPG.U01.D.AnimatedMotor",
+    "AnimeMMORPG.U01.D.TransitionsAndAttachment",
+    "AnimeMMORPG.U01.D.LandingTransitions",
+    "AnimeMMORPG.U01.D.GripIsolationAndAttachment",
+    "AnimeMMORPG.U01.D.CarryTrajectory",
+    "AnimeMMORPG.U01.B.ReleaseGate",
+    "AnimeMMORPG.U01.B.CameraPolicy",
+    "AnimeMMORPG.U01.C.JumpWindows",
+    "AnimeMMORPG.U01.C.FlatMovement",
+    "AnimeMMORPG.U01.C.JumpPhysics",
+    "AnimeMMORPG.U01.C.Terrain",
+    "AnimeMMORPG.U01.C.MotorLocks",
+    "AnimeMMORPG.U01.F.SavedMoveReplay",
+    "AnimeMMORPG.U01.F.ProxyAnimation",
+    "AnimeMMORPG.U01.E.BindingValidation",
+    "AnimeMMORPG.U01.E.PartialRecovery",
+    "AnimeMMORPG.U01.E.SaveAndFailure",
+    "AnimeMMORPG.U01.E.LocalMappingIsolation",
+    "AnimeMMORPG.U02.A.PhaseDeadlines",
+    "AnimeMMORPG.U02.A.WholeActiveInterval",
+    "AnimeMMORPG.U02.A.CancellationAndAim",
+    "AnimeMMORPG.U02.A.IntentIdentityAndReset",
+    "AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary",
+    "AnimeMMORPG.U02.A.ResolveDedupAndGeneration",
+    "AnimeMMORPG.U02.A.StableResolveDeathOrdering",
+    "AnimeMMORPG.U02.B.AdapterDrainBeforeMutation",
+    "AnimeMMORPG.U02.B.AuthorityLockSavedMoveReplay",
+    "AnimeMMORPG.U02.B.MotorGravityAndHeldIntent",
+    "AnimeMMORPG.U02.B.AdmissionCancelAndYaw"
+  ],
+  "method": "MCP TestRunner trigger and GetLogEntries completion, cold full-build clone",
+  "sourceSHA": "94ebcc73b27dc0d40b0f818491caef6217469e4c",
+  "utc": "2026-11-05T14:10:43.6070685Z",
+  "perTest": [
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U00.Foundation.Axes"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U00.Foundation.CallOrder"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U00.Foundation.HalfOpenInterval"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U00.Foundation.Units"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.B.CameraPolicy"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.B.ReleaseGate"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.C.FlatMovement"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.C.JumpPhysics"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.C.JumpWindows"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.C.MotorLocks"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.C.Terrain"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.D.AnimatedMotor"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.D.AssetPolicy"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.D.CarryTrajectory"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.D.GripIsolationAndAttachment"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.D.LandingTransitions"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.D.TransitionsAndAttachment"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.E.BindingValidation"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.E.LocalMappingIsolation"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.E.PartialRecovery"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.E.SaveAndFailure"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.F.ProxyAnimation"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U01.F.SavedMoveReplay"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.A.CancellationAndAim"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.A.IntentIdentityAndReset"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.A.PhaseDeadlines"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.A.ResolveDedupAndGeneration"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.A.StableResolveDeathOrdering"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.A.WholeActiveInterval"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.B.AdapterDrainBeforeMutation"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.B.AdmissionCancelAndYaw"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.B.AuthorityLockSavedMoveReplay"
+    },
+    {
+      "result": "Success",
+      "name": "AnimeMMORPG.U02.B.MotorGravityAndHeldIntent"
+    }
+  ]
+}

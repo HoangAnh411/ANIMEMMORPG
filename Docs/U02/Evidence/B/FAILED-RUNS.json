@@ -1,0 +1,262 @@
+[
+  {
+    "run": "Play-2e06309",
+    "file": "History-Play-2e06309-Capture.json",
+    "completed": false
+  },
+  {
+    "run": "Play-94ebcc7",
+    "file": "History-Play-94ebcc7-AfterUserClosedGame.json",
+    "completed": true
+  },
+  {
+    "run": "Play-Closure94",
+    "file": "History-Play-Closure94-Capture.json",
+    "completed": true
+  },
+  {
+    "run": "Play-Final-2e06309",
+    "file": "History-Play-Final-2e06309-Capture.json",
+    "completed": false
+  },
+  {
+    "run": "Play-Retry-2e06309",
+    "file": "History-Play-Retry-2e06309-Capture.json",
+    "completed": false
+  },
+  {
+    "run": "Play-Review94",
+    "file": "History-Play-Review94-Capture.json",
+    "completed": true
+  },
+  {
+    "run": "Play-Verified-2e06309",
+    "file": "History-Play-Verified-2e06309-Capture.json",
+    "completed": true
+  },
+  {
+    "original": "Artifacts\\U02\\B\\assertions-closure94.log",
+    "file": "History-assertions-closure94.log.gz",
+    "rawSHA256": "31d787951585dbf07d99b9b1a5823829550a22a5c3691a329d1e344f313ddff2"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\assertions-console.log",
+    "file": "History-assertions-console.log.gz",
+    "rawSHA256": "57813819d5fbc1164fc891623efa59271620cb8c8b043cc014be09146723f3dc"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\assertions-evidence94-final.log",
+    "file": "History-assertions-evidence94-final.log.gz",
+    "rawSHA256": "846a592da492c2a4daf6fa69100c229cbb7d78547d92610df586db52f72ac031"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\assertions-evidence94.log",
+    "file": "History-assertions-evidence94.log.gz",
+    "rawSHA256": "e2776d801e88c74e40adef4bb40b7b80da19ab71fdc2dff201fac6ff76024cda"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\assertions-retry-console.log",
+    "file": "History-assertions-retry-console.log.gz",
+    "rawSHA256": "15927a4da39b2ab18ba90d59899807627b9a8bbbb2680a11cf7c9277d3b713eb"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\assertions-review94.log",
+    "file": "History-assertions-review94.log.gz",
+    "rawSHA256": "e51d11430e201820c5fb2ee78917a755fa0e77c1a365901b0e31f5f802df5a81"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\assertions-source94.log",
+    "file": "History-assertions-source94.log.gz",
+    "rawSHA256": "275ffefe5257916da2c409e5a1bf4a53ca0838afb51f50193ac59f15e7ed08d4"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\build-barrier-console.log",
+    "file": "History-build-barrier-console.log.gz",
+    "rawSHA256": "7e4304172aee851d550b1283eb31eb49951434a218fa89a6bfeaab44c7e3af73"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\build-console.log",
+    "file": "History-build-console.log.gz",
+    "rawSHA256": "9cd03cb9d7ec34b89b5677049c473bfd1df35b266bbbe96009927bcd9ff6e254"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\build-final-console.log",
+    "file": "History-build-final-console.log.gz",
+    "rawSHA256": "5c94a9d9750a2b1a8390194a383e895b0595cd1d04d670a07614b7fbac88ddde"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\build-retry-console.log",
+    "file": "History-build-retry-console.log.gz",
+    "rawSHA256": "07665c14af4ef79b7b634b2a5e640caeba61055e3e0084959b25d2123decd9ee"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\build-sprint-console.log",
+    "file": "History-build-sprint-console.log.gz",
+    "rawSHA256": "4987ffb3deedb3c001df282ddf2e0e79d72f04ed939708e9800171e2b5db272f"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\build-third-console.log",
+    "file": "History-build-third-console.log.gz",
+    "rawSHA256": "e1318cf1c7dd40509bab2c2ee8a28ba476c7b38913859af66afe2f047e8320dc"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-after-user.log",
+    "file": "History-capture-after-user.log.gz",
+    "rawSHA256": "79579e73ad206c1942abc41803805b970f6f154ea04dd4111aa7d63e4f76fa78"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-closure94.log",
+    "file": "History-capture-closure94.log.gz",
+    "rawSHA256": "79579e73ad206c1942abc41803805b970f6f154ea04dd4111aa7d63e4f76fa78"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-console.log",
+    "file": "History-capture-console.log.gz",
+    "rawSHA256": "7408a681d5d8378beaa5c548a7870d8f0098a5c9681ad757a55b32af623f2b4c"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-evidence94.log",
+    "file": "History-capture-evidence94.log.gz",
+    "rawSHA256": "79579e73ad206c1942abc41803805b970f6f154ea04dd4111aa7d63e4f76fa78"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-final-console.log",
+    "file": "History-capture-final-console.log.gz",
+    "rawSHA256": "e4ae81fac986645e110d1af5fa8e018b41759e00eecfce359f543c70918a4464"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-retry-console.log",
+    "file": "History-capture-retry-console.log.gz",
+    "rawSHA256": "6870cea4ea35aad145eb703f24db879010449793635430677667e9fa5fda7057"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-review94.log",
+    "file": "History-capture-review94.log.gz",
+    "rawSHA256": "79579e73ad206c1942abc41803805b970f6f154ea04dd4111aa7d63e4f76fa78"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-source94-retry.log",
+    "file": "History-capture-source94-retry.log.gz",
+    "rawSHA256": "09bb10d0c8fa3af9fa9c16c75ed9121bd484ab5ae9fa6809b4c991000dae20e1"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-source94-retry2.log",
+    "file": "History-capture-source94-retry2.log.gz",
+    "rawSHA256": "b080614def02f879a290af52809ab2d78801a00fe76f55e37a237fd077bdd57b"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-sprint-console.log",
+    "file": "History-capture-sprint-console.log.gz",
+    "rawSHA256": "890a7ae67306a2693c1fd4d9835fb2f3dffba0fa1a369bf1fcfdcc8074002203"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\capture-verified-console.log",
+    "file": "History-capture-verified-console.log.gz",
+    "rawSHA256": "79579e73ad206c1942abc41803805b970f6f154ea04dd4111aa7d63e4f76fa78"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\clone-console.log",
+    "file": "History-clone-console.log.gz",
+    "rawSHA256": "31bd4a109a4c4663194e9aa4b94c7151b11e7237cf4097d6fd96300eac5de642"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\inspect-console.log",
+    "file": "History-inspect-console.log.gz",
+    "rawSHA256": "05f683962e8bfe72aac65c7b4bd06c1423915bc90b4e4a781bf9783e30956254"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\inspect-retry-console.log",
+    "file": "History-inspect-retry-console.log.gz",
+    "rawSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\package-console.log",
+    "file": "History-package-console.log.gz",
+    "rawSHA256": "1503031c38a2d09250854478dac217970edc86253aa7aca770c29294f870bfb1"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\package-sprint-console.log",
+    "file": "History-package-sprint-console.log.gz",
+    "rawSHA256": "52a33395766e9f54ced3e1c33550ab38a5171a4ff899553393c10e38f880095c"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\seal.log",
+    "file": "History-seal.log.gz",
+    "rawSHA256": "3dcda3aed4b12f21efd043eec29946d309c77d26f775716ec899f43d5a97c6b2"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\smoke-console.log",
+    "file": "History-smoke-console.log.gz",
+    "rawSHA256": "7d6f45fdf16529e052211b0225592121f1dfc010cfc1051718659df1c61770c1"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\smoke-final-console.log",
+    "file": "History-smoke-final-console.log.gz",
+    "rawSHA256": "3ccfffec17d0ecfdbc740043733d9e4ad9ddc26b15455f8e84c8d6fabd19bab0"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\smoke-preflight-rejected.log",
+    "file": "History-smoke-preflight-rejected.log.gz",
+    "rawSHA256": "7d6f45fdf16529e052211b0225592121f1dfc010cfc1051718659df1c61770c1"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\smoke-sprint-console.log",
+    "file": "History-smoke-sprint-console.log.gz",
+    "rawSHA256": "64522e6ec341295cbbbca274ec417cd071fcee439d841de032e250113f4023bb"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\start-closure94.log",
+    "file": "History-start-closure94.log.gz",
+    "rawSHA256": "92afe848131dde9f3148d85c1704c03ee6c6f860625e6e3b315723a66661be8d"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\start-evidence94.log",
+    "file": "History-start-evidence94.log.gz",
+    "rawSHA256": "aa757268fec93e291c0a3a7e0f9b7fd4665c48626e6350b03d227b61550a5011"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\start-final-console.log",
+    "file": "History-start-final-console.log.gz",
+    "rawSHA256": "50074c9be0b7598e20367d25c8d8a8a6bf66d7a4cbe1f5b6e0dd8759b7dac610"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\start-play-console.log",
+    "file": "History-start-play-console.log.gz",
+    "rawSHA256": "19c2239026f413ff7d6efbcced45a67e205162cc915c137c2264993c83900cee"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\start-retry-console.log",
+    "file": "History-start-retry-console.log.gz",
+    "rawSHA256": "1feeeed8ae53d2ed04d786f8efe2b42652cabbe981d06a0c673c1dda2a028e8e"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\start-review94.log",
+    "file": "History-start-review94.log.gz",
+    "rawSHA256": "6f9b459cbc2f744478538bbba8fd6a9be292b269901b5225c7563ee4213489db"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\start-sprint-console.log",
+    "file": "History-start-sprint-console.log.gz",
+    "rawSHA256": "40749628abe49a3d1b033172e4f40b3699daadea9eeab7c4c5abee480a15c1f5"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\start-verified-console.log",
+    "file": "History-start-verified-console.log.gz",
+    "rawSHA256": "20418f5463011dc459cc00d2df1f1c40456ee5953d57b9fa88555cc6f6a9c4d6"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\tests-console.log",
+    "file": "History-tests-console.log.gz",
+    "rawSHA256": "5d8fd75d21b017106394bffdab46cd779e9340bb9d7e43ce3fa16b2abd3f9799"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\tests-final-console.log",
+    "file": "History-tests-final-console.log.gz",
+    "rawSHA256": "ae7591e243c1eb23b3c6bd9c7300db170fe7ae251a0e33fbf1569e1a4cd645f6"
+  },
+  {
+    "original": "Artifacts\\U02\\B\\tests-sprint-console.log",
+    "file": "History-tests-sprint-console.log.gz",
+    "rawSHA256": "6c5d33bb7eda53c4a6de23825228b9290b330211bfe888b88c386ab1af384714"
+  }
+]

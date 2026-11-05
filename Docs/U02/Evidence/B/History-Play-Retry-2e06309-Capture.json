@@ -1,0 +1,38 @@
+{
+  "process": {
+    "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Package-20261105-203809-164-e12423b8\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe",
+    "sourceSHA": "2e063093a246edba30056734554a8aa0210c8f7f",
+    "userDir": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Play-Retry-2e06309",
+    "role": "U02PackageB",
+    "log": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Play-Retry-2e06309\\Game.log",
+    "arguments": [
+      "/Game/AnimeMMORPG/Maps/L_CharacterCombatLab",
+      "-windowed",
+      "-ResX=1280",
+      "-ResY=720",
+      "-WinX=0",
+      "-WinY=30",
+      "-nosplash",
+      "-U01Trace",
+      "-U02Trace",
+      "-U01SourceSHA=2e063093a246edba30056734554a8aa0210c8f7f",
+      "-U02SourceSHA=2e063093a246edba30056734554a8aa0210c8f7f",
+      "-U02RunId=Play-Retry-2e06309",
+      "-UserDir=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Play-Retry-2e06309\"",
+      "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\B\\Play-Retry-2e06309\\Game.log\"",
+      "-ExecCmds=\"t.MaxFPS 60,t.IdleWhenNotForeground 0,r.ScreenPercentage 100\""
+    ],
+    "pid": 20740,
+    "utc": "2026-11-05T13:45:17.6428281Z",
+    "binarySHA256": "A6D6131A29AC67A4B63C29571FEC40231E042A0719E71B437B908A825AF4A6A2"
+  },
+  "method": "Windows SendInput + real native game metrics + bounded screen video",
+  "events": [],
+  "completed": false,
+  "focusFixture": {
+    "hwnd": 3147424,
+    "pid": 5416
+  },
+  "error": "No native physical-key observation for IME probe",
+  "externalInputMethodRestored": true
+}

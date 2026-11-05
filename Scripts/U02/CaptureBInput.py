@@ -43,7 +43,10 @@ class BClient(Client):
         assert len(found)==1
         self.hwnd=found[0]; self.metrics()
     def metrics(self):
-        raw=self.log.read_bytes()
+        with self.log.open('rb') as stream:
+            stream.seek(0,2);end=stream.tell();stream.seek(max(0,end-250000))
+            raw=stream.read()
+        if end>250000:raw=raw[raw.find(b'\n')+1:]
         # The writer may be appending a JSON sample; consume only completed log lines.
         lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig',errors='replace').splitlines()
         values=[json.loads(l.split('Metrics ',1)[1]) for l in lines if 'Metrics {' in l]
@@ -55,6 +58,25 @@ class BClient(Client):
         return v
     def attack(self, down):
         self.guard();mouse(2 if down else 4);self.mouse_held=down
+    def focus(self):
+        # Windows may deny SetForegroundWindow from a new console process even
+        # with AttachThreadInput. A physical Alt edge unlocks foreground activation;
+        # verify the exact owned HWND before allowing ANY gameplay injection.
+        owner=w.DWORD();u.GetWindowThreadProcessId(self.hwnd,c.byref(owner))
+        assert owner.value==self.pid
+        u.ShowWindow(self.hwnd,9)
+        key('Alt',True);key('Alt',False)
+        u.SetForegroundWindow(self.hwnd)
+        for _ in range(30):
+            if u.GetForegroundWindow()==self.hwnd:break
+            time.sleep(.02)
+        self.guard();time.sleep(.25)
+        if not self.metrics()['windowActive']:self.click(20,20)
+        for _ in range(30):
+            self.guard()
+            if self.metrics()['windowActive']:return
+            time.sleep(.05)
+        raise RuntimeError('Owned HWND foreground but Slate viewport inactive')
     def release(self):
         super().release()
         if self.mouse_held:mouse(4);self.mouse_held=False
@@ -127,11 +149,15 @@ def main():
             meta['heldWAfterAltTab']=bool(u.GetAsyncKeyState(ord('W'))&0x8000)
         def back():
             assert u.GetForegroundWindow()==helper
+            # Windows task switching can reset injected key state. Reassert held W
+            # while ONLY the owned helper is foreground, then measure its OS state.
+            key('W',True)
             key('Alt',True);key('Tab',True);time.sleep(.05);key('Tab',False);key('Alt',False)
             for _ in range(60):
                 if u.GetForegroundWindow()==client.hwnd and client.metrics()['windowActive']:break
                 time.sleep(.01)
             client.guard()
+            meta['heldWOnFocusReturn']=bool(u.GetAsyncKeyState(ord('W'))&0x8000)
             assert client.metrics()['controlState']==2,'Focus alone resumed controls'
         actions=[
             (1.,'W down',down('W')),(1.05,'Ctrl down',down('Ctrl')),
@@ -140,8 +166,8 @@ def main():
             (1.96,'active camera turn',lambda:mouse(1,110,0)),(2.8,'LMB release',lambda:client.attack(False)),
             (3.,'attack edge',click),(3.15,'busy attack edge',click),
             (3.7,'W up',up('W')),(3.72,'Ctrl up',up('Ctrl')),
-            (4.2,'attack hold across menu',lambda:client.attack(True)),(4.27,'menu in action',down('Escape')),(4.32,'Escape release',up('Escape')),
-            (5.,'LMB release in menu',lambda:client.attack(False)),(5.2,'Resume click',resume),(6.1,'fresh attack after Resume',click),
+            (4.1,'W held across menu',down('W')),(4.2,'attack hold across menu',lambda:client.attack(True)),(4.27,'menu in action',down('Escape')),(4.32,'Escape release',up('Escape')),
+            (5.,'LMB release in menu',lambda:client.attack(False)),(5.2,'Resume click',resume),(5.95,'release W after menu proof',up('W')),(6.1,'fresh attack after Resume',click),
             (6.8,'W before focus',down('W')),(7.,'attack before focus',click),(7.08,'focus away during action',away),
             (8.,'focus return AwaitingResume',back),(8.3,'Resume while W held',resume),
             (9.,'W release gate',up('W')),(9.1,'fresh W',down('W')),(9.7,'W up',up('W')),
