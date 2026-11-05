@@ -102,6 +102,7 @@ void AU01PlayerController::ServerU01NetProbe_Implementation(uint8 Kind,float Cla
         const int32 ProbePlayerId=C->GetPlayerState()?C->GetPlayerState()->GetPlayerId():0;
         C->SetActorLocation(FVector(-5000,3500+(ProbePlayerId%2)*600,110),false,nullptr,ETeleportType::TeleportPhysics);
         C->GetU01Movement()->ResetFixtureState();C->GetU01Movement()->ForceReplicationUpdate();C->GetU01Movement()->ForceClientAdjustment();C->SetActorRotation(FRotator::ZeroRotator);SetControlRotation(FRotator::ZeroRotator);
+        ClientSetLocation(C->GetActorLocation(),FRotator::ZeroRotator); // One explicit fixture reset, not locomotion replication.
         UE_LOG(LogU01Network,Display,TEXT("FixtureReset id=%s player=%d"),*Target.ToString(),ProbePlayerId);
     }
     else UE_LOG(LogU01Network,Display,TEXT("ProbeRejected %s claim=%.1f id=%s mode=%d count=%d serverMax=%.1f"),Kind==1?TEXT("Overspeed"):Kind==2?TEXT("ExtraJump"):TEXT("Unknown"),Claim,*Target.ToString(),int32(C->GetCharacterMovement()->MovementMode),C->JumpCurrentCount,C->GetU01Movement()->GetMaxSpeed());
