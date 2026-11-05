@@ -1,6 +1,7 @@
 #include "U01Character.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/World.h"
+#include "U02/U02CombatComponent.h"
 
 class FSavedMove_U01 final : public FSavedMove_Character
 {
@@ -8,11 +9,14 @@ public:
     using Super=FSavedMove_Character;
     bool Sprint=false,Held=false,Locked=false,PreviousNetworkHeld=false;
     uint8 SavedLocks=0;
+    bool CombatLocked=false;
+    uint64 CombatAction=0,CombatLife=0;
     double Clock=0;
     AnimeMMORPG::U01::FJumpWindow Window;
     virtual void Clear() override
     {
         Super::Clear();Sprint=Held=Locked=PreviousNetworkHeld=false;SavedLocks=0;Clock=0;Window.ResetSession();
+        CombatLocked=false;CombatAction=CombatLife=0;
     }
     virtual uint8 GetCompressedFlags() const override
     {
@@ -21,7 +25,8 @@ public:
     virtual bool CanCombineWith(const FSavedMovePtr& Other,ACharacter* InCharacter,float MaxDelta) const override
     {
         const auto* Move=static_cast<const FSavedMove_U01*>(Other.Get());
-        return Sprint==Move->Sprint&&Held==Move->Held&&Locked==Move->Locked&&Super::CanCombineWith(Other,InCharacter,MaxDelta);
+        return Sprint==Move->Sprint&&Held==Move->Held&&Locked==Move->Locked&&CombatLocked==Move->CombatLocked
+            &&CombatAction==Move->CombatAction&&CombatLife==Move->CombatLife&&Super::CanCombineWith(Other,InCharacter,MaxDelta);
     }
     virtual void SetMoveFor(ACharacter* InCharacter,float Dt,FVector const& NewAccel,FNetworkPredictionData_Client_Character& Data) override
     {
@@ -29,13 +34,19 @@ public:
         auto* Motor=CastChecked<AU01Character>(InCharacter)->GetU01Movement();
         Sprint=Motor->bSprintRequested;Held=Motor->JumpWindow.IsHeld();Locked=(Motor->LockMask&1)!=0;
         SavedLocks=Motor->LockMask;Clock=Motor->SimulationSeconds;Window=Motor->JumpWindow;PreviousNetworkHeld=Motor->bNetworkJumpHeld;
+        CombatLocked=Motor->bCombatAuthorityLocked;
+        if(auto* Combat=CastChecked<AU01Character>(InCharacter)->Combat.Get())
+        { CombatAction=Combat->GetCombatSnapshot().ActionSequence;CombatLife=Combat->GetCombatSnapshot().LifeGeneration; }
     }
     virtual void PrepMoveFor(ACharacter* InCharacter) override
     {
         Super::PrepMoveFor(InCharacter);
         auto* Motor=CastChecked<AU01Character>(InCharacter)->GetU01Movement();
-        Motor->bSprintRequested=Sprint;Motor->LockMask=SavedLocks;Motor->SimulationSeconds=Clock;
+        // Saved local Control may replay; authority Interacting/Defeated/Combat cannot be cleared or resurrected.
+        const uint8 AuthorityLocks=Motor->LockMask & ~uint8(EU01MotorLock::Control);
+        Motor->bSprintRequested=Sprint;Motor->LockMask=(SavedLocks & uint8(EU01MotorLock::Control))|AuthorityLocks;Motor->SimulationSeconds=Clock;
         Motor->JumpWindow=Window;Motor->bNetworkJumpHeld=PreviousNetworkHeld;
+        Motor->SetControlLocked(Locked); // Clears replayed jump/sprint under ANY remaining authority lock.
     }
 };
 class FPredictionData_U01 final : public FNetworkPredictionData_Client_Character
@@ -74,8 +85,9 @@ bool UU01CharacterMovement::ClientUpdatePositionAfterServerUpdate()
 }
 void AU01Character::BeginPlay()
 {
+    // Components begin during Super; give the combat model its server identity first.
+    if(HasAuthority()&&!NetworkPawnId.IsValid())NetworkPawnId=FGuid::NewGuid();
     Super::BeginPlay();
-    if(HasAuthority())NetworkPawnId=FGuid::NewGuid();
 }
 void AU01Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {

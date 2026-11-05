@@ -8,8 +8,9 @@
 
 class UCameraComponent;
 class UStaticMeshComponent;
+class UU02CombatComponent;
 
-enum class EU01MotorLock : uint8 { Control = 1, Interacting = 2, Defeated = 4 };
+enum class EU01MotorLock : uint8 { Control = 1, Interacting = 2, Defeated = 4, Combat = 8 };
 
 class FSavedMove_U01;
 UCLASS()
@@ -25,12 +26,14 @@ public:
     float ProbeSpeed=0;
     void SetControlLocked(bool bLocked);
     void SetMotorLock(EU01MotorLock Reason, bool bEnabled);
-    bool IsMotorLocked() const { return LockMask != 0; }
-    uint8 GetLockMask() const { return LockMask; }
+    bool IsMotorLocked() const { return GetLockMask() != 0; }
+    uint8 GetLockMask() const { return LockMask | (bCombatAuthorityLocked ? uint8(EU01MotorLock::Combat) : 0); }
+    void ApplyCombatAuthority(bool bLocked, bool bYawLocked, double YawDegrees);
     void SetSprintRequested(bool bRequested) { bSprintRequested = bRequested && !IsMotorLocked(); }
     bool IsSprinting() const;
     virtual float GetMaxSpeed() const override;
     virtual void PerformMovement(float DeltaSeconds) override;
+    virtual void PhysicsRotation(float DeltaSeconds) override;
     virtual void StartFalling(int32 Iterations, float RemainingTime, float TimeTick, const FVector& Delta, const FVector& SubLocation) override;
     virtual void ProcessLanded(const FHitResult& Hit, float RemainingTime, int32 Iterations) override;
     virtual void SetPostLandedPhysics(const FHitResult& Hit) override;
@@ -46,6 +49,9 @@ private:
     friend class FSavedMove_U01;
     bool bNetworkJumpHeld=false;
     uint8 LockMask = 0;
+    // Never restored from a saved move or client compressed flag.
+    bool bCombatAuthorityLocked = false, bCombatYawLocked = false;
+    double CombatYawDegrees = 0;
     bool bSprintRequested = false;
     bool bAttemptingJump = false;
     double FrameStartSeconds = 0;
@@ -65,6 +71,7 @@ public:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
     UPROPERTY(Replicated) FGuid NetworkPawnId;
     UPROPERTY(Replicated) bool bNetSprinting=false;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U02") TObjectPtr<UU02CombatComponent> Combat;
     virtual void Jump() override;
     virtual void StopJumping() override;
     virtual void CheckJumpInput(float DeltaTime) override;

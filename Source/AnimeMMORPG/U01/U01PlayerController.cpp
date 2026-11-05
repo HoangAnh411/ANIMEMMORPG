@@ -1,5 +1,6 @@
 #include "U01PlayerController.h"
 #include "U01Character.h"
+#include "U02/U02CombatComponent.h"
 #include "U01AnimInstance.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "U01Menu.h"
@@ -40,6 +41,7 @@ bool PhysicalDown(FKey Key)
     uint32 Code=0;const uint32* KeyCode=nullptr;const uint32* CharCode=nullptr;
     FInputKeyManager::Get().GetCodesFromKey(Key,KeyCode,CharCode);
     if(KeyCode)Code=*KeyCode;
+    if(Key==EKeys::LeftMouseButton)Code=VK_LBUTTON;
     if(Key==EKeys::MiddleMouseButton)Code=VK_MBUTTON;
     if(Key==EKeys::ThumbMouseButton)Code=VK_XBUTTON1;
     if(Key==EKeys::ThumbMouseButton2)Code=VK_XBUTTON2;
@@ -179,7 +181,7 @@ void AU01PlayerController::UpdateCameraManager(float DeltaSeconds)
     if (!IsLocalPlayerController() || GetNetMode() == NM_DedicatedServer) return;
     // Sample after PCM has resolved this frame's view, never its previous-frame cache.
     TraceElapsed += DeltaSeconds;
-    if (bTrace && TraceElapsed >= .2f)
+    if (bTrace && TraceElapsed >= (FParse::Param(FCommandLine::Get(),TEXT("U02Trace")) ? 1.f/60 : .2f))
     {
         UE_LOG(LogU01Control, Display, TEXT("Metrics %s"), *GetMetricsJson());
         TraceElapsed = 0;
@@ -203,6 +205,7 @@ void AU01PlayerController::ReconcilePhysicalReleases()
     TSet<FKey> Keys=ObservedKeys;
     for(FKey Binding:GetPreferences().Keys)for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(Binding))Keys.Add(Key);
     Keys.Add(EKeys::Escape);
+    Keys.Add(EKeys::LeftMouseButton);
     for (FKey Key:Keys)
         if (!PhysicalDown(Key))
         {
@@ -216,6 +219,7 @@ void AU01PlayerController::ReconcilePhysicalReleases()
 bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
 {
     if (!IsGameWindowActive()) return false; // Another window's releases never re-arm gameplay.
+    const bool bNewPhysicalEdge = bDown && !ObservedKeys.Contains(Key);
     if(PendingRebind!=INDEX_NONE)
     {
         if(bDown){ObservedKeys.Add(Key);ReleaseGate.Down(Key,true);}
@@ -239,11 +243,17 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
     {
         ObservedKeys.Add(Key);
         const auto* MotorPawn = Cast<AU01Character>(GetPawn());
-        const bool bFixtureBlocked = MotorPawn && MotorPawn->GetU01Movement()->IsMotorLocked() && IsMotorKey(Key);
+        const bool bFixtureBlocked = MotorPawn &&
+            (MotorPawn->GetU01Movement()->GetLockMask() & (uint8(EU01MotorLock::Control)|uint8(EU01MotorLock::Interacting)|uint8(EU01MotorLock::Defeated))) && IsMotorKey(Key);
         ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing || bFixtureBlocked);
         UE_LOG(LogU01Control, Display, TEXT("PhysicalPress key=%s state=%d accepted=%d reason=%s"),
             *Key.ToString(), int32(ControlState), IsMotorKey(Key) ? Accepts(Key) : (ControlState == EU01ControlState::Playing && ReleaseGate.Allows(Key)),
             ControlState != EU01ControlState::Playing ? TEXT("ControlLocked") : bFixtureBlocked ? TEXT("MotorFixtureLocked") : (ReleaseGate.Allows(Key) ? TEXT("Ready") : TEXT("AwaitingPhysicalRelease")));
+        // The preprocessor sees UMG clicks BEFORE Resume changes state. No UI click can become an attack.
+        if (Key==EKeys::LeftMouseButton && bNewPhysicalEdge && !bChord && ControlState==EU01ControlState::Playing
+            && !bMotorLocked && ReleaseGate.Allows(Key))
+            if(auto* C=Cast<AU01Character>(GetPawn()); C && C->Combat)
+                C->Combat->SubmitAttackIntent(++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw);
     }
     else
     {
@@ -287,6 +297,7 @@ bool AU01PlayerController::AcceptsAction(int32 Action,bool bRequireMotor) const
 }
 void AU01PlayerController::QuarantineHeldKeys()
 {
+    if(PhysicalDown(EKeys::LeftMouseButton))ReleaseGate.Down(EKeys::LeftMouseButton,true);
     for(FKey Binding:GetPreferences().Keys)for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(Binding))
         if(PhysicalDown(Key))ReleaseGate.Down(Key,true);
     ReleaseGate.Lock();
@@ -395,6 +406,7 @@ void AU01PlayerController::LockControls(EU01ControlState NewState, const TCHAR* 
     ControlState = NewState;
     bMotorLocked = true;
     if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(true);
+    if (auto* C=Cast<AU01Character>(GetPawn()); C && C->Combat) C->Combat->SetControlPlaying(false);
     FlushPressedKeys();
     bShowMouseCursor = true;
     if (MenuWidget)
@@ -435,6 +447,7 @@ void AU01PlayerController::ResumePlaying()
     ControlState = EU01ControlState::Playing;
     bMotorLocked = false;
     if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->SetControlLocked(false);
+    if (auto* C=Cast<AU01Character>(GetPawn()); C && C->Combat) C->Combat->SetControlPlaying(true);
     ApplyPlayingInputMode();
     UE_LOG(LogU01Control, Display, TEXT("Resume PID=%u world=%s held keys remain quarantined"), FPlatformProcess::GetCurrentProcessId(), *GetWorld()->GetPathName());
 }
@@ -495,6 +508,10 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetNumberField(TEXT("gravityCmPerSec2"), ControlledCharacter->GetU01Movement()->GetGravityZ());
     Json->SetNumberField(TEXT("jumpZVelocityCmPerSec"), ControlledCharacter->GetU01Movement()->JumpZVelocity);
     Json->SetNumberField(TEXT("motorLockMask"), ControlledCharacter->GetU01Movement()->GetLockMask());
+    if(ControlledCharacter->Combat)Json->SetObjectField(TEXT("combat"),ControlledCharacter->Combat->GetDiagnostics());
+    Json->SetBoolField(TEXT("gateW"),ReleaseGate.Allows(EKeys::W));
+    Json->SetBoolField(TEXT("gateAttack"),ReleaseGate.Allows(EKeys::LeftMouseButton));
+    Json->SetNumberField(TEXT("bodyYawDegrees"),ControlledCharacter->GetActorRotation().Yaw);
     Json->SetNumberField(TEXT("motorTimeSeconds"), ControlledCharacter->GetU01Movement()->GetMotorTimeSeconds());
     Json->SetBoolField(TEXT("bufferedJump"), ControlledCharacter->GetU01Movement()->HasBufferedJump(ControlledCharacter->GetU01Movement()->GetMotorTimeSeconds()));
     Json->SetStringField(TEXT("pivotWorldCm"), ControlledCharacter->CameraPivot.ToString());
@@ -582,6 +599,8 @@ void AU01PlayerController::U01FixtureLock(const FString& Reason, bool bEnabled)
     if (!FixtureAllowed()) return;
     auto* MotorPawn = Cast<AU01Character>(GetPawn());
     if (!MotorPawn || (Reason != TEXT("Interacting") && Reason != TEXT("Defeated"))) return;
+    if (Reason==TEXT("Interacting") && bEnabled && MotorPawn->Combat && MotorPawn->Combat->GetCombatSnapshot().bLocked)
+    { UE_LOG(LogU01Control,Display,TEXT("LabFixtureLock rejected reason=CombatBusy")); return; }
     QuarantineHeldKeys();
     FlushPressedKeys();
     MotorPawn->GetU01Movement()->SetMotorLock(Reason == TEXT("Interacting") ? EU01MotorLock::Interacting : EU01MotorLock::Defeated, bEnabled);
@@ -589,6 +608,13 @@ void AU01PlayerController::U01FixtureLock(const FString& Reason, bool bEnabled)
         *Reason, bEnabled, MotorPawn->GetU01Movement()->GetLockMask(), *GetWorld()->GetPathName(), *MotorPawn->GetPathName());
 }
 void AU01PlayerController::ResetRunwayFixture() { U01FixtureReset(TEXT("Runway")); }
+void AU01PlayerController::U02FixtureCancel(const FString& Reason)
+{
+    if(!FixtureAllowed())return;
+    auto* C=Cast<AU01Character>(GetPawn());if(!C||!C->Combat)return;
+    if(Reason.Equals(TEXT("Dodge"),ESearchCase::IgnoreCase))C->Combat->CancelAction(AnimeMMORPG::U02::ECancel::Dodge);
+    else if(Reason.Equals(TEXT("Guard"),ESearchCase::IgnoreCase))C->Combat->CancelAction(AnimeMMORPG::U02::ECancel::Guard);
+}
 void AU01PlayerController::NextFixtureStation()
 {
     FixtureStationIndex = (FixtureStationIndex + 1) % UE_ARRAY_COUNT(FixtureStations);

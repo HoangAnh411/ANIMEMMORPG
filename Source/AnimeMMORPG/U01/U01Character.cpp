@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
+#include "U02/U02CombatComponent.h"
 
 void UU01CharacterMovement::BeginPlay()
 {
@@ -22,6 +23,10 @@ void UU01CharacterMovement::SetControlLocked(bool bLocked)
 
 void UU01CharacterMovement::SetMotorLock(EU01MotorLock Reason, bool bEnabled)
 {
+    if (Reason == EU01MotorLock::Combat) return; // Owned by combat snapshot, not generic/client flags.
+    auto* C = Cast<AU01Character>(CharacterOwner);
+    if (bEnabled && Reason == EU01MotorLock::Interacting && bCombatAuthorityLocked) return;
+    if (bEnabled && Reason == EU01MotorLock::Defeated && C && C->Combat) C->Combat->CancelAction(AnimeMMORPG::U02::ECancel::Death);
     const uint8 Bit = static_cast<uint8>(Reason);
     if (bEnabled) LockMask |= Bit;
     else LockMask &= ~Bit;
@@ -34,6 +39,30 @@ void UU01CharacterMovement::SetMotorLock(EU01MotorLock Reason, bool bEnabled)
         JumpWindow.ClearInput();
         if (auto* MotorPawn = Cast<AU01Character>(CharacterOwner)) MotorPawn->ClearEngineJumpInput();
     }
+}
+
+void UU01CharacterMovement::ApplyCombatAuthority(bool bLocked, bool bYawLocked, double YawDegrees)
+{
+    bCombatAuthorityLocked = bLocked;
+    bCombatYawLocked = bYawLocked;
+    CombatYawDegrees = YawDegrees;
+    if (bLocked)
+    {
+        ConsumeInputVector(); Velocity.X = Velocity.Y = 0; Acceleration = FVector::ZeroVector;
+        bSprintRequested = false; JumpWindow.ClearInput();
+        if (auto* C = Cast<AU01Character>(CharacterOwner)) C->ClearEngineJumpInput();
+    }
+}
+
+void UU01CharacterMovement::PhysicsRotation(float DeltaSeconds)
+{
+    if (bCombatAuthorityLocked)
+    {
+        // Authoritative/snapshot yaw also wins during movement replay.
+        if (UpdatedComponent) MoveUpdatedComponent(FVector::ZeroVector,FRotator(0,CombatYawDegrees,0).Quaternion(),true);
+        return;
+    }
+    Super::PhysicsRotation(DeltaSeconds);
 }
 
 bool UU01CharacterMovement::IsSprinting() const
@@ -62,6 +91,7 @@ void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
         Velocity.X = Velocity.Y = 0;
     }
     Super::PerformMovement(DeltaSeconds); // Keep vertical movement and world simulation alive.
+    if (bCombatAuthorityLocked) PhysicsRotation(DeltaSeconds);
     SimulationSeconds = FrameStartSeconds + DeltaSeconds;
     if(CharacterOwner&&CharacterOwner->HasAuthority())CastChecked<AU01Character>(CharacterOwner)->bNetSprinting=IsSprinting();
 }
@@ -93,7 +123,10 @@ void UU01CharacterMovement::ObserveMovementMode(EMovementMode PreviousMode)
 {
     if (IsMovingOnGround()) JumpWindow.Land();
     else if ((PreviousMode == MOVE_Walking || PreviousMode == MOVE_NavWalking) && IsFalling())
+    {
         JumpWindow.LeaveGround(EventSeconds.Get(SimulationSeconds), bAttemptingJump);
+        if (auto* C=Cast<AU01Character>(CharacterOwner); C && C->Combat) C->Combat->LostGround();
+    }
 }
 
 bool UU01CharacterMovement::TryJump(double Now, float DeltaSeconds)
@@ -113,6 +146,7 @@ bool UU01CharacterMovement::TryJump(double Now, float DeltaSeconds)
 
 void UU01CharacterMovement::ResetFixtureState()
 {
+    if (auto* C=Cast<AU01Character>(CharacterOwner); C && C->Combat) C->Combat->ResetLabCombat();
     LockMask &= static_cast<uint8>(EU01MotorLock::Control);
     bSprintRequested = false;
     JumpWindow.ResetSession();
@@ -135,6 +169,7 @@ AU01Character::AU01Character(const FObjectInitializer& ObjectInitializer)
     GetCharacterMovement()->AirControl = .35f;
     JumpMaxCount = 1;
     JumpMaxHoldTime = 0;
+    Combat = CreateDefaultSubobject<UU02CombatComponent>(TEXT("U02Combat"));
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("U01Camera"));
     FollowCamera->SetupAttachment(RootComponent);
     FollowCamera->bUsePawnControlRotation = false;

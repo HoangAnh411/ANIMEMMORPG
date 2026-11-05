@@ -43,6 +43,7 @@ public:
     UFUNCTION(BlueprintCallable, Category="U01") void ReturnToBoot();
     UFUNCTION(BlueprintCallable, Category="U01") void QuitToDesktop();
     UFUNCTION(Exec) void U01Metrics();
+    UFUNCTION(Exec) void U02FixtureCancel(const FString& Reason);
     UFUNCTION(Exec) void U01NetFixture(const FString& Command);
     UFUNCTION(Server,Reliable) void ServerU01NetProbe(uint8 Kind,float Claim,FGuid Target);
     UFUNCTION(Exec) void U01FixtureReset(const FString& Station);
@@ -84,6 +85,7 @@ private:
     float TraceElapsed = 0;
     float ProbeSeconds = 0;
     FString RunId;
+    uint64 CombatCommandSequence = 0;
     void ActivationChanged(bool bActive);
     void ReconcilePhysicalReleases();
     void QuarantineHeldKeys();
