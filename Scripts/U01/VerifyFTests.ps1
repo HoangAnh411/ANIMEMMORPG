@@ -12,7 +12,7 @@ $out=Join-Path $OutputRoot ('MCPTests-'+(Get-Date -Format 'yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Path $out | Out-Null
 $sourceSHA=(& git -C (Split-Path $project) rev-parse HEAD)
 $exe=Join-Path $EngineRoot 'Engine/Binaries/Win64/UnrealEditor.exe'
-$arguments=@(('"'+$project+'"'),'-NullRHI','-nosound','-unattended','-NoLiveCoding','-ModelContextProtocolStartServer',('-ModelContextProtocolPort='+$Port),('-U01SourceSHA='+$sourceSHA),('-abslog="'+(Join-Path $out 'Editor.log')+'"'))
+$arguments=@(('"'+$project+'"'),'-NullRHI','-nosound','-unattended','-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-ModelContextProtocolStartServer',('-ModelContextProtocolPort='+$Port),('-U01SourceSHA='+$sourceSHA),('-abslog="'+(Join-Path $out 'Editor.log')+'"'))
 $p=Start-Process -FilePath $exe -ArgumentList $arguments -WindowStyle Hidden -PassThru
 @{pid=$p.Id;exe=$exe;arguments=$arguments;sourceSHA=$sourceSHA} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $out 'process.json')
 $uri='http://127.0.0.1:'+ $Port + '/mcp'

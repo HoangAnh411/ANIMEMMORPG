@@ -20,6 +20,7 @@ from PIL import ImageGrab
 cv2.setNumThreads(1) # Avoid oversubscribing the foreground game's CPU workers.
 
 p = argparse.ArgumentParser()
+p.add_argument('--resume-first',action='store_true',help='Click local Resume and verify Playing before timing a movement probe')
 p.add_argument('--peer-record',type=Path,help='Second live client to include side by side in the capture')
 p.add_argument('--process-record',type=Path,required=True,help='Dedicated test launcher record for this exact client PID')
 p.add_argument('--pid', type=int, required=True)
@@ -267,6 +268,16 @@ try:
             meta['menuWProbeAfter']=probe_w()
             if meta['menuWProbeAfter']!='W':raise RuntimeError('Input method still replaces W; reject setup')
     meta['keyboardLayoutDuring']=hex(user.GetKeyboardLayout(game_thread))
+    if a.resume_first:
+        if not a.game_log:raise RuntimeError('Resume preflight requires owned metrics')
+        for attempt in range(4):
+            state=live_metrics()
+            if state['controlState']==0:break
+            guard();user.SetCursorPos(left+(right-left)//2,top+241);time.sleep(.25)
+            mouse(2);time.sleep(.10);mouse(4);time.sleep(.4)
+        state=live_metrics()
+        if state['controlState']!=0:raise RuntimeError('Physical Resume click did not enter Playing')
+        meta['resumePreflightVerified']=state
     start=time.perf_counter();meta['utc']=datetime.now(timezone.utc).isoformat()
     while (elapsed := time.perf_counter() - start) < a.duration:
         guard()
@@ -321,8 +332,8 @@ try:
                 if not 0 <= x < right-left or not 0 <= y < bottom-top:
                     raise RuntimeError('Click outside game client')
                 user.SetCursorPos(left+x, top+y)
-                time.sleep(.06) # Let Slate process pointer motion before hit testing the press.
-                mouse(2); time.sleep(.03); mouse(4)
+                time.sleep(.25) # Let Slate process pointer motion before hit testing the press.
+                mouse(2); time.sleep(.10); mouse(4)
                 if event['action']=='quit':stop_requested=True
             else:
                 raise RuntimeError('Unknown evidence action')
