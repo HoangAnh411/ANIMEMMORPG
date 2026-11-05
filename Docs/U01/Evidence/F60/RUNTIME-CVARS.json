@@ -1,0 +1,124 @@
+{
+  "A": {
+    "Server": [
+      "[2026.11.05-07.16.02:770][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.16.02:770][  0]t.IdleWhenNotForeground = \"0\""
+    ],
+    "ClientA": [
+      "[2026.11.05-07.16.09:882][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.16.09:882][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.16.09:882][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.16.09:882][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.16.09:882][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.16.09:882][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.16.09:882][  0]r.ScreenPercentage = \"50\""
+    ],
+    "ClientB": [
+      "[2026.11.05-07.16.23:017][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.16.23:017][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.16.23:018][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.16.23:018][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.16.23:018][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.16.23:018][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.16.23:018][  0]r.ScreenPercentage = \"50\""
+    ]
+  },
+  "B": {
+    "Server": [
+      "[2026.11.05-07.20.45:591][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.20.45:591][  0]t.IdleWhenNotForeground = \"0\""
+    ],
+    "ClientA": [
+      "[2026.11.05-07.20.55:089][  0]t.MaxFPS = \"60\"",
+      "[2026.11.05-07.20.55:089][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.20.55:090][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.20.55:090][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.20.55:090][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.20.55:090][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.20.55:090][  0]r.ScreenPercentage = \"50\""
+    ]
+  },
+  "C": {
+    "Server": [
+      "[2026.11.05-07.25.52:344][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.25.52:344][  0]t.IdleWhenNotForeground = \"0\""
+    ],
+    "ClientA": [
+      "[2026.11.05-07.26.01:977][  0]t.MaxFPS = \"60\"",
+      "[2026.11.05-07.26.01:977][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.26.01:977][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.26.01:977][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.26.01:977][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.26.01:977][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.26.01:977][  0]r.ScreenPercentage = \"50\""
+    ],
+    "ClientB": [
+      "[2026.11.05-07.26.15:581][  0]t.MaxFPS = \"60\"",
+      "[2026.11.05-07.26.15:581][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.26.15:581][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.26.15:581][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.26.15:581][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.26.15:581][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.26.15:581][  0]r.ScreenPercentage = \"50\""
+    ]
+  },
+  "D": {
+    "Server": [
+      "[2026.11.05-07.40.46:282][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.40.46:282][  0]t.IdleWhenNotForeground = \"0\""
+    ],
+    "ClientA": [
+      "[2026.11.05-07.40.55:715][  0]t.MaxFPS = \"60\"",
+      "[2026.11.05-07.40.55:715][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.40.55:715][  0]r.ScreenPercentage = \"100\""
+    ]
+  },
+  "E": {
+    "Server": [
+      "[2026.11.05-07.35.10:325][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.35.10:325][  0]t.IdleWhenNotForeground = \"0\""
+    ],
+    "ClientA": [
+      "[2026.11.05-07.35.19:718][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.35.19:718][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.35.19:719][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.35.19:719][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.35.19:719][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.35.19:719][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.35.19:719][  0]r.ScreenPercentage = \"50\""
+    ],
+    "ClientB": [
+      "[2026.11.05-07.35.32:534][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.35.32:534][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.35.32:534][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.35.32:534][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.35.32:534][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.35.32:534][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.35.32:534][  0]r.ScreenPercentage = \"50\""
+    ]
+  },
+  "F3": {
+    "Server": [
+      "[2026.11.05-07.47.50:907][  0]t.MaxFPS = \"30\"",
+      "[2026.11.05-07.47.50:907][  0]t.IdleWhenNotForeground = \"0\""
+    ],
+    "ClientA": [
+      "[2026.11.05-07.48.00:707][  0]t.MaxFPS = \"60\"",
+      "[2026.11.05-07.48.00:707][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.48.00:707][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.48.00:707][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.48.00:707][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.48.00:707][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.48.00:707][  0]r.ScreenPercentage = \"50\""
+    ],
+    "ClientB": [
+      "[2026.11.05-07.48.15:639][  0]t.MaxFPS = \"60\"",
+      "[2026.11.05-07.48.15:639][  0]t.IdleWhenNotForeground = \"0\"",
+      "[2026.11.05-07.48.15:639][  0]r.ScreenPercentage = \"50\"",
+      "[2026.11.05-07.48.15:639][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+      "[2026.11.05-07.48.15:639][  0]r.RenderTargetPoolMin = \"128\"",
+      "[2026.11.05-07.48.15:639][  0]r.Streaming.PoolSize = \"256\"",
+      "[2026.11.05-07.48.15:639][  0]r.ScreenPercentage = \"50\""
+    ]
+  }
+}

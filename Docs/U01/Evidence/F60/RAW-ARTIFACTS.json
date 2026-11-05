@@ -1,0 +1,114 @@
+{
+  "A": {
+    "manifest": "Artifacts\\U01\\F\\F60\\A-20261105-141550\\MANIFEST.json",
+    "manifestSHA256": "0ae12f8c8b437249206dec9333dcdb307c5cca5df3218c4506fe95c6c58b867c",
+    "inputSHA256": "9452fb83ab7e4f7b5ffe9635dc80dea00074633b281b7359102c95650a1b6991",
+    "resourcesSHA256": "257e5cb01958eba911aa2bbefa18439fca0524727908847e9c58848bc72ee204",
+    "frames": {
+      "Server": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-141551\\Server\\Server.log",
+        "SHA256": "572f79801a6deada5583dbc8326457fc356160ba6892071c656bb973b87c58e4"
+      },
+      "ClientA": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-141551\\ClientA\\ClientA.log",
+        "SHA256": "ad9749ed7d002cdc284d3efc9054c95711ecf8bf1dc4b4178c493b25eeca8285"
+      },
+      "ClientB": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-141551\\ClientB\\ClientB.log",
+        "SHA256": "be62e68d68984f15541b28d4f7b352d397cf20a5285944d4d500808dbf6c2526"
+      }
+    }
+  },
+  "B": {
+    "manifest": "Artifacts\\U01\\F\\F60\\B-20261105-142036\\MANIFEST.json",
+    "manifestSHA256": "d8d83d025ae56643edb42af9e17754978a72369ac9470f074ef352c9eb0c8179",
+    "inputSHA256": "3e6903c7b595b790f174f7d10c88ed3fe140ed1f56b84117e42f96eff900259c",
+    "resourcesSHA256": "3cde98122f0c310edd6093efe2f8eb8ba01e74cf7fb7f0e0b71e204b47ece2ac",
+    "frames": {
+      "Server": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-142037\\Server\\Server.log",
+        "SHA256": "b2af5b8ace08dc1e23b5b884e8062e9dcde049afeb9544b9b05f356eb0988e73"
+      },
+      "ClientA": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-142037\\ClientA\\ClientA.log",
+        "SHA256": "213e0e4dcaad667c8fd1fce31dd156c62653802fa3f91eb02113ddf3860f6bc6"
+      }
+    }
+  },
+  "C": {
+    "manifest": "Artifacts\\U01\\F\\F60\\C-20261105-142542\\MANIFEST.json",
+    "manifestSHA256": "ccaaf6bd78bd1c7676f487906361c8480df6b62f3eaf44f134ab375b81c280c2",
+    "inputSHA256": "4713d8f5a616f804c032765c7a1da4b5faea357a764b587c92d05635c4fd916e",
+    "resourcesSHA256": "59768f695e9a34774041284e327aca8f1bf95abbab474b14bd7b2a4410358b01",
+    "frames": {
+      "Server": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-142543\\Server\\Server.log",
+        "SHA256": "b827eda6fb9969903688afa53f669dfe777e49c4bf2ea704ecff1eb9bfd222fd"
+      },
+      "ClientA": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-142543\\ClientA\\ClientA.log",
+        "SHA256": "62e691cae30edc322e09fa03256527758a90b59abb221e6def867e691019400d"
+      },
+      "ClientB": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-142543\\ClientB\\ClientB.log",
+        "SHA256": "cafc31ad2a5618f90edd2ead49ac6dc378d3aff17813a8e05dd23213e9392bb4"
+      }
+    }
+  },
+  "D": {
+    "manifest": "Artifacts\\U01\\F\\F60\\D-20261105-144036\\MANIFEST.json",
+    "manifestSHA256": "5d6ac1ee5e15fe49941308696f6e63963d1ef6753ebb508977457ef7da8119bb",
+    "inputSHA256": "a4d9736f55b9b3012acf73e74744343e84d0d0fb50b4861624540e4f8cdaef56",
+    "resourcesSHA256": "f923995415a36773817e9ff3977cc0fe9d36c7765bc28a7295fa3b9300b88884",
+    "frames": {
+      "Server": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-144037\\Server\\Server.log",
+        "SHA256": "52d78207dd0f61dd2979289cd54a06f99809de8322a1a0f35a244da3b3883148"
+      },
+      "ClientA": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-144037\\ClientA\\ClientA.log",
+        "SHA256": "2c4155b7737e2c912754368bd99550c6bc3c749a6923343f338c4b77b980358d"
+      }
+    }
+  },
+  "E": {
+    "manifest": "Artifacts\\U01\\F\\F60\\E-20261105-143500\\MANIFEST.json",
+    "manifestSHA256": "55188c4446251a9ce5981511efa35e279d138979284aaa2ddb05f488051cbe6a",
+    "inputSHA256": "5f35ea10ac567a1cea9f0279b8a77beb481f43b0e4979fda93d2a8c32dc1b752",
+    "resourcesSHA256": "8a9d3afb918fc84195f8eae7a74571b1320d7b7795dacea4bdff9168f1b7cf87",
+    "frames": {
+      "Server": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-143501\\Server\\Frames.jsonl",
+        "SHA256": "b95f353813bc7419cb0ff75934724aa666108f09e0fcd1f3d5eeee85f1110044"
+      },
+      "ClientA": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-143501\\ClientA\\Frames.jsonl",
+        "SHA256": "92c33de5e2d4a4cf676ea1c41fffd91c2005c0f2467159c0a0682bf7912f3b64"
+      },
+      "ClientB": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-143501\\ClientB\\Frames.jsonl",
+        "SHA256": "16a073a6f76f12a90e9e4d4348407a40ce5fa0bf576f120fbcd646b34021b828"
+      }
+    }
+  },
+  "F3": {
+    "manifest": "Artifacts\\U01\\F\\F60\\F3-20261105-144740\\MANIFEST.json",
+    "manifestSHA256": "f9310b29c35966a40898ce16a0ce5125c6efe2f18690f21453f59a70953574fe",
+    "inputSHA256": "56dc53b61d6f401a4be6db2e46a0af09fde2e4d38a82f66c9a15d6ff97166695",
+    "resourcesSHA256": "68ed57d13e92f31020431632626dc56fcf4d272a7d3959d3bd9724ffb86fd98a",
+    "frames": {
+      "Server": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-144742\\Server\\Frames.jsonl",
+        "SHA256": "33f5bed76bfd923aab3d53ef9288cf27c1f5696223ff538edc15953f31b02264"
+      },
+      "ClientA": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-144742\\ClientA\\Frames.jsonl",
+        "SHA256": "10c7d83c96f85b9c38d534389d97ae76c0720de6be673971928103d11a906570"
+      },
+      "ClientB": {
+        "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-144742\\ClientB\\Frames.jsonl",
+        "SHA256": "b52d928836646b468f1d26538b11031e41e159e7252184c2540c0d5408e42977"
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "branch": "u01/f-network",
+  "baseSHA": "412bc7b6623c4afb8af8c6fe07d7f419dedcbc5b",
+  "sourceSHA": "edf885ac79d900977a43a404019eadce0244ed47",
+  "packageSourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+  "package": "Artifacts\\U01\\F\\PerfInvestigation\\Package-20261105-132600-709-df14ddc7\\Archive\\Windows",
+  "packageReused": true,
+  "build": "Artifacts\\U01\\F\\F60-Build-20261105-140722",
+  "tests": "Artifacts\\U01\\F\\MCPTests-20261105-140807",
+  "automation": 23,
+  "engine": "UE5.8.4 CL58902052",
+  "toolchain": "MSVC14.51.36260 / SDK10.0.26100.0",
+  "editorModuleSHA256": "442e63eb4a9e7774e6eca260610694c6a2302c5d0228480a105b2246f12f8394",
+  "engineExeSHA256": "a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143",
+  "defaultClientMaxFPS": 60,
+  "serverMaxFPS": 30,
+  "selection": {
+    "defaultClientMaxFPS": 60,
+    "fpsCriteriaMet": true,
+    "noLongStutterChain": true,
+    "tenValidStartsStopsPerDirection": true,
+    "latencyIncreaseFlags": [
+      "ClientA/stop",
+      "ClientB/stop"
+    ],
+    "stopIncreaseExplainedByMeasuredDecay": true,
+    "latencyFlagRule": "Review if median increases >20ms or p95 >33ms versus A; not a gameplay rule",
+    "stutterRule": "Reject repeated 3x >100ms or an isolated >500ms; report every >100ms regardless"
+  },
+  "profile": {
+    "clients": 2,
+    "window": [
+      900,
+      540
+    ],
+    "screenPercentage": 50,
+    "LumenAtlasSize": 2048,
+    "RenderTargetPoolMinimumMiB": 128,
+    "StreamingPoolMiB": 256,
+    "originalEditor": "Kept open, minimized during every run; placement restored by each cleanup",
+    "server": "Dedicated Editor / NullRHI; process-local existing timer request honored; no GPU/window/render dimensions apply"
+  },
+  "nativeGameplayChanged": false,
+  "replicationOrSmoothingChanged": false,
+  "testsOrBuildsDuringMeasurements": false,
+  "inputProtocol": "Continuous 120 seconds per A-D/E, alternating 60s foreground blocks; continuous 300 seconds F3 including all focus/menu transitions; 10 forward starts+stops per block, backward return strokes retained",
+  "scriptsAtSeal": {
+    "AnalyzeF60Study.py": "c9caf9f0bfc4383451f2333c8fadce002daf415b4128a39f1ba8e3b8ab195f0e",
+    "DriveF60.py": "9d2cb2770b543a2996d70112d11cedb1d6502783145ed4909768893ea2e7867e",
+    "F60Input.py": "29486ed4e1f5b7f9bd44118badc6e48d4743be172b6e32c9664bae8240081196",
+    "RecordF60Study.py": "d607b7a6a4a6337663f0257d92f594448372a65a10477bdfb7f3a0ce0a218421",
+    "RunF60Study.py": "c0142b478b6b0559a1c09778944a80f57914f7cbf6a87707040e5e0393c19d69",
+    "SampleF60Resources.ps1": "25e09b380bf6437d091fc6fadb97f5faec06e9eb6d69f2df9b5f8af2a313f2dd",
+    "StartFSession.ps1": "ff688b71a07afc9c168630fa47d651e6726747f596817267d5c42a31eaa1c539",
+    "ReviewF.ps1": "3b6eb72d63c2627faebed86cf531a2ed77a483ed538267194e5027a2fbd8abe6",
+    "FReviewHost.ps1": "eb279092c36711c3f7ccaae11d43517e885ec0761276c0e009a2c394daef3a0c",
+    "StopFSession.ps1": "e64572055d541420a15e8ef2505e2ea68ef93cb3d3ea3a960cade930c2cffa72",
+    "StopLatestFReview.ps1": "ed26929ed62f7ef81c97708df3cc407d8fc2588d94341fede187cd4d00d0e962"
+  },
+  "limits": [
+    "Not an uncapped maximum-FPS measurement",
+    "D is one client at 900x540 internal100%, not target-resolution product benchmark",
+    "No packaged Server acceptance, latency/loss tests or G acceptance",
+    "All transform timings are game-thread estimates, not scanout latency",
+    "F remains pending user confirmation; no merge or G work"
+  ],
+  "defaultLaunchSmoke": "DEFAULT-LAUNCH-SMOKE.json",
+  "reviewProcessesStopped": true
+}

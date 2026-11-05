@@ -1,0 +1,79 @@
+{
+  "A-Phase0.mp4": {
+    "SHA256": "ab942b25d210d2c157b82d73e4641a27b93e5c7db2f8675c3434f7128715692b",
+    "encodedHz": 30,
+    "uniqueCaptures": 138,
+    "actualCaptureHz": 17.541791878675642,
+    "encodedFrames": 235,
+    "duplicateFrames": 97,
+    "firstCaseSecond": 0.21170580000034533,
+    "lastCaseSecond": 8.021626300000207,
+    "edit": "Original guarded client rectangles only, timing duplicates retained; no interpolation. Frame data establishes 60 FPS, not this 30Hz-encoded excerpt."
+  },
+  "A-Phase1.mp4": {
+    "SHA256": "430b69170f57649a76d4be2cc2a29156788a1d2e28bfc7c71f163c184384e947",
+    "encodedHz": 30,
+    "uniqueCaptures": 106,
+    "actualCaptureHz": 17.1874139350487,
+    "encodedFrames": 184,
+    "duplicateFrames": 78,
+    "firstCaseSecond": 61.943505499999446,
+    "lastCaseSecond": 68.05262699999912,
+    "edit": "Original guarded client rectangles only, timing duplicates retained; no interpolation. Frame data establishes 60 FPS, not this 30Hz-encoded excerpt."
+  },
+  "C-Phase0.mp4": {
+    "SHA256": "63a402a04a96509ea14266a14df7081448e617c644ae0e2fb17c4c05ccb2e0e3",
+    "encodedHz": 30,
+    "uniqueCaptures": 89,
+    "actualCaptureHz": 11.254724378386232,
+    "encodedFrames": 235,
+    "duplicateFrames": 146,
+    "firstCaseSecond": 0.21838949999983015,
+    "lastCaseSecond": 8.037328200000047,
+    "edit": "Original guarded client rectangles only, timing duplicates retained; no interpolation. Frame data establishes 60 FPS, not this 30Hz-encoded excerpt."
+  },
+  "C-Phase1.mp4": {
+    "SHA256": "181e83db5f6ac0241f79766f5c46628de807183849322f6454fdc5dafe63472e",
+    "encodedHz": 30,
+    "uniqueCaptures": 69,
+    "actualCaptureHz": 11.534136498227534,
+    "encodedFrames": 177,
+    "duplicateFrames": 108,
+    "firstCaseSecond": 62.16353959999833,
+    "lastCaseSecond": 68.05908279999858,
+    "edit": "Original guarded client rectangles only, timing duplicates retained; no interpolation. Frame data establishes 60 FPS, not this 30Hz-encoded excerpt."
+  },
+  "D-Phase0.mp4": {
+    "SHA256": "7b9c5e616ea1cbe0e9bbb26c9329918a263f15da9248acc003423e46b835cdad",
+    "encodedHz": 30,
+    "uniqueCaptures": 195,
+    "actualCaptureHz": 24.64096745010567,
+    "encodedFrames": 237,
+    "duplicateFrames": 42,
+    "firstCaseSecond": 0.1540789999999106,
+    "lastCaseSecond": 8.027146500000526,
+    "edit": "Original guarded client rectangles only, timing duplicates retained; no interpolation. Frame data establishes 60 FPS, not this 30Hz-encoded excerpt."
+  },
+  "F3-Phase0.mp4": {
+    "SHA256": "6ea1278fc46e57a997c95a48f0e4fc108d011e4bb11672d0660fbef53905efea",
+    "encodedHz": 30,
+    "uniqueCaptures": 95,
+    "actualCaptureHz": 11.873447041545441,
+    "encodedFrames": 238,
+    "duplicateFrames": 143,
+    "firstCaseSecond": 0.08596809999835386,
+    "lastCaseSecond": 8.002792899998894,
+    "edit": "Original guarded client rectangles only, timing duplicates retained; no interpolation. Frame data establishes 60 FPS, not this 30Hz-encoded excerpt."
+  },
+  "F3-Phase1.mp4": {
+    "SHA256": "349f9dec965565844822bf7ee6e9f2396908308a79b4fd0b22d2e57e3d55648b",
+    "encodedHz": 30,
+    "uniqueCaptures": 70,
+    "actualCaptureHz": 11.531748826478777,
+    "encodedFrames": 180,
+    "duplicateFrames": 110,
+    "firstCaseSecond": 62.07797749999918,
+    "lastCaseSecond": 68.06145849999848,
+    "edit": "Original guarded client rectangles only, timing duplicates retained; no interpolation. Frame data establishes 60 FPS, not this 30Hz-encoded excerpt."
+  }
+}

@@ -31,7 +31,10 @@ foreach($role in $roles){
  if($BufferedDiagnostics){$arguments+=('-U01FPerfFile="'+(Join-Path $user 'Frames.jsonl')+'"')}
  $cap=if($role -eq 'Server'){30}else{$ClientMaxFPS}
  $commands='t.MaxFPS '+$cap+',t.IdleWhenNotForeground 0'
- if($role -ne 'Server'){$commands+=',stat unit,r.ScreenPercentage '+$(if($MemoryBudget){50}else{100})}
+ if($role -ne 'Server'){
+  if($Diagnostics -or $BufferedDiagnostics){$commands+=',stat unit'}
+  $commands+=',r.ScreenPercentage '+$(if($MemoryBudget){50}else{100})
+ }
  if($MemoryBudget -and $role -ne 'Server'){
   # Explicit same-machine review profile; retain DX12/SM6, Lumen, window size,
   # network frequency and CMC smoothing. Do not persist project/user settings.
@@ -44,7 +47,7 @@ foreach($role in $roles){
  # The dedicated background server continues to run hidden.
  $windowStyle=if($role -eq 'Server'){'Hidden'}else{'Normal'}
  $p=Start-Process -FilePath $exe -ArgumentList $arguments -WorkingDirectory (Split-Path $project) -WindowStyle $windowStyle -PassThru
- $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;userDir=$user;log=$log;utc=[DateTime]::UtcNow.ToString('o');requestedMaxFPS=$cap;clientCount=$ClientCount;windowSize=@(900,540);internalResolutionPercent=$(if($MemoryBudget){50}else{100});memoryProfile=$MemoryBudget.IsPresent;bufferedDiagnostics=$BufferedDiagnostics.IsPresent}
+ $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;userDir=$user;log=$log;utc=[DateTime]::UtcNow.ToString('o');requestedMaxFPS=$cap;clientCount=$ClientCount;windowSize=$(if($role -ne 'Server'){@(900,540)});internalResolutionPercent=$(if($role -ne 'Server'){if($MemoryBudget){50}else{100}});memoryProfile=($MemoryBudget.IsPresent -and $role -ne 'Server');bufferedDiagnostics=$BufferedDiagnostics.IsPresent}
  $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $user 'process.json')
  $records+=$r;$records | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $run 'processes.json')
  if($role -eq 'Server'){Set-FServerTimer $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $run 'server-timer.json')}

@@ -1,7 +1,10 @@
 param([int]$Port=17877,[switch]$OriginalQuality,[switch]$KeepEditorVisible,[switch]$Diagnostics,[ValidateSet(30,60)][int]$ClientMaxFPS=30,[ValidateSet(1,2)][int]$ClientCount=2,[switch]$BufferedDiagnostics)
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).Path
-$manifest=Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $root 'Docs/U01/Evidence/F-Performance/MANIFEST.json') | ConvertFrom-Json
+$manifestPath=Join-Path $root 'Docs/U01/Evidence/F60/MANIFEST.json'
+if(!(Test-Path -LiteralPath $manifestPath)){$manifestPath=Join-Path $root 'Docs/U01/Evidence/F-Performance/MANIFEST.json'}
+$manifest=Get-Content -Raw -Encoding UTF8 -LiteralPath $manifestPath | ConvertFrom-Json
+if(!$PSBoundParameters.ContainsKey('ClientMaxFPS') -and $manifest.defaultClientMaxFPS){$ClientMaxFPS=[int]$manifest.defaultClientMaxFPS}
 $project=Join-Path $root 'Artifacts/U01/F/Source/AnimeMMORPG.uproject'
 $sha=git -C (Split-Path $project) rev-parse HEAD
 if($sha -ne $manifest.sourceSHA){throw 'Built F clone source differs from recorded review artifact'}
@@ -34,5 +37,6 @@ public static class FReviewWindows {
 $records=Get-Content -Raw -Encoding UTF8 (Join-Path $session 'processes.json') | ConvertFrom-Json
 foreach($record in $records){if($record.role -ne 'Server'){[FReviewWindows]::Show($record.pid)};Write-Output ($record.role+' PID='+$record.pid)}
 Write-Output ('Logs: '+$session)
-Write-Output 'Left=A, right=B. Resume in each client; console: U01NetFixture reset (test ground only).'
+if($ClientCount -eq 2){Write-Output 'Left=A, right=B. Resume in each client; console: U01NetFixture reset (test ground only).'}
+else{Write-Output 'ClientA only. Resume; console: U01NetFixture reset (test ground only).'}
 Write-Output ('Cleanup: powershell -File "'+(Join-Path $PSScriptRoot 'StopFSession.ps1')+'" -SessionPath "'+$session+'"')

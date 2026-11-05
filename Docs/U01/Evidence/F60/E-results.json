@@ -1,0 +1,1451 @@
+{
+  "case": "E",
+  "manifest": "Artifacts\\U01\\F\\F60\\E-20261105-143500\\MANIFEST.json",
+  "session": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-143501",
+  "seconds": 120,
+  "clientCap": 30,
+  "clientCount": 2,
+  "bufferedDiagnostics": true,
+  "roles": {
+    "Server": {
+      "identity": {
+        "sourceSHA": "edf885ac79d900977a43a404019eadce0244ed47",
+        "pid": 14712,
+        "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+        "worldType": 1,
+        "netMode": 1,
+        "context": "Context_0",
+        "localPlayers": 0
+      },
+      "fps": 29.919560361825422,
+      "frames": 3591,
+      "frameMs": {
+        "n": 3590,
+        "mean": 33.422951002846524,
+        "median": 33.403798937797546,
+        "p95": 34.33362431824207,
+        "p99": 34.82084162533283,
+        "max": 40.75390100479126
+      },
+      "focus": {
+        "background": {
+          "seconds": 119.98839410021901,
+          "fps": 29.919560361825422,
+          "frameMs": {
+            "n": 3590,
+            "mean": 33.422951002846524,
+            "median": 33.403798937797546,
+            "p95": 34.33362431824207,
+            "p99": 34.82084162533283,
+            "max": 40.75390100479126
+          }
+        },
+        "foreground": {
+          "seconds": 0.0,
+          "fps": null,
+          "frameMs": {
+            "n": 0,
+            "unavailable": "chưa đo được"
+          }
+        }
+      },
+      "runtime": {
+        "t.MaxFPS": [
+          30
+        ],
+        "t.IdleWhenNotForeground": [
+          0
+        ],
+        "editorThrottle": [
+          false
+        ],
+        "r.VSync": [
+          0
+        ],
+        "r.ScreenPercentage": [
+          0
+        ],
+        "r.LumenScene.SurfaceCache.AtlasSize": [
+          4096
+        ],
+        "r.RenderTargetPoolMin": [
+          400
+        ],
+        "r.Streaming.PoolSize": [
+          1000
+        ],
+        "pktLag": [
+          0
+        ],
+        "pktLagMin": [
+          0
+        ],
+        "pktLagMax": [
+          0
+        ],
+        "pktLagVariance": [
+          0
+        ],
+        "pktJitter": [
+          0
+        ],
+        "pktLoss": [
+          0
+        ],
+        "incomingLagMin": [
+          0
+        ],
+        "incomingLagMax": [
+          0
+        ],
+        "incomingLoss": [
+          0
+        ],
+        "pktBufferBloatMs": [
+          0
+        ],
+        "incomingBufferBloatMs": [
+          0
+        ]
+      },
+      "cpuGpuMs": {
+        "gameMs": {
+          "n": 0,
+          "unavailable": "chưa đo được"
+        },
+        "renderMs": {
+          "n": 0,
+          "unavailable": "chưa đo được"
+        },
+        "rhiMs": {
+          "n": 0,
+          "unavailable": "chưa đo được"
+        },
+        "gpuMs": {
+          "n": 0,
+          "unavailable": "chưa đo được"
+        }
+      },
+      "over100ms": [],
+      "longestOver100msStreak": 0,
+      "focusEvents": [],
+      "pingMs": {
+        "n": 0,
+        "unavailable": "chưa đo được"
+      },
+      "updateSettings": [
+        [
+          100,
+          2,
+          2,
+          0.10000000149011612
+        ]
+      ]
+    },
+    "ClientA": {
+      "identity": {
+        "sourceSHA": "edf885ac79d900977a43a404019eadce0244ed47",
+        "pid": 22400,
+        "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+        "worldType": 1,
+        "netMode": 3,
+        "context": "Context_0",
+        "localPlayers": 1
+      },
+      "fps": 29.999003173510985,
+      "frames": 3600,
+      "frameMs": {
+        "n": 3599,
+        "mean": 33.334440955124684,
+        "median": 33.32659974694252,
+        "p95": 33.933233469724655,
+        "p99": 34.59652595221996,
+        "max": 39.12220150232315
+      },
+      "focus": {
+        "background": {
+          "seconds": 59.763289999216795,
+          "fps": 30.001695020864773,
+          "frameMs": {
+            "n": 1793,
+            "mean": 33.33145008322186,
+            "median": 33.32410007715225,
+            "p95": 33.90486016869545,
+            "p99": 34.53389719128609,
+            "max": 35.47459840774536
+          }
+        },
+        "foreground": {
+          "seconds": 60.168240796774626,
+          "fps": 29.999215135715897,
+          "frameMs": {
+            "n": 1805,
+            "mean": 33.33420542757597,
+            "median": 33.32940116524696,
+            "p95": 33.97008031606674,
+            "p99": 34.66590017080307,
+            "max": 35.64150258898735
+          }
+        }
+      },
+      "runtime": {
+        "t.MaxFPS": [
+          30
+        ],
+        "t.IdleWhenNotForeground": [
+          0
+        ],
+        "editorThrottle": [
+          false
+        ],
+        "r.VSync": [
+          0
+        ],
+        "r.ScreenPercentage": [
+          50
+        ],
+        "r.LumenScene.SurfaceCache.AtlasSize": [
+          2048
+        ],
+        "r.RenderTargetPoolMin": [
+          128
+        ],
+        "r.Streaming.PoolSize": [
+          256
+        ],
+        "pktLag": [
+          0
+        ],
+        "pktLagMin": [
+          0
+        ],
+        "pktLagMax": [
+          0
+        ],
+        "pktLagVariance": [
+          0
+        ],
+        "pktJitter": [
+          0
+        ],
+        "pktLoss": [
+          0
+        ],
+        "incomingLagMin": [
+          0
+        ],
+        "incomingLagMax": [
+          0
+        ],
+        "incomingLoss": [
+          0
+        ],
+        "pktBufferBloatMs": [
+          0
+        ],
+        "incomingBufferBloatMs": [
+          0
+        ]
+      },
+      "cpuGpuMs": {
+        "gameMs": {
+          "n": 3600,
+          "mean": 3.609383333656523,
+          "median": 3.3252999782562256,
+          "p95": 5.555815219879148,
+          "p99": 6.879941978454589,
+          "max": 18.127199172973633
+        },
+        "renderMs": {
+          "n": 3600,
+          "mean": 5.371936888760991,
+          "median": 5.194400072097778,
+          "p95": 7.236000061035156,
+          "p99": 9.51474007606505,
+          "max": 16.37779998779297
+        },
+        "rhiMs": {
+          "n": 3600,
+          "mean": 3.451807333893246,
+          "median": 3.3628499507904053,
+          "p95": 4.699884891510009,
+          "p99": 5.813668794631952,
+          "max": 8.31470012664795
+        },
+        "gpuMs": {
+          "n": 3600,
+          "mean": 7.283150909410582,
+          "median": 4.417050123214722,
+          "p95": 12.361639928817748,
+          "p99": 14.02392189979553,
+          "max": 18.760900497436523
+        }
+      },
+      "over100ms": [],
+      "longestOver100msStreak": 0,
+      "focusEvents": [
+        {
+          "utc": "2026-11-05T07:37:16.282Z",
+          "foreground": false
+        }
+      ],
+      "pingMs": {
+        "n": 3600,
+        "mean": 33.5356547053655,
+        "median": 31.214284896850586,
+        "p95": 40.85714340209961,
+        "p99": 44.03571319580078,
+        "max": 48.96428680419922
+      },
+      "updateSettings": [
+        [
+          100,
+          2,
+          2,
+          0.10000000149011612
+        ]
+      ]
+    },
+    "ClientB": {
+      "identity": {
+        "sourceSHA": "edf885ac79d900977a43a404019eadce0244ed47",
+        "pid": 5468,
+        "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+        "worldType": 1,
+        "netMode": 3,
+        "context": "Context_0",
+        "localPlayers": 1
+      },
+      "fps": 29.999751699729153,
+      "frames": 3600,
+      "frameMs": {
+        "n": 3599,
+        "mean": 33.33360922480663,
+        "median": 33.33180025219917,
+        "p95": 33.632561936974525,
+        "p99": 33.87101277709007,
+        "max": 36.17839887738228
+      },
+      "focus": {
+        "background": {
+          "seconds": 60.166947301477194,
+          "fps": 29.999860071938276,
+          "frameMs": {
+            "n": 1805,
+            "mean": 33.333488809682656,
+            "median": 33.33450108766556,
+            "p95": 33.61274003982544,
+            "p99": 33.839944899082184,
+            "max": 34.32750329375267
+          }
+        },
+        "foreground": {
+          "seconds": 59.76588889956474,
+          "fps": 30.000390406860625,
+          "frameMs": {
+            "n": 1793,
+            "mean": 33.33289955357766,
+            "median": 33.32870081067085,
+            "p95": 33.64991769194603,
+            "p99": 33.88388603925705,
+            "max": 36.17839887738228
+          }
+        }
+      },
+      "runtime": {
+        "t.MaxFPS": [
+          30
+        ],
+        "t.IdleWhenNotForeground": [
+          0
+        ],
+        "editorThrottle": [
+          false
+        ],
+        "r.VSync": [
+          0
+        ],
+        "r.ScreenPercentage": [
+          50
+        ],
+        "r.LumenScene.SurfaceCache.AtlasSize": [
+          2048
+        ],
+        "r.RenderTargetPoolMin": [
+          128
+        ],
+        "r.Streaming.PoolSize": [
+          256
+        ],
+        "pktLag": [
+          0
+        ],
+        "pktLagMin": [
+          0
+        ],
+        "pktLagMax": [
+          0
+        ],
+        "pktLagVariance": [
+          0
+        ],
+        "pktJitter": [
+          0
+        ],
+        "pktLoss": [
+          0
+        ],
+        "incomingLagMin": [
+          0
+        ],
+        "incomingLagMax": [
+          0
+        ],
+        "incomingLoss": [
+          0
+        ],
+        "pktBufferBloatMs": [
+          0
+        ],
+        "incomingBufferBloatMs": [
+          0
+        ]
+      },
+      "cpuGpuMs": {
+        "gameMs": {
+          "n": 3600,
+          "mean": 3.190407833258311,
+          "median": 3.1187000274658203,
+          "p95": 4.246245026588437,
+          "p99": 5.323866086006163,
+          "max": 15.750699996948242
+        },
+        "renderMs": {
+          "n": 3600,
+          "mean": 5.179305638935831,
+          "median": 5.066499948501587,
+          "p95": 6.7599849700927725,
+          "p99": 8.442754573822006,
+          "max": 13.441499710083008
+        },
+        "rhiMs": {
+          "n": 3600,
+          "mean": 3.4463564456833735,
+          "median": 3.3271501064300537,
+          "p95": 4.846790170669555,
+          "p99": 6.06742804527282,
+          "max": 8.462699890136719
+        },
+        "gpuMs": {
+          "n": 3600,
+          "mean": 3.5015276687012777,
+          "median": 3.643649935722351,
+          "p95": 5.065925049781798,
+          "p99": 5.961599826812744,
+          "max": 9.229499816894531
+        }
+      },
+      "over100ms": [],
+      "longestOver100msStreak": 0,
+      "focusEvents": [
+        {
+          "utc": "2026-11-05T07:37:16.268Z",
+          "foreground": true
+        }
+      ],
+      "pingMs": {
+        "n": 3600,
+        "mean": 38.18823414325714,
+        "median": 33.85714340209961,
+        "p95": 55.48392696380585,
+        "p99": 60.10714340209961,
+        "max": 60.21428680419922
+      },
+      "updateSettings": [
+        [
+          100,
+          2,
+          2,
+          0.10000000149011612
+        ]
+      ]
+    }
+  },
+  "trials": [
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:19.103808+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864179.109,
+        "server": 1793864179.133,
+        "peerPacket": 1793864179.167,
+        "peerMesh": 1793864179.167
+      },
+      "stagesMs": {
+        "owner->server": 23.999929428100586,
+        "server->peerPacket": 34.00015830993652,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 29.191970825195312,
+      "inputToPeerMeshMs": 63.192129135131836
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:36:20.267501+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864180.342,
+        "server": 1793864180.365,
+        "peerPacket": 1793864180.401,
+        "peerMesh": 1793864180.533
+      },
+      "stagesMs": {
+        "owner->server": 23.000001907348633,
+        "server->peerPacket": 36.00001335144043,
+        "peerPacket->peerMesh": 131.99996948242188
+      },
+      "inputToServerMs": 97.49889373779297,
+      "inputToPeerMeshMs": 265.4988765716553
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:24.075901+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864184.109,
+        "server": 1793864184.132,
+        "peerPacket": 1793864184.166,
+        "peerMesh": 1793864184.166
+      },
+      "stagesMs": {
+        "owner->server": 23.000001907348633,
+        "server->peerPacket": 33.99991989135742,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 56.09893798828125,
+      "inputToPeerMeshMs": 90.09885787963867
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:36:25.251467+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864185.342,
+        "server": 1793864185.365,
+        "peerPacket": 1793864185.399,
+        "peerMesh": 1793864185.567
+      },
+      "stagesMs": {
+        "owner->server": 23.000001907348633,
+        "server->peerPacket": 33.99991989135742,
+        "peerPacket->peerMesh": 167.9999828338623
+      },
+      "inputToServerMs": 113.53302001953125,
+      "inputToPeerMeshMs": 315.532922744751
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:29.049872+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864189.075,
+        "server": 1793864189.082,
+        "peerPacket": 1793864189.133,
+        "peerMesh": 1793864189.133
+      },
+      "stagesMs": {
+        "owner->server": 6.999969482421875,
+        "server->peerPacket": 50.99987983703613,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 32.128095626831055,
+      "inputToPeerMeshMs": 83.12797546386719
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:36:30.249894+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864190.342,
+        "server": 1793864190.353,
+        "peerPacket": 1793864190.366,
+        "peerMesh": 1793864190.532
+      },
+      "stagesMs": {
+        "owner->server": 10.999917984008789,
+        "server->peerPacket": 13.000011444091797,
+        "peerPacket->peerMesh": 166.0001277923584
+      },
+      "inputToServerMs": 103.10602188110352,
+      "inputToPeerMeshMs": 282.1061611175537
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:34.051831+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864194.074,
+        "server": 1793864194.088,
+        "peerPacket": 1793864194.099,
+        "peerMesh": 1793864194.099
+      },
+      "stagesMs": {
+        "owner->server": 14.000177383422852,
+        "server->peerPacket": 10.999917984008789,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 36.16905212402344,
+      "inputToPeerMeshMs": 47.16897010803223
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:36:35.251528+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864195.342,
+        "server": 1793864195.36,
+        "peerPacket": 1793864195.399,
+        "peerMesh": 1793864195.566
+      },
+      "stagesMs": {
+        "owner->server": 17.999887466430664,
+        "server->peerPacket": 39.00003433227539,
+        "peerPacket->peerMesh": 167.00005531311035
+      },
+      "inputToServerMs": 108.47187042236328,
+      "inputToPeerMeshMs": 314.471960067749
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:39.049349+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864199.074,
+        "server": 1793864199.079,
+        "peerPacket": 1793864199.099,
+        "peerMesh": 1793864199.099
+      },
+      "stagesMs": {
+        "owner->server": 5.000114440917969,
+        "server->peerPacket": 19.999980926513672,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 29.65092658996582,
+      "inputToPeerMeshMs": 49.65090751647949
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:36:40.249877+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864200.442,
+        "server": 1793864200.454,
+        "peerPacket": 1793864200.466,
+        "peerMesh": 1793864200.633
+      },
+      "stagesMs": {
+        "owner->server": 12.000083923339844,
+        "server->peerPacket": 12.000083923339844,
+        "peerPacket->peerMesh": 166.99981689453125
+      },
+      "inputToServerMs": 204.12302017211914,
+      "inputToPeerMeshMs": 383.12292098999023
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:44.049262+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864204.075,
+        "server": 1793864204.09,
+        "peerPacket": 1793864204.099,
+        "peerMesh": 1793864204.099
+      },
+      "stagesMs": {
+        "owner->server": 14.999866485595703,
+        "server->peerPacket": 9.000062942504883,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 40.73786735534668,
+      "inputToPeerMeshMs": 49.73793029785156
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:36:45.249589+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864205.342,
+        "server": 1793864205.363,
+        "peerPacket": 1793864205.366,
+        "peerMesh": 1793864205.532
+      },
+      "stagesMs": {
+        "owner->server": 20.999908447265625,
+        "server->peerPacket": 3.000020980834961,
+        "peerPacket->peerMesh": 166.0001277923584
+      },
+      "inputToServerMs": 113.41094970703125,
+      "inputToPeerMeshMs": 282.4110984802246
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:49.049412+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864209.076,
+        "server": 1793864209.101,
+        "peerPacket": 1793864209.133,
+        "peerMesh": 1793864209.133
+      },
+      "stagesMs": {
+        "owner->server": 25.00009536743164,
+        "server->peerPacket": 31.999826431274414,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 51.58805847167969,
+      "inputToPeerMeshMs": 83.5878849029541
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:36:50.249545+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864210.442,
+        "server": 1793864210.474,
+        "peerPacket": 1793864210.499,
+        "peerMesh": 1793864210.666
+      },
+      "stagesMs": {
+        "owner->server": 32.000064849853516,
+        "server->peerPacket": 25.00009536743164,
+        "peerPacket->peerMesh": 166.99981689453125
+      },
+      "inputToServerMs": 224.4548797607422,
+      "inputToPeerMeshMs": 416.4547920227051
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:54.051306+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864214.076,
+        "server": 1793864214.085,
+        "peerPacket": 1793864214.099,
+        "peerMesh": 1793864214.099
+      },
+      "stagesMs": {
+        "owner->server": 9.000062942504883,
+        "server->peerPacket": 13.99993896484375,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 33.69402885437012,
+      "inputToPeerMeshMs": 47.69396781921387
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:36:55.250045+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864215.343,
+        "server": 1793864215.357,
+        "peerPacket": 1793864215.366,
+        "peerMesh": 1793864215.533
+      },
+      "stagesMs": {
+        "owner->server": 14.000177383422852,
+        "server->peerPacket": 8.999824523925781,
+        "peerPacket->peerMesh": 167.00005531311035
+      },
+      "inputToServerMs": 106.95505142211914,
+      "inputToPeerMeshMs": 282.9549312591553
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:36:59.049319+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864219.076,
+        "server": 1793864219.097,
+        "peerPacket": 1793864219.133,
+        "peerMesh": 1793864219.133
+      },
+      "stagesMs": {
+        "owner->server": 20.999908447265625,
+        "server->peerPacket": 36.00001335144043,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 47.68085479736328,
+      "inputToPeerMeshMs": 83.68086814880371
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:00.249421+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864220.342,
+        "server": 1793864220.367,
+        "peerPacket": 1793864220.399,
+        "peerMesh": 1793864220.533
+      },
+      "stagesMs": {
+        "owner->server": 25.00009536743164,
+        "server->peerPacket": 31.999826431274414,
+        "peerPacket->peerMesh": 134.00006294250488
+      },
+      "inputToServerMs": 117.57922172546387,
+      "inputToPeerMeshMs": 283.57911109924316
+    },
+    {
+      "role": "ClientA",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:04.049356+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864224.076,
+        "server": 1793864224.102,
+        "peerPacket": 1793864224.133,
+        "peerMesh": 1793864224.133
+      },
+      "stagesMs": {
+        "owner->server": 26.000022888183594,
+        "server->peerPacket": 30.99989891052246,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 52.64401435852051,
+      "inputToPeerMeshMs": 83.64391326904297
+    },
+    {
+      "role": "ClientA",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:05.249941+00:00",
+      "phase": 0,
+      "pawn": "8530693947E8FC8E2C0382BCE94163EF",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864225.343,
+        "server": 1793864225.37,
+        "peerPacket": 1793864225.4,
+        "peerMesh": 1793864225.532
+      },
+      "stagesMs": {
+        "owner->server": 26.999950408935547,
+        "server->peerPacket": 30.00020980834961,
+        "peerPacket->peerMesh": 131.99996948242188
+      },
+      "inputToServerMs": 120.05877494812012,
+      "inputToPeerMeshMs": 282.0589542388916
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:19.065517+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864239.067,
+        "server": 1793864239.072,
+        "peerPacket": 1793864239.077,
+        "peerMesh": 1793864239.077
+      },
+      "stagesMs": {
+        "owner->server": 5.000114440917969,
+        "server->peerPacket": 4.999876022338867,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 6.4830780029296875,
+      "inputToPeerMeshMs": 11.482954025268555
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:20.275702+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864240.366,
+        "server": 1793864240.373,
+        "peerPacket": 1793864240.377,
+        "peerMesh": 1793864240.51
+      },
+      "stagesMs": {
+        "owner->server": 6.999969482421875,
+        "server->peerPacket": 4.000186920166016,
+        "peerPacket->peerMesh": 132.99989700317383
+      },
+      "inputToServerMs": 97.29790687561035,
+      "inputToPeerMeshMs": 234.2979907989502
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:24.089373+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864244.101,
+        "server": 1793864244.108,
+        "peerPacket": 1793864244.143,
+        "peerMesh": 1793864244.143
+      },
+      "stagesMs": {
+        "owner->server": 6.999969482421875,
+        "server->peerPacket": 34.999847412109375,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 18.626928329467773,
+      "inputToPeerMeshMs": 53.62677574157715
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:25.251092+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864245.333,
+        "server": 1793864245.347,
+        "peerPacket": 1793864245.377,
+        "peerMesh": 1793864245.544
+      },
+      "stagesMs": {
+        "owner->server": 13.99993896484375,
+        "server->peerPacket": 30.00020980834961,
+        "peerPacket->peerMesh": 166.99981689453125
+      },
+      "inputToServerMs": 95.90792655944824,
+      "inputToPeerMeshMs": 292.9079532623291
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:29.051893+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864249.067,
+        "server": 1793864249.085,
+        "peerPacket": 1793864249.112,
+        "peerMesh": 1793864249.112
+      },
+      "stagesMs": {
+        "owner->server": 18.000125885009766,
+        "server->peerPacket": 26.999950408935547,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 33.10704231262207,
+      "inputToPeerMeshMs": 60.10699272155762
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:30.250929+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864250.333,
+        "server": 1793864250.359,
+        "peerPacket": 1793864250.412,
+        "peerMesh": 1793864250.543
+      },
+      "stagesMs": {
+        "owner->server": 26.000022888183594,
+        "server->peerPacket": 52.99997329711914,
+        "peerPacket->peerMesh": 131.00004196166992
+      },
+      "inputToServerMs": 108.07085037231445,
+      "inputToPeerMeshMs": 292.0708656311035
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:34.052037+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864254.067,
+        "server": 1793864254.097,
+        "peerPacket": 1793864254.112,
+        "peerMesh": 1793864254.112
+      },
+      "stagesMs": {
+        "owner->server": 29.999971389770508,
+        "server->peerPacket": 15.000104904174805,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 44.96288299560547,
+      "inputToPeerMeshMs": 59.96298789978027
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:35.250551+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864255.333,
+        "server": 1793864255.368,
+        "peerPacket": 1793864255.378,
+        "peerMesh": 1793864255.544
+      },
+      "stagesMs": {
+        "owner->server": 35.00008583068848,
+        "server->peerPacket": 9.999990463256836,
+        "peerPacket->peerMesh": 165.9998893737793
+      },
+      "inputToServerMs": 117.44904518127441,
+      "inputToPeerMeshMs": 293.44892501831055
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:39.049644+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864259.067,
+        "server": 1793864259.084,
+        "peerPacket": 1793864259.144,
+        "peerMesh": 1793864259.144
+      },
+      "stagesMs": {
+        "owner->server": 17.000198364257812,
+        "server->peerPacket": 59.999942779541016,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 34.356117248535156,
+      "inputToPeerMeshMs": 94.35606002807617
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:40.251447+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864260.433,
+        "server": 1793864260.452,
+        "peerPacket": 1793864260.511,
+        "peerMesh": 1793864260.645
+      },
+      "stagesMs": {
+        "owner->server": 18.999814987182617,
+        "server->peerPacket": 59.00001525878906,
+        "peerPacket->peerMesh": 134.00006294250488
+      },
+      "inputToServerMs": 200.55294036865234,
+      "inputToPeerMeshMs": 393.5530185699463
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:44.049575+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864264.066,
+        "server": 1793864264.093,
+        "peerPacket": 1793864264.111,
+        "peerMesh": 1793864264.111
+      },
+      "stagesMs": {
+        "owner->server": 26.999950408935547,
+        "server->peerPacket": 18.000125885009766,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 43.42484474182129,
+      "inputToPeerMeshMs": 61.424970626831055
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:45.249338+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864265.334,
+        "server": 1793864265.367,
+        "peerPacket": 1793864265.377,
+        "peerMesh": 1793864265.544
+      },
+      "stagesMs": {
+        "owner->server": 32.99999237060547,
+        "server->peerPacket": 9.999990463256836,
+        "peerPacket->peerMesh": 166.99981689453125
+      },
+      "inputToServerMs": 117.66219139099121,
+      "inputToPeerMeshMs": 294.6619987487793
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:49.050000+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864269.067,
+        "server": 1793864269.084,
+        "peerPacket": 1793864269.111,
+        "peerMesh": 1793864269.111
+      },
+      "stagesMs": {
+        "owner->server": 17.000198364257812,
+        "server->peerPacket": 26.999950408935547,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 34.00015830993652,
+      "inputToPeerMeshMs": 61.00010871887207
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:50.249723+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864270.433,
+        "server": 1793864270.454,
+        "peerPacket": 1793864270.478,
+        "peerMesh": 1793864270.611
+      },
+      "stagesMs": {
+        "owner->server": 20.999908447265625,
+        "server->peerPacket": 23.999929428100586,
+        "peerPacket->peerMesh": 133.00013542175293
+      },
+      "inputToServerMs": 204.27703857421875,
+      "inputToPeerMeshMs": 361.27710342407227
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:54.052131+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864274.067,
+        "server": 1793864274.07,
+        "peerPacket": 1793864274.112,
+        "peerMesh": 1793864274.112
+      },
+      "stagesMs": {
+        "owner->server": 3.000020980834961,
+        "server->peerPacket": 42.00005531311035,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 17.868995666503906,
+      "inputToPeerMeshMs": 59.86905097961426
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:37:55.250632+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864275.333,
+        "server": 1793864275.342,
+        "peerPacket": 1793864275.344,
+        "peerMesh": 1793864275.511
+      },
+      "stagesMs": {
+        "owner->server": 9.000062942504883,
+        "server->peerPacket": 2.000093460083008,
+        "peerPacket->peerMesh": 166.99981689453125
+      },
+      "inputToServerMs": 91.36795997619629,
+      "inputToPeerMeshMs": 260.36787033081055
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:37:59.049557+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864279.067,
+        "server": 1793864279.093,
+        "peerPacket": 1793864279.145,
+        "peerMesh": 1793864279.145
+      },
+      "stagesMs": {
+        "owner->server": 26.000022888183594,
+        "server->peerPacket": 52.00004577636719,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 43.44296455383301,
+      "inputToPeerMeshMs": 95.4430103302002
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:38:00.250610+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864280.333,
+        "server": 1793864280.336,
+        "peerPacket": 1793864280.344,
+        "peerMesh": 1793864280.477
+      },
+      "stagesMs": {
+        "owner->server": 3.000020980834961,
+        "server->peerPacket": 8.00013542175293,
+        "peerPacket->peerMesh": 132.99989700317383
+      },
+      "inputToServerMs": 85.38985252380371,
+      "inputToPeerMeshMs": 226.38988494873047
+    },
+    {
+      "role": "ClientB",
+      "kind": "start",
+      "inputUTC": "2026-11-05T07:38:04.049586+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864284.067,
+        "server": 1793864284.086,
+        "peerPacket": 1793864284.112,
+        "peerMesh": 1793864284.112
+      },
+      "stagesMs": {
+        "owner->server": 19.00005340576172,
+        "server->peerPacket": 26.000022888183594,
+        "peerPacket->peerMesh": 0.0
+      },
+      "inputToServerMs": 36.41390800476074,
+      "inputToPeerMeshMs": 62.413930892944336
+    },
+    {
+      "role": "ClientB",
+      "kind": "stop",
+      "inputUTC": "2026-11-05T07:38:05.251691+00:00",
+      "phase": 1,
+      "pawn": "DE139080450C421AC9C671B48A57EFDA",
+      "valid": true,
+      "onsetsUTCSeconds": {
+        "owner": 1793864285.334,
+        "server": 1793864285.362,
+        "peerPacket": 1793864285.378,
+        "peerMesh": 1793864285.512
+      },
+      "stagesMs": {
+        "owner->server": 27.9998779296875,
+        "server->peerPacket": 16.000032424926758,
+        "peerPacket->peerMesh": 134.00006294250488
+      },
+      "inputToServerMs": 110.30888557434082,
+      "inputToPeerMeshMs": 260.30898094177246
+    }
+  ],
+  "latency": {
+    "ClientA": {
+      "start": {
+        "attempted": 10,
+        "valid": 10,
+        "invalid": 0,
+        "inputToServerMs": {
+          "n": 10,
+          "mean": 40.958380699157715,
+          "median": 38.45345973968506,
+          "p95": 54.54422235488891,
+          "p99": 55.78799486160278,
+          "max": 56.09893798828125
+        },
+        "inputToPeerMeshMs": {
+          "n": 10,
+          "mean": 68.15834045410156,
+          "median": 73.16005229949951,
+          "p95": 87.21076250076294,
+          "p99": 89.52123880386353,
+          "max": 90.09885787963867
+        }
+      },
+      "stop": {
+        "attempted": 10,
+        "valid": 10,
+        "invalid": 0,
+        "inputToServerMs": {
+          "n": 10,
+          "mean": 130.91917037963867,
+          "median": 113.47198486328125,
+          "p95": 215.3055429458618,
+          "p99": 222.6250123977661,
+          "max": 224.4548797607422
+        },
+        "inputToPeerMeshMs": {
+          "n": 10,
+          "mean": 310.8191728591919,
+          "median": 283.2670211791992,
+          "p95": 401.45545005798334,
+          "p99": 413.45492362976074,
+          "max": 416.4547920227051
+        }
+      }
+    },
+    "ClientB": {
+      "start": {
+        "attempted": 10,
+        "valid": 10,
+        "invalid": 0,
+        "inputToServerMs": {
+          "n": 10,
+          "mean": 31.268692016601562,
+          "median": 34.17813777923584,
+          "p95": 44.27891969680786,
+          "p99": 44.82609033584595,
+          "max": 44.96288299560547
+        },
+        "inputToPeerMeshMs": {
+          "n": 10,
+          "mean": 61.96868419647217,
+          "median": 60.553550720214844,
+          "p95": 94.95388269424438,
+          "p99": 95.34518480300903,
+          "max": 95.4430103302002
+        }
+      },
+      "stop": {
+        "attempted": 10,
+        "valid": 10,
+        "invalid": 0,
+        "inputToServerMs": {
+          "n": 10,
+          "mean": 122.82845973968506,
+          "median": 109.18986797332764,
+          "p95": 202.60119438171387,
+          "p99": 203.94186973571777,
+          "max": 204.27703857421875
+        },
+        "inputToPeerMeshMs": {
+          "n": 10,
+          "mean": 290.92845916748047,
+          "median": 292.4894094467163,
+          "p95": 379.0288567543029,
+          "p99": 390.6481862068176,
+          "max": 393.5530185699463
+        }
+      }
+    }
+  },
+  "resources": {
+    "n": 94,
+    "gpuMemoryUsedMiB": {
+      "n": 94,
+      "mean": 3874.478723404255,
+      "median": 3874.0,
+      "p95": 3875.0,
+      "p99": 3875.0,
+      "max": 3875.0
+    },
+    "gpuUtilPercent": {
+      "n": 94,
+      "mean": 34.38297872340426,
+      "median": 35.0,
+      "p95": 46.349999999999994,
+      "p99": 48.06999999999999,
+      "max": 49.0
+    },
+    "sharedMemoryBytes": {
+      "Server": {
+        "n": 94,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+      },
+      "ClientA": {
+        "n": 94,
+        "mean": 232146203.23404256,
+        "median": 272125952.0,
+        "p95": 281038848.0,
+        "p99": 281038848.0,
+        "max": 281038848.0
+      },
+      "ClientB": {
+        "n": 94,
+        "mean": 245607925.10638297,
+        "median": 223383552.0,
+        "p95": 296783872.0,
+        "p99": 296783872.0,
+        "max": 296783872.0
+      }
+    }
+  }
+}

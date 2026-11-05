@@ -1,8 +1,8 @@
 # U01-F — Checklist review
 
-**PENDING USER REVIEW**, nguồn `df897f6088da4cca423085e9fe8e9c2869c98420`. AI đã kiểm 23/23 Automation, smoke package 3/3 và phiên dedicated Editor server/hai client; chi tiết REPORT-F. Checklist này không tự ghi PASS thay người chơi.
+**PENDING USER REVIEW profile F60**, native diagnostics `edf885ac79d900977a43a404019eadce0244ed47`; package giữ nguồn `0f02c77bc14fc4c727ba8694223f8cfc5a655c31`, đã xác minh hash. AI đã đo A–D120s/lượt, logging control và300s liên tục; cold MCP23/23. Chi tiết và lịch sử df897f6/0f02c77 tại REPORT-F/REPORT-F-PERFORMANCE. Chưa nghiệm thu hoặc merge F.
 
-Người dùng đã đánh dấu các mục điều khiển dưới đây đạt; **giữ nguyên các dấu X đó, chưa nghiệm thu F** do FPS/độ trễ cần xem lại. Nguồn native/build/package revision `0f02c77bc14fc4c727ba8694223f8cfc5a655c31`; xem REPORT-F-PERFORMANCE. Launcher mới dùng profile review local4GiB: cache/pool nhỏ hơn, internal resolution50% (cửa sổ900×540), thu nhỏ Editor gốc nhưng giữ process mở, timer hint riêng cho server. Không đổi renderer backend, mạng, smoothing hoặc settings sản phẩm. Dừng bằng StopFSession sẽ khôi phục cửa sổ Editor; dùng `-OriginalQuality -KeepEditorVisible` chỉ để đối chứng.
+Người dùng đã đánh dấu các mục điều khiển dưới đây đạt; **giữ nguyên các dấu X đó**. Default mới: **hai client60/server30**, review local4GiB, internal50% (cửa sổ900×540), atlas2048/RT minimum128/streaming pool256MiB; Editor thu nhỏ nhưng process vẫn mở, timer hint riêng server. Không đổi renderer backend, motor, replication, smoothing hoặc settings sản phẩm. Dừng sẽ khôi phục cửa sổ Editor. `Play-F.cmd -ClientMaxFPS 30` để đối chiếu; thêm `-ClientCount 1` để chạy một client. `-OriginalQuality` chỉ được đo đạt60 với một client ở900×540, chưa phải benchmark sản phẩm/G.
 
 Chạy `Artifacts/U01/F/Play-F.cmd`: mở server riêng và hai client 900×540. Chọn Resume khi đổi cửa sổ. Mỗi client mở console bằng `~`, nhập `U01NetFixture reset` để vào đường thử trống; đây là reset fixture, không hồi sinh sản phẩm. Phiên mới dùng settings riêng, mặc định W/Ctrl/Space.
 
@@ -14,7 +14,8 @@ Chạy `Artifacts/U01/F/Play-F.cmd`: mở server riêng và hai client 900×540.
 
 Để dừng đúng process review, đọc `Artifacts/U01/F/LatestReview.txt`, chạy `Scripts/U01/StopFSession.ps1 -SessionPath <đường-dẫn-đó>`. Không cần đóng Editor gốc. Báo lại cảm giác/quan sát còn lỗi; chưa merge F/G. Cảnh báo VRAM có thể xuất hiện khi mở đồng thời Editor và hai client; không coi phiên này là nghiệm thu FPS G.
 
-Có thể dùng `Artifacts/U01/F/Stop-F.cmd` để dừng đúng phiên mới nhất và khôi phục cửa sổ Editor. Chỉ cần review lại hai mục sau trên profile mới, không phải làm lại toàn bộ điều khiển:
+Có thể dùng `Artifacts/U01/F/Stop-F.cmd` để dừng đúng phiên mới nhất và khôi phục cửa sổ Editor. Chỉ cần review lại ba mục sau trên default60, không phải làm lại toàn bộ điều khiển:
 
-- [ ] Lần lượt focus A rồi B: cửa sổ nền vẫn cập nhật chuyển động đều, không đứng hình/xem pawn kia chậm khoảng một giây. So video RepeatA/RepeatB và số đo gần30FPS ở REPORT-F-PERFORMANCE.
-- [ ] Đánh giá độ nét của profile kỹ thuật50% có chấp nhận cho review cùng máy hay không. Chất lượng đồ họa gốc vẫn chưa được chứng minh ổn với ba process; không coi lựa chọn này là nghiệm thu art/FPS G.
+- [ ] A rồi B đi/sprint/nhảy: độ mượt profile60 ổn, không xuất hiện chuỗi khựng dài.
+- [ ] Nhìn pawn đối phương lúc bắt đầu/dừng: không chậm khoảng một giây hoặc giật rõ. Đuôi dừng hẳn tại60 tăng trung bình24–40ms so30 do giảm tốc/smoothing đã giải thích trong báo cáo; xác nhận cảm giác này chấp nhận được.
+- [ ] Đổi focus hai chiều, mở menu và Resume: cửa sổ nền vẫn cập nhật, không tự chạy/nhảy bằng phím cũ. Không coi xác nhận này là nghiệm thu art hoặc FPS G.

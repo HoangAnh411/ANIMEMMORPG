@@ -1,0 +1,52 @@
+{
+  "session": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-151431",
+  "processes": [
+    {
+      "role": "Server",
+      "pid": 5024,
+      "runtimeCap": 30,
+      "sourceSHA": "edf885ac79d900977a43a404019eadce0244ed47",
+      "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+      "worldType": 1,
+      "netMode": 1,
+      "localPlayers": 0,
+      "pawnIDs": [
+        "F32DAF674ABC1E52BD45C0AC8F837FDA",
+        "F908D6404DD6CE6469D838A5F996FD63"
+      ],
+      "diagnostics": false
+    },
+    {
+      "role": "ClientA",
+      "pid": 7800,
+      "runtimeCap": 60,
+      "sourceSHA": "edf885ac79d900977a43a404019eadce0244ed47",
+      "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+      "worldType": 1,
+      "netMode": 3,
+      "localPlayers": 1,
+      "pawnIDs": [
+        "F32DAF674ABC1E52BD45C0AC8F837FDA",
+        "F908D6404DD6CE6469D838A5F996FD63"
+      ],
+      "diagnostics": false
+    },
+    {
+      "role": "ClientB",
+      "pid": 7936,
+      "runtimeCap": 60,
+      "sourceSHA": "edf885ac79d900977a43a404019eadce0244ed47",
+      "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+      "worldType": 1,
+      "netMode": 3,
+      "localPlayers": 1,
+      "pawnIDs": [
+        "F908D6404DD6CE6469D838A5F996FD63",
+        "F32DAF674ABC1E52BD45C0AC8F837FDA"
+      ],
+      "diagnostics": false
+    }
+  ],
+  "stoppedAfterSmoke": true,
+  "originalEditorPID": 2068
+}

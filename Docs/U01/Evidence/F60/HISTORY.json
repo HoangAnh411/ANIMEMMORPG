@@ -1,0 +1,18 @@
+[
+  {
+    "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\F60\\F3-20261105-144347\\progress.json",
+    "progress": {
+      "stage": "failed",
+      "utc": "2026-11-05T07:45:09.496428+00:00",
+      "error": "CalledProcessError(1, ['python', 'D:\\\\Data\\\\AnimeMMORPG\\\\Scripts\\\\U01\\\\DriveF60.py', '--session', 'D:\\\\Data\\\\AnimeMMORPG\\\\Artifacts\\\\U01\\\\F\\\\Reviews\\\\Session-20261105-144348', '--seconds', '300'])",
+      "session": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-144348"
+    },
+    "inputLog": "Traceback (most recent call last):\n  File \"D:\\Data\\AnimeMMORPG\\Scripts\\U01\\DriveF60.py\", line 28, in <module>\n    active=clients[0];active.prepare()\n                      ~~~~~~~~~~~~~~^^\n  File \"D:\\Data\\AnimeMMORPG\\Scripts\\U01\\F60Input.py\", line 80, in prepare\n    observed=self.probe_w()\n  File \"D:\\Data\\AnimeMMORPG\\Scripts\\U01\\F60Input.py\", line 76, in probe_w\n    raise RuntimeError('No native physical-key observation for IME probe')\nRuntimeError: No native physical-key observation for IME probe\n"
+  },
+  {
+    "path": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\F60\\D-20261105-143159\\MANIFEST.json",
+    "issue": "Resource sampler PowerShell array conversion failed; native input/frame data retained but this run is not accepted as a complete F2 trial",
+    "accepted": false,
+    "samplerLog": "ForEach-Object : Cannot convert the \"System.Object[]\" value of type \"System.Object[]\" to type \"System.Int32\".\nAt D:\\Data\\AnimeMMORPG\\Scripts\\U01\\SampleF60Resources.ps1:7 char:100\n+ ...  UTF8 $editorFile | ConvertFrom-Json | ForEach-Object {[int]$_.pid})}\n+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : InvalidArgument: (:) [ForEach-Object], RuntimeException\n    + FullyQualifiedErrorId : ConvertToFinalInvalidCastException,Microsoft.PowerShell.Commands.ForEachObjectCommand\n \n"
+  }
+]
