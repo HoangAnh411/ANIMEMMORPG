@@ -82,10 +82,11 @@ void AU01PlayerController::U01NetFixture(const FString& Command)
     if(Command==TEXT("speed"))
     {
         C->GetU01Movement()->ProbeSpeed=2000;ServerU01NetProbe(1,2000,C->NetworkPawnId);
+        UE_LOG(LogU01Network,Display,TEXT("ClientProbe Speed id=%s override=2000 duration=2.0"),*C->NetworkPawnId.ToString());
         FTimerHandle Timer;TWeakObjectPtr<AU01Character> Weak=C;
-        GetWorldTimerManager().SetTimer(Timer,[Weak](){if(Weak.IsValid())Weak->GetU01Movement()->ProbeSpeed=0;},.6f,false);
+        GetWorldTimerManager().SetTimer(Timer,[Weak](){if(Weak.IsValid())Weak->GetU01Movement()->ProbeSpeed=0;},2.f,false);
     }
-    if(Command==TEXT("jump")){C->StopJumping();C->Jump();C->GetU01Movement()->Velocity.Z+=800;ServerU01NetProbe(2,800,C->NetworkPawnId);}
+    if(Command==TEXT("jump")){C->StopJumping();C->Jump();C->GetU01Movement()->Velocity.Z+=800;UE_LOG(LogU01Network,Display,TEXT("ClientProbe ExtraJump id=%s velocityZ=%.3f"),*C->NetworkPawnId.ToString(),C->GetVelocity().Z);ServerU01NetProbe(2,800,C->NetworkPawnId);}
     if(Command==TEXT("other"))
     {
         TArray<AActor*> Actors;UGameplayStatics::GetAllActorsOfClass(this,AU01Character::StaticClass(),Actors);

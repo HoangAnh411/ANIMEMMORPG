@@ -16,6 +16,9 @@ bool FU01NetworkMoves::RunTest(const FString&)
     auto* C=World.GetTestWorld()->SpawnActor<AU01Character>();auto* PC=World.GetTestWorld()->SpawnActor<AAIController>();PC->Possess(C);
     World.BeginPlayInTestWorld();auto* M=C->GetU01Movement();
     auto* Data=static_cast<FNetworkPredictionData_Client_Character*>(M->GetPredictionData_Client());
+    const int32 BeforeCorrection=M->CorrectionCount;Data->bUpdatePosition=true;
+    M->ClientUpdatePositionAfterServerUpdate();
+    TestEqual(TEXT("Adjustment counted even without pending moves to replay"),M->CorrectionCount,BeforeCorrection+1);
     M->PressJump(M->GetMotorTimeSeconds());M->SetSprintRequested(true);
     auto Move=Data->AllocateNewMove();Move->Clear();Move->SetMoveFor(C,.016f,FVector(1,0,0),*Data);
     TestTrue(TEXT("Sprint compressed"),(Move->GetCompressedFlags()&FSavedMove_Character::FLAG_Custom_0)!=0);

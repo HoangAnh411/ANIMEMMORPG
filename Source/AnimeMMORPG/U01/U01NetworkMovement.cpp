@@ -66,8 +66,10 @@ void UU01CharacterMovement::UpdateFromCompressedFlags(uint8 Flags)
 }
 bool UU01CharacterMovement::ClientUpdatePositionAfterServerUpdate()
 {
+    const auto* Data=GetPredictionData_Client_Character();
+    const bool HadAdjustment=Data&&Data->bUpdatePosition;
     const bool Result=Super::ClientUpdatePositionAfterServerUpdate();
-    if(Result)++CorrectionCount;
+    if(HadAdjustment)++CorrectionCount;
     return Result;
 }
 void AU01Character::BeginPlay()
