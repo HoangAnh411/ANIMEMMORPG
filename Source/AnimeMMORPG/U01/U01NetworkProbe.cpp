@@ -63,7 +63,7 @@ void UU01NetworkProbe::Tick(float Dt)
         P->SetNumberField(TEXT("playerId"),C->GetPlayerState()?C->GetPlayerState()->GetPlayerId():-1);
         P->SetNumberField(TEXT("role"),int32(C->GetLocalRole()));P->SetNumberField(TEXT("remoteRole"),int32(C->GetRemoteRole()));P->SetBoolField(TEXT("local"),C->IsLocallyControlled());
         P->SetNumberField(TEXT("x"),C->GetActorLocation().X);P->SetNumberField(TEXT("y"),C->GetActorLocation().Y);P->SetNumberField(TEXT("z"),C->GetActorLocation().Z);
-        P->SetNumberField(TEXT("speed"),C->GetVelocity().Size2D());P->SetNumberField(TEXT("vz"),C->GetVelocity().Z);P->SetNumberField(TEXT("mode"),int32(M->MovementMode));
+        P->SetNumberField(TEXT("speed"),C->GetVelocity().Size2D());P->SetNumberField(TEXT("vz"),C->GetVelocity().Z);P->SetNumberField(TEXT("repVz"),C->GetReplicatedMovement().LinearVelocity.Z);P->SetNumberField(TEXT("mode"),int32(M->MovementMode));
         P->SetNumberField(TEXT("locks"),M->GetLockMask());P->SetNumberField(TEXT("motorSeconds"),M->GetMotorTimeSeconds());
         P->SetBoolField(TEXT("sprint"),M->IsSprinting());P->SetNumberField(TEXT("corrections"),M->CorrectionCount);P->SetNumberField(TEXT("jumpCount"),C->JumpCurrentCount);
         if(const auto* Anim=Cast<UU01AnimInstance>(C->GetMesh()->GetAnimInstance()))

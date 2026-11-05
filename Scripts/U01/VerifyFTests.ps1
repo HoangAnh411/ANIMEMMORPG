@@ -53,7 +53,7 @@ try { Tool 'test_runner.toolsets.test_runner.TestRunnerTools' 'execute_console_c
 $p.WaitForExit(15000) | Out-Null
 $success=@($lines | Where-Object {$_ -match 'Test Completed. Result=\{Success\}'})
 $expected=@('U00.Foundation.Axes','U00.Foundation.CallOrder','U00.Foundation.HalfOpenInterval','U00.Foundation.Units',
- 'U01.B.CameraPolicy','U01.B.ReleaseGate','U01.C.JumpWindows','U01.C.FlatMovement','U01.C.JumpPhysics','U01.C.Terrain','U01.C.MotorLocks','U01.D.AssetPolicy','U01.D.AnimatedMotor','U01.D.TransitionsAndAttachment','U01.D.LandingTransitions','U01.D.GripIsolationAndAttachment','U01.D.CarryTrajectory','U01.E.BindingValidation','U01.E.PartialRecovery','U01.E.SaveAndFailure','U01.E.LocalMappingIsolation','U01.F.SavedMoveReplay')
+ 'U01.B.CameraPolicy','U01.B.ReleaseGate','U01.C.JumpWindows','U01.C.FlatMovement','U01.C.JumpPhysics','U01.C.Terrain','U01.C.MotorLocks','U01.D.AssetPolicy','U01.D.AnimatedMotor','U01.D.TransitionsAndAttachment','U01.D.LandingTransitions','U01.D.GripIsolationAndAttachment','U01.D.CarryTrajectory','U01.E.BindingValidation','U01.E.PartialRecovery','U01.E.SaveAndFailure','U01.E.LocalMappingIsolation','U01.F.SavedMoveReplay','U01.F.ProxyAnimation')
 foreach($name in $expected){if(@($success | Where-Object {$_ -match [regex]::Escape('Path={AnimeMMORPG.'+$name+'}')}).Count -ne 1){throw ('Missing success '+$name+'; '+$out)}}
-if(!$done -or $success.Count -ne 22 -or (($lines -join "`n") -notmatch '22 tests performed')){throw ('Incomplete tests: '+$out)}
-Write-Output ('Twenty-two tests completed via clone MCP TestRunner: '+$out)
+if(!$done -or $success.Count -ne 23 -or (($lines -join "`n") -notmatch '23 tests performed')){throw ('Incomplete tests: '+$out)}
+Write-Output ('Twenty-three tests completed via clone MCP TestRunner: '+$out)

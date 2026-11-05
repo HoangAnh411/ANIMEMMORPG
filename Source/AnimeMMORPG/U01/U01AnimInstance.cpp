@@ -18,8 +18,12 @@ void UU01AnimInstance::NativeUpdateAnimation(float Dt)
     const auto* Character = Cast<AU01Character>(TryGetPawnOwner());
     if (!Character) return;
     const auto* Motor = Character->GetU01Movement();
-    GroundSpeed = Character->GetVelocity().Size2D();
-    VerticalSpeed = Character->GetVelocity().Z;
+    // Proxy simulation may extrapolate a full background frame beyond the latest
+    // packet. Present the authoritative movement sample; never move the actor.
+    const FVector PresentationVelocity=Character->GetLocalRole()==ROLE_SimulatedProxy
+        ?Character->GetReplicatedMovement().LinearVelocity:Character->GetVelocity();
+    GroundSpeed = PresentationVelocity.Size2D();
+    VerticalSpeed = PresentationVelocity.Z;
     Acceleration = Motor->GetCurrentAcceleration();
     bGrounded = Motor->IsMovingOnGround();
     bFalling = Motor->IsFalling();
