@@ -1,4 +1,6 @@
-# U02-B — READY_FOR_REVIEW
+# U02-B — ACCEPTED
+
+**Người dùng xác nhận nghiệm thu kỹ thuật tại95a83ca/source94ebcc7; [căn cứ và Editor refresh](ACCEPTANCE-B.md). Các trạng thái chờ dưới đây là lịch sử bàn giao đã được quyết định này thay thế.**
 
 B triển khai riêng action/input/motor, chưa nghiệm thu hoặc merge. Main đã khép A tại `0550254e702e406dcef6731900541a625dafb915`; nhánh B `u02/b-action-input-motor`. **Source build/tests/package/runtime cuối: `94ebcc73b27dc0d40b0f818491caef6217469e4c`**. Các commit bàn giao sau đó chỉ scripts/hồ sơ, không đổi Source/Content/Config/Plugins/project. Không gán SHA hồ sơ cho binary.
 

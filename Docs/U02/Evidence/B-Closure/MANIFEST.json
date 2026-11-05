@@ -1,0 +1,36 @@
+{
+  "status": "ACCEPTED",
+  "reviewCommit": "95a83ca35754e8b4b2b04685733204e807c3d553",
+  "sourceSHA": "94ebcc73b27dc0d40b0f818491caef6217469e4c",
+  "originalDllSHA256": "8bc0221c87f4193d1b07cc153e3cf6986b243fd69d4109aa6d4dc52c9d9a9a3a",
+  "logs": [
+    {
+      "file": "before.json.gz",
+      "rawSHA256": "a6cc714fc200d4bc708fe71cd81199cb4214c1fdb82f8cbb0ee66978ded10dd2"
+    },
+    {
+      "file": "build-result.json.gz",
+      "rawSHA256": "a6f98f0eb1a01aa5b7a5db97a9fd417a7033e507cf3ede048fe3b90aa9a9fe5b"
+    },
+    {
+      "file": "full-build.log.gz",
+      "rawSHA256": "7455dd18bacfd313cae42a84e639e7f189ee964ca5c85b6eac68b7a3d379eb97"
+    },
+    {
+      "file": "live-ubt.log.gz",
+      "rawSHA256": "2eff608591305330085d66c177fae03b4873614c9b08d2cada1383fe058ed722"
+    },
+    {
+      "file": "old-editor.log.gz",
+      "rawSHA256": "48ea586762d542ce5fa06bf0217018f6783a416074c1fc8e15c9a567ff5726c3"
+    },
+    {
+      "file": "pie.json.gz",
+      "rawSHA256": "c53bd08c4b73b7617238bb757d0de0b89ae74aaddcfe5c1ce625ea894ca58a88"
+    },
+    {
+      "file": "refreshed-editor.log.gz",
+      "rawSHA256": "f1f789cfb8f098f3fdc34435b1518adf2d8843c874d4c5a2466e0c63973efb39"
+    }
+  ]
+}

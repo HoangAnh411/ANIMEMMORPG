@@ -2,7 +2,7 @@
 
 **A ACCEPTED tại 914f7af/source f11c944: 7/7 Automation và review evidence đạt.** [Căn cứ](ACCEPTANCE-A.md). Không chạy lại kiểm chứng để khép hồ sơ.
 
-A là model thuần; B READY_FOR_REVIEW trên source94ebcc7: full34Automation, smoke3maps, input40assertions; [REPORT-B](REPORT-B.md). C–F chưa triển khai/chưa chạy. Tên dưới A là Automation tests thực đăng ký; cột evidence được khép bằng kết quả thực ở REPORT-A. Không ấn định tổng số tests tương lai.
+A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: full34Automation, smoke3maps, input40assertions; [REPORT-B](REPORT-B.md). C–F chưa triển khai/chưa chạy. Tên dưới A là Automation tests thực đăng ký; cột evidence được khép bằng kết quả thực ở REPORT-A. Không ấn định tổng số tests tương lai.
 
 | ID | Automation A | Nội dung và giới hạn |
 |---|---|---|
@@ -18,8 +18,8 @@ A là model thuần; B READY_FOR_REVIEW trên source94ebcc7: full34Automation, s
 
 | Đợt / ID | Kiểm chứng bắt buộc còn lại | Trạng thái A |
 |---|---|---|
-| B-ACTION |Authority component/inputLMB thật/edge/busy/clock0.16/0.22/0.40/aim/yaw, cancellation fixtures, diagnostics |PASS kỹ thuật: REPORT-B; chờ review |
-| B-MOTOR |StopXY/gravity/move-jump-sprint lock, heldW recovery, menu/focus/Resume click suppression, lost-ground/Interacting/Defeated; saved move authority lock và U01 camera/gates regression |PASS kỹ thuật theo bằng chứng B; giới hạn injected-key qua Alt-Tab ghi REPORT-B; chờ review |
+| B-ACTION |Authority component/inputLMB thật/edge/busy/clock0.16/0.22/0.40/aim/yaw, cancellation fixtures, diagnostics |PASS kỹ thuật: REPORT-B; đã nghiệm thu B |
+| B-MOTOR |StopXY/gravity/move-jump-sprint lock, heldW recovery, menu/focus/Resume click suppression, lost-ground/Interacting/Defeated; saved move authority lock và U01 camera/gates regression |PASS kỹ thuật theo bằng chứng B; giới hạn injected-key qua Alt-Tab ghi REPORT-B; đã nghiệm thu B |
 | C-PRESENT |Blockout/montage0.40/late seek/action IDs, notify bỏ/lặp không hit, root0displacement, carry/grip, finish/cancel/death/lost-ground, landing/locomotion, BP compile/references/cook |NOT RUN |
 | D-GEOMETRY |Feet/world-local/center/extents; trước/sau/ngoài/chạm biên; multiple targets/hurtboxes; target không che target |NOT RUN |
 | D-WALL |Kín/góc/partial hurtbox; origin inside solid; segment nearest-point; target lộ ra sau vật cản trong active; blocked candidate không consume dedup |NOT RUN |
