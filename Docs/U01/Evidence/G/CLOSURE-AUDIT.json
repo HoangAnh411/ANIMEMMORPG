@@ -1,0 +1,32 @@
+{
+  "acceptedReviewSHA": "9c89d08e5e14590166e7933e405e95887afb1b54",
+  "binarySourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+  "packageFilesVerified": 48,
+  "packageIndexSHA256": "87a2313527f10898b49a224f1d7970440e6cb7dc26a6702b829d853735a42fa6",
+  "gameExecutableSHA256": "aa8d5f78af548c7a48b29a6e49860908367c5c8cd7a678d1b7ff74d8b7b226d8",
+  "automation": {
+    "passed": 23,
+    "foundation": 4,
+    "U01": 19
+  },
+  "existingCapturesTimedChecks": 56,
+  "smokePassed": 3,
+  "sourceContentConfigUnchangedFromAcceptedF": true,
+  "mandatoryTechnicalEvidenceGaps": [],
+  "limits": [
+    "Art anime and official weapon carry DEFERRED",
+    "Packaged Server NOT ACCEPTED",
+    "Sustained120FPS NOT VERIFIED; cap120 actually89.5167FPS at1920x1080/internal100%",
+    "Physical input-to-display latency NOT MEASURED; transform timings only",
+    "Exact GPU/driver/VRAM mechanism NOT ESTABLISHED; interrupted resource sampler retained",
+    "Original Editor newest native-code load NOT VERIFIED; independent disk-binary clone/package used",
+    "F reconnect/security/settings evidence retained from accepted F; not all replayed in G network session"
+  ],
+  "historyRetained": [
+    "534.429second interrupted long session; not ten-minute PASS",
+    "Boot-observer preflight failure",
+    "IME-contaminated focus attempt",
+    "GPU resource sampler file-lock failure",
+    "Earlier Live Coding/build/runtime warning history"
+  ]
+}

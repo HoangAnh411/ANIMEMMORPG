@@ -1,0 +1,121 @@
+{
+  "sourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+  "method": "Read existing fresh cold-clone MCP TestRunner log; no test rerun at closure",
+  "tests": [
+    {
+      "name": "AnimeMMORPG.U00.Foundation.Axes",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.51:455][334]LogAutomationController: Display: Test Completed. Result={Success} Name={Axes} Path={AnimeMMORPG.U00.Foundation.Axes}"
+    },
+    {
+      "name": "AnimeMMORPG.U00.Foundation.CallOrder",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.51:516][337]LogAutomationController: Display: Test Completed. Result={Success} Name={CallOrder} Path={AnimeMMORPG.U00.Foundation.CallOrder}"
+    },
+    {
+      "name": "AnimeMMORPG.U00.Foundation.HalfOpenInterval",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.51:566][340]LogAutomationController: Display: Test Completed. Result={Success} Name={HalfOpenInterval} Path={AnimeMMORPG.U00.Foundation.HalfOpenInterval}"
+    },
+    {
+      "name": "AnimeMMORPG.U00.Foundation.Units",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.51:624][343]LogAutomationController: Display: Test Completed. Result={Success} Name={Units} Path={AnimeMMORPG.U00.Foundation.Units}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.B.CameraPolicy",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.51:674][346]LogAutomationController: Display: Test Completed. Result={Success} Name={CameraPolicy} Path={AnimeMMORPG.U01.B.CameraPolicy}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.B.ReleaseGate",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.51:734][349]LogAutomationController: Display: Test Completed. Result={Success} Name={ReleaseGate} Path={AnimeMMORPG.U01.B.ReleaseGate}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.C.FlatMovement",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.52:391][351]LogAutomationController: Display: Test Completed. Result={Success} Name={FlatMovement} Path={AnimeMMORPG.U01.C.FlatMovement}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.C.JumpPhysics",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.52:811][353]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpPhysics} Path={AnimeMMORPG.U01.C.JumpPhysics}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.C.JumpWindows",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.52:863][356]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpWindows} Path={AnimeMMORPG.U01.C.JumpWindows}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.C.MotorLocks",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.52:923][359]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorLocks} Path={AnimeMMORPG.U01.C.MotorLocks}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.C.Terrain",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.53:771][361]LogAutomationController: Display: Test Completed. Result={Success} Name={Terrain} Path={AnimeMMORPG.U01.C.Terrain}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.D.AnimatedMotor",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.55:228][363]LogAutomationController: Display: Test Completed. Result={Success} Name={AnimatedMotor} Path={AnimeMMORPG.U01.D.AnimatedMotor}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.D.AssetPolicy",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.55:278][366]LogAutomationController: Display: Test Completed. Result={Success} Name={AssetPolicy} Path={AnimeMMORPG.U01.D.AssetPolicy}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.D.CarryTrajectory",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.55:874][368]LogAutomationController: Display: Test Completed. Result={Success} Name={CarryTrajectory} Path={AnimeMMORPG.U01.D.CarryTrajectory}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.D.GripIsolationAndAttachment",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.56:040][371]LogAutomationController: Display: Test Completed. Result={Success} Name={GripIsolationAndAttachment} Path={AnimeMMORPG.U01.D.GripIsolationAndAttachment}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.D.LandingTransitions",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.57:023][373]LogAutomationController: Display: Test Completed. Result={Success} Name={LandingTransitions} Path={AnimeMMORPG.U01.D.LandingTransitions}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.D.TransitionsAndAttachment",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.57:376][376]LogAutomationController: Display: Test Completed. Result={Success} Name={TransitionsAndAttachment} Path={AnimeMMORPG.U01.D.TransitionsAndAttachment}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.E.BindingValidation",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.57:426][379]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingValidation} Path={AnimeMMORPG.U01.E.BindingValidation}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.E.LocalMappingIsolation",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.57:486][382]LogAutomationController: Display: Test Completed. Result={Success} Name={LocalMappingIsolation} Path={AnimeMMORPG.U01.E.LocalMappingIsolation}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.E.PartialRecovery",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.57:544][385]LogAutomationController: Display: Test Completed. Result={Success} Name={PartialRecovery} Path={AnimeMMORPG.U01.E.PartialRecovery}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.E.SaveAndFailure",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.57:624][388]LogAutomationController: Display: Test Completed. Result={Success} Name={SaveAndFailure} Path={AnimeMMORPG.U01.E.SaveAndFailure}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.F.ProxyAnimation",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.57:678][391]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxyAnimation} Path={AnimeMMORPG.U01.F.ProxyAnimation}"
+    },
+    {
+      "name": "AnimeMMORPG.U01.F.SavedMoveReplay",
+      "result": "Success",
+      "log": "[2026.11.05-08.31.57:733][394]LogAutomationController: Display: Test Completed. Result={Success} Name={SavedMoveReplay} Path={AnimeMMORPG.U01.F.SavedMoveReplay}"
+    }
+  ]
+}

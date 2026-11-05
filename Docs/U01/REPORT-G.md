@@ -1,4 +1,16 @@
-﻿# U01-G — Integration verification (in progress)
+# U01-G — Hồ sơ khép nghiệm thu kỹ thuật
+
+**ACCEPTED — U01 kỹ thuật hoàn tất.** Người dùng xác nhận chơi thử tại **9c89d08e5e14590166e7933e405e95887afb1b54**, bao gồm sửa khựng lúc đổi focus A/B, và cho phép khép hồ sơ/fast-forward main khi đủ bằng chứng. Đối chiếu toàn bộ ma trận tại [G-MATRIX-CLOSURE.md](G-MATRIX-CLOSURE.md); không còn tiêu chí bắt buộc thiếu bằng chứng.
+
+- Source build/package giữ nguyên **5f8a6eabe103a8b31a894c82f32cffb0325474a9**.48file package được xác minh lại SHA256 khi khép; PACKAGE.csv và hash executable/index không đổi. Commit hồ sơ không được coi là source binary mới.
+- Full build Editor/Game và package exit0;23/23Automation (U00 4 + U01 19), smoke3/3 giữ nguyên. Không chạy lại build/tests/smoke hoặc phiên10phút; chỉ đọc/xác minh bằng chứng. [Tên từng test](Evidence/G/AUTOMATION-RESULTS.json), [build](Evidence/G/BUILD-RESULTS.json), [audit](Evidence/G/CLOSURE-AUDIT.json).
+- Đã hoàn tất56/56đối chiếu thời điểm/trạng thái trên capture input thật đã có: rebind, settings, menu/focus/gates/gravity, save lỗi/retry, corrupt hash, Quit/reopen và năm vòng Boot. Đây không phải56Automation tests. [Kết quả](Evidence/G/TIMED-CHECKS.json), scriptAuditGIntegration.py.
+- Phiên hoàn tất600.233498giây,263input,3001mẫu Gameworld,10lần đổi focus. Lượt534.429giây gián đoạn giữ riêng và không tính đạt10phút. Bằng chứng network G và focus5lần mỗi chiều giữ nguyên; reconnect/security/settings đầy đủ kế thừa F đã nghiệm thu, không tuyên bố chạy lại toàn bộ trong G.
+- 1920×1080/internal100%, chất lượng/renderer không đổi: thực đạt29.9996/59.9952FPS tại cap30/60. Cap120 chỉ89.5167FPS, **120FPS NOT VERIFIED**, không chặn cổng theo quy tắc phần cứng đã chốt. Profile mạng hai client60/server30 ở900×540/internal50% là profile thử riêng.
+- **DEFERRED:** art anime/model/rig/kiếm và carry chính thức; carry hiện tại chỉ blockout kỹ thuật. **Chưa nghiệm thu Server đóng gói.** Không suy thành hiệu năng sản phẩm tổng quát, mạng xấu/combat hoặc U02. Native code mới nhất trong Editor gốc và input-to-display latency chưa kiểm chứng; phép đo là transform timing. Nguyên nhân GPU/driver/VRAM chính xác chưa được xác lập vì sampler gián đoạn.
+- Giữ lịch sử Live Coding và các lần lỗi/preflight/IME/sampler, warning compiler/toolset. Không sửa luật Description, Source/Content/Config, không đóng/restart Editor để khép hồ sơ, không bắt đầu U02. Native source/assets/config giữa F được nghiệm thu và G không đổi; nguyên nhân focus được xử lý ở launcher/minimize-restore như profile F.
+
+## Lịch sử kiểm chứng (giữ nguyên; trạng thái pending ở các mốc cũ đã được phần khép trên thay thế)
 
 Source: 5f8a6eabe103a8b31a894c82f32cffb0325474a9, cloned from accepted main into Artifacts/U01/G/Source. Branch: u01/g-integration. G is not accepted or merged.
 

@@ -1,5 +1,5 @@
 {
-  "status": "IN_PROGRESS",
+  "status": "ACCEPTED",
   "sourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
   "packagePath": "Artifacts\\U01\\G\\Package-20261105-153201-862-38caf5d5\\Archive\\Windows",
   "packageIndexSHA256": "87a2313527f10898b49a224f1d7970440e6cb7dc26a6702b829d853735a42fa6",
@@ -8,7 +8,7 @@
   "automation": "Artifacts/U01/G/MCPTests-20261105-153131",
   "automationPassed": 23,
   "smokePassed": 3,
-  "scope": "G not accepted/merged; remaining integrated checks pending",
+  "scope": "U01 technical/blockout complete; anime/official carry DEFERRED; packaged Server not accepted;120FPS not achieved",
   "originalEditorObserved": {
     "pid": 8676,
     "createdLocal": "2026-11-05T17:20:42",
@@ -21,6 +21,17 @@
     "validTransfersPerCondition": 10,
     "directionsEach": 5,
     "nativeSourceChanged": false,
-    "status": "Measured launcher fix; pending user feel confirmation; G not accepted"
+    "status": "PASS per user acceptance of9c89d08"
+  },
+  "acceptance": {
+    "reviewSHA": "9c89d08e5e14590166e7933e405e95887afb1b54",
+    "method": "Explicit user confirmation including focus fix; all mandatory matrix evidence reconciled",
+    "matrix": "../../G-MATRIX-CLOSURE.md",
+    "binarySourceUnchanged": true
+  },
+  "closureEditorObservation": {
+    "pid": 3508,
+    "originalProject": "D:/Data/AnimeMMORPG/AnimeMMORPG.uproject",
+    "note": "Editor process observed open at closure; no agent restart/close. Prior PID observations retained as historical, no continuous PID claim."
   }
 }

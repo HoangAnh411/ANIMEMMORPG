@@ -1,0 +1,19 @@
+{
+  "Generate": {
+    "CompletedAt": "2026-11-05T15:28:15.4312388+07:00",
+    "ExitCode": 0
+  },
+  "Editor": {
+    "CompletedAt": "2026-11-05T15:30:07.9813271+07:00",
+    "ExitCode": 0
+  },
+  "Game": {
+    "CompletedAt": "2026-11-05T15:31:31.4661140+07:00",
+    "ExitCode": 0
+  },
+  "Package": {
+    "ExitCode": 0,
+    "CompletedAt": "2026-11-05T15:32:49.1174797+07:00",
+    "Archive": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\G\\Package-20261105-153201-862-38caf5d5\\Archive"
+  }
+}

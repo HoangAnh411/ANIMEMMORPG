@@ -46,6 +46,8 @@ Cổng: mở, compile, test và packaged Windows vào được sân thử từ n
 
 Phụ thuộc: U00.
 
+**U01 KỸ THUẬT HOÀN TẤT** theo nghiệm thu G tại9c89d08, gồm sửa focus A/B. [Hồ sơ cuối](U01/REPORT-G.md), [đối chiếu ma trận](U01/G-MATRIX-CLOSURE.md).23/23Automation,56/56kiểm tra input, smoke3/3, phiên600.23giây.1080p/internal100% đạt30/60FPS;120FPS chưa đạt/chưa kiểm chứng. Art anime/carry chính thức **DEFERRED**; chưa nghiệm thu Server đóng gói. Profile mạng review: hai client60/server30. **Chưa bắt đầu U02.** Các trạng thái chờ ở các đoạn lịch sử dưới đây được kết quả cuối này thay thế.
+
 U01-A bắt đầu từ main U00 `f10e9252767f134e8e6d5698c326a2b045b8f1d3`. Quyết định người dùng: kỹ thuật trước bằng mannequin/clip hiện có và kiếm hình khối; camera/chuột là ưu tiên chơi thử đầu tiên, di chuột xoay ngay không giữ nút. Nghiệm thu kỹ thuật tách khỏi art sản phẩm. Model/rig/kiếm anime **DEFERRED**, chưa hoàn thành và không chặn cổng kỹ thuật. Không sửa luật gameplay trong Description. Hợp đồng, asset và ma trận tại [Docs/U01](U01/CONTRACTS.md), [báo cáo A](U01/REPORT-A.md).
 
 Mỗi đợt riêng trên `u01/<tên-đợt>` từ main đã nghiệm thu; commit/push, bàn giao rồi dừng, không tự merge hoặc chuyển đợt: A hợp đồng/khả thi → B camera/chuột/menu tối thiểu → C motor/sân đo → D animation/kiếm thử → E rebind/settings/khóa → F server riêng/hai client → G Windows tích hợp. B–F có smoke packaged phần mới; G full build/Automation/package từ clone SHA đã push, giữ Editor gốc mở.
@@ -72,14 +74,14 @@ F60 từ412bc7b đã đo lại với cap client tách server: A hai30, B một60
 
 F ?? ???c ng??i d?ng nghi?m thu t?i **2bd9b56**, profile m?ng client60/server30; dedicated Editor server, kh?ng Server ??ng g?i/?? h?a s?n ph?m1080p. Cho ph?p kh?p h? s?/push/fast-forward main v? tri?n khai ri?ng **G ki?m t?ch h?p**: clone commit main ?? merge, full build/Automation/package/h?i quy/lifecycle; Editor g?c ti?p t?c m?. L?ch s? F READY_FOR_REVIEW ph?a tr?n gi? nguy?n.
 
-- [ ] U01.01 Chốt mannequin/clip nguồn theo register U00 cho phép thử kỹ thuật. Model/rig/kiếm anime hợp giấy phép: **DEFERRED**, nghiệm thu art riêng.
-- [ ] U01.02 Character/CharacterMovement và Enhanced Input: đi 5 m/s, sprint 7 m/s, nhảy 1,2 m, dốc 45°, đi chéo không nhanh hơn.
-- [ ] U01.03 Camera tự do/đổi vai/tránh vật cản, tách hướng thân/di chuyển/ngắm.
-- [ ] U01.04 Skeleton/retarget/socket kiếm, Animation Blueprint idle/đi/chạy/nhảy/rơi/tiếp đất; motor giữ quyền dịch chuyển.
-- [ ] U01.05 Menu/focus/Resume, rebind/settings; camera dùng được khi khóa hành động, xóa lệnh cũ.
-- [ ] U01.06 Sân dốc/bậc/trần/vực/hành lang/vật cản có số đo; Windows chơi được với mannequin kỹ thuật.
-- [ ] U01.07 Chốt chính sách root motion cho bộ clip đầu: CharacterMovement giữ quyền dịch chuyển cơ bản, AnimBP trình bày; không để root motion và code cùng dịch chuyển một hành động. Ghi rõ ngoại lệ nếu có và kiểm thử displacement thực.
-- [ ] U01.08 Thử kỹ thuật bằng UnrealEditor.exe -server và hai client riêng localhost ngay từ A; phân biệt với target Server đóng gói, không mặc định installed engine hỗ trợ. Nếu không chạy được, bàn giao lỗi và phương án engine, không tự tải source/nâng engine. F kiểm spawn/possess/ownership, server ghi nhận đi/sprint/nhảy, hai client thấy di chuyển/animation, reconnect và settings độc lập; log từng PID/world/net mode/pawn. Chưa prediction combat hoặc mạng xấu U05.
+- [x] U01.01 Chốt mannequin/clip nguồn theo register U00 cho phép thử kỹ thuật. Model/rig/kiếm anime hợp giấy phép: **DEFERRED**, nghiệm thu art riêng.
+- [x] U01.02 Character/CharacterMovement và Enhanced Input: đi 5 m/s, sprint 7 m/s, nhảy 1,2 m, dốc 45°, đi chéo không nhanh hơn.
+- [x] U01.03 Camera tự do/đổi vai/tránh vật cản, tách hướng thân/di chuyển/ngắm.
+- [x] U01.04 Skeleton/retarget/socket kiếm, Animation Blueprint idle/đi/chạy/nhảy/rơi/tiếp đất; motor giữ quyền dịch chuyển.
+- [x] U01.05 Menu/focus/Resume, rebind/settings; camera dùng được khi khóa hành động, xóa lệnh cũ.
+- [x] U01.06 Sân dốc/bậc/trần/vực/hành lang/vật cản có số đo; Windows chơi được với mannequin kỹ thuật.
+- [x] U01.07 Chốt chính sách root motion cho bộ clip đầu: CharacterMovement giữ quyền dịch chuyển cơ bản, AnimBP trình bày; không để root motion và code cùng dịch chuyển một hành động. Ghi rõ ngoại lệ nếu có và kiểm thử displacement thực.
+- [x] U01.08 Thử kỹ thuật bằng UnrealEditor.exe -server và hai client riêng localhost ngay từ A; phân biệt với target Server đóng gói, không mặc định installed engine hỗ trợ. Nếu không chạy được, bàn giao lỗi và phương án engine, không tự tải source/nâng engine. F kiểm spawn/possess/ownership, server ghi nhận đi/sprint/nhảy, hai client thấy di chuyển/animation, reconnect và settings độc lập; log từng PID/world/net mode/pawn. Chưa prediction combat hoặc mạng xấu U05.
 
 Cổng kỹ thuật: Windows điều khiển được, chuột xoay ngay, menu/focus/Resume/settings đúng; motor và animation đo theo Description, không trượt chân nghiêm trọng. U00 Foundation 4/4 và ma trận U01 thực chạy, có source SHA/log/video; server riêng/hai client đạt trước U02. Art anime vẫn DEFERRED, mannequin không là nghiệm thu hình ảnh sản phẩm. Xem [ma trận](U01/TEST-MATRIX.md).
 
