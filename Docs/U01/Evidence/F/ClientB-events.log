@@ -1,0 +1,2 @@
+[2026.11.05-05.10.06:048][  0]LogPython: Python disabled via command-line flag '-DisablePython'
+[2026.11.05-05.13.58:883][535]LogNet: UChannel::Close: Sending CloseBunch. ChIndex == 0. Name: [UChannel] ChIndex: 0, Closing: 0 [UNetConnection] RemoteAddr: 127.0.0.1:17877, Name: IpConnection_0, Driver: Name:GameNetDriver Def:GameNetDriver IpNetDriver_0, IsServer: NO, PC: BP_U01Controller_C_0, Owner: BP_U01Controller_C_0, UniqueId: NULL:HoangAnh-8445A50842E84AB4A9B51ABB0C3FFDBA

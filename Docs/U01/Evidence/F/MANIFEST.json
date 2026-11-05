@@ -1,0 +1,50 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "branch": "u01/f-network",
+  "baseSHA": "99363222895b0069b3afdab2b103bfc81c68af6b",
+  "sourceSHA": "df897f6088da4cca423085e9fe8e9c2869c98420",
+  "engine": "UE5.8.4 CL58902052",
+  "toolchain": "MSVC14.51.36260 / SDK10.0.26100.0",
+  "build": "Artifacts\\U01\\F\\Build-20261105-120525-295-b4be0b5d",
+  "tests": "Artifacts\\U01\\F\\MCPTests-20261105-120700",
+  "automationCount": 23,
+  "inputChecks": 92,
+  "session": "Artifacts\\U01\\F\\Session-20261105-120906",
+  "package": "Artifacts\\U01\\F\\Package-20261105-120856-201-0ffc4cbc\\Archive\\Windows",
+  "moduleSHA256": "80a3a51a1fe9ae990e3f1d5fd12f4ce41d832078590fdb80205cfcb979420b3e",
+  "engineExeSHA256": "a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143",
+  "ids": {
+    "A": "C5796E1B4190B2A1CEDF52BB0F6DB9F2",
+    "oldB": "1720536F49D66975EFCA93B07C535416",
+    "newB": "23AAC0F3444C214114FF0CA62FA502F4"
+  },
+  "captureHz": {
+    "NormalA": 27.653420941904454,
+    "NormalB": 26.673655656451086,
+    "AttacksSettingsA": 19.87972174917182,
+    "SpeedA": 24.14660806258122,
+    "MoveQuitB": 27.53426524583742,
+    "ReconnectBOnRunway": 26.823604890581148
+  },
+  "speedFixture": {
+    "claim": 2000,
+    "rejected": true,
+    "serverMaxObserved": 700.0000000000001,
+    "clientMaxObservedInSpeedProbe": 904.8309367194602,
+    "note": "Client-side prediction exceeds limit during malformed fixture; server remains bounded and issues correction. Fixture only, no production speed API."
+  },
+  "limits": [
+    "Installed Editor dedicated only; no packaged Server acceptance",
+    "No latency/loss/jitter/combat prediction or integrated FPS acceptance",
+    "VRAM exhausted warning visible with two rendered clients + original Editor; renderer unchanged; video export retains warnings",
+    "Anime art/combat animation DEFERRED; D temporary carry unchanged"
+  ],
+  "history": [
+    "Compile declaration fixes before 97400db retained",
+    "97400db startup ready check originally matched Zen rather than IpNetDriver; no-world early attempt not acceptance",
+    "919fec2 throttle config initially in wrong file; corrected via per-process EditorSettings override",
+    "b5d1ff0 local movable fixture base caused proxy landing failure; 0166d6f replicates server fixture base",
+    "b1c3ed0 presents authoritative replicated proxy velocity; owner/authority motor unchanged",
+    "Short input pulse lost within a slow frame; physical space hold 0.6s used for normal probes, no variable-height jump"
+  ]
+}

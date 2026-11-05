@@ -1,0 +1,374 @@
+{
+  "sourceSHA": "df897f6088da4cca423085e9fe8e9c2869c98420",
+  "method": "Postprocessing native Game-world identities and real guarded OS input; not additional Automation tests",
+  "checks": [
+    {
+      "name": "Fresh owned Game-world identity Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Runtime Python errors absent Server",
+      "result": "PASS"
+    },
+    {
+      "name": "No pawn duplication Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Dedicated has no local controller/UI",
+      "result": "PASS"
+    },
+    {
+      "name": "Fresh owned Game-world identity ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Runtime Python errors absent ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "No pawn duplication ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Exactly one owned autonomous pawn ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Fresh owned Game-world identity ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Runtime Python errors absent ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "No pawn duplication ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Exactly one owned autonomous pawn ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Fresh owned Game-world identity ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "Runtime Python errors absent ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "No pawn duplication ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "Exactly one owned autonomous pawn ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "Server IDs distinct; reconnect receives new identity",
+      "result": "PASS"
+    },
+    {
+      "name": "Completed guarded real input NormalA",
+      "result": "PASS"
+    },
+    {
+      "name": "Completed guarded real input NormalB",
+      "result": "PASS"
+    },
+    {
+      "name": "Completed guarded real input AttacksSettingsA",
+      "result": "PASS"
+    },
+    {
+      "name": "Completed guarded real input SpeedA",
+      "result": "PASS"
+    },
+    {
+      "name": "Completed guarded real input MoveQuitB",
+      "result": "PASS"
+    },
+    {
+      "name": "Completed guarded real input ReconnectBOnRunway",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen NormalA/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen AttacksSettingsA/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation NormalA/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing NormalA/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority NormalA/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen NormalA/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen AttacksSettingsA/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation NormalA/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing NormalA/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority NormalA/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen NormalA/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen AttacksSettingsA/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation NormalA/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing NormalA/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority NormalA/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen NormalB/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen NormalB/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation NormalB/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing NormalB/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority NormalB/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen NormalB/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen NormalB/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation NormalB/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing NormalB/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority NormalB/ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen NormalB/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen NormalB/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation NormalB/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing NormalB/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority NormalB/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen ReconnectBOnRunway/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen ReconnectBOnRunway/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation ReconnectBOnRunway/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing ReconnectBOnRunway/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority ReconnectBOnRunway/Server",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen ReconnectBOnRunway/ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen ReconnectBOnRunway/ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation ReconnectBOnRunway/ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing ReconnectBOnRunway/ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority ReconnectBOnRunway/ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "Walk seen ReconnectBOnRunway/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Sprint seen ReconnectBOnRunway/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Locomotion/jump presentation ReconnectBOnRunway/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Grounded and idle after landing ReconnectBOnRunway/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Settled location matches authority ReconnectBOnRunway/ClientA",
+      "result": "PASS"
+    },
+    {
+      "name": "Only owned pawn responds NormalA",
+      "result": "PASS"
+    },
+    {
+      "name": "Only owned pawn responds NormalB",
+      "result": "PASS"
+    },
+    {
+      "name": "Server speed bound for entire session",
+      "result": "PASS"
+    },
+    {
+      "name": "Overspeed request 2000 rejected",
+      "result": "PASS"
+    },
+    {
+      "name": "Actual client overspeed prediction exercised",
+      "result": "PASS"
+    },
+    {
+      "name": "Actual overspeed receives server correction",
+      "result": "PASS"
+    },
+    {
+      "name": "Additional jump rejected while airborne",
+      "result": "PASS"
+    },
+    {
+      "name": "Foreign pawn target rejected",
+      "result": "PASS"
+    },
+    {
+      "name": "Client corrected after malformed jump",
+      "result": "PASS"
+    },
+    {
+      "name": "No server second ascent after rejected air jump",
+      "result": "PASS"
+    },
+    {
+      "name": "Server jump apex stays within motor bound",
+      "result": "PASS"
+    },
+    {
+      "name": "Remote observer has jump/fall/land states",
+      "result": "PASS"
+    },
+    {
+      "name": "A rebind/sensitivity saved locally",
+      "result": "PASS"
+    },
+    {
+      "name": "B settings independent ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "B settings independent ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "No contexts accumulate",
+      "result": "PASS"
+    },
+    {
+      "name": "A menu does not pause server/B",
+      "result": "PASS"
+    },
+    {
+      "name": "Quit removes old pawn before reconnect",
+      "result": "PASS"
+    },
+    {
+      "name": "Reconnect has exactly A + new B, no ghost",
+      "result": "PASS"
+    },
+    {
+      "name": "Server-generated ID shared across processes ClientB",
+      "result": "PASS"
+    },
+    {
+      "name": "Server-generated ID shared across processes ReconnectB",
+      "result": "PASS"
+    },
+    {
+      "name": "A Python errors reproduced on all three processes",
+      "result": "PASS"
+    },
+    {
+      "name": "Twenty-three actual Automation successes",
+      "result": "PASS"
+    },
+    {
+      "name": "Three packaged map smokes",
+      "result": "PASS"
+    }
+  ]
+}

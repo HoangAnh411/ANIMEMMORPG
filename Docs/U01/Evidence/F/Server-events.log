@@ -1,0 +1,18 @@
+[2026.11.05-05.09.14:073][  0]LogPython: Python disabled via command-line flag '-DisablePython'
+[2026.11.05-05.09.14:619][  0]LogU01Network: Display: FixtureGround center=(0,4000,-50) sizeCm=(30000,3000,100) world=/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab net=1
+[2026.11.05-05.09.50:121][  0]LogNet: NotifyAcceptingConnection accepted from: 127.0.0.1:57539
+[2026.11.05-05.09.50:274][  4]LogNet: NotifyAcceptingConnection accepted from: 127.0.0.1:57539
+[2026.11.05-05.09.50:863][ 21]LogNet: Join succeeded: HoangAnh-961C87D04F9
+[2026.11.05-05.10.06:141][476]LogNet: NotifyAcceptingConnection accepted from: 127.0.0.1:59013
+[2026.11.05-05.10.08:771][554]LogNet: NotifyAcceptingConnection accepted from: 127.0.0.1:59013
+[2026.11.05-05.10.09:180][566]LogNet: Join succeeded: HoangAnh-8445A50842E
+[2026.11.05-05.12.49:956][384]LogU01Network: Display: FixtureReset id=1720536F49D66975EFCA93B07C535416 player=257
+[2026.11.05-05.13.08:731][946]LogU01Network: Display: FixtureReset id=C5796E1B4190B2A1CEDF52BB0F6DB9F2 player=256
+[2026.11.05-05.13.32:282][651]LogU01Network: Display: ProbeRejected ExtraJump claim=800.0 id=C5796E1B4190B2A1CEDF52BB0F6DB9F2 mode=3 count=1 serverMax=500.0
+[2026.11.05-05.13.33:814][697]LogU01Network: Display: ProbeRejected Ownership target=1720536F49D66975EFCA93B07C535416 own=C5796E1B4190B2A1CEDF52BB0F6DB9F2 controller=/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab:PersistentLevel.BP_U01Controller_C_0
+[2026.11.05-05.13.45:052][ 34]LogU01Network: Display: ProbeRejected Overspeed claim=2000.0 id=C5796E1B4190B2A1CEDF52BB0F6DB9F2 mode=1 count=0 serverMax=500.0
+[2026.11.05-05.13.58:915][449]LogNet: UChannel::Close: Sending CloseBunch. ChIndex == 0. Name: [UChannel] ChIndex: 0, Closing: 0 [UNetConnection] RemoteAddr: 127.0.0.1:59013, Name: IpConnection_1, Driver: Name:GameNetDriver Def:GameNetDriver IpNetDriver_0, IsServer: YES, PC: BP_U01Controller_C_1, Owner: BP_U01Controller_C_1, UniqueId: NULL:HoangAnh-8445A50842E84AB4A9B51ABB0C3FFDBA
+[2026.11.05-05.15.55:562][949]LogNet: NotifyAcceptingConnection accepted from: 127.0.0.1:64558
+[2026.11.05-05.15.58:038][ 23]LogNet: NotifyAcceptingConnection accepted from: 127.0.0.1:64558
+[2026.11.05-05.15.58:479][ 36]LogNet: Join succeeded: HoangAnh-9337A21248F
+[2026.11.05-05.16.03:657][191]LogU01Network: Display: FixtureReset id=23AAC0F3444C214114FF0CA62FA502F4 player=258

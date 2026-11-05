@@ -1,0 +1,23 @@
+{
+  "beforeSource": "97400db302d561a610278de5e8e0931a8f7de95e",
+  "before": {
+    "Server": [
+      "[2026.11.05-03.57.24:588][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'ToolsetDefinition'",
+      "[2026.11.05-03.57.24:647][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'AgentSkill'",
+      "[2026.11.05-03.57.24:674][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'PythonTestRunner'"
+    ],
+    "ClientA": [
+      "[2026.11.05-03.57.32:709][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'ToolsetDefinition'",
+      "[2026.11.05-03.57.32:713][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'AgentSkill'",
+      "[2026.11.05-03.57.32:737][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'PythonTestRunner'"
+    ],
+    "ClientB": [
+      "[2026.11.05-03.57.44:561][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'ToolsetDefinition'",
+      "[2026.11.05-03.57.44:565][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'AgentSkill'",
+      "[2026.11.05-03.57.44:590][  0]LogPython: Error: AttributeError: module 'unreal' has no attribute 'PythonTestRunner'"
+    ]
+  },
+  "afterSource": "df897f6088da4cca423085e9fe8e9c2869c98420",
+  "afterArguments": "-DisablePython only for -server/-game; Editor Automation retains Python/MCP",
+  "afterErrorCount": 0
+}
