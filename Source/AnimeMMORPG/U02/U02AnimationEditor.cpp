@@ -117,7 +117,7 @@ FString UU02AnimationEditor::BuildCAssets()
     Montage->PostEditChange();
     // Insert slot BEFORE finger grip but AFTER carry: attack wins the shoulder, fingers remain gripped.
     UAnimGraphNode_LayeredBoneBlend* GripNode=nullptr;UEdGraph* Graph=nullptr;
-    for(auto* G:BP->FunctionGraphs)for(auto* N:G->Nodes)if(auto* L=Cast<UAnimGraphNode_LayeredBoneBlend>(N))
+    for(auto G:BP->FunctionGraphs)for(auto N:G->Nodes)if(auto* L=Cast<UAnimGraphNode_LayeredBoneBlend>(N))
         if(L->Node.LayerSetup.Num()&&L->Node.LayerSetup[0].BranchFilters.Num()&&L->Node.LayerSetup[0].BranchFilters[0].BoneName==TEXT("thumb_01_r")){GripNode=L;Graph=G;}
     if(!GripNode||!Graph)return TEXT("ERROR: finger grip graph missing");
     auto* Input=GripNode->FindPin(TEXT("BasePose"));if(!Input||Input->LinkedTo.Num()!=1)return TEXT("ERROR: expected accepted carry link");

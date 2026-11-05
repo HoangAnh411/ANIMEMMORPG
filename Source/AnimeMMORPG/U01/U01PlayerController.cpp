@@ -498,6 +498,10 @@ FString AU01PlayerController::GetMetricsJson() const
     if (const auto* Anim = Cast<UU01AnimInstance>(ControlledCharacter->GetMesh()->GetAnimInstance()))
     {
         Json->SetNumberField(TEXT("animationPoseIndex"), Anim->PoseIndex);
+        Json->SetBoolField(TEXT("attackPresented"),Anim->bAttackPresented);
+        Json->SetNumberField(TEXT("attackPositionSeconds"),Anim->AttackPositionSeconds);
+        Json->SetStringField(TEXT("presentedAction"),FString::Printf(TEXT("%llu:%llu"),Anim->PresentedLife,Anim->PresentedAction));
+        Json->SetStringField(TEXT("rightHandComponentCm"),ControlledCharacter->GetMesh()->GetSocketTransform(TEXT("hand_r"),RTS_Component).GetLocation().ToString());
         Json->SetNumberField(TEXT("animationGroundSpeedCmPerSec"), Anim->GroundSpeed);
         Json->SetNumberField(TEXT("animationVerticalSpeedCmPerSec"), Anim->VerticalSpeed);
         Json->SetNumberField(TEXT("rootMotionMode"), int32(Anim->RootMotionMode));
