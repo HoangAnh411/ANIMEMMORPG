@@ -9,6 +9,8 @@
 void UU01CharacterMovement::BeginPlay()
 {
     Super::BeginPlay();
+    bServerAcceptClientAuthoritativePosition=false;
+    bIgnoreClientMovementErrorChecksAndCorrection=false;
     SimulationSeconds = GetWorld()->GetTimeSeconds();
     JumpWindow.ResetSession();
 }

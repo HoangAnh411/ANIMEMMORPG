@@ -5,6 +5,7 @@
 class FSavedMove_U01 final : public FSavedMove_Character
 {
 public:
+    using Super=FSavedMove_Character;
     bool Sprint=false,Held=false,Locked=false,PreviousNetworkHeld=false;
     uint8 SavedLocks=0;
     double Clock=0;
@@ -40,6 +41,7 @@ public:
 class FPredictionData_U01 final : public FNetworkPredictionData_Client_Character
 {
 public:
+    using Super=FNetworkPredictionData_Client_Character;
     explicit FPredictionData_U01(const UCharacterMovementComponent& Motor):Super(Motor){}
     virtual FSavedMovePtr AllocateNewMove() override{return FSavedMovePtr(new FSavedMove_U01());}
 };
