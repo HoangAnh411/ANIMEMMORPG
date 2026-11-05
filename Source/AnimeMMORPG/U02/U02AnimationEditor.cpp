@@ -46,7 +46,7 @@ FString UU02AnimationEditor::AdjustCArmMask()
     if(!Dir.Contains(TEXT("/Artifacts/U02/C/Source/")))return TEXT("ERROR: clone only");
     auto* BP=LoadObject<UAnimBlueprint>(nullptr,*(CRoot+TEXT("/ABP_U02")));if(!BP)return TEXT("ERROR: graph missing");
     int32 Count=0;
-    for(auto G:BP->FunctionGraphs)for(auto N:G->Nodes)if(auto* L=Cast<UAnimGraphNode_LayeredBoneBlend>(N))
+    for(auto G:BP->FunctionGraphs)for(auto N:TArray<TObjectPtr<UEdGraphNode>>(G->Nodes))if(auto* L=Cast<UAnimGraphNode_LayeredBoneBlend>(N))
         if(L->NodePosX==0&&L->Node.LayerSetup.Num()&&L->Node.LayerSetup[0].BranchFilters.Num()&&
             (L->Node.LayerSetup[0].BranchFilters[0].BoneName==TEXT("clavicle_r")||L->Node.LayerSetup[0].BranchFilters[0].BoneName==TEXT("upperarm_r")))
         {
