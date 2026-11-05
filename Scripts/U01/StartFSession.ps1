@@ -4,6 +4,9 @@
  [switch]$ReproducePython,
  [switch]$Diagnostics,
  [switch]$MemoryBudget,
+ [ValidateSet(30,60)][int]$ClientMaxFPS=30,
+ [ValidateSet(1,2)][int]$ClientCount=2,
+ [switch]$BufferedDiagnostics,
  [int]$Port=17877
 )
 $ErrorActionPreference='Stop'
@@ -16,7 +19,8 @@ $run=Join-Path $OutputRoot ($(if($ReproducePython){'PythonBefore-'}else{'Session
 New-Item -ItemType Directory -Path $run | Out-Null
 $records=@()
 try{
-foreach($role in @('Server','ClientA','ClientB')){
+$roles=if($ClientCount -eq 1){@('Server','ClientA')}else{@('Server','ClientA','ClientB')}
+foreach($role in $roles){
  $user=Join-Path $run $role;New-Item -ItemType Directory -Path $user | Out-Null
  $log=Join-Path $user ($role+'.log')
  $arguments=@(('"'+$project+'"'))
@@ -24,7 +28,10 @@ foreach($role in @('Server','ClientA','ClientB')){
  else{$arguments+=@(('127.0.0.1:'+$Port),'-game','-windowed','-ResX=900','-ResY=540',('-WinX='+$(if($role -eq 'ClientA'){0}else{940})),'-WinY=100')}
  if($ReproducePython){if($role -ne 'Server'){$arguments+='-NullRHI'}}else{$arguments+='-DisablePython'}
  if($Diagnostics){$arguments+='-U01FPerf'}
- $commands='t.MaxFPS 30,t.IdleWhenNotForeground 0'
+ if($BufferedDiagnostics){$arguments+=('-U01FPerfFile="'+(Join-Path $user 'Frames.jsonl')+'"')}
+ $cap=if($role -eq 'Server'){30}else{$ClientMaxFPS}
+ $commands='t.MaxFPS '+$cap+',t.IdleWhenNotForeground 0'
+ if($role -ne 'Server'){$commands+=',stat unit,r.ScreenPercentage '+$(if($MemoryBudget){50}else{100})}
  if($MemoryBudget -and $role -ne 'Server'){
   # Explicit same-machine review profile; retain DX12/SM6, Lumen, window size,
   # network frequency and CMC smoothing. Do not persist project/user settings.
@@ -37,7 +44,7 @@ foreach($role in @('Server','ClientA','ClientB')){
  # The dedicated background server continues to run hidden.
  $windowStyle=if($role -eq 'Server'){'Hidden'}else{'Normal'}
  $p=Start-Process -FilePath $exe -ArgumentList $arguments -WorkingDirectory (Split-Path $project) -WindowStyle $windowStyle -PassThru
- $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;userDir=$user;log=$log;utc=[DateTime]::UtcNow.ToString('o')}
+ $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;userDir=$user;log=$log;utc=[DateTime]::UtcNow.ToString('o');requestedMaxFPS=$cap;clientCount=$ClientCount;windowSize=@(900,540);internalResolutionPercent=$(if($MemoryBudget){50}else{100});memoryProfile=$MemoryBudget.IsPresent;bufferedDiagnostics=$BufferedDiagnostics.IsPresent}
  $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $user 'process.json')
  $records+=$r;$records | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $run 'processes.json')
  if($role -eq 'Server'){Set-FServerTimer $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $run 'server-timer.json')}

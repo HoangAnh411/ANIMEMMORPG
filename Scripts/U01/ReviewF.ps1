@@ -1,4 +1,4 @@
-param([int]$Port=17877,[switch]$OriginalQuality,[switch]$KeepEditorVisible,[switch]$Diagnostics)
+param([int]$Port=17877,[switch]$OriginalQuality,[switch]$KeepEditorVisible,[switch]$Diagnostics,[ValidateSet(30,60)][int]$ClientMaxFPS=30,[ValidateSet(1,2)][int]$ClientCount=2,[switch]$BufferedDiagnostics)
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).Path
 $manifest=Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $root 'Docs/U01/Evidence/F-Performance/MANIFEST.json') | ConvertFrom-Json
@@ -13,7 +13,7 @@ if(!$KeepEditorVisible){
  $editorWindows=@(Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject'))
  Write-Host ('Original Editor kept running; minimized '+$editorWindows.Count+' windows to reduce GPU contention. Cleanup restores them.')
 }
-try{$session=& (Join-Path $PSScriptRoot 'StartFSession.ps1') -CloneProject $project -OutputRoot $output -Port $Port -MemoryBudget:(!$OriginalQuality) -Diagnostics:$Diagnostics}
+try{$session=& (Join-Path $PSScriptRoot 'StartFSession.ps1') -CloneProject $project -OutputRoot $output -Port $Port -MemoryBudget:(!$OriginalQuality) -Diagnostics:$Diagnostics -ClientMaxFPS $ClientMaxFPS -ClientCount $ClientCount -BufferedDiagnostics:$BufferedDiagnostics}
 catch{Restore-FOriginalEditorWindows $editorWindows;throw}
 if(!$session -or !(Test-Path (Join-Path $session 'processes.json'))){throw 'Session did not become ready'}
 ConvertTo-Json -InputObject $editorWindows -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $session 'original-editor-windows.json')

@@ -25,6 +25,15 @@
 #include "HAL/IConsoleManager.h"
 #include "Misc/App.h"
 #include "Misc/ConfigCacheIni.h"
+#include "Misc/FileHelper.h"
+#include "HAL/FileManager.h"
+#include "Engine/GameViewportClient.h"
+#include "UnrealClient.h"
+#include "UObject/UObjectGlobals.h"
+#if WITH_EDITOR
+#include "ShaderCompiler.h"
+#include "ShaderPipelineCache.h"
+#endif
 
 DEFINE_LOG_CATEGORY_STATIC(LogU01Network,Log,All);
 void UU01NetworkProbe::OnWorldBeginPlay(UWorld& World)
@@ -32,6 +41,7 @@ void UU01NetworkProbe::OnWorldBeginPlay(UWorld& World)
     Super::OnWorldBeginPlay(World);
 #if !UE_BUILD_SHIPPING
     Enabled=FParse::Param(FCommandLine::Get(),TEXT("U01FProbe"));
+    FParse::Value(FCommandLine::Get(),TEXT("U01FPerfFile="),FrameFile);
     Run=FGuid::NewGuid().ToString();
     if(Enabled&&World.GetNetMode()!=NM_Client)
     {
@@ -48,11 +58,19 @@ void UU01NetworkProbe::OnWorldBeginPlay(UWorld& World)
     }
 #endif
 }
+void UU01NetworkProbe::FlushPerformanceFrames()
+{
+    if(PendingFrames.IsEmpty()||FrameFile.IsEmpty())return;
+    if(!FFileHelper::SaveStringArrayToFile(PendingFrames,*FrameFile,FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM,&IFileManager::Get(),FILEWRITE_Append))
+        UE_LOG(LogU01Network,Error,TEXT("Cannot flush buffered performance file %s"),*FrameFile);
+    PendingFrames.Reset();LastFlushSeconds=FPlatformTime::Seconds();
+}
+void UU01NetworkProbe::Deinitialize(){FlushPerformanceFrames();Super::Deinitialize();}
 void UU01NetworkProbe::Tick(float Dt)
 {
     // Opt-in diagnosis only: sample every game frame, before the normal 5 Hz
     // collector. UTC and monotonic timestamps share the host clock on localhost.
-    if(Enabled&&FParse::Param(FCommandLine::Get(),TEXT("U01FPerf")))
+    if(Enabled&&(FParse::Param(FCommandLine::Get(),TEXT("U01FPerf"))||!FrameFile.IsEmpty()))
     {
         auto* World=GetWorld();auto D=MakeShared<FJsonObject>();
         D->SetStringField(TEXT("utc"),FDateTime::UtcNow().ToIso8601());
@@ -60,7 +78,13 @@ void UU01NetworkProbe::Tick(float Dt)
         D->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());D->SetNumberField(TEXT("netMode"),int32(World->GetNetMode()));
         D->SetBoolField(TEXT("focus"),FApp::HasFocus());D->SetNumberField(TEXT("frame"),double(GFrameCounter));
         auto CV=[&](const TCHAR* Name){const auto* V=IConsoleManager::Get().FindConsoleVariable(Name);D->SetNumberField(Name,V?V->GetFloat():-999);};
-        for(const auto* Name:{TEXT("t.MaxFPS"),TEXT("t.IdleWhenNotForeground"),TEXT("r.VSync"),TEXT("r.ScreenPercentage"),TEXT("net.UseAdaptiveNetUpdateFrequency")})CV(Name);
+        for(const auto* Name:{TEXT("t.MaxFPS"),TEXT("t.IdleWhenNotForeground"),TEXT("r.VSync"),TEXT("r.ScreenPercentage"),TEXT("net.UseAdaptiveNetUpdateFrequency"),TEXT("r.LumenScene.SurfaceCache.AtlasSize"),TEXT("r.RenderTargetPoolMin"),TEXT("r.Streaming.PoolSize")})CV(Name);
+        if(const auto* View=World->GetGameViewport())if(const auto* Unit=View->GetStatUnitData())
+        {
+            // Last-drawn-frame raw stat-unit timings; never infer GPU work from capped wall time.
+            D->SetNumberField(TEXT("gameMs"),Unit->RawGameThreadTime);D->SetNumberField(TEXT("renderMs"),Unit->RawRenderThreadTime);
+            D->SetNumberField(TEXT("rhiMs"),Unit->RawRHITTime);D->SetNumberField(TEXT("gpuMs"),Unit->RawGPUFrameTime[0]);
+        }
         bool Throttle=true;GConfig->GetBool(TEXT("/Script/UnrealEd.EditorPerformanceSettings"),TEXT("bThrottleCPUWhenNotForeground"),Throttle,GEditorSettingsIni);
         D->SetBoolField(TEXT("editorThrottle"),Throttle);
         if(const auto* Driver=World->GetNetDriver())
@@ -70,6 +94,8 @@ void UU01NetworkProbe::Tick(float Dt)
             D->SetNumberField(TEXT("pktLag"),P.PktLag);D->SetNumberField(TEXT("pktLagMin"),P.PktLagMin);D->SetNumberField(TEXT("pktLagMax"),P.PktLagMax);
             D->SetNumberField(TEXT("pktLoss"),P.PktLoss);D->SetNumberField(TEXT("pktOrder"),P.PktOrder);D->SetNumberField(TEXT("pktDup"),P.PktDup);
             D->SetNumberField(TEXT("incomingLagMin"),P.PktIncomingLagMin);D->SetNumberField(TEXT("incomingLagMax"),P.PktIncomingLagMax);D->SetNumberField(TEXT("incomingLoss"),P.PktIncomingLoss);
+            D->SetNumberField(TEXT("pktJitter"),P.PktJitter);D->SetNumberField(TEXT("pktLagVariance"),P.PktLagVariance);
+            D->SetNumberField(TEXT("pktBufferBloatMs"),P.PktBufferBloatInMS);D->SetNumberField(TEXT("incomingBufferBloatMs"),P.PktIncomingBufferBloatInMS);
 #endif
             TArray<TSharedPtr<FJsonValue>> Connections;
             auto Add=[&](const UNetConnection* N){if(!N)return;auto V=MakeShared<FJsonObject>();
@@ -87,13 +113,20 @@ void UU01NetworkProbe::Tick(float Dt)
             V->SetNumberField(TEXT("smoothMode"),int32(M->NetworkSmoothingMode));V->SetNumberField(TEXT("smoothSeconds"),M->NetworkSimulatedSmoothLocationTime);
             V->SetNumberField(TEXT("pingMs"),C->GetPlayerState()?C->GetPlayerState()->GetPingInMilliseconds():-1);
             Values.Add(MakeShared<FJsonValueObject>(V));}
-        D->SetArrayField(TEXT("pawns"),Values);FString Text;FJsonSerializer::Serialize(D,TJsonWriterFactory<TCHAR,TCondensedJsonPrintPolicy<TCHAR>>::Create(&Text));UE_LOG(LogU01Network,Display,TEXT("U01F_PERF %s"),*Text);
+        D->SetArrayField(TEXT("pawns"),Values);FString Text;FJsonSerializer::Serialize(D,TJsonWriterFactory<TCHAR,TCondensedJsonPrintPolicy<TCHAR>>::Create(&Text));
+        if(FrameFile.IsEmpty()){UE_LOG(LogU01Network,Display,TEXT("U01F_PERF %s"),*Text);}
+        else{PendingFrames.Add(MoveTemp(Text));if(FPlatformTime::Seconds()-LastFlushSeconds>=1.)FlushPerformanceFrames();}
     }
     if(!Enabled)return;Elapsed+=Dt;if(Elapsed<.2f)return;Elapsed=0;
     auto* W=GetWorld();auto J=MakeShared<FJsonObject>();FString SHA;FParse::Value(FCommandLine::Get(),TEXT("U01SourceSHA="),SHA);
     J->SetStringField(TEXT("sourceSHA"),SHA);J->SetStringField(TEXT("runID"),Run);J->SetStringField(TEXT("utc"),FDateTime::UtcNow().ToIso8601());
     J->SetNumberField(TEXT("frameDt"),Dt);J->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());J->SetStringField(TEXT("world"),W->GetPathName());
     J->SetNumberField(TEXT("worldType"),int32(W->WorldType));J->SetNumberField(TEXT("netMode"),int32(W->GetNetMode()));J->SetNumberField(TEXT("seconds"),W->GetTimeSeconds());
+    J->SetBoolField(TEXT("asyncLoading"),IsAsyncLoading());
+#if WITH_EDITOR
+    J->SetNumberField(TEXT("shaderJobs"),GShaderCompilingManager?GShaderCompilingManager->GetNumRemainingJobs():0);
+    J->SetNumberField(TEXT("pipelinePrecompiles"),FShaderPipelineCache::NumPrecompilesRemaining());
+#endif
     if(const auto* Context=GEngine->GetWorldContextFromWorld(W))J->SetStringField(TEXT("context"),Context->ContextHandle.ToString());
     J->SetNumberField(TEXT("localPlayers"),W->GetGameInstance()?W->GetGameInstance()->GetNumLocalPlayers():0);
     int32 Widgets=0;for(TObjectIterator<UU01Menu> It;It;++It)if(It->GetWorld()==W&&It->IsInViewport())++Widgets;

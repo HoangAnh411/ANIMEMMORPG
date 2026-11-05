@@ -12,9 +12,14 @@ public:
     virtual bool DoesSupportWorldType(EWorldType::Type Type) const override {return Type==EWorldType::Game||Type==EWorldType::PIE;}
     virtual void OnWorldBeginPlay(UWorld& World) override;
     virtual void Tick(float Dt) override;
+    virtual void Deinitialize() override;
     virtual TStatId GetStatId() const override {RETURN_QUICK_DECLARE_CYCLE_STAT(UU01NetworkProbe,STATGROUP_Tickables);}
 private:
     float Elapsed=0;
     FString Run;
     bool Enabled=false;
+    FString FrameFile;
+    TArray<FString> PendingFrames;
+    double LastFlushSeconds=0;
+    void FlushPerformanceFrames();
 };
