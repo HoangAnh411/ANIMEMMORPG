@@ -118,6 +118,9 @@ bool FU02Intent::RunTest(const FString&)
     TestTrue(TEXT("No buffered auto-follow action"),M.GetCombatSnapshot(.4).Phase==EPhase::Finished);
     TestTrue(TEXT("Previously rejected command cannot replay"),M.SubmitAttackIntent(2,.4,0,{})==EReject::StaleCommand);
     TestTrue(TEXT("Reset succeeds"),M.ResetLabCombat(.4));
+    const auto ResetSnapshot = M.GetCombatSnapshot(.4);
+    TestTrue(TEXT("Idle reset snapshot identifies new life independently of action"),ResetSnapshot.Life==Life(1,2));
+    TestTrue(TEXT("Reset snapshot has no stale action or lock"),ResetSnapshot.Phase==EPhase::Idle && ResetSnapshot.Action.Sequence==0 && !ResetSnapshot.bCombatLocked);
     TestTrue(TEXT("Old command remains stale across reset"),M.SubmitAttackIntent(1,.4,0,{})==EReject::StaleCommand);
     TestTrue(TEXT("Fresh edge can accept"),M.SubmitAttackIntent(3,.4,0,{})==EReject::None);
     const FActionId Next=M.GetCombatSnapshot(.4).Action;

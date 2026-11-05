@@ -57,6 +57,7 @@ struct FActiveSlice
 
 struct FCombatSnapshot
 {
+    FLifeId Life; // Reset/idle snapshots must identify the current life without an action.
     FActionId Action;
     EPhase Phase = EPhase::Idle;
     double StartSeconds = 0, ActiveStartSeconds = 0, ActiveEndSeconds = 0, EndSeconds = 0;

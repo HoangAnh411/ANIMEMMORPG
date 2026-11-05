@@ -124,6 +124,7 @@ bool FActionModel::ResetLabCombat(double Now)
 FCombatSnapshot FActionModel::GetCombatSnapshot(double Now) const
 {
     FCombatSnapshot Result;
+    Result.Life = Life;
     Result.Action = Action;
     Result.Phase = PhaseAt(Now);
     Result.StartSeconds = Start;
