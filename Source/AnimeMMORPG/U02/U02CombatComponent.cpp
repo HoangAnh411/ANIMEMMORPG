@@ -41,9 +41,9 @@ void UU02CombatComponent::EndPlay(const EEndPlayReason::Type Reason)
     OnActiveInterval.Clear();
     Super::EndPlay(Reason);
 }
-void UU02CombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const
+void UU02CombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-    Super::GetLifetimeReplicatedProps(Out);
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
     DOREPLIFETIME(UU02CombatComponent,Snapshot);
 }
 void UU02CombatComponent::SubmitAttackIntent(uint64 Sequence, double LocalInputSeconds, double Yaw)
