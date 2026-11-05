@@ -57,7 +57,7 @@ record=json.loads(a.process_record.read_text(encoding='utf-8-sig'))
 if record['pid']!=a.pid or record['role'] not in ('ClientA','ClientB') or '-game' not in record['arguments']:
     raise RuntimeError('Requires an explicit client process record')
 import subprocess
-command=subprocess.check_output(['powershell','-NoProfile','-Command',f'(Get-CimInstance Win32_Process -Filter "ProcessId={a.pid}").CommandLine'],text=True).strip().replace('\\','/')
+command=subprocess.check_output(['powershell','-NoProfile','-Command',f'(Get-CimInstance Win32_Process -Filter "ProcessId={a.pid}").CommandLine'],text=True,creationflags=subprocess.CREATE_NO_WINDOW).strip().replace('\\','/')
 project=record['project'].replace('\\','/')
 if project.lower() not in command.lower() or '-game' not in command or '-server' in command:
     raise RuntimeError('Live command line does not match isolated client project')
@@ -297,13 +297,14 @@ try:
                 event_key=Input(type=1,payload=Payload(key=Key(vk=0xc0)))
                 user.SendInput(1,c.byref(event_key),c.sizeof(Input));event_key.payload.key.flags=2
                 user.SendInput(1,c.byref(event_key),c.sizeof(Input));time.sleep(.15)
-                for ch in event['command']:
-                    for flags in (4,6):
-                        ch_input=Input(type=1,payload=Payload(key=Key(scan=ord(ch),flags=flags)))
-                        if user.SendInput(1,c.byref(ch_input),c.sizeof(Input))!=1:raise c.WinError(c.get_last_error())
+                for ch in event['command'].lower():
+                    code=user.VkKeyScanW(ord(ch))&0xff
+                    char_input=Input(type=1,payload=Payload(key=Key(vk=code)))
+                    user.SendInput(1,c.byref(char_input),c.sizeof(Input));time.sleep(.012)
+                    char_input.payload.key.flags=2;user.SendInput(1,c.byref(char_input),c.sizeof(Input));time.sleep(.012)
                 enter=Input(type=1,payload=Payload(key=Key(vk=13)))
                 user.SendInput(1,c.byref(enter),c.sizeof(Input));enter.payload.key.flags=2
-                user.SendInput(1,c.byref(enter),c.sizeof(Input));time.sleep(.1)
+                user.SendInput(1,c.byref(enter),c.sizeof(Input));time.sleep(.15)
             elif event['action']=='wheel':
                 value=event.get('delta',120)
                 wheel_event=Input(type=0,payload=Payload(mouse=Mouse(data=value&0xffffffff,flags=0x800)))

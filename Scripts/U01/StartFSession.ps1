@@ -19,15 +19,19 @@ foreach($role in @('Server','ClientA','ClientB')){
  if($role -eq 'Server'){$arguments+=@('/Game/AnimeMMORPG/Maps/L_NetworkLab','-server',('-port='+$Port),'-NullRHI','-nosound')}
  else{$arguments+=@(('127.0.0.1:'+$Port),'-game','-windowed','-ResX=900','-ResY=540',('-WinX='+$(if($role -eq 'ClientA'){0}else{940})),'-WinY=100')}
  if($ReproducePython){if($role -ne 'Server'){$arguments+='-NullRHI'}}else{$arguments+='-DisablePython'}
- $arguments+=@('-NoLiveCoding','-nop4','-nosplash','-U01FProbe','-U01Trace',('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18310+$records.Count)))
+ $arguments+=@('-ExecCmds="t.MaxFPS 30,t.IdleWhenNotForeground 0"','-NoLiveCoding','-nop4','-nosplash','-U01FProbe','-U01Trace',('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18310+$records.Count)))
  $p=Start-Process -FilePath $exe -ArgumentList $arguments -WindowStyle Hidden -PassThru
  $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;userDir=$user;log=$log;utc=[DateTime]::UtcNow.ToString('o')}
  $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $user 'process.json')
  $records+=$r;$records | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $run 'processes.json')
  if($role -eq 'Server'){
   $ready=$false
-  for($i=0;$i -lt 50;$i++){if((Test-Path $log) -and (Select-String -LiteralPath $log -Pattern 'listening on port' -Quiet)){$ready=$true;break};Start-Sleep -Milliseconds 500}
+  for($i=0;$i -lt 400;$i++){if((Test-Path $log) -and (Select-String -LiteralPath $log -Pattern ('IpNetDriver.*listening on port '+$Port) -Quiet)){$ready=$true;break};Start-Sleep -Milliseconds 500}
   if(!$ready){throw ('Server not ready; inspect own PID '+$p.Id+' log '+$log)}
- }else{Start-Sleep -Seconds 3}
+ }else{
+  $ready=$false
+  for($i=0;$i -lt 400;$i++){if((Test-Path $log) -and (Select-String -LiteralPath $log -Pattern 'U01F_NET.*"local":true' -Quiet)){$ready=$true;break};Start-Sleep -Milliseconds 500}
+  if(!$ready){throw ('Client not ready; inspect own PID '+$p.Id+' log '+$log)}
+ }
 }
 Write-Output $run

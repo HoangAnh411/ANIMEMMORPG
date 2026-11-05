@@ -46,7 +46,7 @@ void UU01NetworkProbe::Tick(float Dt)
     if(!Enabled)return;Elapsed+=Dt;if(Elapsed<.2f)return;Elapsed=0;
     auto* W=GetWorld();auto J=MakeShared<FJsonObject>();FString SHA;FParse::Value(FCommandLine::Get(),TEXT("U01SourceSHA="),SHA);
     J->SetStringField(TEXT("sourceSHA"),SHA);J->SetStringField(TEXT("runID"),Run);J->SetStringField(TEXT("utc"),FDateTime::UtcNow().ToIso8601());
-    J->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());J->SetStringField(TEXT("world"),W->GetPathName());
+    J->SetNumberField(TEXT("frameDt"),Dt);J->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());J->SetStringField(TEXT("world"),W->GetPathName());
     J->SetNumberField(TEXT("worldType"),int32(W->WorldType));J->SetNumberField(TEXT("netMode"),int32(W->GetNetMode()));J->SetNumberField(TEXT("seconds"),W->GetTimeSeconds());
     if(const auto* Context=GEngine->GetWorldContextFromWorld(W))J->SetStringField(TEXT("context"),Context->ContextHandle.ToString());
     J->SetNumberField(TEXT("localPlayers"),W->GetGameInstance()?W->GetGameInstance()->GetNumLocalPlayers():0);
@@ -76,7 +76,7 @@ void AU01PlayerController::U01NetFixture(const FString& Command)
 #if !UE_BUILD_SHIPPING
     if(!IsLocalPlayerController()||!FParse::Param(FCommandLine::Get(),TEXT("U01FProbe")))return;
     auto* C=Cast<AU01Character>(GetPawn());if(!C)return;
-    if(Command==TEXT("reset"))ServerU01NetProbe(0,0,C->NetworkPawnId);
+    if(Command==TEXT("reset")){SetControlRotation(FRotator::ZeroRotator);ServerU01NetProbe(0,0,C->NetworkPawnId);}
     if(Command==TEXT("speed"))
     {
         C->GetU01Movement()->ProbeSpeed=2000;ServerU01NetProbe(1,2000,C->NetworkPawnId);
@@ -101,7 +101,7 @@ void AU01PlayerController::ServerU01NetProbe_Implementation(uint8 Kind,float Cla
     {
         const int32 ProbePlayerId=C->GetPlayerState()?C->GetPlayerState()->GetPlayerId():0;
         C->SetActorLocation(FVector(-5000,3500+(ProbePlayerId%2)*600,110),false,nullptr,ETeleportType::TeleportPhysics);
-        C->GetU01Movement()->ResetFixtureState();C->SetActorRotation(FRotator::ZeroRotator);SetControlRotation(FRotator::ZeroRotator);
+        C->GetU01Movement()->ResetFixtureState();C->GetU01Movement()->ForceReplicationUpdate();C->GetU01Movement()->ForceClientAdjustment();C->SetActorRotation(FRotator::ZeroRotator);SetControlRotation(FRotator::ZeroRotator);
         UE_LOG(LogU01Network,Display,TEXT("FixtureReset id=%s player=%d"),*Target.ToString(),ProbePlayerId);
     }
     else UE_LOG(LogU01Network,Display,TEXT("ProbeRejected %s claim=%.1f id=%s mode=%d count=%d serverMax=%.1f"),Kind==1?TEXT("Overspeed"):Kind==2?TEXT("ExtraJump"):TEXT("Unknown"),Claim,*Target.ToString(),int32(C->GetCharacterMovement()->MovementMode),C->JumpCurrentCount,C->GetU01Movement()->GetMaxSpeed());
