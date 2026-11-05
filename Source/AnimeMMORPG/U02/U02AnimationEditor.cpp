@@ -9,6 +9,7 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "Animation/AnimData/IAnimationDataController.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "AssetToolsModule.h"
 #include "AnimGraphNode_Root.h"
 #include "AnimGraphNode_Slot.h"
 #include "AnimGraphNode_LayeredBoneBlend.h"
@@ -46,8 +47,9 @@ FString UU02AnimationEditor::BuildCAssets()
     auto* Skeleton=LoadObject<USkeleton>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/SK_U01"));
     auto* Carry=LoadObject<UPoseAsset>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/PA_U01_RightCarry"));
     auto* Grip=LoadObject<UPoseAsset>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/PA_U01_RightGrip"));
-    auto* BP=LoadObject<UAnimBlueprint>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/ABP_U01"));
-    if(!Skeleton||!Carry||!Grip||!BP)return TEXT("ERROR: accepted U01 assets missing");
+    auto* OriginalBP=LoadObject<UAnimBlueprint>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/ABP_U01"));
+    if(!Skeleton||!Carry||!Grip||!OriginalBP)return TEXT("ERROR: accepted U01 assets missing");
+    auto* BP=CastChecked<UAnimBlueprint>(FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().DuplicateAsset(TEXT("ABP_U02"),CRoot,OriginalBP));
     const auto& Ref=Skeleton->GetReferenceSkeleton();
     TArray<FTransform> Base=PoseLocal(Carry),Fingers=PoseLocal(Grip);
     if(Base.Num()!=Ref.GetNum()||Fingers.Num()!=Ref.GetNum())return TEXT("ERROR: pose skeleton mismatch");

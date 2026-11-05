@@ -4,6 +4,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimInstance.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
 #include "Policies/CondensedJsonPrintPolicy.h"
@@ -27,6 +29,12 @@ void UU02CombatComponent::BeginPlay()
     if (!C || !GetWorld() || (GetWorld()->WorldType != EWorldType::Game && GetWorld()->WorldType != EWorldType::PIE))
     { SetComponentTickEnabled(false); return; }
     C->GetU01Movement()->AddTickPrerequisiteComponent(this);
+    // C owns a separate graph; keep the accepted U01 AnimBP bytes untouched.
+    if(C->GetMesh()->GetSkeletalMeshAsset())
+    {
+        auto* PresentationClass=LoadClass<UAnimInstance>(nullptr,TEXT("/Game/AnimeMMORPG/U02/Animation/ABP_U02.ABP_U02_C"));
+        if(PresentationClass)C->GetMesh()->SetAnimInstanceClass(PresentationClass);
+    }
     if (C->HasAuthority())
     {
         check(C->NetworkPawnId.IsValid());
