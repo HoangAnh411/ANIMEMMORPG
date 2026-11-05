@@ -20,6 +20,11 @@
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
 #include "Policies/CondensedJsonPrintPolicy.h"
+#include "Engine/NetDriver.h"
+#include "Engine/NetConnection.h"
+#include "HAL/IConsoleManager.h"
+#include "Misc/App.h"
+#include "Misc/ConfigCacheIni.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogU01Network,Log,All);
 void UU01NetworkProbe::OnWorldBeginPlay(UWorld& World)
@@ -45,6 +50,45 @@ void UU01NetworkProbe::OnWorldBeginPlay(UWorld& World)
 }
 void UU01NetworkProbe::Tick(float Dt)
 {
+    // Opt-in diagnosis only: sample every game frame, before the normal 5 Hz
+    // collector. UTC and monotonic timestamps share the host clock on localhost.
+    if(Enabled&&FParse::Param(FCommandLine::Get(),TEXT("U01FPerf")))
+    {
+        auto* World=GetWorld();auto D=MakeShared<FJsonObject>();
+        D->SetStringField(TEXT("utc"),FDateTime::UtcNow().ToIso8601());
+        D->SetNumberField(TEXT("wall"),FPlatformTime::Seconds());D->SetNumberField(TEXT("dt"),Dt);
+        D->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());D->SetNumberField(TEXT("netMode"),int32(World->GetNetMode()));
+        D->SetBoolField(TEXT("focus"),FApp::HasFocus());D->SetNumberField(TEXT("frame"),double(GFrameCounter));
+        auto CV=[&](const TCHAR* Name){const auto* V=IConsoleManager::Get().FindConsoleVariable(Name);D->SetNumberField(Name,V?V->GetFloat():-999);};
+        for(const auto* Name:{TEXT("t.MaxFPS"),TEXT("t.IdleWhenNotForeground"),TEXT("r.VSync"),TEXT("r.ScreenPercentage"),TEXT("net.UseAdaptiveNetUpdateFrequency")})CV(Name);
+        bool Throttle=true;GConfig->GetBool(TEXT("/Script/UnrealEd.EditorPerformanceSettings"),TEXT("bThrottleCPUWhenNotForeground"),Throttle,GEditorSettingsIni);
+        D->SetBoolField(TEXT("editorThrottle"),Throttle);
+        if(const auto* Driver=World->GetNetDriver())
+        {
+#if DO_ENABLE_NET_TEST
+            const auto& P=Driver->PacketSimulationSettings;
+            D->SetNumberField(TEXT("pktLag"),P.PktLag);D->SetNumberField(TEXT("pktLagMin"),P.PktLagMin);D->SetNumberField(TEXT("pktLagMax"),P.PktLagMax);
+            D->SetNumberField(TEXT("pktLoss"),P.PktLoss);D->SetNumberField(TEXT("pktOrder"),P.PktOrder);D->SetNumberField(TEXT("pktDup"),P.PktDup);
+            D->SetNumberField(TEXT("incomingLagMin"),P.PktIncomingLagMin);D->SetNumberField(TEXT("incomingLagMax"),P.PktIncomingLagMax);D->SetNumberField(TEXT("incomingLoss"),P.PktIncomingLoss);
+#endif
+            TArray<TSharedPtr<FJsonValue>> Connections;
+            auto Add=[&](const UNetConnection* N){if(!N)return;auto V=MakeShared<FJsonObject>();
+                V->SetNumberField(TEXT("avgLagSeconds"),N->AvgLag);V->SetNumberField(TEXT("inPackets"),N->InPackets);V->SetNumberField(TEXT("outPackets"),N->OutPackets);
+                V->SetNumberField(TEXT("inLost"),N->InPacketsLost);V->SetNumberField(TEXT("outLost"),N->OutPacketsLost);Connections.Add(MakeShared<FJsonValueObject>(V));};
+            Add(Driver->ServerConnection);for(const auto* N:Driver->ClientConnections)Add(N);D->SetArrayField(TEXT("connections"),Connections);
+        }
+        TArray<AActor*> Actors;UGameplayStatics::GetAllActorsOfClass(World,AU01Character::StaticClass(),Actors);TArray<TSharedPtr<FJsonValue>> Values;
+        for(auto* A:Actors){auto* C=CastChecked<AU01Character>(A);auto* M=C->GetU01Movement();auto V=MakeShared<FJsonObject>();
+            V->SetStringField(TEXT("id"),C->NetworkPawnId.ToString());V->SetBoolField(TEXT("local"),C->IsLocallyControlled());
+            V->SetNumberField(TEXT("x"),C->GetActorLocation().X);V->SetNumberField(TEXT("z"),C->GetActorLocation().Z);
+            V->SetNumberField(TEXT("repX"),C->GetReplicatedMovement().Location.X);V->SetNumberField(TEXT("repZ"),C->GetReplicatedMovement().Location.Z);
+            V->SetNumberField(TEXT("meshX"),C->GetMesh()->GetComponentLocation().X);V->SetNumberField(TEXT("meshZ"),C->GetMesh()->GetComponentLocation().Z);
+            V->SetNumberField(TEXT("speed"),C->GetVelocity().Size2D());V->SetNumberField(TEXT("updatesHz"),C->GetNetUpdateFrequency());V->SetNumberField(TEXT("minUpdatesHz"),C->GetMinNetUpdateFrequency());
+            V->SetNumberField(TEXT("smoothMode"),int32(M->NetworkSmoothingMode));V->SetNumberField(TEXT("smoothSeconds"),M->NetworkSimulatedSmoothLocationTime);
+            V->SetNumberField(TEXT("pingMs"),C->GetPlayerState()?C->GetPlayerState()->GetPingInMilliseconds():-1);
+            Values.Add(MakeShared<FJsonValueObject>(V));}
+        D->SetArrayField(TEXT("pawns"),Values);FString Text;FJsonSerializer::Serialize(D,TJsonWriterFactory<TCHAR,TCondensedJsonPrintPolicy<TCHAR>>::Create(&Text));UE_LOG(LogU01Network,Display,TEXT("U01F_PERF %s"),*Text);
+    }
     if(!Enabled)return;Elapsed+=Dt;if(Elapsed<.2f)return;Elapsed=0;
     auto* W=GetWorld();auto J=MakeShared<FJsonObject>();FString SHA;FParse::Value(FCommandLine::Get(),TEXT("U01SourceSHA="),SHA);
     J->SetStringField(TEXT("sourceSHA"),SHA);J->SetStringField(TEXT("runID"),Run);J->SetStringField(TEXT("utc"),FDateTime::UtcNow().ToIso8601());
