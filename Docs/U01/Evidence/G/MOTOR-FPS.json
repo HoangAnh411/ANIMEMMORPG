@@ -1,0 +1,23 @@
+[
+  {
+    "cap": 30,
+    "walk10sMeters": 50.00027149915695,
+    "sprint10sMeters": 69.99436896184562,
+    "apexCm": 121.74831208094342,
+    "pass": true
+  },
+  {
+    "cap": 60,
+    "walk10sMeters": 49.9948090447667,
+    "sprint10sMeters": 69.99767523407274,
+    "apexCm": 121.7525271487263,
+    "pass": true
+  },
+  {
+    "cap": 120,
+    "walk10sMeters": 49.99992562476721,
+    "sprint10sMeters": 69.99656976098863,
+    "apexCm": 121.9351325171803,
+    "pass": true
+  }
+]

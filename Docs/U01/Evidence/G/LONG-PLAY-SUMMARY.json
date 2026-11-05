@@ -1,0 +1,23 @@
+{
+  "sourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+  "completed": true,
+  "seconds": 600.2334981999993,
+  "pid": 6424,
+  "realInputEvents": 263,
+  "nativeGameSamples": 3001,
+  "focusReturnEvents": 10,
+  "windowActiveSamples": 2961,
+  "windowInactiveSamples": 40,
+  "controlStates": [
+    0,
+    1,
+    2
+  ],
+  "oneMappingThroughout": true,
+  "history": {
+    "path": "Artifacts/U01/G/Play/LongPlay/input.json",
+    "completed": false,
+    "seconds": 534.4294635,
+    "reason": "Unexpected foreground change; input guard aborted; interrupted verification, not a ten-minute pass"
+  }
+}

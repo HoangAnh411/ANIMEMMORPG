@@ -6,9 +6,9 @@ import cv2,numpy as np
 from PIL import ImageGrab
 from F60Input import Client,mouse,key
 cv2.setNumThreads(1)
-p=argparse.ArgumentParser();p.add_argument('--session',type=Path,required=True);p.add_argument('--seconds',type=int,choices=(120,300),default=120);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--stage',choices=('F','G'),default='F');p.add_argument('--session',type=Path,required=True);p.add_argument('--seconds',type=int,choices=(120,300),default=120);a=p.parse_args()
 def utc():return datetime.now(timezone.utc).isoformat()
-records=json.loads((a.session/'processes.json').read_text(encoding='utf-8-sig'));clients=[Client(r) for r in records if r['role']!='Server'];events=[];writers={};video_times={};last_frames={};active=None;started=None;completed=False
+records=json.loads((a.session/'processes.json').read_text(encoding='utf-8-sig'));clients=[Client(r,stage=a.stage) for r in records if r['role']!='Server'];events=[];writers={};video_times={};last_frames={};active=None;started=None;completed=False
 def save():
  (a.session/'input.json').write_text(json.dumps({'start':started,'end':utc(),'requestedSeconds':a.seconds,'completed':completed,'events':events,'videos':video_times,'method':'Guarded Win32 real input; continuous wall interval, includes focus/Resume transitions; not transform-to-photon latency'},indent=2),encoding='utf8',newline='\n')
 def mark(action,**kwargs):events.append(dict(action=action,utc=utc(),elapsed=time.perf_counter()-start,**kwargs))

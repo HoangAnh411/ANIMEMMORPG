@@ -1,0 +1,17 @@
+{
+  "status": "IN_PROGRESS",
+  "sourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+  "packagePath": "Artifacts\\U01\\G\\Package-20261105-153201-862-38caf5d5\\Archive\\Windows",
+  "packageIndexSHA256": "87a2313527f10898b49a224f1d7970440e6cb7dc26a6702b829d853735a42fa6",
+  "gameExecutableSHA256": "aa8d5f78af548c7a48b29a6e49860908367c5c8cd7a678d1b7ff74d8b7b226d8",
+  "build": "Artifacts/U01/G/Build-20261105-152800-078-73c759e0",
+  "automation": "Artifacts/U01/G/MCPTests-20261105-153131",
+  "automationPassed": 23,
+  "smokePassed": 3,
+  "scope": "G not accepted/merged; remaining integrated checks pending",
+  "originalEditorObserved": {
+    "pid": 8676,
+    "createdLocal": "2026-11-05T17:20:42",
+    "note": "Original project remains open. Earlier PID2068 no longer present; agent did not restart it. Do not claim uninterrupted PID lifetime."
+  }
+}

@@ -1,7 +1,7 @@
-param([Parameter(Mandatory=$true)][string]$SessionPath)
+param([Parameter(Mandatory=$true)][string]$SessionPath,[ValidateSet('F','G')][string]$Stage='F')
 $ErrorActionPreference='Stop'
 $session=(Resolve-Path -LiteralPath $SessionPath).Path
-$allowed=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../../Artifacts/U01/F')).Path
+$allowed=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot ('../../Artifacts/U01/'+$Stage))).Path
 if(!$session.StartsWith($allowed+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Only isolated F sessions may be stopped'}
 $file=if(Test-Path (Join-Path $session 'all-processes.json')){Join-Path $session 'all-processes.json'}else{Join-Path $session 'processes.json'}
 $records=Get-Content -Raw -Encoding UTF8 -LiteralPath $file | ConvertFrom-Json

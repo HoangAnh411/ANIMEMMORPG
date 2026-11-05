@@ -21,12 +21,12 @@ def emit(event):
 def key(name,down):emit(Input(type=1,payload=Payload(key=Key(vk=VK.get(name,ord(name) if len(name)==1 else 0),flags=0 if down else 2))))
 def mouse(flags,dx=0,dy=0):emit(Input(type=0,payload=Payload(mouse=Mouse(flags=flags,dx=dx,dy=dy))))
 class Client:
- def __init__(self,record):
+ def __init__(self,record,stage='F'):
   self.record=record;self.pid=record['pid'];self.log=Path(record['log']);self.ime=False;self.held=set()
   assert record['role'] in ('ClientA','ClientB') and '-game' in record['arguments']
   cmd=subprocess.check_output(['powershell','-NoProfile','-Command',f'(Get-CimInstance Win32_Process -Filter "ProcessId={self.pid}").CommandLine'],text=True,creationflags=subprocess.CREATE_NO_WINDOW).replace('\\','/')
   assert record['project'].replace('\\','/').lower() in cmd.lower() and '-game' in cmd and '-server' not in cmd
-  assert Path(record['executable']).name=='UnrealEditor.exe' and '/Artifacts/U01/F/Source/' in record['project'].replace('\\','/')
+  assert Path(record['executable']).name=='UnrealEditor.exe' and stage in ('F','G') and ('/Artifacts/U01/'+stage+'/Source/') in record['project'].replace('\\','/')
   found=[]
   @c.WINFUNCTYPE(w.BOOL,w.HWND,w.LPARAM)
   def visit(h,_):

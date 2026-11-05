@@ -1,4 +1,4 @@
-﻿param(
+param(
  [Parameter(Mandatory=$true)][string]$CloneProject,
  [Parameter(Mandatory=$true)][string]$OutputRoot,
  [switch]$ReproducePython,
@@ -7,12 +7,13 @@
  [ValidateSet(30,60)][int]$ClientMaxFPS=30,
  [ValidateSet(1,2)][int]$ClientCount=2,
  [switch]$BufferedDiagnostics,
- [int]$Port=17877
+ [int]$Port=17877,
+ [ValidateSet('F','G')][string]$Stage='F'
 )
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'FReviewHost.ps1')
 $project=(Resolve-Path -LiteralPath $CloneProject).Path
-if($project -notlike '*\Artifacts\U01\F\Source\*'){throw 'F clone required'}
+if($project -notlike ("*\Artifacts\U01\"+$Stage+"\Source\*")){throw 'Isolated stage clone required'}
 $sha=git -C (Split-Path $project) rev-parse HEAD
 $exe='D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe'
 $run=Join-Path $OutputRoot ($(if($ReproducePython){'PythonBefore-'}else{'Session-'})+(Get-Date -Format 'yyyyMMdd-HHmmss'))

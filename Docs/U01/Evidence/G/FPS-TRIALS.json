@@ -1,0 +1,465 @@
+{
+  "process": {
+    "role": "Package",
+    "pid": 11436,
+    "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\G\\Package-20261105-153201-862-38caf5d5\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe",
+    "project": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\G\\Source\\AnimeMMORPG.uproject",
+    "sourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+    "userDir": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\G\\FPS",
+    "log": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\G\\FPS\\FPS.log",
+    "arguments": [
+      "/Game/AnimeMMORPG/Maps/L_CharacterCombatLab",
+      "-fullscreen",
+      "-ResX=1920",
+      "-ResY=1080",
+      "-WinX=0",
+      "-WinY=30",
+      "-nosplash",
+      "-U01Trace",
+      "-U01SourceSHA=5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+      "-UserDir=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\G\\FPS\"",
+      "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\G\\FPS\\FPS.log\"",
+      "-ExecCmds=\"t.MaxFPS 30,t.IdleWhenNotForeground 0,r.ScreenPercentage 100,stat unit\"",
+      "-ForceRes",
+      "-U01FProbe",
+      "-U01FPerfFile=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\G\\FPS\\FPS-frames.jsonl\""
+    ],
+    "utc": "2026-11-05T10:23:52.5006357Z",
+    "requestedFPS": 30,
+    "requestedWindow": [
+      1920,
+      1080
+    ],
+    "renderer": "Unchanged project defaults; internal100%"
+  },
+  "geometry": [
+    1920,
+    1080
+  ],
+  "quality": "Unchanged project renderer/scalability defaults; internal100%; stat unit; opt-in diagnostic fixture floor far from runway",
+  "trials": [
+    {
+      "cap": 30,
+      "start": "2026-11-05T10:24:32.545915+00:00",
+      "events": [
+        {
+          "nominal": 2,
+          "action": "down",
+          "key": "W",
+          "elapsed": 2.0010971000010613,
+          "utc": "2026-11-05T10:24:34.547924+00:00"
+        },
+        {
+          "nominal": 14,
+          "action": "up",
+          "key": "W",
+          "elapsed": 14.000912100000278,
+          "utc": "2026-11-05T10:24:46.547737+00:00"
+        },
+        {
+          "nominal": 16,
+          "action": "reset",
+          "key": "",
+          "elapsed": 17.130661499999405,
+          "utc": "2026-11-05T10:24:49.677488+00:00"
+        },
+        {
+          "nominal": 17.8,
+          "action": "down",
+          "key": "Ctrl",
+          "elapsed": 17.801855600002455,
+          "utc": "2026-11-05T10:24:50.348680+00:00"
+        },
+        {
+          "nominal": 18,
+          "action": "down",
+          "key": "W",
+          "elapsed": 18.002168099999835,
+          "utc": "2026-11-05T10:24:50.548992+00:00"
+        },
+        {
+          "nominal": 30,
+          "action": "up",
+          "key": "W",
+          "elapsed": 30.001349400001345,
+          "utc": "2026-11-05T10:25:02.548178+00:00"
+        },
+        {
+          "nominal": 30.2,
+          "action": "up",
+          "key": "Ctrl",
+          "elapsed": 30.201706800002285,
+          "utc": "2026-11-05T10:25:02.748530+00:00"
+        },
+        {
+          "nominal": 34,
+          "action": "reset",
+          "key": "",
+          "elapsed": 35.12994489999983,
+          "utc": "2026-11-05T10:25:07.676773+00:00"
+        },
+        {
+          "nominal": 36,
+          "action": "down",
+          "key": "Space",
+          "elapsed": 36.00225499999942,
+          "utc": "2026-11-05T10:25:08.549079+00:00"
+        },
+        {
+          "nominal": 36.6,
+          "action": "up",
+          "key": "Space",
+          "elapsed": 36.60178749999977,
+          "utc": "2026-11-05T10:25:09.148654+00:00"
+        },
+        {
+          "nominal": 42,
+          "action": "look",
+          "key": "",
+          "elapsed": 42.002178900002036,
+          "utc": "2026-11-05T10:25:14.549003+00:00"
+        },
+        {
+          "nominal": 45,
+          "action": "down",
+          "key": "V",
+          "elapsed": 45.0020786999994,
+          "utc": "2026-11-05T10:25:17.548903+00:00"
+        },
+        {
+          "nominal": 45.2,
+          "action": "up",
+          "key": "V",
+          "elapsed": 45.201388500001485,
+          "utc": "2026-11-05T10:25:17.748214+00:00"
+        },
+        {
+          "nominal": 48,
+          "action": "down",
+          "key": "Escape",
+          "elapsed": 48.00094270000045,
+          "utc": "2026-11-05T10:25:20.547766+00:00"
+        },
+        {
+          "nominal": 48.2,
+          "action": "up",
+          "key": "Escape",
+          "elapsed": 48.201076100001956,
+          "utc": "2026-11-05T10:25:20.747900+00:00"
+        },
+        {
+          "nominal": 50,
+          "action": "resume",
+          "key": "",
+          "elapsed": 50.168574100000114,
+          "utc": "2026-11-05T10:25:22.715397+00:00"
+        },
+        {
+          "nominal": 52,
+          "action": "down",
+          "key": "W",
+          "elapsed": 52.00111770000149,
+          "utc": "2026-11-05T10:25:24.547941+00:00"
+        },
+        {
+          "nominal": 55,
+          "action": "up",
+          "key": "W",
+          "elapsed": 55.001543300000776,
+          "utc": "2026-11-05T10:25:27.548366+00:00"
+        },
+        {
+          "nominal": 57,
+          "action": "snapshot",
+          "key": "",
+          "elapsed": 57.14626259999932,
+          "utc": "2026-11-05T10:25:29.693091+00:00"
+        }
+      ],
+      "completed": true,
+      "end": "2026-11-05T10:25:32.547839+00:00"
+    },
+    {
+      "cap": 60,
+      "start": "2026-11-05T10:25:39.532032+00:00",
+      "events": [
+        {
+          "nominal": 2,
+          "action": "down",
+          "key": "W",
+          "elapsed": 2.0011249000017415,
+          "utc": "2026-11-05T10:25:41.533874+00:00"
+        },
+        {
+          "nominal": 14,
+          "action": "up",
+          "key": "W",
+          "elapsed": 14.002831500001776,
+          "utc": "2026-11-05T10:25:53.535582+00:00"
+        },
+        {
+          "nominal": 16,
+          "action": "reset",
+          "key": "",
+          "elapsed": 17.134802900000068,
+          "utc": "2026-11-05T10:25:56.667553+00:00"
+        },
+        {
+          "nominal": 17.8,
+          "action": "down",
+          "key": "Ctrl",
+          "elapsed": 17.801869499999157,
+          "utc": "2026-11-05T10:25:57.334618+00:00"
+        },
+        {
+          "nominal": 18,
+          "action": "down",
+          "key": "W",
+          "elapsed": 18.00185540000166,
+          "utc": "2026-11-05T10:25:57.534605+00:00"
+        },
+        {
+          "nominal": 30,
+          "action": "up",
+          "key": "W",
+          "elapsed": 30.000976600000286,
+          "utc": "2026-11-05T10:26:09.533725+00:00"
+        },
+        {
+          "nominal": 30.2,
+          "action": "up",
+          "key": "Ctrl",
+          "elapsed": 30.202505299999757,
+          "utc": "2026-11-05T10:26:09.735253+00:00"
+        },
+        {
+          "nominal": 34,
+          "action": "reset",
+          "key": "",
+          "elapsed": 35.136106400001154,
+          "utc": "2026-11-05T10:26:14.668863+00:00"
+        },
+        {
+          "nominal": 36,
+          "action": "down",
+          "key": "Space",
+          "elapsed": 36.003073399999266,
+          "utc": "2026-11-05T10:26:15.535824+00:00"
+        },
+        {
+          "nominal": 36.6,
+          "action": "up",
+          "key": "Space",
+          "elapsed": 36.600555500001065,
+          "utc": "2026-11-05T10:26:16.133304+00:00"
+        },
+        {
+          "nominal": 42,
+          "action": "look",
+          "key": "",
+          "elapsed": 42.001580000000104,
+          "utc": "2026-11-05T10:26:21.534327+00:00"
+        },
+        {
+          "nominal": 45,
+          "action": "down",
+          "key": "V",
+          "elapsed": 45.00205149999965,
+          "utc": "2026-11-05T10:26:24.534799+00:00"
+        },
+        {
+          "nominal": 45.2,
+          "action": "up",
+          "key": "V",
+          "elapsed": 45.20180139999866,
+          "utc": "2026-11-05T10:26:24.734550+00:00"
+        },
+        {
+          "nominal": 48,
+          "action": "down",
+          "key": "Escape",
+          "elapsed": 48.00071309999839,
+          "utc": "2026-11-05T10:26:27.533460+00:00"
+        },
+        {
+          "nominal": 48.2,
+          "action": "up",
+          "key": "Escape",
+          "elapsed": 48.20071800000005,
+          "utc": "2026-11-05T10:26:27.733466+00:00"
+        },
+        {
+          "nominal": 50,
+          "action": "resume",
+          "key": "",
+          "elapsed": 50.16667569999845,
+          "utc": "2026-11-05T10:26:29.699430+00:00"
+        },
+        {
+          "nominal": 52,
+          "action": "down",
+          "key": "W",
+          "elapsed": 52.000894900000276,
+          "utc": "2026-11-05T10:26:31.533643+00:00"
+        },
+        {
+          "nominal": 55,
+          "action": "up",
+          "key": "W",
+          "elapsed": 55.00080009999874,
+          "utc": "2026-11-05T10:26:34.533547+00:00"
+        },
+        {
+          "nominal": 57,
+          "action": "snapshot",
+          "key": "",
+          "elapsed": 57.118101600000955,
+          "utc": "2026-11-05T10:26:36.650856+00:00"
+        }
+      ],
+      "completed": true,
+      "end": "2026-11-05T10:26:39.532858+00:00"
+    },
+    {
+      "cap": 120,
+      "start": "2026-11-05T10:26:46.556863+00:00",
+      "events": [
+        {
+          "nominal": 2,
+          "action": "down",
+          "key": "W",
+          "elapsed": 2.0022392999999283,
+          "utc": "2026-11-05T10:26:48.560228+00:00"
+        },
+        {
+          "nominal": 14,
+          "action": "up",
+          "key": "W",
+          "elapsed": 14.0007102999989,
+          "utc": "2026-11-05T10:27:00.558709+00:00"
+        },
+        {
+          "nominal": 16,
+          "action": "reset",
+          "key": "",
+          "elapsed": 17.13832360000015,
+          "utc": "2026-11-05T10:27:03.696315+00:00"
+        },
+        {
+          "nominal": 17.8,
+          "action": "down",
+          "key": "Ctrl",
+          "elapsed": 17.80293189999793,
+          "utc": "2026-11-05T10:27:04.360924+00:00"
+        },
+        {
+          "nominal": 18,
+          "action": "down",
+          "key": "W",
+          "elapsed": 18.00296259999959,
+          "utc": "2026-11-05T10:27:04.560951+00:00"
+        },
+        {
+          "nominal": 30,
+          "action": "up",
+          "key": "W",
+          "elapsed": 30.00072799999907,
+          "utc": "2026-11-05T10:27:16.558717+00:00"
+        },
+        {
+          "nominal": 30.2,
+          "action": "up",
+          "key": "Ctrl",
+          "elapsed": 30.202571399997396,
+          "utc": "2026-11-05T10:27:16.760561+00:00"
+        },
+        {
+          "nominal": 34,
+          "action": "reset",
+          "key": "",
+          "elapsed": 35.1384244999972,
+          "utc": "2026-11-05T10:27:21.696418+00:00"
+        },
+        {
+          "nominal": 36,
+          "action": "down",
+          "key": "Space",
+          "elapsed": 36.000565299997106,
+          "utc": "2026-11-05T10:27:22.558553+00:00"
+        },
+        {
+          "nominal": 36.6,
+          "action": "up",
+          "key": "Space",
+          "elapsed": 36.60285479999948,
+          "utc": "2026-11-05T10:27:23.160847+00:00"
+        },
+        {
+          "nominal": 42,
+          "action": "look",
+          "key": "",
+          "elapsed": 42.00241839999944,
+          "utc": "2026-11-05T10:27:28.560406+00:00"
+        },
+        {
+          "nominal": 45,
+          "action": "down",
+          "key": "V",
+          "elapsed": 45.00096279999707,
+          "utc": "2026-11-05T10:27:31.558952+00:00"
+        },
+        {
+          "nominal": 45.2,
+          "action": "up",
+          "key": "V",
+          "elapsed": 45.20112679999875,
+          "utc": "2026-11-05T10:27:31.759117+00:00"
+        },
+        {
+          "nominal": 48,
+          "action": "down",
+          "key": "Escape",
+          "elapsed": 48.0006887999989,
+          "utc": "2026-11-05T10:27:34.558677+00:00"
+        },
+        {
+          "nominal": 48.2,
+          "action": "up",
+          "key": "Escape",
+          "elapsed": 48.200591499997245,
+          "utc": "2026-11-05T10:27:34.758583+00:00"
+        },
+        {
+          "nominal": 50,
+          "action": "resume",
+          "key": "",
+          "elapsed": 50.1622486999986,
+          "utc": "2026-11-05T10:27:36.720241+00:00"
+        },
+        {
+          "nominal": 52,
+          "action": "down",
+          "key": "W",
+          "elapsed": 52.00069429999712,
+          "utc": "2026-11-05T10:27:38.558682+00:00"
+        },
+        {
+          "nominal": 55,
+          "action": "up",
+          "key": "W",
+          "elapsed": 55.000406099999964,
+          "utc": "2026-11-05T10:27:41.558394+00:00"
+        },
+        {
+          "nominal": 57,
+          "action": "snapshot",
+          "key": "",
+          "elapsed": 57.14242860000013,
+          "utc": "2026-11-05T10:27:43.700419+00:00"
+        }
+      ],
+      "completed": true,
+      "end": "2026-11-05T10:27:46.559053+00:00"
+    }
+  ]
+}

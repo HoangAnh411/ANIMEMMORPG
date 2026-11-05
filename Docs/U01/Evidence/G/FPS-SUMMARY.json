@@ -1,0 +1,62 @@
+{
+  "sourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+  "pid": 11436,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "quality": "Unchanged project renderer/scalability defaults; internal100%; stat unit; opt-in diagnostic fixture floor far from runway",
+  "trials": [
+    {
+      "cap": 30,
+      "samples": 1800,
+      "actualFPS": 29.999607055938284,
+      "frameMsMedian": 33.33340212702751,
+      "frameMsP95": 33.33350270986557,
+      "frameMsP99": 33.33810344338417,
+      "frameMsMax": 33.499300479888916,
+      "framesOver100ms": 0,
+      "runtimeCaps": [
+        30
+      ],
+      "runtimeScreenPercentage": [
+        100
+      ],
+      "focusedSamples": 1800
+    },
+    {
+      "cap": 60,
+      "samples": 3600,
+      "actualFPS": 59.995173987775445,
+      "frameMsMedian": 16.666702926158905,
+      "frameMsP95": 16.666799783706665,
+      "frameMsP99": 16.673997044563293,
+      "frameMsMax": 19.13999766111374,
+      "framesOver100ms": 0,
+      "runtimeCaps": [
+        60
+      ],
+      "runtimeScreenPercentage": [
+        100
+      ],
+      "focusedSamples": 3600
+    },
+    {
+      "cap": 120,
+      "samples": 5371,
+      "actualFPS": 89.51666860638294,
+      "frameMsMedian": 11.217702180147171,
+      "frameMsP95": 12.688498944044113,
+      "frameMsP99": 13.392899185419083,
+      "frameMsMax": 17.60689914226532,
+      "framesOver100ms": 0,
+      "runtimeCaps": [
+        120
+      ],
+      "runtimeScreenPercentage": [
+        100
+      ],
+      "focusedSamples": 5371
+    }
+  ]
+}

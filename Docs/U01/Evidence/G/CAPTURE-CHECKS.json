@@ -1,0 +1,72 @@
+[
+  {
+    "case": "Rebind",
+    "completed": true,
+    "seconds": 25.004226400000334,
+    "captureHz": 26.6309629684535,
+    "pid": 21220
+  },
+  {
+    "case": "MotionLocks",
+    "completed": true,
+    "seconds": 29.001513999999588,
+    "captureHz": 27.300668680353244,
+    "pid": 21220
+  },
+  {
+    "case": "CaptureEdges",
+    "completed": true,
+    "seconds": 6.301589499998954,
+    "captureHz": 26.48786485598538,
+    "pid": 21220
+  },
+  {
+    "case": "DefeatedRestore",
+    "completed": true,
+    "seconds": 13.895041200001288,
+    "captureHz": 25.63794432028156,
+    "pid": 21220
+  },
+  {
+    "case": "Persist",
+    "completed": true,
+    "seconds": 7.500818100001197,
+    "captureHz": 27.18332917927868,
+    "pid": 15760
+  },
+  {
+    "case": "LifecycleRetry",
+    "completed": true,
+    "seconds": 20.000320600000123,
+    "captureHz": 27.739082147619268,
+    "pid": 15760
+  },
+  {
+    "case": "NetworkReturn",
+    "completed": true,
+    "seconds": 5.5928381999983685,
+    "captureHz": 27.060718511067172,
+    "pid": 15760
+  },
+  {
+    "case": "SaveFailure",
+    "completed": true,
+    "seconds": 5.005919699997321,
+    "captureHz": 23.534346759843352,
+    "pid": 4572
+  },
+  {
+    "case": "SaveRecovered",
+    "completed": true,
+    "seconds": 4.892407100000128,
+    "captureHz": 26.626499090248668,
+    "pid": 4572
+  },
+  {
+    "case": "Corrupt",
+    "completed": true,
+    "seconds": 3.5962427999984357,
+    "captureHz": 25.929915931745732,
+    "pid": 7996
+  }
+]
