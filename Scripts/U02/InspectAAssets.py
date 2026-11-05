@@ -11,7 +11,7 @@ registry.wait_for_completion()
 rows = []
 for data in registry.get_assets_by_path('/Game', recursive=True):
     kind = str(data.asset_class_path.asset_name)
-    if kind not in ('AnimSequence', 'AnimMontage', 'Skeleton', 'SkeletalMesh', 'PoseAsset', 'AnimBlueprint', 'BlendSpace'):
+    if kind not in ('AnimSequence', 'AnimMontage', 'Skeleton', 'SkeletalMesh', 'PoseAsset', 'AnimBlueprint', 'BlendSpace', 'BlendSpace1D'):
         continue
     package = str(data.package_name)
     obj = data.get_asset()

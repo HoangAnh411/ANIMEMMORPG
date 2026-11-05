@@ -1,6 +1,6 @@
 # U02-A — Asset decision
 
-Read-only audit qua TestRunner `execute_console_command` chạy [InspectAAssets.py](../../Scripts/U02/InspectAAssets.py) trong Editor gốc PID3508. Log hoàn tất và metadata/hash thực tại [ASSETS.json](Evidence/A/ASSETS.json). Không save/chỉnh asset. Quét mọi AnimSequence/AnimMontage/Skeleton/SkeletalMesh/PoseAsset/AnimBlueprint/BlendSpace trong `/Game`, 120 assets tải được; không chỉ suy từ tên file. SHA256 tính file `.uasset` thực, không LFS pointer.
+Read-only audit qua TestRunner `execute_console_command` chạy [InspectAAssets.py](../../Scripts/U02/InspectAAssets.py) trong Editor gốc PID3508. Log hoàn tất và metadata/hash thực tại [ASSETS.json](Evidence/A/ASSETS.json). Không save/chỉnh asset. Quét mọi AnimSequence/AnimMontage/Skeleton/SkeletalMesh/PoseAsset/AnimBlueprint/BlendSpace trong `/Game`, 121 assets tải được; không chỉ suy từ tên file. SHA256 tính file `.uasset` thực, không LFS pointer.
 
 U01 đang dùng `/Game/AnimeMMORPG/U01/Animation/SKM_U01`, `SK_U01`, sáu clip locomotion, `ABP_U01`, `BS_U01_Locomotion`, `PA_U01_RightGrip`, `PA_U01_RightCarry`. Mesh/clip cùng skeleton SK_U01 thực theo metadata. Socket `U01_Sword_R` và kiếm blockout hình khối tiếp tục tái sử dụng, căn cứ native authoring/character và hồ sơ nghiệm thu U01; A không thay socket/grip/carry. Kiếm hiển thị không quyết định collision.
 

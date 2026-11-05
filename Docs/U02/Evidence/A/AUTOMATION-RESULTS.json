@@ -1,0 +1,46 @@
+{
+  "failed": 0,
+  "executed": 7,
+  "tests": [
+    "AnimeMMORPG.U02.A.PhaseDeadlines",
+    "AnimeMMORPG.U02.A.WholeActiveInterval",
+    "AnimeMMORPG.U02.A.CancellationAndAim",
+    "AnimeMMORPG.U02.A.IntentIdentityAndReset",
+    "AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary",
+    "AnimeMMORPG.U02.A.ResolveDedupAndGeneration",
+    "AnimeMMORPG.U02.A.StableResolveDeathOrdering"
+  ],
+  "method": "MCP TestRunner trigger and GetLogEntries completion, cold full-build clone",
+  "sourceSHA": "f11c9449f9f060d13c86b3b7e25387ba01ce735f",
+  "utc": "2026-11-05T13:00:46.2713274Z",
+  "perTest": [
+    {
+      "state": "Success",
+      "name": "AnimeMMORPG.U02.A.CancellationAndAim"
+    },
+    {
+      "state": "Success",
+      "name": "AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary"
+    },
+    {
+      "state": "Success",
+      "name": "AnimeMMORPG.U02.A.IntentIdentityAndReset"
+    },
+    {
+      "state": "Success",
+      "name": "AnimeMMORPG.U02.A.PhaseDeadlines"
+    },
+    {
+      "state": "Success",
+      "name": "AnimeMMORPG.U02.A.ResolveDedupAndGeneration"
+    },
+    {
+      "state": "Success",
+      "name": "AnimeMMORPG.U02.A.StableResolveDeathOrdering"
+    },
+    {
+      "state": "Success",
+      "name": "AnimeMMORPG.U02.A.WholeActiveInterval"
+    }
+  ]
+}

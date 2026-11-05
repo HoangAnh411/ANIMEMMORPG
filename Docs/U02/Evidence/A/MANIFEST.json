@@ -1,0 +1,35 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "utc": "2026-11-05T13:04:25.133201+00:00",
+  "baseSHA": "e4ab61812b5a1e3d954a1c8f3d2a1b4fb9535560",
+  "sourceSHA": "f11c9449f9f060d13c86b3b7e25387ba01ce735f",
+  "branch": "u02/a-contract-model",
+  "buildRun": "Build-20261105-195827-588-d266707a",
+  "testRun": "MCPTests-20261105-200027",
+  "module": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\Binaries\\Win64\\UnrealEditor-AnimeMMORPG.dll",
+  "moduleSHA256": "A3C6165E074E260FB8711B1B36E3D13C0B43DB8DBC2E242C263C8C9DAE9CDDD1",
+  "editorExe": "D:\\Software\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+  "editorExeSHA256": "A423AB94410AA4F4CC34D99A2AF75240C5D0E376A33D903A3E819FECF1177143",
+  "gameExe": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\Binaries\\Win64\\AnimeMMORPG.exe",
+  "gameExeSHA256": "5bda672197817697ed7bfb00ecc3479071bf405917e709b0d541649841734952",
+  "sourceGitBlobs": {
+    "Source/AnimeMMORPG/U02/U02ActionModel.h": "567315203c202030ca3951d695c004e559263d83",
+    "Source/AnimeMMORPG/U02/U02ActionModel.cpp": "dfce6e5f1f979f08e0897254cdc3f2f17e24e812",
+    "Source/AnimeMMORPG/Tests/U02ActionModelTests.cpp": "2fec089a7078a5a7a0b048ec44b9d0245f51fecc"
+  },
+  "localConfigByteUnchanged": true,
+  "existingRuntimeAssetsConfigUnchanged": true,
+  "sourceEqualsHandoffRuntime": true,
+  "world": "N/A: pure model Automation in Editor process; no gameplay pawn asserted",
+  "inputVideo": "NOT RUN: A has no gameplay input integration",
+  "package": "NOT RUN: A pure model scope; E is Windows integration gate",
+  "inheritedU01": {
+    "sourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+    "automation": 23,
+    "maps": 3,
+    "rerunInA": false
+  },
+  "failuresRetained": [
+    "Build-20261105-194856-766-8e32f7a5"
+  ]
+}

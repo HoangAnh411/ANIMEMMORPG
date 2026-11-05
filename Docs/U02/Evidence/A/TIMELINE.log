@@ -1,0 +1,9 @@
+[2026.11.05-13.00.42:882][318]LogAutomationController: U02A_TIMELINE time=0.000 phase=1 slice=0 begin=0 end=0 endExclusive=0 lock=1
+[2026.11.05-13.00.42:882][318]LogAutomationController: U02A_TIMELINE time=0.159 phase=1 slice=0 begin=0 end=0 endExclusive=0 lock=1
+[2026.11.05-13.00.42:882][318]LogAutomationController: U02A_TIMELINE time=0.160 phase=2 slice=1 begin=0.16 end=0.16 endExclusive=0 lock=1
+[2026.11.05-13.00.42:882][318]LogAutomationController: U02A_TIMELINE time=0.219 phase=2 slice=1 begin=0.16 end=0.219 endExclusive=0 lock=1
+[2026.11.05-13.00.42:882][318]LogAutomationController: U02A_TIMELINE time=0.220 phase=3 slice=1 begin=0.219 end=0.22 endExclusive=1 lock=1
+[2026.11.05-13.00.42:882][318]LogAutomationController: U02A_TIMELINE time=0.399 phase=3 slice=0 begin=0 end=0 endExclusive=0 lock=1
+[2026.11.05-13.00.42:882][318]LogAutomationController: U02A_TIMELINE time=0.400 phase=4 slice=0 begin=0 end=0 endExclusive=0 lock=0
+[2026.11.05-13.00.42:982][324]LogAutomationController: U02A_ORDER permutations=24 source1->source2 lethal@0.18; source2 retaliation rejected; death=1; source1->source3@0.19 accepted
+[2026.11.05-13.00.43:031][327]LogAutomationController: U02A_SWEEP previous=0 now=0.5 clipped=[0.16,0.22) alpha=[0.32000000000000001,0.44]

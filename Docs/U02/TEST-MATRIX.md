@@ -11,7 +11,7 @@ A là model thuần; B–F chưa triển khai/chưa chạy. Tên dưới A là A
 | A-LOCK | `AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary` |Policy combat vs control/Defeated; heldW recovery với FReleaseGate U01 thật; menu/LMB physical rearm; authority combat giữ khi replay policy. Chưa movement replay thật/click Resume. |
 | A-RESOLVE | `AnimeMMORPG.U02.A.ResolveDedupAndGeneration` |Active bounds, duplicate action/hit, blocked hurtbox không dedup, nhiều hurtbox, source/target reset, death once. Geometry flag/HP là fixture, không collision/damage thật. |
 | A-ORDER | `AnimeMMORPG.U02.A.StableResolveDeathOrdering` |24 permutations, timestamp/source/event/hurtbox ordering, hai lethal cùng timestamp không trả đòn từ source chết; cutoff cancel. Lethal fixture không vital runtime. |
-| A-ASSET | Registry/load + SHA256 + provenance register |120 assets metadata; chọn tự author blockout C. Không asset mutation/render quality proof. |
+| A-ASSET | Registry/load + SHA256 + provenance register |121 assets metadata; chọn tự author blockout C. Không asset mutation/render quality proof. |
 | A-BUILD | Full Editor/Game build trong clone |Code mới build từ source SHA đã push; không coi Editor gốc đã nạp header/layout. |
 
 | Đợt / ID | Kiểm chứng bắt buộc còn lại | Trạng thái A |
@@ -20,7 +20,7 @@ A là model thuần; B–F chưa triển khai/chưa chạy. Tên dưới A là A
 | B-MOTOR |StopXY/gravity/move-jump-sprint lock, heldW recovery, menu/focus/Resume click suppression, lost-ground/Interacting/Defeated; saved move authority lock và U01 camera/gates regression |NOT RUN |
 | C-PRESENT |Blockout/montage0.40/late seek/action IDs, notify bỏ/lặp không hit, root0displacement, carry/grip, finish/cancel/death/lost-ground, landing/locomotion, BP compile/references/cook |NOT RUN |
 | D-GEOMETRY |Feet/world-local/center/extents; trước/sau/ngoài/chạm biên; multiple targets/hurtboxes; target không che target |NOT RUN |
-| D-WALL |Kín/góc/partial hurtbox; origin inside solid; segment nearest-point; blocked candidate không consume dedup |NOT RUN |
+| D-WALL |Kín/góc/partial hurtbox; origin inside solid; segment nearest-point; target lộ ra sau vật cản trong active; blocked candidate không consume dedup |NOT RUN |
 | D-INTERVAL |Whole-active between updates, target xuyên hộp (endpoints ngoài), stationary, relative sweep clip0.16/0.22, reset/teleport no arena sweep; collider/order permutation |NOT RUN |
 | E-VITAL |60/90, factors/round-half-up, shield source replacement/order/deadline/overkill; death once/immediate rejection; lethal ordering/reset old events, held input reset, cancel rights |NOT RUN |
 | E-WINDOWS |Packaged input hụt/trúng/tường/nhiều hurtbox/menu/focus, smoke3maps, Boot/Quit/reopen; full U00/U01/U02 đúng binary; package hash/cook3maps |NOT RUN |

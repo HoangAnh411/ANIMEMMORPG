@@ -1,0 +1,41 @@
+{
+  "Artifacts\\U02\\A\\Build-20261105-195827-588-d266707a\\Generate.log": {
+    "errors": [],
+    "warningCount": 7,
+    "warningExamples": [
+      "Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested",
+      "Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested",
+      "Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested",
+      "Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested",
+      "Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested",
+      "Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested"
+    ]
+  },
+  "Artifacts\\U02\\A\\Build-20261105-195827-588-d266707a\\Editor.log": {
+    "errors": [],
+    "warningCount": 5,
+    "warningExamples": [
+      "Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested",
+      "Warning: Visual Studio compiler 14.51.36260 is not a preferred version",
+      "D:\\Software\\UE_5.8\\Engine\\Source\\Runtime\\Engine\\Classes\\GameFramework\\Character.h(798,31): warning C4996: 'APawn::GetMovementBase': GetMovementBase is deprecated. Use GetMovementBaseObject or GetMovementBaseInterfaceData instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+      "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\Source\\AnimeMMORPG\\Tests\\U01AnimationTests.cpp(359,46): warning C4305: 'argument': truncation from 'double' to 'float'",
+      "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\Source\\AnimeMMORPG\\Tests\\U01AnimationTests.cpp(362,62): warning C4305: 'argument': truncation from 'double' to 'float'"
+    ]
+  },
+  "Artifacts\\U02\\A\\Build-20261105-195827-588-d266707a\\Game.log": {
+    "errors": [],
+    "warningCount": 3,
+    "warningExamples": [
+      "Visual Studio compiler version 14.51.36260 is newer than latest preferred version 14.50.35717. Please use caution as this compiler has not been heavily tested",
+      "Warning: Visual Studio compiler 14.51.36260 is not a preferred version",
+      "D:\\Software\\UE_5.8\\Engine\\Source\\Runtime\\Engine\\Classes\\GameFramework\\Character.h(798,31): warning C4996: 'APawn::GetMovementBase': GetMovementBase is deprecated. Use GetMovementBaseObject or GetMovementBaseInterfaceData instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile."
+    ]
+  },
+  "Artifacts\\U02\\A\\MCPTests-20261105-200027\\Editor.log": {
+    "errors": [],
+    "warningCount": 1,
+    "warningExamples": [
+      "[2026.11.05-13.00.34:364][  0]LogModelContextProtocol: Warning: Data transmitted via this plugin to your connected LLM service is Licensed Technology under the UE EULA. You are responsible for ensuring your LLM provider does not use it as training input. See Section 6(e) of the UE EULA for full terms."
+    ]
+  }
+}

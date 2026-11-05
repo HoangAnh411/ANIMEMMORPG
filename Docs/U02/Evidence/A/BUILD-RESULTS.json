@@ -1,0 +1,81 @@
+{
+  "Generate": {
+    "CompletedAt": "2026-11-05T19:58:34.3262180+07:00",
+    "ExitCode": 0,
+    "command": {
+      "Project": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\AnimeMMORPG.uproject",
+      "Arguments": [
+        "-projectfiles",
+        "-project=D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\AnimeMMORPG.uproject",
+        "-game",
+        "-rocket"
+      ],
+      "StartedAt": "2026-11-05T19:58:27.6037131+07:00",
+      "Engine": {
+        "MajorVersion": 5,
+        "MinorVersion": 8,
+        "PatchVersion": 4,
+        "Changelist": 58902052,
+        "CompatibleChangelist": 55116800,
+        "IsLicenseeVersion": 0,
+        "IsPromotedBuild": 1,
+        "BranchName": "++UE5+Release-5.8"
+      },
+      "Executable": "D:\\Software\\UE_5.8\\Engine\\Build\\BatchFiles\\Build.bat"
+    }
+  },
+  "Editor": {
+    "CompletedAt": "2026-11-05T19:59:05.9980266+07:00",
+    "ExitCode": 0,
+    "command": {
+      "Project": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\AnimeMMORPG.uproject",
+      "Arguments": [
+        "AnimeMMORPGEditor",
+        "Win64",
+        "Development",
+        "-Project=D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\AnimeMMORPG.uproject",
+        "-WaitMutex",
+        "-NoHotReloadFromIDE"
+      ],
+      "StartedAt": "2026-11-05T19:58:34.3287292+07:00",
+      "Engine": {
+        "MajorVersion": 5,
+        "MinorVersion": 8,
+        "PatchVersion": 4,
+        "Changelist": 58902052,
+        "CompatibleChangelist": 55116800,
+        "IsLicenseeVersion": 0,
+        "IsPromotedBuild": 1,
+        "BranchName": "++UE5+Release-5.8"
+      },
+      "Executable": "D:\\Software\\UE_5.8\\Engine\\Build\\BatchFiles\\Build.bat"
+    }
+  },
+  "Game": {
+    "CompletedAt": "2026-11-05T19:59:42.2455739+07:00",
+    "ExitCode": 0,
+    "command": {
+      "Project": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\AnimeMMORPG.uproject",
+      "Arguments": [
+        "AnimeMMORPG",
+        "Win64",
+        "Development",
+        "-Project=D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\AnimeMMORPG.uproject",
+        "-WaitMutex",
+        "-NoHotReloadFromIDE"
+      ],
+      "StartedAt": "2026-11-05T19:59:05.9995532+07:00",
+      "Engine": {
+        "MajorVersion": 5,
+        "MinorVersion": 8,
+        "PatchVersion": 4,
+        "Changelist": 58902052,
+        "CompatibleChangelist": 55116800,
+        "IsLicenseeVersion": 0,
+        "IsPromotedBuild": 1,
+        "BranchName": "++UE5+Release-5.8"
+      },
+      "Executable": "D:\\Software\\UE_5.8\\Engine\\Build\\BatchFiles\\Build.bat"
+    }
+  }
+}

@@ -63,6 +63,12 @@
       "force_root_lock": "True"
     },
     {
+      "package": "/Game/AnimeMMORPG/U01/Animation/BS_U01_Locomotion",
+      "asset_class": "BlendSpace1D",
+      "sha256": "33cf6fcd8a58fcfb77aed00022ac67f1e0848c2159dc939477789859109408c1",
+      "skeleton": "/Game/AnimeMMORPG/U01/Animation/SK_U01.SK_U01"
+    },
+    {
       "package": "/Game/AnimeMMORPG/U01/Animation/PA_U01_RightCarry",
       "asset_class": "PoseAsset",
       "sha256": "799d29aa825a7de14fb1b1ea4b5dc6acd18f5b96725ef8ea92bb5602736afd97",

@@ -1,0 +1,22 @@
+{
+    "runId":  "MCPTests-20261105-200027",
+    "exeSHA256":  "A423AB94410AA4F4CC34D99A2AF75240C5D0E376A33D903A3E819FECF1177143",
+    "sourceSHA":  "f11c9449f9f060d13c86b3b7e25387ba01ce735f",
+    "utc":  "2026-11-05T13:00:27.9120319Z",
+    "exe":  "D:\\Software\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+    "scope":  "pure model Automation; no gameplay pawn/world/net evidence",
+    "module":  "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\Binaries\\Win64\\UnrealEditor-AnimeMMORPG.dll",
+    "arguments":  [
+                      "\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\Source\\AnimeMMORPG.uproject\"",
+                      "-NullRHI",
+                      "-nosound",
+                      "-unattended",
+                      "-NoLiveCoding",
+                      "-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False",
+                      "-ModelContextProtocolStartServer",
+                      "-ModelContextProtocolPort=18022",
+                      "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\A\\MCPTests-20261105-200027\\Editor.log\""
+                  ],
+    "pid":  18128,
+    "moduleSHA256":  "A3C6165E074E260FB8711B1B36E3D13C0B43DB8DBC2E242C263C8C9DAE9CDDD1"
+}

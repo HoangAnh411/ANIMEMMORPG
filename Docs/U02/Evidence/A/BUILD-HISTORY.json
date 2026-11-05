@@ -1,0 +1,57 @@
+[
+  {
+    "run": "Build-20261105-194856-766-8e32f7a5",
+    "results": {
+      "Editor.result": {
+        "CompletedAt": "2026-11-05T19:51:31.9162000+07:00",
+        "ExitCode": 6
+      },
+      "Generate.result": {
+        "CompletedAt": "2026-11-05T19:49:17.1231077+07:00",
+        "ExitCode": 0
+      }
+    }
+  },
+  {
+    "run": "Build-20261105-195333-542-637f63d2",
+    "results": {
+      "Editor.result": {
+        "CompletedAt": "2026-11-05T19:54:15.3435138+07:00",
+        "ExitCode": 0
+      },
+      "Game.result": {
+        "CompletedAt": "2026-11-05T19:55:32.9756198+07:00",
+        "ExitCode": 0
+      },
+      "Generate.result": {
+        "CompletedAt": "2026-11-05T19:53:39.9994396+07:00",
+        "ExitCode": 0
+      }
+    }
+  },
+  {
+    "run": "Build-20261105-195827-588-d266707a",
+    "results": {
+      "Editor.result": {
+        "CompletedAt": "2026-11-05T19:59:05.9980266+07:00",
+        "ExitCode": 0
+      },
+      "Game.result": {
+        "CompletedAt": "2026-11-05T19:59:42.2455739+07:00",
+        "ExitCode": 0
+      },
+      "Generate.result": {
+        "CompletedAt": "2026-11-05T19:58:34.3262180+07:00",
+        "ExitCode": 0
+      }
+    }
+  },
+  {
+    "run": "build-final-console.log",
+    "results": {}
+  },
+  {
+    "run": "build-retry-console.log",
+    "results": {}
+  }
+]

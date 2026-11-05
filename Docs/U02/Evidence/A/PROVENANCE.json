@@ -1,0 +1,615 @@
+{
+  "total": 121,
+  "baselineMatches": 109,
+  "baselineMismatches": [],
+  "u01AcceptedMainMatches": 12,
+  "rows": [
+    {
+      "path": "Content/Characters/Mannequins/Anims/Death/MM_Death_Back_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Death\\MM_Death_Back_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Death/MM_Death_Front_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Death\\MM_Death_Front_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Death/MM_Death_Front_02.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Death\\MM_Death_Front_02.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Death/MM_Death_Front_03.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Death\\MM_Death_Front_03.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Death/MM_Death_Left_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Death\\MM_Death_Left_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Death/MM_Death_Right_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Death\\MM_Death_Right_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Aim/MF_Pistol_Idle_ADS1.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Aim\\MF_Pistol_Idle_ADS1.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Aim/MF_Pistol_Idle_ADS_AO_CD.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Aim\\MF_Pistol_Idle_ADS_AO_CD.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Aim/MF_Pistol_Idle_ADS_AO_CU.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Aim\\MF_Pistol_Idle_ADS_AO_CU.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Bwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jog\\MF_Pistol_Jog_Bwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Bwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jog\\MF_Pistol_Jog_Bwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Bwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jog\\MF_Pistol_Jog_Bwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Fwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jog\\MF_Pistol_Jog_Fwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Fwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jog\\MF_Pistol_Jog_Fwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Fwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jog\\MF_Pistol_Jog_Fwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jog\\MF_Pistol_Jog_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jog/MF_Pistol_Jog_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jog\\MF_Pistol_Jog_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jump/MM_Pistol_Jump_Fall_Loop.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jump\\MM_Pistol_Jump_Fall_Loop.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jump/MM_Pistol_Jump_RecoveryAdditive.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jump\\MM_Pistol_Jump_RecoveryAdditive.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Jump/MM_Pistol_Jump_Start.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Jump\\MM_Pistol_Jump_Start.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/MF_Pistol_Idle_ADS.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\MF_Pistol_Idle_ADS.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/MM_Pistol_DryFire.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\MM_Pistol_DryFire.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/MM_Pistol_Equip.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\MM_Pistol_Equip.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/MM_Pistol_Fire.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\MM_Pistol_Fire.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/MM_Pistol_Fire_Montage.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\MM_Pistol_Fire_Montage.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/MM_Pistol_Reload.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\MM_Pistol_Reload.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Bwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Walk\\MF_Pistol_Walk_Bwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Bwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Walk\\MF_Pistol_Walk_Bwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Bwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Walk\\MF_Pistol_Walk_Bwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Fwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Walk\\MF_Pistol_Walk_Fwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Fwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Walk\\MF_Pistol_Walk_Fwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Fwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Walk\\MF_Pistol_Walk_Fwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Walk\\MF_Pistol_Walk_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Pistol/Walk/MF_Pistol_Walk_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Pistol\\Walk\\MF_Pistol_Walk_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/AIM/MM_Rifle_Idle_ADS_AO_CC.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\AIM\\MM_Rifle_Idle_ADS_AO_CC.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/AIM/MM_Rifle_Idle_ADS_AO_CD.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\AIM\\MM_Rifle_Idle_ADS_AO_CD.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/AIM/MM_Rifle_Idle_ADS_AO_CU.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\AIM\\MM_Rifle_Idle_ADS_AO_CU.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Back_Med_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\HitReact\\MM_HitReact_Back_Med_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Hvy_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\HitReact\\MM_HitReact_Front_Hvy_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\HitReact\\MM_HitReact_Front_Lgt_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_02.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\HitReact\\MM_HitReact_Front_Lgt_02.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_03.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\HitReact\\MM_HitReact_Front_Lgt_03.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Lgt_04.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\HitReact\\MM_HitReact_Front_Lgt_04.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Med_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\HitReact\\MM_HitReact_Front_Med_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/HitReact/MM_HitReact_Front_Med_02.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\HitReact\\MM_HitReact_Front_Med_02.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Bwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jog\\MF_Rifle_Jog_Bwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Bwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jog\\MF_Rifle_Jog_Bwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Bwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jog\\MF_Rifle_Jog_Bwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Fwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jog\\MF_Rifle_Jog_Fwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Fwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jog\\MF_Rifle_Jog_Fwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Fwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jog\\MF_Rifle_Jog_Fwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jog\\MF_Rifle_Jog_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jog/MF_Rifle_Jog_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jog\\MF_Rifle_Jog_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Apex.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jump\\MM_Rifle_Jump_Apex.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Fall_Land.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jump\\MM_Rifle_Jump_Fall_Land.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Fall_Loop.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jump\\MM_Rifle_Jump_Fall_Loop.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_RecoveryAdditive.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jump\\MM_Rifle_Jump_RecoveryAdditive.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Start.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jump\\MM_Rifle_Jump_Start.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Jump/MM_Rifle_Jump_Start_Loop.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Jump\\MM_Rifle_Jump_Start_Loop.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/MF_Rifle_Idle_ADS.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\MF_Rifle_Idle_ADS.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/MM_Rifle_DryFire.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\MM_Rifle_DryFire.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/MM_Rifle_Equip.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\MM_Rifle_Equip.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/MM_Rifle_Fire.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\MM_Rifle_Fire.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/MM_Rifle_Reload.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\MM_Rifle_Reload.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Bwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Walk\\MF_Rifle_Walk_Bwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Bwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Walk\\MF_Rifle_Walk_Bwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Bwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Walk\\MF_Rifle_Walk_Bwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Fwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Walk\\MF_Rifle_Walk_Fwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Fwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Walk\\MF_Rifle_Walk_Fwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Fwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Walk\\MF_Rifle_Walk_Fwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Walk\\MF_Rifle_Walk_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Rifle/Walk/MF_Rifle_Walk_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Rifle\\Walk\\MF_Rifle_Walk_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/ABP_Unarmed.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\ABP_Unarmed.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Attack\\MM_Attack_01.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_02.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Attack\\MM_Attack_02.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_03.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Attack\\MM_Attack_03.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Attack/MM_ChargedAttack.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Attack\\MM_ChargedAttack.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/BS_Idle_Walk_Run.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\BS_Idle_Walk_Run.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Bwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Bwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Bwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Bwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Bwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Bwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Fwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Fwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Fwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Fwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jog/MF_Unarmed_Jog_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jog\\MF_Unarmed_Jog_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jump/MM_Dash.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jump\\MM_Dash.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jump/MM_Fall_Loop.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jump\\MM_Fall_Loop.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jump/MM_Jump.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jump\\MM_Jump.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jump/MM_Land.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jump\\MM_Land.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Jump/MM_WallJump.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Jump\\MM_WallJump.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/MM_Idle.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\MM_Idle.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Bwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Bwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Bwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Bwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Bwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Bwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Fwd.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Fwd_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Fwd_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Fwd_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Left.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Left.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Anims/Unarmed/Walk/MF_Unarmed_Walk_Right.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Anims\\Unarmed\\Walk\\MF_Unarmed_Walk_Right.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Meshes/SKM_Manny_Simple.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Meshes\\SKM_Manny_Simple.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Meshes/SKM_Quinn_Simple.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Meshes\\SKM_Quinn_Simple.uasset"
+    },
+    {
+      "path": "Content/Characters/Mannequins/Meshes/SK_Mannequin.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TemplateResources\\High\\Characters\\Content\\Mannequins\\Meshes\\SK_Mannequin.uasset"
+    },
+    {
+      "path": "Content/Variant_Combat/Anims/ABP_Manny_Combat.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TP_ThirdPerson\\Content\\Variant_Combat\\Anims\\ABP_Manny_Combat.uasset | D:\\Software\\UE_5.8\\Templates\\TemplateResources\\Standard\\Variant_Combat\\Content\\Anims\\ABP_Manny_Combat.uasset"
+    },
+    {
+      "path": "Content/Variant_Combat/Anims/AM_ChargedAttack.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TP_ThirdPerson\\Content\\Variant_Combat\\Anims\\AM_ChargedAttack.uasset"
+    },
+    {
+      "path": "Content/Variant_Combat/Anims/AM_ComboAttack.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TP_ThirdPerson\\Content\\Variant_Combat\\Anims\\AM_ComboAttack.uasset"
+    },
+    {
+      "path": "Content/Variant_Platforming/Anims/ABP_Manny_Platforming.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TP_ThirdPerson\\Content\\Variant_Platforming\\Anims\\ABP_Manny_Platforming.uasset"
+    },
+    {
+      "path": "Content/Variant_Platforming/Anims/AM_Dash.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TP_ThirdPerson\\Content\\Variant_Platforming\\Anims\\AM_Dash.uasset"
+    },
+    {
+      "path": "Content/Variant_SideScrolling/Anims/ABP_Manny_SideScroller.uasset",
+      "match": true,
+      "origin": "D:\\Software\\UE_5.8\\Templates\\TP_ThirdPerson\\Content\\Variant_SideScrolling\\Anims\\ABP_Manny_SideScroller.uasset"
+    }
+  ],
+  "inheritedU01": [
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/ABP_U01.uasset",
+      "match": true,
+      "baselineSHA256": "008020d54d2771415dedcf6f920e2f9ede9adf8628529fab7919add2b78b8baf"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Fall.uasset",
+      "match": true,
+      "baselineSHA256": "0f84e1dfd9733a6aecdf559b985d13737cbe360881828c639a87428dbdc2d270"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Idle.uasset",
+      "match": true,
+      "baselineSHA256": "f650060a5b9295d376ab24fc6391dce0008505368cc3a182667cf2404c650534"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Jog.uasset",
+      "match": true,
+      "baselineSHA256": "fe5f581f03c58c84a8d08861416c8b8817bf3e836a8ace074ce88741df00b9d8"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Jump.uasset",
+      "match": true,
+      "baselineSHA256": "531dd85c6e47d62f62cb24e0a33cd76d9da355f5d00d804b6dcd02823fc434ba"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Land.uasset",
+      "match": true,
+      "baselineSHA256": "3adf4a5c0929f0bd7a7d2786d0553390f32dc7e794df5d3527b580c76585aebc"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/A_U01_Walk.uasset",
+      "match": true,
+      "baselineSHA256": "595293a474a04dd986d3be5e9a6343d94e8c7018673064651b0d84b7dec7ce64"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/BS_U01_Locomotion.uasset",
+      "match": true,
+      "baselineSHA256": "33cf6fcd8a58fcfb77aed00022ac67f1e0848c2159dc939477789859109408c1"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/PA_U01_RightCarry.uasset",
+      "match": true,
+      "baselineSHA256": "799d29aa825a7de14fb1b1ea4b5dc6acd18f5b96725ef8ea92bb5602736afd97"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/PA_U01_RightGrip.uasset",
+      "match": true,
+      "baselineSHA256": "7e4a51c39170b7ba1067d814ae15e1ba75b95c66afb54ccde1aa51f94eb7b679"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/SKM_U01.uasset",
+      "match": true,
+      "baselineSHA256": "8d1a6dcc057446f0a60368b954897d64d21956b6c107745b7922cebad5224ca1"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U01/Animation/SK_U01.uasset",
+      "match": true,
+      "baselineSHA256": "16195ad7a62653c12ea5e9eaa7eb4edbfdc62f34102a7dffc79e2717bfb0d8b7"
+    }
+  ]
+}
