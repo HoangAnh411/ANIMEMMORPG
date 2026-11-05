@@ -87,9 +87,11 @@ Cổng kỹ thuật: Windows điều khiển được, chuột xoay ngay, menu/f
 
 ### U02 — Một đòn đánh hoàn chỉnh
 
+**U02-A / U02.00 ACCEPTED** theo reviewer tại914f7af, source kiểm chứng f11c944; người dùng cho phép khép hồ sơ/fast-forward main và triển khai riêng B. [Căn cứ](U02/ACCEPTANCE-A.md), [báo cáo A](U02/REPORT-A.md). B–F chưa nghiệm thu; giữ ranh giới model/runtime và ba ràng buộc interval/replay-release gate/sweep geometry.
+
 Phụ thuộc: U01, gồm thử server/hai client. Thực hiện U02.00 trước U02.01–05, sau đó U02.06.
 
-- [ ] U02.00 Bàn giao hợp đồng một action: chủ sở hữu trạng thái/quyền sửa, clock/deadline, thời gian nhận lệnh và xử lý, ID chủ thể/action/event ổn định, thứ tự resolve theo Description. Chốt xử lý frame đi qua cả đầu/cuối active và nguồn dữ liệu animation. Đánh giá giải pháp action tối thiểu; chỉ thử framework/GAS nếu có yêu cầu cụ thể và phép so sánh, không mặc định cài thêm. Test bằng clock điều khiển được trước khi nhân rộng.
+- [x] U02.00 Bàn giao hợp đồng một action: chủ sở hữu trạng thái/quyền sửa, clock/deadline, thời gian nhận lệnh và xử lý, ID chủ thể/action/event ổn định, thứ tự resolve theo Description. Chốt xử lý frame đi qua cả đầu/cuối active và nguồn dữ liệu animation. Đánh giá giải pháp action tối thiểu; chỉ thử framework/GAS nếu có yêu cầu cụ thể và phép so sánh, không mặc định cài thêm. Test bằng clock điều khiển được trước khi nhân rộng.
 
 - [ ] U02.01 Action instance/deadline/phase/quyền hành động, đòn 1 theo Description.
 - [ ] U02.02 Montage theo phase, không dùng notify làm nguồn quyết định hit.

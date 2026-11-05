@@ -1,6 +1,6 @@
 # U02 — Hợp đồng A / U02.00
 
-Trạng thái: đề nghị review A; không là nghiệm thu U02. Nền main/origin/main đã fetch: `e4ab61812b5a1e3d954a1c8f3d2a1b4fb9535560`. Nguồn luật theo thứ tự: [Description](../Description.md), [ROADMAP](../ROADMAP.md), [U01 contracts](../U01/CONTRACTS.md), [closure G](../U01/G-MATRIX-CLOSURE.md). Quyết định người dùng trong kế hoạch U02 và lệnh triển khai A là ranh giới giai đoạn. Không sửa Description để xóa buffer/combo sản phẩm.
+Trạng thái: **A ACCEPTED tại 914f7af/source f11c944**, theo [căn cứ review](ACCEPTANCE-A.md); không là nghiệm thu U02 tổng thể. Nền main/origin/main đã fetch: `e4ab61812b5a1e3d954a1c8f3d2a1b4fb9535560`. Nguồn luật theo thứ tự: [Description](../Description.md), [ROADMAP](../ROADMAP.md), [U01 contracts](../U01/CONTRACTS.md), [closure G](../U01/G-MATRIX-CLOSURE.md). Quyết định người dùng trong kế hoạch U02 và lệnh triển khai A là ranh giới giai đoạn. Không sửa Description để xóa buffer/combo sản phẩm.
 
 ## Phạm vi, ownership và giao diện
 

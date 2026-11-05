@@ -1,4 +1,10 @@
-# U02-A — READY_FOR_REVIEW
+# U02-A — ACCEPTED
+
+**Đã được reviewer nghiệm thu kỹ thuật tại 914f7af, source f11c944; người dùng cho phép khép hồ sơ/fast-forward main và triển khai riêng B.** [Căn cứ review](ACCEPTANCE-A.md). Không chạy lại build/tests khi khép hồ sơ; giữ nguyên manifest/binary SHA của lượt đã review.
+
+## Hồ sơ bàn giao lịch sử tại 914f7af
+
+Các trạng thái READY_FOR_REVIEW/chưa merge/chưa B dưới đây mô tả thời điểm bàn giao A và đã được quyết định ACCEPTED phía trên thay thế.
 
 Đã hoàn tất riêng U02.00: hợp đồng, kiểm kê asset, model action/lifetime thuần và clock-controlled tests. **Chưa nghiệm thu, chưa merge, chưa bắt đầu B.** Không tích hợp input/combat component/motor/RPC/collision/vital/montage runtime.
 

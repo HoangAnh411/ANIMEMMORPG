@@ -1,5 +1,7 @@
 # U02 — Test matrix
 
+**A ACCEPTED tại 914f7af/source f11c944: 7/7 Automation và review evidence đạt.** [Căn cứ](ACCEPTANCE-A.md). Không chạy lại kiểm chứng để khép hồ sơ.
+
 A là model thuần; B–F chưa triển khai/chưa chạy. Tên dưới A là Automation tests thực đăng ký; cột evidence được khép bằng kết quả thực ở REPORT-A. Không ấn định tổng số tests tương lai.
 
 | ID | Automation A | Nội dung và giới hạn |
