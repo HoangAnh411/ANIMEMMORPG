@@ -176,7 +176,8 @@ void UU02CombatComponent::TickComponent(float Dt, ELevelTick Type, FActorCompone
     if (Model)
     {
         AdvanceAuthority(Now);
-        if (C->GetController() && Model->UpdateAim(Now,C->GetControlRotation().Yaw)) Publish(Now);
+        // Remote aim arrives through ServerAim. A stale replicated controller rotation must not overwrite it.
+        if (C->IsLocallyControlled() && C->GetController() && Model->UpdateAim(Now,C->GetControlRotation().Yaw)) Publish(Now);
     }
     else if (C->IsLocallyControlled() && Snapshot.Phase==uint8(EPhase::Startup) && Now-LastAimSend>=1./30)
     { ServerAim(C->GetControlRotation().Yaw); LastAimSend=Now; }
