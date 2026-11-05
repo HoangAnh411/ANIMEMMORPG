@@ -43,6 +43,8 @@ public:
     UFUNCTION(BlueprintCallable, Category="U01") void ReturnToBoot();
     UFUNCTION(BlueprintCallable, Category="U01") void QuitToDesktop();
     UFUNCTION(Exec) void U01Metrics();
+    UFUNCTION(Exec) void U01NetFixture(const FString& Command);
+    UFUNCTION(Server,Reliable) void ServerU01NetProbe(uint8 Kind,float Claim,FGuid Target);
     UFUNCTION(Exec) void U01FixtureReset(const FString& Station);
     UFUNCTION(Exec) void U01FixtureLock(const FString& Reason, bool bEnabled);
     UFUNCTION(BlueprintCallable, Category="U01|Lab") void ResetRunwayFixture();

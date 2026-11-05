@@ -11,13 +11,18 @@ class UStaticMeshComponent;
 
 enum class EU01MotorLock : uint8 { Control = 1, Interacting = 2, Defeated = 4 };
 
-// Network saved moves/validation will be completed in F; the standalone motor is exercised in C.
+class FSavedMove_U01;
 UCLASS()
 class ANIMEMMORPG_API UU01CharacterMovement : public UCharacterMovementComponent
 {
     GENERATED_BODY()
 public:
     virtual void BeginPlay() override;
+    virtual FNetworkPredictionData_Client* GetPredictionData_Client() const override;
+    virtual void UpdateFromCompressedFlags(uint8 Flags) override;
+    virtual bool ClientUpdatePositionAfterServerUpdate() override;
+    int32 CorrectionCount=0;
+    float ProbeSpeed=0;
     void SetControlLocked(bool bLocked);
     void SetMotorLock(EU01MotorLock Reason, bool bEnabled);
     bool IsMotorLocked() const { return LockMask != 0; }
@@ -38,6 +43,8 @@ public:
     double GetMotorTimeSeconds() const { return SimulationSeconds; }
     void ResetFixtureState();
 private:
+    friend class FSavedMove_U01;
+    bool bNetworkJumpHeld=false;
     uint8 LockMask = 0;
     bool bSprintRequested = false;
     bool bAttemptingJump = false;
@@ -54,6 +61,10 @@ class ANIMEMMORPG_API AU01Character : public ACharacter
     GENERATED_BODY()
 public:
     AU01Character(const FObjectInitializer& ObjectInitializer);
+    virtual void BeginPlay() override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
+    UPROPERTY(Replicated) FGuid NetworkPawnId;
+    UPROPERTY(Replicated) bool bNetSprinting=false;
     virtual void Jump() override;
     virtual void StopJumping() override;
     virtual void CheckJumpInput(float DeltaTime) override;

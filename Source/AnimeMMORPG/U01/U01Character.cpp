@@ -36,11 +36,15 @@ void UU01CharacterMovement::SetMotorLock(EU01MotorLock Reason, bool bEnabled)
 
 bool UU01CharacterMovement::IsSprinting() const
 {
+    if(CharacterOwner&&CharacterOwner->GetLocalRole()==ROLE_SimulatedProxy)return CastChecked<AU01Character>(CharacterOwner)->bNetSprinting;
     return !IsMotorLocked() && bSprintRequested && Acceleration.SizeSquared2D() > UE_SMALL_NUMBER;
 }
 
 float UU01CharacterMovement::GetMaxSpeed() const
 {
+#if !UE_BUILD_SHIPPING
+    if(CharacterOwner&&CharacterOwner->GetLocalRole()==ROLE_AutonomousProxy&&ProbeSpeed>0)return ProbeSpeed;
+#endif
     return IsMotorLocked() ? 0.f : (IsSprinting() ? 700.f : 500.f);
 }
 
@@ -57,6 +61,7 @@ void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
     }
     Super::PerformMovement(DeltaSeconds); // Keep vertical movement and world simulation alive.
     SimulationSeconds = FrameStartSeconds + DeltaSeconds;
+    if(CharacterOwner&&CharacterOwner->HasAuthority())CastChecked<AU01Character>(CharacterOwner)->bNetSprinting=IsSprinting();
 }
 
 void UU01CharacterMovement::StartFalling(int32 Iterations, float RemainingTime, float TimeTick, const FVector& Delta, const FVector& SubLocation)

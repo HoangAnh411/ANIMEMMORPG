@@ -18,6 +18,7 @@ public:
         return true;
     }
     void Release() { bHeld = false; }
+    bool IsHeld() const { return bHeld; }
     void LeaveGround(double Now, bool bVoluntary)
     {
         LeftGroundAt = (!bVoluntary && !bConsumedInAir) ? TOptional<double>(Now) : TOptional<double>();
