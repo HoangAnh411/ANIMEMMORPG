@@ -14,7 +14,7 @@ build=art/'Build-20261105-120525-295-b4be0b5d';tests=art/'MCPTests-20261105-1207
 def load(p):return json.loads(p.read_text(encoding='utf-8-sig'))
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def utc(s):return datetime.fromisoformat(s.replace('Z','+00:00'))
-def write(n,data):(out/n).write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
+def write(n,data):(out/n).write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8',newline='\n')
 checks=[]
 def check(name,value):
  if not value:raise AssertionError(name)
@@ -31,7 +31,7 @@ for role,path in [('Server',run/'Server/Server.log'),('ClientA',run/'ClientA/Cli
  if role!='Server':check('Exactly one owned autonomous pawn '+role,all(sum(p['local'] and p['role']==2 for p in s['pawns'])==1 for s in samples[role] if s['pawns']))
  else:check('Dedicated has no local controller/UI',all(s['visibleMenus']==0 and not any(p['local'] for p in s['pawns']) for s in samples[role]))
  chosen=[l for l in lines if ('ProbeRejected' in l or 'ClientProbe' in l or 'FixtureReset' in l or 'FixtureGround' in l or 'Join succeeded' in l or 'NotifyAcceptingConnection' in l or 'CloseBunch' in l or 'LogNet: UChannel::Close:' in l or 'Python disabled via' in l)]
- (out/(role+'-events.log')).write_text('\n'.join(chosen)+'\n',encoding='utf-8')
+ (out/(role+'-events.log')).write_text('\n'.join(chosen)+'\n',encoding='utf-8',newline='\n')
 oldA=next(p['id'] for s in samples['ClientA'] for p in s['pawns'] if p['local']);oldB=next(p['id'] for s in samples['ClientB'] for p in s['pawns'] if p['local']);newB=next(p['id'] for s in samples['ReconnectB'] for p in s['pawns'] if p['local'])
 check('Server IDs distinct; reconnect receives new identity',len({oldA,oldB,newB})==3)
 case_roles={'NormalA':'ClientA','NormalB':'ClientB','AttacksSettingsA':'ClientA','SpeedA':'ClientA','MoveQuitB':'ClientB','ReconnectBOnRunway':'ReconnectB'}
@@ -109,7 +109,7 @@ write('AUTOMATION.json',{'sourceSHA':source,'process':load(tests/'process.json')
 smoke=load(art/'SmokeB-20261105-121748/results.json');check('Three packaged map smokes',len(smoke)==3 and all(s['passed'] and s['exitCode']==0 for s in smoke));write('SMOKE.json',smoke)
 write('CHECKS.json',{'sourceSHA':source,'method':'Postprocessing native Game-world identities and real guarded OS input; not additional Automation tests','checks':checks})
 with (out/'PACKAGE.csv').open('w',encoding='utf-8',newline='') as f:
- w=csv.writer(f);w.writerow(['PathUnderWindows','Bytes','SHA256'])
+ w=csv.writer(f,lineterminator='\n');w.writerow(['PathUnderWindows','Bytes','SHA256'])
  for p in sorted(package.rglob('*')):
   if p.is_file():w.writerow([p.relative_to(package).as_posix(),p.stat().st_size,digest(p)])
 manifest={'status':'READY_FOR_REVIEW','branch':'u01/f-network','baseSHA':'99363222895b0069b3afdab2b103bfc81c68af6b','sourceSHA':source,'engine':'UE5.8.4 CL58902052','toolchain':'MSVC14.51.36260 / SDK10.0.26100.0','build':str(build.relative_to(root)),'tests':str(tests.relative_to(root)),'automationCount':23,'inputChecks':len(checks),'session':str(run.relative_to(root)),'package':str(package.relative_to(root)),'moduleSHA256':digest(art/'Source/Binaries/Win64/UnrealEditor-AnimeMMORPG.dll'),'engineExeSHA256':digest(Path('D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe')),'ids':{'A':oldA,'oldB':oldB,'newB':newB},'captureHz':{n:c['metadata']['uniqueCaptureHz'] for n,c in cases.items()},'speedFixture':{'claim':2000,'rejected':True,'serverMaxObserved':max(p['speed'] for s in samples['Server'] for p in s['pawns']),'clientMaxObservedInSpeedProbe':max(p['speed'] for p in pawns('SpeedA','ClientA',oldA)),'note':'Client-side prediction exceeds limit during malformed fixture; server remains bounded and issues correction. Fixture only, no production speed API.'},'limits':['Installed Editor dedicated only; no packaged Server acceptance','No latency/loss/jitter/combat prediction or integrated FPS acceptance','VRAM exhausted warning visible with two rendered clients + original Editor; renderer unchanged; video export retains warnings','Anime art/combat animation DEFERRED; D temporary carry unchanged'],'history':['Compile declaration fixes before 97400db retained','97400db startup ready check originally matched Zen rather than IpNetDriver; no-world early attempt not acceptance','919fec2 throttle config initially in wrong file; corrected via per-process EditorSettings override','b5d1ff0 local movable fixture base caused proxy landing failure; 0166d6f replicates server fixture base','b1c3ed0 presents authoritative replicated proxy velocity; owner/authority motor unchanged','Short input pulse lost within a slow frame; physical space hold 0.6s used for normal probes, no variable-height jump']}
