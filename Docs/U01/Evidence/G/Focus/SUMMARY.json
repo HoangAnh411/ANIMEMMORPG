@@ -1,0 +1,92 @@
+{
+  "sourceSHA": "5f8a6eabe103a8b31a894c82f32cffb0325474a9",
+  "results": [
+    {
+      "label": "VisibleRetry",
+      "directions": {
+        "ClientA->ClientB": {
+          "keyToNativePressMs": {
+            "median": 8.448123931884766,
+            "max": 35.05682945251465
+          },
+          "keyToOwnedTransformMs": {
+            "median": 9.448051452636719,
+            "max": 37.056922912597656
+          },
+          "keyToServerTransformMs": {
+            "median": 39.23797607421875,
+            "max": 45.056819915771484
+          },
+          "keyToPeerTransformMs": {
+            "median": 105.44800758361816,
+            "max": 168.05696487426758
+          }
+        },
+        "ClientB->ClientA": {
+          "keyToNativePressMs": {
+            "median": 9.537935256958008,
+            "max": 11.115074157714844
+          },
+          "keyToOwnedTransformMs": {
+            "median": 11.538028717041016,
+            "max": 14.440059661865234
+          },
+          "keyToServerTransformMs": {
+            "median": 33.65492820739746,
+            "max": 37.44006156921387
+          },
+          "keyToPeerTransformMs": {
+            "median": 76.11513137817383,
+            "max": 358.7610721588135
+          }
+        }
+      },
+      "maxActivationFrameMs": 244.58570033311844
+    },
+    {
+      "label": "EditorMinimized",
+      "directions": {
+        "ClientA->ClientB": {
+          "keyToNativePressMs": {
+            "median": 11.343955993652344,
+            "max": 15.314102172851562
+          },
+          "keyToOwnedTransformMs": {
+            "median": 12.343883514404297,
+            "max": 17.31419563293457
+          },
+          "keyToServerTransformMs": {
+            "median": 41.34392738342285,
+            "max": 48.9959716796875
+          },
+          "keyToPeerTransformMs": {
+            "median": 66.12586975097656,
+            "max": 114.35890197753906
+          }
+        },
+        "ClientB->ClientA": {
+          "keyToNativePressMs": {
+            "median": 9.022951126098633,
+            "max": 10.622024536132812
+          },
+          "keyToOwnedTransformMs": {
+            "median": 11.621952056884766,
+            "max": 13.022899627685547
+          },
+          "keyToServerTransformMs": {
+            "median": 27.957916259765625,
+            "max": 39.71099853515625
+          },
+          "keyToPeerTransformMs": {
+            "median": 36.07606887817383,
+            "max": 45.71104049682617
+          }
+        }
+      },
+      "maxActivationFrameMs": 46.280596405267715
+    }
+  ],
+  "firstAttempt": "Baseline input contaminated by external IME; retained as invalid input-latency evidence. Rendering frame evidence remains historical. VisibleRetry and EditorMinimized have10/10 valid input trials.",
+  "gpuSampling": "Interrupted file writer; do not infer VRAM root cause.",
+  "fix": "G network review wrapper minimizes original Editor, restores its prior placement on stop, matching accepted F profile. No native/config/smoothing change."
+}

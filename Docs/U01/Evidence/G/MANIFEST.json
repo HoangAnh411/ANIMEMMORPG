@@ -13,5 +13,14 @@
     "pid": 8676,
     "createdLocal": "2026-11-05T17:20:42",
     "note": "Original project remains open. Earlier PID2068 no longer present; agent did not restart it. Do not claim uninterrupted PID lifetime."
+  },
+  "focusFollowup": {
+    "report": "Focus/SUMMARY.json",
+    "launcher": "Play-G-Network.cmd",
+    "stop": "Stop-G-Network.cmd",
+    "validTransfersPerCondition": 10,
+    "directionsEach": 5,
+    "nativeSourceChanged": false,
+    "status": "Measured launcher fix; pending user feel confirmation; G not accepted"
   }
 }

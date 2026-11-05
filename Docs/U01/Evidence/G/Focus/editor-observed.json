@@ -1,0 +1,48 @@
+﻿[
+    {
+        "placement":  {
+                          "Length":  44,
+                          "Flags":  0,
+                          "Show":  1,
+                          "Min":  {
+                                      "X":  -1,
+                                      "Y":  -1
+                                  },
+                          "Max":  {
+                                      "X":  -1,
+                                      "Y":  -1
+                                  },
+                          "Normal":  {
+                                         "Left":  0,
+                                         "Top":  0,
+                                         "Right":  960,
+                                         "Bottom":  1032
+                                     }
+                      },
+        "hwnd":  1050792,
+        "pid":  8676
+    },
+    {
+        "placement":  {
+                          "Length":  44,
+                          "Flags":  0,
+                          "Show":  1,
+                          "Min":  {
+                                      "X":  -1,
+                                      "Y":  -1
+                                  },
+                          "Max":  {
+                                      "X":  -1,
+                                      "Y":  -1
+                                  },
+                          "Normal":  {
+                                         "Left":  958,
+                                         "Top":  0,
+                                         "Right":  1938,
+                                         "Bottom":  1050
+                                     }
+                      },
+        "hwnd":  1115006,
+        "pid":  8676
+    }
+]

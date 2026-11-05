@@ -14,3 +14,12 @@ Chỉ đánh dấu sau khi chơi package cuối:
 Bằng chứng tự động/tool: full build đạt, Automation23/23, smoke3/3; phiên600.23giây với263input và10lần đổi focus. Lượt534giây bị gián đoạn được giữ riêng, không tính hoàn tất10phút. Checklist này không thay các phép kiểm kỹ thuật còn đang hoàn thiện trong REPORT-G.
 
 Art anime/animation chiến đấu DEFERRED; carry hiện tại chỉ là tư thế kỹ thuật/blockout. Không nghiệm thu Server đóng gói.
+
+Focus-switch follow-up (use Play-G-Network.cmd, not the standalone launcher):
+
+- [ ] A→B: chọn Resume rồi đi ngay; pawn của B phản hồi ổn ngay từ đầu, không chậm rồi mới mượt. Quan sát riêng nhân vật A.
+- [ ] B→A: lặp lại, đi/sprint/nhảy ngay sau Resume; phân biệt pawn mình và đối phương.
+- [ ] Không tự Resume khi trở lại cửa sổ; phím giữ qua khóa phải nhả trước khi dùng lại.
+- [ ] Stop-G-Network.cmd dừng cả ba process kiểm thử và trả cửa sổ Editor về trạng thái trước khi chạy. Editor vẫn mở.
+
+Đã đo5lần mỗi chiều trước/sau; sửa launcher đưa trạng thái Editor về đúng profile F. Chi tiết và giới hạn phép đo trong REPORT-G, mục Focus-switch regression. Chưa đánh dấu người dùng PASS.

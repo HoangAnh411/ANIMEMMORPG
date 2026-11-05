@@ -51,3 +51,30 @@ Editor observation update: original-project Editor now PID8676, created17:20:42 
 Play-G.cmd verifies all package file hashes against Evidence/G/PACKAGE.csv, then launches Boot with separate ReviewUser settings. G-MANUAL-CHECKLIST.md is the single consolidated user checklist. No user PASS is assumed. Native source/assets/package are unchanged, so previous full build,23 Automation tests and three smoke maps were not rerun.
 
 G remains IN_PROGRESS: detailed timed assertion review of all input captures and full matrix reconciliation still need completion before READY_FOR_REVIEW. FPS120 remains NOT VERIFIED as an achieved operating point. No acceptance, merge or U02 is performed. The new original-project Editor PID8676 remains open; isolated server/clients were stopped after their measurements.
+
+## Focus-switch regression — measured and launcher corrected
+
+User report: newly focused client initially feels slow, then settles. Other previously tested behavior was reported OK; this does not constitute G acceptance.
+
+Session: Artifacts/U01/G/Session-20261105-181013; source5f8a6eabe103a8b31a894c82f32cffb0325474a9, unchanged G clone binaries. No rebuild, Automation or10minute session was repeated. Evidence: Evidence/G/Focus, including native per-frame data covering5seconds before/after each transfer,5Hz control/focus state, real input timestamps, pawn/local/replicated/mesh transforms and server timer record.
+
+Two valid conditions, each5 A→B and5 B→A, same session and explicit Resume procedure:
+
+| Measured maximum | Editor windows visible | Editor minimized (F profile) |
+|---|---:|---:|
+|Target frame interval, first0.5s after focus request|244.59ms|46.28ms|
+|Input→native W press|35.06ms|15.31ms|
+|Input→owned pawn movement|37.06ms|17.31ms|
+|Input→peer pawn movement|358.76ms|114.36ms|
+
+Native press accepted in Playing for all20 valid trials. Server movement latency remained bounded at about49ms in the minimized condition. A tiny negative native timestamp sample(-0.64ms) is UTC millisecond quantization and timestamp placement just after SendInput, not negative physical latency. These are game-thread transform timings, not input-to-display measurements. Raw mesh coordinates are retained; no claim about physical screen scanout latency is made.
+
+Diagnosis supported by the controlled comparison: visible original Editor windows caused substantial activation-frame contention in this host review setup. The initial hitch and larger peer delays reduced when restoring F's minimized-Editor condition. Normal own-pawn response immediately after explicit Resume did not show a persistent one-second input gate. Exact GPU/driver/VRAM scheduling mechanism is NOT established. Resource sampler hit a file-writer lock; partial GPU data is retained locally and is insufficient to claim VRAM as the root cause.
+
+Runtime profile matched F in both valid runs: clients60/server30,900x540,internal50%, t.IdleWhenNotForeground0, editorThrottlefalse, LumenAtlas2048, RT minimum128MiB, texture pool256MiB; no packet lag/loss simulation. Dedicated server retained its process-local timer request. The difference was original Editor window placement: PID8676 had two visible windows; accepted F minimized them.
+
+Fix: Play-G-Network.cmd → ReviewGNetwork.ps1 now applies the same original-Editor minimize/restore lifecycle as F, with identity-guarded cleanup through Stop-G-Network.cmd. Editor remains open. No project config, native source, gameplay, network update rate, smoothing or AwaitingResume change. Source/package identity and earlier build/test evidence remain valid.
+
+Measurement history: Baseline first10transfers captured rendering but external IME translatedW→None; input-latency results invalid, kept. Probe tool was corrected to keep its verified input-method state across transfers, then VisibleRetry and EditorMinimized each completed10 valid transfers. This tool fix is not a gameplay fix.
+
+Remaining human confirmation: use Play-G-Network.cmd, switch A→B and B→A, select Resume, then immediately walk/sprint/jump and observe both own pawn and peer. Confirm initial response feels stable. Stop-G-Network.cmd stops only owned processes and restores Editor placement. G remains unaccepted/unmerged; detailed matrix reconciliation from the earlier report remains pending.
