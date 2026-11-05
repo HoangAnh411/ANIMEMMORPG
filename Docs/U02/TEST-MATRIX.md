@@ -2,7 +2,7 @@
 
 **A ACCEPTED tại 914f7af/source f11c944: 7/7 Automation và review evidence đạt.** [Căn cứ](ACCEPTANCE-A.md). Không chạy lại kiểm chứng để khép hồ sơ.
 
-A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: full34Automation, smoke3maps, input40assertions; [REPORT-B](REPORT-B.md). C–F chưa triển khai/chưa chạy. Tên dưới A là Automation tests thực đăng ký; cột evidence được khép bằng kết quả thực ở REPORT-A. Không ấn định tổng số tests tương lai.
+A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: full34Automation, smoke3maps, input40assertions; [REPORT-B](REPORT-B.md). C READY_FOR_REVIEW source61be83b:37Automation/3smoke/63assertions, xem REPORT-C. D–F chưa triển khai/chưa chạy. Tên dưới A là Automation tests thực đăng ký; cột evidence được khép bằng kết quả thực ở REPORT-A. Không ấn định tổng số tests tương lai.
 
 | ID | Automation A | Nội dung và giới hạn |
 |---|---|---|

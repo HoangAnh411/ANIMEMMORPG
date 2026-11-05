@@ -1,0 +1,137 @@
+[
+  {
+    "original": "Artifacts\\U02\\C\\adjust-mask-native.log",
+    "file": "History-adjust-mask-native.log.gz",
+    "rawSHA256": "79e8fb609942afb82dfbff3ffeb7ba90a782f50af485e7bb65c26cbf5d42f3ab"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\adjust-mask.log",
+    "file": "History-adjust-mask.log.gz",
+    "rawSHA256": "a6c4ec7045724b7571b5ebd76bcc0ef9edf358c029ec6696ca616a7eecd0bb7a"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\adjust-weight.log",
+    "file": "History-adjust-weight.log.gz",
+    "rawSHA256": "da52021c84e0f97b02747d19002884591f8af1ddf4a4a83639ae127e066279e0"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\assertions.log",
+    "file": "History-assertions.log.gz",
+    "rawSHA256": "c61555512a531049aabe8e606627d988aa8950c1c756a5ef8afd50bc0f359ca1"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\author-console.log",
+    "file": "History-author-console.log.gz",
+    "rawSHA256": "91cc4b003f159116002a411b3a1a7e8dd338b7710efc5c5ae104ef1bdb32bf09"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\author-retry-console.log",
+    "file": "History-author-retry-console.log.gz",
+    "rawSHA256": "b49d053dc8553284cebe4a3e52a9ab1fb1de1dbe054e61786be66b99e8aee7a4"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\build-arm.log",
+    "file": "History-build-arm.log.gz",
+    "rawSHA256": "f8533070776b80ad88a58c2181ed323679b77a3b479b2b8084021f96b2e4e62e"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\build-final.log",
+    "file": "History-build-final.log.gz",
+    "rawSHA256": "ff4ae8b85ecd528dd06115bff7e8e4c980aa67422600d5f192b03bb308de3f86"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\build-graph.log",
+    "file": "History-build-graph.log.gz",
+    "rawSHA256": "84c24a1ffc270ff6fa719319767e376204d92b3ad34dd56c6910653801a1908e"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\build-mask.log",
+    "file": "History-build-mask.log.gz",
+    "rawSHA256": "d91f2dbbe8b506d97ec906b79dce550ed9876f34de4b3cfa4888de6614255cfc"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\build-reach.log",
+    "file": "History-build-reach.log.gz",
+    "rawSHA256": "53bc7acd569513fc78d8dc903b8ac89afc3c5f6356c8ba466b91f23f6519cfd6"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\build-retry.log",
+    "file": "History-build-retry.log.gz",
+    "rawSHA256": "957ab2d2d27a33907947bdf2cf7aa2683fe42498f1375979b1a4c72fd0756d8b"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\build-weight.log",
+    "file": "History-build-weight.log.gz",
+    "rawSHA256": "12f26c68c4f802aa76a25052d587c9d170f37842fb509d0d22e8a975b0b6149c"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\build.log",
+    "file": "History-build.log.gz",
+    "rawSHA256": "aa455f5dc8e8d644b0c8ba397693336036353e41d5f37afd8f99ab21f2c8022c"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\capture.log",
+    "file": "History-capture.log.gz",
+    "rawSHA256": "79579e73ad206c1942abc41803805b970f6f154ea04dd4111aa7d63e4f76fa78"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\clone.log",
+    "file": "History-clone.log.gz",
+    "rawSHA256": "46d36f7f26bb30e85e4c43eb1bd4844a467831c43d82e364a11a1c3c3f46ae0e"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\finalize-graph.log",
+    "file": "History-finalize-graph.log.gz",
+    "rawSHA256": "d86858815fff03f408c4fd117bea63fd2cf036b6ef2ada8d65eecf524de430c5"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\package.log",
+    "file": "History-package.log.gz",
+    "rawSHA256": "e891c178dc9f98ce5598d76fd96745149cce9b3e45108b78b720bc37ceeee8d7"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\smoke.log",
+    "file": "History-smoke.log.gz",
+    "rawSHA256": "fcea86f61ad93e611fa62a0a828052e56818981ec17ae90f0203bd9777edebda"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\start-play.log",
+    "file": "History-start-play.log.gz",
+    "rawSHA256": "ee8a82e60440a4f7afb2236ecc27f5a1e126acb9b9c4c77136deb7f9202a7181"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\tests-final.log",
+    "file": "History-tests-final.log.gz",
+    "rawSHA256": "b6f669f48c662cfa5ad1468a7a2aeef0631959574659454e6a4d2e3bdbc1827c"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\tests-mask-retry.log",
+    "file": "History-tests-mask-retry.log.gz",
+    "rawSHA256": "458ce9d32d48184d3ae82ecb1a38c9d75b35550ef31b4972d78d0c7a595bc4f5"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\tests-mask.log",
+    "file": "History-tests-mask.log.gz",
+    "rawSHA256": "04b9794f759766e34263329145f877267c4f29aa6d5ed25e4af160088ad71923"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\tests-weight.log",
+    "file": "History-tests-weight.log.gz",
+    "rawSHA256": "ea772d1c24dbb86dfe86aec5c59e299f8b41a6f9681240a0139903d962c94eae"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\tests.log",
+    "file": "History-tests.log.gz",
+    "rawSHA256": "bfcf56bd5f9a838aa22ec0b3bf3e5df0b60159178877fd5aa8bff1699ec52300"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\Author-20261105-235630\\Editor.log",
+    "file": "Author-20261105-235630-Editor.log.gz",
+    "rawSHA256": "d6c94232eb6d84bc8418d14bcab5d305122ec59c176d58fc5d04c25d25c9f49d"
+  },
+  {
+    "original": "Artifacts\\U02\\C\\Author-20261105-235923\\Editor.log",
+    "file": "Author-20261105-235923-Editor.log.gz",
+    "rawSHA256": "b77855ef7f254edf29b05cb542ccbbf4661a3ce500b74d5051a82cdcfcb7fce3"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "path": "Content/AnimeMMORPG/U02/Animation/ABP_U02.uasset",
+    "sha256": "f8ed6163aaefe6f3dc8e1f979635137fd4b847d6a116fbd4bcb3f0c1f67247aa",
+    "bytes": 204999
+  },
+  {
+    "path": "Content/AnimeMMORPG/U02/Animation/AM_U02_Attack1.uasset",
+    "sha256": "f9010b2a8852833fecee23cf7b587126ece74e2cc3bb7110e7f81c9ef92e1eed",
+    "bytes": 5601
+  },
+  {
+    "path": "Content/AnimeMMORPG/U02/Animation/A_U02_Attack1.uasset",
+    "sha256": "6fb267bb3344b7fc3066dff0b8e8e8dc8f17bc4a22f0276a5028c9d6c3a51ac2",
+    "bytes": 162500
+  }
+]
