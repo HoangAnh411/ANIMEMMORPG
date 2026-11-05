@@ -75,9 +75,9 @@ void AU01Character::BeginPlay()
     Super::BeginPlay();
     if(HasAuthority())NetworkPawnId=FGuid::NewGuid();
 }
-void AU01Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const
+void AU01Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-    Super::GetLifetimeReplicatedProps(Out);
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
     DOREPLIFETIME(AU01Character,NetworkPawnId);
     DOREPLIFETIME_CONDITION(AU01Character,bNetSprinting,COND_SimulatedOnly);
 }
