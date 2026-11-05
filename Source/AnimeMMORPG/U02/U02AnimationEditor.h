@@ -9,4 +9,5 @@ class ANIMEMMORPG_API UU02AnimationEditor : public UBlueprintFunctionLibrary
     GENERATED_BODY()
 public:
     UFUNCTION(BlueprintCallable,Category="U02|Authoring") static FString BuildCAssets();
+    UFUNCTION(BlueprintCallable,Category="U02|Authoring") static FString AdjustCArmMask();
 };

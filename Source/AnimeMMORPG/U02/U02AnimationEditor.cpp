@@ -38,6 +38,24 @@ TArray<FTransform> PoseLocal(UPoseAsset* Asset)
 }
 #endif
 
+FString UU02AnimationEditor::AdjustCArmMask()
+{
+#if WITH_EDITOR
+    FString Dir=FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());Dir.ReplaceInline(TEXT("\\"),TEXT("/"));
+    if(!Dir.Contains(TEXT("/Artifacts/U02/C/Source/")))return TEXT("ERROR: clone only");
+    auto* BP=LoadObject<UAnimBlueprint>(nullptr,*(CRoot+TEXT("/ABP_U02")));if(!BP)return TEXT("ERROR: graph missing");
+    int32 Count=0;
+    for(auto G:BP->FunctionGraphs)for(auto N:G->Nodes)if(auto* L=Cast<UAnimGraphNode_LayeredBoneBlend>(N))
+        if(L->NodePosX==0&&L->Node.LayerSetup.Num()&&L->Node.LayerSetup[0].BranchFilters.Num()&&L->Node.LayerSetup[0].BranchFilters[0].BoneName==TEXT("clavicle_r"))
+        {L->Node.LayerSetup[0].BranchFilters[0].BoneName=TEXT("upperarm_r");++Count;}
+    if(Count!=1)return TEXT("ERROR: expected one attack mask");
+    FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(BP);FKismetEditorUtilities::CompileBlueprint(BP);
+    return BP->Status!=BS_Error&&SaveC(BP)?TEXT("SUCCESS: C arm mask adjusted"):TEXT("ERROR: compile/save");
+#else
+    return TEXT("ERROR: editor only");
+#endif
+}
+
 FString UU02AnimationEditor::BuildCAssets()
 {
 #if WITH_EDITOR
@@ -127,7 +145,7 @@ FString UU02AnimationEditor::BuildCAssets()
     auto* Slot=NewObject<UAnimGraphNode_Slot>(Graph);Graph->AddNode(Slot,false,false);Slot->CreateNewGuid();Slot->Node.SlotName=TEXT("DefaultSlot");Slot->PostPlacedNewNode();Slot->AllocateDefaultPins();
     auto* Arm=NewObject<UAnimGraphNode_LayeredBoneBlend>(Graph);Graph->AddNode(Arm,false,false);Arm->CreateNewGuid();
     Arm->Node.LayerSetup.SetNum(1);Arm->Node.BlendWeights.SetNum(1);Arm->Node.BlendWeights[0]=1;
-    FBranchFilter ArmFilter;ArmFilter.BoneName=TEXT("clavicle_r");ArmFilter.BlendDepth=0;Arm->Node.LayerSetup[0].BranchFilters.Add(ArmFilter);
+    FBranchFilter ArmFilter;ArmFilter.BoneName=TEXT("upperarm_r");ArmFilter.BlendDepth=0;Arm->Node.LayerSetup[0].BranchFilters.Add(ArmFilter);
     Arm->Node.bMeshSpaceRotationBlend=true;Arm->PostPlacedNewNode();Arm->AllocateDefaultPins();
     if(!Graph->GetSchema()->TryCreateConnection(Previous,Slot->FindPin(TEXT("Source")))
         ||!Graph->GetSchema()->TryCreateConnection(Previous,Arm->FindPin(TEXT("BasePose")))

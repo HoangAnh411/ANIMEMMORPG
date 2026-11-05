@@ -44,7 +44,8 @@ FAnimNode_LayeredBoneBlend* ArmLayer(UAnimInstance* Anim,bool Carry)
         if(Node->LayerSetup.Num()&&Node->LayerSetup[0].BranchFilters.Num())
         {
             const bool IsCarry=Node->LayerSetup[0].BranchFilters[0].BoneName==TEXT("clavicle_r");
-            if(Carry==IsCarry)return Node;
+            const bool IsGrip=Node->LayerSetup[0].BranchFilters[0].BoneName==TEXT("thumb_01_r");
+            if((Carry&&IsCarry)||(!Carry&&IsGrip))return Node;
         }
     }
     return nullptr;
