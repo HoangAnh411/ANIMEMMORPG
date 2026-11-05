@@ -5,7 +5,7 @@
 #include <limits>
 
 using namespace AnimeMMORPG::U02;
-static constexpr uint32 U02Flags = EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter;
+static constexpr auto U02Flags = EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter;
 static FLifeId Life(uint32 Id, uint64 Generation = 1) { return {FGuid(Id,0,0,1),Generation}; }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02Timeline, "AnimeMMORPG.U02.A.PhaseDeadlines", U02Flags)
