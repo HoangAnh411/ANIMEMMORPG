@@ -2,6 +2,7 @@
  [Parameter(Mandatory=$true)][string]$CloneProject,
  [Parameter(Mandatory=$true)][string]$OutputRoot,
  [switch]$ReproducePython,
+ [switch]$Diagnostics,
  [int]$Port=17877
 )
 $ErrorActionPreference='Stop'
@@ -19,6 +20,7 @@ foreach($role in @('Server','ClientA','ClientB')){
  if($role -eq 'Server'){$arguments+=@('/Game/AnimeMMORPG/Maps/L_NetworkLab','-server',('-port='+$Port),'-NullRHI','-nosound')}
  else{$arguments+=@(('127.0.0.1:'+$Port),'-game','-windowed','-ResX=900','-ResY=540',('-WinX='+$(if($role -eq 'ClientA'){0}else{940})),'-WinY=100')}
  if($ReproducePython){if($role -ne 'Server'){$arguments+='-NullRHI'}}else{$arguments+='-DisablePython'}
+ if($Diagnostics){$arguments+='-U01FPerf'}
  $arguments+=@('-ExecCmds="t.MaxFPS 30,t.IdleWhenNotForeground 0"','-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace',('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18310+$records.Count)))
  Write-Host ('Starting '+$role+'; log: '+$log)
  # Interactive review clients must be visible during loading, before readiness.

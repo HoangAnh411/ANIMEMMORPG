@@ -75,7 +75,7 @@ void UU01NetworkProbe::Tick(float Dt)
             auto Add=[&](const UNetConnection* N){if(!N)return;auto V=MakeShared<FJsonObject>();
                 V->SetNumberField(TEXT("avgLagSeconds"),N->AvgLag);V->SetNumberField(TEXT("inPackets"),N->InPackets);V->SetNumberField(TEXT("outPackets"),N->OutPackets);
                 V->SetNumberField(TEXT("inLost"),N->InPacketsLost);V->SetNumberField(TEXT("outLost"),N->OutPacketsLost);Connections.Add(MakeShared<FJsonValueObject>(V));};
-            Add(Driver->ServerConnection);for(const auto* N:Driver->ClientConnections)Add(N);D->SetArrayField(TEXT("connections"),Connections);
+            Add(Driver->ServerConnection);for(const auto& N:Driver->ClientConnections)Add(N.Get());D->SetArrayField(TEXT("connections"),Connections);
         }
         TArray<AActor*> Actors;UGameplayStatics::GetAllActorsOfClass(World,AU01Character::StaticClass(),Actors);TArray<TSharedPtr<FJsonValue>> Values;
         for(auto* A:Actors){auto* C=CastChecked<AU01Character>(A);auto* M=C->GetU01Movement();auto V=MakeShared<FJsonObject>();
