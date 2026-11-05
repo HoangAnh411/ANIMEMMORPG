@@ -28,13 +28,15 @@ void UU01NetworkProbe::OnWorldBeginPlay(UWorld& World)
 #if !UE_BUILD_SHIPPING
     Enabled=FParse::Param(FCommandLine::Get(),TEXT("U01FProbe"));
     Run=FGuid::NewGuid().ToString();
-    if(Enabled)
+    if(Enabled&&World.GetNetMode()!=NM_Client)
     {
-        // Identical opt-in static test ground in each process. Reset is explicit;
-        // all subsequent movement uses CharacterMovement replication normally.
+        // A replicated movement base must resolve to the same server actor on
+        // every client; independent local movable floors are not valid bases.
         auto* Floor=World.SpawnActor<AStaticMeshActor>(FVector(0,4000,-50),FRotator::ZeroRotator);
+        Floor->SetReplicates(true);Floor->SetReplicateMovement(true);Floor->bAlwaysRelevant=true;
         Floor->Tags.Add(TEXT("U01F_TestGround"));
         auto* Shape=Floor->GetStaticMeshComponent();Shape->SetMobility(EComponentMobility::Movable);
+        Shape->SetIsReplicated(true);
         Shape->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
         Floor->SetActorScale3D(FVector(300,30,1));Shape->SetCollisionProfileName(TEXT("BlockAll"));
         UE_LOG(LogU01Network,Display,TEXT("FixtureGround center=(0,4000,-50) sizeCm=(30000,3000,100) world=%s net=%d"),*World.GetPathName(),int32(World.GetNetMode()));

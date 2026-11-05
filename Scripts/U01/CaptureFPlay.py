@@ -311,8 +311,8 @@ try:
                 for ch in event['command'].lower():
                     code=user.VkKeyScanW(ord(ch))&0xff
                     char_input=Input(type=1,payload=Payload(key=Key(vk=code)))
-                    user.SendInput(1,c.byref(char_input),c.sizeof(Input));time.sleep(.012)
-                    char_input.payload.key.flags=2;user.SendInput(1,c.byref(char_input),c.sizeof(Input));time.sleep(.012)
+                    user.SendInput(1,c.byref(char_input),c.sizeof(Input));time.sleep(.006)
+                    char_input.payload.key.flags=2;user.SendInput(1,c.byref(char_input),c.sizeof(Input));time.sleep(.006)
                 enter=Input(type=1,payload=Payload(key=Key(vk=13)))
                 user.SendInput(1,c.byref(enter),c.sizeof(Input));enter.payload.key.flags=2
                 user.SendInput(1,c.byref(enter),c.sizeof(Input));time.sleep(.15)
