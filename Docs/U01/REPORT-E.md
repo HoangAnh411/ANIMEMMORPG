@@ -1,6 +1,6 @@
 # U01-E — Đổi phím, thiết lập local và khóa điều khiển
 
-**READY_FOR_REVIEW. Chưa nghiệm thu/merge E; chưa bắt đầu F.** D kỹ thuật/blockout đã được người dùng nghiệm thu tại `1e46f710cec8fbb0dd9de2e6be7d35519bf45d83`. Hồ sơ D được commit/push tại `fc5a43b155eb4da120f7b963e484a1d0489e2976`, bổ sung digest tại `e867af97c53bbf11ea141fe5f8f21efc1e31200a`, rồi fast-forward/push vào main. Nhánh `u01/e-settings` bắt đầu từ main `e867af97c53bbf11ea141fe5f8f21efc1e31200a`.
+**ĐÃ NGHIỆM THU U01-E theo xác nhận người dùng tại `cb46c520469807004b101c1b98ac4bdfdad70d84`, với package nguồn `c8df4ff2182c0006c11f65466ecec4b9223be5a3`.** Checklist PASS theo xác nhận đó; nguồn package và lịch sử kiểm chứng bên dưới giữ nguyên. Người dùng cho phép khép hồ sơ/push/fast-forward E vào main rồi triển khai riêng F; không coi kết nối A là nghiệm thu F, không yêu cầu Server đóng gói. D kỹ thuật/blockout đã được người dùng nghiệm thu tại `1e46f710cec8fbb0dd9de2e6be7d35519bf45d83`. Hồ sơ D được commit/push tại `fc5a43b155eb4da120f7b963e484a1d0489e2976`, bổ sung digest tại `e867af97c53bbf11ea141fe5f8f21efc1e31200a`, rồi fast-forward/push vào main. Nhánh `u01/e-settings` bắt đầu từ main `e867af97c53bbf11ea141fe5f8f21efc1e31200a`.
 
 Nguồn full build, tests và package E cuối: **`c8df4ff2182c0006c11f65466ecec4b9223be5a3`**. Commit hồ sơ bàn giao sau nguồn này không thay runtime/package. [Manifest](Evidence/E/MANIFEST.json) ghi đường dẫn artifact, phiên bản, PID và nguồn; [checklist chơi thử](E-MANUAL-CHECKLIST.md).
 

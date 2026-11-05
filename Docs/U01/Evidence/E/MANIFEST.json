@@ -1,5 +1,5 @@
 {
-  "status": "READY_FOR_REVIEW",
+  "status": "ACCEPTED_BY_USER",
   "branch": "u01/e-settings",
   "baseSHA": "e867af97c53bbf11ea141fe5f8f21efc1e31200a",
   "sourceSHA": "c8df4ff2182c0006c11f65466ecec4b9223be5a3",
@@ -98,5 +98,11 @@
     "package": "Artifacts/U01/E/Package-20261104-225239-671-b3874bf5",
     "captures": "Artifacts/U01/E/Play",
     "note": "Initial movement hit spawn obstacle; corrected to runway fixture. Final captures and tests above supersede preliminary results. Early compiler failures retained in Artifacts."
+  },
+  "userAcceptance": {
+    "commit": "cb46c520469807004b101c1b98ac4bdfdad70d84",
+    "packageSource": "c8df4ff2182c0006c11f65466ecec4b9223be5a3",
+    "date": "2026-11-05",
+    "scope": "U01-E accepted; authorized closure/fast-forward and separate F; not acceptance of F or packaged Server"
   }
 }
