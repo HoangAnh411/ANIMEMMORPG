@@ -1,5 +1,5 @@
 {
-  "status": "READY_FOR_REVIEW",
+  "status": "ACCEPTED",
   "branch": "u01/f-network",
   "baseSHA": "412bc7b6623c4afb8af8c6fe07d7f419dedcbc5b",
   "sourceSHA": "edf885ac79d900977a43a404019eadce0244ed47",
@@ -66,5 +66,11 @@
     "F remains pending user confirmation; no merge or G work"
   ],
   "defaultLaunchSmoke": "DEFAULT-LAUNCH-SMOKE.json",
-  "reviewProcessesStopped": true
+  "reviewProcessesStopped": true,
+  "acceptance": {
+    "reviewCommit": "2bd9b565500042d25c8a8958df481f55175a753d",
+    "method": "Explicit user acceptance and play confirmation",
+    "scope": "Dedicated Editor server, two clients60 FPS, server30 FPS; excludes packaged Server and product graphics performance1080p; G separately authorized",
+    "packageAndPriorEvidenceUnchanged": true
+  }
 }

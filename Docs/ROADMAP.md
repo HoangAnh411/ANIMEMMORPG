@@ -70,6 +70,8 @@ F sau review điều khiển: người dùng giữ các mục control đã đạ
 
 F60 từ412bc7b đã đo lại với cap client tách server: A hai30, B một60 review, C hai60 review, D một60 gốc100%/900×540; mỗi lượt120s sau warm-up≥30s và đọc cvar thật. C đạt≈59,96/59,99FPS, p95≈17,2ms, server≈29,9; tăng phần dừng hẳn được giải thích bằng số đo offset/công thức Exponential không sửa. Chọn default **hai client60/server30**, F3 chạy300s liên tục đạt, frame>100ms0. Native diagnosticsEDF885A cold Editor build/MCP23/23; package0f02c77 tái dùng sau xác minh48hash, không build lại vô ích. [Báo cáo](U01/REPORT-F-PERFORMANCE.md), [manifest](U01/Evidence/F60/MANIFEST.json). **READY_FOR_REVIEW, chưa khép/merge F, chưa G**; một client gốc đạt60 ở900×540 không chứng minh cấu hình sản phẩm/độ phân giải mục tiêu đạt.
 
+F ?? ???c ng??i d?ng nghi?m thu t?i **2bd9b56**, profile m?ng client60/server30; dedicated Editor server, kh?ng Server ??ng g?i/?? h?a s?n ph?m1080p. Cho ph?p kh?p h? s?/push/fast-forward main v? tri?n khai ri?ng **G ki?m t?ch h?p**: clone commit main ?? merge, full build/Automation/package/h?i quy/lifecycle; Editor g?c ti?p t?c m?. L?ch s? F READY_FOR_REVIEW ph?a tr?n gi? nguy?n.
+
 - [ ] U01.01 Chốt mannequin/clip nguồn theo register U00 cho phép thử kỹ thuật. Model/rig/kiếm anime hợp giấy phép: **DEFERRED**, nghiệm thu art riêng.
 - [ ] U01.02 Character/CharacterMovement và Enhanced Input: đi 5 m/s, sprint 7 m/s, nhảy 1,2 m, dốc 45°, đi chéo không nhanh hơn.
 - [ ] U01.03 Camera tự do/đổi vai/tránh vật cản, tách hướng thân/di chuyển/ngắm.

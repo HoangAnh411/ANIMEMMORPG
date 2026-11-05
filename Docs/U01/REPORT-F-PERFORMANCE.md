@@ -1,5 +1,7 @@
 # U01-F — Điều tra FPS và độ trễ sau review
 
+**?? NGHI?M THU U01-F theo x?c nh?n ng??i d?ng t?i `2bd9b565500042d25c8a8958df481f55175a753d`.** Ph?m vi: dedicated Editor server v? hai client, profile client60/server30; ch?a bao g?m Server ??ng g?i, hi?u n?ng ?? h?a s?n ph?m1080p ho?c G. Gi? native diagnostics `edf885ac79d900977a43a404019eadce0244ed47`, package ngu?n `0f02c77bc14fc4c727ba8694223f8cfc5a655c31`, to?n b? hash v? l?ch s? ki?m ch?ng. Ng??i d?ng cho ph?p kh?p h? s?/push/fast-forward F v?o main r?i tri?n khai ri?ng G trong clone, Editor g?c gi? m?. C?c tr?ng th?i ch? review b?n d??i l? l?ch s? tr??c x?c nh?n n?y.
+
 **Cập nhật hiện tại — F60:** đã đo A–D đủ120s/lượt, đối chứng logging và kiểm liên tục300s. Chọn mặc định **hai client60 FPS / dedicated server30 FPS** trên profile review hiện tại; vẫn **READY_FOR_REVIEW, chưa nghiệm thu hoặc merge F**. Native diagnostics nguồn `edf885ac79d900977a43a404019eadce0244ed47`, package giữ nguồn0f02c77 và đã kiểm lại hash. Chi tiết ở mục F60 cuối báo cáo và [manifest F60](Evidence/F60/MANIFEST.json). Các kết quả30FPS trước đó là kết quả dưới cap30, không phải FPS tối đa của máy.
 
 **READY_FOR_REVIEW bản sửa môi trường chạy F; chưa nghiệm thu/merge F, chưa sang G.** Giữ các mục điều khiển người dùng đã đánh dấu đạt trong checklist. Lượt review mới yêu cầu điều tra FPS thấp và cảm giác B thấy A chậm khoảng một giây; không dùng kết quả điều khiển để tự nghiệm thu phần này.

@@ -1,5 +1,7 @@
 # U01-F — Dedicated Editor server và hai client
 
+**?? NGHI?M THU U01-F theo x?c nh?n ng??i d?ng t?i `2bd9b565500042d25c8a8958df481f55175a753d`.** Ph?m vi: dedicated Editor server v? hai client, profile client60/server30; ch?a bao g?m Server ??ng g?i, hi?u n?ng ?? h?a s?n ph?m1080p ho?c G. Gi? native diagnostics `edf885ac79d900977a43a404019eadce0244ed47`, package ngu?n `0f02c77bc14fc4c727ba8694223f8cfc5a655c31`, to?n b? hash v? l?ch s? ki?m ch?ng. Ng??i d?ng cho ph?p kh?p h? s?/push/fast-forward F v?o main r?i tri?n khai ri?ng G trong clone, Editor g?c gi? m?. C?c tr?ng th?i ch? review b?n d??i l? l?ch s? tr??c x?c nh?n n?y.
+
 **Cập nhật sau review FPS/độ trễ:** người dùng xác nhận các mục điều khiển nhưng chưa nghiệm thu F. Bản điều tra/sửa launcher hiện tại dùng native diagnostics nguồn0f02c77, xem [REPORT-F-PERFORMANCE](REPORT-F-PERFORMANCE.md) và [manifest mới](Evidence/F-Performance/MANIFEST.json). Hồ sơ nguồn df897f6 bên dưới giữ lịch sử; không dùng nó để tự nghiệm thu hiệu năng hoặc chứng nhận đồ họa gốc đã ổn.
 
 **Đợt đo F60 mới nhất:** nguồn diagnosticsEDF885A, package0f02c77 giữ hash, A–D120s/lượt và F3300s đã hoàn tất. Chọn default client60/server30 theo tiêu chí; hai client≈59,96–59,99FPS, server≈29,9, không frame>100ms ở F3. Tăng đuôi dừng đã phân rã và xác minh khớp Exponential smoothing nguyên trạng. [Báo cáo cập nhật](REPORT-F-PERFORMANCE.md), [manifest F60](Evidence/F60/MANIFEST.json), checklist chờ người dùng xác nhận; **F chưa nghiệm thu/merge, G chưa chạy**.
