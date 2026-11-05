@@ -123,7 +123,14 @@ FString UU02AnimationEditor::BuildCAssets()
     auto* Input=GripNode->FindPin(TEXT("BasePose"));if(!Input||Input->LinkedTo.Num()!=1)return TEXT("ERROR: expected accepted carry link");
     auto* Previous=Input->LinkedTo[0];Input->BreakAllPinLinks();
     auto* Slot=NewObject<UAnimGraphNode_Slot>(Graph);Graph->AddNode(Slot,false,false);Slot->CreateNewGuid();Slot->Node.SlotName=TEXT("DefaultSlot");Slot->PostPlacedNewNode();Slot->AllocateDefaultPins();
-    if(!Graph->GetSchema()->TryCreateConnection(Previous,Slot->FindPin(TEXT("Source")))||!Graph->GetSchema()->TryCreateConnection(Slot->FindPin(TEXT("Pose")),Input))return TEXT("ERROR: slot graph connection");
+    auto* Arm=NewObject<UAnimGraphNode_LayeredBoneBlend>(Graph);Graph->AddNode(Arm,false,false);Arm->CreateNewGuid();
+    Arm->Node.LayerSetup.SetNum(1);Arm->Node.BlendWeights.SetNum(1);Arm->Node.BlendWeights[0]=1;
+    FBranchFilter ArmFilter;ArmFilter.BoneName=TEXT("clavicle_r");ArmFilter.BlendDepth=0;Arm->Node.LayerSetup[0].BranchFilters.Add(ArmFilter);
+    Arm->Node.bMeshSpaceRotationBlend=true;Arm->PostPlacedNewNode();Arm->AllocateDefaultPins();
+    if(!Graph->GetSchema()->TryCreateConnection(Previous,Slot->FindPin(TEXT("Source")))
+        ||!Graph->GetSchema()->TryCreateConnection(Previous,Arm->FindPin(TEXT("BasePose")))
+        ||!Graph->GetSchema()->TryCreateConnection(Slot->FindPin(TEXT("Pose")),Arm->FindPin(TEXT("BlendPoses_0")))
+        ||!Graph->GetSchema()->TryCreateConnection(Arm->FindPin(TEXT("Pose")),Input))return TEXT("ERROR: slot/arm graph connection");
     FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(BP);FKismetEditorUtilities::CompileBlueprint(BP);
     if(BP->Status==BS_Error)return TEXT("ERROR: AnimBP compile");
     CastChecked<UU01AnimInstance>(BP->GeneratedClass->GetDefaultObject())->AttackMontage=Montage;
