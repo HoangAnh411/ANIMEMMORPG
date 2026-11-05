@@ -8,7 +8,8 @@ import re
 def main():
     p=argparse.ArgumentParser();p.add_argument('--capture',type=Path,required=True);a=p.parse_args()
     meta=json.loads((a.capture/'input.json').read_text(encoding='utf-8-sig'))
-    record=meta['process'];start=datetime.fromisoformat(meta['utc']);lines=Path(record['log']).read_text(encoding='utf-8-sig',errors='replace').splitlines()
+    record=meta['process'];start=datetime.fromisoformat(meta['utc'])
+    raw=Path(record['log']).read_bytes();lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig',errors='replace').splitlines()
     def relative(v):return (datetime.fromisoformat(v['utc'].replace('Z','+00:00'))-start).total_seconds()
     samples=[json.loads(l.split('Metrics ',1)[1]) for l in lines if 'Metrics {' in l]
     samples=[dict(s,t=relative(s)) for s in samples if 0<=relative(s)<=meta['captureSeconds']]

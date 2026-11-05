@@ -17,7 +17,8 @@ from PIL import ImageGrab
 
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'Scripts/U01'))
-from F60Input import Client, u, k, mouse
+from F60Input import Client, u, k, mouse, key, VK
+VK.update({'Alt':0xa4,'Tab':0x09})
 
 class BClient(Client):
     def __init__(self, record):
@@ -42,7 +43,9 @@ class BClient(Client):
         assert len(found)==1
         self.hwnd=found[0]; self.metrics()
     def metrics(self):
-        lines=self.log.read_text(encoding='utf-8-sig',errors='replace').splitlines()
+        raw=self.log.read_bytes()
+        # The writer may be appending a JSON sample; consume only completed log lines.
+        lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig',errors='replace').splitlines()
         values=[json.loads(l.split('Metrics ',1)[1]) for l in lines if 'Metrics {' in l]
         if not values:raise RuntimeError('No owned runtime metrics yet')
         v=values[-1]
@@ -62,6 +65,8 @@ class BClient(Client):
         observed=self.probe_w()
         if observed!='W':self.toggle_ime();self.ime=True;observed=self.probe_w()
         assert observed=='W'
+        # Default PlayerStart is not the measured runway. Use its real lab reset button.
+        self.click(640,358);time.sleep(.4)
         self.click(640,205)
         for _ in range(30):
             time.sleep(.1)
@@ -76,13 +81,32 @@ def main():
     client=BClient(record);client.focus()
     if args.inspect:
         ImageGrab.grab(bbox=client.bounds(),all_screens=True).save(args.out/'inspect.png');return
-    # A known, owned focus target avoids exposing or typing into another application.
-    u.CreateWindowExW.restype=w.HWND
-    u.CreateWindowExW.argtypes=[w.DWORD,w.LPCWSTR,w.LPCWSTR,w.DWORD,c.c_int,c.c_int,c.c_int,c.c_int,w.HWND,w.HMENU,w.HINSTANCE,c.c_void_p]
-    helper=u.CreateWindowExW(0,'STATIC','U02-B focus fixture',0x00CF0000,20,60,400,180,None,None,None,None)
-    assert helper
+    # A separate owned GUI loop keeps helper activation independent from the capture thread.
+    fixture=args.out/'FocusFixture';fixture.mkdir(exist_ok=True)
+    helper_process=subprocess.Popen([sys.executable,str(ROOT/'Scripts/U02/FocusBFixture.py'),str(fixture)],creationflags=subprocess.CREATE_NO_WINDOW)
+    for _ in range(100):
+        if (fixture/'window.json').exists():break
+        assert helper_process.poll() is None;time.sleep(.05)
+    helper=json.loads((fixture/'window.json').read_text())['hwnd']
+    helper_pid=w.DWORD();u.GetWindowThreadProcessId(helper,c.byref(helper_pid));assert helper_pid.value==helper_process.pid
     writer=None;meta=dict(process=record,method='Windows SendInput + real native game metrics + bounded screen video',events=[],completed=False)
+    meta['focusFixture']=dict(hwnd=int(helper),pid=helper_process.pid)
     try:
+        # Establish MRU order BEFORE holding any key. During capture focus changes use real Alt-Tab.
+        (fixture/'command.txt').write_text('show')
+        for _ in range(100):
+            state=json.loads((fixture/'window.json').read_text())
+            if state.get('shown'):helper=state['hwnd'];break
+            time.sleep(.02)
+        u.SetForegroundWindow(helper)
+        if u.GetForegroundWindow()!=helper:
+            own=k.GetCurrentThreadId();other=u.GetWindowThreadProcessId(u.GetForegroundWindow(),None);target=u.GetWindowThreadProcessId(helper,None)
+            u.AttachThreadInput(own,other,True);attached=target!=other and bool(u.AttachThreadInput(own,target,True))
+            try:u.BringWindowToTop(helper);u.SetActiveWindow(helper);u.SetForegroundWindow(helper)
+            finally:
+                if attached:u.AttachThreadInput(own,target,False)
+                u.AttachThreadInput(own,other,False)
+        assert u.GetForegroundWindow()==helper
         client.prepare();time.sleep(.3)
         initial=client.metrics();meta['baselineAccepted']=initial['combat']['accepted'];assert initial['combat']['accepted']==0
         left,top,right,bottom=client.bounds();bounds=(left,top,right,bottom)
@@ -93,10 +117,21 @@ def main():
         def click():client.attack(True);time.sleep(.04);client.attack(False)
         def resume():client.click(640,205)
         def away():
-            client.guard();u.ShowWindow(helper,5);u.SetForegroundWindow(helper)
-            assert u.GetForegroundWindow()==helper
+            client.guard();key('Alt',True);key('Tab',True);time.sleep(.05);key('Tab',False);key('Alt',False)
+            for _ in range(60):
+                if u.GetForegroundWindow()==helper:break
+                time.sleep(.01)
+            owner=w.DWORD();u.GetWindowThreadProcessId(helper,c.byref(owner));assert owner.value==helper_process.pid
+            meta['focusFixture']['hwnd']=int(helper)
+            assert u.GetForegroundWindow()==helper,'Owned focus fixture did not become foreground'
+            meta['heldWAfterAltTab']=bool(u.GetAsyncKeyState(ord('W'))&0x8000)
         def back():
-            client.focus();u.ShowWindow(helper,0)
+            assert u.GetForegroundWindow()==helper
+            key('Alt',True);key('Tab',True);time.sleep(.05);key('Tab',False);key('Alt',False)
+            for _ in range(60):
+                if u.GetForegroundWindow()==client.hwnd and client.metrics()['windowActive']:break
+                time.sleep(.01)
+            client.guard()
             assert client.metrics()['controlState']==2,'Focus alone resumed controls'
         actions=[
             (1.,'W down',down('W')),(1.05,'Ctrl down',down('Ctrl')),
@@ -121,6 +156,8 @@ def main():
             while i<len(actions) and elapsed>=actions[i][0]:
                 scheduled,label,operation=actions[i];operation();meta['events'].append(dict(label=label,scheduled=scheduled,actual=time.perf_counter()-start));i+=1
             foreground=u.GetForegroundWindow()
+            meta['lastForeground']=int(foreground or 0)
+            foreground_pid=w.DWORD();u.GetWindowThreadProcessId(foreground,c.byref(foreground_pid));meta['lastForegroundPID']=foreground_pid.value
             if foreground!=helper:client.guard()
             else:assert 7.0<elapsed<8.1,'Unexpected focus fixture activation'
             assert client.bounds()==bounds,'Capture target moved/resized'
@@ -131,9 +168,12 @@ def main():
         meta['completed']=i==len(actions);meta['frames']=frames;meta['captureSeconds']=time.perf_counter()-start
         meta['finalMetrics']=client.metrics()
         ImageGrab.grab(bbox=bounds,all_screens=True).save(args.out/'Final.png')
+    except Exception as error:
+        meta['error']=str(error)
+        raise
     finally:
         if writer:writer.release()
-        client.finish();u.DestroyWindow(helper)
+        client.finish();(fixture/'command.txt').write_text('close');helper_process.wait(timeout=5)
         meta['externalInputMethodRestored']=not client.ime
         (args.out/'input.json').write_text(json.dumps(meta,indent=2),encoding='utf-8')
     assert meta['completed'] and meta['externalInputMethodRestored']

@@ -250,7 +250,7 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
             *Key.ToString(), int32(ControlState), IsMotorKey(Key) ? Accepts(Key) : (ControlState == EU01ControlState::Playing && ReleaseGate.Allows(Key)),
             ControlState != EU01ControlState::Playing ? TEXT("ControlLocked") : bFixtureBlocked ? TEXT("MotorFixtureLocked") : (ReleaseGate.Allows(Key) ? TEXT("Ready") : TEXT("AwaitingPhysicalRelease")));
         // The preprocessor sees UMG clicks BEFORE Resume changes state. No UI click can become an attack.
-        if (Key==EKeys::LeftMouseButton && bNewPhysicalEdge && !bChord && ControlState==EU01ControlState::Playing
+        if (Key==EKeys::LeftMouseButton && bNewPhysicalEdge && ControlState==EU01ControlState::Playing
             && !bMotorLocked && ReleaseGate.Allows(Key))
             if(auto* C=Cast<AU01Character>(GetPawn()); C && C->Combat)
                 C->Combat->SubmitAttackIntent(++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw);
