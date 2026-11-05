@@ -1,0 +1,5081 @@
+{
+  "method": "Every Game-world frame, shared localhost UTC; measured wall intervals, not clamped simulation DeltaSeconds. Mesh is game-thread presentation, not photon/scanout latency. No packet injection or smoothing tuning.",
+  "cases": [
+    {
+      "case": "BaselineAEnglish",
+      "session": "Session-20261105-130458",
+      "owner": "ClientA",
+      "pawn": "3875714941FB902774D28EB5D23C2436",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 1644,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.820920947336283,
+          "wallFrameMs": {
+            "n": 388,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 50.99987983703613
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 778,
+            "median": 104.46428680419922,
+            "p95": 290.25,
+            "max": 296.6428527832031
+          },
+          "connectionAvgLagMs": {
+            "n": 778,
+            "median": 123.79647418856621,
+            "p95": 228.32411527633667,
+            "max": 257.17294216156006
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 10928,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.992289833609384,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.999847412109375,
+            "max": 39.00003433227539
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 39.10714340209961,
+            "p95": 92.10713958740234,
+            "max": 92.10713958740234
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.291935592889786,
+            "p95": 64.5313709974289,
+            "max": 64.5313709974289
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 16832,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 4.6321739854762525,
+          "wallFrameMs": {
+            "n": 59,
+            "median": 64.99981880187988,
+            "p95": 417.9999828338623,
+            "max": 443.00007820129395
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 60,
+            "median": 231.6875,
+            "p95": 277,
+            "max": 277
+          },
+          "connectionAvgLagMs": {
+            "n": 60,
+            "median": 217.42278337478638,
+            "p95": 584.4898819923401,
+            "max": 584.4898819923401
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0307090282440186,
+        "serverSimulation": 1.0447089672088623,
+        "peerPacketObserved": 1.1057090759277344,
+        "peerMeshPresentation": 1.1057090759277344,
+        "physicalW": 1.0083018000004813
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 22.407228243537247,
+        "ownerSimulation -> serverSimulation": 13.99993896484375,
+        "serverSimulation -> peerPacketObserved": 61.00010871887207,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 27,
+        "median": 391.00003242492676,
+        "p95": 451.9999027252197,
+        "max": 2148.9999294281006
+      },
+      "peerChangedPacketCount": 28,
+      "intentWindowsUTCSeconds": [
+        [
+          1793858865.4805927,
+          1793858868.47707
+        ],
+        [
+          1793858870.4752314,
+          1793858874.474602
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 25,
+        "median": 389.9998664855957,
+        "p95": 421.9999313354492,
+        "max": 451.9999027252197
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 32,
+        "median": 0.0,
+        "p95": 155.51317390183294,
+        "max": 168.35763549804688
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 32,
+        "median": 0.0,
+        "p95": 238.9878738744319,
+        "max": 336.71527099609375
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "BaselineBEnglish",
+      "session": "Session-20261105-130458",
+      "owner": "ClientB",
+      "pawn": "2477497E4D78FFD0D46EC392B4239E1D",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 1644,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.93689404772988,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 36.00001335144043
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 780,
+            "median": 163.375,
+            "p95": 471.6785583496094,
+            "max": 474.96429443359375
+          },
+          "connectionAvgLagMs": {
+            "n": 780,
+            "median": 158.27347710728645,
+            "p95": 293.641060590744,
+            "max": 383.0401599407196
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 10928,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 3.7022753131567776,
+          "wallFrameMs": {
+            "n": 48,
+            "median": 264.99998569488525,
+            "p95": 592.0000076293945,
+            "max": 1111.9999885559082
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 49,
+            "median": 234.86363220214844,
+            "p95": 368.1333312988281,
+            "max": 368.1333312988281
+          },
+          "connectionAvgLagMs": {
+            "n": 49,
+            "median": 249.48038160800934,
+            "p95": 401.619017124176,
+            "max": 458.82663130760193
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 16832,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 25.021171602730295,
+          "wallFrameMs": {
+            "n": 325,
+            "median": 32.99999237060547,
+            "p95": 73.00019264221191,
+            "max": 275.9997844696045
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 326,
+            "median": 59.46428680419922,
+            "p95": 118.03571319580078,
+            "max": 135.8148193359375
+          },
+          "connectionAvgLagMs": {
+            "n": 326,
+            "median": 45.83711922168732,
+            "p95": 116.88558757305145,
+            "max": 132.97544419765472
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0668361186981201,
+        "serverSimulation": 1.079836130142212,
+        "peerPacketObserved": 1.3098361492156982,
+        "peerMeshPresentation": 1.3098361492156982,
+        "physicalW": 1.0033143999989989
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 63.521718699121266,
+        "ownerSimulation -> serverSimulation": 13.000011444091797,
+        "serverSimulation -> peerPacketObserved": 230.00001907348633,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 15,
+        "median": 467.9999351501465,
+        "p95": 1156.0001373291016,
+        "max": 1930.0000667572021
+      },
+      "peerChangedPacketCount": 16,
+      "intentWindowsUTCSeconds": [
+        [
+          1793858882.9484785,
+          1793858885.9670846
+        ],
+        [
+          1793858887.9597206,
+          1793858891.976055
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 13,
+        "median": 457.99994468688965,
+        "p95": 592.0000076293945,
+        "max": 1156.0001373291016
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 23,
+        "median": 0.0,
+        "p95": 112.66014164007015,
+        "max": 152.36172485351562
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 23,
+        "median": 0.0,
+        "p95": 178.48368129816015,
+        "max": 225.3202832801403
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "HalfMotionA",
+      "session": "Session-20261105-130458",
+      "owner": "ClientA",
+      "pawn": "3875714941FB902774D28EB5D23C2436",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 1644,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.940581579426393,
+          "wallFrameMs": {
+            "n": 388,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 39.999961853027344
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 778,
+            "median": 138.1071434020996,
+            "p95": 366.4444580078125,
+            "max": 399.1851806640625
+          },
+          "connectionAvgLagMs": {
+            "n": 778,
+            "median": 108.98527130484581,
+            "p95": 357.8495681285858,
+            "max": 412.00271248817444
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 10928,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 18.26342681117861,
+          "wallFrameMs": {
+            "n": 236,
+            "median": 34.00015830993652,
+            "p95": 95.99995613098145,
+            "max": 241.00017547607422
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 237,
+            "median": 76.42857360839844,
+            "p95": 92.82142639160156,
+            "max": 122.71428680419922
+          },
+          "connectionAvgLagMs": {
+            "n": 237,
+            "median": 60.35645678639412,
+            "p95": 91.66529774665833,
+            "max": 94.27452087402344
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 16832,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 3.9028959156725906,
+          "wallFrameMs": {
+            "n": 50,
+            "median": 250.0,
+            "p95": 719.0001010894775,
+            "max": 818.9997673034668
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 51,
+            "median": 268.3529357910156,
+            "p95": 426.81817626953125,
+            "max": 432.8333435058594
+          },
+          "connectionAvgLagMs": {
+            "n": 51,
+            "median": 253.38634848594666,
+            "p95": 426.4310896396637,
+            "max": 585.1339101791382
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0278489589691162,
+        "serverSimulation": 1.0628490447998047,
+        "peerPacketObserved": 1.2158489227294922,
+        "peerMeshPresentation": 1.2158489227294922,
+        "physicalW": 1.0043390999999247
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 23.509858969191555,
+        "ownerSimulation -> serverSimulation": 35.00008583068848,
+        "serverSimulation -> peerPacketObserved": 152.9998779296875,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 19,
+        "median": 258.00013542175293,
+        "p95": 818.9997673034668,
+        "max": 2319.000005722046
+      },
+      "peerChangedPacketCount": 20,
+      "intentWindowsUTCSeconds": [
+        [
+          1793858992.0234902,
+          1793858995.0241103
+        ],
+        [
+          1793858997.0276341,
+          1793859001.0425572
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 17,
+        "median": 253.9999485015869,
+        "p95": 736.9999885559082,
+        "max": 818.9997673034668
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 22,
+        "median": 0.0,
+        "p95": 106.08121052420779,
+        "max": 170.66622924804688
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 22,
+        "median": 0.0,
+        "p95": 157.7648436180807,
+        "max": 243.80889892578125
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "HalfMotionB",
+      "session": "Session-20261105-130458",
+      "owner": "ClientB",
+      "pawn": "2477497E4D78FFD0D46EC392B4239E1D",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 1644,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.929983890740637,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 36.99994087219238
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 780,
+            "median": 122.75000381469727,
+            "p95": 216.2857208251953,
+            "max": 236.89285278320312
+          },
+          "connectionAvgLagMs": {
+            "n": 780,
+            "median": 108.34644362330437,
+            "p95": 212.06660568714142,
+            "max": 213.02512288093567
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 10928,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 6.004834971786267,
+          "wallFrameMs": {
+            "n": 77,
+            "median": 101.99999809265137,
+            "p95": 403.99980545043945,
+            "max": 451.9999027252197
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 78,
+            "median": 163.37037658691406,
+            "p95": 260.058837890625,
+            "max": 260.058837890625
+          },
+          "connectionAvgLagMs": {
+            "n": 78,
+            "median": 168.31347346305847,
+            "p95": 318.968802690506,
+            "max": 318.968802690506
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 16832,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 24.590164083125785,
+          "wallFrameMs": {
+            "n": 318,
+            "median": 33.00011157989502,
+            "p95": 90.00015258789062,
+            "max": 236.9999885559082
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 319,
+            "median": 34.25,
+            "p95": 104.35713958740234,
+            "max": 121.35713958740234
+          },
+          "connectionAvgLagMs": {
+            "n": 319,
+            "median": 31.25385195016861,
+            "p95": 99.31683540344238,
+            "max": 99.31683540344238
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0826621055603027,
+        "serverSimulation": 1.1076619625091553,
+        "peerPacketObserved": 1.252661943435669,
+        "peerMeshPresentation": 1.252661943435669,
+        "physicalW": 1.0052748000016436
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 77.38730555865914,
+        "ownerSimulation -> serverSimulation": 24.99985694885254,
+        "serverSimulation -> peerPacketObserved": 144.99998092651367,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 36,
+        "median": 134.4999074935913,
+        "p95": 450.9999752044678,
+        "max": 1976.9999980926514
+      },
+      "peerChangedPacketCount": 37,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859009.6846128,
+          1793859012.6847174
+        ],
+        [
+          1793859014.7070532,
+          1793859018.6895945
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 34,
+        "median": 100.99995136260986,
+        "p95": 448.99988174438477,
+        "max": 451.9999027252197
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 40,
+        "median": 0.0,
+        "p95": 108.21190136720656,
+        "max": 110.41813892849859
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 40,
+        "median": 0.0,
+        "p95": 162.42765268852781,
+        "max": 186.29113920163718
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "BudgetA",
+      "session": "Session-20261105-131333",
+      "owner": "ClientA",
+      "pawn": "2944617D4B9C932AA23A55A53DF896B8",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 21756,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.935961810644987,
+          "wallFrameMs": {
+            "n": 388,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 44.99983787536621
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 778,
+            "median": 40.35714340209961,
+            "p95": 121.39286041259766,
+            "max": 121.60713958740234
+          },
+          "connectionAvgLagMs": {
+            "n": 778,
+            "median": 33.10643509030342,
+            "p95": 132.15191662311554,
+            "max": 171.8468964099884
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 7740,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.336833010545785,
+          "wallFrameMs": {
+            "n": 380,
+            "median": 32.99999237060547,
+            "p95": 38.00010681152344,
+            "max": 83.9998722076416
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 381,
+            "median": 35.85714340209961,
+            "p95": 36.96428680419922,
+            "max": 36.96428680419922
+          },
+          "connectionAvgLagMs": {
+            "n": 381,
+            "median": 32.844677567481995,
+            "p95": 44.44426670670509,
+            "max": 44.44426670670509
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 22144,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 21.138713335739713,
+          "wallFrameMs": {
+            "n": 274,
+            "median": 33.99991989135742,
+            "p95": 98.00004959106445,
+            "max": 406.00013732910156
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 275,
+            "median": 75.35713958740234,
+            "p95": 99.81481170654297,
+            "max": 99.96295928955078
+          },
+          "connectionAvgLagMs": {
+            "n": 275,
+            "median": 32.507844269275665,
+            "p95": 147.5638449192047,
+            "max": 185.58615446090698
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0327739715576172,
+        "serverSimulation": 1.0347740650177002,
+        "peerPacketObserved": 1.0557739734649658,
+        "peerMeshPresentation": 1.0557739734649658,
+        "physicalW": 1.0222149999990506
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 10.558971558566554,
+        "ownerSimulation -> serverSimulation": 2.000093460083008,
+        "serverSimulation -> peerPacketObserved": 20.999908447265625,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 75,
+        "median": 59.999942779541016,
+        "p95": 297.9998588562012,
+        "max": 1960.9999656677246
+      },
+      "peerChangedPacketCount": 76,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859290.601441,
+          1793859293.5820868
+        ],
+        [
+          1793859295.6141922,
+          1793859299.6055207
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 73,
+        "median": 58.00008773803711,
+        "p95": 292.9999828338623,
+        "max": 406.00013732910156
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 102,
+        "median": 0.6400921764657141,
+        "p95": 33.505297445353335,
+        "max": 99.87831069880394
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 102,
+        "median": 0.9875257107050531,
+        "p95": 67.01059489070667,
+        "max": 142.68330099829134
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "BudgetB",
+      "session": "Session-20261105-131333",
+      "owner": "ClientB",
+      "pawn": "9F6F71164BF3EDDB2BFBCFAB8775B3AE",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 21756,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.961389851067924,
+          "wallFrameMs": {
+            "n": 388,
+            "median": 32.99999237060547,
+            "p95": 34.999847412109375,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 778,
+            "median": 30.785715103149414,
+            "p95": 187.4642791748047,
+            "max": 225.7142791748047
+          },
+          "connectionAvgLagMs": {
+            "n": 778,
+            "median": 31.40724077820778,
+            "p95": 166.738823056221,
+            "max": 176.48059129714966
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 7740,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 14.046039734395565,
+          "wallFrameMs": {
+            "n": 180,
+            "median": 43.50006580352783,
+            "p95": 315.000057220459,
+            "max": 400.00009536743164
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 181,
+            "median": 36.35714340209961,
+            "p95": 154.17391967773438,
+            "max": 191.36363220214844
+          },
+          "connectionAvgLagMs": {
+            "n": 181,
+            "median": 47.141436487436295,
+            "p95": 174.2725372314453,
+            "max": 183.86304378509521
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 22144,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.999228793948024,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.999847412109375,
+            "max": 37.000179290771484
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 30.535715103149414,
+            "p95": 30.964284896850586,
+            "max": 30.964284896850586
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.045522540807724,
+            "p95": 31.544547528028488,
+            "max": 31.544547528028488
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0090968608856201,
+        "serverSimulation": 1.024096965789795,
+        "peerPacketObserved": 1.0340969562530518,
+        "peerMeshPresentation": 1.0340969562530518,
+        "physicalW": 1.0045880999987276
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 4.50876088689256,
+        "ownerSimulation -> serverSimulation": 15.000104904174805,
+        "serverSimulation -> peerPacketObserved": 9.999990463256836,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 70,
+        "median": 60.99987030029297,
+        "p95": 336.99989318847656,
+        "max": 1928.0002117156982
+      },
+      "peerChangedPacketCount": 71,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859308.1014912,
+          1793859311.1066685
+        ],
+        [
+          1793859313.1028504,
+          1793859317.1034508
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 66,
+        "median": 60.99987030029297,
+        "p95": 322.9999542236328,
+        "max": 400.00009536743164
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 93,
+        "median": 1.4481108777881673,
+        "p95": 8.562450146556785,
+        "max": 112.88085772382169
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 93,
+        "median": 2.4799027651228505,
+        "p95": 25.528328704160405,
+        "max": 179.2671572685981
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "BudgetHalfMotionA",
+      "session": "Session-20261105-131333",
+      "owner": "ClientA",
+      "pawn": "2944617D4B9C932AA23A55A53DF896B8",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 21756,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.942891998556316,
+          "wallFrameMs": {
+            "n": 388,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 36.99994087219238
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 778,
+            "median": 31.178571701049805,
+            "p95": 48.89285659790039,
+            "max": 50.03571319580078
+          },
+          "connectionAvgLagMs": {
+            "n": 778,
+            "median": 31.381774693727493,
+            "p95": 57.22399055957794,
+            "max": 59.66633930802345
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 7740,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.99691563427634,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.999847412109375,
+            "max": 40.000200271606445
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 30.535715103149414,
+            "p95": 34.03571319580078,
+            "max": 42.32143020629883
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 30.806226655840874,
+            "p95": 62.92644888162613,
+            "max": 62.92644888162613
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 22144,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 28.59124522058119,
+          "wallFrameMs": {
+            "n": 371,
+            "median": 32.99999237060547,
+            "p95": 42.00005531311035,
+            "max": 153.99980545043945
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 372,
+            "median": 32.85714340209961,
+            "p95": 39.10714340209961,
+            "max": 39.10714340209961
+          },
+          "connectionAvgLagMs": {
+            "n": 372,
+            "median": 31.926903873682022,
+            "p95": 58.091115206480026,
+            "max": 58.091115206480026
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.018200159072876,
+        "serverSimulation": 1.0342001914978027,
+        "peerPacketObserved": 1.0442001819610596,
+        "peerMeshPresentation": 1.0442001819610596,
+        "physicalW": 1.0103582000010647
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 7.841959071811289,
+        "ownerSimulation -> serverSimulation": 16.000032424926758,
+        "serverSimulation -> peerPacketObserved": 9.999990463256836,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 135,
+        "median": 35.00008583068848,
+        "p95": 82.0000171661377,
+        "max": 2066.999912261963
+      },
+      "peerChangedPacketCount": 136,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859392.761158,
+          1793859395.7727582
+        ],
+        [
+          1793859397.8052135,
+          1793859401.7742312
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 130,
+        "median": 35.00008583068848,
+        "p95": 78.99999618530273,
+        "max": 135.9999179840088
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 196,
+        "median": 0.3972315854111912,
+        "p95": 6.993964383897492,
+        "max": 12.32993811652068
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 196,
+        "median": 0.7944631708223824,
+        "p95": 14.254166025039066,
+        "max": 40.81080567430252
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "BudgetHalfMotionB",
+      "session": "Session-20261105-131333",
+      "owner": "ClientB",
+      "pawn": "9F6F71164BF3EDDB2BFBCFAB8775B3AE",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 21756,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.90135673696389,
+          "wallFrameMs": {
+            "n": 388,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 36.99994087219238
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 778,
+            "median": 34.25,
+            "p95": 92.5,
+            "max": 108.5
+          },
+          "connectionAvgLagMs": {
+            "n": 778,
+            "median": 31.669456511735916,
+            "p95": 91.98135882616043,
+            "max": 111.44980043172836
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 7740,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 19.773793984371064,
+          "wallFrameMs": {
+            "n": 257,
+            "median": 33.99991989135742,
+            "p95": 106.00018501281738,
+            "max": 328.0000686645508
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 258,
+            "median": 30.85714340209961,
+            "p95": 98.21428680419922,
+            "max": 109.78571319580078
+          },
+          "connectionAvgLagMs": {
+            "n": 258,
+            "median": 35.25640815496445,
+            "p95": 101.68421268463135,
+            "max": 106.49970918893814
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 22144,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.989977192619158,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.999847412109375,
+            "max": 36.99994087219238
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 31.0,
+            "p95": 41.42856979370117,
+            "max": 41.42856979370117
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 30.912304297089577,
+            "p95": 61.24396622180939,
+            "max": 61.24396622180939
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0550191402435303,
+        "serverSimulation": 1.0840191841125488,
+        "peerPacketObserved": 1.12601900100708,
+        "peerMeshPresentation": 1.12601900100708,
+        "physicalW": 1.0316660000007687
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 23.353140242761583,
+        "ownerSimulation -> serverSimulation": 29.000043869018555,
+        "serverSimulation -> peerPacketObserved": 41.99981689453125,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 103,
+        "median": 34.999847412109375,
+        "p95": 108.99996757507324,
+        "max": 1962.0001316070557
+      },
+      "peerChangedPacketCount": 104,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859410.748647,
+          1793859413.7390597
+        ],
+        [
+          1793859415.7542737,
+          1793859419.7211874
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 99,
+        "median": 34.999847412109375,
+        "p95": 108.99996757507324,
+        "max": 328.0000686645508
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 138,
+        "median": 0.02794198220612998,
+        "p95": 6.733266751276915,
+        "max": 120.91308214299988
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 138,
+        "median": 0.05588396441225996,
+        "p95": 22.167456058471032,
+        "max": 172.73297448999983
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "MinimizedMotionA",
+      "session": "Session-20261105-131333",
+      "owner": "ClientA",
+      "pawn": "2944617D4B9C932AA23A55A53DF896B8",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 21756,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 21.365214179235714,
+          "wallFrameMs": {
+            "n": 277,
+            "median": 46.99993133544922,
+            "p95": 49.00002479553223,
+            "max": 50.99987983703613
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 556,
+            "median": 44.21428680419922,
+            "p95": 46.39285659790039,
+            "max": 46.39285659790039
+          },
+          "connectionAvgLagMs": {
+            "n": 556,
+            "median": 44.718194752931595,
+            "p95": 44.99255120754242,
+            "max": 45.311540365219116
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 7740,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.999228793948024,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.999847412109375,
+            "max": 36.00001335144043
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 42.96428680419922,
+            "p95": 45.03571319580078,
+            "max": 45.03571319580078
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 43.44864934682846,
+            "p95": 45.817781239748,
+            "max": 45.817781239748
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 22144,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.99769265242752,
+          "wallFrameMs": {
+            "n": 390,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 391,
+            "median": 42,
+            "p95": 44.10714340209961,
+            "max": 44.10714340209961
+          },
+          "connectionAvgLagMs": {
+            "n": 391,
+            "median": 43.37645694613457,
+            "p95": 45.75008153915405,
+            "max": 46.858660876750946
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0102570056915283,
+        "serverSimulation": 1.0542571544647217,
+        "peerPacketObserved": 1.0702571868896484,
+        "peerMeshPresentation": 1.0702571868896484,
+        "physicalW": 1.00197610000032
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 8.280905691208318,
+        "ownerSimulation -> serverSimulation": 44.00014877319336,
+        "serverSimulation -> peerPacketObserved": 16.000032424926758,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 140,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 1968.0001735687256
+      },
+      "peerChangedPacketCount": 141,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859509.443719,
+          1793859512.447834
+        ],
+        [
+          1793859514.4431272,
+          1793859518.4460351
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 138,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 68.00007820129395
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 211,
+        "median": 3.394052487677527,
+        "p95": 13.436813242245762,
+        "max": 17.216526316200543
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 211,
+        "median": 6.224363070656182,
+        "p95": 21.532755659319264,
+        "max": 81.98345864857401
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "MinimizedMotionB",
+      "session": "Session-20261105-131333",
+      "owner": "ClientB",
+      "pawn": "9F6F71164BF3EDDB2BFBCFAB8775B3AE",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 21756,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 21.424167971329798,
+          "wallFrameMs": {
+            "n": 278,
+            "median": 46.99993133544922,
+            "p95": 48.999786376953125,
+            "max": 49.00002479553223
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 558,
+            "median": 44.35714340209961,
+            "p95": 45.5,
+            "max": 45.5
+          },
+          "connectionAvgLagMs": {
+            "n": 558,
+            "median": 44.76345330476761,
+            "p95": 45.139096677303314,
+            "max": 46.116866171360016
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 7740,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.99691563427634,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 44.14285659790039,
+            "p95": 45.5,
+            "max": 45.5
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 43.83370280265808,
+            "p95": 45.823171734809875,
+            "max": 45.823171734809875
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 22144,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 30.001542310397745,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 44.10714340209961,
+            "p95": 45.25,
+            "max": 45.25
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 43.034628033638,
+            "p95": 46.03583738207817,
+            "max": 46.03583738207817
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0034539699554443,
+        "serverSimulation": 1.0074539184570312,
+        "peerPacketObserved": 1.032454013824463,
+        "peerMeshPresentation": 1.032454013824463,
+        "physicalW": 1.001141099999586
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 2.312869955858332,
+        "ownerSimulation -> serverSimulation": 3.999948501586914,
+        "serverSimulation -> peerPacketObserved": 25.00009536743164,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 139,
+        "median": 33.99991989135742,
+        "p95": 68.00007820129395,
+        "max": 1967.0000076293945
+      },
+      "peerChangedPacketCount": 140,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859526.586687,
+          1793859529.588341
+        ],
+        [
+          1793859531.5860968,
+          1793859535.589209
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 136,
+        "median": 33.99991989135742,
+        "p95": 67.99983978271484,
+        "max": 68.00007820129395
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 212,
+        "median": 2.7992996999308843,
+        "p95": 13.083354868795595,
+        "max": 15.227470656874175
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 212,
+        "median": 5.247004577103163,
+        "p95": 21.539428431036868,
+        "max": 27.010233731396383
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "OriginalMinimizedA",
+      "session": "Session-20261105-131333",
+      "owner": "ClientA",
+      "pawn": "2944617D4B9C932AA23A55A53DF896B8",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 21756,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 22.253129497175546,
+          "wallFrameMs": {
+            "n": 288,
+            "median": 46.99993133544922,
+            "p95": 48.00009727478027,
+            "max": 49.00002479553223
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 578,
+            "median": 51.32143020629883,
+            "p95": 287.53570556640625,
+            "max": 299.46429443359375
+          },
+          "connectionAvgLagMs": {
+            "n": 578,
+            "median": 47.33182117342949,
+            "p95": 202.6626169681549,
+            "max": 358.18150639533997
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 7740,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 28.547180077161457,
+          "wallFrameMs": {
+            "n": 370,
+            "median": 32.99999237060547,
+            "p95": 43.99991035461426,
+            "max": 110.0001335144043
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              100
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 371,
+            "median": 44,
+            "p95": 50.32143020629883,
+            "max": 50.32143020629883
+          },
+          "connectionAvgLagMs": {
+            "n": 371,
+            "median": 43.96345838904381,
+            "p95": 61.36421114206314,
+            "max": 61.36421114206314
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 22144,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 8.991399557700912,
+          "wallFrameMs": {
+            "n": 115,
+            "median": 33.99991989135742,
+            "p95": 270.9999084472656,
+            "max": 882.9998970031738
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              100
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 116,
+            "median": 159.44444274902344,
+            "p95": 236,
+            "max": 236
+          },
+          "connectionAvgLagMs": {
+            "n": 116,
+            "median": 160.70899367332458,
+            "p95": 560.4603290557861,
+            "max": 560.4603290557861
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0266249179840088,
+        "serverSimulation": 1.0636248588562012,
+        "peerPacketObserved": 1.0856249332427979,
+        "peerMeshPresentation": 1.0856249332427979,
+        "physicalW": 1.0006855000010546
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 25.939417982954183,
+        "ownerSimulation -> serverSimulation": 36.99994087219238,
+        "serverSimulation -> peerPacketObserved": 22.00007438659668,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 34,
+        "median": 233.50000381469727,
+        "p95": 404.9999713897705,
+        "max": 2039.9999618530273
+      },
+      "peerChangedPacketCount": 35,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859654.8920605,
+          1793859657.9122403
+        ],
+        [
+          1793859659.896335,
+          1793859663.8915284
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 32,
+        "median": 230.00001907348633,
+        "p95": 317.99983978271484,
+        "max": 882.9998970031738
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 49,
+        "median": 0.0,
+        "p95": 94.26286064316491,
+        "max": 98.73170590387963
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 49,
+        "median": 0.0,
+        "p95": 146.25393120135232,
+        "max": 195.01824255033898
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "OriginalMinimizedB",
+      "session": "Session-20261105-131333",
+      "owner": "ClientB",
+      "pawn": "9F6F71164BF3EDDB2BFBCFAB8775B3AE",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 21756,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.99691563427634,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.999847412109375,
+            "max": 42.00005531311035
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 780,
+            "median": 99.85713958740234,
+            "p95": 383.4285583496094,
+            "max": 410.53570556640625
+          },
+          "connectionAvgLagMs": {
+            "n": 780,
+            "median": 122.40737304091454,
+            "p95": 348.7429916858673,
+            "max": 456.69400691986084
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 7740,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 5.230546371655636,
+          "wallFrameMs": {
+            "n": 65,
+            "median": 225.00014305114746,
+            "p95": 557.0001602172852,
+            "max": 967.0000076293945
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              100
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 66,
+            "median": 227.2857208251953,
+            "p95": 403.23077392578125,
+            "max": 403.23077392578125
+          },
+          "connectionAvgLagMs": {
+            "n": 66,
+            "median": 209.15886014699936,
+            "p95": 515.7983303070068,
+            "max": 515.7983303070068
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 22144,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 21.424167577686173,
+          "wallFrameMs": {
+            "n": 278,
+            "median": 33.99991989135742,
+            "p95": 118.99995803833008,
+            "max": 282.0000648498535
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              100
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 279,
+            "median": 72.71428680419922,
+            "p95": 115.96428680419922,
+            "max": 123.28571319580078
+          },
+          "connectionAvgLagMs": {
+            "n": 279,
+            "median": 46.234115958213806,
+            "p95": 140.89347422122955,
+            "max": 140.89347422122955
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0130250453948975,
+        "serverSimulation": 1.0210249423980713,
+        "peerPacketObserved": 1.289025068283081,
+        "peerMeshPresentation": 1.289025068283081,
+        "physicalW": 1.0013614999988931
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 11.663545396004338,
+        "ownerSimulation -> serverSimulation": 7.999897003173828,
+        "serverSimulation -> peerPacketObserved": 268.00012588500977,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 30,
+        "median": 243.99995803833008,
+        "p95": 709.0001106262207,
+        "max": 1248.999834060669
+      },
+      "peerChangedPacketCount": 31,
+      "intentWindowsUTCSeconds": [
+        [
+          1793859672.0863366,
+          1793859675.0897026
+        ],
+        [
+          1793859677.0896928,
+          1793859681.0899334
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 28,
+        "median": 238.99996280670166,
+        "p95": 338.0000591278076,
+        "max": 709.0001106262207
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 35,
+        "median": 0.0,
+        "p95": 101.12326439505978,
+        "max": 117.8366374205516
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 35,
+        "median": 0.0,
+        "p95": 145.3205257460204,
+        "max": 168.33805345793084
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "FinalA",
+      "session": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-132938",
+      "owner": "ClientA",
+      "pawn": "6628AB6C4CAABD7CA0107A8AE84206E3",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 18112,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.881862461658304,
+          "wallFrameMs": {
+            "n": 387,
+            "median": 33.00023078918457,
+            "p95": 35.00008583068848,
+            "max": 36.99994087219238
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 776,
+            "median": 31.5,
+            "p95": 48.10714340209961,
+            "max": 48.25
+          },
+          "connectionAvgLagMs": {
+            "n": 776,
+            "median": 31.982414424419403,
+            "p95": 56.8944588303566,
+            "max": 63.01705539226532
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 15460,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 30.001542310397745,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 31.39285659790039,
+            "p95": 38.35714340209961,
+            "max": 38.35714340209961
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.860724091529846,
+            "p95": 53.52325737476349,
+            "max": 53.52325737476349
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 1076,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.999228793948024,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 36.00001335144043
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 31.10714340209961,
+            "p95": 48.17856979370117,
+            "max": 48.17856979370117
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.83591365814209,
+            "p95": 48.0264350771904,
+            "max": 48.0264350771904
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.014017105102539,
+        "serverSimulation": 1.0310170650482178,
+        "peerPacketObserved": 1.0600171089172363,
+        "peerMeshPresentation": 1.0600171089172363,
+        "physicalW": 1.000554700000066
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 13.462405102472985,
+        "ownerSimulation -> serverSimulation": 16.99995994567871,
+        "serverSimulation -> peerPacketObserved": 29.000043869018555,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 150,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 2000.0
+      },
+      "peerChangedPacketCount": 151,
+      "intentWindowsUTCSeconds": [
+        [
+          1793860253.8715377,
+          1793860256.8751223
+        ],
+        [
+          1793860258.8772376,
+          1793860262.8743098
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 148,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 99.99990463256836
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 210,
+        "median": 0.018587299324735795,
+        "p95": 5.925267979649334,
+        "max": 15.557872348257206
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 210,
+        "median": 0.03276319482275929,
+        "p95": 14.816984632778128,
+        "max": 33.18731628195213
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "FinalB",
+      "session": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-132938",
+      "owner": "ClientB",
+      "pawn": "BB3A3C364F89CCD135F0FE8B19A56413",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 18112,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.910576345113057,
+          "wallFrameMs": {
+            "n": 388,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 36.00001335144043
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 778,
+            "median": 32.42856979370117,
+            "p95": 55.53571319580078,
+            "max": 56.67856979370117
+          },
+          "connectionAvgLagMs": {
+            "n": 778,
+            "median": 31.83797374367714,
+            "p95": 63.30087035894394,
+            "max": 64.36103582382202
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 15460,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.99691563427634,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 39.46428680419922,
+            "p95": 60.07143020629883,
+            "max": 60.07143020629883
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.832978129386902,
+            "p95": 59.83199179172516,
+            "max": 62.144018709659576
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 1076,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.999228793948024,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.999847412109375,
+            "max": 36.00001335144043
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 34.25,
+            "p95": 56.71428680419922,
+            "max": 56.71428680419922
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.409408897161484,
+            "p95": 62.300994992256165,
+            "max": 62.300994992256165
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.0182981491088867,
+        "serverSimulation": 1.0492980480194092,
+        "peerPacketObserved": 1.0772981643676758,
+        "peerMeshPresentation": 1.0772981643676758,
+        "physicalW": 1.0049101999993582
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 13.387949109528563,
+        "ownerSimulation -> serverSimulation": 30.99989891052246,
+        "serverSimulation -> peerPacketObserved": 28.0001163482666,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 150,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 1967.0000076293945
+      },
+      "peerChangedPacketCount": 151,
+      "intentWindowsUTCSeconds": [
+        [
+          1793860310.6796122,
+          1793860313.6802523
+        ],
+        [
+          1793860315.6747236,
+          1793860319.6772873
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 147,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 68.00007820129395
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 211,
+        "median": 0.05968067056392101,
+        "p95": 6.451159599100947,
+        "max": 12.28459078188962
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 211,
+        "median": 0.11936134112784202,
+        "p95": 15.63286102518214,
+        "max": 30.719807614766417
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "RepeatA",
+      "session": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-132938",
+      "owner": "ClientA",
+      "pawn": "6628AB6C4CAABD7CA0107A8AE84206E3",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 18112,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.922109953860755,
+          "wallFrameMs": {
+            "n": 388,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 36.00001335144043
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 778,
+            "median": 34.57143020629883,
+            "p95": 45.57143020629883,
+            "max": 45.78571319580078
+          },
+          "connectionAvgLagMs": {
+            "n": 778,
+            "median": 31.83567151427269,
+            "p95": 54.558202624320984,
+            "max": 56.47197365760803
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 15460,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 30.001542310397745,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 39.46428680419922,
+            "p95": 48.96428680419922,
+            "max": 48.96428680419922
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.784243881702423,
+            "p95": 61.57878413796425,
+            "max": 61.57878413796425
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 1076,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.999228793948024,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 31.464284896850586,
+            "p95": 36.25,
+            "max": 38.71428680419922
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.86332806944847,
+            "p95": 45.20614072680473,
+            "max": 45.20614072680473
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.004390001296997,
+        "serverSimulation": 1.012389898300171,
+        "peerPacketObserved": 1.0323898792266846,
+        "peerMeshPresentation": 1.0323898792266846,
+        "physicalW": 1.0024493999990227
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 1.9406012979743537,
+        "ownerSimulation -> serverSimulation": 7.999897003173828,
+        "serverSimulation -> peerPacketObserved": 19.999980926513672,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 147,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 1932.999849319458
+      },
+      "peerChangedPacketCount": 148,
+      "intentWindowsUTCSeconds": [
+        [
+          1793860371.7740595,
+          1793860374.77542
+        ],
+        [
+          1793860376.7739217,
+          1793860380.776144
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 143,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 100.00014305114746
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 212,
+        "median": 0.037713265719617084,
+        "p95": 8.857025357250222,
+        "max": 15.565935457822889
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 212,
+        "median": 0.06266577011235443,
+        "p95": 16.173135655889382,
+        "max": 30.719810361333224
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    },
+    {
+      "case": "RepeatB",
+      "session": "D:\\Data\\AnimeMMORPG\\Artifacts\\U01\\F\\Reviews\\Session-20261105-132938",
+      "owner": "ClientB",
+      "pawn": "BB3A3C364F89CCD135F0FE8B19A56413",
+      "roles": {
+        "Server": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 18112,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 1,
+            "context": "Context_0",
+            "localPlayers": 0
+          },
+          "fps": 29.955336375455982,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 35.00008583068848,
+            "max": 36.00001335144043
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              0
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 780,
+            "median": 31.35714340209961,
+            "p95": 52.46428680419922,
+            "max": 53.71428680419922
+          },
+          "connectionAvgLagMs": {
+            "n": 780,
+            "median": 31.953927129507065,
+            "p95": 53.24675887823105,
+            "max": 63.797131180763245
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientA": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 15460,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 29.999229345530786,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            false
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 31.571428298950195,
+            "p95": 38.39285659790039,
+            "max": 38.39285659790039
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 31.781911849975586,
+            "p95": 51.416561007499695,
+            "max": 51.416561007499695
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        },
+        "ClientB": {
+          "identity": {
+            "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+            "pid": 1076,
+            "world": "/Game/AnimeMMORPG/Maps/L_NetworkLab.L_NetworkLab",
+            "worldType": 1,
+            "netMode": 3,
+            "context": "Context_0",
+            "localPlayers": 1
+          },
+          "fps": 30.001542310397745,
+          "wallFrameMs": {
+            "n": 389,
+            "median": 32.99999237060547,
+            "p95": 34.00015830993652,
+            "max": 35.00008583068848
+          },
+          "focus": [
+            true
+          ],
+          "settings": {
+            "t.MaxFPS": [
+              30
+            ],
+            "t.IdleWhenNotForeground": [
+              0
+            ],
+            "editorThrottle": [
+              false
+            ],
+            "r.VSync": [
+              0
+            ],
+            "r.ScreenPercentage": [
+              50
+            ],
+            "pktLag": [
+              0
+            ],
+            "pktLagMin": [
+              0
+            ],
+            "pktLagMax": [
+              0
+            ],
+            "pktLoss": [
+              0
+            ],
+            "pktOrder": [
+              0
+            ],
+            "pktDup": [
+              0
+            ],
+            "incomingLagMin": [
+              0
+            ],
+            "incomingLagMax": [
+              0
+            ],
+            "incomingLoss": [
+              0
+            ]
+          },
+          "pingMs": {
+            "n": 390,
+            "median": 31.178571701049805,
+            "p95": 54.96428680419922,
+            "max": 54.96428680419922
+          },
+          "connectionAvgLagMs": {
+            "n": 390,
+            "median": 35.255540162324905,
+            "p95": 54.81022968888283,
+            "max": 54.81022968888283
+          },
+          "updateSettings": [
+            [
+              100,
+              2,
+              2,
+              0.10000000149011612
+            ]
+          ]
+        }
+      },
+      "onsetSecondsFromRunStart": {
+        "ownerSimulation": 1.027439832687378,
+        "serverSimulation": 1.0444397926330566,
+        "peerPacketObserved": 1.0544400215148926,
+        "peerMeshPresentation": 1.0544400215148926,
+        "physicalW": 1.0031174999985524
+      },
+      "onsetStageMs": {
+        "physicalW -> ownerSimulation": 24.322332688825554,
+        "ownerSimulation -> serverSimulation": 16.99995994567871,
+        "serverSimulation -> peerPacketObserved": 10.000228881835938,
+        "peerPacketObserved -> peerMeshPresentation": 0.0
+      },
+      "peerChangedPacketIntervalsMs": {
+        "n": 141,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 1967.0000076293945
+      },
+      "peerChangedPacketCount": 142,
+      "intentWindowsUTCSeconds": [
+        [
+          1793860411.1576777,
+          1793860414.159953
+        ],
+        [
+          1793860416.1561253,
+          1793860420.1549299
+        ]
+      ],
+      "peerMovingPacketIntervalsMs": {
+        "n": 137,
+        "median": 33.99991989135742,
+        "p95": 67.00015068054199,
+        "max": 100.00014305114746
+      },
+      "packetCadenceCaveat": "All changed-position intervals retain the deliberate two-second stop. Moving intervals require both endpoints in the same actual W-held window; stationary actor positions do not imply packet loss.",
+      "peerMeshCapsuleOffsetCm": {
+        "n": 210,
+        "median": 0.12001713205199849,
+        "p95": 8.330267597191323,
+        "max": 16.746541664624147
+      },
+      "peerMeshOffsetTimeEquivalentMs": {
+        "n": 210,
+        "median": 0.22194155528852988,
+        "p95": 17.50942377540251,
+        "max": 33.49308332924829
+      },
+      "displayCaveat": "Onset at mesh and packet can share a frame; this does not imply zero ongoing smoothing. Offset is relative to extrapolated proxy capsule, not server-to-photon latency."
+    }
+  ],
+  "serverTimerABA": [
+    {
+      "hint": {
+        "utc": "2026-11-05T06:23:26.3197119Z",
+        "pid": 21756,
+        "previous": {
+          "Version": 1,
+          "ControlMask": 4,
+          "StateMask": 0
+        },
+        "ignoreTimerResolution": false,
+        "scope": "This dedicated process only; honor existing engine timeBeginPeriod request; no tick-rate change"
+      },
+      "start": "2026-11-05T06:23:26.3264844Z",
+      "end": "2026-11-05T06:23:32.3331991Z",
+      "fps": 29.968608620359035,
+      "wallFrameMs": {
+        "n": 179,
+        "median": 33.339399844408035,
+        "p95": 34.11140292882919,
+        "max": 34.400299191474915
+      }
+    },
+    {
+      "hint": {
+        "utc": "2026-11-05T06:23:32.3872674Z",
+        "pid": 21756,
+        "previous": {
+          "Version": 1,
+          "ControlMask": 4,
+          "StateMask": 0
+        },
+        "ignoreTimerResolution": true,
+        "scope": "This dedicated process only; honor existing engine timeBeginPeriod request; no tick-rate change"
+      },
+      "start": "2026-11-05T06:23:32.3872674Z",
+      "end": "2026-11-05T06:23:38.4021226Z",
+      "fps": 21.332838455426486,
+      "wallFrameMs": {
+        "n": 127,
+        "median": 46.920400112867355,
+        "p95": 48.39299991726875,
+        "max": 49.832697957754135
+      }
+    },
+    {
+      "hint": {
+        "utc": "2026-11-05T06:23:38.4533449Z",
+        "pid": 21756,
+        "previous": {
+          "Version": 1,
+          "ControlMask": 4,
+          "StateMask": 4
+        },
+        "ignoreTimerResolution": false,
+        "scope": "This dedicated process only; honor existing engine timeBeginPeriod request; no tick-rate change"
+      },
+      "start": "2026-11-05T06:23:38.4533449Z",
+      "end": "2026-11-05T06:23:44.4660023Z",
+      "fps": 29.975376582836148,
+      "wallFrameMs": {
+        "n": 178,
+        "median": 33.35744887590408,
+        "p95": 34.04020145535469,
+        "max": 43.1412011384964
+      }
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # U01-F — Dedicated Editor server và hai client
 
+**Cập nhật sau review FPS/độ trễ:** người dùng xác nhận các mục điều khiển nhưng chưa nghiệm thu F. Bản điều tra/sửa launcher hiện tại dùng native diagnostics nguồn0f02c77, xem [REPORT-F-PERFORMANCE](REPORT-F-PERFORMANCE.md) và [manifest mới](Evidence/F-Performance/MANIFEST.json). Hồ sơ nguồn df897f6 bên dưới giữ lịch sử; không dùng nó để tự nghiệm thu hiệu năng hoặc chứng nhận đồ họa gốc đã ổn.
+
 **READY_FOR_REVIEW; chưa nghiệm thu hoặc merge F.** E được người dùng nghiệm thu tại `cb46c520469807004b101c1b98ac4bdfdad70d84`, package nguồn `c8df4ff2182c0006c11f65466ecec4b9223be5a3`. Hồ sơ E đã cập nhật, commit/push và fast-forward main tại `99363222895b0069b3afdab2b103bfc81c68af6b`. Nhánh `u01/f-network` bắt đầu từ main đó.
 
 Nguồn native/build/package F: **`df897f6088da4cca423085e9fe8e9c2869c98420`**, đã push trước khi build clone riêng. [Manifest](Evidence/F/MANIFEST.json), [kiểm chứng runtime](Evidence/F/CHECKS.json), [checklist review](F-MANUAL-CHECKLIST.md). Commit hồ sơ sau nguồn này không thay binary. Art anime/animation chiến đấu **DEFERRED**; carry một tay D vẫn là tư thế tạm cho blockout.

@@ -1,0 +1,32 @@
+{
+  "Server": [
+    "[2026.11.05-06.29.48:292][  0]t.MaxFPS = \"30\"",
+    "[2026.11.05-06.29.48:292][  0]t.IdleWhenNotForeground = \"0\"",
+    "[2026.11.05-06.29.58:165][294]LogNet: Join succeeded: HoangAnh-02EDDA7946C",
+    "[2026.11.05-06.30.12:004][709]LogNet: Join succeeded: HoangAnh-0209F92C486",
+    "[2026.11.05-06.30.31:557][295]LogU01Network: Display: FixtureReset id=6628AB6C4CAABD7CA0107A8AE84206E3 player=256",
+    "[2026.11.05-06.30.38:932][516]LogU01Network: Display: FixtureReset id=BB3A3C364F89CCD135F0FE8B19A56413 player=257",
+    "[2026.11.05-06.31.28:202][991]LogU01Network: Display: FixtureReset id=6628AB6C4CAABD7CA0107A8AE84206E3 player=256",
+    "[2026.11.05-06.31.42:985][434]LogU01Network: Display: FixtureReset id=BB3A3C364F89CCD135F0FE8B19A56413 player=257",
+    "[2026.11.05-06.32.28:913][809]LogU01Network: Display: FixtureReset id=6628AB6C4CAABD7CA0107A8AE84206E3 player=256",
+    "[2026.11.05-06.32.36:338][ 31]LogU01Network: Display: FixtureReset id=BB3A3C364F89CCD135F0FE8B19A56413 player=257",
+    "[2026.11.05-06.33.08:517][994]LogU01Network: Display: FixtureReset id=6628AB6C4CAABD7CA0107A8AE84206E3 player=256",
+    "[2026.11.05-06.33.23:576][445]LogU01Network: Display: FixtureReset id=BB3A3C364F89CCD135F0FE8B19A56413 player=257"
+  ],
+  "ClientA": [
+    "[2026.11.05-06.29.57:801][  0]t.MaxFPS = \"30\"",
+    "[2026.11.05-06.29.57:801][  0]t.IdleWhenNotForeground = \"0\"",
+    "[2026.11.05-06.29.57:801][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+    "[2026.11.05-06.29.57:801][  0]r.RenderTargetPoolMin = \"128\"",
+    "[2026.11.05-06.29.57:801][  0]r.Streaming.PoolSize = \"256\"",
+    "[2026.11.05-06.29.57:801][  0]r.ScreenPercentage = \"50\""
+  ],
+  "ClientB": [
+    "[2026.11.05-06.30.11:558][  0]t.MaxFPS = \"30\"",
+    "[2026.11.05-06.30.11:558][  0]t.IdleWhenNotForeground = \"0\"",
+    "[2026.11.05-06.30.11:558][  0]r.LumenScene.SurfaceCache.AtlasSize = \"2048\"",
+    "[2026.11.05-06.30.11:558][  0]r.RenderTargetPoolMin = \"128\"",
+    "[2026.11.05-06.30.11:558][  0]r.Streaming.PoolSize = \"256\"",
+    "[2026.11.05-06.30.11:559][  0]r.ScreenPercentage = \"50\""
+  ]
+}

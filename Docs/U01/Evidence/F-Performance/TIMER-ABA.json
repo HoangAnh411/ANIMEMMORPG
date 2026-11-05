@@ -1,0 +1,47 @@
+[
+  {
+    "hint": {
+      "utc": "2026-11-05T06:23:26.3197119Z",
+      "pid": 21756,
+      "previous": {
+        "Version": 1,
+        "ControlMask": 4,
+        "StateMask": 0
+      },
+      "ignoreTimerResolution": false,
+      "scope": "This dedicated process only; honor existing engine timeBeginPeriod request; no tick-rate change"
+    },
+    "start": "2026-11-05T06:23:26.3264844Z",
+    "end": "2026-11-05T06:23:32.3331991Z"
+  },
+  {
+    "hint": {
+      "utc": "2026-11-05T06:23:32.3872674Z",
+      "pid": 21756,
+      "previous": {
+        "Version": 1,
+        "ControlMask": 4,
+        "StateMask": 0
+      },
+      "ignoreTimerResolution": true,
+      "scope": "This dedicated process only; honor existing engine timeBeginPeriod request; no tick-rate change"
+    },
+    "start": "2026-11-05T06:23:32.3872674Z",
+    "end": "2026-11-05T06:23:38.4021226Z"
+  },
+  {
+    "hint": {
+      "utc": "2026-11-05T06:23:38.4533449Z",
+      "pid": 21756,
+      "previous": {
+        "Version": 1,
+        "ControlMask": 4,
+        "StateMask": 4
+      },
+      "ignoreTimerResolution": false,
+      "scope": "This dedicated process only; honor existing engine timeBeginPeriod request; no tick-rate change"
+    },
+    "start": "2026-11-05T06:23:38.4533449Z",
+    "end": "2026-11-05T06:23:44.4660023Z"
+  }
+]

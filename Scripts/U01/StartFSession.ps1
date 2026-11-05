@@ -3,9 +3,11 @@
  [Parameter(Mandatory=$true)][string]$OutputRoot,
  [switch]$ReproducePython,
  [switch]$Diagnostics,
+ [switch]$MemoryBudget,
  [int]$Port=17877
 )
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'FReviewHost.ps1')
 $project=(Resolve-Path -LiteralPath $CloneProject).Path
 if($project -notlike '*\Artifacts\U01\F\Source\*'){throw 'F clone required'}
 $sha=git -C (Split-Path $project) rev-parse HEAD
@@ -13,6 +15,7 @@ $exe='D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe'
 $run=Join-Path $OutputRoot ($(if($ReproducePython){'PythonBefore-'}else{'Session-'})+(Get-Date -Format 'yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Path $run | Out-Null
 $records=@()
+try{
 foreach($role in @('Server','ClientA','ClientB')){
  $user=Join-Path $run $role;New-Item -ItemType Directory -Path $user | Out-Null
  $log=Join-Path $user ($role+'.log')
@@ -21,7 +24,14 @@ foreach($role in @('Server','ClientA','ClientB')){
  else{$arguments+=@(('127.0.0.1:'+$Port),'-game','-windowed','-ResX=900','-ResY=540',('-WinX='+$(if($role -eq 'ClientA'){0}else{940})),'-WinY=100')}
  if($ReproducePython){if($role -ne 'Server'){$arguments+='-NullRHI'}}else{$arguments+='-DisablePython'}
  if($Diagnostics){$arguments+='-U01FPerf'}
- $arguments+=@('-ExecCmds="t.MaxFPS 30,t.IdleWhenNotForeground 0"','-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace',('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18310+$records.Count)))
+ $commands='t.MaxFPS 30,t.IdleWhenNotForeground 0'
+ if($MemoryBudget -and $role -ne 'Server'){
+  # Explicit same-machine review profile; retain DX12/SM6, Lumen, window size,
+  # network frequency and CMC smoothing. Do not persist project/user settings.
+  $commands+=',r.LumenScene.SurfaceCache.AtlasSize 2048,r.RenderTargetPoolMin 128,r.Streaming.PoolSize 256,r.ScreenPercentage 50'
+  Write-Host 'Local 4GB review profile: Lumen atlas 2048, RT pool minimum 128 MiB, texture pool 256 MiB, internal resolution 50%.'
+ }
+ $arguments+=@(('-ExecCmds="'+$commands+'"'),'-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace',('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18310+$records.Count)))
  Write-Host ('Starting '+$role+'; log: '+$log)
  # Interactive review clients must be visible during loading, before readiness.
  # The dedicated background server continues to run hidden.
@@ -30,6 +40,7 @@ foreach($role in @('Server','ClientA','ClientB')){
  $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;userDir=$user;log=$log;utc=[DateTime]::UtcNow.ToString('o')}
  $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $user 'process.json')
  $records+=$r;$records | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $run 'processes.json')
+ if($role -eq 'Server'){Set-FServerTimer $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $run 'server-timer.json')}
  if($role -eq 'Server'){
   $ready=$false
   for($i=0;$i -lt 400;$i++){if($p.HasExited){throw ('Server exited ('+$p.ExitCode+'); log: '+$log)};if((Test-Path $log) -and (Select-String -LiteralPath $log -Pattern ('IpNetDriver.*listening on port '+$Port) -Quiet)){$ready=$true;break};Start-Sleep -Milliseconds 500}
@@ -40,5 +51,15 @@ foreach($role in @('Server','ClientA','ClientB')){
   if(!$ready){throw ('Client not ready; inspect own PID '+$p.Id+' log '+$log)}
  }
  Write-Host ($role+' ready (PID '+$p.Id+')')
+}
+}catch{
+ $failure=$_
+ foreach($record in $records){
+  $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$record.pid)
+  if($live -and $live.Name -eq 'UnrealEditor.exe' -and $live.CommandLine.Contains($record.project) -and $live.CommandLine.Contains($record.userDir)){
+   try{Stop-Process -Id $record.pid}catch{Write-Warning ('Could not stop own failed-start process '+$record.pid)}
+  }
+ }
+ throw $failure
 }
 Write-Output $run

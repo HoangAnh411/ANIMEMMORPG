@@ -1,0 +1,38 @@
+{
+  "BaselineAEnglish": {
+    "rawSHA256": "3a078659e58e98128630b4d8694ab9ff3fcbf27be513113548e14cc6a285034f",
+    "exportSHA256": "c882dae320b18b886307b809c7a2bbbe126c9c4203cf3ae10cf4f08561ed9684",
+    "frames": 389,
+    "encodedHz": 30.0,
+    "uniqueCaptureHz": 26.362120116535248,
+    "distinctImageHz": 23.96556374230477,
+    "edit": "Only desktop gap removed. Both native 900x540 clients, in-game warnings, all frame order and duplicate timing frames retained; no interpolation or speed change."
+  },
+  "BaselineBEnglish": {
+    "rawSHA256": "23bfa130a1e0aeec156c40de68bd9a5ca320845c471fcba9fa189d454d385120",
+    "exportSHA256": "0c880976ce948a49fbb6faed66b9702702078a273678308bd8fc9d533459dc37",
+    "frames": 390,
+    "encodedHz": 30.0,
+    "uniqueCaptureHz": 26.834228224000547,
+    "distinctImageHz": 21.74497804358665,
+    "edit": "Only desktop gap removed. Both native 900x540 clients, in-game warnings, all frame order and duplicate timing frames retained; no interpolation or speed change."
+  },
+  "RepeatA": {
+    "rawSHA256": "0766a6f58b33417da381c004704eb4d87206865927030f753aac52adbed918a8",
+    "exportSHA256": "3f8cda89d62d0a0529712d865ecc48e540441b707a0da52af4cdf3fdcb2b89db",
+    "frames": 390,
+    "encodedHz": 30.0,
+    "uniqueCaptureHz": 29.996790112119015,
+    "distinctImageHz": 28.30031355050817,
+    "edit": "Only desktop gap removed. Both native 900x540 clients, in-game warnings, all frame order and duplicate timing frames retained; no interpolation or speed change."
+  },
+  "RepeatB": {
+    "rawSHA256": "7667c8a356c57ea69e47f0101bc611d20d624dc6bd3a356600a24f642aae979a",
+    "exportSHA256": "b122892e88b23b576ac310186e59bbeded18e94c47346967b9dc1ea65e7d91d8",
+    "frames": 390,
+    "encodedHz": 30.0,
+    "uniqueCaptureHz": 29.996516933998688,
+    "distinctImageHz": 27.991608347150446,
+    "edit": "Only desktop gap removed. Both native 900x540 clients, in-game warnings, all frame order and duplicate timing frames retained; no interpolation or speed change."
+  }
+}

@@ -1,4 +1,4 @@
-﻿param([Parameter(Mandatory=$true)][string]$SessionPath)
+param([Parameter(Mandatory=$true)][string]$SessionPath)
 $ErrorActionPreference='Stop'
 $session=(Resolve-Path -LiteralPath $SessionPath).Path
 $allowed=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../../Artifacts/U01/F')).Path
@@ -11,4 +11,10 @@ foreach($record in $records){
  if($live.Name -ne 'UnrealEditor.exe' -or !$live.CommandLine.Contains($record.project) -or !$live.CommandLine.Contains($record.userDir)){throw ('PID identity mismatch; not stopping '+$record.pid)}
  Stop-Process -Id $record.pid
  Write-Output ('Stopped own '+$record.role+' PID '+$record.pid)
+}
+
+$editorFile=Join-Path $session 'original-editor-windows.json'
+if(Test-Path -LiteralPath $editorFile){
+ . (Join-Path $PSScriptRoot 'FReviewHost.ps1')
+ Restore-FOriginalEditorWindows (Get-Content -LiteralPath $editorFile -Raw -Encoding UTF8 | ConvertFrom-Json)
 }

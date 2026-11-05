@@ -1,14 +1,22 @@
-﻿param([int]$Port=17877)
+param([int]$Port=17877,[switch]$OriginalQuality,[switch]$KeepEditorVisible,[switch]$Diagnostics)
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).Path
-$manifest=Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $root 'Docs/U01/Evidence/F/MANIFEST.json') | ConvertFrom-Json
+$manifest=Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $root 'Docs/U01/Evidence/F-Performance/MANIFEST.json') | ConvertFrom-Json
 $project=Join-Path $root 'Artifacts/U01/F/Source/AnimeMMORPG.uproject'
 $sha=git -C (Split-Path $project) rev-parse HEAD
-if($sha -ne $manifest.sourceSHA){throw 'Built F clone source differs from accepted review artifact'}
+if($sha -ne $manifest.sourceSHA){throw 'Built F clone source differs from recorded review artifact'}
 if(Get-NetUDPEndpoint -LocalPort $Port -ErrorAction SilentlyContinue){throw 'Port is occupied; stop your previous F session or choose -Port'}
 $output=Join-Path $root 'Artifacts/U01/F/Reviews';New-Item -ItemType Directory -Force -Path $output | Out-Null
-$session=& (Join-Path $PSScriptRoot 'StartFSession.ps1') -CloneProject $project -OutputRoot $output -Port $Port
+. (Join-Path $PSScriptRoot 'FReviewHost.ps1')
+$editorWindows=@()
+if(!$KeepEditorVisible){
+ $editorWindows=@(Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject'))
+ Write-Host ('Original Editor kept running; minimized '+$editorWindows.Count+' windows to reduce GPU contention. Cleanup restores them.')
+}
+try{$session=& (Join-Path $PSScriptRoot 'StartFSession.ps1') -CloneProject $project -OutputRoot $output -Port $Port -MemoryBudget:(!$OriginalQuality) -Diagnostics:$Diagnostics}
+catch{Restore-FOriginalEditorWindows $editorWindows;throw}
 if(!$session -or !(Test-Path (Join-Path $session 'processes.json'))){throw 'Session did not become ready'}
+ConvertTo-Json -InputObject $editorWindows -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $session 'original-editor-windows.json')
 $session | Set-Content -Encoding UTF8 (Join-Path $root 'Artifacts/U01/F/LatestReview.txt')
 Add-Type @"
 using System;

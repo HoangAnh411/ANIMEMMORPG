@@ -1,0 +1,44 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "sourceSHA": "0f02c77bc14fc4c727ba8694223f8cfc5a655c31",
+  "baseAcceptedMain": "99363222895b0069b3afdab2b103bfc81c68af6b",
+  "engine": "UE5.8.4 CL58902052",
+  "toolchain": "MSVC14.51.36260 / toolset14.51.36231 / SDK10.0.26100.0",
+  "build": "Artifacts/U01/F/Build-20261105-130401-709-c1d0b747",
+  "tests": "Artifacts\\U01\\F\\PerfInvestigation\\MCPTests-20261105-132523",
+  "automation": 23,
+  "smoke": "Artifacts\\U01\\F\\PerfInvestigation\\SmokeB-20261105-132746",
+  "package": "Artifacts\\U01\\F\\PerfInvestigation\\Package-20261105-132600-709-df14ddc7\\Archive\\Windows",
+  "finalSession": "Artifacts\\U01\\F\\Reviews\\Session-20261105-132938",
+  "moduleSHA256": "f7fdcaea1f4dcb06fa461c457eaf5efd05b51a05699ddcf260dacebeed3e1b20",
+  "engineExeSHA256": "a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143",
+  "reviewProfile": {
+    "scope": "Per-process local 4GiB two-client review; original product settings unchanged",
+    "DX12_SM6_Lumen": true,
+    "LumenAtlasSize": 2048,
+    "RenderTargetPoolMinimumMiB": 128,
+    "StreamingPoolMiB": 256,
+    "ScreenPercentage": 50,
+    "WindowSize": [
+      900,
+      540
+    ],
+    "originalEditor": "Kept open; windows minimized and placement saved for cleanup restore",
+    "server": "Honor existing timer-resolution request on dedicated process only",
+    "maxFPS": 30,
+    "replicationOrSmoothingChanged": false
+  },
+  "limits": [
+    "Original graphics profile remains insufficient under the same simultaneous workload; do not claim product performance fixed",
+    "Game-thread packet/mesh onset measurement, not GPU scanout latency",
+    "No integrated G FPS/10min or 60/120FPS acceptance",
+    "No F acceptance/merge; no packaged Server acceptance; anime art/combat DEFERRED"
+  ],
+  "handoffSession": "Artifacts/U01/F/Reviews/Session-20261105-134518",
+  "handoffDiagnostics": false,
+  "cleanupRestoreVerified": {
+    "session": "Artifacts/U01/F/Reviews/Session-20261105-132938",
+    "originalEditorPID": 2068,
+    "restoredShowCommand": 1
+  }
+}

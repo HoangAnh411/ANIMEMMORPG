@@ -1,0 +1,32 @@
+[
+  {
+    "InstanceName": "pid_2068_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_2068_luid_0x00000000_0x00658d60_phys_0)\\dedicated usage",
+    "CookedValue": 712257536
+  },
+  {
+    "InstanceName": "pid_22144_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_22144_luid_0x00000000_0x00658d60_phys_0)\\dedicated usage",
+    "CookedValue": 1464320000
+  },
+  {
+    "InstanceName": "pid_7740_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_7740_luid_0x00000000_0x00658d60_phys_0)\\dedicated usage",
+    "CookedValue": 1487941632
+  },
+  {
+    "InstanceName": "pid_2068_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_2068_luid_0x00000000_0x00658d60_phys_0)\\shared usage",
+    "CookedValue": 176590848
+  },
+  {
+    "InstanceName": "pid_22144_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_22144_luid_0x00000000_0x00658d60_phys_0)\\shared usage",
+    "CookedValue": 283496448
+  },
+  {
+    "InstanceName": "pid_7740_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_7740_luid_0x00000000_0x00658d60_phys_0)\\shared usage",
+    "CookedValue": 282087424
+  }
+]

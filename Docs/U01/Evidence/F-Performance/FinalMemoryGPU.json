@@ -1,0 +1,62 @@
+[
+  {
+    "InstanceName": "pid_1076_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_1076_luid_0x00000000_0x00658d60_phys_0)\\dedicated usage",
+    "CookedValue": 1515728896
+  },
+  {
+    "InstanceName": "pid_15460_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_15460_luid_0x00000000_0x00658d60_phys_0)\\dedicated usage",
+    "CookedValue": 1549557760
+  },
+  {
+    "InstanceName": "pid_2068_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_2068_luid_0x00000000_0x00658d60_phys_0)\\dedicated usage",
+    "CookedValue": 683040768
+  },
+  {
+    "InstanceName": "pid_1076_luid_0x00000000_0x00012201_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_1076_luid_0x00000000_0x00012201_phys_0)\\shared usage",
+    "CookedValue": 16384
+  },
+  {
+    "InstanceName": "pid_1076_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_1076_luid_0x00000000_0x00658d60_phys_0)\\shared usage",
+    "CookedValue": 196349952
+  },
+  {
+    "InstanceName": "pid_15460_luid_0x00000000_0x00012201_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_15460_luid_0x00000000_0x00012201_phys_0)\\shared usage",
+    "CookedValue": 16384
+  },
+  {
+    "InstanceName": "pid_15460_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_15460_luid_0x00000000_0x00658d60_phys_0)\\shared usage",
+    "CookedValue": 178016256
+  },
+  {
+    "InstanceName": "pid_2068_luid_0x00000000_0x00012201_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_2068_luid_0x00000000_0x00012201_phys_0)\\shared usage",
+    "CookedValue": 16384
+  },
+  {
+    "InstanceName": "pid_2068_luid_0x00000000_0x00658d60_phys_0",
+    "Path": "\\\\hoanganh\\gpu process memory(pid_2068_luid_0x00000000_0x00658d60_phys_0)\\shared usage",
+    "CookedValue": 208572416
+  },
+  {
+    "InstanceName": "pid_1076_luid_0x00000000_0x00658d60_phys_0_eng_0_engtype_3d",
+    "Path": "\\\\hoanganh\\gpu engine(pid_1076_luid_0x00000000_0x00658d60_phys_0_eng_0_engtype_3d)\\utilization percentage",
+    "CookedValue": 16.76723470266549
+  },
+  {
+    "InstanceName": "pid_15460_luid_0x00000000_0x00658d60_phys_0_eng_0_engtype_3d",
+    "Path": "\\\\hoanganh\\gpu engine(pid_15460_luid_0x00000000_0x00658d60_phys_0_eng_0_engtype_3d)\\utilization percentage",
+    "CookedValue": 33.95486757794945
+  },
+  {
+    "InstanceName": "pid_2068_luid_0x00000000_0x00658d60_phys_0_eng_0_engtype_3d",
+    "Path": "\\\\hoanganh\\gpu engine(pid_2068_luid_0x00000000_0x00658d60_phys_0_eng_0_engtype_3d)\\utilization percentage",
+    "CookedValue": 0.5532275626640459
+  }
+]
