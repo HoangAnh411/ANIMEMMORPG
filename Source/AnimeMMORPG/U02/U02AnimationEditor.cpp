@@ -13,6 +13,7 @@
 #include "AnimGraphNode_Root.h"
 #include "AnimGraphNode_Slot.h"
 #include "AnimGraphNode_LayeredBoneBlend.h"
+#include "K2Node_VariableGet.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/Paths.h"
@@ -46,8 +47,14 @@ FString UU02AnimationEditor::AdjustCArmMask()
     auto* BP=LoadObject<UAnimBlueprint>(nullptr,*(CRoot+TEXT("/ABP_U02")));if(!BP)return TEXT("ERROR: graph missing");
     int32 Count=0;
     for(auto G:BP->FunctionGraphs)for(auto N:G->Nodes)if(auto* L=Cast<UAnimGraphNode_LayeredBoneBlend>(N))
-        if(L->NodePosX==0&&L->Node.LayerSetup.Num()&&L->Node.LayerSetup[0].BranchFilters.Num()&&L->Node.LayerSetup[0].BranchFilters[0].BoneName==TEXT("clavicle_r"))
-        {L->Node.LayerSetup[0].BranchFilters[0].BoneName=TEXT("upperarm_r");++Count;}
+        if(L->NodePosX==0&&L->Node.LayerSetup.Num()&&L->Node.LayerSetup[0].BranchFilters.Num()&&
+            (L->Node.LayerSetup[0].BranchFilters[0].BoneName==TEXT("clavicle_r")||L->Node.LayerSetup[0].BranchFilters[0].BoneName==TEXT("upperarm_r")))
+        {
+            L->Node.LayerSetup[0].BranchFilters[0].BoneName=TEXT("upperarm_r");
+            auto* Alpha=NewObject<UK2Node_VariableGet>(G);G->AddNode(Alpha,false,false);Alpha->CreateNewGuid();Alpha->VariableReference.SetSelfMember(TEXT("AttackBlendWeight"));Alpha->PostPlacedNewNode();Alpha->AllocateDefaultPins();
+            if(!G->GetSchema()->TryCreateConnection(Alpha->FindPin(TEXT("AttackBlendWeight")),L->FindPin(TEXT("BlendWeights_0"))))return TEXT("ERROR: attack weight pin");
+            ++Count;
+        }
     if(Count!=1)return TEXT("ERROR: expected one attack mask");
     FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(BP);FKismetEditorUtilities::CompileBlueprint(BP);
     return BP->Status!=BS_Error&&SaveC(BP)?TEXT("SUCCESS: C arm mask adjusted"):TEXT("ERROR: compile/save");
@@ -147,6 +154,8 @@ FString UU02AnimationEditor::BuildCAssets()
     Arm->Node.LayerSetup.SetNum(1);Arm->Node.BlendWeights.SetNum(1);Arm->Node.BlendWeights[0]=1;
     FBranchFilter ArmFilter;ArmFilter.BoneName=TEXT("upperarm_r");ArmFilter.BlendDepth=0;Arm->Node.LayerSetup[0].BranchFilters.Add(ArmFilter);
     Arm->Node.bMeshSpaceRotationBlend=true;Arm->PostPlacedNewNode();Arm->AllocateDefaultPins();
+    auto* Alpha=NewObject<UK2Node_VariableGet>(Graph);Graph->AddNode(Alpha,false,false);Alpha->CreateNewGuid();Alpha->VariableReference.SetSelfMember(TEXT("AttackBlendWeight"));Alpha->PostPlacedNewNode();Alpha->AllocateDefaultPins();
+    if(!Graph->GetSchema()->TryCreateConnection(Alpha->FindPin(TEXT("AttackBlendWeight")),Arm->FindPin(TEXT("BlendWeights_0"))))return TEXT("ERROR: attack weight pin");
     if(!Graph->GetSchema()->TryCreateConnection(Previous,Slot->FindPin(TEXT("Source")))
         ||!Graph->GetSchema()->TryCreateConnection(Previous,Arm->FindPin(TEXT("BasePose")))
         ||!Graph->GetSchema()->TryCreateConnection(Slot->FindPin(TEXT("Pose")),Arm->FindPin(TEXT("BlendPoses_0")))

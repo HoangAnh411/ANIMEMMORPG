@@ -23,6 +23,7 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="U01") int32 PoseIndex = 0;
     UPROPERTY(EditDefaultsOnly, Category="U02") TObjectPtr<UAnimMontage> AttackMontage;
     bool bAttackPresented=false;
+    UPROPERTY(BlueprintReadOnly,Category="U02") float AttackBlendWeight=0;
     double AttackPositionSeconds=0;
     uint64 PresentedAction=0,PresentedLife=0;
     FGuid PresentedPawn;

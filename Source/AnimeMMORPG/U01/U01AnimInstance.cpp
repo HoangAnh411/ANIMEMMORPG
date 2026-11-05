@@ -15,7 +15,7 @@ void UU01AnimInstance::NativeInitializeAnimation()
     bPreviouslyFalling = false;
     LandingRemaining = 0;
     PoseIndex = 0;
-    bAttackPresented=false;PresentedAction=PresentedLife=0;PresentedPawn.Invalidate();
+    bAttackPresented=false;AttackBlendWeight=0;PresentedAction=PresentedLife=0;PresentedPawn.Invalidate();
 }
 void UU01AnimInstance::NativeUpdateAnimation(float Dt)
 {
@@ -58,6 +58,7 @@ void UU01AnimInstance::PresentCombat(const FU02RepCombatSnapshot& S,double Now)
     const bool NewLife=PresentedPawn!=S.PawnId || PresentedLife!=S.LifeGeneration;
     const bool NewAction=NewLife || PresentedAction!=S.ActionSequence;
     const auto Sample=AnimeMMORPG::U02::SamplePresentation(S,Now);
+    AttackBlendWeight=Sample.bPlay?1.f:0.f;
     if(NewLife || NewAction)
     {
         if(bAttackPresented)Montage_Stop(.04f,AttackMontage);
