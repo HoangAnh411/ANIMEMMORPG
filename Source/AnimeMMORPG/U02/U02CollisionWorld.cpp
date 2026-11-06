@@ -6,6 +6,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
+#include "Engine/Brush.h"
 #include "PhysicsEngine/BodySetup.h"
 #include "Interfaces/Interface_CollisionDataProvider.h"
 #include "Engine/World.h"
@@ -100,14 +101,15 @@ void UU02CollisionWorld::CaptureEnvironment()
         auto* P=*It;if(P->GetWorld()!=GetWorld()||!P->IsRegistered()||!P->IsQueryCollisionEnabled()||!P->GetOwner())continue;
         // Trigger/physics volumes and pawn bodies are not solid environment. New trace
         // channels can inherit Block even where their existing Pawn response is overlap.
-        if(Cast<APawn>(P->GetOwner())||Cast<APhysicsVolume>(P->GetOwner())||Cast<UU02HurtboxComponent>(P)||P->GetCollisionResponseToChannel(ECC_Pawn)!=ECR_Block)
+        if(P->GetOwner()==GetWorld()->GetDefaultBrush()||P->GetOwner()->IsEditorOnly()||Cast<APawn>(P->GetOwner())||Cast<APhysicsVolume>(P->GetOwner())||Cast<UU02HurtboxComponent>(P)||P->GetCollisionResponseToChannel(ECC_Pawn)!=ECR_Block)
         {IgnoredObstructionComponents.Add(P);continue;}
         if(P->GetCollisionResponseToChannel(ECC_GameTraceChannel2)!=ECR_Block)continue;
         FEnvironment E;E.Component=P;E.Bounds=P->Bounds.GetBox();int Before=Triangles.Num();
         if(auto* Box=Cast<UBoxComponent>(P))AddBoxTriangles(Box->GetComponentTransform(),Box->GetUnscaledBoxExtent(),Triangles);
-        else if(auto* Mesh=Cast<UStaticMeshComponent>(P))
+        else
         {
-            if(auto* Body=Mesh->GetBodySetup())
+            auto* Mesh=Cast<UStaticMeshComponent>(P);
+            if(auto* Body=P->GetBodySetup())
             {
                 if(Body->CollisionTraceFlag!=CTF_UseComplexAsSimple)
                 {
@@ -119,7 +121,7 @@ void UU02CollisionWorld::CaptureEnvironment()
                     }
                     E.bSupported=Body->AggGeom.SphereElems.IsEmpty()&&Body->AggGeom.SphylElems.IsEmpty()&&Body->AggGeom.TaperedCapsuleElems.IsEmpty();
                 }
-                if(Triangles.Num()==Before&&Mesh->GetStaticMesh())
+                if(Triangles.Num()==Before&&Mesh&&Mesh->GetStaticMesh())
                 {
                     FTriMeshCollisionData Data;
                     if(Mesh->GetStaticMesh()->GetPhysicsTriMeshData(&Data,true))for(const auto& T:Data.Indices)
