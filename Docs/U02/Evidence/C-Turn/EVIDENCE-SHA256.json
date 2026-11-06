@@ -556,8 +556,8 @@
   },
   {
     "file": "MANIFEST.json",
-    "bytes": 3022,
-    "sha256": "7e5b5f5ab8708ce01748b525ae3287ba29b8be3786268c5e884ea72ddd9ed059"
+    "bytes": 2988,
+    "sha256": "c54aa5ee14421638553c6a7367382930b60f499ab06545fb05ddc87ec7eea107"
   },
   {
     "file": "MCP-RESULTS.json",
@@ -633,6 +633,21 @@
     "file": "Remote-Final-Push.log.gz",
     "bytes": 437,
     "sha256": "4319482306a60dbe6be26e17ec8be43d270d4205b54f37d43a1a581dc6828955"
+  },
+  {
+    "file": "Remote-Verified-Fetch.log",
+    "bytes": 54,
+    "sha256": "a8e6a8def050733d03822e0fe23daca06b1b54b9f59e4648a23faf0437339dc8"
+  },
+  {
+    "file": "Remote-Verified-Fsck.log",
+    "bytes": 36,
+    "sha256": "959126641d389cc72c10c51ef9cc43c99c14c2e87317fb4d45736b1429444164"
+  },
+  {
+    "file": "REMOTE-VERIFIED.json",
+    "bytes": 97336,
+    "sha256": "f83338dc72875526f127a9e9a49e27677679024827f698b985c5495135f2179a"
   },
   {
     "file": "REVISION-HISTORY.json",

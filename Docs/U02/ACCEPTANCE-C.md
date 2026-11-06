@@ -1,3 +1,5 @@
+> REMOTE CLOSED: C accepted and remote commit 775ce94 verified; all 816 reachable LFS objects downloaded into isolated storage and SHA-256 checked. See Evidence/C-Turn/REMOTE-VERIFIED.json. Prior pending statements below are historical; no C rebuild/retest.
+
 # U02-C — ACCEPTED_LOCAL — REMOTE_PENDING
 
 Người dùng nghiệm thu kỹ thuật tại handoff `cdaf102`, source kiểm chứng `9aa7249a38b65f8119d8c93790d73e795341324a`. Người dùng cũng ghi nhận chấp nhận phần xoay và cảm giác đứng đánh của bản sửa. Animation được nghiệm thu ở mức blockout kỹ thuật; không phải art sản phẩm hoặc xác nhận đồng thuận hai client mạng.

@@ -1,3 +1,5 @@
+> REMOTE CLOSED: C accepted and remote commit 775ce94 verified; all 816 reachable LFS objects downloaded into isolated storage and SHA-256 checked. See Evidence/C-Turn/REMOTE-VERIFIED.json. Prior pending statements below are historical; no C rebuild/retest.
+
 > Current acceptance: technical and standing-attack turn/feel accepted by user at cdaf102, verified source 9aa7249. See [ACCEPTANCE-C.md](ACCEPTANCE-C.md). Historical review-pending statements below describe the original handoff; acceptance supersedes them. Remote delivery remains pending; no main fast-forward or D until verified.
 
 # U02-C — ACCEPTED_LOCAL — REMOTE_PENDING

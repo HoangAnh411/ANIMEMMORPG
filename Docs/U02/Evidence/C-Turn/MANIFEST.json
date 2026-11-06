@@ -1,6 +1,6 @@
 {
-  "status": "ACCEPTED_LOCAL \u2014 REMOTE_PENDING",
-  "remoteDelivery": "pending: acceptance retained; push and remote SHA lookup failed",
+  "status": "ACCEPTED",
+  "remoteDelivery": "verified",
   "utc": "2026-11-06T03:42:02.645180+00:00",
   "branch": "u02/c-attack-presentation",
   "baseSHA": "34e5dd73724546deb6e9cbb410a844341fcfad3c",
@@ -45,5 +45,6 @@
   "acceptanceHandoff": "cdaf102",
   "acceptanceRecord": "../../ACCEPTANCE-C.md",
   "acceptanceScope": "technical blockout, turn and standing attack feel; no product art or two-client agreement",
-  "acceptanceRemoteRecord": "ACCEPTED-REMOTE-ATTEMPT.json"
+  "acceptanceRemoteRecord": "ACCEPTED-REMOTE-ATTEMPT.json",
+  "remoteVerification": "REMOTE-VERIFIED.json"
 }
