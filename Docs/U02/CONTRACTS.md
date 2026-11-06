@@ -111,10 +111,12 @@ HP0 synchronously invalidates ledger before the next event and applies Defeated/
 
 Lab-only native/console crit overrides and shield grants are marked on HUD/log. Production rolls remain server5%. HP/shield/dead snapshots replicate for presentation; dedicated-process agreement remains F. No gameplay shield skill, prediction, combat AI or PvP opening. Current lab remains dummy-target gameplay, with explicit native pawn-versus-pawn fixtures only for ordering tests.
 
-## F implementation record (READY_FOR_REVIEW)
+## F implementation record (ACCEPTED at d5fb4b0/source8580651)
 
 E was ACCEPTED at903e139/source1f1c359 and closed on main e6e1e2f. F adds expected pawn/life to attack admission and expected pawn/life/action to startup-aim RPC; client times remain diagnostic. Reliable attack RPC carries no damage/HP/action claim. Actor-channel ownership plus server model/context/finite checks decide acceptance. Replicated snapshots expose latest accepted/rejected counters/reason; server logs retain every decision.
 
 NetworkLab has server-spawned replicated dummy identity/vital state and one always-relevant result actor, retaining at most64 confirmed events with stable serial and complete action/target/life identity. Client history is presentation/diagnostics only, never a damage application path; current vital snapshot wins after reset/reconnect. No delivery guarantee beyond this bounded history is claimed for bad-network U05. Static map-fixture components have deterministic names and valid Static root attachment on every process. World resolver, collision dimensions/obstruction and damage ordering remain unchanged.
 
 Opt-in non-Shipping dedicated fixture commands exercise shields/reset and two simultaneous sources; concurrent admission briefly supplies fixture Playing control and restores its prior lock, explicitly separate from real Windows input. Normal gameplay does not bypass AwaitingResume. No free PvP, packaged Server, product respawn, prediction or U03. REPORT-F and its matrix distinguish Automation, actual input, postprocessing and pending user network feel review.
+
+F technical acceptance is recorded in ACCEPTANCE-F. Historical Evidence/F remains immutable; two-window user feel is unconfirmed and does not block technical closure. U03 is planning-only until plan review.
