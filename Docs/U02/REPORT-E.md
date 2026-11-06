@@ -1,4 +1,6 @@
-# U02-E — READY_FOR_REVIEW
+# U02-E — ACCEPTED
+
+Người dùng nghiệm thu kỹ thuật tại903e139/source1f1c359; căn cứ và quyền chuyển F ghi tại [ACCEPTANCE-E.md](ACCEPTANCE-E.md). Các kết quả/bằng chứng bên dưới giữ nguyên từ lần bàn giao, không phải chạy lại khi khép hồ sơ. Trạng thái READY_FOR_REVIEW trong manifest lịch sử phản ánh thời điểm capture/handoff; quyết định nghiệm thu ở hồ sơ này.
 
 Branch u02/e-vitals-damage-death from D ACCEPTED main2381089. D acceptance at d0dd5b0/source82bb890, closure push and main remote verified. No D build/tests rerun for documentation closure. E native changes require isolated full Editor/Game build.
 
@@ -34,4 +36,4 @@ Binary SHA-256: DLL Editor `e7bcbb0849a19328a84457f63fc37a28697adef987bc461382d5
 
 Chạy [Play-U02-E.cmd](../../Play-U02-E.cmd); [checklist](../../Play-U02-E-CHECKLIST.md) nằm cạnh launcher. Launcher kiểm cả48 file package và liên kết source trước khi mở. Người dùng chỉ cần báo HUD khó đọc hoặc hồi quy pose/movement/focus; không cần nghiệm thu lại cảm giác C.
 
-Animation vẫn blockout kỹ thuật; dummy chết chưa có ragdoll/art sản phẩm. Kiếm hình ảnh chưa bị chặn theo quỹ đạo môi trường. Không mở PvP, shield skill, respawn sản phẩm, prediction hay F. Replicated vital property chưa chứng minh đồng thuận dedicated server/hai client. E chờ reviewer quyết định nghiệm thu.
+Animation vẫn blockout kỹ thuật; dummy chết chưa có ragdoll/art sản phẩm. Kiếm hình ảnh chưa bị chặn theo quỹ đạo môi trường. Không mở PvP, shield skill, respawn sản phẩm, prediction trong E. Replicated vital property chưa chứng minh đồng thuận dedicated server/hai client. E đã ACCEPTED; F được triển khai riêng sau khi khép remote/main.
