@@ -262,7 +262,7 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetStringField(TEXT("pawnId"),Snapshot.PawnId.ToString());
     J->SetStringField(TEXT("lifeId"),FString::Printf(TEXT("%s:%llu"),*Snapshot.PawnId.ToString(),Snapshot.LifeGeneration));
     J->SetStringField(TEXT("actionId"),FString::Printf(TEXT("%s:%llu:%llu"),*Snapshot.PawnId.ToString(),Snapshot.LifeGeneration,Snapshot.ActionSequence));
-    J->SetStringField(TEXT("commandId"),FString::Printf(TEXT("%llu"),LastCommand));
+    J->SetStringField(TEXT("commandId"),FString::Printf(TEXT("%llu"),Model?LastCommand:Snapshot.LastCommand));
     J->SetNumberField(TEXT("life"),Snapshot.LifeGeneration); J->SetNumberField(TEXT("action"),Snapshot.ActionSequence);
     J->SetNumberField(TEXT("phase"),Snapshot.Phase); J->SetNumberField(TEXT("start"),Snapshot.StartSeconds);
     J->SetNumberField(TEXT("activeStart"),Snapshot.StartSeconds+.16); J->SetNumberField(TEXT("activeEnd"),Snapshot.StartSeconds+.22);
@@ -272,11 +272,12 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("aimYaw"),Snapshot.AimYawDegrees);
     J->SetNumberField(TEXT("turnFromYaw"),Snapshot.TurnFromYaw);
     J->SetNumberField(TEXT("turnStart"),Snapshot.TurnStartSeconds);
-    J->SetNumberField(TEXT("actionSeconds"),GetWorld()->GetTimeSeconds()-Snapshot.StartSeconds);
+    const auto* Clock=GetWorld()->GetGameState();const double ServerNow=Model?GetWorld()->GetTimeSeconds():(Clock?Clock->GetServerWorldTimeSeconds():Snapshot.ServerSeconds);
+    J->SetNumberField(TEXT("actionSeconds"),ServerNow-Snapshot.StartSeconds);
     J->SetNumberField(TEXT("yaw"),Snapshot.AimYawDegrees); J->SetBoolField(TEXT("locked"),Snapshot.bLocked);
     J->SetBoolField(TEXT("yawLocked"),Snapshot.bYawLocked); J->SetNumberField(TEXT("accepted"),Model?AcceptedCount:Snapshot.Accepted);
     J->SetNumberField(TEXT("rejected"),Model?RejectedCount:Snapshot.Rejected); J->SetNumberField(TEXT("lastReject"),Model?uint8(LastReject):Snapshot.RejectReason);
-    J->SetNumberField(TEXT("command"),LastCommand); J->SetNumberField(TEXT("intervals"),IntervalCount);
+    J->SetNumberField(TEXT("command"),Model?LastCommand:Snapshot.LastCommand); J->SetNumberField(TEXT("intervals"),IntervalCount);
     J->SetNumberField(TEXT("lastSliceBegin"),LastInterval.BeginSeconds); J->SetNumberField(TEXT("lastSliceEnd"),LastInterval.EndSeconds);
     if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())
     {J->SetNumberField(TEXT("geometryConfirmed"),W->Confirmed.Num());J->SetNumberField(TEXT("geometryQueries"),W->Queries);J->SetNumberField(TEXT("geometryBlocked"),W->Blocked);J->SetNumberField(TEXT("geometryUnsupportedShapes"),W->UnsupportedObstructions);
