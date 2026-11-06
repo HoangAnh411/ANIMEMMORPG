@@ -17,6 +17,7 @@
 #include <limits>
 struct FU02FTestAccess
 {
+    static void Aim(UU02CombatComponent* C,FGuid Id,uint64 Life,uint64 Action,double Yaw){C->ServerAim_Implementation(Yaw,Id,Life,Action);}
     static void Attack(UU02CombatComponent* C,uint64 Seq,FGuid Id,uint64 Life,double Yaw=0){C->ServerAttack_Implementation(Seq,0,Yaw,Id,Life);}
 };
 namespace {
@@ -31,7 +32,7 @@ struct FW:FTestWorldWrapper
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02FLife,"AnimeMMORPG.U02.F.CommandLifeAndDuplicateAdmission",U02FFlags)
 bool FU02FLife::RunTest(const FString&)
 {
- FW W;auto* C=W.C->Combat.Get();const auto Id=W.C->NetworkPawnId;FU02FTestAccess::Attack(C,1,Id,1);TestEqual(TEXT("Own life accepted"),C->AcceptedCount,uint64(1));W.Finish();FU02FTestAccess::Attack(C,1,Id,1);TestEqual(TEXT("Duplicate rejected after finish"),C->AcceptedCount,uint64(1));C->ResetLabCombat();FU02FTestAccess::Attack(C,2,Id,1);FU02FTestAccess::Attack(C,2,FGuid::NewGuid(),2);TestEqual(TEXT("Old life and wrong subject rejected"),C->AcceptedCount,uint64(1));FU02FTestAccess::Attack(C,2,Id,2,std::numeric_limits<double>::quiet_NaN());TestEqual(TEXT("Nonfinite rejected"),C->AcceptedCount,uint64(1));FU02FTestAccess::Attack(C,3,Id,2);TestEqual(TEXT("Valid new command after rejection accepted"),C->AcceptedCount,uint64(2));W.ForwardErrorMessages(this);return true;
+ FW W;auto* C=W.C->Combat.Get();const auto Id=W.C->NetworkPawnId;FU02FTestAccess::Attack(C,1,Id,1);TestEqual(TEXT("Own life accepted"),C->AcceptedCount,uint64(1));W.Finish();FU02FTestAccess::Attack(C,1,Id,1);TestEqual(TEXT("Duplicate rejected after finish"),C->AcceptedCount,uint64(1));C->ResetLabCombat();FU02FTestAccess::Attack(C,2,Id,1);FU02FTestAccess::Attack(C,2,FGuid::NewGuid(),2);TestEqual(TEXT("Old life and wrong subject rejected"),C->AcceptedCount,uint64(1));FU02FTestAccess::Attack(C,2,Id,2,std::numeric_limits<double>::quiet_NaN());TestEqual(TEXT("Nonfinite rejected"),C->AcceptedCount,uint64(1));FU02FTestAccess::Attack(C,3,Id,2);TestEqual(TEXT("Valid new command after rejection accepted"),C->AcceptedCount,uint64(2));const uint64 Action=C->GetCombatSnapshot().ActionSequence;FU02FTestAccess::Aim(C,Id,1,Action,90);FU02FTestAccess::Aim(C,Id,2,Action+1,90);TestEqual(TEXT("Old life/action aim cannot retarget new startup"),C->GetCombatSnapshot().AimYawDegrees,0.);FU02FTestAccess::Aim(C,Id,2,Action,45);TestEqual(TEXT("Current action aim allowed"),C->GetCombatSnapshot().AimYawDegrees,45.);W.ForwardErrorMessages(this);return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02FResult,"AnimeMMORPG.U02.F.AuthoritativeResultHistoryAndReplicationSchema",U02FFlags)
 bool FU02FResult::RunTest(const FString&)

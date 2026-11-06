@@ -68,7 +68,7 @@ private:
     UFUNCTION() void OnRep_Snapshot();
     UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life);
     UFUNCTION(Server, Reliable) void ServerControlPlaying(bool bPlaying);
-    UFUNCTION(Server, Unreliable) void ServerAim(double Yaw);
+    UFUNCTION(Server, Unreliable) void ServerAim(double Yaw, FGuid Pawn, uint64 Life, uint64 Action);
     TUniquePtr<AnimeMMORPG::U02::FActionModel> Model;
     AU01Character* Character() const;
     bool bAuthorityPlaying = true;

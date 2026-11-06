@@ -85,9 +85,11 @@ void UU02CombatComponent::SetControlPlaying(bool bPlaying)
     else ServerControlPlaying(bPlaying);
 }
 void UU02CombatComponent::ServerControlPlaying_Implementation(bool bPlaying) { bAuthorityPlaying = bPlaying; }
-void UU02CombatComponent::ServerAim_Implementation(double Yaw)
+void UU02CombatComponent::ServerAim_Implementation(double Yaw, FGuid Pawn, uint64 Life, uint64 Action)
 {
     if (!Model || !FMath::IsFinite(Yaw)) return;
+    const auto Current=Model->GetCombatSnapshot(GetWorld()->GetTimeSeconds());
+    if(Pawn!=Current.Life.Pawn||Life!=Current.Life.Generation||Action!=Current.Action.Sequence)return;
     const double Now = GetWorld()->GetTimeSeconds();
     // Drain first: aim received at/after entry can never retroactively turn active.
     AdvanceAuthority(Now);
@@ -247,7 +249,7 @@ void UU02CombatComponent::TickComponent(float Dt, ELevelTick Type, FActorCompone
         { StartupTurn.Retarget(Now,C->GetControlRotation().Yaw); Publish(Now); }
     }
     else if (C->IsLocallyControlled() && Snapshot.Phase==uint8(EPhase::Startup) && Now-LastAimSend>=1./30)
-    { ServerAim(C->GetControlRotation().Yaw); LastAimSend=Now; }
+    { ServerAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence); LastAimSend=Now; }
     if (!Model) ApplyMotorSnapshot();
     if (C->IsLocallyControlled() && GEngine && FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
     {
