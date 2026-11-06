@@ -1,6 +1,6 @@
-# U02 — ma trận closure trình review F
+# U02 — ma trận khép kỹ thuật A–F
 
-A/B/C/D/E đã ACCEPTED theo ACCEPTANCE-A/B/C/D/E. F source8580651, READY_FOR_REVIEW; reviewer/người dùng quyết định nghiệm thu. Main giữ tại E closuree6e1e2f. Không tự merge F hoặc bắt đầu U03.
+A–E đã ACCEPTED theo ACCEPTANCE-A/B/C/D/E. F **ACCEPTED về kỹ thuật tại d5fb4b0/source8580651**, căn cứ ACCEPTANCE-F. Ma trận bên dưới giữ kết quả đã bàn giao và được reviewer đối chiếu; không phải chạy lại khi khép. Người dùng cho phép push/fast-forward main và lập kế hoạch U03, chưa cho triển khai U03 trước review.
 
 | Cổng | Bằng chứng | Kết quả trình review |
 |---|---|---|
@@ -16,6 +16,15 @@ A/B/C/D/E đã ACCEPTED theo ACCEPTANCE-A/B/C/D/E. F source8580651, READY_FOR_RE
 | Movement/smoothing/settings U01 | Full61 tests; heldW/sprint700/gravity/settings; SMOOTHING mode2/time0,1 trên proxy samples; actual frame profiles30/60/60 | Không sửa smoothing chung |
 | Source→binary→run→kết quả | MANIFEST, BUILD/AUTOMATION/PROCESS, RAW-LOGS, EVIDENCE-SHA256; remote SHA kiểm sau push | Failed/INVALID runs giữ riêng; không dùng làm PASS |
 | Launcher/Stop/Editor/config | Play-U02-F, Stop-U02-F, LAUNCHER, EDITOR-RESTORED; private config byte guard | Chỉ session-owned PIDs; Editor gốc còn nguyên |
-| Người dùng đánh giá mạng | Checklist cạnh launcher | Chờ review hình ảnh/focus/cảm giác; không yêu cầu kiểm lại phép tính E/cảm giác C |
+| Người dùng đánh giá mạng | Checklist cạnh launcher | Cảm giác hai cửa sổ chưa xác nhận; không chặn nghiệm thu kỹ thuật F; không suy từ cảm giác C |
+
+| Đợt | Commit nghiệm thu | Source kiểm chứng | Trạng thái |
+|---|---|---|---|
+| A |914f7af |f11c944 |ACCEPTED kỹ thuật/model |
+| B |95a83ca |94ebcc7 |ACCEPTED action/input/motor |
+| C |cdaf102 |9aa7249 |ACCEPTED blockout; xoay/đứng đánh đã được chấp nhận |
+| D |d0dd5b0 |82bb890 |ACCEPTED collision/corner; action66 không được gán chắc cho ảnh ban đầu |
+| E |903e139 |1f1c359 |ACCEPTED Windows/vital/damage |
+| F |d5fb4b0 |8580651 |ACCEPTED dedicated Editor server/hai client trong điều kiện đã đo |
 
 Các file bằng chứng ở Evidence/F. Package Windows và smoke3maps của E là bằng chứng đã ACCEPTED riêng, source1f1c359; không gọi là package F. F chạy Editor binaries trên source mới, chưa Server đóng gói hoặc U05. Anime art/carry sản phẩm, respawn sản phẩm và các tính năng U03 vẫn ngoài phạm vi.

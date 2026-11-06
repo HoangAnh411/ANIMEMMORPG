@@ -87,6 +87,8 @@ Cổng kỹ thuật: Windows điều khiển được, chuột xoay ngay, menu/f
 
 ### U02 — Một đòn đánh hoàn chỉnh
 
+**U02 KỸ THUẬT HOÀN TẤT A–F**: F được nghiệm thu tại **d5fb4b0/source8580651**; [ACCEPTANCE-F](U02/ACCEPTANCE-F.md), [REPORT-F](U02/REPORT-F.md), [ma trận khép](U02/CLOSURE-F.md).61/61 Automation,134/134 input assertions +36/36 bổ sung; dedicated Editor server/hai client trong điều kiện đã đo. Windows E giữ package source1f1c359 và nghiệm thu903e139. Cảm giác hai cửa sổ chưa được xác nhận, không chặn khép kỹ thuật; chưa Server đóng gói, mạng xấu/bù trễ U05 hoặc art sản phẩm. Các trạng thái chờ bên dưới là lịch sử. U03 mới được phép khảo sát/lập kế hoạch, **chưa triển khai trước review kế hoạch**.
+
 **U02-B ACCEPTED** tại95a83ca/source94ebcc7; Editor gốc đã refresh và kiểm PIE/Live Coding; [closure B](U02/ACCEPTANCE-B.md). Cho phép triển khai riêng C, chưa nghiệm thu C–F.
 
 **U02-A / U02.00 ACCEPTED** theo reviewer tại914f7af, source kiểm chứng f11c944; người dùng cho phép khép hồ sơ/fast-forward main và triển khai riêng B. [Căn cứ](U02/ACCEPTANCE-A.md), [báo cáo A](U02/REPORT-A.md). B–F chưa nghiệm thu; giữ ranh giới model/runtime và ba ràng buộc interval/replay-release gate/sweep geometry.
@@ -96,11 +98,11 @@ Phụ thuộc: U01, gồm thử server/hai client. Thực hiện U02.00 trước
 - [x] U02.00 Bàn giao hợp đồng một action: chủ sở hữu trạng thái/quyền sửa, clock/deadline, thời gian nhận lệnh và xử lý, ID chủ thể/action/event ổn định, thứ tự resolve theo Description. Chốt xử lý frame đi qua cả đầu/cuối active và nguồn dữ liệu animation. Đánh giá giải pháp action tối thiểu; chỉ thử framework/GAS nếu có yêu cầu cụ thể và phép so sánh, không mặc định cài thêm. Test bằng clock điều khiển được trước khi nhân rộng.
 
 - [x] U02.01 Action instance/deadline/phase/quyền hành động, đòn 1 theo Description.
-- [ ] U02.02 Montage theo phase, không dùng notify làm nguồn quyết định hit.
-- [ ] U02.03 Hurtbox/query/sweep/tường/chống trùng/thứ tự resolve ổn định.
-- [ ] U02.04 HP/damage/crit/khiên/death, hình nộm/reset, HUD/log tối thiểu.
-- [ ] U02.05 Test biên active, hủy startup, nhiều collider, chết đồng thời; Windows một đòn chơi được.
-- [ ] U02.06 Một đòn qua server riêng/hai client: server nhận và kiểm tra lệnh, quyết định hit/HP; client hiển thị kết quả xác nhận. Thử đánh hụt/trúng/tường và gửi lặp cùng action ID; không nhân hit, hai client đồng thuận HP. Bàn giao log có ID lệnh/action/hit, lý do từ chối và video; chưa nghiệm thu bù trễ hoặc prediction đầy đủ.
+- [x] U02.02 Montage theo phase, không dùng notify làm nguồn quyết định hit.
+- [x] U02.03 Hurtbox/query/sweep/tường/chống trùng/thứ tự resolve ổn định.
+- [x] U02.04 HP/damage/crit/khiên/death, hình nộm/reset, HUD/log tối thiểu.
+- [x] U02.05 Test biên active, hủy startup, nhiều collider, chết đồng thời; Windows một đòn chơi được.
+- [x] U02.06 Một đòn qua server riêng/hai client: server nhận và kiểm tra lệnh, quyết định hit/HP; client hiển thị kết quả xác nhận. Thử đánh hụt/trúng/tường và gửi lặp cùng action ID; không nhân hit, hai client đồng thuận HP. Bàn giao log có ID lệnh/action/hit, lý do từ chối và video; chưa nghiệm thu bù trễ hoặc prediction đầy đủ.
 
 U02.03 phải bàn giao collision matrix/profile trong Config và fixture: môi trường/thân nhân vật/hurtbox; vị trí chân khác tâm capsule; kích thước đầy đủ khác half extent API; world/local space; tường chặn nhưng cơ thể đối thủ không tự chặn kiếm; nhiều hurtbox vẫn một hit/mục tiêu/action. Query/sweep phải kiểm chứng khi khoảng active nằm giữa hai lần cập nhật, không chỉ kiểm tra phase tại cuối frame.
 
