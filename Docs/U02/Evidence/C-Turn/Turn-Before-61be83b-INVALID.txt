@@ -1,0 +1,1 @@
+Guarded capture completed but scenario left rear runway edge; 0 accepted/7 airborne rejects. Retained as failed setup, not proof. Repeat starts further along same runway and uses shorter movement intervals.

@@ -1,0 +1,1 @@
+Wrong manually transcribed source stamp supplied at launch. Binary is revised package, but this run is NOT delivery evidence; retain unchanged logs. Repeat derives SHA directly from Git.

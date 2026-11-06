@@ -1,0 +1,87 @@
+{
+  "sourceSHA": "9aa7249a38b65f8119d8c93790d73e795341324a",
+  "passed": 18,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "Guarded input completed and IME restored",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual owned source/world identity",
+      "result": "PASS"
+    },
+    {
+      "check": "Seven intended attacks, no Resume phantom",
+      "result": "PASS"
+    },
+    {
+      "check": "Video duration matches wall time within one output frame",
+      "result": "PASS"
+    },
+    {
+      "check": "Root motion still ignored",
+      "result": "PASS"
+    },
+    {
+      "check": "Motor lock retains stop during all attack phases",
+      "result": "PASS"
+    },
+    {
+      "check": "All attacks return from montage",
+      "result": "PASS"
+    },
+    {
+      "check": "AwaitingResume after real AltTab",
+      "result": "PASS"
+    },
+    {
+      "check": "Menu does not cancel accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "Held W continues after recovery",
+      "result": "PASS"
+    },
+    {
+      "check": "Back-facing setup exceeds 170 degrees",
+      "result": "PASS"
+    },
+    {
+      "check": "Attack acceptance does not snap actual body",
+      "result": "PASS"
+    },
+    {
+      "check": "Measured startup includes intermediate actual body yaw",
+      "result": "PASS"
+    },
+    {
+      "check": "Measured actual body follows timestamp trajectory",
+      "result": "PASS"
+    },
+    {
+      "check": "Active and recovery actual body equals locked gameplay aim",
+      "result": "PASS"
+    },
+    {
+      "check": "Body and mesh diagnostics are real transform measurements",
+      "result": "PASS"
+    },
+    {
+      "check": "Fixed aim action 1 reaches yaw at active",
+      "result": "PASS"
+    },
+    {
+      "check": "Fixed aim action 2 reaches yaw at active",
+      "result": "PASS"
+    }
+  ],
+  "videoSeconds": 14.566666666666666,
+  "wallSeconds": 14.546947799999998,
+  "samples": 873,
+  "report": {
+    "maxMeasuredTrajectoryErrorDegrees": 5.684341886080802e-14,
+    "startBodyYaw": 180,
+    "firstAimYaw": 0
+  }
+}

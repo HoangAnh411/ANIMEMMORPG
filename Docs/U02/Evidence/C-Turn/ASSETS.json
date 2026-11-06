@@ -1,0 +1,20 @@
+[
+  {
+    "path": "Content/AnimeMMORPG/U02/Animation/ABP_U02.uasset",
+    "sha256": "d12ea3e09a32e2ddae31935bf4274a45ed6a69a9bc569c65e195c0ef5bad7a5a",
+    "bytes": 205154,
+    "provenance": "project-authored technical blockout; accepted U01 skeleton/socket/grip unchanged"
+  },
+  {
+    "path": "Content/AnimeMMORPG/U02/Animation/AM_U02_Attack1.uasset",
+    "sha256": "58ffe8594f67510703dcc623eb5a84f257507ff5cb8420a56c6c17c8d04565e4",
+    "bytes": 5601,
+    "provenance": "project-authored technical blockout; accepted U01 skeleton/socket/grip unchanged"
+  },
+  {
+    "path": "Content/AnimeMMORPG/U02/Animation/A_U02_Attack1.uasset",
+    "sha256": "6d84cc3229e7bf5f92dd7cc0422c2a4a517092fcd61783cff3a49cf5d58b0cdc",
+    "bytes": 180868,
+    "provenance": "project-authored technical blockout; accepted U01 skeleton/socket/grip unchanged"
+  }
+]

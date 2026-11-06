@@ -20,7 +20,7 @@ A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: 
 |---|---|---|
 | B-ACTION |Authority component/inputLMB thật/edge/busy/clock0.16/0.22/0.40/aim/yaw, cancellation fixtures, diagnostics |PASS kỹ thuật: REPORT-B; đã nghiệm thu B |
 | B-MOTOR |StopXY/gravity/move-jump-sprint lock, heldW recovery, menu/focus/Resume click suppression, lost-ground/Interacting/Defeated; saved move authority lock và U01 camera/gates regression |PASS kỹ thuật theo bằng chứng B; giới hạn injected-key qua Alt-Tab ghi REPORT-B; đã nghiệm thu B |
-| C-PRESENT |Blockout/montage0.40/late seek/action IDs, notify bỏ/lặp không hit, root0displacement, carry/grip, finish/cancel/death/lost-ground, landing/locomotion, BP compile/references/cook |NOT RUN |
+| C-PRESENT |Blockout/montage0.40/late seek/action IDs, notify bỏ/lặp không hit, root0displacement, carry/grip, finish/cancel/death/lost-ground, landing/locomotion, BP compile/references/cook |EVIDENCE READY; C REVIEW PENDING |
 | D-GEOMETRY |Feet/world-local/center/extents; trước/sau/ngoài/chạm biên; multiple targets/hurtboxes; target không che target |NOT RUN |
 | D-WALL |Kín/góc/partial hurtbox; origin inside solid; segment nearest-point; target lộ ra sau vật cản trong active; blocked candidate không consume dedup |NOT RUN |
 | D-INTERVAL |Whole-active between updates, target xuyên hộp (endpoints ngoài), stationary, relative sweep clip0.16/0.22, reset/teleport no arena sweep; collider/order permutation |NOT RUN |
@@ -31,3 +31,5 @@ A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: 
 | F-CLOSURE |Source→binary/package→run→IDs→results manifest/logs/video; user checklist cảm giác/aim/3phases/kiếm/pose/movement/focus2clients; không mục bắt buộc thiếu evidence |NOT RUN |
 
 U01 23 Automation/3 smoke/runtime là **kế thừa từ G**, không tự tính vào số đã chạy A. A chỉ cần tests liên quan; E/F mới full regression bắt buộc. Loại bằng chứng tách riêng: Automation / hậu xử lý assertions / input thật-video / user review. Không dùng model lock làm PASS motor thật; không dùng boolean obstruction làm PASS tường; không dùng lethal fixture làm PASS HP.
+
+C startup-turn revision: StartupTurnTrajectory (shortest arc, tie, retarget/deadline, 30/60/120 Hz), ActualBodyAndSkippedBoundary (real actor yaw before full skipped active delivery), ProxySamplesActionTurn (role fixture), and inherited motor/replay/presentation tests. Final manifest/results: Evidence/C-Turn. Real input/video and actual transform traces are separate from Automation. C is not accepted.

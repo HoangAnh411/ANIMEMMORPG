@@ -1,6 +1,6 @@
-import json,datetime,re
+import json,datetime,re,argparse
 from pathlib import Path
-p=Path('Artifacts/U02/C/Play-61be83b');m=json.loads((p/'Capture/input.json').read_text());t=datetime.datetime.fromisoformat(m['utc'])
+parser=argparse.ArgumentParser();parser.add_argument('--session',type=Path,required=True);p=parser.parse_args().session;m=json.loads((p/'Capture/input.json').read_text());t=datetime.datetime.fromisoformat(m['utc'])
 raw=(p/'Game.log').read_bytes();samples=[json.loads(l.split('Metrics ',1)[1]) for l in raw[:raw.rfind(b'\n')+1].decode('utf-8-sig').splitlines() if 'Metrics {' in l]
 samples=[v for v in samples if 0<(datetime.datetime.fromisoformat(v['utc'].replace('Z','+00:00'))-t).total_seconds()<m['captureSeconds']]
 result=json.loads((p/'Capture/ASSERTIONS.json').read_text());checks=[]

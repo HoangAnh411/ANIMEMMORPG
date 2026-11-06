@@ -1,41 +1,47 @@
-> Ph?n h?i m?i c?a ng??i d?ng: C ch?a nghi?m thu. Revision chuy?n yaw startup v? blockout ?ang th?c hi?n; source 61be83b / handoff 39bb09c v? to?n b? b?ng ch?ng b?n d??i l? l?ch s?, kh?ng ch?ng minh revision m?i ?? ??t. Kh?ng merge C ho?c b?t ??u D. Editor g?c ???c gi? m?, kh?ng t? restart.
+# U02-C — LOCAL_READY_FOR_REVIEW
 
-# U02-C — READY_FOR_REVIEW
+C chưa nghiệm thu. Nhánh `u02/c-attack-presentation`; main giữ ở B ACCEPTED `34e5dd73724546deb6e9cbb410a844341fcfad3c`. Source kiểm chứng mới: **`9aa7249a38b65f8119d8c93790d73e795341324a`**. Chưa merge C hoặc bắt đầu D. Chưa xác minh bàn giao remote vì GitHub lỗi kết nối/DNS; log push được giữ trong lịch sử.
 
-Nhánh riêng `u02/c-attack-presentation`, từ main B ACCEPTED `34e5dd73724546deb6e9cbb410a844341fcfad3c`. **Source kiểm chứng `61be83bce9bc4eb1ad15713b2bd4dc291cd37456`**. Không merge C hoặc bắt đầu D. B được nghiệm thu tại95a83ca/source94ebcc7, không chờ xác nhận kỹ thuật lại. Checklist B đã đặt cạnh launcher; original Editor refresh/PIE/Live Coding đã khép trong ACCEPTANCE-B.
+Lịch sử `39bb09c` / source `61be83b` được giữ nguyên. [Báo cáo cũ](REPORT-C-39bb09c.md) và `Evidence/C` chỉ là bằng chứng lịch sử, không chứng minh revision này. Phản hồi cần sửa: thân xoay phắt sang aim lúc nhận LMB; cần chuyển dần trong startup, bổ sung chuẩn bị bằng thân/chân, giữ grip và trả locomotion; video cũ phát nhanh hơn wall time.
 
-## Đã triển khai
+## Thay đổi
 
-Tự author clip kỹ thuật `A_U02_Attack1` trên SK_U01,41mẫu100Hz/0.40s; montage `AM_U02_Attack1` sections Startup0/Active0.16/Recovery0.22. Không clip ngoài hoặc mua/tải asset. Root cố định, root motion disabled/IgnoreRootMotion; không capsule displacement. Bone pose tay dùng chiều dài tay thực và socket đã nghiệm thu, giữ ngón tay grip. Asset hashes tại ASSETS.json.
+`FStartupTurn` tách yaw ngắm khỏi quỹ đạo thân. Nhận đòn giữ yaw thân hiện tại; smoothstep theo simulation time và cung ngắn nhất đến aim trong startup 0,16 giây. Đổi aim bắt đầu đoạn mới từ yaw hiện tại, giữ deadline active ban đầu. Đúng 180° luôn quay chiều yaw dương. Đến active hoàn tất yaw trước khi giao interval, kể cả update vượt toàn active và recovery. Active/recovery khóa hướng; camera vẫn tự do. Timings 0,16/0,22/0,40, gravity, input, combat lock và release gate không đổi.
 
-Graph riêng `ABP_U02` giữ ABP_U01 nguyên byte; combat component gán C graph khi mesh có mặt. Cook explicit thư mục U02. Montage slot sau carry, mask upperarm_r và dưới grip; AttackBlendWeight chỉ1khi trình bày action,0khi idle/finish/cancel để carry/locomotion không bị cached slot đè. Chân/tay trái tiếp tục U01. Không thay damage/collision hoặc quyền motor B.
+Snapshot có yaw bắt đầu đoạn, thời điểm đoạn và aim đích. Client lấy server simulation time để trình bày; simulated proxy được xử lý riêng vì không chạy PhysicsRotation. Không sửa smoothing chung U01 hoặc thêm quyền hit cho client. Diagnostics đo riêng transform thân, transform mesh, aim và action time. Chưa tuyên bố đồng thuận hai client mạng; đó vẫn là cổng F.
 
-UU01AnimInstance đọc confirmed combat snapshot + server/world simulation time: late snapshot play/seek current time, stale life/action stop không dừng action mới; matching cancel/reset/finish dừng montage và trả locomotion. Montage/notify không sửa model, không phát hit/damage. Asset hiện không có notify; tests kiểm không notify dependency, không tuyên bố đã phát/đánh giá SFX/VFX. Crit/vital/hurtbox/network agreement chưa thuộc C.
+Blockout tự tạo được bổ sung chuẩn bị ở spine/clavicle và chân, không dịch chuyển root/capsule. Layer attack từ pelvis, loại nhánh upperarm_l để giữ tay trái locomotion U01; grip ngón tay vẫn sau layer attack. IK dùng chiều dài tay thực và socket đã nghiệm thu. Không đổi asset U01. Chất lượng kỹ thuật, chưa nghiệm thu art anime hoặc cảm giác người dùng.
 
-## Kiểm chứng thực
+## Kiểm chứng trên source mới
 
-UE5.8.4 CL58902052; MSVC14.51.36260/toolset14.51.36231,SDK10.0.26100.0. Full build Editor/Game clone riêng `Build-20261106-001924-446-56d63463`, cả hai Result:Succeeded/exit0. Không nạp layout C qua Live Coding vào Editor gốc; giữ Editor gốc đang mở ở binary B vừa refresh, không đóng thêm.
+- Full build Editor/Game trong clone riêng: `Build-20261106-103506-202-75bb5d6f`, cả hai Result: Succeeded. Source C++ giống lượt compile `e1bc39f`; commit source cuối bổ sung asset đã author, build cuối xác nhận các target trên cây sạch tương ứng. [Build](Evidence/C-Turn/BUILD-RESULTS.json).
+- MCP cold clone `MCPTests-20261106-103539`: **40/40 Success**, queue kết thúc 40 tests performed. Có U00/U01, A/B/C; bổ sung StartupTurnTrajectory, ActualBodyAndSkippedBoundary và ProxySamplesActionTurn. Bao phủ góc 0/±45/±90/±179/180, wrap, smoothstep, retarget, deadline, 30/60/120 Hz sampling và actual body trước interval bị vượt toàn bộ. Hồi quy saved-move authority, gravity, held intent, release gate, grip/carry/landing và montage identity đạt. [Từng test](Evidence/C-Turn/AUTOMATION-RESULTS.json).
+- Windows package `Package-20261106-103646-745-f3676841`: UAT BUILD SUCCESSFUL/exit0, cook ba map và assets mới. Smoke `SmokeB-20261106-103813`: **3/3**, gồm Boot Quit rồi mở hai lab. [Smoke](Evidence/C-Turn/SMOKE.json).
+- Input Windows thật `Play-Turn-Final`: **63/63 assertions**, tách khỏi Automation. Bảy accepted, ba rejected; held WASD/Ctrl tiếp tục sau recovery, Resume không attack, menu/focus không cancel, AwaitingResume, gravity, yaw lock và montage return đạt. [Assertions](Evidence/C-Turn/RUNTIME-ASSERTIONS.json), [video](Evidence/C-Turn/Input-C.mp4).
+- Kịch bản chuyển hướng `Turn-After-Final`: **18/18 assertions**, 873 native samples. Thân 180°, aim 0° khi nhận đòn; có yaw trung gian, khớp aim ở active/recovery. Sai số lớn nhất giữa transform thân đo thực và quỹ đạo timestamp khoảng 5,68e-14°. Đây không phải dùng yaw đích thay transform thực. [Assertions](Evidence/C-Turn/After-TURN-ASSERTIONS.json), [trace thân/mesh/aim](Evidence/C-Turn/After-YAW-TRACE.csv).
+- Launcher C đã kiểm đủ hash package, khởi chạy đúng source/Game world/owned pawn và Stop đúng session; nguyên trạng Editor gốc được khôi phục theo identity. [Launcher](Evidence/C-Turn/LAUNCHER.json).
 
-Cold MCP `MCPTests-20261106-002059`: **37/37 Success**, queue37tests hoàn tất. U00/U01 23 + A7 + B4 + C3. Tests C: SnapshotClock,MontageAssets,RuntimeIdentityAndReturn. Có late seek, stale cancel, matching cancel/reset/finish, root displacement và serialized montage dependency trên pawn/AnimBP thực. Full carry/landing/grip/motor/replay regression đạt. [Per-test](Evidence/C/AUTOMATION-RESULTS.json), [MCP](Evidence/C/MCP-RESULTS.json), [build](Evidence/C/BUILD-RESULTS.json).
+## Trước/sau và thời gian video
 
-Windows package `Package-20261106-002214-736-125d162e`, UAT exit0/BUILD SUCCESSFUL, cook ba map + U02 assets. Smoke **3/3** tại `SmokeB-20261106-002349` (tái sử dụng script smoke đã có, không lẫn source B). [Smoke](Evidence/C/SMOKE.json), [48package files SHA256](Evidence/C/PACKAGE.csv), [source/binary manifest](Evidence/C/MANIFEST.json).
+[Trước sửa](Evidence/C-Turn/Before-Input-C.mp4) và [sau sửa](Evidence/C-Turn/After-Input-C.mp4) dùng cùng reset runway, camera ban đầu và kịch bản: quay lưng rồi đánh; đi ngang rồi đánh; đổi camera trong startup/active; giữ W qua recovery; menu/Alt-Tab/Resume. [Ảnh so sánh](Evidence/C-Turn/Compare.png) và [timestamps](Evidence/C-Turn/FRAMES.json).
 
-Input Windows thật `Play-61be83b`, exact PID/exe/hash/owned Game/Standalone/1LocalPlayer/foreground/IME guards;14.5058s,871native samples. **63/63 assertions hậu xử lý**, tách khỏi37Automation:40hành vi B và23trình bày thực (C graph, bảy action có montage/hand movement/return, root-motion mode). [Assertions](Evidence/C/RUNTIME-ASSERTIONS.json), [input/frame timestamps](Evidence/C/INPUT.json), [video](Evidence/C/Input-C.mp4). Bảy accepted, ba rejected; heldW/Ctrl sau recovery, camera/yaw, menu/focus/AwaitingResume/Resume suppression/gravity vẫn đạt.
+Video sau sửa dài 14,5667 giây, capture thực 14,5469 giây; chênh dưới một output frame 30 FPS. Export giữ frame quan sát gần nhất theo timestamp, không tăng tốc hoặc tạo chuyển động giả. Capture không chứng minh render 60 FPS; các frame được giữ có thể làm video giật và không dùng để xác nhận chính xác biên 0,16. Biên gameplay dùng native traces/tests. Video cũ của hồ sơ 39bb09c được [xuất lại đúng wall time](Evidence/C-Turn/Before-Historical-Realtime.mp4), bản gốc vẫn giữ nguyên.
 
-Video250frames lưu30FPS nhưng capture thực≈17.23FPS; playback nhanh hơn wall time, dùng mảng frame timestamps để liên kết native log. Không chứng minh render60FPS/độ mượt hoặc chất lượng anime. AI đã xem frame chuẩn bị/chém/thu tay và pose thay đổi; user review hình ảnh/cảm giác chưa được giả định PASS. [Các frame](Evidence/C/FRAMES.json).
+AI đã xem ảnh chuẩn bị/chém/thu và sau finish: tay trái về locomotion, kiếm/grip không thấy xuyên thân rõ trong các góc đã xem. Đây là kiểm hình giới hạn, không thay đánh giá cảm giác của người dùng.
 
-## Lịch sử lỗi/giới hạn
+## Hash và lịch sử lỗi
 
-- First compile auto-pointer/TObjectPtr graph iteration sai, đã sửa. Root arm endpoint bị reachable guard reject71.241cm >55cm, đã đưa về trong tầm, không kéo giãn xương.
-- Editor gốc giữ ABP_U01 nên OS chặn copy; không đóng để ép ghi. Đổi thành ABP_U02 riêng, nguyên bộ U01 assets được giữ. Lượt authored ABP_U01 trong clone được archive riêng, không commit vào Content gốc.
-- CarryTrajectory fail ở hai lượt: selector carry/grip cũ mơ hồ khi thêm layer attack và cached slot luônweight1. Sửa selector theo bone role, attack mask upperarm riêng, weight0 khi idle; không bỏ A/B pose assertion. Lượt sau37/37 đạt.
-- Python không expose graph FunctionGraphs; chỉnh asset bằng helper C++ clone-only. Lượt thêm node trong ranged-for có handled ensure; đã sửa duyệt bản sao và rebuild/test source cuối. Logs lỗi giữ lại. Không dùng ensure/trigger làm PASS.
-- GitHub DNS/connectivity lỗi từng lượt; retry trước bàn giao. Compiler preference/UE deprecation warnings còn ở full logs. Không mở AllToolsets, không thêm plugin/module/GAS.
-- Native tests xác nhận cancel/reset và root; input video không tự đại diện kiểm mọi death fixture hoặc dedicated two-client late snapshot. Dedicated U02 đồng thuận/action/HP vẫn cổng F. Chưa collision/damage D/E hoặc product art.
-- Config riêng nguyên byte so với baseline C; không stage/in token/restore toàn file. Clone token tự sinh chỉ loại đúng dòng đã xác minh, không áp vào workspace config.
+[Manifest](Evidence/C-Turn/MANIFEST.json), [48 file package](Evidence/C-Turn/PACKAGE.csv), [asset hashes](Evidence/C-Turn/ASSETS.json), [evidence index](Evidence/C-Turn/EVIDENCE-SHA256.json).
 
-Failed builds/tests/author runs giữ trong Artifacts và archive lịch sử, xem HISTORY.json. Source→binary/package→run→result hashes tại manifest và evidence index; commit hồ sơ không thay source của binary.
+- Editor DLL SHA-256: `dc4d7c2a047c0caf3f045a33e38e8fd4d040fd5f8dce5911b7f2cef52759fcb4`.
+- Packaged Game SHA-256: `fb4f46a6440e3d93b8101afe6804fa7ca231f24d70b340d8a8f233767e217381`.
+
+Giữ các lượt trung gian 39/40 tests, bản mask chưa loại tay trái, lượt quay đi lùi khỏi mép runway, lượt smoke gán nhầm SHA và lượt package bị guard chặn do Editor clone đang chạy tests. Các lượt đó không thay bằng chứng source cuối. [Lịch sử revision](Evidence/C-Turn/REVISION-HISTORY.json), [warnings/logs](Evidence/C-Turn/WARNINGS.json). Không bỏ guard; chờ clone kết thúc rồi package lại. Không dùng trigger/zero tests làm PASS.
+
+Editor gốc PID2444 được giữ mở; không restart hoặc nạp layout C qua Live Coding. Full builds/tests dùng clone, package dùng binary mới. Config riêng nguyên byte so với baseline C (SHA-256 `1A89D9B36D4C7653FE2261A9D966A59E6B4A5D26EC5F17C88C4EED1E260E556D`); không stage/in token. MSVC preference/deprecation warnings giữ trong logs. Không thêm module/plugin/framework.
 
 ## Review
 
-Chạy [Play-U02-C.cmd](../../Play-U02-C.cmd), đọc [checklist cạnh launcher](../../Play-U02-C-CHECKLIST.md). Launcher xác minh48file hash, dùng settings/log riêng và khôi phục Editor window theo identity khi Quit. Đánh giá độ đọc được chuẩn bị/chém/thu đòn, kiếm/grip/pose, trở lại movement và cảm giác ngắm/focus. Đây là blockout kỹ thuật; art anime/carry sản phẩm vẫn DEFERRED. **C dừng READY_FOR_REVIEW**, chưa nghiệm thu/merge, chưa D.
+Chạy [Play-U02-C.cmd](../../Play-U02-C.cmd) với [checklist ba mục](../../Play-U02-C-CHECKLIST.md): quay từ hướng ngược có còn bật người khó chịu; chuẩn bị/chém/thu và kiếm có đọc được; đánh xong tiếp tục di chuyển có tự nhiên. Nếu đổi aim rất mạnh sát active, thân phải bắt kịp trong thời gian còn lại rất ngắn; không hứa mọi thao tác đều quay chậm. Nếu cảm giác góc lớn chưa đạt, giữ C ở review, không tự đổi startup/tốc độ quay thành luật mới.
+
+Kết thúc local: LOCAL_READY_FOR_REVIEW, chưa nghiệm thu C. Remote chưa được xác minh; không coi lỗi push là đã bàn giao GitHub. Không merge hoặc bắt đầu D.

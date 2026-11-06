@@ -1,0 +1,52 @@
+[
+  {
+    "file": "Before-Input-C.mp4",
+    "sha256": "03b30ef2efe98328b5701eceae59a9f831b3ff037403f4a61786bb1a7bf6c9b9",
+    "original": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\Input-C.mp4"
+  },
+  {
+    "file": "Before-input.json",
+    "sha256": "7413e8dc6257aeae8bea6948f52e489b01b5deecd12749b25c2c13436eeb7b36",
+    "original": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\input.json"
+  },
+  {
+    "file": "Before-TURN-ASSERTIONS.json",
+    "sha256": "5b8e36616cc2ff6c86137ea4404a3f3bf0716a193511ec3b7efe52e9d2c83806",
+    "original": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\TURN-ASSERTIONS.json"
+  },
+  {
+    "file": "Before-YAW-TRACE.csv",
+    "sha256": "5d9838e2c1491c8fcda97cab372ce27b9cef1d1195ac543c1803dba1c6413ade",
+    "original": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\YAW-TRACE.csv"
+  },
+  {
+    "file": "Before-Turn-Game.log.gz",
+    "sha256": "c88aede091e331af7a5cc42ca43ea983c88298158f2fb8b3fe168c4a11130b74",
+    "rawSHA256": "60f039f4f1f396c6b79e1a5e48e724b11e510f9189adc3433490d423d6034b4e"
+  },
+  {
+    "file": "After-Input-C.mp4",
+    "sha256": "b3c56024d78aae600fed9b73aa8f1a8ac65de3d5dcfa4fce14adb0f1b8be9b6a",
+    "original": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\Input-C.mp4"
+  },
+  {
+    "file": "After-input.json",
+    "sha256": "d6e565d68750f4303d5ad0d6c055adb97446da490fcc5dcb97759887b7737dcf",
+    "original": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\input.json"
+  },
+  {
+    "file": "After-TURN-ASSERTIONS.json",
+    "sha256": "ffb2ee1fcdfa3563f4de9535f4f6ad8a93bc0319383832febad83a9f156f4f25",
+    "original": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\TURN-ASSERTIONS.json"
+  },
+  {
+    "file": "After-YAW-TRACE.csv",
+    "sha256": "f51c77c0dee8f5a48f20da1f65208fc16fa92d014eda942883de596cb7bc8fab",
+    "original": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\YAW-TRACE.csv"
+  },
+  {
+    "file": "After-Turn-Game.log.gz",
+    "sha256": "fe9469c75c3e4fa431f33764e9f575c8ef2ef4f7ea7f732bc8fd620877e5f65b",
+    "rawSHA256": "6e17622977d5f4588d608145532262aeb6e92a1efe710408df2a64e18e514f75"
+  }
+]

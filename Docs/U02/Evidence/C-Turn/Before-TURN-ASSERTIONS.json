@@ -1,0 +1,53 @@
+{
+  "sourceSHA": "61be83bce9bc4eb1ad15713b2bd4dc291cd37456",
+  "passed": 10,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "Guarded input completed and IME restored",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual owned source/world identity",
+      "result": "PASS"
+    },
+    {
+      "check": "Seven intended attacks, no Resume phantom",
+      "result": "PASS"
+    },
+    {
+      "check": "Video duration matches wall time within one output frame",
+      "result": "PASS"
+    },
+    {
+      "check": "Root motion still ignored",
+      "result": "PASS"
+    },
+    {
+      "check": "Motor lock retains stop during all attack phases",
+      "result": "PASS"
+    },
+    {
+      "check": "All attacks return from montage",
+      "result": "PASS"
+    },
+    {
+      "check": "AwaitingResume after real AltTab",
+      "result": "PASS"
+    },
+    {
+      "check": "Menu does not cancel accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "Held W continues after recovery",
+      "result": "PASS"
+    }
+  ],
+  "videoSeconds": 14.6,
+  "wallSeconds": 14.594773499999974,
+  "samples": 875,
+  "report": {
+    "note": "Historical before package; new trajectory assertions do not apply"
+  }
+}

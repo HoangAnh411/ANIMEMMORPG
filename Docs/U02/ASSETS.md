@@ -11,3 +11,8 @@ Có ba clip nguồn `MM_Attack_01/02/03` (1.0s mỗi clip) và `MM_ChargedAttack
 Asset blockout mới chưa tạo trong A nên **chưa có hash/preview/cook**; C phải ghi hash thật, test root/grip/pose/missing-reference/cook và video. Không gán hash asset nguồn cho asset tương lai. Quyền clip tự tạo thuộc phần authoring dự án; quyền skeleton/mesh nguồn kế thừa baseline U00/U01 đã được người dùng cho phép sử dụng/upload và nghiệm thu, xem [U00-B](../U00/REPORT-B.md) và [U01 assets](../U01/ASSETS.md). Nhãn lịch sử `UPLOAD_NOT_CONFIRMED` trong register U00 chỉ là provenance snapshot cũ; A không cấp giấy phép mới hoặc suy hash là license proof. Không dùng clip attack nguồn cho U02.
 
 Art anime, model/rig/kiếm và carry sản phẩm vẫn **DEFERRED**. Inventory gồm template chỉ để truy vết lựa chọn, không tuyên bố mọi asset template đã đạt chất lượng/được dùng trong combat mới.
+
+
+## C startup-turn revision
+
+Re-authored technical A_U02_Attack1 / AM_U02_Attack1 and ABP_U02 on the accepted SK_U01. Root fixed; no external clip or new dependency. Spine/clavicle and leg preparation use existing bone lengths; right wrist IK retains the accepted socket and grip. Attack mask starts at pelvis but excludes upperarm_l and descendants, preserving U01 left-arm locomotion instead of exposing reference-pose data from the isolated right-carry asset. Finger grip remains after the attack layer. Actual hashes and current evidence are in Evidence/C-Turn/ASSETS.json; historical assets/evidence remain in Evidence/C. Product anime art remains deferred.

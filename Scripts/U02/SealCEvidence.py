@@ -1,4 +1,4 @@
-"""Verify and seal B source -> binary/package -> MCP/runtime evidence. No gameplay inference from trigger."""
+"""Verify and seal C source -> binary/package -> MCP/runtime evidence. No gameplay inference from trigger."""
 import argparse
 import csv
 from datetime import datetime, timezone
@@ -12,7 +12,8 @@ import subprocess
 
 p=argparse.ArgumentParser()
 for name in ('build','tests','package','smoke','capture'):p.add_argument('--'+name,type=Path,required=True)
-a=p.parse_args();root=Path(__file__).resolve().parents[2];out=root/'Docs/U02/Evidence/C';out.mkdir(parents=True,exist_ok=True)
+p.add_argument('--evidence',type=Path,required=True)
+a=p.parse_args();root=Path(__file__).resolve().parents[2];out=a.evidence.resolve();assert out.is_relative_to(root/'Docs/U02/Evidence');out.mkdir(parents=True,exist_ok=True)
 for name in ('build','tests','package','smoke','capture'):setattr(a,name,getattr(a,name).resolve())
 def load(path):return json.loads(path.read_text(encoding='utf-8-sig'))
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -70,7 +71,7 @@ for path in paths:
 for directory in sorted((root/'Artifacts/U02/C').glob('MCPTests-*')):
     if (directory/'result.json').exists():history.append(dict(run=directory.name,**load(directory/'result.json')))
 write('LOGS.json',logs);write('WARNINGS.json',warnings);write('RUN-HISTORY.json',history)
-write('MANIFEST.json',dict(status='READY_FOR_REVIEW',utc=datetime.now(timezone.utc).isoformat(),branch='u02/c-attack-presentation',
+write('MANIFEST.json',dict(status='LOCAL_READY_FOR_REVIEW',remoteDelivery='pending remote verification',utc=datetime.now(timezone.utc).isoformat(),branch='u02/c-attack-presentation',
     baseSHA='34e5dd73724546deb6e9cbb410a844341fcfad3c',sourceSHA=source,moduleSHA256=sha(Path(process['module'])),
     gameExeSHA256=sha(game),engineExeSHA256=process['exeSHA256'],packageRelativePath=package.relative_to(root).as_posix(),packageFiles=len(files),
     buildRun=a.build.name,testRun=a.tests.name,packageRun=a.package.name,smokeRun=a.smoke.name,captureRun=a.capture.name,

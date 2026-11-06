@@ -1,0 +1,86 @@
+[
+  {
+    "file": "Before-0.png",
+    "video": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 1.746008,
+    "actionOffset": 0,
+    "sourceSHA": "61be83bce9bc4eb1ad15713b2bd4dc291cd37456"
+  },
+  {
+    "file": "Before-0.08.png",
+    "video": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 1.826008,
+    "actionOffset": 0.08,
+    "sourceSHA": "61be83bce9bc4eb1ad15713b2bd4dc291cd37456"
+  },
+  {
+    "file": "Before-0.17.png",
+    "video": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 1.916008,
+    "actionOffset": 0.17,
+    "sourceSHA": "61be83bce9bc4eb1ad15713b2bd4dc291cd37456"
+  },
+  {
+    "file": "Before-0.25.png",
+    "video": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 1.996008,
+    "actionOffset": 0.25,
+    "sourceSHA": "61be83bce9bc4eb1ad15713b2bd4dc291cd37456"
+  },
+  {
+    "file": "Before-0.39.png",
+    "video": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 2.136008,
+    "actionOffset": 0.39,
+    "sourceSHA": "61be83bce9bc4eb1ad15713b2bd4dc291cd37456"
+  },
+  {
+    "file": "Before-0.5.png",
+    "video": "Artifacts\\U02\\C\\Turn-Before-Retry-61be83b\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 2.246008,
+    "actionOffset": 0.5,
+    "sourceSHA": "61be83bce9bc4eb1ad15713b2bd4dc291cd37456"
+  },
+  {
+    "file": "After-0.png",
+    "video": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 1.729402,
+    "actionOffset": 0,
+    "sourceSHA": "9aa7249a38b65f8119d8c93790d73e795341324a"
+  },
+  {
+    "file": "After-0.08.png",
+    "video": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 1.8094020000000002,
+    "actionOffset": 0.08,
+    "sourceSHA": "9aa7249a38b65f8119d8c93790d73e795341324a"
+  },
+  {
+    "file": "After-0.17.png",
+    "video": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 1.899402,
+    "actionOffset": 0.17,
+    "sourceSHA": "9aa7249a38b65f8119d8c93790d73e795341324a"
+  },
+  {
+    "file": "After-0.25.png",
+    "video": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 1.979402,
+    "actionOffset": 0.25,
+    "sourceSHA": "9aa7249a38b65f8119d8c93790d73e795341324a"
+  },
+  {
+    "file": "After-0.39.png",
+    "video": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 2.119402,
+    "actionOffset": 0.39,
+    "sourceSHA": "9aa7249a38b65f8119d8c93790d73e795341324a"
+  },
+  {
+    "file": "After-0.5.png",
+    "video": "Artifacts\\U02\\C\\Turn-After-Final\\Capture\\Input-C.mp4",
+    "wallRelativeSeconds": 2.2294020000000003,
+    "actionOffset": 0.5,
+    "sourceSHA": "9aa7249a38b65f8119d8c93790d73e795341324a"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "inputVideo": "Docs\\U02\\Evidence\\C\\Input-C.mp4",
+  "inputMetadata": "Docs\\U02\\Evidence\\C\\INPUT.json",
+  "sourceFrames": 250,
+  "wallSeconds": 14.505824799998663,
+  "outputFrames": 436,
+  "outputFPS": 30,
+  "outputSeconds": 14.533333333333333,
+  "policy": "hold last observed frame until next timestamp; no invented motion"
+}

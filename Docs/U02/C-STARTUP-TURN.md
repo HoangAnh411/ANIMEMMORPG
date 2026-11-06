@@ -1,4 +1,4 @@
-# C startup turn revision ? IN_PROGRESS
+# C startup turn revision ? LOCAL_READY_FOR_REVIEW
 
 User requested revision after 39bb09c (tested source 61be83b). C remains unaccepted.
 

@@ -1,0 +1,137 @@
+[
+  {
+    "file": "History-turn-build-console.log.gz",
+    "rawSHA256": "2fa31b70717b992e6f7d414d475d12ff5248643604991ed80adbca1e262d0e14",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-build-console.log"
+  },
+  {
+    "file": "History-turn-final-build-console.log.gz",
+    "rawSHA256": "99f54a1a18280a2ad93a731b34c517e5e29bdcd0d46dedd86d711d50fd96529c",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-final-build-console.log"
+  },
+  {
+    "file": "History-turn-final-package-console.log.gz",
+    "rawSHA256": "2b2cd4bd252b1f7bcbcf83d2a2142b5a18febf646296a436df987ff914fe93e8",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-final-package-console.log"
+  },
+  {
+    "file": "History-turn-final-package-retry-console.log.gz",
+    "rawSHA256": "89ca28b309d83f6013cfec9ccd8c6eec81c8da319761de986fce0aacdcc73e8f",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-final-package-retry-console.log"
+  },
+  {
+    "file": "History-turn-final-smoke-console.log.gz",
+    "rawSHA256": "d26c9a064bcd273b24504d1bfe4102573c64dcb9b0d06ddcbdf5c2ad3b731e8e",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-final-smoke-console.log"
+  },
+  {
+    "file": "History-turn-final-tests-console.log.gz",
+    "rawSHA256": "8d53a484b6d3111ecae1ffa6b5b68fdf9608c6f719fc28c493197291a9663baa",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-final-tests-console.log"
+  },
+  {
+    "file": "History-turn-left-arm-author-console.log.gz",
+    "rawSHA256": "1caa14762f61f57badf6453c335db56385df20c4d5f927205462e75a730d012d",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-left-arm-author-console.log"
+  },
+  {
+    "file": "History-turn-left-arm-build-console.log.gz",
+    "rawSHA256": "1923450bae0a3206879a98215d6869d3d62d760b09ce112d79c8668c55a8b3bc",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-left-arm-build-console.log"
+  },
+  {
+    "file": "History-turn-package-console.log.gz",
+    "rawSHA256": "4651bc98dc555494b4b75e35b14676ab42dc5bc32a3f45bdf81cebbc43235817",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-package-console.log"
+  },
+  {
+    "file": "History-turn-proxy-build-console.log.gz",
+    "rawSHA256": "d90f3d5362c3532ecd3d9777cc0732e06420953f1f1769b37323b3d9352b84b0",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-proxy-build-console.log"
+  },
+  {
+    "file": "History-turn-proxy-package-console.log.gz",
+    "rawSHA256": "ba09fea932cfe3af27f56abca398c5b0b7a5f421e62189f57bb0f830f77bc4b1",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-proxy-package-console.log"
+  },
+  {
+    "file": "History-turn-proxy-smoke-console.log.gz",
+    "rawSHA256": "d3702fe2f7c5bcb4777b76ebe5487fbfc004ace581eb4c98d72343f4af7a4115",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-proxy-smoke-console.log"
+  },
+  {
+    "file": "History-turn-proxy-tests-console.log.gz",
+    "rawSHA256": "19f95ba88a88932d5963c964b566713e4bcd455ffc39b96dfa6cf43e51af0230",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-proxy-tests-console.log"
+  },
+  {
+    "file": "History-turn-push-source.log.gz",
+    "rawSHA256": "017013968fc68c2cfc74da62df921bdfed5b88f81359c88c8337fe9532d2b70f",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-push-source.log"
+  },
+  {
+    "file": "History-turn-remote-head.log.gz",
+    "rawSHA256": "aa093faf43c12f39bcc6da4712b765628e8485c33b80f7ed120a66dcd61684e9",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-remote-head.log"
+  },
+  {
+    "file": "History-turn-smoke-correct-console.log.gz",
+    "rawSHA256": "616152c754ba4a84ff84a66cd661182e2869351b84186f6edb1bd47346ad3b65",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-smoke-correct-console.log"
+  },
+  {
+    "file": "History-turn-tests-console.log.gz",
+    "rawSHA256": "c26510c5fe7a56c21d9f1a7ee9a89605d880951dd4341f42786da3c2a7aefd02",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\turn-tests-console.log"
+  },
+  {
+    "file": "Author-20261105-235630-Editor.log.gz",
+    "rawSHA256": "d6c94232eb6d84bc8418d14bcab5d305122ec59c176d58fc5d04c25d25c9f49d",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\Author-20261105-235630\\Editor.log"
+  },
+  {
+    "file": "Author-20261105-235923-Editor.log.gz",
+    "rawSHA256": "b77855ef7f254edf29b05cb542ccbbf4661a3ce500b74d5051a82cdcfcb7fce3",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\Author-20261105-235923\\Editor.log"
+  },
+  {
+    "file": "Author-20261106-101931-Editor.log.gz",
+    "rawSHA256": "37b158b47f9cc5802c5fd984661f84384674597a437b29eb7d941d139f64a95f",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\Author-20261106-101931\\Editor.log"
+  },
+  {
+    "file": "Author-20261106-103428-Editor.log.gz",
+    "rawSHA256": "65c4f82d0daea13aec6796c925994db5f20a5941dc0873ad1a1c46dfe4fae6e2",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\Author-20261106-103428\\Editor.log"
+  },
+  {
+    "file": "History-Turn-Before-61be83b-Game.log.gz",
+    "rawSHA256": "3c0ad57194e48b8e44ea9ec10fc4a9f08b6f5e65c3b8890c5b05cc9ca2bf529e",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\Turn-Before-61be83b\\Game.log"
+  },
+  {
+    "file": "History-Play-Turn-2e166a2-Game.log.gz",
+    "rawSHA256": "3db9c5f5615a5985be429fbebc1278c59f861f5e47db9f1734e65878536e4701",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\Play-Turn-2e166a2\\Game.log"
+  },
+  {
+    "file": "History-Turn-After-2e166a2-Game.log.gz",
+    "rawSHA256": "ebb5fc07cf9d7ffb5b98eb16cf54ee8ca7c89263e710c07caef83d105a8eeaa9",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\Turn-After-2e166a2\\Game.log"
+  },
+  {
+    "file": "Invalid-Source-Stamp-L_Boot-Game.log.gz",
+    "rawSHA256": "be72eded8de918a8fe21796c213a596d9223abc3d532d69a8a7730093e0ff66a",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\SmokeB-20261106-102717\\L_Boot\\Game.log"
+  },
+  {
+    "file": "Invalid-Source-Stamp-L_CharacterCombatLab-Game.log.gz",
+    "rawSHA256": "942e28daab95bf33837988535f1e7c6c1b63e08ebd3a2f511bfea8ae262c0ef8",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\SmokeB-20261106-102717\\L_CharacterCombatLab\\Game.log"
+  },
+  {
+    "file": "Invalid-Source-Stamp-L_NetworkLab-Game.log.gz",
+    "rawSHA256": "c999905f0242fb0b5abca7c8a02bd47586a4fe4d6ced961e2cbc01378c5d1893",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\C\\SmokeB-20261106-102717\\L_NetworkLab\\Game.log"
+  }
+]
