@@ -1,6 +1,8 @@
-# U02-C — LOCAL_READY_FOR_REVIEW
+> Current acceptance: technical and standing-attack turn/feel accepted by user at cdaf102, verified source 9aa7249. See [ACCEPTANCE-C.md](ACCEPTANCE-C.md). Historical review-pending statements below describe the original handoff; acceptance supersedes them. Remote delivery remains pending; no main fast-forward or D until verified.
 
-C chưa nghiệm thu. Nhánh `u02/c-attack-presentation`; main giữ ở B ACCEPTED `34e5dd73724546deb6e9cbb410a844341fcfad3c`. Source kiểm chứng mới: **`9aa7249a38b65f8119d8c93790d73e795341324a`**. Chưa merge C hoặc bắt đầu D. Chưa xác minh bàn giao remote vì GitHub lỗi kết nối/DNS; log push được giữ trong lịch sử.
+# U02-C — ACCEPTED_LOCAL — REMOTE_PENDING
+
+C ACCEPTED theo review nguời dùng tại cdaf102; xem ACCEPTANCE-C.md. Nhánh `u02/c-attack-presentation`; main giữ ở B ACCEPTED `34e5dd73724546deb6e9cbb410a844341fcfad3c`. Source kiểm chứng mới: **`9aa7249a38b65f8119d8c93790d73e795341324a`**. Chưa merge C hoặc bắt đầu D. Chưa xác minh bàn giao remote vì GitHub lỗi kết nối/DNS; log push được giữ trong lịch sử.
 
 Lịch sử `39bb09c` / source `61be83b` được giữ nguyên. [Báo cáo cũ](REPORT-C-39bb09c.md) và `Evidence/C` chỉ là bằng chứng lịch sử, không chứng minh revision này. Phản hồi cần sửa: thân xoay phắt sang aim lúc nhận LMB; cần chuyển dần trong startup, bổ sung chuẩn bị bằng thân/chân, giữ grip và trả locomotion; video cũ phát nhanh hơn wall time.
 
@@ -44,4 +46,4 @@ Editor gốc PID2444 được giữ mở; không restart hoặc nạp layout C q
 
 Chạy [Play-U02-C.cmd](../../Play-U02-C.cmd) với [checklist ba mục](../../Play-U02-C-CHECKLIST.md): quay từ hướng ngược có còn bật người khó chịu; chuẩn bị/chém/thu và kiếm có đọc được; đánh xong tiếp tục di chuyển có tự nhiên. Nếu đổi aim rất mạnh sát active, thân phải bắt kịp trong thời gian còn lại rất ngắn; không hứa mọi thao tác đều quay chậm. Nếu cảm giác góc lớn chưa đạt, giữ C ở review, không tự đổi startup/tốc độ quay thành luật mới.
 
-Kết thúc local: LOCAL_READY_FOR_REVIEW, chưa nghiệm thu C. Remote chưa được xác minh; không coi lỗi push là đã bàn giao GitHub. Không merge hoặc bắt đầu D.
+Trạng thái hiện tại: ACCEPTED_LOCAL — REMOTE_PENDING. Remote chưa được xác minh; không coi lỗi push là đã bàn giao GitHub. Không merge hoặc bắt đầu D.
