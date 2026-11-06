@@ -38,7 +38,8 @@ void UU02CollisionWorld::RegisterCombat(UU02CombatComponent* C)
 {
     if(!C->GetOwner()->HasAuthority()||Sources.ContainsByPredicate([&](const FSource& S){return S.Component==C;}))return;
     FSource S;S.Component=C;auto* Pawn=CastChecked<AU01Character>(C->GetOwner());
-    const auto Snap=C->GetCombatSnapshot();S.Current.Position=Feet(Pawn);S.Current.Life={Snap.PawnId,Snap.LifeGeneration};S.Previous=S.Current;
+    const auto Snap=C->GetCombatSnapshot();S.Current.Position=Feet(Pawn);S.Current.Life={Snap.PawnId,Snap.LifeGeneration};TArray<UU02HurtboxComponent*> Boxes;Pawn->GetComponents(Boxes);for(auto* H:Boxes)S.Current.Epoch=FMath::Max(S.Current.Epoch,H->ContinuityEpoch);
+    S.Previous=S.Current;
     S.IntervalHandle=C->OnActiveInterval.AddLambda([this,Weak=TWeakObjectPtr<UU02CombatComponent>(C)](const FActionId& Id,const FActiveSlice& Slice)
     {
         if(auto* Component=Weak.Get())Pending.Add({Weak,Id,Slice,Component->GetCombatSnapshot().AimYawDegrees});
@@ -91,11 +92,15 @@ void UU02CollisionWorld::Capture(double Now)
 }
 void UU02CollisionWorld::CaptureEnvironment()
 {
-    Environment.Empty();Triangles.Empty();UnsupportedObstructions=0;
+    Environment.Empty();Triangles.Empty();IgnoredObstructionComponents.Empty();UnsupportedObstructions=0;
     for(TObjectIterator<UPrimitiveComponent> It;It;++It)
     {
-        auto* P=*It;if(P->GetWorld()!=GetWorld()||!P->IsRegistered()||!P->IsQueryCollisionEnabled()||!P->GetOwner()
-            ||Cast<ACharacter>(P->GetOwner())||Cast<UU02HurtboxComponent>(P)||P->GetCollisionResponseToChannel(ECC_GameTraceChannel2)!=ECR_Block)continue;
+        auto* P=*It;if(P->GetWorld()!=GetWorld()||!P->IsRegistered()||!P->IsQueryCollisionEnabled()||!P->GetOwner())continue;
+        // Trigger/physics volumes and pawn bodies are not solid environment. New trace
+        // channels can inherit Block even where their existing Pawn response is overlap.
+        if(Cast<APawn>(P->GetOwner())||Cast<UU02HurtboxComponent>(P)||P->GetCollisionResponseToChannel(ECC_Pawn)!=ECR_Block)
+        {IgnoredObstructionComponents.Add(P);continue;}
+        if(P->GetCollisionResponseToChannel(ECC_GameTraceChannel2)!=ECR_Block)continue;
         FEnvironment E;E.Component=P;E.Bounds=P->Bounds.GetBox();int Before=Triangles.Num();
         if(auto* Box=Cast<UBoxComponent>(P))AddBoxTriangles(Box->GetComponentTransform(),Box->GetUnscaledBoxExtent(),Triangles);
         else if(auto* Mesh=Cast<UStaticMeshComponent>(P))
@@ -133,7 +138,9 @@ bool UU02CollisionWorld::Unobstructed(FVector O,FVector C,double R) const
         if(auto* P=E.Component.Get()) { FVector Closest;const float D=P->GetClosestPointOnCollision(O,Closest);if(D==0)return false; }
     }
     for(const auto& T:Triangles)if(SegmentTriangleClosed(O,End,T))return false;
-    return !GetWorld()->LineTraceTestByChannel(O,End,ECC_GameTraceChannel2,FCollisionQueryParams(SCENE_QUERY_STAT(U02Wall),false));
+    FCollisionQueryParams Params(SCENE_QUERY_STAT(U02Wall),false);
+    for(const auto& Weak:IgnoredObstructionComponents)if(auto* Cmp=Weak.Get())Params.AddIgnoredComponent(Cmp);
+    return !GetWorld()->LineTraceTestByChannel(O,End,ECC_GameTraceChannel2,Params);
 }
 void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandidate>& Out)
 {

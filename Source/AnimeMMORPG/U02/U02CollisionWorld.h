@@ -68,6 +68,7 @@ private:
     TArray<FHurt> Hurts;
     TArray<FPending> Pending;
     TArray<FEnvironment> Environment;
+    TArray<TWeakObjectPtr<UPrimitiveComponent>> IgnoredObstructionComponents;
     TArray<AnimeMMORPG::U02::FTriangle> Triangles;
     AnimeMMORPG::U02::FResolveLedger Ledger;
     FDelegateHandle TickHandle;

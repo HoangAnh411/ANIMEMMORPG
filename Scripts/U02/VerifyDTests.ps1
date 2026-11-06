@@ -9,6 +9,8 @@ $project=(Resolve-Path -LiteralPath $CloneProject).Path
 $original=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../../AnimeMMORPG.uproject')).Path
 if($project -ieq $original -or $project -notlike '*\Artifacts\U02\D\Source\*') { throw 'Requires isolated U02-D source clone' }
 $sourceRoot=Split-Path $project
+& python (Join-Path $PSScriptRoot "PrepareDCloneConfig.py") --root $sourceRoot
+if($LASTEXITCODE -ne 0){throw "Unexpected clone config change"}
 if(@(& git -C $sourceRoot status --porcelain --untracked-files=no).Count){throw 'Clone tracked tree must be clean'}
 $out=Join-Path $OutputRoot ('MCPTests-'+(Get-Date -Format 'yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Path $out | Out-Null
