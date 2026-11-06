@@ -1,0 +1,433 @@
+{
+  "passed": 34,
+  "failed": 1,
+  "criteria": "No multi-second degradation: both clients p95<25ms in .5-2/2-5/5-15 bands and every rolling1s >=50 frames; server p95<40ms; latency p95 no worse beyond1ms UTC quantization. These are diagnostic regression gates, not product performance acceptance.",
+  "checks": [
+    {
+      "check": "Baseline and final each10 complete transfers",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientA no sustained drop 0.5:2",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientB no sustained drop 0.5:2",
+      "result": "PASS"
+    },
+    {
+      "check": "Server no sustained drop 0.5:2",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientA no sustained drop 2:5",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientB no sustained drop 2:5",
+      "result": "PASS"
+    },
+    {
+      "check": "Server no sustained drop 2:5",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientA no sustained drop 5:15",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientB no sustained drop 5:15",
+      "result": "PASS"
+    },
+    {
+      "check": "Server no sustained drop 5:15",
+      "result": "PASS"
+    },
+    {
+      "check": "0 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "0 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "1 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "1 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "2 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "2 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "3 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "3 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "4 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "4 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "5 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "5 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "6 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "6 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "7 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "7 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "8 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "8 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "9 ClientA every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "9 ClientB every rolling1s >=50 frames",
+      "result": "PASS"
+    },
+    {
+      "check": "keyToOwnedTransformMs p95 not worse than baseline plus one sample quantum",
+      "result": "PASS"
+    },
+    {
+      "check": "keyToServerTransformMs p95 not worse than baseline plus one sample quantum",
+      "result": "PASS"
+    },
+    {
+      "check": "keyToPeerTransformMs p95 not worse than baseline plus one sample quantum",
+      "result": "PASS"
+    },
+    {
+      "check": "Both original Editor HWNDs actually minimized throughout",
+      "result": "FAIL"
+    },
+    {
+      "check": "Resume/release/repress71 input checks pass",
+      "result": "PASS"
+    }
+  ],
+  "bins": [
+    {
+      "band": "0:0.5",
+      "role": "ClientA",
+      "before": {
+        "worstP95": 55.944401770830154,
+        "max": 69.00429725646973
+      },
+      "after": {
+        "worstP95": 17.859600484371185,
+        "max": 22.610601037740707
+      }
+    },
+    {
+      "band": "0:0.5",
+      "role": "ClientB",
+      "before": {
+        "worstP95": 63.81160020828247,
+        "max": 107.49759897589684
+      },
+      "after": {
+        "worstP95": 17.80889928340912,
+        "max": 23.326799273490906
+      }
+    },
+    {
+      "band": "0:0.5",
+      "role": "Server",
+      "before": {
+        "worstP95": 37.426501512527466,
+        "max": 37.7839021384716
+      },
+      "after": {
+        "worstP95": 35.693198442459106,
+        "max": 36.138299852609634
+      }
+    },
+    {
+      "band": "0.5:2",
+      "role": "ClientA",
+      "before": {
+        "worstP95": 194.06399875879288,
+        "max": 357.33800008893013
+      },
+      "after": {
+        "worstP95": 17.64480024576187,
+        "max": 18.550299108028412
+      }
+    },
+    {
+      "band": "0.5:2",
+      "role": "ClientB",
+      "before": {
+        "worstP95": 213.34310248494148,
+        "max": 418.09480264782906
+      },
+      "after": {
+        "worstP95": 17.635300755500793,
+        "max": 20.101197063922882
+      }
+    },
+    {
+      "band": "0.5:2",
+      "role": "Server",
+      "before": {
+        "worstP95": 36.23659908771515,
+        "max": 46.42230272293091
+      },
+      "after": {
+        "worstP95": 35.65939888358116,
+        "max": 37.637900561094284
+      }
+    },
+    {
+      "band": "2:5",
+      "role": "ClientA",
+      "before": {
+        "worstP95": 316.05450063943863,
+        "max": 375.92900171875954
+      },
+      "after": {
+        "worstP95": 17.477601766586304,
+        "max": 18.401801586151123
+      }
+    },
+    {
+      "band": "2:5",
+      "role": "ClientB",
+      "before": {
+        "worstP95": 373.7036995589733,
+        "max": 504.5837014913559
+      },
+      "after": {
+        "worstP95": 17.472900450229645,
+        "max": 18.47030222415924
+      }
+    },
+    {
+      "band": "2:5",
+      "role": "Server",
+      "before": {
+        "worstP95": 36.64819896221161,
+        "max": 42.930398136377335
+      },
+      "after": {
+        "worstP95": 36.09189763665199,
+        "max": 38.98479789495468
+      }
+    },
+    {
+      "band": "5:15",
+      "role": "ClientA",
+      "before": {
+        "worstP95": 249.8151995241642,
+        "max": 358.2267016172409
+      },
+      "after": {
+        "worstP95": 17.475396394729614,
+        "max": 19.938699901103973
+      }
+    },
+    {
+      "band": "5:15",
+      "role": "ClientB",
+      "before": {
+        "worstP95": 308.2844018936157,
+        "max": 361.66970059275627
+      },
+      "after": {
+        "worstP95": 17.47030019760132,
+        "max": 19.010599702596664
+      }
+    },
+    {
+      "band": "5:15",
+      "role": "Server",
+      "before": {
+        "worstP95": 36.70480102300644,
+        "max": 42.99149662256241
+      },
+      "after": {
+        "worstP95": 35.47130152583122,
+        "max": 43.57589781284332
+      }
+    }
+  ],
+  "latencies": {
+    "keyToOwnedTransformMs": {
+      "before": {
+        "median": 10.974526405334473,
+        "p95": 26.905059814453125,
+        "max": 47.81007766723633
+      },
+      "after": {
+        "median": 12.862920761108398,
+        "p95": 16.1590576171875,
+        "max": 17.067909240722656
+      }
+    },
+    "keyToServerTransformMs": {
+      "before": {
+        "median": 32.59241580963135,
+        "p95": 61.9051456451416,
+        "max": 72.80993461608887
+      },
+      "after": {
+        "median": 39.168477058410645,
+        "p95": 46.76103591918945,
+        "max": 54.06785011291504
+      }
+    },
+    "keyToPeerTransformMs": {
+      "before": {
+        "median": 114.5789623260498,
+        "p95": 141.41201972961426,
+        "max": 213.8049602508545
+      },
+      "after": {
+        "median": 52.26552486419678,
+        "p95": 82.76081085205078,
+        "max": 85.04581451416016
+      }
+    }
+  },
+  "rolling": [
+    {
+      "index": 0,
+      "role": "ClientA",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 0,
+      "role": "ClientB",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 1,
+      "role": "ClientA",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 1,
+      "role": "ClientB",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 2,
+      "role": "ClientA",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 2,
+      "role": "ClientB",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 3,
+      "role": "ClientA",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 3,
+      "role": "ClientB",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 4,
+      "role": "ClientA",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 4,
+      "role": "ClientB",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 5,
+      "role": "ClientA",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 5,
+      "role": "ClientB",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 6,
+      "role": "ClientA",
+      "minOneSecondFrames": 59
+    },
+    {
+      "index": 6,
+      "role": "ClientB",
+      "minOneSecondFrames": 59
+    },
+    {
+      "index": 7,
+      "role": "ClientA",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 7,
+      "role": "ClientB",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 8,
+      "role": "ClientA",
+      "minOneSecondFrames": 59
+    },
+    {
+      "index": 8,
+      "role": "ClientB",
+      "minOneSecondFrames": 59
+    },
+    {
+      "index": 9,
+      "role": "ClientA",
+      "minOneSecondFrames": 60
+    },
+    {
+      "index": 9,
+      "role": "ClientB",
+      "minOneSecondFrames": 59
+    }
+  ]
+}

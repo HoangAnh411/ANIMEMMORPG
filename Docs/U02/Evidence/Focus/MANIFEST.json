@@ -1,0 +1,19 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "utc": "2026-11-06T13:20:31.002837+00:00",
+  "runtimeSourceSHA": "85806519f98ef9078c5832e6193bb3bc8d924b54",
+  "launcherSourceSHA": "a55839e4ac78180cd6b4c53e8165e0bd6bcb6c31",
+  "handoffParentSHA": "a55839e4ac78180cd6b4c53e8165e0bd6bcb6c31",
+  "moduleSHA256": "b324e86adfd91b21fa9460f370e132c464f06068ee63867f91d1bb4409b3894d",
+  "engineExeSHA256": "a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143",
+  "baselineSession": "Artifacts\\U02\\F\\Session-20261106-194148",
+  "afterSession": "Artifacts\\U02\\F\\Session-20261106-201312",
+  "beforeTransfers": 10,
+  "afterTransfers": 10,
+  "followupSeconds": 15,
+  "privateConfigByteUnchanged": true,
+  "runtimeSourceUnchanged": true,
+  "combatAcceptanceRetained": true,
+  "mainUnmerged": true,
+  "scope": "Focus performance regression only; no U03 implementation"
+}

@@ -1,0 +1,290 @@
+{
+  "passed": 71,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "Ten completed transfers with15s followup",
+      "result": "PASS"
+    },
+    {
+      "check": "0 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "0 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "0 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "0 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "0 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "0 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "0 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "1 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "1 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "1 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "1 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "1 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "1 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "1 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "2 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "2 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "2 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "2 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "2 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "2 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "2 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "3 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "3 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "3 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "3 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "3 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "3 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "3 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "4 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "4 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "4 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "4 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "4 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "4 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "4 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "5 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "5 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "5 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "5 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "5 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "5 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "5 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "6 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "6 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "6 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "6 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "6 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "6 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "6 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "7 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "7 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "7 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "7 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "7 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "7 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "7 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "8 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "8 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "8 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "8 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "8 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "8 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "8 No artificial packet loss",
+      "result": "PASS"
+    },
+    {
+      "check": "9 Resume no attack",
+      "result": "PASS"
+    },
+    {
+      "check": "9 Playing after actual Resume",
+      "result": "PASS"
+    },
+    {
+      "check": "9 Key injected promptly after click",
+      "result": "PASS"
+    },
+    {
+      "check": "9 First W moves",
+      "result": "PASS"
+    },
+    {
+      "check": "9 Release then second S edge moves",
+      "result": "PASS"
+    },
+    {
+      "check": "9 Release stops",
+      "result": "PASS"
+    },
+    {
+      "check": "9 No artificial packet loss",
+      "result": "PASS"
+    }
+  ]
+}

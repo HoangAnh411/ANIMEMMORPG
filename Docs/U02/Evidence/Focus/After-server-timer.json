@@ -1,0 +1,11 @@
+﻿{
+    "utc":  "2026-11-06T13:13:12.1709709Z",
+    "pid":  8920,
+    "previous":  {
+                     "Version":  1,
+                     "ControlMask":  0,
+                     "StateMask":  0
+                 },
+    "ignoreTimerResolution":  false,
+    "scope":  "This dedicated process only; honor existing engine timeBeginPeriod request; no tick-rate change"
+}

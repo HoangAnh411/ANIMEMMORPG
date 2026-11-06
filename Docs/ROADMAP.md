@@ -89,6 +89,8 @@ Cổng kỹ thuật: Windows điều khiển được, chuột xoay ngay, menu/f
 
 **U02 KỸ THUẬT HOÀN TẤT A–F**: F được nghiệm thu tại **d5fb4b0/source8580651**; [ACCEPTANCE-F](U02/ACCEPTANCE-F.md), [REPORT-F](U02/REPORT-F.md), [ma trận khép](U02/CLOSURE-F.md).61/61 Automation,134/134 input assertions +36/36 bổ sung; dedicated Editor server/hai client trong điều kiện đã đo. Windows E giữ package source1f1c359 và nghiệm thu903e139. Cảm giác hai cửa sổ chưa được xác nhận, không chặn khép kỹ thuật; chưa Server đóng gói, mạng xấu/bù trễ U05 hoặc art sản phẩm. Các trạng thái chờ bên dưới là lịch sử. U03 mới được phép khảo sát/lập kế hoạch, **chưa triển khai trước review kế hoạch**.
 
+Theo phản hồi tiếp theo, mở riêng hồi quy hiệu năng đổi focus trước U03, giữ nghiệm thu combat. [Báo cáo Focus](U02/FOCUS-REGRESSION.md): sửa launcher/window placement và profile render review;10 lượt trước/sau,71 input +55 gate đạt, READY_FOR_REVIEW/chờ cảm giác. Chưa chuyển U03.
+
 **U02-B ACCEPTED** tại95a83ca/source94ebcc7; Editor gốc đã refresh và kiểm PIE/Live Coding; [closure B](U02/ACCEPTANCE-B.md). Cho phép triển khai riêng C, chưa nghiệm thu C–F.
 
 **U02-A / U02.00 ACCEPTED** theo reviewer tại914f7af, source kiểm chứng f11c944; người dùng cho phép khép hồ sơ/fast-forward main và triển khai riêng B. [Căn cứ](U02/ACCEPTANCE-A.md), [báo cáo A](U02/REPORT-A.md). B–F chưa nghiệm thu; giữ ranh giới model/runtime và ba ràng buộc interval/replay-release gate/sweep geometry.

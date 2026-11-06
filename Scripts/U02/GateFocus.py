@@ -15,6 +15,7 @@ for band in ['0:0.5','0.5:2','2:5','5:15']:
   if band!='0:0.5':ck(role+' no sustained drop '+band,q['after']['worstP95']<(40 if role=='Server' else 25))
 for t in f['trials']:
  start=ep(t['focusUTC'])
+ ck(str(t['index'])+' actual packet-loss counters remain zero',all(c.get('inLost',0)==0 and c.get('outLost',0)==0 for ff in frames.values() for v in ff if start<=ep(v['utc'])<start+15 for c in v.get('connections',[])))
  ck(str(t['index'])+' native frame files cover full15s',all(ep(frames[r][-1]['utc'])>=start+15 for r in frames))
  for role in ['ClientA','ClientB']:
   v=[ep(q['utc'])-start for q in frames[role] if start-1<=ep(q['utc'])<=start+15];counts=[sum(s<=x<s+1 for x in v) for s in [i*.25 for i in range(57)]];rolling.append(dict(index=t['index'],role=role,minOneSecondFrames=min(counts)));ck(str(t['index'])+' '+role+' every rolling1s >=50 frames',min(counts)>=50)

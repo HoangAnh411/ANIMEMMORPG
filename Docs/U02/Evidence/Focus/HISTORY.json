@@ -1,0 +1,100 @@
+[
+  {
+    "file": "History-baseline-launch.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\baseline-launch.log",
+    "rawSHA256": "9978f77b3b35a1d536f2b41b9757f7d4b60e09be3e9e76243c4ab4367881fb87"
+  },
+  {
+    "file": "History-baseline-probe.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\baseline-probe.log",
+    "rawSHA256": "297e2cc3fa9f34716abe12643378b22711e3a6ef7e8966865106b36386dbe70f"
+  },
+  {
+    "file": "History-diagnostics-off.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\diagnostics-off.log",
+    "rawSHA256": "6e633f5276b3293a9f21aced192a34e06eaf7968629a4b17ac102e63136148f0"
+  },
+  {
+    "file": "History-diagnostics-reduced.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\diagnostics-reduced.log",
+    "rawSHA256": "f3d7cd6123689916417911e1ceb8f014f510259bdb29dc396d6aa3edb415ec3b"
+  },
+  {
+    "file": "History-editor-minimized.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\editor-minimized.log",
+    "rawSHA256": "f46f0ccea6b5adadd6dac93fc40696163ea8da1ae38049ef5741eff0fbf10062"
+  },
+  {
+    "file": "History-editor-visible.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\editor-visible.log",
+    "rawSHA256": "e866905da0684d50bf6a872b6c5874b3c0165be3c306025cbeaa9bc201b9bed9"
+  },
+  {
+    "file": "History-final-complete-launch.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\final-complete-launch.log",
+    "rawSHA256": "8d5ecdcc1bc9a9c0ea1eaccee026d9d14e55c61730368199774ebfc2a41648b4"
+  },
+  {
+    "file": "History-final-complete-probe.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\final-complete-probe.log",
+    "rawSHA256": "c173a8ffe92d47b15d08dc967971266019e8f610185e2a50e00f5a85c7cfafda"
+  },
+  {
+    "file": "History-final-flushed-launch.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\final-flushed-launch.log",
+    "rawSHA256": "8e27036b2fc908177afdbe101c8fbefb4f46e51b0e3e2d27af9e2c7198d60a5c"
+  },
+  {
+    "file": "History-final-flushed-probe.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\final-flushed-probe.log",
+    "rawSHA256": "c173a8ffe92d47b15d08dc967971266019e8f610185e2a50e00f5a85c7cfafda"
+  },
+  {
+    "file": "History-final-launch.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\final-launch.log",
+    "rawSHA256": "5c08482e7ef41dec6d87f5c7732c5954a54b0b073feb39d243d7d83e2b3ebd0c"
+  },
+  {
+    "file": "History-final-low-launch.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\final-low-launch.log",
+    "rawSHA256": "3ced9ab272b337781e869958700a46a22c73eac400372a96c4b73e4dee24ef0a"
+  },
+  {
+    "file": "History-final-low-probe.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\final-low-probe.log",
+    "rawSHA256": "c173a8ffe92d47b15d08dc967971266019e8f610185e2a50e00f5a85c7cfafda"
+  },
+  {
+    "file": "History-final-probe.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\final-probe.log",
+    "rawSHA256": "c173a8ffe92d47b15d08dc967971266019e8f610185e2a50e00f5a85c7cfafda"
+  },
+  {
+    "file": "History-low-render.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\low-render.log",
+    "rawSHA256": "9c63c25c17fb4a0329aa38e08057c8bbbcde7a2e9e31b66b2cdea2ba0cf1c66b"
+  },
+  {
+    "file": "History-one-client.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\one-client.log",
+    "rawSHA256": "6ab0317bf2c25e64d76d8e53b4d42a7ecceb652e4605a3ef8c6e5bfb06f1c3fb"
+  },
+  {
+    "file": "FailedDiagnostics-ClientA-ClientA.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\Session-20261106-195207\\ClientA\\ClientA.log",
+    "rawSHA256": "b5146b838685c53388c3d482d3a49df53ee0f803708a58d0256c888a6fdc52a1",
+    "status": "FAILED: native control telemetry disabled, guard refused input; not performance evidence"
+  },
+  {
+    "file": "FailedDiagnostics-ClientB-ClientB.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\Session-20261106-195207\\ClientB\\ClientB.log",
+    "rawSHA256": "f7b3d990cc0929deb837db17cab452fcfaa7466b5a0c282cdf16ae24f0d7394c",
+    "status": "FAILED: native control telemetry disabled, guard refused input; not performance evidence"
+  },
+  {
+    "file": "FailedDiagnostics-Server-Server.log.gz",
+    "original": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\Focus\\Session-20261106-195207\\Server\\Server.log",
+    "rawSHA256": "e8a437da2682b9ee015a1234de1da7b0df7f8a8c265649d415fbc3a3fd70cca2",
+    "status": "FAILED: native control telemetry disabled, guard refused input; not performance evidence"
+  }
+]

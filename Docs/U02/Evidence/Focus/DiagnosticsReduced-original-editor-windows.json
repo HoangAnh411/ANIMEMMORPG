@@ -1,0 +1,50 @@
+﻿[
+    {
+        "pid":  18756,
+        "project":  "D:\\Data\\AnimeMMORPG\\AnimeMMORPG.uproject",
+        "hwnd":  458896,
+        "placement":  {
+                          "Length":  44,
+                          "Flags":  0,
+                          "Show":  1,
+                          "Min":  {
+                                      "X":  -32000,
+                                      "Y":  -32000
+                                  },
+                          "Max":  {
+                                      "X":  -1,
+                                      "Y":  -1
+                                  },
+                          "Normal":  {
+                                         "Left":  0,
+                                         "Top":  0,
+                                         "Right":  843,
+                                         "Bottom":  1032
+                                     }
+                      }
+    },
+    {
+        "pid":  18756,
+        "project":  "D:\\Data\\AnimeMMORPG\\AnimeMMORPG.uproject",
+        "hwnd":  393990,
+        "placement":  {
+                          "Length":  44,
+                          "Flags":  0,
+                          "Show":  1,
+                          "Min":  {
+                                      "X":  0,
+                                      "Y":  0
+                                  },
+                          "Max":  {
+                                      "X":  -1,
+                                      "Y":  -1
+                                  },
+                          "Normal":  {
+                                         "Left":  843,
+                                         "Top":  0,
+                                         "Right":  1938,
+                                         "Bottom":  1050
+                                     }
+                      }
+    }
+]

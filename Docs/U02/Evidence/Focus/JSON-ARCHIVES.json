@@ -1,0 +1,62 @@
+[
+  {
+    "originalFile": "After-analysis.json",
+    "archive": "After-analysis.json.gz",
+    "rawSHA256": "7ab73f10d0ed39a361f71765788686741332c77e966eb142fa27062a9b8e925f",
+    "rawBytes": 62562264
+  },
+  {
+    "originalFile": "Before-analysis.json",
+    "archive": "Before-analysis.json.gz",
+    "rawSHA256": "f25b133b1f50a090bbacff80aee52a2157436769dc5d35d33da28a2f8f29a532",
+    "rawBytes": 48881802
+  },
+  {
+    "originalFile": "DiagnosticsReduced-analysis.json",
+    "archive": "DiagnosticsReduced-analysis.json.gz",
+    "rawSHA256": "bb3e82f09785b6bc88c512384a0942e219fad926c5db4662c3a57f6188a72a52",
+    "rawBytes": 1066033
+  },
+  {
+    "originalFile": "EditorMinimized-analysis.json",
+    "archive": "EditorMinimized-analysis.json.gz",
+    "rawSHA256": "5903604b219c11f0240e541adb9f3d7c0c0586ed7152401398adf683661e58a5",
+    "rawBytes": 12502553
+  },
+  {
+    "originalFile": "EditorVisible-analysis.json",
+    "archive": "EditorVisible-analysis.json.gz",
+    "rawSHA256": "a0463198152e9cb1ed534f301bef89865c765261e8645f1b0d4efc2fd09887ae",
+    "rawBytes": 10500541
+  },
+  {
+    "originalFile": "FinalNativeTailIncomplete-analysis.json",
+    "archive": "FinalNativeTailIncomplete-analysis.json.gz",
+    "rawSHA256": "bccc78b8be25ca679e181a3642e3e02da25d029faeabab72d27c5cdfd94ce486",
+    "rawBytes": 62568214
+  },
+  {
+    "originalFile": "FirstLowRenderWindowCoverageIncomplete-analysis.json",
+    "archive": "FirstLowRenderWindowCoverageIncomplete-analysis.json.gz",
+    "rawSHA256": "3f060434d32ba6ee725979c67e5fba1ad97d809c6da737213f87146dda566b74",
+    "rawBytes": 62573853
+  },
+  {
+    "originalFile": "LowRender-analysis.json",
+    "archive": "LowRender-analysis.json.gz",
+    "rawSHA256": "937393387869712c6286857d5d978ab1bf415dadfb79b3c0094632c3e1d72918",
+    "rawBytes": 12513406
+  },
+  {
+    "originalFile": "MinimizedOnlyNotAccepted-analysis.json",
+    "archive": "MinimizedOnlyNotAccepted-analysis.json.gz",
+    "rawSHA256": "ee0e3d37828443bcf3198a0dbcd6b44504fc851b2a0003285257a7e683f11431",
+    "rawBytes": 61849048
+  },
+  {
+    "originalFile": "OneClient-analysis.json",
+    "archive": "OneClient-analysis.json.gz",
+    "rawSHA256": "736b99fda8f076faf00eacc71cc7b652e0cf255486434e1810884fa159a1658b",
+    "rawBytes": 12516777
+  }
+]

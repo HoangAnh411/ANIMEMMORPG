@@ -1,0 +1,38 @@
+[
+  {
+    "file": "Scripts/U02/ReviewFNetwork.ps1",
+    "sha256": "8de7941e15d1b671ed69619d6f426807d85fe078a69b27c7361c7f754cf007cc"
+  },
+  {
+    "file": "Scripts/U02/StartFSession.ps1",
+    "sha256": "99609e00ea1eefeb2c4a2778541f7599fb8a1af32907a046ca90520296eee6c4"
+  },
+  {
+    "file": "Scripts/U02/EnsureEditorMinimized.ps1",
+    "sha256": "667e0e58be2d2ff2bb770e82ebb1b921b57e93c171f5fa0c6085754dd79ec69b"
+  },
+  {
+    "file": "Scripts/U02/StopFSession.ps1",
+    "sha256": "1098319ee3ab96e5a8c9791bc14af8d944fbdd8e46e1a94703e1ff70bc6d721d"
+  },
+  {
+    "file": "Scripts/U02/ProbeFocus.py",
+    "sha256": "986b99d5995db05d1cec53090e9851a8010b8334d3cd6e5d73ef0dfc4dbc3746"
+  },
+  {
+    "file": "Scripts/U02/AnalyzeFocus.py",
+    "sha256": "78aa7553b18388653f0a10e4f250a504afddd2244701270874ee4d9fabbe1ab8"
+  },
+  {
+    "file": "Scripts/U02/CompareFocus.py",
+    "sha256": "7960e6c485d905fe2502258938d08bffbcae49f7c2d21d13cc5b0b57de47eec3"
+  },
+  {
+    "file": "Scripts/U02/GateFocus.py",
+    "sha256": "729e8e09f6d0e369be6ea34cb639abb4a6946e1a229923aa7703bf9169b543fe"
+  },
+  {
+    "file": "Scripts/U02/VerifyFocusInputs.py",
+    "sha256": "3d1ff109ac1fe1569468311a92a15e452d15ebef4605d372d57459d175bb7e28"
+  }
+]
