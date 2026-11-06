@@ -1,4 +1,5 @@
 #include "U02CombatComponent.h"
+#include "U02CollisionWorld.h"
 #include "U01/U01Character.h"
 #include "U01/U01PlayerController.h"
 #include "Net/UnrealNetwork.h"
@@ -6,6 +7,7 @@
 #include "Engine/Engine.h"
 #include "GameFramework/GameStateBase.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
@@ -30,6 +32,8 @@ void UU02CombatComponent::BeginPlay()
     if (!C || !GetWorld() || (GetWorld()->WorldType != EWorldType::Game && GetWorld()->WorldType != EWorldType::PIE))
     { SetComponentTickEnabled(false); return; }
     C->GetU01Movement()->AddTickPrerequisiteComponent(this);
+    TArray<UPrimitiveComponent*> PresentationAndBody;C->GetComponents(PresentationAndBody);
+    for(auto* P:PresentationAndBody)P->SetCollisionResponseToChannel(ECC_GameTraceChannel2,ECR_Ignore);
     // C owns a separate graph; keep the accepted U01 AnimBP bytes untouched.
     if(C->GetMesh()->GetSkeletalMeshAsset())
     {
@@ -42,11 +46,13 @@ void UU02CombatComponent::BeginPlay()
         check(FAttack1Definition().IsValid());
         Model = MakeUnique<FActionModel>(FLifeId{C->NetworkPawnId,1});
         Publish(GetWorld()->GetTimeSeconds(),true);
+        GetWorld()->GetSubsystem<UU02CollisionWorld>()->RegisterCombat(this);
     }
 }
 void UU02CombatComponent::EndPlay(const EEndPlayReason::Type Reason)
 {
     if (Model) CancelAt(ECancel::Removed,GetWorld()->GetTimeSeconds());
+    if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())W->UnregisterCombat(this);
     OnActiveInterval.Clear();
     BeforeActionMutation.Unbind();
     Super::EndPlay(Reason);
@@ -155,6 +161,7 @@ bool UU02CombatComponent::CancelAt(ECancel Reason, double Now)
     if(!AdvanceAuthority(Now,WillCancel))return false;
     BeforeActionMutation.ExecuteIfBound(Now);
     const bool Cancelled = Model->CancelAction(Reason,Now);
+    if(Cancelled&&(Reason==ECancel::Death||Reason==ECancel::Removed))GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(Model->GetLife());
     Publish(Now,true);
     Trace(Cancelled ? TEXT("Cancelled") : TEXT("CancelRejected"),Now,FString::Printf(TEXT("reason=%d"),int32(Reason)));
     return Cancelled;
@@ -189,6 +196,7 @@ void UU02CombatComponent::Publish(double Now, bool bForce)
     Snapshot.StartSeconds = S.StartSeconds; Snapshot.ServerSeconds = Now; Snapshot.AimYawDegrees = S.AimYawDegrees;
     Snapshot.TurnFromYaw=StartupTurn.FromYaw; Snapshot.TurnStartSeconds=StartupTurn.SegmentStart;
     Snapshot.bLocked = S.bCombatLocked; Snapshot.bYawLocked = S.bYawLocked; ++Snapshot.Revision;
+    if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())W->ObserveCombat(this);
     ApplyMotorSnapshot(); Character()->ForceNetUpdate();
 }
 void UU02CombatComponent::ApplyMotorSnapshot()
@@ -250,6 +258,8 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("rejected"),RejectedCount); J->SetNumberField(TEXT("lastReject"),uint8(LastReject));
     J->SetNumberField(TEXT("command"),LastCommand); J->SetNumberField(TEXT("intervals"),IntervalCount);
     J->SetNumberField(TEXT("lastSliceBegin"),LastInterval.BeginSeconds); J->SetNumberField(TEXT("lastSliceEnd"),LastInterval.EndSeconds);
+    if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())
+    {J->SetNumberField(TEXT("geometryConfirmed"),W->Confirmed.Num());J->SetNumberField(TEXT("geometryQueries"),W->Queries);J->SetNumberField(TEXT("geometryBlocked"),W->Blocked);}
     return J;
 }
 void UU02CombatComponent::Trace(const TCHAR* Event, double GameplaySeconds, const FString& Detail) const

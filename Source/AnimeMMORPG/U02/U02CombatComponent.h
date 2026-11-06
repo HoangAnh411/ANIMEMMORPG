@@ -55,6 +55,7 @@ public:
     uint64 AcceptedCount = 0, RejectedCount = 0, IntervalCount = 0;
 private:
     friend struct FU02CombatTestAccess;
+    friend class UU02CollisionWorld;
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepCombatSnapshot Snapshot;
     UFUNCTION() void OnRep_Snapshot();
     UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw);

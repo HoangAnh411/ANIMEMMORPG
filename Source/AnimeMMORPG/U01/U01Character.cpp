@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 #include "U02/U02CombatComponent.h"
+#include "U02/U02HurtboxComponent.h"
 
 void UU01CharacterMovement::BeginPlay()
 {
@@ -170,6 +171,10 @@ AU01Character::AU01Character(const FObjectInitializer& ObjectInitializer)
     JumpMaxCount = 1;
     JumpMaxHoldTime = 0;
     Combat = CreateDefaultSubobject<UU02CombatComponent>(TEXT("U02Combat"));
+    auto* BodyHurt=CreateDefaultSubobject<UU02HurtboxComponent>(TEXT("U02BodyHurtbox"));
+    BodyHurt->SetupAttachment(RootComponent);BodyHurt->SetRelativeLocation(FVector(0,0,-26));BodyHurt->InitSphereRadius(35);BodyHurt->StableHurtboxId=1;
+    auto* HeadHurt=CreateDefaultSubobject<UU02HurtboxComponent>(TEXT("U02HeadHurtbox"));
+    HeadHurt->SetupAttachment(RootComponent);HeadHurt->SetRelativeLocation(FVector(0,0,49));HeadHurt->InitSphereRadius(20);HeadHurt->StableHurtboxId=2;
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("U01Camera"));
     FollowCamera->SetupAttachment(RootComponent);
     FollowCamera->bUsePawnControlRotation = false;
