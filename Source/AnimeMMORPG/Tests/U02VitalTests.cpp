@@ -137,4 +137,15 @@ bool FU02EShieldClock::RunTest(const FString&)
     if(!W.Resolver->DamageResults.IsEmpty())TestEqual(TEXT("Absorbed60"),W.Resolver->DamageResults[0].Result.Absorbed,60);
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02ENewLifeFrame,"AnimeMMORPG.U02.E.NewLifeAttackWholeActiveAfterReset",U02EFlags)
+bool FU02ENewLifeFrame::RunTest(const FString&)
+{
+    FEWorld W(*this);auto* D=W.Dummy();W.Attack();W.Resolver->DrainAt(W.Now()+.3);
+    const double End=W.Now()+.35;for(int I=0;I<120&&W.Now()<End;++I)W.TickTestWorld(1.f/60);
+    TestTrue(TEXT("Dummy reset"),D->ResetLabCombat());TestTrue(TEXT("Source reset"),W.A->Combat->ResetLabCombat());
+    W.A->Combat->SubmitAttackIntent(2,W.Now(),0);W.Resolver->DrainAt(W.Now()+.5);
+    TestEqual(TEXT("New life action must not lose whole active merely because reset occurred at previous boundary"),D->Vital->GetSnapshot().HP,540);
+    TestEqual(TEXT("Old life hit and new life hit each exactly once"),W.Resolver->DamageResults.Num(),2);
+    return true;
+}
 #endif
