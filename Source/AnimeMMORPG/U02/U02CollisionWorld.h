@@ -42,6 +42,7 @@ public:
     bool bCharacterFixtureTargets=false; // Native test fixture only; normal lab attacks dummies.
 private:
     friend struct FU02CollisionTestAccess;
+    friend struct FU02EVitalWorldAccess;
     struct FPose
     {
         FVector Position=FVector::ZeroVector;

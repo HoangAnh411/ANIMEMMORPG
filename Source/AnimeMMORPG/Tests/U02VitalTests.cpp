@@ -21,6 +21,11 @@ struct FU02VitalTestAccess
 {
     static void HP(UU02VitalComponent* V,int32 HP){V->State.HP=HP;V->State.bDead=HP==0;V->Publish(V->GetWorld()->GetTimeSeconds());}
 };
+struct FU02EVitalWorldAccess
+{
+    static void ReverseSources(UU02CollisionWorld* W){if(W->Sources.Num()==2)W->Sources.Swap(0,1);}
+    static bool Replay(UU02CollisionWorld* W){return W->ResolveHit(W->Confirmed[0]);}
+};
 namespace
 {
 struct FEWorld : FTestWorldWrapper
@@ -79,6 +84,7 @@ bool FU02EWorldDamage::RunTest(const FString&)
         FEWorld W(*this);auto* D=W.Dummy();W.Resolver->FixtureCritRoll=Roll;W.Attack();W.Resolver->DrainAt(W.Now()+.5);
         TestEqual(TEXT("Default player HP1000"),W.A->Vital->GetSnapshot().HP,1000);TestEqual(TEXT("Dummy600 minus one damage"),D->Vital->GetSnapshot().HP,Roll==0?510:540);
         TestEqual(TEXT("One valid target/action across two hurtboxes"),W.Resolver->DamageResults.Num(),1);TestEqual(TEXT("One roll only after valid resolve"),W.Resolver->CritRolls,uint64(1));
+        TestFalse(TEXT("Duplicate confirmed ID cannot mutate damage"),FU02EVitalWorldAccess::Replay(W.Resolver));
         W.Resolver->DrainAt(W.Now()+.6);TestEqual(TEXT("No late repeated roll"),W.Resolver->CritRolls,uint64(1));
     }
     return true;
@@ -86,14 +92,19 @@ bool FU02EWorldDamage::RunTest(const FString&)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02EDeathOrder,"AnimeMMORPG.U02.E.SameTimestampLethalOrderAndDeadMotor",U02EFlags)
 bool FU02EDeathOrder::RunTest(const FString&)
 {
+    for(bool Reverse:{false,true})
+    {
     FEWorld W(*this);auto* B=W.Pawn(FVector(150,0,98),2);B->GetU01Movement()->SetMovementMode(MOVE_Walking);
     FU02VitalTestAccess::HP(W.A->Vital,60);FU02VitalTestAccess::HP(B->Vital,60);W.Resolver->bCharacterFixtureTargets=true;
-    W.Attack();B->Combat->SubmitAttackIntent(1,W.Now(),180);W.Resolver->DrainAt(W.Now()+.3);
+    W.Attack();B->Combat->SubmitAttackIntent(1,W.Now(),180);if(Reverse)FU02EVitalWorldAccess::ReverseSources(W.Resolver);W.Resolver->DrainAt(W.Now()+.3);
     TestEqual(TEXT("Lower source kills first at identical time"),B->Vital->GetSnapshot().HP,0);TestEqual(TEXT("Dead source next lethal event rejected"),W.A->Vital->GetSnapshot().HP,60);
     TestEqual(TEXT("One damage and one RNG roll"),W.Resolver->DamageResults.Num(),1);TestEqual(TEXT("One roll"),W.Resolver->CritRolls,uint64(1));
     TestEqual(TEXT("One actual death"),B->Vital->GetSnapshot().DeathCount,uint32(1));TestTrue(TEXT("Real Defeated motor lock"),(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))!=0);
     TestEqual(TEXT("Death cancels pending action presentation"),B->Combat->GetCombatSnapshot().Phase,uint8(EPhase::Cancelled));
     B->GetU01Movement()->SetMotorLock(EU01MotorLock::Defeated,false);TestTrue(TEXT("Old U01 fixture cannot clear actual HP0 Defeated"),(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))!=0);
+    W.TickTestWorld(.35f);TestTrue(TEXT("Real combat lab reset restores dead pawn"),B->Combat->ResetLabCombat());
+    TestTrue(TEXT("Reset full HP, new life and clears actual Defeated"),B->Vital->GetSnapshot().HP==1000&&B->Vital->GetSnapshot().Generation==2&&!B->Vital->GetSnapshot().bDead&&(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))==0);
+    }
     return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02EReset,"AnimeMMORPG.U02.E.ResetRejectsOldLifeAndClearsShield",U02EFlags)
