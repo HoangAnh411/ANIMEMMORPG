@@ -1,5 +1,7 @@
 # U02-F — ACCEPTED về kỹ thuật
 
+Cập nhật sau nghiệm thu ban đầu: bản sửa focus32061ba đã được nghiệm thu, gồm cảm giác đổi focus “ok rồi”; xem ACCEPTANCE-FOCUS. Đoạn chưa xác nhận cảm giác bên dưới là lịch sử ở thời điểm review F ban đầu, không phải trạng thái hiện tại.
+
 Theo review người dùng tại **d5fb4b0436ecf5b1792eaddfffb951fef8414063**, source kiểm chứng **85806519f98ef9078c5832e6193bb3bc8d924b54**, không phát hiện lỗi chặn trong phạm vi F.
 
 Căn cứ đã đối chiếu: server authority; attack/aim ràng buộc pawn/life/action, không nhận client damage/HP; history chỉ trình bày, không áp damage lại hoặc ghi đè HP life mới; build Editor/Game thành công;61/61 Automation;134/134 assertions chính +36/36 bổ sung của ba process, gồm reset/ownership/duplicate/stale/disconnect/reconnect;149 file bằng chứng và hash DLL/Game build khớp; remote đúngd5fb4b0; Stop xác nhận Editor gốc còn sống và được khôi phục cửa sổ.

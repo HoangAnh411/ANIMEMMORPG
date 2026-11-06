@@ -1,8 +1,8 @@
 # U02 — Test matrix
 
-**A ACCEPTED tại 914f7af/source f11c944: 7/7 Automation và review evidence đạt.** [Căn cứ](ACCEPTANCE-A.md). Không chạy lại kiểm chứng để khép hồ sơ.
+**U02 KỸ THUẬT A–F HOÀN TẤT.** F ACCEPTED tại d5fb4b0/source8580651; bản sửa focus ACCEPTED tại32061ba, gồm xác nhận cảm giác đổi focus. Không phát hiện lỗi chặn còn mở qua lần rà soát cuối. [Ma trận khép](CLOSURE-F.md), [nghiệm thu focus](ACCEPTANCE-FOCUS.md). Không chạy lại build/tests cho lượt khép tài liệu; Evidence/F và Evidence/Focus là bằng chứng kế thừa giữ nguyên.
 
-A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: full34Automation, smoke3maps, input40assertions; [REPORT-B](REPORT-B.md). C READY_FOR_REVIEW source61be83b:37Automation/3smoke/63assertions, xem REPORT-C. D–F chưa triển khai/chưa chạy. Tên dưới A là Automation tests thực đăng ký; cột evidence được khép bằng kết quả thực ở REPORT-A. Không ấn định tổng số tests tương lai.
+A ACCEPTED914f7af/sourcef11c944,7/7 Automation model; B ACCEPTED95a83ca/source94ebcc7,34 Automation/smoke3/input40; C ACCEPTEDcdaf102/source9aa7249 sau sửa startup-turn; D ACCEPTEDd0dd5b0/source82bb890; E ACCEPTED903e139/source1f1c359; F ACCEPTEDd5fb4b0/source8580651. Báo cáo từng đợt lưu số liệu thực và giới hạn. Mốc C61be83b với37 Automation/3smoke/63 assertions là lịch sử trước sửa, được Evidence/C-Turn và nghiệm thu C thay thế; nhận định cũ “D–F chưa triển khai” chỉ đúng lúc đó. Tên tests A bên dưới giữ giới hạn model, không tự trở thành bằng chứng runtime.
 
 | ID | Automation A | Nội dung và giới hạn |
 |---|---|---|
@@ -16,7 +16,7 @@ A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: 
 | A-ASSET | Registry/load + SHA256 + provenance register |121 assets metadata; chọn tự author blockout C. Không asset mutation/render quality proof. |
 | A-BUILD | Full Editor/Game build trong clone |Code mới build từ source SHA đã push; không coi Editor gốc đã nạp header/layout. |
 
-| Đợt / ID | Kiểm chứng bắt buộc còn lại | Trạng thái A |
+| Đợt / ID | Kiểm chứng bắt buộc | Trạng thái hiện tại |
 |---|---|---|
 | B-ACTION |Authority component/inputLMB thật/edge/busy/clock0.16/0.22/0.40/aim/yaw, cancellation fixtures, diagnostics |PASS kỹ thuật: REPORT-B; đã nghiệm thu B |
 | B-MOTOR |StopXY/gravity/move-jump-sprint lock, heldW recovery, menu/focus/Resume click suppression, lost-ground/Interacting/Defeated; saved move authority lock và U01 camera/gates regression |PASS kỹ thuật theo bằng chứng B; giới hạn injected-key qua Alt-Tab ghi REPORT-B; đã nghiệm thu B |
@@ -29,6 +29,7 @@ A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: 
 | F-AUTHORITY |Dedicated Editor server0LocalPlayer+2owned clients, confirmed action/result/HP, hụt/trúng/tường/multihurtbox/concurrent lethal, duplicate/stale/ownership/nonfinite/self-declared data, disconnect/reconnect lifetime |ACCEPTED d5fb4b0/source8580651; REPORT-F/Evidence/F;61 Automation,134 input +36 supplementary; measured conditions only |
 | F-PRESENT |Client montage phase/action, HPserver, menu/focus không pause, movement/smoothing/settings regression, profile30/60/60 actual cvars, session-safe launcher/capture/Stop |ACCEPTED d5fb4b0/source8580651; REPORT-F/Evidence/F;61 Automation,134 input +36 supplementary; measured conditions only |
 | F-CLOSURE |Source→binary/package→run→IDs→results manifest/logs/video; user checklist cảm giác/aim/3phases/kiếm/pose/movement/focus2clients; không mục bắt buộc thiếu evidence |ACCEPTED d5fb4b0/source8580651; REPORT-F/Evidence/F;61 Automation,134 input +36 supplementary; measured conditions only |
+| F-FOCUS |10 lượt trước/sau,15s/lượt; frames ba process/owner-peer response; Resume/rearm; hai HWND/Stop; profile review giảm tải |ACCEPTED32061ba;197 evidence hashes,71/71 input +55/55 supplementary; cảm giác đổi focus đã xác nhận; ACCEPTANCE-FOCUS |
 
 U01 23 Automation/3 smoke/runtime là **kế thừa từ G**, không tự tính vào số đã chạy A. A chỉ cần tests liên quan; E/F mới full regression bắt buộc. Loại bằng chứng tách riêng: Automation / hậu xử lý assertions / input thật-video / user review. Không dùng model lock làm PASS motor thật; không dùng boolean obstruction làm PASS tường; không dùng lethal fixture làm PASS HP.
 
@@ -38,4 +39,6 @@ C startup-turn revision: StartupTurnTrajectory (shortest arc, tie, retarget/dead
 D corner supplement (ACCEPTED at d0dd5b0): source82bb890; 50/50 Automation, 23/23 selected-action real-input assertions, smoke3/3. Independent action66 segment/AABB oracle and edge/face tangency; collider-order and 30/60/120Hz/whole-active step matrix. Evidence/D-Corner. Gameplay collision algorithm unchanged; selected debug runtime added. Original D48/36 evidence retained in Evidence/D.
 
 
-E verification (READY_FOR_REVIEW): pure damage/rounding/crit and shield order/expiry/overkill; actual world multi-hurtbox dedup and single RNG roll; same-time lethal ordering under reversed collection and .3/.5 endpoint; actual HP0 Defeated cannot be cleared by old fixture; reset rejects old-life events and rebases first new-life full-active interval. Final Windows source and run links are in REPORT-E/Evidence/E. No F acceptance implied.
+E verification (ACCEPTED903e139/source1f1c359; READY_FOR_REVIEW là trạng thái lúc bàn giao): pure damage/rounding/crit and shield order/expiry/overkill; actual world multi-hurtbox dedup and single RNG roll; same-time lethal ordering under reversed collection and .3/.5 endpoint; actual HP0 Defeated cannot be cleared by old fixture; reset rejects old-life events and rebases first new-life full-active interval. Windows source/run links are in REPORT-E/Evidence/E. F có nghiệm thu riêng d5fb4b0, focus32061ba; không suy nghiệm thu F từ riêng tests E.
+
+Giới hạn hiện tại: dedicated Editor server/hai client trong điều kiện đã đo, Windows E có source/package riêng; chưa Server đóng gói, mạng xấu/bù trễ U05, hiệu năng/art sản phẩm hoặc hồi sinh sản phẩm. Không còn tính năng U02 phải triển khai. U03 chưa được triển khai trong lượt khép này.

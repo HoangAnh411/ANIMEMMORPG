@@ -2,6 +2,8 @@
 
 ## Kiểm lại đổi focus sau sửa hồi quy
 
+Bản sửa32061ba đã ACCEPTED, gồm cảm giác đổi focus “ok rồi”. Các bước dưới giữ làm checklist hồi quy khi chơi lại, không phải yêu cầu nghiệm thu còn mở của U02.
+
 Chỉ chơi lại sau khi báo cáo Focus đạt cổng kỹ thuật. Launcher review dùng ánh sáng/phản chiếu/bóng đơn giản hơn để giữ dư tải cho hai client trên máy hiện tại; đây không phải thiết lập hình ảnh sản phẩm. Vẫn client60/server30, không giảm cap hoặc thêm chờ input.
 
 - Đổi A ↔ B, bấm Resume rồi đi ngay: còn khựng nhiều giây hoặc phản hồi chậm bất thường không?

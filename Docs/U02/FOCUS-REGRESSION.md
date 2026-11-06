@@ -1,6 +1,6 @@
 # U02 — hồi quy khựng khi đổi focus
 
-**READY_FOR_REVIEW — cổng kiểm kỹ thuật đã đạt, chờ xác nhận cảm giác chơi lại.** Mở riêng hiệu năng A ↔ B; nghiệm thu combat A–F giữ nguyên. U03 chỉ có kế hoạch trên nhánh riêng, chưa triển khai.
+**ACCEPTED tại32061ba**, gồm xác nhận cảm giác đổi focus “ok rồi” theo review người dùng; [căn cứ nghiệm thu](ACCEPTANCE-FOCUS.md). U02 hoàn thành kỹ thuật A–F, không có lỗi chặn còn mở qua lần rà soát này. Bên dưới là kết quả/lịch sử đã đo, không chạy lại khi khép. U03 chỉ có kế hoạch trên nhánh riêng, chưa triển khai.
 
 ## Nền và phép đo
 
@@ -76,4 +76,4 @@ Kết luận có giới hạn: có bằng chứng placement Editor và tải ren
 
 Chạy [Play-U02-F.cmd](../../Play-U02-F.cmd), dừng bằng [Stop-U02-F.cmd](../../Stop-U02-F.cmd), xem [checklist đổi focus](../../Play-U02-F-CHECKLIST.md). [Video trước](Evidence/Focus/Before-Focus.mp4), [video sau](Evidence/Focus/After-Focus.mp4); toàn bộ hash tại [EVIDENCE-SHA256](Evidence/Focus/EVIDENCE-SHA256.json). Runtime DLL SHA-256 giữ `b324e86adfd91b21fa9460f370e132c464f06068ee63867f91d1bb4409b3894d`; Engine `a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143`.
 
-Giờ có thể nhờ người dùng xác nhận cảm giác A↔B/Resume/di chuyển ngay; chưa tự ghi người dùng đã chấp nhận. Nhánh dừng READY_FOR_REVIEW, chưa merge hoặc chuyển U03. Nếu chủ động mở Editor trong lúc chơi hai client, tải render có thể tăng; báo rõ thời điểm đó khi phản hồi.
+Người dùng đã nghiệm thu32061ba và ghi nhận cảm giác đổi focus “ok rồi”; không yêu cầu xác nhận lại. Trạng thái READY_FOR_REVIEW trong manifest và các đoạn mô tả lượt thử là lịch sử, không thay quyết định ACCEPTED hiện tại. Được phép khép hồ sơ/push/fast-forward main rồi dừng; không chuyển U03 trong lượt này. Giới hạn vẫn giữ: chủ động mở Editor khi chơi hai client có thể làm tăng tải render.

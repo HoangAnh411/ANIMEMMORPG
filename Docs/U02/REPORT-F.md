@@ -1,5 +1,7 @@
 # U02-F — ACCEPTED về kỹ thuật
 
+Cập nhật khép cuối: bản sửa focus **ACCEPTED32061ba**, gồm xác nhận cảm giác đổi focus “ok rồi”, theo [ACCEPTANCE-FOCUS](ACCEPTANCE-FOCUS.md). U02 A–F hoàn thành kỹ thuật, không có lỗi chặn còn mở qua lần rà soát cuối. Không chạy lại build/tests; kết quả F bên dưới giữ nguyên lịch sử.
+
 Người dùng nghiệm thu tại **d5fb4b0436ecf5b1792eaddfffb951fef8414063**, source kiểm chứng **85806519f98ef9078c5832e6193bb3bc8d924b54**. Không phát hiện lỗi chặn trong phạm vi F. Căn cứ review ghi tại [ACCEPTANCE-F.md](ACCEPTANCE-F.md); ma trận khép kỹ thuật U02 tại [CLOSURE-F.md](CLOSURE-F.md). Bản này sửa tiếng Việt UTF-8 bị mất dấu trong báo cáo bàn giao, giữ nguyên số liệu/lịch sử; không chạy lại build/tests.
 
 E đã được nghiệm thu tại903e139/source1f1c359; closure **e6e1e2f5cf30b713ebe560acab98b63751076493** đã push và fast-forward main trước F. Nhánh triển khai F là `u02/f-dedicated-two-clients`. Commit bàn giao d5fb4b0 không đổi Source/Content/Config/Plugins so với source kiểm chứng8580651.
@@ -50,6 +52,6 @@ Warnings engine/toolchain/optional MCP/fixture và performance console lookup gi
 | Engine executable | a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143 |
 | Game build executable | 5a07966e0bde0d1d97e2f267f326746948e60e82add49ed5286fa88f4f02e725 |
 
-Game build executable không phải package F. Reviewer đã đối chiếu149 file bằng chứng/hash DLL/Game build, remote đúngd5fb4b0 và Stop giữ/khôi phục Editor gốc. F **ACCEPTED về kỹ thuật** chỉ cho dedicated Editor server và hai client trong điều kiện đã đo. **Cảm giác hai cửa sổ chưa được người dùng xác nhận**, không chặn khép kỹ thuật hiện tại; không suy từ nghiệm thu cảm giác C.
+Game build executable không phải package F. Reviewer đã đối chiếu149 file bằng chứng/hash DLL/Game build, remote đúngd5fb4b0 và Stop giữ/khôi phục Editor gốc. F **ACCEPTED về kỹ thuật** chỉ cho dedicated Editor server và hai client trong điều kiện đã đo. Khi nghiệm thu F ban đầu, cảm giác hai cửa sổ chưa xác nhận; sau đó bản sửa focus32061ba được nghiệm thu với xác nhận cảm giác đổi focus. Xác nhận này không được suy từ cảm giác C hoặc mở rộng thành art sản phẩm. [Báo cáo focus](FOCUS-REGRESSION.md) giữ197 file bằng chứng,71/71 input và55/55 kiểm tra bổ sung.
 
-U02 kỹ thuật đã khép A–F. Chưa nghiệm thu Server đóng gói, mạng xấu/bù trễ/prediction đầy đủ U05, hiệu năng sản phẩm, art anime/carry sản phẩm hoặc respawn sản phẩm. Người dùng cho phép khép remote/main và lập kế hoạch U03; **chưa cho triển khai U03 trước review kế hoạch**.
+U02 kỹ thuật đã khép A–F và bản sửa focus, không còn tính năng U02 phải triển khai. Chưa nghiệm thu Server đóng gói, mạng xấu/bù trễ/prediction đầy đủ U05, hiệu năng sản phẩm, art anime/carry sản phẩm hoặc respawn sản phẩm. Lượt hiện tại chỉ khép hồ sơ/push/fast-forward main rồi dừng; **không triển khai U03**.

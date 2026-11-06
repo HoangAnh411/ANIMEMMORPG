@@ -89,7 +89,7 @@ Cổng kỹ thuật: Windows điều khiển được, chuột xoay ngay, menu/f
 
 **U02 KỸ THUẬT HOÀN TẤT A–F**: F được nghiệm thu tại **d5fb4b0/source8580651**; [ACCEPTANCE-F](U02/ACCEPTANCE-F.md), [REPORT-F](U02/REPORT-F.md), [ma trận khép](U02/CLOSURE-F.md).61/61 Automation,134/134 input assertions +36/36 bổ sung; dedicated Editor server/hai client trong điều kiện đã đo. Windows E giữ package source1f1c359 và nghiệm thu903e139. Cảm giác hai cửa sổ chưa được xác nhận, không chặn khép kỹ thuật; chưa Server đóng gói, mạng xấu/bù trễ U05 hoặc art sản phẩm. Các trạng thái chờ bên dưới là lịch sử. U03 mới được phép khảo sát/lập kế hoạch, **chưa triển khai trước review kế hoạch**.
 
-Theo phản hồi tiếp theo, mở riêng hồi quy hiệu năng đổi focus trước U03, giữ nghiệm thu combat. [Báo cáo Focus](U02/FOCUS-REGRESSION.md): sửa launcher/window placement và profile render review;10 lượt trước/sau,71 input +55 gate đạt, READY_FOR_REVIEW/chờ cảm giác. Chưa chuyển U03.
+Hồi quy hiệu năng đổi focus đã **ACCEPTED tại32061ba**, gồm xác nhận cảm giác đổi focus “ok rồi”; giữ nghiệm thu combat. [Báo cáo Focus](U02/FOCUS-REGRESSION.md), [căn cứ](U02/ACCEPTANCE-FOCUS.md): sửa launcher/window placement và profile render review;10 lượt trước/sau,197 evidence hashes,71 input +55 gate đạt. U02 hoàn thành kỹ thuật A–F, không phát hiện lỗi chặn còn mở qua lần rà soát cuối. Các ghi chú cảm giác chưa xác nhận ở review F ban đầu là lịch sử; không mở rộng thành art sản phẩm/U05. Lượt khép này chỉ push/fast-forward main rồi dừng, không triển khai U03.
 
 **U02-B ACCEPTED** tại95a83ca/source94ebcc7; Editor gốc đã refresh và kiểm PIE/Live Coding; [closure B](U02/ACCEPTANCE-B.md). Cho phép triển khai riêng C, chưa nghiệm thu C–F.
 
