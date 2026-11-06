@@ -151,6 +151,9 @@ void UU01CharacterMovement::ResetFixtureState()
 {
     if (auto* C=Cast<AU01Character>(CharacterOwner); C && C->Combat) C->Combat->ResetLabCombat();
     LockMask &= static_cast<uint8>(EU01MotorLock::Control);
+    // A failed/non-authority lab reset cannot bypass actual vital death.
+    if(const auto* C=Cast<AU01Character>(CharacterOwner);C&&C->Vital&&C->Vital->GetSnapshot().bDead)
+        LockMask |= static_cast<uint8>(EU01MotorLock::Defeated);
     bSprintRequested = false;
     JumpWindow.ResetSession();
     StopMovementImmediately();

@@ -102,7 +102,9 @@ bool FU02EDeathOrder::RunTest(const FString&)
     TestEqual(TEXT("One actual death"),B->Vital->GetSnapshot().DeathCount,uint32(1));TestTrue(TEXT("Real Defeated motor lock"),(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))!=0);
     TestEqual(TEXT("Death cancels pending action presentation"),B->Combat->GetCombatSnapshot().Phase,uint8(FrameEnd<.4?EPhase::Cancelled:EPhase::Finished));
     B->GetU01Movement()->SetMotorLock(EU01MotorLock::Defeated,false);TestTrue(TEXT("Old U01 fixture cannot clear actual HP0 Defeated"),(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))!=0);
-    W.TickTestWorld(float(FrameEnd+.05));TestTrue(TEXT("Real combat lab reset restores dead pawn"),B->Combat->ResetLabCombat());
+    B->SetRole(ROLE_AutonomousProxy);B->GetU01Movement()->ResetFixtureState();B->SetRole(ROLE_Authority);
+    TestTrue(TEXT("Non-authority U01 reset cannot clear actual HP0 Defeated"),B->Vital->GetSnapshot().HP==0&&(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))!=0);
+    const double CatchUp=W.Now()+FrameEnd+.05;for(int I=0;I<120&&W.Now()<CatchUp;++I)W.TickTestWorld(1.f/60);TestTrue(TEXT("Real combat lab reset restores dead pawn"),B->Combat->ResetLabCombat());
     TestTrue(TEXT("Reset full HP, new life and clears actual Defeated"),B->Vital->GetSnapshot().HP==1000&&B->Vital->GetSnapshot().Generation==2&&!B->Vital->GetSnapshot().bDead&&(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))==0);
     }
     return true;
