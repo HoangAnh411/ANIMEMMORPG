@@ -11,7 +11,12 @@ c=FClient(by['ClientA'])
 try:
  c.prepare()
  if c.ime:c.toggle_ime();c.ime=False
- marker=str(time.time_ns())+' hit';(a.session/'command.txt').write_text(marker);time.sleep(1.5);old=c.metrics()['combat']['pawnId'];baseline=next(v for v in latest('Server')['pawns'] if v['id']==old);c.attack(True);time.sleep(.04);c.attack(False)
+ marker=str(time.time_ns())+' hit';(a.session/'command.txt').write_text(marker);time.sleep(1.5);old=c.metrics()['combat']['pawnId'];baseline=next(v for v in latest('Server')['pawns'] if v['id']==old)
+ # The explicit server concurrent fixture consumed a command ID; drain any stale physical counter edges before this separate disconnect attempt.
+ for attempt in range(4):
+  c.attack(True);time.sleep(.04);c.attack(False);time.sleep(.06)
+  current=next(v for v in latest('Server')['pawns'] if v['id']==old)
+  if current['accepted']>baseline['accepted']:break
  for _ in range(80):
   s=latest('Server');own=next(v for v in s['pawns'] if v['id']==old)
   if own['accepted']>baseline['accepted']:break

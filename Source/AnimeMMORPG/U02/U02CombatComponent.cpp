@@ -314,7 +314,7 @@ void UU02CombatComponent::SendNetworkFixtureProbe(const FString& Kind)
     if(!FParse::Param(FCommandLine::Get(),TEXT("U02FProbe"))||!Character()||!Character()->IsLocallyControlled()||!GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab")))return;
     if(Kind==TEXT("duplicate"))ServerAttack(LastSentCommand,GetWorld()->GetTimeSeconds(),0,Snapshot.PawnId,LastSentLife);
     if(Kind==TEXT("stale"))ServerAttack(LastSentCommand+1,GetWorld()->GetTimeSeconds(),0,Snapshot.PawnId,Snapshot.LifeGeneration-1);
-    if(Kind==TEXT("nan"))ServerAttack(LastSentCommand+1,GetWorld()->GetTimeSeconds(),std::numeric_limits<double>::quiet_NaN(),Snapshot.PawnId,Snapshot.LifeGeneration);
+    if(Kind==TEXT("nan"))ServerAttack(FMath::Max(LastSentCommand,Snapshot.LastCommand)+1,GetWorld()->GetTimeSeconds(),std::numeric_limits<double>::quiet_NaN(),Snapshot.PawnId,Snapshot.LifeGeneration);
     if(Kind==TEXT("other"))for(TActorIterator<AU01Character> It(GetWorld());It;++It)if(*It!=Character()){It->Combat->ServerAttack(1,0,0,It->NetworkPawnId,It->Combat->Snapshot.LifeGeneration);break;}
     // No damage/HP payload exists in the gameplay RPC schema.
     Trace(TEXT("ClientProbe"),GetWorld()->GetTimeSeconds(),Kind);
