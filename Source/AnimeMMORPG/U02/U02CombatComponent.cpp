@@ -198,7 +198,11 @@ void UU02CombatComponent::ApplyMotorSnapshot()
         const auto* GS=GetWorld()->GetGameState();
         const double Now=C->HasAuthority()?Snapshot.ServerSeconds:(GS?GS->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds());
         FStartupTurn Turn;Turn.Begin(Snapshot.TurnFromYaw,Snapshot.AimYawDegrees,Snapshot.TurnStartSeconds,Snapshot.StartSeconds+.16);
-        C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,Turn.Sample(Now));
+        const double BodyYaw=Turn.Sample(Now);
+        C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,BodyYaw);
+        // Simulated proxies do not run PhysicsRotation. Sample the action trajectory
+        // explicitly there too; hit direction remains exclusively server-owned.
+        if (!C->HasAuthority() && Snapshot.bLocked) C->SetActorRotation(FRotator(0,BodyYaw,0));
     }
 }
 void UU02CombatComponent::OnRep_Snapshot() { ApplyMotorSnapshot(); }

@@ -14,6 +14,7 @@ static constexpr auto U02BFlags=EAutomationTestFlags::EditorContext|EAutomationT
 struct FU02CombatTestAccess
 {
     static void Attack(UU02CombatComponent* C,uint64 Seq,double Yaw,double Now) { C->HandleAttack(Seq,Now,Yaw,Now); }
+    static void ApplySnapshot(UU02CombatComponent* C,const FU02RepCombatSnapshot& S) { C->Snapshot=S;C->ApplyMotorSnapshot(); }
     static bool Advance(UU02CombatComponent* C,double Now) { return C->AdvanceAuthority(Now); }
     static bool Cancel(UU02CombatComponent* C,ECancel Reason,double Now) { return C->CancelAt(Reason,Now); }
 };
@@ -203,5 +204,22 @@ bool FU02ActualTurn::RunTest(const FString&)
         B->OnActiveInterval.Clear();
     }
     return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02ProxyTurn,"AnimeMMORPG.U02.C.ProxySamplesActionTurn",U02BFlags)
+bool FU02ProxyTurn::RunTest(const FString&)
+{
+    FU02BWorld W(*this);auto* C=W.C;auto* B=C->Combat.Get();
+    FU02RepCombatSnapshot S;S.PawnId=C->NetworkPawnId;S.ActionSequence=1;S.bLocked=true;S.Phase=1;
+    S.StartSeconds=W.Now()-.08;S.TurnStartSeconds=S.StartSeconds;S.TurnFromYaw=0;S.AimYawDegrees=90;
+    C->SetRole(ROLE_SimulatedProxy);
+    FU02CombatTestAccess::ApplySnapshot(B,S);
+    TestTrue(TEXT("Simulated proxy actual body samples action midpoint without PhysicsRotation"),FMath::Abs(C->GetActorRotation().Yaw-45)<.001);
+    S.StartSeconds=W.Now()-.2;S.TurnStartSeconds=S.StartSeconds;S.Phase=2;S.bYawLocked=true;
+    FU02CombatTestAccess::ApplySnapshot(B,S);
+    TestTrue(TEXT("Late proxy snapshot completes locked action yaw"),FMath::Abs(C->GetActorRotation().Yaw-90)<.001);
+    S.bLocked=false;S.Phase=5;C->SetActorRotation(FRotator(0,30,0));
+    FU02CombatTestAccess::ApplySnapshot(B,S);
+    TestTrue(TEXT("Cancelled proxy cannot apply old turn"),FMath::Abs(C->GetActorRotation().Yaw-30)<.001);
+    C->SetRole(ROLE_Authority);return true;
 }
 #endif
