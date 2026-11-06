@@ -8,4 +8,4 @@ Chạy `Play-U02-C.cmd`. Trong menu chọn reset runway rồi Resume. LMB chém,
 
 Startup vẫn 0,16 giây. Nếu đổi aim rất mạnh sát active, thân phải bắt kịp trong thời gian còn lại rất ngắn. Animation là blockout kỹ thuật; ghi nhận lỗi pose/chuyển trạng thái như lỗi cần sửa.
 
-Thoát bằng menu Quit. Launcher kiểm hash package và khôi phục cửa sổ Editor theo identity; logs nằm trong `Artifacts/U02/C/Review-*`. C chưa nghiệm thu, chưa merge hoặc bắt đầu D.
+Thoát bằng menu Quit. Launcher kiểm hash package và khôi phục cửa sổ Editor theo identity; logs nằm trong `Artifacts/U02/C/Review-*`. C ACCEPTED về kỹ thuật blockout tại cdaf102/source 9aa7249; phần xoay và cảm giác đứng đánh đã được chấp nhận. Remote pending; chưa merge hoặc bắt đầu D.

@@ -5,6 +5,21 @@
     "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
   },
   {
+    "file": "accepted-push.log.gz",
+    "bytes": 654,
+    "sha256": "d67346dcfa5fba6e7fb372b27a1086bf2fc0820ecceb481c98c320b2ba81d954"
+  },
+  {
+    "file": "ACCEPTED-REMOTE-ATTEMPT.json",
+    "bytes": 777,
+    "sha256": "8740af8115af319e3ecd3f9048750b1bbc7a0e0f6210ab6f38260d801c5b4e85"
+  },
+  {
+    "file": "accepted-remote-head.log.gz",
+    "bytes": 443,
+    "sha256": "8991f3d3cfda2059bbda0f4db90c57a7670a557c5409919cbc6387fb02641221"
+  },
+  {
     "file": "After-0.08.png",
     "bytes": 276725,
     "sha256": "3abb835e7f7075d525d300107bb81658dce8db9176d12109652ff35c73c38906"
@@ -541,8 +556,8 @@
   },
   {
     "file": "MANIFEST.json",
-    "bytes": 2937,
-    "sha256": "d67f592aa1627ec5bad08ea7d29ccc5661b055cc9d94f6227d1955eb43667251"
+    "bytes": 3022,
+    "sha256": "7e5b5f5ab8708ce01748b525ae3287ba29b8be3786268c5e884ea72ddd9ed059"
   },
   {
     "file": "MCP-RESULTS.json",

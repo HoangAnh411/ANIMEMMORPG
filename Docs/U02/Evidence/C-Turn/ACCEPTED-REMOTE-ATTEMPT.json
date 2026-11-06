@@ -1,0 +1,23 @@
+{
+  "status": "ACCEPTED_LOCAL \u2014 REMOTE_PENDING",
+  "acceptedHandoff": "cdaf102",
+  "verifiedSource": "9aa7249a38b65f8119d8c93790d73e795341324a",
+  "attemptedCommit": "86ee3ce6179f9a19d158d824c3250c7581e9c94b",
+  "remoteVerified": false,
+  "utc": "2026-11-06T04:34:40.207446+00:00",
+  "reason": "LFS HTTPS timeout; ls-remote HTTPS port 443 connection failure",
+  "logs": [
+    {
+      "file": "accepted-push.log.gz",
+      "rawSHA256": "960cff9c2770d11a0f9ae7bfc5bc8e325eb26d8e961b2b887a751b7e29c5d096",
+      "exitCode": 1
+    },
+    {
+      "file": "accepted-remote-head.log.gz",
+      "rawSHA256": "3a23d42c59a1765b1553511033a3e73aa55a2aef42320b7fcf125a27622e17e4",
+      "exitCode": 1
+    }
+  ],
+  "mainFastForwarded": false,
+  "DStarted": false
+}

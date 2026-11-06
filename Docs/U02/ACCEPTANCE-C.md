@@ -10,4 +10,6 @@ Lượt nghiệm thu là review source/log và tính lại hash của người d
 
 Nghiệm thu kỹ thuật vẫn có hiệu lực khi GitHub lỗi. Bàn giao remote chỉ hoàn tất sau push và đối chiếu SHA remote. Trước mốc đó giữ ACCEPTED_LOCAL — REMOTE_PENDING; chưa fast-forward main hoặc bắt đầu D.
 
+Lần bàn giao sau nghiệm thu: đã commit hồ sơ tại `86ee3ce` và thử push. Endpoint Git LFS timeout; lệnh `git ls-remote` cũng lỗi kết nối HTTPS cổng 443 nên chưa xác minh được SHA remote. Giữ nguyên trạng thái ACCEPTED_LOCAL — REMOTE_PENDING. [Biên bản và log](Evidence/C-Turn/ACCEPTED-REMOTE-ATTEMPT.json). Không chạy lại build/tests vì source/runtime không đổi.
+
 Sau khi remote xác minh: fast-forward main, tạo nhánh D riêng. D chỉ collision/hurtbox/sweep: tường theo từng hurtbox, dedup, chuyển động tương đối và interval vượt toàn active; chưa damage E. D phải commit/push và dừng review.
