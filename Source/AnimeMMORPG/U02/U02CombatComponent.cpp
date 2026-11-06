@@ -259,7 +259,7 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("command"),LastCommand); J->SetNumberField(TEXT("intervals"),IntervalCount);
     J->SetNumberField(TEXT("lastSliceBegin"),LastInterval.BeginSeconds); J->SetNumberField(TEXT("lastSliceEnd"),LastInterval.EndSeconds);
     if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())
-    {J->SetNumberField(TEXT("geometryConfirmed"),W->Confirmed.Num());J->SetNumberField(TEXT("geometryQueries"),W->Queries);J->SetNumberField(TEXT("geometryBlocked"),W->Blocked);}
+    {J->SetNumberField(TEXT("geometryConfirmed"),W->Confirmed.Num());J->SetNumberField(TEXT("geometryQueries"),W->Queries);J->SetNumberField(TEXT("geometryBlocked"),W->Blocked);J->SetNumberField(TEXT("geometryUnsupportedShapes"),W->UnsupportedObstructions);}
     return J;
 }
 void UU02CombatComponent::Trace(const TCHAR* Event, double GameplaySeconds, const FString& Detail) const

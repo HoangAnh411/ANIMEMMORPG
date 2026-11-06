@@ -2,6 +2,8 @@
 #include "U02LabDummy.h"
 #include "Components/BoxComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
 #include "Engine/TargetPoint.h"
 #include "Engine/World.h"
 AU02CollisionLab::AU02CollisionLab()
@@ -15,6 +17,9 @@ void AU02CollisionLab::BeginPlay()
         auto* Shape=NewObject<UBoxComponent>(this);Shape->SetBoxExtent(Half);Shape->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
         Shape->SetCollisionResponseToAllChannels(ECR_Block);Shape->SetCollisionResponseToChannel(ECC_GameTraceChannel1,ECR_Ignore);
         Shape->SetupAttachment(RootComponent);Shape->SetRelativeLocation(P);Shape->RegisterComponent();Shape->SetHiddenInGame(false);Shape->ShapeColor=FColor::Cyan;
+        auto* Visual=NewObject<UStaticMeshComponent>(this);Visual->SetupAttachment(RootComponent);
+        Visual->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
+        Visual->SetRelativeLocation(P);Visual->SetRelativeScale3D(Half*.02);Visual->SetCollisionEnabled(ECollisionEnabled::NoCollision);Visual->RegisterComponent();
     };
     for(int Lane=0;Lane<4;++Lane)
     {
@@ -23,7 +28,7 @@ void AU02CollisionLab::BeginPlay()
         auto* Point=GetWorld()->SpawnActor<ATargetPoint>(Base+FVector(0,0,110),FRotator::ZeroRotator);
         Point->Tags.Add(FName(*FString::Printf(TEXT("U01C_Reset_CombatD%d"),Lane+1)));
         auto* Label=NewObject<UTextRenderComponent>(this);Label->SetupAttachment(RootComponent);Label->SetRelativeLocation(Base-GetActorLocation()+FVector(250,0,220));
-        Label->SetText(FText::FromString(FString::Printf(TEXT("U02-D %d | geometry only / no damage"),Lane+1)));Label->SetWorldSize(24);Label->RegisterComponent();
+        Label->SetText(FText::FromString(FString::Printf(TEXT("U02-D %d | geometry only / no damage"),Lane+1)));Label->SetWorldSize(24);Label->SetRelativeRotation(FRotator(0,180,0));Label->RegisterComponent();
         GetWorld()->SpawnActor<AU02LabDummy>(Base+FVector(150,Lane==0?-35:0,0),FRotator::ZeroRotator);
         if(Lane==0)GetWorld()->SpawnActor<AU02LabDummy>(Base+FVector(150,35,0),FRotator::ZeroRotator);
         if(Lane==1)Box(Base-GetActorLocation()+FVector(75,0,110),FVector(10,200,110));

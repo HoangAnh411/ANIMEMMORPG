@@ -56,7 +56,7 @@ bool FU02DGeometry::RunTest(const FString&)
     const FVector Feet(10,20,30);TestTrue(TEXT("Feet based rotated center"),AttackCenter(Feet,90).Equals(FVector(10,120,120),1.e-8));
     for(double Yaw:{0.,45.,90.,-179.})
     {
-        const FQuat Q=FRotator(0,Yaw,0).Quaternion();auto Point=[&](FVector P){return Feet+Q.RotateVector(P);};
+        const FQuat Q=FRotator(0,Yaw,0).Quaternion().GetNormalized();auto Point=[&](FVector P){return Feet+Q.RotateVector(P);};
         for(FVector P:{FVector(0,0,0),FVector(200,60,180),FVector(100,-60,90)})
             TestTrue(TEXT("Closed spatial boundaries"),SphereAttackContact(Feet,Feet,Yaw,Point(P),Point(P),0,0,1).bHit);
         for(FVector P:{FVector(-1,0,90),FVector(201,0,90),FVector(100,61,90),FVector(100,0,181)})
@@ -81,8 +81,9 @@ bool FU02DVisibility::RunTest(const FString&)
     TestTrue(TEXT("Blocked-first interval can emerge"),First.IsSet()&&First.GetValue()>.49&&First.GetValue()<.51&&Visible(First.GetValue()));
     TArray<FTriangle> Slit;AddBoxTriangles(FTransform(FVector(75,-40.8767,90)),FVector(5,50,90),Slit);
     AddBoxTriangles(FTransform(FVector(75,59.1235,90)),FVector(5,50,90),Slit);
-    auto SlitVisible=[&](double T){auto End=SphereNearest(O,FMath::Lerp(A,B,T),1);for(auto& Tri:Slit)if(SegmentTriangleClosed(O,End,Tri))return false;return true;};
-    auto Hit=FirstVisible(O,O,A,B,1,Contact,Slit,SlitVisible);
+    FVector SlitOrigin(0,9.1234,90);
+    auto SlitVisible=[&](double T){auto End=SphereNearest(SlitOrigin,FMath::Lerp(A,B,T),1);for(auto& Tri:Slit)if(SegmentTriangleClosed(SlitOrigin,End,Tri))return false;return true;};
+    auto Hit=FirstVisible(SlitOrigin,SlitOrigin,A,B,1,Contact,Slit,SlitVisible);
     TestTrue(TEXT("Sub-sample slit is found analytically"),Hit.IsSet()&&SlitVisible(Hit.GetValue()));return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DWorldSweep,"AnimeMMORPG.U02.D.WorldWholeActiveCrossingAndDedup",U02DFlags)

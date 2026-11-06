@@ -144,6 +144,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         if(Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets)continue;
         const bool Continuous=Source->Previous.Life==Source->Current.Life&&Source->Previous.Epoch==Source->Current.Epoch
             &&H.Previous.Life==H.Current.Life&&H.Previous.Epoch==H.Current.Epoch&&H.Previous.Radius==H.Current.Radius;
+        if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))UE_LOG(LogU02Collision,Display,TEXT("U02D_SPAN source=%s target=%s hurtbox=%u continuous=%d epochs=%llu/%llu targetEpochs=%llu/%llu radius=%.17g/%.17g feet=%s target=%s"),*P.Action.Source.Pawn.ToString(),*H.Current.Life.Pawn.ToString(),Shape->StableHurtboxId,Continuous,Source->Previous.Epoch,Source->Current.Epoch,H.Previous.Epoch,H.Current.Epoch,H.Previous.Radius,H.Current.Radius,*Source->Current.Position.ToString(),*H.Current.Position.ToString());
         double A=P.Slice.BeginAlpha,B=P.Slice.EndAlpha;
         FVector F0=Source->Previous.Position,F1=Source->Current.Position,C0=H.Previous.Position,C1=H.Current.Position;
         if(!Continuous)

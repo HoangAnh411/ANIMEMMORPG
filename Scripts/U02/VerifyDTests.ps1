@@ -20,7 +20,7 @@ $expected=@(Get-ChildItem (Join-Path $sourceRoot 'Source/AnimeMMORPG/Tests') -Fi
  [regex]::Matches((Get-Content -Raw -LiteralPath $_.FullName),'IMPLEMENT_SIMPLE_AUTOMATION_TEST\(\s*\w+\s*,\s*"(AnimeMMORPG\.[^"]+)"') | ForEach-Object {$_.Groups[1].Value}
 })
 if($expected.Count -eq 0){throw 'Zero registered project tests'}
-$arguments=@(('"'+$project+'"'),'-NullRHI','-nosound','-unattended','-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-ModelContextProtocolStartServer',('-ModelContextProtocolPort='+$Port),('-U01SourceSHA='+$sourceSHA),('-U02SourceSHA='+$sourceSHA),('-U02RunId='+(Split-Path $out -Leaf)),('-abslog="'+(Join-Path $out 'Editor.log')+'"'))
+$arguments=@(('"'+$project+'"'),'-NullRHI','-nosound','-unattended','-NoLiveCoding','-U02Trace','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-ModelContextProtocolStartServer',('-ModelContextProtocolPort='+$Port),('-U01SourceSHA='+$sourceSHA),('-U02SourceSHA='+$sourceSHA),('-U02RunId='+(Split-Path $out -Leaf)),('-abslog="'+(Join-Path $out 'Editor.log')+'"'))
 $p=Start-Process -FilePath $exe -ArgumentList $arguments -WindowStyle Hidden -PassThru
 @{runId=Split-Path $out -Leaf;utc=[DateTime]::UtcNow.ToString('o');pid=$p.Id;exe=$exe;arguments=$arguments;sourceSHA=$sourceSHA;exeSHA256=(Get-FileHash -LiteralPath $exe).Hash;module=$module;moduleSHA256=(Get-FileHash -LiteralPath $module).Hash;scope='Game-world adapter/movement fixtures and pure rules; not real keyboard or network process proof'} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $out 'process.json')
 $uri='http://127.0.0.1:'+ $Port + '/mcp'

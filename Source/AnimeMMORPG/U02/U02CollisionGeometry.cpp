@@ -36,13 +36,13 @@ void Roots(FPoly P,double Lo,double Hi,TArray<double>& Out)
     }
 }
 }
-FVector AttackCenter(FVector Feet,double Yaw) { return Feet+FRotator(0,Yaw,0).RotateVector(FVector(100,0,90)); }
+FVector AttackCenter(FVector Feet,double Yaw) { return Feet+FRotator(0,Yaw,0).Quaternion().GetNormalized().RotateVector(FVector(100,0,90)); }
 FVector SphereNearest(FVector Origin,FVector Center,double Radius)
 { FVector D=Origin-Center;return D.SizeSquared()<=Radius*Radius?Origin:Center+D.GetSafeNormal()*Radius; }
 FContactRange SphereAttackContact(FVector F0,FVector F1,double Yaw,FVector C0,FVector C1,double R,double Lo,double Hi)
 {
     FContactRange Out;if(R<0||!FMath::IsFinite(R)||Lo>Hi)return Out;
-    const FQuat Q=FRotator(0,Yaw,0).Quaternion();
+    const FQuat Q=FRotator(0,Yaw,0).Quaternion().GetNormalized();
     FVector P=Q.UnrotateVector(C0-AttackCenter(F0,Yaw));
     FVector V=Q.UnrotateVector((C1-C0)-(F1-F0));const FVector H(100+1.e-7,60+1.e-7,90+1.e-7);
     TArray<double> Cuts{Lo,Hi};
