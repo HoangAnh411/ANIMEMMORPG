@@ -2,6 +2,7 @@
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationCommon.h"
 #include "U02/U02NetworkState.h"
+#include "U02/U02CollisionLab.h"
 #include "U02/U02CombatComponent.h"
 #include "U02/U02LabDummy.h"
 #include "U02/U02VitalComponent.h"
@@ -36,5 +37,10 @@ bool FU02FResult::RunTest(const FString&)
  FW W;auto* S=W.GetTestWorld()->SpawnActor<AU02NetworkState>();auto* D=W.GetTestWorld()->SpawnActor<AU02LabDummy>(FVector(500,0,0),FRotator::ZeroRotator);TestTrue(TEXT("Dummy replicates with server identity"),D->GetIsReplicated()&&D->NetworkPawnId.IsValid());TestTrue(TEXT("Vital replicated component"),D->Vital->GetIsReplicated());UU02CollisionWorld::FConfirmedDamage R;R.Hit.Id.Action={{W.C->NetworkPawnId,1},1};R.Hit.Id.Target={D->NetworkPawnId,1};R.Result.Damage=60;R.Result.AfterHP=540;
  for(int I=0;I<70;++I){R.Hit.Id.Action.Sequence=I+1;S->Confirm(R);}TestEqual(TEXT("Bounded result history"),S->Results.Num(),64);TestEqual(TEXT("Stable server serial"),S->Results.Last().Serial,uint64(70));TestEqual(TEXT("Event publication never applies damage"),D->Vital->GetSnapshot().HP,600);
  const auto* F=UU02CombatComponent::StaticClass()->FindFunctionByName(TEXT("ServerAttack"));TestNotNull(TEXT("RPC exists"),F);if(F){TestTrue(TEXT("Server reliable RPC"),F->HasAllFunctionFlags(FUNC_NetServer|FUNC_NetReliable));TestNull(TEXT("Client cannot declare damage"),F->FindPropertyByName(TEXT("Damage")));TestNull(TEXT("Client cannot declare HP"),F->FindPropertyByName(TEXT("HP")));TestNotNull(TEXT("Expected life on wire"),F->FindPropertyByName(TEXT("Life")));}W.ForwardErrorMessages(this);return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02FFloor,"AnimeMMORPG.U02.F.NetworkLabStaticFloorAttachment",U02FFlags)
+bool FU02FFloor::RunTest(const FString&)
+{
+ FW W;auto* World=W.GetTestWorld();const FString Name=World->GetName();World->Rename(TEXT("L_NetworkLab"),nullptr,REN_DontCreateRedirectors);auto* Lab=World->SpawnActor<AU02CollisionLab>(FVector(0,-6000,0),FRotator::ZeroRotator);TArray<UBoxComponent*> Boxes;Lab->GetComponents(Boxes);TestEqual(TEXT("Four floors plus four wall blocks"),Boxes.Num(),8);bool Floor=false;for(auto* B:Boxes){TestTrue(TEXT("Static collider stays attached to map root"),B->GetAttachParent()==Lab->GetRootComponent());if(B->GetFName()==TEXT("CombatBox_300_0_-50")){Floor=true;TestTrue(TEXT("Floor includes map actor transform"),B->GetComponentLocation().Equals(FVector(300,-6000,-50),.01));}}TestTrue(TEXT("Registered stable floor"),Floor);World->Rename(*Name,nullptr,REN_DontCreateRedirectors);W.ForwardErrorMessages(this);return true;
 }
 #endif

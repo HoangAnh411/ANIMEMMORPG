@@ -12,6 +12,8 @@ AU02CollisionLab::AU02CollisionLab()
 void AU02CollisionLab::BeginPlay()
 {
     Super::BeginPlay();
+    // Fixed map geometry: static children require a static parent before registration.
+    RootComponent->SetMobility(EComponentMobility::Static);
     const FString Map=GetWorld()->GetMapName();if(!Map.EndsWith(TEXT("L_CharacterCombatLab"))&&!Map.EndsWith(TEXT("L_NetworkLab")))return;
     if(HasAuthority()&&Map.EndsWith(TEXT("L_NetworkLab")))GetWorld()->SpawnActor<AU02NetworkState>();
     auto Box=[&](FVector P,FVector Half)
