@@ -1,0 +1,11 @@
+{
+  "status": "LOCAL_READY_FOR_REVIEW",
+  "remoteVerified": false,
+  "attemptedCommit": "07863d91040da0ed3b479e5a7fcb4ffb6faa0627",
+  "sourceSHA": "9aa7249a38b65f8119d8c93790d73e795341324a",
+  "exitCode": 1,
+  "utc": "2026-11-06T03:46:11.440461+00:00",
+  "rawLogSHA256": "7807b7203a1a67712bc1be8f158ba9abe778d17828f125310b99526f6e5c98c1",
+  "log": "Remote-Final-Push.log.gz",
+  "reason": "GitHub HTTPS connection failed; remote delivery not confirmed"
+}

@@ -1,6 +1,6 @@
 {
   "status": "LOCAL_READY_FOR_REVIEW",
-  "remoteDelivery": "pending remote verification",
+  "remoteDelivery": "failed: GitHub connection; not verified",
   "utc": "2026-11-06T03:42:02.645180+00:00",
   "branch": "u02/c-attack-presentation",
   "baseSHA": "34e5dd73724546deb6e9cbb410a844341fcfad3c",
@@ -40,5 +40,6 @@
   "turnCaptureSession": "Turn-After-Final",
   "turnRuntimeAssertions": 18,
   "reviewerTechnicalAcceptance": false,
-  "userFeelAcceptance": false
+  "userFeelAcceptance": false,
+  "remoteRecord": "REMOTE-DELIVERY.json"
 }
