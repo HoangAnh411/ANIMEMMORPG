@@ -30,7 +30,9 @@ public:
     TArray<AnimeMMORPG::U02::FHitCandidate> Confirmed;
     uint64 Queries=0,Blocked=0,Discontinuities=0;
     uint32 UnsupportedObstructions=0;
+    bool bCharacterFixtureTargets=false; // Native test fixture only; normal lab attacks dummies.
 private:
+    friend struct FU02CollisionTestAccess;
     struct FPose
     {
         FVector Position=FVector::ZeroVector;

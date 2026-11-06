@@ -15,7 +15,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 using namespace AnimeMMORPG::U02;
-static constexpr auto DFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
+static constexpr auto U02DFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
+struct FU02CollisionTestAccess
+{
+    static void ReverseSources(UU02CollisionWorld* W) { if(W->Sources.Num()==2)W->Sources.Swap(0,1); }
+};
 namespace
 {
 struct FDWorld : FTestWorldWrapper
@@ -46,7 +50,7 @@ struct FDWorld : FTestWorldWrapper
     void Attack(double Yaw=0){Source->Combat->SubmitAttackIntent(1,Now(),Yaw);}
 };
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DGeometry,"AnimeMMORPG.U02.D.FeetBoxBoundaryAndRelativeSweep",DFlags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DGeometry,"AnimeMMORPG.U02.D.FeetBoxBoundaryAndRelativeSweep",U02DFlags)
 bool FU02DGeometry::RunTest(const FString&)
 {
     const FVector Feet(10,20,30);TestTrue(TEXT("Feet based rotated center"),AttackCenter(Feet,90).Equals(FVector(10,120,120),1.e-8));
@@ -66,7 +70,7 @@ bool FU02DGeometry::RunTest(const FString&)
     TestFalse(TEXT("Never sweep startup/recovery outside clipped active"),SphereAttackContact(FVector::ZeroVector,FVector::ZeroVector,0,FVector(100,-500,90),FVector(100,500,90),10,0,.2).bHit);
     return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DVisibility,"AnimeMMORPG.U02.D.VisibilityChangesInsideContactInterval",DFlags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DVisibility,"AnimeMMORPG.U02.D.VisibilityChangesInsideContactInterval",U02DFlags)
 bool FU02DVisibility::RunTest(const FString&)
 {
     TArray<FTriangle> Triangles;AddBoxTriangles(FTransform(FVector(75,-35,90)),FVector(5,35,90),Triangles);
@@ -81,7 +85,7 @@ bool FU02DVisibility::RunTest(const FString&)
     auto Hit=FirstVisible(O,O,A,B,1,Contact,Slit,SlitVisible);
     TestTrue(TEXT("Sub-sample slit is found analytically"),Hit.IsSet()&&SlitVisible(Hit.GetValue()));return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DWorldSweep,"AnimeMMORPG.U02.D.WorldWholeActiveCrossingAndDedup",DFlags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DWorldSweep,"AnimeMMORPG.U02.D.WorldWholeActiveCrossingAndDedup",U02DFlags)
 bool FU02DWorldSweep::RunTest(const FString&)
 {
     FDWorld W(*this);auto* D=W.Dummy(FVector(150,-500,0));W.Attack();D->SetActorLocation(FVector(150,500,0));W.Resolver->DrainAt(W.Now()+.5);
@@ -92,7 +96,7 @@ bool FU02DWorldSweep::RunTest(const FString&)
     TestEqual(TEXT("Ignores pawn movement"),D->Body->GetCollisionResponseToChannel(ECC_Pawn),ECR_Ignore);
     TestEqual(TEXT("Capsule ignores obstruction"),W.Source->GetCapsuleComponent()->GetCollisionResponseToChannel(ECC_GameTraceChannel2),ECR_Ignore);return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DWalls,"AnimeMMORPG.U02.D.WorldWallPartialHurtboxAndOrigin",DFlags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DWalls,"AnimeMMORPG.U02.D.WorldWallPartialHurtboxAndOrigin",U02DFlags)
 bool FU02DWalls::RunTest(const FString&)
 {
     for(int Case=0;Case<3;++Case)
@@ -106,7 +110,7 @@ bool FU02DWalls::RunTest(const FString&)
     }
     return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DOrder,"AnimeMMORPG.U02.D.WorldTargetsOrderingAndLifetime",DFlags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DOrder,"AnimeMMORPG.U02.D.WorldTargetsOrderingAndLifetime",U02DFlags)
 bool FU02DOrder::RunTest(const FString&)
 {
     for(bool Reverse:{false,true})
@@ -118,7 +122,7 @@ bool FU02DOrder::RunTest(const FString&)
     FDWorld W(*this);auto* D=W.Dummy(FVector(150,-500,0));W.Attack();D->SetActorLocation(FVector(150,500,0),false,nullptr,ETeleportType::TeleportPhysics);
     W.Resolver->DrainAt(W.Now()+.5);TestEqual(TEXT("No teleport sweep"),W.Resolver->Confirmed.Num(),0);TestTrue(TEXT("Continuity break recorded"),W.Resolver->Discontinuities>0);return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DReset,"AnimeMMORPG.U02.D.WorldResetAndResolveRevalidation",DFlags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DReset,"AnimeMMORPG.U02.D.WorldResetAndResolveRevalidation",U02DFlags)
 bool FU02DReset::RunTest(const FString&)
 {
     FDWorld W(*this);auto* A=W.Dummy(FVector(100,0,0),10);auto* B=W.Dummy(FVector(150,0,0),20);
@@ -127,5 +131,26 @@ bool FU02DReset::RunTest(const FString&)
     FDWorld Death(*this);Death.Dummy(FVector(100,0,0),10);Death.Dummy(FVector(150,0,0),20);
     Death.Resolver->OnGeometryConfirmed.AddLambda([&](const FHitCandidate& C){Death.Resolver->MarkDead(C.Id.Action.Source);});Death.Attack();Death.Resolver->DrainAt(Death.Now()+.3);
     TestEqual(TEXT("Invalid source rejects next sorted event; no HP"),Death.Resolver->Confirmed.Num(),1);Death.Resolver->OnGeometryConfirmed.Clear();return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DGlobal,"AnimeMMORPG.U02.D.GlobalBatchAcrossSources",U02DFlags)
+bool FU02DGlobal::RunTest(const FString&)
+{
+    for(bool Reverse:{false,true})
+    {
+        FDWorld W(*this);W.Dummy(FVector(150,0,0),10);
+        FTransform X(FVector(0,40,98));auto* B=W.GetTestWorld()->SpawnActorDeferred<AU01Character>(AU01Character::StaticClass(),X,nullptr,nullptr,ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+        B->NetworkPawnId=FGuid(2,0,0,1);UGameplayStatics::FinishSpawningActor(B,X);B->GetU01Movement()->SetMovementMode(MOVE_Walking);
+        W.Attack();B->Combat->SubmitAttackIntent(1,W.Now(),0);
+        if(Reverse)FU02CollisionTestAccess::ReverseSources(W.Resolver);
+        W.Resolver->OnGeometryConfirmed.AddLambda([&](const FHitCandidate& C)
+        {
+            TestEqual(TEXT("Lower source ID resolves before higher ID at equal timestamp"),C.Id.Action.Source.Pawn, W.Source->NetworkPawnId);
+            W.Resolver->MarkDead({B->NetworkPawnId,1});
+        });
+        W.Resolver->DrainAt(W.Now()+.3);
+        TestEqual(TEXT("Global batch invalidation suppresses other source regardless collection order"),W.Resolver->Confirmed.Num(),1);
+        W.Resolver->OnGeometryConfirmed.Clear();
+    }
+    return true;
 }
 #endif

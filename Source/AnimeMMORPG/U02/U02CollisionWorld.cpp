@@ -141,6 +141,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
     for(const auto& H:Hurts)
     {
         auto* Shape=H.Component.Get();if(!Shape||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
+        if(Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets)continue;
         const bool Continuous=Source->Previous.Life==Source->Current.Life&&Source->Previous.Epoch==Source->Current.Epoch
             &&H.Previous.Life==H.Current.Life&&H.Previous.Epoch==H.Current.Epoch&&H.Previous.Radius==H.Current.Radius;
         double A=P.Slice.BeginAlpha,B=P.Slice.EndAlpha;
@@ -161,7 +162,8 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
             *GetWorld()->GetPathName(),*P.Action.Source.Pawn.ToString(),P.Action.Source.Generation,P.Action.Sequence,*H.Current.Life.Pawn.ToString(),H.Current.Life.Generation,Shape->StableHurtboxId,
             PreviousTime,CurrentTime,P.Slice.BeginSeconds,P.Slice.EndSeconds,Range.Begin,Range.End,*F0.ToString(),*F1.ToString(),P.Yaw,*C0.ToString(),*C1.ToString(),H.Current.Radius,Hit.IsSet(),UnsupportedObstructions);
         if(!Hit.IsSet()){++Blocked;continue;}
-        const double T=Hit.GetValue(),Timestamp=FMath::Lerp(PreviousTime,CurrentTime,T);
+        const double T=Hit.GetValue();
+        const double Timestamp=T==P.Slice.BeginAlpha?P.Slice.BeginSeconds:T==P.Slice.EndAlpha?P.Slice.EndSeconds:FMath::Lerp(PreviousTime,CurrentTime,T);
         if(Timestamp<P.Slice.BeginSeconds||Timestamp>P.Slice.EndSeconds||(P.Slice.bEndExclusive&&Timestamp>=P.Slice.EndSeconds))continue;
         Out.Add({{P.Action,H.Current.Life},Timestamp,Shape->StableHurtboxId,true,true});
         if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
