@@ -45,6 +45,11 @@ foreach($role in $roles){
   $commands+=',r.LumenScene.SurfaceCache.AtlasSize 2048,r.RenderTargetPoolMin 128,r.Streaming.PoolSize 256,r.ScreenPercentage 50'
   Write-Host 'Local 4GB review profile: Lumen atlas 2048, RT pool minimum 128 MiB, texture pool 256 MiB, internal resolution 50%.'
  }
+ if($MemoryBudget -and $role -ne 'Server'){
+  # Focus regression: measured headroom for both simultaneous review clients.
+  # No frame cap, input delay, networking, smoothing or gameplay changes.
+  $commands+=',r.Lumen.DiffuseIndirect.Allow 0,r.Lumen.Reflections.Allow 0,r.Shadow.Virtual.Enable 0,r.ShadowQuality 2'
+ }
  $arguments+=@(('-ExecCmds="'+$commands+'"'),'-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace','-U02FProbe','-U02Trace','-ModelContextProtocolStartServer',('-U02SourceSHA='+$sha),('-U02RunId='+(Split-Path $run -Leaf)),('-U02FCommands="'+(Join-Path $run 'command.txt')+'"'),('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18410+$records.Count)))
  Write-Host ('Starting '+$role+'; log: '+$log)
  # Interactive review clients must be visible during loading, before readiness.
