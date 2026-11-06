@@ -2,7 +2,7 @@
 
 > Current acceptance: technical and standing-attack turn/feel accepted by user at cdaf102, verified source 9aa7249. See [ACCEPTANCE-C.md](ACCEPTANCE-C.md). Historical review-pending statements below describe the original handoff; acceptance supersedes them. Remote delivery remains pending; no main fast-forward or D until verified.
 
-# U02-C — ACCEPTED_LOCAL — REMOTE_PENDING
+# U02-C - ACCEPTED (remote verified)
 
 C ACCEPTED theo review nguời dùng tại cdaf102; xem ACCEPTANCE-C.md. Nhánh `u02/c-attack-presentation`; main giữ ở B ACCEPTED `34e5dd73724546deb6e9cbb410a844341fcfad3c`. Source kiểm chứng mới: **`9aa7249a38b65f8119d8c93790d73e795341324a`**. Chưa merge C hoặc bắt đầu D. Chưa xác minh bàn giao remote vì GitHub lỗi kết nối/DNS; log push được giữ trong lịch sử.
 

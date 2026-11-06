@@ -1,6 +1,6 @@
 > REMOTE CLOSED: C accepted and remote commit 775ce94 verified; all 816 reachable LFS objects downloaded into isolated storage and SHA-256 checked. See Evidence/C-Turn/REMOTE-VERIFIED.json. Prior pending statements below are historical; no C rebuild/retest.
 
-# C startup turn revision ? ACCEPTED_LOCAL - REMOTE_PENDING
+# U02-C - ACCEPTED (remote verified)
 
 User requested revision after 39bb09c (tested source 61be83b). C remains unaccepted.
 
