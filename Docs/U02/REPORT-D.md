@@ -1,3 +1,5 @@
+> ACCEPTED: user technical acceptance at d0dd5b0 / verified source82bb890. See [ACCEPTANCE-D.md](ACCEPTANCE-D.md). Review-pending statements below are historical handoff text. No D rebuild/retest for closure.
+
 > Current handoff: corner verification READY_FOR_REVIEW, source82bb890; see [CORNER-REVIEW-D.md](CORNER-REVIEW-D.md) and Evidence/D-Corner. Action66 is geometrically valid; no gameplay algorithm change. Original a0c6224/source3a63edd evidence below remains historical. No D acceptance, merge or E.
 
 # U02-D — READY_FOR_REVIEW

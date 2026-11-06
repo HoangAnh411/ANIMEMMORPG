@@ -1,5 +1,5 @@
 {
-  "status": "READY_FOR_REVIEW",
+  "status": "ACCEPTED",
   "remoteDelivery": "source verified; handoff verification recorded separately",
   "utc": "2026-11-06T06:23:54.546985+00:00",
   "branch": "u02/d-collision-hurtbox-sweep",
@@ -41,7 +41,9 @@
   "oldHandoff": "a0c6224",
   "oldVerifiedSource": "3a63edd",
   "gameplayCollisionAlgorithmChanged": false,
-  "reviewAccepted": false,
+  "reviewAccepted": true,
   "captureSession": "Artifacts\\U02\\D\\Corner\\Play-Verified",
-  "nativeDebugChanged": true
+  "nativeDebugChanged": true,
+  "acceptanceHandoff": "d0dd5b0",
+  "acceptanceRecord": "../../ACCEPTANCE-D.md"
 }

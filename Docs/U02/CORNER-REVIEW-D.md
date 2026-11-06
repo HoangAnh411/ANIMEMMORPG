@@ -1,3 +1,5 @@
+> ACCEPTED: user technical acceptance at d0dd5b0 / verified source82bb890. See [ACCEPTANCE-D.md](ACCEPTANCE-D.md). Review-pending statements below are historical handoff text. No D rebuild/retest for closure.
+
 # U02-D — xác minh góc tường (bổ sung review)
 
 Giữ lịch sử handoff `a0c6224`, source `3a63edd`. D chưa nghiệm thu; không merge hoặc bắt đầu damage E. Không đổi luật hộp đánh, nearest point, che khuất từng hurtbox, dedup hoặc quỹ đạo mesh kiếm.
