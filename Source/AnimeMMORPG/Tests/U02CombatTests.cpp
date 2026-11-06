@@ -178,4 +178,30 @@ bool FU02AdapterRights::RunTest(const FString&)
     TestFalse(TEXT("Cannot enter Interacting inside action"),(AM->GetLockMask()&uint8(EU01MotorLock::Interacting))!=0);
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02ActualTurn,"AnimeMMORPG.U02.C.ActualBodyAndSkippedBoundary",U02BFlags)
+bool FU02ActualTurn::RunTest(const FString&)
+{
+    for(double Angle:{0.,45.,-45.,90.,-90.,179.,-179.,180.})
+    {
+        FU02BWorld W(*this);auto* B=W.C->Combat.Get();const double Start=W.Now();
+        W.C->SetActorRotation(FRotator::ZeroRotator);
+        FU02CombatTestAccess::Attack(B,1,Angle,Start);
+        TestEqual(TEXT("Actual capsule yaw unchanged at acceptance"),W.C->GetActorRotation().Yaw,0.);
+        FU02CombatTestAccess::Advance(B,Start+.08);
+        TestTrue(TEXT("Actual body follows midpoint trajectory"),FMath::Abs(FStartupTurn::Delta(W.C->GetActorRotation().Yaw,FStartupTurn::Delta(0,Angle)*.5))<.001);
+        int Delivered=0;
+        B->OnActiveInterval.AddLambda([&](const FActionId&,const FActiveSlice& Slice)
+        {
+            ++Delivered;
+            TestTrue(TEXT("Actual body target reached before whole skipped active delivered"),FMath::Abs(FStartupTurn::Delta(W.C->GetActorRotation().Yaw,Angle))<.001);
+            TestEqual(TEXT("No active window extension"),Slice.BeginSeconds,Start+.16);
+            TestEqual(TEXT("No recovery sweep"),Slice.EndSeconds,Start+.22);
+        });
+        FU02CombatTestAccess::Advance(B,Start+.5);
+        TestEqual(TEXT("Skipped active still delivered once"),Delivered,1);
+        TestFalse(TEXT("Finished releases combat"),B->GetCombatSnapshot().bLocked);
+        B->OnActiveInterval.Clear();
+    }
+    return true;
+}
 #endif

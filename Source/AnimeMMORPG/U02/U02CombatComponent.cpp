@@ -129,7 +129,7 @@ bool UU02CombatComponent::AdvanceAuthority(double Now, bool bExcludeEnd)
     }
     // Complete the gameplay orientation boundary BEFORE handing any active interval to D.
     // This also holds when a single update skips the entire active window.
-    if (Before.bCombatLocked)
+    if (Before.Action.Sequence && Before.Phase!=EPhase::Cancelled && Previous<Before.EndSeconds && Now>=Before.StartSeconds)
     {
         const double BodyYaw=StartupTurn.Sample(Now);
         Character()->GetU01Movement()->ApplyCombatAuthority(true,Now>=Before.ActiveStartSeconds,BodyYaw);

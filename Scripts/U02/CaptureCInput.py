@@ -97,7 +97,7 @@ class CClient(Client):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True)
-    p.add_argument('--inspect',action='store_true');args=p.parse_args()
+    p.add_argument('--inspect',action='store_true');p.add_argument('--turn-review',action='store_true');args=p.parse_args()
     args.out.mkdir(parents=True,exist_ok=True)
     record=json.loads(args.record.read_text(encoding='utf-8-sig'))
     client=CClient(record);client.focus()
@@ -130,6 +130,9 @@ def main():
                 u.AttachThreadInput(own,other,False)
         assert u.GetForegroundWindow()==helper
         client.prepare();time.sleep(.3)
+        if args.turn_review:
+            client.press('W',True);time.sleep(1.4);client.press('W',False);time.sleep(.2)
+            assert client.metrics()['movementMode']==1,'Turn comparison must start on runway'
         initial=client.metrics();meta['baselineAccepted']=initial['combat']['accepted'];assert initial['combat']['accepted']==0
         left,top,right,bottom=client.bounds();bounds=(left,top,right,bottom)
         cv2.setNumThreads(1)
@@ -176,6 +179,18 @@ def main():
             (11.5,'jump',down('Space')),(11.56,'jump release',up('Space')),(11.65,'attack rejected airborne',click),
             (11.8,'menu while airborne',down('Escape')),(11.85,'Escape release',up('Escape')),(12.3,'Resume click airborne menu',resume),
             (13.,'final attack',click)]
+        if args.turn_review:
+            # Same fixed starting camera/runway for old and revised packages.
+            actions=[(1.,'backward movement',down('S')),(1.4,'S release',up('S')),(1.7,'back-facing attack',click),
+                (2.75,'strafe',down('D')),(3.,'D release',up('D')),(3.1,'strafe attack',click),
+                (4.2,'backward movement',down('S')),(4.5,'S release',up('S')),(4.6,'turning attack',click),
+                (4.65,'startup camera change',lambda:mouse(1,100,0)),(4.8,'active camera change',lambda:mouse(1,100,0)),
+                (5.3,'held W',down('W')),(5.6,'attack while moving',click),(6.2,'W release',up('W')),
+                (7.,'attack before AltTab',click),(7.08,'focus away during action',away),(8.,'focus return AwaitingResume',back),
+                (8.3,'Resume click',resume),(9.,'W release gate',up('W')),
+                (10.,'attack before menu',click),(10.07,'menu during action',down('Escape')),(10.12,'Escape release',up('Escape')),
+                (11.,'Resume click',resume),(12.,'final attack',click)]
+            meta['scenario']='turn-review: back, strafe, aim retarget, held W, AltTab/menu/Resume'
         frames=[]; encoded_frames=0; previous_frame=None;meta['utc']=datetime.now(timezone.utc).isoformat();start=time.perf_counter();i=0;next_frame=start
         while time.perf_counter()-start<14.5:
             elapsed=time.perf_counter()-start

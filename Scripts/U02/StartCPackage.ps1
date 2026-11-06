@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Package,[Parameter(Mandatory=$true)][string]$OutputRoot)
+param([Parameter(Mandatory=$true)][string]$Package,[Parameter(Mandatory=$true)][string]$OutputRoot,[ValidatePattern('^[0-9a-f]{40}$')][string]$SourceSHA)
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $allowed=[IO.Path]::GetFullPath((Join-Path $root 'Artifacts/U02/C/'))
@@ -8,6 +8,7 @@ if(!$packagePath.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase) -or 
 $exe=Join-Path $packagePath 'AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe'
 if(!(Test-Path -LiteralPath $exe)){throw 'Packaged game missing'}
 $sha=git -C (Join-Path $root 'Artifacts/U02/C/Source') rev-parse HEAD
+if($SourceSHA){$sha=$SourceSHA}
 New-Item -ItemType Directory -Force -Path $out | Out-Null
 . (Join-Path $root 'Scripts/U01/FReviewHost.ps1')
 $windows=@(Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject'))
