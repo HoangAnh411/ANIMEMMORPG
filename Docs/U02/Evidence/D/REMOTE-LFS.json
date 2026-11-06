@@ -1,0 +1,16 @@
+{
+  "sourceSHA": "3a63edd886350622d80d7ef5bfba3eb546558b6e",
+  "method": "fresh isolated storage downloaded the two current map LFS objects from GitHub; each SHA-256 verified",
+  "objects": [
+    {
+      "path": "Content/AnimeMMORPG/Maps/L_CharacterCombatLab.umap",
+      "oid": "1ccd8d8f65f1a72d406e96d355246bff30871beb519615ef6c4511de2fa7aae7",
+      "bytes": 165740
+    },
+    {
+      "path": "Content/AnimeMMORPG/Maps/L_NetworkLab.umap",
+      "oid": "35e0a3b67249cef325098716c7a360ee15d35279ee24f790a4661c96d3c8b238",
+      "bytes": 29332
+    }
+  ]
+}

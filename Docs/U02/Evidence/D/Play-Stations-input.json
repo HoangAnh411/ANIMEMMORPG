@@ -1,0 +1,80 @@
+{
+  "process": {
+    "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Package-20261106-122836-253-2e688523\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe",
+    "sourceSHA": "d472678665ab70cebfdfb0b039d81a3755f66e57",
+    "userDir": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Play-Stations",
+    "role": "U02PackageD",
+    "log": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Play-Stations\\Game.log",
+    "arguments": [
+      "/Game/AnimeMMORPG/Maps/L_CharacterCombatLab",
+      "-windowed",
+      "-ResX=1280",
+      "-ResY=720",
+      "-WinX=0",
+      "-WinY=30",
+      "-nosplash",
+      "-U01Trace",
+      "-U02Trace",
+      "-U01SourceSHA=d472678665ab70cebfdfb0b039d81a3755f66e57",
+      "-U02SourceSHA=d472678665ab70cebfdfb0b039d81a3755f66e57",
+      "-U02RunId=Play-Stations",
+      "-UserDir=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Play-Stations\"",
+      "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Play-Stations\\Game.log\"",
+      "-ExecCmds=\"t.MaxFPS 60,t.IdleWhenNotForeground 0,r.ScreenPercentage 100\""
+    ],
+    "pid": 3948,
+    "utc": "2026-11-06T05:33:00.0098522Z",
+    "binarySHA256": "3ABF7E0EFCC14C60D2A52FF40AF3EC24BEEF7894EDB7AB4FAAAEFF223202D336"
+  },
+  "completed": false,
+  "events": [
+    {
+      "label": "reset multi",
+      "scheduled": 0.3,
+      "actual": 1.5200597000002745
+    },
+    {
+      "label": "held attack multi",
+      "scheduled": 1.8,
+      "actual": 1.8162197999990894
+    }
+  ],
+  "checks": [
+    {
+      "check": "MultiHold geometry result delta",
+      "result": "FAIL"
+    }
+  ],
+  "frames": [
+    0.07516650000070513,
+    0.1322065999993356,
+    0.1723043999991205,
+    0.21286139999938314,
+    0.25382859999990615,
+    0.2916208999995433,
+    0.3341600000003382,
+    1.5456013999992138,
+    1.7076541000005818,
+    1.7593708000003971,
+    1.7988406999993458,
+    1.8525558000001183,
+    1.8930880999996589,
+    1.9343042000000423,
+    1.973534999999174,
+    2.0160992999990412,
+    2.053663000000597,
+    2.093661599999905,
+    2.1333049000004394,
+    2.1755878999993,
+    2.2121525000002293,
+    2.2548029999998107,
+    2.2935904000005394,
+    2.3335996999994677,
+    2.375202699999136,
+    2.4127683999995497
+  ],
+  "method": "guarded SendInput, real Game-world native metrics; not Automation",
+  "utc": "2026-11-06T05:33:04.827990+00:00",
+  "error": "MultiHold geometry result delta",
+  "externalInputMethodRestored": true
+}

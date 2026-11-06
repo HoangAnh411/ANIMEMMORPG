@@ -1,0 +1,34 @@
+[
+  {
+    "map": "/Game/AnimeMMORPG/Maps/L_CharacterCombatLab",
+    "fixtureClass": "/Script/AnimeMMORPG.U02CollisionLab",
+    "stationBase": [
+      0,
+      -6000,
+      0
+    ],
+    "offsetY": -1000,
+    "stations": [
+      "MultiTarget",
+      "FullWall",
+      "VisibleHead",
+      "Corner"
+    ]
+  },
+  {
+    "map": "/Game/AnimeMMORPG/Maps/L_NetworkLab",
+    "fixtureClass": "/Script/AnimeMMORPG.U02CollisionLab",
+    "stationBase": [
+      0,
+      -6000,
+      0
+    ],
+    "offsetY": -1000,
+    "stations": [
+      "MultiTarget",
+      "FullWall",
+      "VisibleHead",
+      "Corner"
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+diff --git a/Config/DefaultEngine.ini b/Config/DefaultEngine.ini
+index bffa281..f52e315 100644
+--- a/Config/DefaultEngine.ini
++++ b/Config/DefaultEngine.ini
+@@ -259,3 +259,7 @@ ConnectionType=USBOnly
+ bUseManualIPAddress=False
+ ManualIPAddress=
+ 
++
++[/Script/Engine.CollisionProfile]
+++DefaultChannelResponses=(Channel=ECC_GameTraceChannel1,DefaultResponse=ECR_Ignore,bTraceType=False,bStaticObject=False,Name="U02CombatCandidate")
+++DefaultChannelResponses=(Channel=ECC_GameTraceChannel2,DefaultResponse=ECR_Block,bTraceType=True,bStaticObject=False,Name="U02CombatObstruction")

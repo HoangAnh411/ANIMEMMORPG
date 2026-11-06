@@ -29,15 +29,18 @@ try:
  (3.6,'reset full wall',lambda:reset(2)),(5.1,'full wall attack',lambda:attack('FullWall',0)),(5.7,'verify full wall',lambda:verify('FullWall')),
  (6.,'reset partial wall',lambda:reset(3)),(7.5,'partial wall attack',lambda:attack('PartialWallHead',1)),(8.1,'verify partial wall',lambda:verify('PartialWallHead')),
  (8.4,'reset corner',lambda:reset(4)),(9.9,'corner attack',lambda:attack('Corner',0)),(10.5,'verify corner',lambda:verify('Corner'))]
- m['utc']=datetime.now(timezone.utc).isoformat();start=time.perf_counter();i=0;encoded=0;previous=None
- while time.perf_counter()-start<11.3:
+ m['utc']=datetime.now(timezone.utc).isoformat();start=time.perf_counter();i=0;encoded=0;previous=None;offset=0.
+ while time.perf_counter()-start<11.3+offset:
   elapsed=time.perf_counter()-start
-  while i<len(actions) and elapsed>=actions[i][0]:
-   scheduled,label,op=actions[i];c.guard();op();m['events'].append(dict(label=label,scheduled=scheduled,actual=time.perf_counter()-start));i+=1
+  while i<len(actions) and elapsed>=actions[i][0]+offset:
+   scheduled,label,op=actions[i];c.guard();began=time.perf_counter()-start
+   offset+=max(0.,began-(scheduled+offset));op();actual=time.perf_counter()-start;offset+=actual-began
+   m['events'].append(dict(label=label,scheduled=scheduled,actual=actual,operationStart=began,offset=offset));i+=1
   c.guard();assert c.bounds()==bounds
   frame=cv2.cvtColor(np.array(ImageGrab.grab(bbox=bounds,all_screens=True)),cv2.COLOR_RGB2BGR);captured=time.perf_counter()-start
   while encoded/30<captured:writer.write(previous if previous is not None else frame);encoded+=1
   previous=frame;m['frames'].append(captured)
+ m['timingPolicy']='planned gaps start after preceding operation completes; delayed capture/input shifts later events, never gameplay deadlines'
  m['captureSeconds']=time.perf_counter()-start;m['videoSeconds']=encoded/30;m['encodedFrames']=encoded;m['encodedFPS']=30;m['stages']=pending
  check('Video real-time within one output frame',abs(m['videoSeconds']-m['captureSeconds'])<1/30+.01)
  check('All planned inputs performed',i==len(actions));m['completed']=True;m['finalMetrics']=c.metrics()

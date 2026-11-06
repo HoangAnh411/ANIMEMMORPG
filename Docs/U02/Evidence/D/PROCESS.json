@@ -1,0 +1,26 @@
+{
+  "runId": "MCPTests-20261106-123542",
+  "exeSHA256": "A423AB94410AA4F4CC34D99A2AF75240C5D0E376A33D903A3E819FECF1177143",
+  "sourceSHA": "3a63edd886350622d80d7ef5bfba3eb546558b6e",
+  "utc": "2026-11-06T05:35:42.1886870Z",
+  "exe": "D:\\Software\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+  "scope": "Game-world adapter/movement fixtures and pure rules; not real keyboard or network process proof",
+  "module": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Source\\Binaries\\Win64\\UnrealEditor-AnimeMMORPG.dll",
+  "arguments": [
+    "\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Source\\AnimeMMORPG.uproject\"",
+    "-NullRHI",
+    "-nosound",
+    "-unattended",
+    "-NoLiveCoding",
+    "-U02Trace",
+    "-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False",
+    "-ModelContextProtocolStartServer",
+    "-ModelContextProtocolPort=18026",
+    "-U01SourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e",
+    "-U02SourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e",
+    "-U02RunId=MCPTests-20261106-123542",
+    "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\MCPTests-20261106-123542\\Editor.log\""
+  ],
+  "pid": 6556,
+  "moduleSHA256": "D26DCC5AAA07B0365E13129F7A49A050F14A19E9FE475E643434391DA57A28EF"
+}

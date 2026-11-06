@@ -97,3 +97,8 @@ Replicated action data includes segment start/body and target. Clients sample pr
 Animation revision must include preparation in upper body/shoulders and feet, keep accepted grip/socket and root fixed, and return cleanly to locomotion. Existing C footage is historical and its original 30 FPS encoding played faster than wall time. Correct timestamp resampling and before/after matching views are required for review.
 
 Required evidence: new clone Editor/Game builds, trajectory/adapter plus related regression tests, new Windows package and three-map smoke, guarded input captures with actual body/mesh/aim/action-time diagnostics, real-time videos, hashes and updated launcher/checklist. No technical PASS or user feel acceptance is inferred from the old C artifacts.
+
+
+## D implementation record (review pending)
+
+D uses explicitly registered stable sphere hurtboxes, exhaustive registry broadphase, locked-yaw relative sphere/box interval roots, polygon visibility topology partition and world pre-actor collection/global sorted resolve. Trace slots1/2 verified against runtime collision names. Pawn targets disabled outside native fixtures; normal lab targets dummies. No damage or vital implementation. Supported solid shapes, conservative unsupported-shape behavior, fixture dimensions and limitations are recorded in REPORT-D. These implementation details do not alter product timing, wall-per-hurtbox or one-hit/target/action rules.

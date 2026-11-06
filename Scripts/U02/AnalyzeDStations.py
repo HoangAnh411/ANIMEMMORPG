@@ -2,7 +2,7 @@ import argparse,json,re
 from pathlib import Path
 from datetime import datetime,timezone
 p=argparse.ArgumentParser();p.add_argument('--capture',type=Path,required=True);a=p.parse_args()
-m=json.loads((a.capture/'input.json').read_text());assert m['completed'],'Incomplete capture retained; no runtime PASS';start=datetime.fromisoformat(m['utc']);record=m['process'];lines=Path(record['log']).read_text(encoding='utf-8-sig',errors='replace').splitlines()
+m=json.loads((a.capture/'input.json').read_text());assert m['completed'],'Incomplete capture retained; no runtime PASS';start=datetime.fromisoformat(m['utc']);record=m['process'];raw=Path(record['log']).read_bytes();lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig',errors='replace').splitlines()
 checks=list(m['checks']);samples=[];hits=[];queries=[]
 def relative(v):return (datetime.fromisoformat(v['utc'].replace('Z','+00:00'))-start).total_seconds()
 for line in lines:

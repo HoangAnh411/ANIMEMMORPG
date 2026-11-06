@@ -1,0 +1,76 @@
+{
+  "process": {
+    "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Package-20261106-123643-657-81907530\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe",
+    "sourceSHA": "3a63edd886350622d80d7ef5bfba3eb546558b6e",
+    "userDir": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Play-Stations-Final",
+    "role": "U02PackageD",
+    "log": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Play-Stations-Final\\Game.log",
+    "arguments": [
+      "/Game/AnimeMMORPG/Maps/L_CharacterCombatLab",
+      "-windowed",
+      "-ResX=1280",
+      "-ResY=720",
+      "-WinX=0",
+      "-WinY=30",
+      "-nosplash",
+      "-U01Trace",
+      "-U02Trace",
+      "-U01SourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e",
+      "-U02SourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e",
+      "-U02RunId=Play-Stations-Final",
+      "-UserDir=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Play-Stations-Final\"",
+      "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\D\\Play-Stations-Final\\Game.log\"",
+      "-ExecCmds=\"t.MaxFPS 60,t.IdleWhenNotForeground 0,r.ScreenPercentage 100\""
+    ],
+    "pid": 7540,
+    "utc": "2026-11-06T05:39:19.4124732Z",
+    "binarySHA256": "31CF71B4A86F3ECD9A7E298EF7D46DF960DAB225A24023FAC3C2BD64EB5F9CC3"
+  },
+  "completed": false,
+  "events": [
+    {
+      "label": "reset multi",
+      "scheduled": 0.3,
+      "actual": 1.5722697000001062
+    },
+    {
+      "label": "held attack multi",
+      "scheduled": 1.8,
+      "actual": 2.143567700000858
+    }
+  ],
+  "checks": [
+    {
+      "check": "MultiHold geometry result delta",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiHold exactly one action",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiHold completed and locomotion restored",
+      "result": "FAIL"
+    }
+  ],
+  "frames": [
+    0.11832030000005034,
+    0.2936232000010932,
+    1.640255199999956,
+    2.216042300000481
+  ],
+  "method": "guarded SendInput, real Game-world native metrics; not Automation",
+  "utc": "2026-11-06T05:39:28.318894+00:00",
+  "error": "MultiHold completed and locomotion restored",
+  "captureSeconds": 2.4613306999999622,
+  "videoSeconds": 2.2333333333333334,
+  "encodedFrames": 67,
+  "stages": {
+    "MultiHold": {
+      "before": 0,
+      "accepted": 0,
+      "expected": 2
+    }
+  },
+  "externalInputMethodRestored": true
+}

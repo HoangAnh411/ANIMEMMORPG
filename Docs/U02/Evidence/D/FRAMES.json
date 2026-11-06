@@ -1,0 +1,22 @@
+[
+  {
+    "file": "Multi.png",
+    "wallSeconds": 3.8106044000011026,
+    "note": "Observed held CFR frame, not exact phase-boundary proof"
+  },
+  {
+    "file": "FullWall.png",
+    "wallSeconds": 9.275773200000549,
+    "note": "Observed held CFR frame, not exact phase-boundary proof"
+  },
+  {
+    "file": "PartialHead.png",
+    "wallSeconds": 13.328238300000157,
+    "note": "Observed held CFR frame, not exact phase-boundary proof"
+  },
+  {
+    "file": "Corner.png",
+    "wallSeconds": 18.055785500000276,
+    "note": "Observed held CFR frame, not exact phase-boundary proof"
+  }
+]

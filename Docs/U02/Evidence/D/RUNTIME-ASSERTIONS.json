@@ -1,0 +1,208 @@
+{
+  "sourceSHA": "3a63edd886350622d80d7ef5bfba3eb546558b6e",
+  "automation": false,
+  "method": "postprocessed real Windows input and native server geometry traces",
+  "samples": 1120,
+  "confirmed": 5,
+  "queries": 70,
+  "passed": 36,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "MultiHold geometry result delta",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiHold exactly one action",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiHold completed and locomotion restored",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiSecond geometry result delta",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiSecond exactly one action",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiSecond completed and locomotion restored",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall geometry result delta",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall exactly one action",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall completed and locomotion restored",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialWallHead geometry result delta",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialWallHead exactly one action",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialWallHead completed and locomotion restored",
+      "result": "PASS"
+    },
+    {
+      "check": "Corner geometry result delta",
+      "result": "PASS"
+    },
+    {
+      "check": "Corner exactly one action",
+      "result": "PASS"
+    },
+    {
+      "check": "Corner completed and locomotion restored",
+      "result": "PASS"
+    },
+    {
+      "check": "Video real-time within one output frame",
+      "result": "PASS"
+    },
+    {
+      "check": "All planned inputs performed",
+      "result": "PASS"
+    },
+    {
+      "check": "Completed guarded input / IME restored",
+      "result": "PASS"
+    },
+    {
+      "check": "Owned actual Game standalone with exact source/binary identity",
+      "result": "PASS"
+    },
+    {
+      "check": "Five server geometry results",
+      "result": "PASS"
+    },
+    {
+      "check": "No repeated hit per action/target life across hurtboxes or frames",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiHold actual confirmed log matches diagnostic count",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiHold timestamps strictly within active window",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiSecond actual confirmed log matches diagnostic count",
+      "result": "PASS"
+    },
+    {
+      "check": "MultiSecond timestamps strictly within active window",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall actual confirmed log matches diagnostic count",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall timestamps strictly within active window",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialWallHead actual confirmed log matches diagnostic count",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialWallHead timestamps strictly within active window",
+      "result": "PASS"
+    },
+    {
+      "check": "Partial obstruction resolves the visible head hurtbox",
+      "result": "PASS"
+    },
+    {
+      "check": "Corner actual confirmed log matches diagnostic count",
+      "result": "PASS"
+    },
+    {
+      "check": "Corner timestamps strictly within active window",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual query trace records blocked and visible hurtboxes",
+      "result": "PASS"
+    },
+    {
+      "check": "No unsupported obstruction shapes in reviewed maps",
+      "result": "PASS"
+    },
+    {
+      "check": "No damage implementation claimed",
+      "result": "PASS"
+    },
+    {
+      "check": "Root motion stays ignored",
+      "result": "PASS"
+    }
+  ],
+  "hits": [
+    {
+      "timestamp": 5.958938511812594,
+      "source": "1D48E5D64B3AAEB45951CEA062032428",
+      "life": 3,
+      "action": 1,
+      "target": "CFF795CF4BF435C5DFBE3FA0FA3B1378",
+      "targetLife": 1,
+      "hurtbox": 1,
+      "line": "[2026.11.06-05.44.27:304][322]LogU02Collision: Display: U02D_CONFIRMED sourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab time=5.9589385118125939 source=1D48E5D64B3AAEB45951CEA062032428:3 action=1 target=CFF795CF4BF435C5DFBE3FA0FA3B1378:1 hurtbox=1 damage=NOT_IMPLEMENTED"
+    },
+    {
+      "timestamp": 5.958938511812594,
+      "source": "1D48E5D64B3AAEB45951CEA062032428",
+      "life": 3,
+      "action": 1,
+      "target": "F6D28E2043AEA147A4A71EB1D81B7460",
+      "targetLife": 1,
+      "hurtbox": 1,
+      "line": "[2026.11.06-05.44.27:304][322]LogU02Collision: Display: U02D_CONFIRMED sourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab time=5.9589385118125939 source=1D48E5D64B3AAEB45951CEA062032428:3 action=1 target=F6D28E2043AEA147A4A71EB1D81B7460:1 hurtbox=1 damage=NOT_IMPLEMENTED"
+    },
+    {
+      "timestamp": 7.318416110032704,
+      "source": "1D48E5D64B3AAEB45951CEA062032428",
+      "life": 3,
+      "action": 2,
+      "target": "CFF795CF4BF435C5DFBE3FA0FA3B1378",
+      "targetLife": 1,
+      "hurtbox": 1,
+      "line": "[2026.11.06-05.44.28:662][403]LogU02Collision: Display: U02D_CONFIRMED sourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab time=7.3184161100327039 source=1D48E5D64B3AAEB45951CEA062032428:3 action=2 target=CFF795CF4BF435C5DFBE3FA0FA3B1378:1 hurtbox=1 damage=NOT_IMPLEMENTED"
+    },
+    {
+      "timestamp": 7.318416110032704,
+      "source": "1D48E5D64B3AAEB45951CEA062032428",
+      "life": 3,
+      "action": 2,
+      "target": "F6D28E2043AEA147A4A71EB1D81B7460",
+      "targetLife": 1,
+      "hurtbox": 1,
+      "line": "[2026.11.06-05.44.28:662][403]LogU02Collision: Display: U02D_CONFIRMED sourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab time=7.3184161100327039 source=1D48E5D64B3AAEB45951CEA062032428:3 action=2 target=F6D28E2043AEA147A4A71EB1D81B7460:1 hurtbox=1 damage=NOT_IMPLEMENTED"
+    },
+    {
+      "timestamp": 15.407198711091187,
+      "source": "1D48E5D64B3AAEB45951CEA062032428",
+      "life": 5,
+      "action": 1,
+      "target": "D49AA5014E3E613079F00DA1F52319CB",
+      "targetLife": 1,
+      "hurtbox": 2,
+      "line": "[2026.11.06-05.44.36:750][884]LogU02Collision: Display: U02D_CONFIRMED sourceSHA=3a63edd886350622d80d7ef5bfba3eb546558b6e world=/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab time=15.407198711091187 source=1D48E5D64B3AAEB45951CEA062032428:5 action=1 target=D49AA5014E3E613079F00DA1F52319CB:1 hurtbox=2 damage=NOT_IMPLEMENTED"
+    }
+  ]
+}

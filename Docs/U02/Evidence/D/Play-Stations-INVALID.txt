@@ -1,0 +1,1 @@
+First packaged real-input run failed MultiHold geometry delta: GameplayDebuggerRenderingComponent has non-collision world-wide bounds and default Block response. No physics body. Kept as failed run; no PASS. Postprocessing attempt also failed on missing incomplete metadata field; failure metadata handling improved subsequently.
