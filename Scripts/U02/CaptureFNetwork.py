@@ -66,6 +66,8 @@ try:
  active.console('U02NetProbe nan');wait(1);consensus('NonfiniteAim',0)
  # Production API has no client-supplied HP/damage fields; native reflected-schema test verifies this.
  active.console('U02NetProbe damage');wait(.5);consensus('NoDamagePayloadAPI',0)
+ now=time.perf_counter()-start
+ while encoded/30<now:writer.write(previous);encoded+=1
  meta['completed']=True;meta['captureSeconds']=time.perf_counter()-start;meta['videoSeconds']=encoded/30;meta['timestampPolicy']='CFR30 previous image held to wall timestamp; no acceleration'
 except Exception as error:meta['error']=str(error);raise
 finally:

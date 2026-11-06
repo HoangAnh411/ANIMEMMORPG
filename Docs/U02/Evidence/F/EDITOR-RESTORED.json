@@ -1,0 +1,10 @@
+﻿[
+    {
+        "pid":  18756,
+        "hwnd":  393990,
+        "expectedShow":  1,
+        "actualShow":  1,
+        "alive":  true,
+        "restored":  true
+    }
+]

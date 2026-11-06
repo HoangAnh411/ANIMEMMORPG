@@ -1,0 +1,208 @@
+{
+  "sourceSHA": "85806519f98ef9078c5832e6193bb3bc8d924b54",
+  "automation": false,
+  "method": "independent per-process logs and actual Windows input postprocessing",
+  "passed": 31,
+  "failed": 1,
+  "primaryInputPassed": 134,
+  "controlSamples": 597,
+  "checks": [
+    {
+      "check": "Primary complete and IME restored",
+      "result": "PASS"
+    },
+    {
+      "check": "Controls complete and IME restored",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual disconnect/reconnect proof complete",
+      "result": "PASS"
+    },
+    {
+      "check": "Different connection identity",
+      "result": "PASS"
+    },
+    {
+      "check": "Initial life1 then fixture life2",
+      "result": "PASS"
+    },
+    {
+      "check": "Source/PID/native worlds correct",
+      "result": "PASS"
+    },
+    {
+      "check": "Owned runtime samples present",
+      "result": "PASS"
+    },
+    {
+      "check": "Observed combat lock stops horizontal movement",
+      "result": "PASS"
+    },
+    {
+      "check": "Held WASD resumes after recovery",
+      "result": "PASS"
+    },
+    {
+      "check": "Sprint returns accepted U01 speed",
+      "result": "FAIL"
+    },
+    {
+      "check": "Gravity continues under menu",
+      "result": "PASS"
+    },
+    {
+      "check": "Resume clicks do not create attack",
+      "result": "PASS"
+    },
+    {
+      "check": "Fresh W after focus/Resume works",
+      "result": "PASS"
+    },
+    {
+      "check": "Focus requires AwaitingResume",
+      "result": "PASS"
+    },
+    {
+      "check": "Settings remain unchanged",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual U02 graph loaded, root motion ignored",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual montage runs then returns",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual body locked to confirmed aim",
+      "result": "PASS"
+    },
+    {
+      "check": "Camera moves independently during locked phase",
+      "result": "PASS"
+    },
+    {
+      "check": "Server advances while client menu/focus",
+      "result": "PASS"
+    },
+    {
+      "check": "One confirmed event per source action target life",
+      "result": "PASS"
+    },
+    {
+      "check": "Serials monotonic and unique",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual server rejects nonfinite aim at correct stage",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual server rejects stale life",
+      "result": "PASS"
+    },
+    {
+      "check": "Actual server rejects duplicate command",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientA montage on local",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientA montage on proxy",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientB montage on local",
+      "result": "PASS"
+    },
+    {
+      "check": "ClientB montage on proxy",
+      "result": "PASS"
+    },
+    {
+      "check": "Same action montage observed by both clients",
+      "result": "PASS"
+    },
+    {
+      "check": "Network video matches wall duration",
+      "result": "PASS"
+    },
+    {
+      "check": "Controls video matches wall duration",
+      "result": "PASS"
+    }
+  ],
+  "frameProfiles": {
+    "Server": {
+      "n": 298,
+      "medianDt": 0.033388400450348854,
+      "p95Dt": 0.03407110273838043
+    },
+    "ClientB": {
+      "n": 597,
+      "medianDt": 0.016666799783706665,
+      "p95Dt": 0.0166672021150589
+    },
+    "ClientA": {
+      "n": 0,
+      "medianDt": null,
+      "p95Dt": null
+    }
+  },
+  "sharedMontageActions": [
+    [
+      "057B892C4A84A7A4FEBACC8B6EEB6A9D",
+      2,
+      1
+    ],
+    [
+      "057B892C4A84A7A4FEBACC8B6EEB6A9D",
+      4,
+      1
+    ],
+    [
+      "057B892C4A84A7A4FEBACC8B6EEB6A9D",
+      5,
+      1
+    ],
+    [
+      "057B892C4A84A7A4FEBACC8B6EEB6A9D",
+      5,
+      2
+    ],
+    [
+      "057B892C4A84A7A4FEBACC8B6EEB6A9D",
+      5,
+      3
+    ],
+    [
+      "057B892C4A84A7A4FEBACC8B6EEB6A9D",
+      5,
+      4
+    ],
+    [
+      "057B892C4A84A7A4FEBACC8B6EEB6A9D",
+      6,
+      1
+    ],
+    [
+      "057B892C4A84A7A4FEBACC8B6EEB6A9D",
+      7,
+      1
+    ],
+    [
+      "5928ED1C451A9BB9700C7C811039E25B",
+      5,
+      1
+    ],
+    [
+      "5928ED1C451A9BB9700C7C811039E25B",
+      6,
+      1
+    ]
+  ]
+}

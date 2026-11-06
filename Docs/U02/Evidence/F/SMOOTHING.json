@@ -1,0 +1,20 @@
+[
+  {
+    "role": "ClientB",
+    "pid": 4316,
+    "proxySamples": 597,
+    "smoothMode": 2,
+    "smoothSeconds": 0.1,
+    "sourceFile": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\F\\Session-20261106-180839\\ClientB\\Frames.jsonl",
+    "verified": true
+  },
+  {
+    "role": "ClientA",
+    "pid": 8300,
+    "proxySamples": 597,
+    "smoothMode": 2,
+    "smoothSeconds": 0.1,
+    "sourceFile": "D:\\Data\\AnimeMMORPG\\Artifacts\\U02\\F\\Session-20261106-180839\\ClientA\\Frames.jsonl",
+    "verified": true
+  }
+]
