@@ -13,7 +13,7 @@ def check(name,value):
 def consensus(label,expected=None):
  for _ in range(150):
   states={k:state(k) for k in by};s=states['Server'];
-  def core(x):return sorted((t['id'],t['lifeGeneration'],t['hp'],t['shield'],t['dead']) for t in x['targets']),x['results']
+  def core(x):return sorted((t['id'],t['lifeGeneration'],t['hp'],t['shield'],t['dead'],t['deathCount'],t['identityLife']) for t in x['targets']),x['results'],x['critMode']
   if all(core(v)==core(s) for v in states.values()) and all(len(v['pawns'])==len(s['pawns']) for v in states.values()):break
   wait(.1)
  else:raise AssertionError('Consensus timeout '+label)
@@ -52,7 +52,7 @@ try:
  setup('hit');focus('ClientA');consensus('Baseline');attack();s=consensus('HitMulti',2);check('Two target HP540',sum(t['hp']==540 for t in s['targets'])==2)
  active.console('U02NetProbe duplicate');wait(1);consensus('Duplicate',0)
  active.console('U02NetProbe stale');wait(1);consensus('StaleLife',0)
- active.console('U02NetProbe other');wait(1);consensus('WrongOwnership',0)
+ before={p['id']:(p['accepted'],p['rejected']) for p in state('Server')['pawns']};active.console('U02NetProbe other');wait(1);s=consensus('WrongOwnership',0);check('Foreign RPC never reaches server admission',before=={p['id']:(p['accepted'],p['rejected']) for p in s['pawns']})
  setup('miss');attack();consensus('Miss',0)
  setup('wall');attack();consensus('Wall',0)
  setup('partial');attack();s=consensus('PartialHead',1);check('Head-only hurtbox',s['results'][-1]['hurtbox']==2)

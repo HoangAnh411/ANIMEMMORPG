@@ -73,7 +73,7 @@ void AU02NetworkState::ProcessFixture()
     {
         W->FixtureCritRoll=1.-1e-9;W->ResetLabDummies();TArray<AU01Character*> P;for(TActorIterator<AU01Character> It(GetWorld());It;++It)P.Add(*It);P.Sort([](const AU01Character& X,const AU01Character& Y){return X.NetworkPawnId<Y.NetworkPawnId;});
         const int Lane=Mode==TEXT("wall")?1:Mode==TEXT("partial")?2:0;
-        for(int I=0;I<P.Num();++I){auto* C=P[I];C->GetU01Movement()->ResetFixtureState();FVector Pos(Mode==TEXT("miss")?-450:0,-6000-1000*Lane+(I?25:-25),110);C->SetActorLocation(Pos,false,nullptr,ETeleportType::TeleportPhysics);C->SetActorRotation(FRotator::ZeroRotator);C->GetU01Movement()->ForceReplicationUpdate();C->GetU01Movement()->ForceClientAdjustment();if(auto* PC=Cast<APlayerController>(C->GetController())){PC->SetControlRotation(FRotator::ZeroRotator);PC->ClientSetLocation(Pos,FRotator::ZeroRotator);}}
+        for(int I=0;I<P.Num();++I){auto* C=P[I];C->GetU01Movement()->ResetFixtureState();FVector Pos(Mode==TEXT("miss")?-450:0,-6000-1000*Lane+(I?50:-50),110);C->SetActorLocation(Pos,false,nullptr,ETeleportType::TeleportPhysics);C->SetActorRotation(FRotator::ZeroRotator);C->GetU01Movement()->ForceReplicationUpdate();C->GetU01Movement()->ForceClientAdjustment();if(auto* PC=Cast<APlayerController>(C->GetController())){PC->SetControlRotation(FRotator::ZeroRotator);PC->ClientSetLocation(Pos,FRotator::ZeroRotator);}}
         if(Mode==TEXT("lethal")){for(TActorIterator<AU02LabDummy> It(GetWorld());It;++It){FHitCandidate H;H.Id.Target={It->NetworkPawnId,It->LifeGeneration};for(int I=0;I<9;++I)It->Vital->ApplyResolved(H,1,.5);}}
     }
     UE_LOG(LogU02Network,Display,TEXT("U02F_FIXTURE %s"),*Command);EmitState();
