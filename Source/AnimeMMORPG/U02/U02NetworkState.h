@@ -31,6 +31,7 @@ public:
     virtual void Tick(float Dt) override;
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
     void Confirm(const UU02CollisionWorld::FConfirmedDamage& Result);
+    UPROPERTY(Replicated) int32 CritMode=0; // 0 production5%,1 fixture off,2 fixture forced
     UPROPERTY(ReplicatedUsing=OnRep_Results) TArray<FU02ConfirmedResult> Results;
 private:
     UFUNCTION() void OnRep_Results();

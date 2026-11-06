@@ -19,6 +19,7 @@ def consensus(label,expected=None):
  else:raise AssertionError('Consensus timeout '+label)
  check(label+' result/HP/shield/life agreement',True);check(label+' dedicated no LocalPlayer',s['netMode']==1 and s['localPlayers']==0)
  for k in clients:check(label+' owned pawn '+k,states[k]['netMode']==3 and states[k]['localPlayers']==1 and sum(p['local'] for p in states[k]['pawns'])==1 and all(p['role']==(2 if p['local'] else 1) for p in states[k]['pawns']))
+ check(label+' distinct ownership',len({next(p['id'] for p in states[k]['pawns'] if p['local']) for k in clients})==2)
  check(label+' profile30/60/60',s['t.MaxFPS']==30 and all(states[k]['t.MaxFPS']==60 and states[k]['r.ScreenPercentage']==50 for k in clients))
  if expected is not None:check(label+' event delta',len(s['results'])-meta['stages'][-1]['resultCount']==expected)
  meta['stages'].append(dict(label=label,utc=datetime.now(timezone.utc).isoformat(),resultCount=len(s['results']),states=states));grab();ImageGrab.grab(bbox=bounds,all_screens=True).save(out/(label+'.png'));return s
@@ -58,6 +59,7 @@ try:
  setup('crit');attack();s=consensus('Crit',1);check('Crit90 server/client agree',s['results'][-1]['crit'] and s['results'][-1]['damage']==90)
  setup('shield');consensus('ShieldGranted',0);attack();s=consensus('ShieldHit',1);check('Shield absorbs40',s['results'][-1]['absorbed']==40)
  setup('reset');s=consensus('ResetGeneration',0);check('Reset restores600',all(t['hp']==600 and t['shield']==0 for t in s['targets']))
+ focus('ClientB');attack();consensus('ClientBRealAttack',1);focus('ClientA')
  # An accepted attack continues while its client enters menu and the peer resumes.
  active.attack(True);time.sleep(.04);active.attack(False);active.press('Escape',True);time.sleep(.03);active.press('Escape',False);wait(.5);focus('ClientB');consensus('MenuFocusDoesNotPause',1)
  setup('lethal');consensus('LethalPrepared',0);setup('concurrent');wait(1);s=consensus('ConcurrentLethal',2);check('Death once per target',sum(t['dead'] and t['deathCount']==1 for t in s['targets'])==2);check('Sorted lethal only first source per target',len({r['source'] for r in s['results'][-2:]})==1)
