@@ -27,6 +27,7 @@ public:
     void ObserveCombat(UU02CombatComponent* Combat);
     void DrainAt(double Now);
     void MarkDead(AnimeMMORPG::U02::FLifeId Life);
+    void RebaseResetSubject(AActor* Subject); // after authority reset drained the old batch
     bool SelectDebugAction(uint64 Sequence); // lab diagnostics only, 0 selects next local action
     void DrawSelectedAction();
     FU02GeometryConfirmed OnGeometryConfirmed;

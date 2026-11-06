@@ -76,6 +76,23 @@ void UU02CollisionWorld::UnregisterHurtbox(UU02HurtboxComponent* H)
     Hurts.RemoveAll([&](const FHurt& R){return R.Component==H;});
 }
 void UU02CollisionWorld::MarkDead(FLifeId Life) {Ledger.MarkDead(Life);}
+void UU02CollisionWorld::RebaseResetSubject(AActor* Subject)
+{
+    if(!Subject||!Subject->HasAuthority())return;
+    // Reset is a known boundary, not an unknown swept path. Establish the new
+    // life baseline now so a first NEW action can span its entire active next step.
+    for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->GetOwner()==Subject)
+    {
+        auto* Pawn=CastChecked<AU01Character>(Subject);const auto Snap=C->GetCombatSnapshot();
+        S.Current.Position=Feet(Pawn);S.Current.Life={Snap.PawnId,Snap.LifeGeneration};S.Current.Epoch=0;
+        TArray<UU02HurtboxComponent*> Boxes;Pawn->GetComponents(Boxes);for(auto* H:Boxes)S.Current.Epoch=FMath::Max(S.Current.Epoch,H->ContinuityEpoch);
+        S.Previous=S.Current;Ledger.RegisterLife(S.Current.Life);
+    }
+    for(auto& H:Hurts)if(auto* C=H.Component.Get())if(C->GetOwner()==Subject)
+    {
+        H.Current={C->GetComponentLocation(),C->GetSubject(),C->ContinuityEpoch,C->GetScaledSphereRadius()};H.Previous=H.Current;Ledger.RegisterLife(H.Current.Life);
+    }
+}
 void UU02CollisionWorld::ObserveCombat(UU02CombatComponent* C)
 {
     const auto S=C->GetCombatSnapshot();FLifeId Life{S.PawnId,S.LifeGeneration};Ledger.RegisterLife(Life);

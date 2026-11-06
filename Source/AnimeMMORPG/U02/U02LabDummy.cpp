@@ -29,5 +29,6 @@ bool AU02LabDummy::ResetLabCombat()
     if(!HasAuthority()||LifeGeneration==MAX_uint64)return false;
     GetWorld()->GetSubsystem<UU02CollisionWorld>()->DrainAt(GetWorld()->GetTimeSeconds());
     ++LifeGeneration;Vital->ResetLabCombat(LifeGeneration);
-    Body->SetFixtureSubject({NetworkPawnId,LifeGeneration});Head->SetFixtureSubject({NetworkPawnId,LifeGeneration});return true;
+    Body->SetFixtureSubject({NetworkPawnId,LifeGeneration});Head->SetFixtureSubject({NetworkPawnId,LifeGeneration});
+    GetWorld()->GetSubsystem<UU02CollisionWorld>()->RebaseResetSubject(this);return true;
 }

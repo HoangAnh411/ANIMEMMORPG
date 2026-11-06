@@ -195,7 +195,7 @@ bool UU02CombatComponent::ResetLabCombat()
     BeforeActionMutation.ExecuteIfBound(Now);
     if (!Model->ResetLabCombat(Now)) return false;
     if(Character()->Vital)Character()->Vital->ResetLabCombat(Model->GetLife().Generation);
-    Publish(Now,true); Trace(TEXT("Reset"),Now); return true;
+    Publish(Now,true); GetWorld()->GetSubsystem<UU02CollisionWorld>()->RebaseResetSubject(Character()); Trace(TEXT("Reset"),Now); return true;
 #endif
 }
 void UU02CombatComponent::Publish(double Now, bool bForce)

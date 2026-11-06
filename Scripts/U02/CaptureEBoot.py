@@ -5,7 +5,11 @@ from datetime import datetime,timezone
 from PIL import ImageGrab
 from EClient import EClient,u
 p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--quit-menu',action='store_true');a=p.parse_args();a.out.mkdir(exist_ok=True,parents=True)
-r=json.loads(a.record.read_text(encoding='utf-8-sig'));c=EClient(r);writer=None;m=dict(process=r,completed=False,events=[],frames=[])
+r=json.loads(a.record.read_text(encoding='utf-8-sig'));c=EClient(r);writer=None
+kernel=ct.WinDLL('kernel32',use_last_error=True);kernel.OpenProcess.argtypes=[ct.c_ulong,ct.c_int,ct.c_ulong];kernel.OpenProcess.restype=ct.c_void_p
+kernel.WaitForSingleObject.argtypes=[ct.c_void_p,ct.c_ulong];kernel.GetExitCodeProcess.argtypes=[ct.c_void_p,ct.POINTER(ct.c_ulong)];kernel.CloseHandle.argtypes=[ct.c_void_p]
+process_handle=kernel.OpenProcess(0x101000,False,r['pid']);assert process_handle
+m=dict(process=r,completed=False,events=[],frames=[])
 try:
  c.prepare();m['ownedInitialMetrics']=c.metrics();bounds=c.bounds();l,t,rr,b=bounds;cv2.setNumThreads(1);writer=cv2.VideoWriter(str(a.out/'Boot-Quit.mp4'),cv2.VideoWriter_fourcc(*'mp4v'),30,(rr-l,b-t));assert writer.isOpened()
  start=time.perf_counter();m['utc']=datetime.now(timezone.utc).isoformat();encoded=0;previous=None
@@ -32,9 +36,14 @@ try:
   if not u.IsWindow(c.hwnd):break
   time.sleep(.25)
  assert not u.IsWindow(c.hwnd),'Quit did not destroy owned window'
- m['windowClosed']=True;m['completed']=True;m['externalInputMethodRestored']=not c.ime
+ m['windowClosed']=True
+ for _ in range(480):
+  if kernel.WaitForSingleObject(process_handle,250)==0:break
+ assert kernel.WaitForSingleObject(process_handle,0)==0,'Quit did not exit owned process; do not count window closure as PASS'
+ exit_code=ct.c_ulong();assert kernel.GetExitCodeProcess(process_handle,ct.byref(exit_code));m['exitCode']=exit_code.value;assert exit_code.value==0
+ m['completed']=True;m['externalInputMethodRestored']=not c.ime
 except Exception as e:m['error']=str(e);raise
 finally:
  if writer:writer.release()
- c.finish();(a.out/'input.json').write_text(json.dumps(m,indent=2))
+ kernel.CloseHandle(process_handle);c.finish();(a.out/'input.json').write_text(json.dumps(m,indent=2))
 print(json.dumps(dict(completed=m['completed'],boot=m.get('bootMapVerified'),quitWindowClosed=m['windowClosed'])))
