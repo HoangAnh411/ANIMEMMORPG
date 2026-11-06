@@ -1,0 +1,731 @@
+{
+  "sourceSHA": "1f1c35954772b075197fd225b1e7ee494b989505",
+  "automation": false,
+  "passed": 115,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "Normal60 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "Normal60 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "Normal60 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "Normal60 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "Crit90 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "Crit90 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "Crit90 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "Crit90 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "Shield40 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "Shield40 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "Shield40 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "Shield40 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "Shield40 absorbed",
+      "result": "PASS"
+    },
+    {
+      "check": "Reset600 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "Reset600 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "Reset600 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "Reset600 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain1 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain1 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain1 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain1 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain2 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain2 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain2 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain2 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain3 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain3 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain3 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain3 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain4 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain4 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain4 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain4 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain5 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain5 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain5 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain5 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain6 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain6 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain6 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain6 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain7 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain7 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain7 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain7 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain8 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain8 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain8 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain8 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain9 confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain9 one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain9 damage",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain9 target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "Dummy defeated exactly at HP0",
+      "result": "PASS"
+    },
+    {
+      "check": "DeadNoHit confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "DeadNoHit one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "ResetHeld confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "ResetHeld one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "ResetHeld damage",
+      "result": "PASS"
+    },
+    {
+      "check": "ResetHeld target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "Held LMB across reset no automatic action",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "MultipleTargets confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "MultipleTargets one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "MultipleTargets damage",
+      "result": "PASS"
+    },
+    {
+      "check": "MultipleTargets target HP",
+      "result": "PASS"
+    },
+    {
+      "check": "MissOutside confirmed target count",
+      "result": "PASS"
+    },
+    {
+      "check": "MissOutside one accepted action",
+      "result": "PASS"
+    },
+    {
+      "check": "Real-time export",
+      "result": "PASS"
+    },
+    {
+      "check": "Native source / actual owned Game standalone",
+      "result": "PASS"
+    },
+    {
+      "check": "One damage per action/target life despite multi-hurtboxes",
+      "result": "PASS"
+    },
+    {
+      "check": "Exactly one crit in controlled fixture",
+      "result": "PASS"
+    },
+    {
+      "check": "Death emitted exactly once per target life",
+      "result": "PASS"
+    },
+    {
+      "check": "Fixture crit setting explicitly diagnosed",
+      "result": "PASS"
+    },
+    {
+      "check": "Normal60 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "Normal60 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "Crit90 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "Crit90 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "Shield40 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "Shield40 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "Reset600 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "Reset600 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain1 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain1 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain2 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain2 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain3 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain3 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain4 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain4 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain5 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain5 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain6 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain6 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain7 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain7 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain8 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain8 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain9 native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "LethalChain9 damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "DeadNoHit native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "DeadNoHit damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "ResetHeld native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "ResetHeld damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "FullWall damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "MultipleTargets native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "MultipleTargets damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "MissOutside native result count",
+      "result": "PASS"
+    },
+    {
+      "check": "MissOutside damage timestamp in active",
+      "result": "PASS"
+    },
+    {
+      "check": "HP never negative",
+      "result": "PASS"
+    },
+    {
+      "check": "No duplicate crit roll",
+      "result": "PASS"
+    },
+    {
+      "check": "Player remains HP1000",
+      "result": "PASS"
+    },
+    {
+      "check": "Real-time duration from frame timestamps",
+      "result": "PASS"
+    }
+  ],
+  "damageEvents": 16,
+  "samples": 4791,
+  "videoSeconds": 80.83333333333333,
+  "wallSeconds": 80.81607239999994,
+  "capturedFrames": 131,
+  "hits": [
+    {
+      "timestamp": 9.656827620023396,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 1,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 2,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 600,
+      "hpAfter": 540,
+      "death": false,
+      "line": "[2026.11.06-10.16.16:583][508]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=9.656827620023396 source=686764B2434679DC3BCEBDB414286868:3 action=1 target=B60CCBFD48C86B00EFE5A48715050D2F:2 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=600 hpAfter=540 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 13.453079017603304,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 2,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 2,
+      "hurtbox": 2,
+      "crit": true,
+      "damage": 90,
+      "absorbed": 0,
+      "hpBefore": 540,
+      "hpAfter": 450,
+      "death": false,
+      "line": "[2026.11.06-10.16.20:381][733]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=13.453079017603304 source=686764B2434679DC3BCEBDB414286868:3 action=2 target=B60CCBFD48C86B00EFE5A48715050D2F:2 hurtbox=2 raw=60 attack=1 roll=0 crit=1 damage=90 absorbed=0 hpBefore=540 hpAfter=450 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 18.207128419333603,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 3,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 2,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 40,
+      "hpBefore": 450,
+      "hpAfter": 430,
+      "death": false,
+      "line": "[2026.11.06-10.16.25:132][ 14]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=18.207128419333603 source=686764B2434679DC3BCEBDB414286868:3 action=3 target=B60CCBFD48C86B00EFE5A48715050D2F:2 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=40 hpBefore=450 hpAfter=430 death=0 shieldOrder=1,"
+    },
+    {
+      "timestamp": 21.72992531841388,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 4,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 600,
+      "hpAfter": 540,
+      "death": false,
+      "line": "[2026.11.06-10.16.28:655][223]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=21.72992531841388 source=686764B2434679DC3BCEBDB414286868:3 action=4 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=600 hpAfter=540 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 23.917456819468644,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 5,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 540,
+      "hpAfter": 480,
+      "death": false,
+      "line": "[2026.11.06-10.16.30:839][352]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=23.917456819468644 source=686764B2434679DC3BCEBDB414286868:3 action=5 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=540 hpAfter=480 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 26.289705618077424,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 6,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 480,
+      "hpAfter": 420,
+      "death": false,
+      "line": "[2026.11.06-10.16.33:214][493]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=26.289705618077424 source=686764B2434679DC3BCEBDB414286868:3 action=6 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=480 hpAfter=420 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 28.25438531746855,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 7,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 420,
+      "hpAfter": 360,
+      "death": false,
+      "line": "[2026.11.06-10.16.35:180][610]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=28.25438531746855 source=686764B2434679DC3BCEBDB414286868:3 action=7 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=420 hpAfter=360 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 30.014764218383934,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 8,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 360,
+      "hpAfter": 300,
+      "death": false,
+      "line": "[2026.11.06-10.16.36:939][715]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=30.014764218383934 source=686764B2434679DC3BCEBDB414286868:3 action=8 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=360 hpAfter=300 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 31.94359141846886,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 9,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 300,
+      "hpAfter": 240,
+      "death": false,
+      "line": "[2026.11.06-10.16.38:870][830]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=31.943591418468859 source=686764B2434679DC3BCEBDB414286868:3 action=9 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=300 hpAfter=240 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 33.51987431829562,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 10,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 240,
+      "hpAfter": 180,
+      "death": false,
+      "line": "[2026.11.06-10.16.40:445][924]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=33.519874318295621 source=686764B2434679DC3BCEBDB414286868:3 action=10 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=240 hpAfter=180 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 35.80137951930752,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 11,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 180,
+      "hpAfter": 120,
+      "death": false,
+      "line": "[2026.11.06-10.16.42:726][ 60]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=35.801379519307517 source=686764B2434679DC3BCEBDB414286868:3 action=11 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=180 hpAfter=120 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 38.014926518106364,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 12,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 120,
+      "hpAfter": 60,
+      "death": false,
+      "line": "[2026.11.06-10.16.44:942][192]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=38.014926518106364 source=686764B2434679DC3BCEBDB414286868:3 action=12 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=120 hpAfter=60 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 49.867633218669795,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 13,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 3,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 60,
+      "hpAfter": 0,
+      "death": true,
+      "line": "[2026.11.06-10.16.56:794][898]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=49.867633218669795 source=686764B2434679DC3BCEBDB414286868:3 action=13 target=B60CCBFD48C86B00EFE5A48715050D2F:3 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=60 hpAfter=0 death=1 shieldOrder="
+    },
+    {
+      "timestamp": 65.37652861958136,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 3,
+      "action": 15,
+      "target": "B60CCBFD48C86B00EFE5A48715050D2F",
+      "targetLife": 4,
+      "hurtbox": 2,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 600,
+      "hpAfter": 540,
+      "death": false,
+      "line": "[2026.11.06-10.17.12:303][819]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=65.376528619581364 source=686764B2434679DC3BCEBDB414286868:3 action=15 target=B60CCBFD48C86B00EFE5A48715050D2F:4 hurtbox=2 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=600 hpAfter=540 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 80.51582331841578,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 6,
+      "action": 1,
+      "target": "6034875C4E848B9B601ACBAAF96C68A6",
+      "targetLife": 5,
+      "hurtbox": 1,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 600,
+      "hpAfter": 540,
+      "death": false,
+      "line": "[2026.11.06-10.17.27:440][717]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=80.515823318415784 source=686764B2434679DC3BCEBDB414286868:6 action=1 target=6034875C4E848B9B601ACBAAF96C68A6:5 hurtbox=1 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=600 hpAfter=540 death=0 shieldOrder="
+    },
+    {
+      "timestamp": 80.51582331841578,
+      "source": "686764B2434679DC3BCEBDB414286868",
+      "life": 6,
+      "action": 1,
+      "target": "F0609F5D43EB400212FC45945B3BAA8E",
+      "targetLife": 5,
+      "hurtbox": 1,
+      "crit": false,
+      "damage": 60,
+      "absorbed": 0,
+      "hpBefore": 600,
+      "hpAfter": 540,
+      "death": false,
+      "line": "[2026.11.06-10.17.27:440][717]LogU02Collision: Display: U02E_DAMAGE sourceSHA=1f1c35954772b075197fd225b1e7ee494b989505 timestamp=80.515823318415784 source=686764B2434679DC3BCEBDB414286868:6 action=1 target=F0609F5D43EB400212FC45945B3BAA8E:5 hurtbox=1 raw=60 attack=1 roll=0.99999999900000003 crit=0 damage=60 absorbed=0 hpBefore=600 hpAfter=540 death=0 shieldOrder="
+    }
+  ]
+}

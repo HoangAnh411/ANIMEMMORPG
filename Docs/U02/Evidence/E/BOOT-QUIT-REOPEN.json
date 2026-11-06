@@ -1,0 +1,20 @@
+[
+  {
+    "label": "Boot",
+    "pid": 5140,
+    "binarySHA256": "F08810EC88C2AD43C7480C8FFE832F8F859D21FBC888D78FB94C9E5FB5EC67AE",
+    "sourceSHA": "1f1c35954772b075197fd225b1e7ee494b989505",
+    "exitCode": 0,
+    "bootVerified": true,
+    "method": "actual input Back to Boot or menu Quit; native map load and original process handle signalled exit0"
+  },
+  {
+    "label": "Reopen",
+    "pid": 18496,
+    "binarySHA256": "F08810EC88C2AD43C7480C8FFE832F8F859D21FBC888D78FB94C9E5FB5EC67AE",
+    "sourceSHA": "1f1c35954772b075197fd225b1e7ee494b989505",
+    "exitCode": 0,
+    "bootVerified": false,
+    "method": "actual input Back to Boot or menu Quit; native map load and original process handle signalled exit0"
+  }
+]

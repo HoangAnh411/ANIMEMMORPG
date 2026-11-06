@@ -1,0 +1,1 @@
+Capture failed to load Boot: harness clicked lower boundary of Back to Boot button at Y534. Actual menu observed has Back to Boot center519, Quit559. No source/UI change; correct harness clicks and repeat. Failed video/menu image/log preserved.

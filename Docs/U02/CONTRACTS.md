@@ -99,6 +99,14 @@ Animation revision must include preparation in upper body/shoulders and feet, ke
 Required evidence: new clone Editor/Game builds, trajectory/adapter plus related regression tests, new Windows package and three-map smoke, guarded input captures with actual body/mesh/aim/action-time diagnostics, real-time videos, hashes and updated launcher/checklist. No technical PASS or user feel acceptance is inferred from the old C artifacts.
 
 
-## D implementation record (review pending)
+## D implementation record (ACCEPTED at d0dd5b0)
 
 D uses explicitly registered stable sphere hurtboxes, exhaustive registry broadphase, locked-yaw relative sphere/box interval roots, polygon visibility topology partition and world pre-actor collection/global sorted resolve. Trace slots1/2 verified against runtime collision names. Pawn targets disabled outside native fixtures; normal lab targets dummies. No damage or vital implementation. Supported solid shapes, conservative unsupported-shape behavior, fixture dimensions and limitations are recorded in REPORT-D. These implementation details do not alter product timing, wall-per-hurtbox or one-hit/target/action rules.
+
+## E implementation record (review pending)
+
+D's no-vital description above is historical. E composes UU02VitalComponent on pawn/dummy, retains one world sorted resolver, revalidates live source/target generations and ledger before one server crit roll. Only confirmed eligible hits mutate the vital model. Damage60, attack1, defense0, crit5% x1.5; half-up after all factors. Same-source shield replaces capacity/deadline; different sources add, earliest deadline/source ID first; exact deadline expired. Frame-end expiry runs after earlier sorted hits, preserving shields that were alive at hit time.
+
+HP0 synchronously invalidates ledger before the next event and applies Defeated/action termination. Models already advanced to the collision snapshot endpoint never rewind their clocks to earlier hit timestamps; death retains the gameplay timestamp, presentation terminates at the observed endpoint (or remains Finished if it already completed). U01 generic unlock and failed/non-authority fixture reset cannot clear actual HP0 Defeated. Valid lab reset increments generation, clears shields/actions, restores HP and establishes new-life collision baseline after the old batch drains; subsequent unknown teleport/radius discontinuities still prevent connecting sweeps. This is not product respawn.
+
+Lab-only native/console crit overrides and shield grants are marked on HUD/log. Production rolls remain server5%. HP/shield/dead snapshots replicate for presentation; dedicated-process agreement remains F. No gameplay shield skill, prediction, combat AI or PvP opening. Current lab remains dummy-target gameplay, with explicit native pawn-versus-pawn fixtures only for ordering tests.
