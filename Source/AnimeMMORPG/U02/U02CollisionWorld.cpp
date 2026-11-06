@@ -9,6 +9,8 @@
 #include "PhysicsEngine/BodySetup.h"
 #include "Interfaces/Interface_CollisionDataProvider.h"
 #include "Engine/World.h"
+#include "GameFramework/PhysicsVolume.h"
+#include "Engine/Engine.h"
 #include "UObject/UObjectIterator.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
@@ -98,7 +100,7 @@ void UU02CollisionWorld::CaptureEnvironment()
         auto* P=*It;if(P->GetWorld()!=GetWorld()||!P->IsRegistered()||!P->IsQueryCollisionEnabled()||!P->GetOwner())continue;
         // Trigger/physics volumes and pawn bodies are not solid environment. New trace
         // channels can inherit Block even where their existing Pawn response is overlap.
-        if(Cast<APawn>(P->GetOwner())||Cast<UU02HurtboxComponent>(P)||P->GetCollisionResponseToChannel(ECC_Pawn)!=ECR_Block)
+        if(Cast<APawn>(P->GetOwner())||Cast<APhysicsVolume>(P->GetOwner())||Cast<UU02HurtboxComponent>(P)||P->GetCollisionResponseToChannel(ECC_Pawn)!=ECR_Block)
         {IgnoredObstructionComponents.Add(P);continue;}
         if(P->GetCollisionResponseToChannel(ECC_GameTraceChannel2)!=ECR_Block)continue;
         FEnvironment E;E.Component=P;E.Bounds=P->Bounds.GetBox();int Before=Triangles.Num();
@@ -125,7 +127,11 @@ void UU02CollisionWorld::CaptureEnvironment()
                 }
             }
         }
-        E.bSupported&=Triangles.Num()>Before;Environment.Add(E);if(!E.bSupported)++UnsupportedObstructions;
+        E.bSupported&=Triangles.Num()>Before;Environment.Add(E);if(!E.bSupported)
+        {
+            ++UnsupportedObstructions;
+            if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))UE_LOG(LogU02Collision,Display,TEXT("U02D_UNSUPPORTED component=%s class=%s ownerClass=%s bounds=%s"),*P->GetPathName(),*P->GetClass()->GetName(),*P->GetOwner()->GetClass()->GetName(),*E.Bounds.ToString());
+        }
     }
 }
 bool UU02CollisionWorld::Unobstructed(FVector O,FVector C,double R) const
@@ -169,7 +175,17 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
             TEXT("U02D_QUERY world=%s source=%s:%llu action=%llu target=%s:%llu hurtbox=%u prev=%.17g now=%.17g activeBegin=%.17g activeEnd=%.17g alphaBegin=%.17g alphaEnd=%.17g feet0=(%s) feet1=(%s) yaw=%.17g half=100/60/90 originUp=90 target0=(%s) target1=(%s) radius=%.17g visible=%d unsupportedShapes=%u"),
             *GetWorld()->GetPathName(),*P.Action.Source.Pawn.ToString(),P.Action.Source.Generation,P.Action.Sequence,*H.Current.Life.Pawn.ToString(),H.Current.Life.Generation,Shape->StableHurtboxId,
             PreviousTime,CurrentTime,P.Slice.BeginSeconds,P.Slice.EndSeconds,Range.Begin,Range.End,*F0.ToString(),*F1.ToString(),P.Yaw,*C0.ToString(),*C1.ToString(),H.Current.Radius,Hit.IsSet(),UnsupportedObstructions);
-        if(!Hit.IsSet()){++Blocked;continue;}
+        if(!Hit.IsSet())
+        {
+            ++Blocked;
+            if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
+            {
+                const FVector Foot=FMath::Lerp(F0,F1,Range.Begin),Origin=Foot+Up;
+                DrawDebugBox(GetWorld(),AttackCenter(Foot,P.Yaw),FVector(100,60,90),FRotator(0,P.Yaw,0).Quaternion(),FColor::Red,false,.5f);
+                DrawDebugLine(GetWorld(),Origin,SphereNearest(Origin,FMath::Lerp(C0,C1,Range.Begin),H.Current.Radius),FColor::Red,false,.5f);
+            }
+            continue;
+        }
         const double T=Hit.GetValue();
         const double Timestamp=T==P.Slice.BeginAlpha?P.Slice.BeginSeconds:T==P.Slice.EndAlpha?P.Slice.EndSeconds:FMath::Lerp(PreviousTime,CurrentTime,T);
         if(Timestamp<P.Slice.BeginSeconds||Timestamp>P.Slice.EndSeconds||(P.Slice.bEndExclusive&&Timestamp>=P.Slice.EndSeconds))continue;
@@ -204,4 +220,6 @@ void UU02CollisionWorld::DrainAt(double Now)
     for(const auto& P:Batch)CollectHitCandidates(P,Candidates);
     Candidates.Sort(CandidateLess);
     for(const auto& C:Candidates)ResolveHit(C);
+    if(GEngine&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))GEngine->AddOnScreenDebugMessage(290001,.15f,FColor::Yellow,
+        FString::Printf(TEXT("U02-D geometry | hits %d | queries %llu | blocked %llu | no damage"),Confirmed.Num(),Queries,Blocked));
 }

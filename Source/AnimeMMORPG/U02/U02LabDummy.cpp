@@ -10,6 +10,7 @@ AU02LabDummy::AU02LabDummy()
     Head=CreateDefaultSubobject<UU02HurtboxComponent>(TEXT("Head"));Head->SetupAttachment(RootComponent);Head->SetRelativeLocation(FVector(0,0,145));Head->InitSphereRadius(20);Head->StableHurtboxId=2;
     Visual=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Visual"));Visual->SetupAttachment(RootComponent);Visual->SetRelativeLocation(FVector(0,0,90));Visual->SetRelativeScale3D(FVector(.5,.5,1.8));Visual->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Engine/BasicShapes/Cube.Cube"));if(Mesh.Succeeded())Visual->SetStaticMesh(Mesh.Object);
+    Visual->SetCollisionEnabled(ECollisionEnabled::NoCollision);Visual->SetCollisionResponseToAllChannels(ECR_Ignore);
 }
 void AU02LabDummy::BeginPlay()
 {

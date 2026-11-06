@@ -11,6 +11,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/World.h"
+#include "Engine/CollisionProfile.h"
 #include "GameFramework/WorldSettings.h"
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -53,6 +54,8 @@ struct FDWorld : FTestWorldWrapper
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DGeometry,"AnimeMMORPG.U02.D.FeetBoxBoundaryAndRelativeSweep",U02DFlags)
 bool FU02DGeometry::RunTest(const FString&)
 {
+    TestEqual(TEXT("Candidate channel name"),UCollisionProfile::Get()->ReturnChannelNameFromContainerIndex(ECC_GameTraceChannel1),FName(TEXT("U02CombatCandidate")));
+    TestEqual(TEXT("Obstruction channel name"),UCollisionProfile::Get()->ReturnChannelNameFromContainerIndex(ECC_GameTraceChannel2),FName(TEXT("U02CombatObstruction")));
     const FVector Feet(10,20,30);TestTrue(TEXT("Feet based rotated center"),AttackCenter(Feet,90).Equals(FVector(10,120,120),1.e-8));
     for(double Yaw:{0.,45.,90.,-179.})
     {
