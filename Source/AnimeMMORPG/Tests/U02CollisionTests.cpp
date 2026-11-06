@@ -9,6 +9,7 @@
 #include "U01/U01Character.h"
 #include "AIController.h"
 #include "Components/BoxComponent.h"
+#include "Components/ArrowComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/World.h"
 #include "Engine/CollisionProfile.h"
@@ -36,6 +37,8 @@ struct FDWorld : FTestWorldWrapper
     {
         CreateTestWorld(EWorldType::Game);GetTestWorld()->GetWorldSettings()->DefaultGameMode=AGameModeBase::StaticClass();
         Wall(FVector(0,0,-50),FVector(10000,10000,50));
+        auto* DebugActor=GetTestWorld()->SpawnActor<AActor>();auto* Debug=NewObject<UArrowComponent>(DebugActor);DebugActor->SetRootComponent(Debug);
+        Debug->SetCollisionEnabled(ECollisionEnabled::QueryOnly);Debug->SetCollisionResponseToAllChannels(ECR_Block);Debug->RegisterComponent();
         Source=GetTestWorld()->SpawnActor<AU01Character>(FVector(0,0,98),FRotator::ZeroRotator);Source->NetworkPawnId=FGuid(1,0,0,1);
         auto* PC=GetTestWorld()->SpawnActor<AAIController>();PC->bSetControlRotationFromPawnOrientation=false;PC->Possess(Source);
         BeginPlayInTestWorld();for(int I=0;I<30;++I)TickTestWorld(1.f/60);

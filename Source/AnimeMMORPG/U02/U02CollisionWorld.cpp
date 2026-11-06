@@ -8,6 +8,7 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/Brush.h"
 #include "PhysicsEngine/BodySetup.h"
+#include "PhysicsEngine/BodyInstance.h"
 #include "Interfaces/Interface_CollisionDataProvider.h"
 #include "Engine/World.h"
 #include "GameFramework/PhysicsVolume.h"
@@ -104,6 +105,9 @@ void UU02CollisionWorld::CaptureEnvironment()
         if(P->GetOwner()==GetWorld()->GetDefaultBrush()||P->GetOwner()->IsEditorOnly()||Cast<APawn>(P->GetOwner())||Cast<APhysicsVolume>(P->GetOwner())||Cast<UU02HurtboxComponent>(P)||P->GetCollisionResponseToChannel(ECC_Pawn)!=ECR_Block)
         {IgnoredObstructionComponents.Add(P);continue;}
         if(P->GetCollisionResponseToChannel(ECC_GameTraceChannel2)!=ECR_Block)continue;
+        auto* PhysicsBody=P->GetBodyInstance();
+        if(!PhysicsBody||!PhysicsBody->IsValidBodyInstance())
+        {IgnoredObstructionComponents.Add(P);continue;} // render/debug components have bounds but no query shape
         FEnvironment E;E.Component=P;E.Bounds=P->Bounds.GetBox();int Before=Triangles.Num();
         if(auto* Box=Cast<UBoxComponent>(P))AddBoxTriangles(Box->GetComponentTransform(),Box->GetUnscaledBoxExtent(),Triangles);
         else
@@ -158,7 +162,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
     const auto* Source=Sources.FindByPredicate([&](const FSource& S){return S.Component==P.Component;});if(!Source)return;
     for(const auto& H:Hurts)
     {
-        auto* Shape=H.Component.Get();if(!Shape||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
+        auto* Shape=H.Component.Get();if(!Shape||!Shape->IsQueryCollisionEnabled()||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
         if(Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets)continue;
         const bool Continuous=Source->Previous.Life==Source->Current.Life&&Source->Previous.Epoch==Source->Current.Epoch
             &&H.Previous.Life==H.Current.Life&&H.Previous.Epoch==H.Current.Epoch&&H.Previous.Radius==H.Current.Radius;

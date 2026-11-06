@@ -44,6 +44,8 @@ try:
  ImageGrab.grab(bbox=bounds,all_screens=True).save(a.out/'Final.png')
 except Exception as e:m['error']=str(e);raise
 finally:
+ if 'start' in locals():
+  m.setdefault('captureSeconds',time.perf_counter()-start);m.setdefault('videoSeconds',encoded/30);m.setdefault('encodedFrames',encoded);m.setdefault('stages',pending)
  if writer:writer.release()
  c.finish();m['externalInputMethodRestored']=not c.ime
  (a.out/'input.json').write_text(json.dumps(m,indent=2))
