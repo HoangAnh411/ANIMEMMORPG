@@ -11,6 +11,7 @@ FContactRange SphereAttackContact(FVector Feet0,FVector Feet1,double LockedYaw,
 FVector AttackCenter(FVector Feet,double Yaw);
 FVector SphereNearest(FVector Origin,FVector Center,double Radius);
 bool SegmentTriangleClosed(FVector From,FVector To,const FTriangle& Triangle);
+bool InsideClosedPolyhedron(FVector Point,TConstArrayView<FTriangle> Triangles);
 // Partition at all visibility topology changes (edge/plane/near-sphere quartic roots).
 // The predicate includes initial-solid containment and actual world query validation.
 TOptional<double> FirstVisible(FVector Origin0,FVector Origin1,FVector Center0,FVector Center1,

@@ -157,4 +157,34 @@ bool FU02DGlobal::RunTest(const FString&)
     }
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DShapes,"AnimeMMORPG.U02.D.ContainmentRoundedCornersAndStepRates",U02DFlags)
+bool FU02DShapes::RunTest(const FString&)
+{
+    TArray<FTriangle> Box;AddBoxTriangles(FTransform(FVector(30,0,90)),FVector(10,20,30),Box);
+    TestTrue(TEXT("Inside closed collision mesh even when segment stays internal"),InsideClosedPolyhedron(FVector(30,0,90),Box));
+    TestTrue(TEXT("Surface is blocked"),InsideClosedPolyhedron(FVector(20,0,90),Box));
+    TestFalse(TEXT("Outside polyhedron"),InsideClosedPolyhedron(FVector(0,0,90),Box));
+    TestFalse(TEXT("Sphere cannot hit inflated-box corner without actual rounded overlap"),SphereAttackContact(FVector::ZeroVector,FVector::ZeroVector,0,FVector(210,70,90),FVector(210,70,90),10,0,1).bHit);
+    for(double Dt:{1./30,1./60,1./120,.5})
+    {
+        double First=1,Previous=0;
+        for(double Now=Dt;Previous<.4;Now+=Dt)
+        {
+            const double A=FMath::Max(Previous,.16),B=FMath::Min(Now,.22);
+            if(A<=B)
+            {
+                auto Pos=[](double T){return FVector(100,(T-.2)*10000,90);};
+                auto Contact=SphereAttackContact(FVector::ZeroVector,FVector::ZeroVector,0,Pos(Previous),Pos(Now),10,(A-Previous)/(Now-Previous),(B-Previous)/(Now-Previous));
+                if(Contact.bHit)
+                {
+                    double T=FMath::Lerp(Previous,Now,Contact.Begin);
+                    if(T>=.16&&T<.22)First=FMath::Min(First,T);
+                }
+            }
+            Previous=Now;
+        }
+        TestTrue(TEXT("30/60/120/whole-step same relative contact deadline"),FMath::Abs(First-.193)<1.e-8);
+    }
+    return true;
+}
 #endif

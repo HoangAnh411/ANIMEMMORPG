@@ -62,6 +62,7 @@ private:
     {
         TWeakObjectPtr<UPrimitiveComponent> Component;
         bool bSupported=true;
+        int32 FirstTriangle=0,TriangleCount=0;
         FBox Bounds=FBox(ForceInit);
     };
     TArray<FSource> Sources;

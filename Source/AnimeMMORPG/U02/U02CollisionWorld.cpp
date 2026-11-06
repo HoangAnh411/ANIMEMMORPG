@@ -129,7 +129,8 @@ void UU02CollisionWorld::CaptureEnvironment()
                 }
             }
         }
-        E.bSupported&=Triangles.Num()>Before;Environment.Add(E);if(!E.bSupported)
+        E.FirstTriangle=Before;E.TriangleCount=Triangles.Num()-Before;
+        E.bSupported&=E.TriangleCount>0;Environment.Add(E);if(!E.bSupported)
         {
             ++UnsupportedObstructions;
             if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))UE_LOG(LogU02Collision,Display,TEXT("U02D_UNSUPPORTED component=%s class=%s ownerClass=%s bounds=%s"),*P->GetPathName(),*P->GetClass()->GetName(),*P->GetOwner()->GetClass()->GetName(),*E.Bounds.ToString());
@@ -144,6 +145,8 @@ bool UU02CollisionWorld::Unobstructed(FVector O,FVector C,double R) const
         if(!E.Bounds.Intersect(Segment))continue;
         if(!E.bSupported)return false; // authoring diagnostic, never silently allow an unknown solid
         if(auto* P=E.Component.Get()) { FVector Closest;const float D=P->GetClosestPointOnCollision(O,Closest);if(D==0)return false; }
+        // Complex triangle collision may not expose signed containment via Chaos.
+        if(E.Bounds.IsInsideOrOn(O)&&InsideClosedPolyhedron(O,MakeArrayView(Triangles.GetData()+E.FirstTriangle,E.TriangleCount)))return false;
     }
     for(const auto& T:Triangles)if(SegmentTriangleClosed(O,End,T))return false;
     FCollisionQueryParams Params(SCENE_QUERY_STAT(U02Wall),false);

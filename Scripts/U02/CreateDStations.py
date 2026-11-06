@@ -7,7 +7,7 @@ rows=[]
 for name in ['L_CharacterCombatLab','L_NetworkLab']:
  path='/Game/AnimeMMORPG/Maps/'+name
  unreal.EditorLevelLibrary.load_level(path)
- existing=[a for a in unreal.EditorLevelLibrary.get_all_level_actors() if a.is_a(cls)]
+ existing=[a for a in unreal.EditorLevelLibrary.get_all_level_actors() if a.get_class()==cls]
  assert not existing,'Refuses duplicate station authoring'
  actor=unreal.EditorLevelLibrary.spawn_actor_from_class(cls,unreal.Vector(0,-6000,0));assert actor
  actor.set_actor_label('U02D_CollisionStations');actor.set_editor_property('tags',[unreal.Name('U02D_Fixture')])

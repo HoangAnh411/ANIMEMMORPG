@@ -94,6 +94,19 @@ bool SegmentTriangleClosed(FVector O,FVector End,const FTriangle& T)
     }
     return true;
 }
+bool InsideClosedPolyhedron(FVector Point,TConstArrayView<FTriangle> Triangles)
+{
+    double Angle=0;
+    for(const auto& T:Triangles)
+    {
+        if(SegmentTriangleClosed(Point,Point,T))return true;
+        const FVector A=T.A-Point,B=T.B-Point,C=T.C-Point;
+        const double LA=A.Size(),LB=B.Size(),LC=C.Size();
+        Angle+=2*FMath::Atan2(FVector::DotProduct(A,FVector::CrossProduct(B,C)),
+            LA*LB*LC+FVector::DotProduct(A,B)*LC+FVector::DotProduct(B,C)*LA+FVector::DotProduct(C,A)*LB);
+    }
+    return FMath::Abs(Angle)>2*UE_DOUBLE_PI;
+}
 TOptional<double> FirstVisible(FVector O0,FVector O1,FVector C0,FVector C1,double R,FContactRange Range,
     const TArray<FTriangle>& Triangles,TFunctionRef<bool(double)> Visible)
 {
