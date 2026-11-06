@@ -1,10 +1,26 @@
+if(-not ('U02FocusWindows' -as [type])){
+ Add-Type @'
+using System;using System.Collections.Generic;using System.Runtime.InteropServices;
+public static class U02FocusWindows {
+ [StructLayout(LayoutKind.Sequential)] public struct Point{public int X,Y;}
+ [StructLayout(LayoutKind.Sequential)] public struct Rect{public int L,T,R,B;}
+ [StructLayout(LayoutKind.Sequential)] public struct Placement{public uint Length,Flags,Show;public Point Min,Max;public Rect Normal;}
+ public delegate bool Visitor(IntPtr h,IntPtr p);
+ [DllImport("user32.dll")] static extern bool EnumWindows(Visitor f,IntPtr p);
+ [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr h,out uint p);
+ [DllImport("user32.dll")] static extern bool GetWindowPlacement(IntPtr h,ref Placement p);
+ [DllImport("user32.dll")] static extern bool IsWindowVisible(IntPtr h);
+ public static List<long> Find(uint pid){var a=new List<long>();EnumWindows((h,p)=>{uint id;GetWindowThreadProcessId(h,out id);var v=new Placement();v.Length=(uint)Marshal.SizeOf(v);if(id==pid&&IsWindowVisible(h)&&GetWindowPlacement(h,ref v)&&v.Normal.R-v.Normal.L>=640&&v.Normal.B-v.Normal.T>=360)a.Add(h.ToInt64());return true;},IntPtr.Zero);return a;}
+}
+'@
+}
 # Snapshot every original Editor window, including already minimized ones.
 function Get-U02OriginalEditorWindows([string]$Project){
  . (Join-Path $PSScriptRoot '../U01/FReviewHost.ps1')
  $records=@()
  foreach($process in (Get-CimInstance Win32_Process -Filter "Name='UnrealEditor.exe'")){
   if($process.CommandLine.Replace('/','\').IndexOf($Project.Replace('/','\'),[StringComparison]::OrdinalIgnoreCase) -lt 0 -or $process.CommandLine -match ' -game| -server'){continue}
-  foreach($handle in [FReviewHostNative]::Windows($process.ProcessId)){$records+=[pscustomobject]@{pid=$process.ProcessId;project=$Project;hwnd=$handle;placement=[FReviewHostNative]::Read([IntPtr]$handle)}}
+  foreach($handle in [U02FocusWindows]::Find($process.ProcessId)){$records+=[pscustomobject]@{pid=$process.ProcessId;project=$Project;hwnd=$handle;placement=[FReviewHostNative]::Read([IntPtr]$handle)}}
  }
  return $records
 }
