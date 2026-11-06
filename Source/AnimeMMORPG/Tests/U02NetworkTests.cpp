@@ -11,6 +11,7 @@
 #include "AIController.h"
 #include "Engine/World.h"
 #include "UObject/Package.h"
+#include "EngineUtils.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/WorldSettings.h"
 #include <limits>
@@ -42,6 +43,6 @@ bool FU02FResult::RunTest(const FString&)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02FFloor,"AnimeMMORPG.U02.F.NetworkLabStaticFloorAttachment",U02FFlags)
 bool FU02FFloor::RunTest(const FString&)
 {
- FW W;auto* World=W.GetTestWorld();auto* Package=World->GetOutermost();const FString Name=Package->GetName();Package->Rename(TEXT("/Temp/U02F_L_NetworkLab"),nullptr,REN_DontCreateRedirectors);auto* Lab=World->SpawnActor<AU02CollisionLab>(FVector(0,-6000,0),FRotator::ZeroRotator);TArray<UBoxComponent*> Boxes;Lab->GetComponents(Boxes);TestEqual(TEXT("Four floors plus four wall blocks"),Boxes.Num(),8);bool Floor=false;for(auto* B:Boxes){TestTrue(TEXT("Static collider stays attached to map root"),B->GetAttachParent()==Lab->GetRootComponent());if(B->GetFName()==TEXT("CombatBox_300_0_-50")){Floor=true;TestTrue(TEXT("Floor includes map actor transform"),B->GetComponentLocation().Equals(FVector(300,-6000,-50),.01));}}TestTrue(TEXT("Registered stable floor"),Floor);Package->Rename(*Name,nullptr,REN_DontCreateRedirectors);W.ForwardErrorMessages(this);return true;
+ FW W;auto* World=W.GetTestWorld();auto* Package=World->GetOutermost();const FString Name=Package->GetName();Package->Rename(TEXT("/Temp/U02F_L_NetworkLab"),nullptr,REN_DontCreateRedirectors);auto* Lab=World->SpawnActor<AU02CollisionLab>(FVector(0,-6000,0),FRotator::ZeroRotator);TArray<UBoxComponent*> Boxes;Lab->GetComponents(Boxes);TestEqual(TEXT("Four floors plus four wall blocks"),Boxes.Num(),8);bool Floor=false;for(auto* B:Boxes){TestTrue(TEXT("Static collider stays attached to map root"),B->GetAttachParent()==Lab->GetRootComponent());if(B->GetFName()==TEXT("CombatBox_300_0_-50")){Floor=true;TestTrue(TEXT("Floor includes map actor transform"),B->GetComponentLocation().Equals(FVector(300,-6000,-50),.01));}}TestTrue(TEXT("Registered stable floor"),Floor);for(TActorIterator<AU02LabDummy> It(World);It;++It)It->Vital->AddFixtureShield(1,40,100,0);World->GetSubsystem<UU02CollisionWorld>()->ResetLabDummies();int Dummies=0;for(TActorIterator<AU02LabDummy> It(World);It;++It){++Dummies;TestEqual(TEXT("Network lab reset changes life"),It->LifeGeneration,uint64(2));TestEqual(TEXT("Network lab reset clears shield"),It->Vital->GetSnapshot().Shield,0);}TestEqual(TEXT("Only server spawns five dummies"),Dummies,5);Package->Rename(*Name,nullptr,REN_DontCreateRedirectors);W.ForwardErrorMessages(this);return true;
 }
 #endif

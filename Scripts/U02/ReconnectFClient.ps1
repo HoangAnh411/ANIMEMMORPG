@@ -7,7 +7,7 @@ if(!$session.StartsWith($allowed+'\',[StringComparison]::OrdinalIgnoreCase)){thr
 $records=@(Get-Content -Raw -Encoding UTF8 (Join-Path $session 'processes.json') | ConvertFrom-Json)
 $old=$records | Where-Object role -eq ClientA
 $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$old.pid)
-if($live){if($live.ExecutablePath -ine $old.executable -or !$live.CommandLine.Contains($old.project) -or !$live.CommandLine.Contains($old.userDir)){throw 'Old client identity mismatch'};Stop-Process -Id $old.pid}
+if($live){if([IO.Path]::GetFullPath($live.ExecutablePath) -ine [IO.Path]::GetFullPath($old.executable) -or !$live.CommandLine.Contains($old.project) -or !$live.CommandLine.Contains($old.userDir)){throw 'Old client identity mismatch'};Stop-Process -Id $old.pid}
 $newUser=Join-Path $session ('ClientA-Reconnect-'+(Get-Date -Format 'HHmmss'));New-Item -ItemType Directory -Path $newUser | Out-Null
 $log=Join-Path $newUser 'ClientA.log'
 $argsNew=@($old.arguments | ForEach-Object {if($_ -like '-UserDir=*'){'-UserDir="'+$newUser+'"'}elseif($_ -like '-abslog=*'){'-abslog="'+$log+'"'}elseif($_ -like '-ModelContextProtocolPort=*'){'-ModelContextProtocolPort=18413'}else{$_}})

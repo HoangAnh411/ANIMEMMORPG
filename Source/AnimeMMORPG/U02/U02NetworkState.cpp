@@ -66,12 +66,12 @@ void AU02NetworkState::ProcessFixture()
     FString File,Command;if(!FParse::Value(FCommandLine::Get(),TEXT("U02FCommands="),File)||!FFileHelper::LoadFileToString(Command,*File)||Command==LastFixtureCommand)return;LastFixtureCommand=Command;
     TArray<FString> A;Command.ParseIntoArrayWS(A);if(A.Num()<2)return;const FString Mode=A[1];auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->DrainAt(GetWorld()->GetTimeSeconds());
     if(Mode==TEXT("shield")){for(TActorIterator<AU02LabDummy> It(GetWorld());It;++It)It->Vital->AddFixtureShield(1,40,GetWorld()->GetTimeSeconds()+60,GetWorld()->GetTimeSeconds());}
-    else if(Mode==TEXT("crit"))W->FixtureCritRoll=0;
+    else if(Mode==TEXT("crit"))W->SetLabCritRoll(0);
     else if(Mode==TEXT("reset"))W->ResetLabDummies();
-    else if(Mode==TEXT("concurrent")){for(TActorIterator<AU01Character> It(GetWorld());It;++It)It->Combat->SubmitAttackIntent(It->Combat->GetLastCommand()+1,0,0);}
+    else if(Mode==TEXT("concurrent")){for(TActorIterator<AU01Character> It(GetWorld());It;++It){const bool Locked=(It->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Control))!=0;It->GetU01Movement()->SetControlLocked(false);It->Combat->SetControlPlaying(true);It->Combat->SubmitAttackIntent(It->Combat->GetLastCommand()+1,0,0);It->GetU01Movement()->SetControlLocked(Locked);It->Combat->SetControlPlaying(!Locked);}}
     else
     {
-        W->FixtureCritRoll=1.-1e-9;W->ResetLabDummies();TArray<AU01Character*> P;for(TActorIterator<AU01Character> It(GetWorld());It;++It)P.Add(*It);P.Sort([](const AU01Character& X,const AU01Character& Y){return X.NetworkPawnId<Y.NetworkPawnId;});
+        W->SetLabCritRoll(1.-1e-9);W->ResetLabDummies();TArray<AU01Character*> P;for(TActorIterator<AU01Character> It(GetWorld());It;++It)P.Add(*It);P.Sort([](const AU01Character& X,const AU01Character& Y){return X.NetworkPawnId<Y.NetworkPawnId;});
         const int Lane=Mode==TEXT("wall")?1:Mode==TEXT("partial")?2:0;
         for(int I=0;I<P.Num();++I){auto* C=P[I];C->GetU01Movement()->ResetFixtureState();FVector Pos(Mode==TEXT("miss")?-450:0,-6000-1000*Lane+(I?50:-50),110);C->SetActorLocation(Pos,false,nullptr,ETeleportType::TeleportPhysics);C->SetActorRotation(FRotator::ZeroRotator);C->GetU01Movement()->ForceReplicationUpdate();C->GetU01Movement()->ForceClientAdjustment();if(auto* PC=Cast<APlayerController>(C->GetController())){PC->SetControlRotation(FRotator::ZeroRotator);PC->ClientSetLocation(Pos,FRotator::ZeroRotator);}}
         if(Mode==TEXT("lethal")){for(TActorIterator<AU02LabDummy> It(GetWorld());It;++It){FHitCandidate H;H.Id.Target={It->NetworkPawnId,It->LifeGeneration};for(int I=0;I<9;++I)It->Vital->ApplyResolved(H,1,.5);}}

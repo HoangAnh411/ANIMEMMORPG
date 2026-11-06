@@ -16,6 +16,7 @@ $project=(Resolve-Path -LiteralPath $CloneProject).Path
 if($project -notlike ("*\Artifacts\U02\"+$Stage+"\Source\*")){throw 'Isolated stage clone required'}
 & python (Join-Path $PSScriptRoot 'PrepareFCloneConfig.py') --root (Split-Path $project)
 if($LASTEXITCODE -ne 0){throw 'Clone config guard failed'}
+if(@(git -C (Split-Path $project) status --porcelain --untracked-files=no).Count){throw 'Clone tracked tree is dirty'}
 $sha=git -C (Split-Path $project) rev-parse HEAD
 $exe='D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe'
 $run=Join-Path $OutputRoot ($(if($ReproducePython){'PythonBefore-'}else{'Session-'})+(Get-Date -Format 'yyyyMMdd-HHmmss'))

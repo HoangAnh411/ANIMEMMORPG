@@ -62,7 +62,7 @@ try:
  focus('ClientB');attack();consensus('ClientBRealAttack',1);focus('ClientA')
  # An accepted attack continues while its client enters menu and the peer resumes.
  active.attack(True);time.sleep(.04);active.attack(False);active.press('Escape',True);time.sleep(.03);active.press('Escape',False);wait(.5);focus('ClientB');consensus('MenuFocusDoesNotPause',1)
- setup('lethal');consensus('LethalPrepared',0);setup('concurrent');wait(1);s=consensus('ConcurrentLethal',2);check('Death once per target',sum(t['dead'] and t['deathCount']==1 for t in s['targets'])==2);check('Sorted lethal only first source per target',len({r['source'] for r in s['results'][-2:]})==1)
+ setup('lethal');consensus('LethalPrepared',0);before={p['id']:p['accepted'] for p in state('Server')['pawns']};setup('concurrent');wait(1);s=consensus('ConcurrentLethal',2);check('Both concurrent fixture sources accepted',all(p['accepted']==before[p['id']]+1 for p in s['pawns']));check('Death once per target',sum(t['dead'] and t['deathCount']==1 for t in s['targets'])==2);check('Sorted lethal only first source per target',len({r['source'] for r in s['results'][-2:]})==1)
  active.console('U02NetProbe nan');wait(1);consensus('NonfiniteAim',0)
  # Production API has no client-supplied HP/damage fields; native reflected-schema test verifies this.
  active.console('U02NetProbe damage');wait(.5);consensus('NoDamagePayloadAPI',0)

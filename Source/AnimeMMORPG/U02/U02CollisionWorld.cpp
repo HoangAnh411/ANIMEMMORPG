@@ -369,7 +369,7 @@ bool UU02CollisionWorld::SetLabCritRoll(double Roll)
 void UU02CollisionWorld::ResetLabDummies()
 {
 #if !UE_BUILD_SHIPPING
-    if(!GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab"))||GetWorld()->GetNetMode()==NM_Client)return;
+    if((!GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab"))&&!GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab")))||GetWorld()->GetNetMode()==NM_Client)return;
     DrainAt(GetWorld()->GetTimeSeconds());
     for(TActorIterator<AU02LabDummy> It(GetWorld());It;++It)It->ResetLabCombat();
 #endif
