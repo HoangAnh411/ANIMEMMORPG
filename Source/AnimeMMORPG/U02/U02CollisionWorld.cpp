@@ -16,6 +16,7 @@
 #include "UObject/UObjectIterator.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
+#include "Misc/Paths.h"
 #include "DrawDebugHelpers.h"
 #include "HAL/IConsoleManager.h"
 #include "GameFramework/PlayerController.h"
@@ -286,12 +287,12 @@ void UU02CollisionWorld::DrawSelectedAction()
     for(const auto& D:DebugHurts)
     {
         FColor Color=D.Result==TEXT("CONFIRMED")?FColor::Green:D.Result==TEXT("BLOCKED")?FColor::Red:D.Result==TEXT("OUTSIDE")?FColor::Silver:FColor::Yellow;
-        DrawDebugBox(GetWorld(),AttackCenter(D.Feet,D.Yaw),FVector(100,60,90),FRotator(0,D.Yaw,0).Quaternion(),FColor::Cyan,false,0,0,1);
-        DrawDebugSphere(GetWorld(),D.Center,D.Radius,24,Color,false,0,0,1.5f);
-        DrawDebugSphere(GetWorld(),D.Origin,3,8,FColor::Magenta,false,0);DrawDebugSphere(GetWorld(),D.Nearest,3,8,FColor::Yellow,false,0);
-        DrawDebugLine(GetWorld(),D.Origin,D.Nearest,Color,false,0,0,3);
+        DrawDebugBox(GetWorld(),AttackCenter(D.Feet,D.Yaw),FVector(100,60,90),FRotator(0,D.Yaw,0).Quaternion(),FColor::Cyan,false,0,1,1);
+        DrawDebugSphere(GetWorld(),D.Center,D.Radius,24,Color,false,0,1,1.5f);
+        DrawDebugSphere(GetWorld(),D.Origin,3,8,FColor::Magenta,false,0,1);DrawDebugSphere(GetWorld(),D.Nearest,3,8,FColor::Yellow,false,0,1);
+        DrawDebugLine(GetWorld(),D.Origin,D.Nearest,Color,false,0,1,3);
         DrawDebugString(GetWorld(),D.Center+FVector(0,0,D.Radius+10),FString::Printf(TEXT("%s:%llu HB%u %s"),*D.Hit.Target.Pawn.ToString().Left(8),D.Hit.Target.Generation,D.Hurtbox,*D.Result),nullptr,Color,0,true);
-        if(D.bHasBlock){DrawDebugPoint(GetWorld(),D.BlockPoint,15,FColor::Red,false,0);DrawDebugString(GetWorld(),D.BlockPoint+FVector(0,0,10),TEXT("WALL BLOCK"),nullptr,FColor::Red,0);}
+        if(D.bHasBlock){DrawDebugPoint(GetWorld(),D.BlockPoint,15,FColor::Red,false,0,1);DrawDebugString(GetWorld(),D.BlockPoint+FVector(0,0,10),FString::Printf(TEXT("WALL BLOCK %s"),*FPaths::GetCleanFilename(D.Wall)),nullptr,FColor::Red,0);}
     }
 }
 namespace
@@ -307,7 +308,7 @@ FAutoConsoleCommandWithWorldAndArgs CornerU02Fixture(TEXT("U02CornerCase"),TEXT(
         C->GetU01Movement()->ResetFixtureState();
         FVector Feet(162.889,-9181.335,2.15);double Yaw=90.720003351569176;
         if(Args.Num()&&Args[0].Equals(TEXT("blocked"),ESearchCase::IgnoreCase)){Feet.X=120;Yaw=80.6;}
-        if(Args.Num()&&Args[0].Equals(TEXT("outside"),ESearchCase::IgnoreCase)){Feet.Y=-9400;Yaw=90;}
+        if(Args.Num()&&Args[0].Equals(TEXT("outside"),ESearchCase::IgnoreCase)){Feet.X=400;Yaw=90;}
         C->SetActorLocation(Feet+FVector(0,0,C->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()),false,nullptr,ETeleportType::TeleportPhysics);
         C->SetActorRotation(FRotator(0,Yaw,0));PC->SetControlRotation(FRotator(0,Yaw,0));C->GetU01Movement()->SetMovementMode(MOVE_Walking);
         W->GetSubsystem<UU02CollisionWorld>()->SelectDebugAction(0);
