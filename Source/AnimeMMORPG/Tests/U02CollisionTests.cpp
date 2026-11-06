@@ -243,7 +243,8 @@ bool FU02DCornerWorld::RunTest(const FString&)
         W.Dummy(FVector(150,-9000,0));
         FVector Feet(Blocked?120:162.889,-9181.335,2.15);
         W.Source->SetActorLocation(Feet+FVector(0,0,96),false,nullptr,ETeleportType::TeleportPhysics);
-        W.Resolver->DrainAt(W.Now());W.Attack(Blocked?80.6:90.720003351569176);
+        // Establish a post-teleport snapshot pair before the NEW action; do not sweep the teleport.
+        W.TickTestWorld(1.f/60);W.TickTestWorld(1.f/60);W.Resolver->DrainAt(W.Now());W.Attack(Blocked?80.6:90.720003351569176);
         const double Start=W.Now();for(double T=Step;T<.5;T+=Step)W.Resolver->DrainAt(Start+T);
         W.Resolver->DrainAt(Start+.5);
         TestEqual(TEXT("Review corner invariant under collider registration and update step"),W.Resolver->Confirmed.Num(),Blocked?0:1);
