@@ -98,7 +98,6 @@ void UU02CollisionWorld::Capture(double Now)
     }
     for(auto& R:Hurts)if(auto* H=R.Component.Get())
     {R.Previous=R.Current;R.Current={H->GetComponentLocation(),H->GetSubject(),H->ContinuityEpoch,H->GetScaledSphereRadius()};Ledger.RegisterLife(R.Current.Life);}
-    for(const auto& R:Hurts)if(auto* H=R.Component.Get())if(auto* V=H->GetOwner()->FindComponentByClass<UU02VitalComponent>())V->Refresh(Now);
     CaptureEnvironment();
 }
 void UU02CollisionWorld::CaptureEnvironment()
@@ -239,6 +238,9 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     FString SHA;FParse::Value(FCommandLine::Get(),TEXT("U02SourceSHA="),SHA);
     UE_LOG(LogU02Collision,Display,TEXT("U02D_CONFIRMED sourceSHA=%s world=%s time=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u damage=%d crit=%d roll=%.17g absorbed=%d hpBefore=%d hpAfter=%d death=%d"),
         *SHA,*GetWorld()->GetPathName(),C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,Result.Damage,Result.bCrit,Roll,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied);
+    FString Order;for(uint64 Id:Result.ShieldOrder)Order+=FString::Printf(TEXT("%llu,"),Id);
+    UE_LOG(LogU02Collision,Display,TEXT("U02E_DAMAGE sourceSHA=%s timestamp=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u raw=60 attack=%.17g roll=%.17g crit=%d damage=%d absorbed=%d hpBefore=%d hpAfter=%d death=%d shieldOrder=%s"),
+        *SHA,C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,SourceVital->GetAttackFactor(),Roll,Result.bCrit,Result.Damage,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied,*Order);
     OnGeometryConfirmed.Broadcast(C);return true;
 }
 void UU02CollisionWorld::DrainAt(double Now)
@@ -252,8 +254,10 @@ void UU02CollisionWorld::DrainAt(double Now)
     for(const auto& P:Batch)CollectHitCandidates(P,Candidates);
     Candidates.Sort(CandidateLess);
     for(const auto& C:Candidates)ResolveHit(C);
+    // Expire at frame endpoint only AFTER sorted earlier hit timestamps consumed shields.
+    for(const auto& R:Hurts)if(auto* H=R.Component.Get())if(auto* V=H->GetOwner()->FindComponentByClass<UU02VitalComponent>())V->Refresh(Now);
     if(GEngine&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))GEngine->AddOnScreenDebugMessage(290001,.15f,FColor::Yellow,
-        FString::Printf(TEXT("U02-E confirmed | hits %d | queries %llu | blocked %llu | crit %s"),Confirmed.Num(),Queries,Blocked,FixtureCritRoll>=0?TEXT("FIXTURE controlled"):TEXT("server 5%")));
+        FString::Printf(TEXT("U02-E confirmed | hits %d | queries %llu | blocked %llu | crit %s"),Confirmed.Num(),Queries,Blocked,FixtureCritRoll>=.05?TEXT("FIXTURE CRIT OFF"):FixtureCritRoll>=0?TEXT("FIXTURE CRIT FORCED"):TEXT("server 5%")));
     DrawVitalHUD();
 }
 
@@ -340,7 +344,7 @@ bool UU02CollisionWorld::SetLabCritRoll(double Roll)
 #else
     const bool Lab=GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab"))||GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab"));
     if(!Lab||GetWorld()->GetNetMode()==NM_Client||!FMath::IsFinite(Roll)||(Roll!=-1&&(Roll<0||Roll>=1)))return false;
-    FixtureCritRoll=Roll;UE_LOG(LogU02Collision,Display,TEXT("U02E_FIXTURE critRoll=%.17g productionCrit=5%%"),Roll);return true;
+    FixtureCritRoll=Roll;UE_LOG(LogU02Collision,Display,TEXT("U02E_FIXTURE critRoll=%.17g mode=%s productionCrit=5%%"),Roll,Roll>=.05?TEXT("CRIT_OFF"):Roll>=0?TEXT("CRIT_FORCED"):TEXT("NORMAL"));return true;
 #endif
 }
 void UU02CollisionWorld::ResetLabDummies()

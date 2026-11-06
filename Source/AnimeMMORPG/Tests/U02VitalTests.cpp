@@ -1,5 +1,6 @@
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
+#include <limits>
 #include "Tests/AutomationCommon.h"
 #include "U02/U02VitalModel.h"
 #include "U02/U02VitalComponent.h"
@@ -57,7 +58,7 @@ bool FU02EDamage::RunTest(const FString&)
     TestEqual(TEXT("No negative defense"),FVitalModel::Calculate(60,1,-1,false),-1);
     FVitalModel M;auto Crit=M.Apply(60,1,.049999,0);auto Normal=M.Apply(60,1,.05,1);
     TestTrue(TEXT("5 percent strict threshold"),Crit.bCrit&&!Normal.bCrit&&Crit.Damage==90&&Normal.Damage==60);
-    TestFalse(TEXT("Nonfinite roll rejected"),M.Apply(60,1,TNumericLimits<double>::QuietNaN(),2).bApplied);return true;
+    TestFalse(TEXT("Nonfinite roll rejected"),M.Apply(60,1,std::numeric_limits<double>::quiet_NaN(),2).bApplied);return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02EShields,"AnimeMMORPG.U02.E.ShieldReplaceOrderExpiryAndOverkill",U02EFlags)
 bool FU02EShields::RunTest(const FString&)
@@ -113,5 +114,14 @@ bool FU02ECancel::RunTest(const FString&)
     TestEqual(TEXT("No damage / RNG after startup cancellation"),D->Vital->GetSnapshot().HP,600);TestEqual(TEXT("No roll"),Cancel.Resolver->CritRolls,uint64(0));
     FEWorld Active(*this);auto* Target=Active.Dummy();Active.Attack();for(int I=0;I<21;++I)Active.TickTestWorld(1.f/120);
     TestFalse(TEXT("Active guard cannot cancel"),Active.A->Combat->CancelAction(ECancel::Guard));Active.Resolver->DrainAt(Active.Now()+.2);TestEqual(TEXT("One damage remains"),Target->Vital->GetSnapshot().HP,540);return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02EShieldClock,"AnimeMMORPG.U02.E.ShieldExpiryUsesHitTimestampBeforeFrameEnd",U02EFlags)
+bool FU02EShieldClock::RunTest(const FString&)
+{
+    FEWorld W(*this);auto* D=W.Dummy();D->Vital->AddFixtureShield(1,60,W.Now()+.2,W.Now());W.Attack();W.Resolver->DrainAt(W.Now()+.5);
+    TestEqual(TEXT("Hit at .16 absorbs shield alive then, even though endpoint .5 is after expiry"),D->Vital->GetSnapshot().HP,600);
+    TestEqual(TEXT("One shield consumption"),W.Resolver->DamageResults.Num(),1);
+    if(!W.Resolver->DamageResults.IsEmpty())TestEqual(TEXT("Absorbed60"),W.Resolver->DamageResults[0].Result.Absorbed,60);
+    return true;
 }
 #endif

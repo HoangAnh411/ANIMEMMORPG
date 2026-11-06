@@ -27,6 +27,7 @@ FDamageResult UU02VitalComponent::ApplyResolved(const FHitCandidate& Hit,double 
     if(!IsAlive(Hit.Id.Target))return {};
     auto R=State.Apply(FAttack1Definition().RawDamage,Attack,Roll,Hit.TimestampSeconds);
     if(!R.bApplied)return R;
+    Publish(Hit.TimestampSeconds);
     if(R.bDied)
     {
         // Ledger invalidation happens synchronously BEFORE the next sorted event.

@@ -273,7 +273,14 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("command"),LastCommand); J->SetNumberField(TEXT("intervals"),IntervalCount);
     J->SetNumberField(TEXT("lastSliceBegin"),LastInterval.BeginSeconds); J->SetNumberField(TEXT("lastSliceEnd"),LastInterval.EndSeconds);
     if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())
-    {J->SetNumberField(TEXT("geometryConfirmed"),W->Confirmed.Num());J->SetNumberField(TEXT("geometryQueries"),W->Queries);J->SetNumberField(TEXT("geometryBlocked"),W->Blocked);J->SetNumberField(TEXT("geometryUnsupportedShapes"),W->UnsupportedObstructions);}
+    {J->SetNumberField(TEXT("geometryConfirmed"),W->Confirmed.Num());J->SetNumberField(TEXT("geometryQueries"),W->Queries);J->SetNumberField(TEXT("geometryBlocked"),W->Blocked);J->SetNumberField(TEXT("geometryUnsupportedShapes"),W->UnsupportedObstructions);
+        J->SetNumberField(TEXT("damageResults"),W->DamageResults.Num());J->SetNumberField(TEXT("critRolls"),W->CritRolls);J->SetNumberField(TEXT("fixtureCritRoll"),W->FixtureCritRoll);
+        if(!W->DamageResults.IsEmpty())
+        {
+            const auto& R=W->DamageResults.Last();J->SetNumberField(TEXT("lastDamage"),R.Result.Damage);J->SetNumberField(TEXT("lastAbsorbed"),R.Result.Absorbed);
+            J->SetNumberField(TEXT("lastTargetHP"),R.Result.AfterHP);J->SetBoolField(TEXT("lastCrit"),R.Result.bCrit);J->SetBoolField(TEXT("lastDeath"),R.Result.bDied);
+            J->SetStringField(TEXT("lastDamageTarget"),R.Hit.Id.Target.Pawn.ToString());J->SetNumberField(TEXT("lastDamageTargetLife"),R.Hit.Id.Target.Generation);
+        }}
     if(Character()&&Character()->Vital)J->SetObjectField(TEXT("vital"),Character()->Vital->GetDiagnostics());
     return J;
 }
