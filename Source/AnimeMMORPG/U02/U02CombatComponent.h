@@ -23,6 +23,10 @@ struct FU02RepCombatSnapshot
     UPROPERTY() double AimYawDegrees = 0;
     UPROPERTY() double TurnFromYaw = 0;
     UPROPERTY() double TurnStartSeconds = 0;
+    UPROPERTY() uint64 LastCommand = 0;
+    UPROPERTY() uint64 Accepted = 0;
+    UPROPERTY() uint64 Rejected = 0;
+    UPROPERTY() uint8 RejectReason = 0;
     UPROPERTY() bool bLocked = false;
     UPROPERTY() bool bYawLocked = false;
 };
@@ -43,6 +47,8 @@ public:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
     void SubmitAttackIntent(uint64 CommandSequence, double LocalInputSeconds, double AimYawDegrees);
     void SetControlPlaying(bool bPlaying);
+    void SendNetworkFixtureProbe(const FString& Kind); // opt-in lab only
+    uint64 GetLastCommand() const {return LastCommand;}
     bool CancelAction(AnimeMMORPG::U02::ECancel Reason);
     bool ResetLabCombat();
     void LostGround();
@@ -56,10 +62,11 @@ public:
     uint64 AcceptedCount = 0, RejectedCount = 0, IntervalCount = 0;
 private:
     friend struct FU02CombatTestAccess;
+    friend struct FU02FTestAccess;
     friend class UU02CollisionWorld;
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepCombatSnapshot Snapshot;
     UFUNCTION() void OnRep_Snapshot();
-    UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw);
+    UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life);
     UFUNCTION(Server, Reliable) void ServerControlPlaying(bool bPlaying);
     UFUNCTION(Server, Unreliable) void ServerAim(double Yaw);
     TUniquePtr<AnimeMMORPG::U02::FActionModel> Model;
@@ -68,6 +75,7 @@ private:
     AnimeMMORPG::U02::FStartupTurn StartupTurn;
     double LastAimSend = -1;
     uint64 LastCommand = 0;
+    uint64 LastSentCommand=0,LastSentLife=0;
     AnimeMMORPG::U02::EReject LastReject = AnimeMMORPG::U02::EReject::None;
     AnimeMMORPG::U02::FActiveSlice LastInterval;
     void HandleAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, double Now);

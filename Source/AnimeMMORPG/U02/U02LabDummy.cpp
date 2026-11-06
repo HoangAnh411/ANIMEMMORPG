@@ -1,4 +1,5 @@
 #include "U02LabDummy.h"
+#include "Net/UnrealNetwork.h"
 #include "U02HurtboxComponent.h"
 #include "U02VitalComponent.h"
 #include "U02CollisionWorld.h"
@@ -7,6 +8,7 @@
 #include "UObject/ConstructorHelpers.h"
 AU02LabDummy::AU02LabDummy()
 {
+    bReplicates=true;bAlwaysRelevant=true;SetReplicateMovement(true);
     Vital=CreateDefaultSubobject<UU02VitalComponent>(TEXT("U02Vital"));
     RootComponent=CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
     Body=CreateDefaultSubobject<UU02HurtboxComponent>(TEXT("Body"));Body->SetupAttachment(RootComponent);Body->SetRelativeLocation(FVector(0,0,70));Body->InitSphereRadius(35);Body->StableHurtboxId=1;
@@ -32,3 +34,8 @@ bool AU02LabDummy::ResetLabCombat()
     Body->SetFixtureSubject({NetworkPawnId,LifeGeneration});Head->SetFixtureSubject({NetworkPawnId,LifeGeneration});
     GetWorld()->GetSubsystem<UU02CollisionWorld>()->RebaseResetSubject(this);return true;
 }
+
+void AU02LabDummy::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{Super::GetLifetimeReplicatedProps(OutLifetimeProps);DOREPLIFETIME(AU02LabDummy,NetworkPawnId);DOREPLIFETIME(AU02LabDummy,LifeGeneration);}
+void AU02LabDummy::OnRep_Identity()
+{Body->SetFixtureSubject({NetworkPawnId,LifeGeneration});Head->SetFixtureSubject({NetworkPawnId,LifeGeneration});}

@@ -1,10 +1,12 @@
 #include "U02CombatComponent.h"
+#include <limits>
 #include "U02CollisionWorld.h"
 #include "U02VitalComponent.h"
 #include "U01/U01Character.h"
 #include "U01/U01PlayerController.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/World.h"
+#include "EngineUtils.h"
 #include "Engine/Engine.h"
 #include "GameFramework/GameStateBase.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -67,10 +69,13 @@ void UU02CombatComponent::SubmitAttackIntent(uint64 Sequence, double LocalInputS
 {
     if (!Character()) return;
     if (Character()->HasAuthority()) HandleAttack(Sequence,LocalInputSeconds,Yaw,GetWorld()->GetTimeSeconds());
-    else ServerAttack(Sequence,LocalInputSeconds,Yaw);
+    else {LastSentCommand=Sequence;LastSentLife=Snapshot.LifeGeneration;ServerAttack(Sequence,LocalInputSeconds,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration);}
 }
-void UU02CombatComponent::ServerAttack_Implementation(uint64 Sequence, double LocalInputSeconds, double Yaw)
+void UU02CombatComponent::ServerAttack_Implementation(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life)
 {
+    if(!Model||!Character()||!Character()->HasAuthority())return;
+    if(Pawn!=Model->GetLife().Pawn||Life!=Model->GetLife().Generation)
+    {++RejectedCount;LastReject=EReject::StaleCommand;Publish(GetWorld()->GetTimeSeconds(),true);Trace(TEXT("RejectedLife"),GetWorld()->GetTimeSeconds());return;}
     HandleAttack(Sequence,LocalInputSeconds,Yaw,GetWorld()->GetTimeSeconds());
 }
 void UU02CombatComponent::SetControlPlaying(bool bPlaying)
@@ -209,6 +214,7 @@ void UU02CombatComponent::Publish(double Now, bool bForce)
     Snapshot.ActionSequence = S.Action.Sequence; Snapshot.Phase = uint8(S.Phase);
     Snapshot.StartSeconds = S.StartSeconds; Snapshot.ServerSeconds = Now; Snapshot.AimYawDegrees = S.AimYawDegrees;
     Snapshot.TurnFromYaw=StartupTurn.FromYaw; Snapshot.TurnStartSeconds=StartupTurn.SegmentStart;
+    Snapshot.LastCommand=LastCommand;Snapshot.Accepted=AcceptedCount;Snapshot.Rejected=RejectedCount;Snapshot.RejectReason=uint8(LastReject);
     Snapshot.bLocked = S.bCombatLocked; Snapshot.bYawLocked = S.bYawLocked; ++Snapshot.Revision;
     if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())W->ObserveCombat(this);
     ApplyMotorSnapshot(); Character()->ForceNetUpdate();
@@ -268,8 +274,8 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("turnStart"),Snapshot.TurnStartSeconds);
     J->SetNumberField(TEXT("actionSeconds"),GetWorld()->GetTimeSeconds()-Snapshot.StartSeconds);
     J->SetNumberField(TEXT("yaw"),Snapshot.AimYawDegrees); J->SetBoolField(TEXT("locked"),Snapshot.bLocked);
-    J->SetBoolField(TEXT("yawLocked"),Snapshot.bYawLocked); J->SetNumberField(TEXT("accepted"),AcceptedCount);
-    J->SetNumberField(TEXT("rejected"),RejectedCount); J->SetNumberField(TEXT("lastReject"),uint8(LastReject));
+    J->SetBoolField(TEXT("yawLocked"),Snapshot.bYawLocked); J->SetNumberField(TEXT("accepted"),Model?AcceptedCount:Snapshot.Accepted);
+    J->SetNumberField(TEXT("rejected"),Model?RejectedCount:Snapshot.Rejected); J->SetNumberField(TEXT("lastReject"),Model?uint8(LastReject):Snapshot.RejectReason);
     J->SetNumberField(TEXT("command"),LastCommand); J->SetNumberField(TEXT("intervals"),IntervalCount);
     J->SetNumberField(TEXT("lastSliceBegin"),LastInterval.BeginSeconds); J->SetNumberField(TEXT("lastSliceEnd"),LastInterval.EndSeconds);
     if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())
@@ -299,4 +305,17 @@ void UU02CombatComponent::Trace(const TCHAR* Event, double GameplaySeconds, cons
     J->SetStringField(TEXT("detail"),Detail);
     FString Text; FJsonSerializer::Serialize(J,TJsonWriterFactory<TCHAR,TCondensedJsonPrintPolicy<TCHAR>>::Create(&Text));
     UE_LOG(LogU02Combat,Display,TEXT("U02B_EVENT %s"),*Text);
+}
+
+void UU02CombatComponent::SendNetworkFixtureProbe(const FString& Kind)
+{
+#if !UE_BUILD_SHIPPING
+    if(!FParse::Param(FCommandLine::Get(),TEXT("U02FProbe"))||!Character()||!Character()->IsLocallyControlled()||!GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab")))return;
+    if(Kind==TEXT("duplicate"))ServerAttack(LastSentCommand,GetWorld()->GetTimeSeconds(),0,Snapshot.PawnId,LastSentLife);
+    if(Kind==TEXT("stale"))ServerAttack(LastSentCommand+1,GetWorld()->GetTimeSeconds(),0,Snapshot.PawnId,Snapshot.LifeGeneration-1);
+    if(Kind==TEXT("nan"))ServerAttack(LastSentCommand+1,GetWorld()->GetTimeSeconds(),std::numeric_limits<double>::quiet_NaN(),Snapshot.PawnId,Snapshot.LifeGeneration);
+    if(Kind==TEXT("other"))for(TActorIterator<AU01Character> It(GetWorld());It;++It)if(*It!=Character()){It->Combat->ServerAttack(1,0,0,It->NetworkPawnId,It->Combat->Snapshot.LifeGeneration);break;}
+    // No damage/HP payload exists in the gameplay RPC schema.
+    Trace(TEXT("ClientProbe"),GetWorld()->GetTimeSeconds(),Kind);
+#endif
 }

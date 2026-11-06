@@ -1,4 +1,5 @@
 #include "U02CollisionWorld.h"
+#include "U02NetworkState.h"
 #include "U02CombatComponent.h"
 #include "U02VitalComponent.h"
 #include "U02LabDummy.h"
@@ -249,6 +250,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     const auto Result=TargetVital->ApplyResolved(C,SourceVital->GetAttackFactor(),Roll);
     if(!Result.bApplied)return false;
     DamageResults.Add({C,Result,Roll});
+    for(TActorIterator<AU02NetworkState> It(GetWorld());It;++It)It->Confirm(DamageResults.Last());
     if(const auto* Pawn=Cast<APawn>(SourceVital->GetOwner()))if(Pawn->IsLocallyControlled())HUDTarget=TargetVital->GetOwner();
     Confirmed.Add(C);
     for(auto& D:DebugHurts)if(D.Hit==C.Id&&D.Hurtbox==C.HurtboxId)D.Result=TEXT("CONFIRMED");
