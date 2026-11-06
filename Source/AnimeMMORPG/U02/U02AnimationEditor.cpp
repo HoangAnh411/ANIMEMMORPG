@@ -93,7 +93,24 @@ FString UU02AnimationEditor::BuildCAssets()
     TArray<TArray<FTransform>> Keys;
     for(int32 K=0;K<4;++K)
     {
-        auto Local=Base;TArray<FTransform> CS;CS.SetNum(Local.Num());
+        auto Local=Base;
+        // Small preparation/counter-rotation, authored only for attack 1. Root stays fixed.
+        const double Twist[]={0.,-12.,10.,0.};
+        const double Crouch[]={0.,7.,4.,0.};
+        auto RotateLocal=[&](const TCHAR* Name,FRotator Rotation)
+        {
+            const int32 I=Ref.FindBoneIndex(Name);
+            if(I!=INDEX_NONE)Local[I].SetRotation((Local[I].GetRotation()*Rotation.Quaternion()).GetNormalized());
+        };
+        RotateLocal(TEXT("spine_01"),FRotator(0,Twist[K]*.35,0));
+        RotateLocal(TEXT("spine_02"),FRotator(0,Twist[K]*.35,0));
+        RotateLocal(TEXT("spine_03"),FRotator(0,Twist[K]*.30,0));
+        RotateLocal(TEXT("clavicle_l"),FRotator(0,-Twist[K]*.25,0));
+        RotateLocal(TEXT("thigh_l"),FRotator(Crouch[K],0,-Crouch[K]*.3));
+        RotateLocal(TEXT("thigh_r"),FRotator(-Crouch[K],0,Crouch[K]*.3));
+        RotateLocal(TEXT("calf_l"),FRotator(-Crouch[K]*.5,0,0));
+        RotateLocal(TEXT("calf_r"),FRotator(Crouch[K]*.5,0,0));
+        TArray<FTransform> CS;CS.SetNum(Local.Num());
         auto Recompute=[&](){for(int32 I=0;I<Local.Num();++I){int32 P=Ref.GetParentIndex(I);CS[I]=P<0?Local[I]:Local[I]*CS[P];}};
         Recompute();
         const FVector Shoulder=CS[Upper].GetLocation(),Goal=Wrists[K],Pole(-65,-15,135);
@@ -152,7 +169,7 @@ FString UU02AnimationEditor::BuildCAssets()
     auto* Slot=NewObject<UAnimGraphNode_Slot>(Graph);Graph->AddNode(Slot,false,false);Slot->CreateNewGuid();Slot->Node.SlotName=TEXT("DefaultSlot");Slot->PostPlacedNewNode();Slot->AllocateDefaultPins();
     auto* Arm=NewObject<UAnimGraphNode_LayeredBoneBlend>(Graph);Graph->AddNode(Arm,false,false);Arm->CreateNewGuid();
     Arm->Node.LayerSetup.SetNum(1);Arm->Node.BlendWeights.SetNum(1);Arm->Node.BlendWeights[0]=1;
-    FBranchFilter ArmFilter;ArmFilter.BoneName=TEXT("upperarm_r");ArmFilter.BlendDepth=0;Arm->Node.LayerSetup[0].BranchFilters.Add(ArmFilter);
+    FBranchFilter ArmFilter;ArmFilter.BoneName=TEXT("pelvis");ArmFilter.BlendDepth=0;Arm->Node.LayerSetup[0].BranchFilters.Add(ArmFilter);
     Arm->Node.bMeshSpaceRotationBlend=true;Arm->PostPlacedNewNode();Arm->AllocateDefaultPins();
     auto* Alpha=NewObject<UK2Node_VariableGet>(Graph);Graph->AddNode(Alpha,false,false);Alpha->CreateNewGuid();Alpha->VariableReference.SetSelfMember(TEXT("AttackBlendWeight"));Alpha->PostPlacedNewNode();Alpha->AllocateDefaultPins();
     if(!Graph->GetSchema()->TryCreateConnection(Alpha->FindPin(TEXT("AttackBlendWeight")),Arm->FindPin(TEXT("BlendWeights_0"))))return TEXT("ERROR: attack weight pin");

@@ -176,7 +176,7 @@ def main():
             (11.5,'jump',down('Space')),(11.56,'jump release',up('Space')),(11.65,'attack rejected airborne',click),
             (11.8,'menu while airborne',down('Escape')),(11.85,'Escape release',up('Escape')),(12.3,'Resume click airborne menu',resume),
             (13.,'final attack',click)]
-        frames=[];meta['utc']=datetime.now(timezone.utc).isoformat();start=time.perf_counter();i=0;next_frame=start
+        frames=[]; encoded_frames=0; previous_frame=None;meta['utc']=datetime.now(timezone.utc).isoformat();start=time.perf_counter();i=0;next_frame=start
         while time.perf_counter()-start<14.5:
             elapsed=time.perf_counter()-start
             while i<len(actions) and elapsed>=actions[i][0]:
@@ -188,10 +188,16 @@ def main():
             else:assert 7.0<elapsed<8.1,'Unexpected focus fixture activation'
             assert client.bounds()==bounds,'Capture target moved/resized'
             frame=cv2.cvtColor(np.array(ImageGrab.grab(bbox=bounds,all_screens=True)),cv2.COLOR_RGB2BGR)
-            writer.write(frame);frames.append(time.perf_counter()-start)
+            captured=time.perf_counter()-start
+            while encoded_frames/30 < captured:
+                writer.write(previous_frame if previous_frame is not None else frame)
+                encoded_frames+=1
+            previous_frame=frame;frames.append(captured)
             next_frame+=1/30
             if next_frame>time.perf_counter():time.sleep(next_frame-time.perf_counter())
         meta['completed']=i==len(actions);meta['frames']=frames;meta['captureSeconds']=time.perf_counter()-start
+        meta['encodedFrames']=encoded_frames;meta['encodedFPS']=30;meta['videoSeconds']=encoded_frames/30
+        meta['timestampPolicy']='CFR30 previous observed image held until next capture; no acceleration; gaps remain visible'
         meta['finalMetrics']=client.metrics()
         ImageGrab.grab(bbox=bounds,all_screens=True).save(args.out/'Final.png')
     except Exception as error:

@@ -1,3 +1,5 @@
+> Ph?n h?i m?i c?a ng??i d?ng: C ch?a nghi?m thu. Revision chuy?n yaw startup v? blockout ?ang th?c hi?n; source 61be83b / handoff 39bb09c v? to?n b? b?ng ch?ng b?n d??i l? l?ch s?, kh?ng ch?ng minh revision m?i ?? ??t. Kh?ng merge C ho?c b?t ??u D. Editor g?c ???c gi? m?, kh?ng t? restart.
+
 # U02-C — READY_FOR_REVIEW
 
 Nhánh riêng `u02/c-attack-presentation`, từ main B ACCEPTED `34e5dd73724546deb6e9cbb410a844341fcfad3c`. **Source kiểm chứng `61be83bce9bc4eb1ad15713b2bd4dc291cd37456`**. Không merge C hoặc bắt đầu D. B được nghiệm thu tại95a83ca/source94ebcc7, không chờ xác nhận kỹ thuật lại. Checklist B đã đặt cạnh launcher; original Editor refresh/PIE/Live Coding đã khép trong ACCEPTANCE-B.

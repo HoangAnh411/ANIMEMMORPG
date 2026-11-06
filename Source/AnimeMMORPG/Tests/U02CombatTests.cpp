@@ -62,6 +62,7 @@ bool FU02AdapterDrain::RunTest(const FString&)
     B->OnActiveInterval.AddLambda([&](const FActionId& Id,const FActiveSlice& Slice)
     {
         ++Delivered;
+        TestTrue(TEXT("Actual body reaches locked aim before active interval"),FMath::Abs(FRotator::NormalizeAxis(W.C->GetActorRotation().Yaw-B->GetCombatSnapshot().AimYawDegrees))<.01);
         TestEqual(TEXT("Old action still owns snapshot during drain"),B->GetCombatSnapshot().ActionSequence,Id.Sequence);
         if(Delivered==1)
         {
@@ -167,7 +168,7 @@ bool FU02AdapterRights::RunTest(const FString&)
     FU02BWorld Aim(*this);auto* AB=Aim.C->Combat.Get();auto* AM=Aim.C->GetU01Movement();
     AB->SubmitAttackIntent(1,Aim.Now(),10);Aim.Controller->SetControlRotation(FRotator(0,75,0));
     for(int32 I=0;I<12;++I)Aim.Step();
-    TestTrue(TEXT("Startup follows newest aim"),FMath::Abs(FRotator::NormalizeAxis(Aim.C->GetActorRotation().Yaw-75))<.01);
+    TestTrue(TEXT("Startup body approaches aim without instant snap"),Aim.C->GetActorRotation().Yaw>0 && Aim.C->GetActorRotation().Yaw<75);
     for(int32 I=0;I<10;++I)Aim.Step();
     Aim.Controller->SetControlRotation(FRotator(0,-110,0));
     for(int32 I=0;I<20;++I)Aim.Step();

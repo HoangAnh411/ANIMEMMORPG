@@ -4,6 +4,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
+#include "GameFramework/GameStateBase.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Dom/JsonObject.h"
@@ -78,7 +79,7 @@ void UU02CombatComponent::ServerAim_Implementation(double Yaw)
     const double Now = GetWorld()->GetTimeSeconds();
     // Drain first: aim received at/after entry can never retroactively turn active.
     AdvanceAuthority(Now);
-    if (Model->UpdateAim(Now,Yaw)) Publish(Now);
+    if (Model->UpdateAim(Now,Yaw)) { StartupTurn.Retarget(Now,Yaw); Publish(Now); }
 }
 void UU02CombatComponent::HandleAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, double Now)
 {
@@ -97,7 +98,12 @@ void UU02CombatComponent::HandleAttack(uint64 Sequence, double LocalInputSeconds
     LastCommand = Sequence;
     // The client clock is diagnostic only; invalid local stamps are discarded, never backdated.
     LastReject = Model->SubmitAttackIntent(Sequence,Now,Yaw,Context);
-    if (LastReject == EReject::None) ++AcceptedCount; else ++RejectedCount;
+    if (LastReject == EReject::None)
+    {
+        ++AcceptedCount;
+        StartupTurn.Begin(Character()->GetActorRotation().Yaw,Yaw,Now,Now+.16);
+    }
+    else ++RejectedCount;
     Publish(Now,true);
     Trace(LastReject == EReject::None ? TEXT("Accepted") : TEXT("Rejected"),Now,
         FString::Printf(TEXT("command=%llu reason=%d localInput=%.17g receive=%.17g"),Sequence,int32(LastReject),
@@ -120,6 +126,14 @@ bool UU02CombatComponent::AdvanceAuthority(double Now, bool bExcludeEnd)
         const double Boundaries[] = {Before.ActiveStartSeconds,Before.ActiveEndSeconds,Before.EndSeconds};
         const TCHAR* Names[] = {TEXT("Active"),TEXT("Recovery"),TEXT("Finished")};
         for (int32 I=0;I<3;++I) if (Previous < Boundaries[I] && Now >= Boundaries[I]) Trace(Names[I],Boundaries[I]);
+    }
+    // Complete the gameplay orientation boundary BEFORE handing any active interval to D.
+    // This also holds when a single update skips the entire active window.
+    if (Before.bCombatLocked)
+    {
+        const double BodyYaw=StartupTurn.Sample(Now);
+        Character()->GetU01Movement()->ApplyCombatAuthority(true,Now>=Before.ActiveStartSeconds,BodyYaw);
+        Character()->SetActorRotation(FRotator(0,BodyYaw,0));
     }
     if (Slice.bEvaluate)
     {
@@ -173,12 +187,19 @@ void UU02CombatComponent::Publish(double Now, bool bForce)
     Snapshot.PawnId = S.Life.Pawn; Snapshot.LifeGeneration = S.Life.Generation;
     Snapshot.ActionSequence = S.Action.Sequence; Snapshot.Phase = uint8(S.Phase);
     Snapshot.StartSeconds = S.StartSeconds; Snapshot.ServerSeconds = Now; Snapshot.AimYawDegrees = S.AimYawDegrees;
+    Snapshot.TurnFromYaw=StartupTurn.FromYaw; Snapshot.TurnStartSeconds=StartupTurn.SegmentStart;
     Snapshot.bLocked = S.bCombatLocked; Snapshot.bYawLocked = S.bYawLocked; ++Snapshot.Revision;
     ApplyMotorSnapshot(); Character()->ForceNetUpdate();
 }
 void UU02CombatComponent::ApplyMotorSnapshot()
 {
-    if (auto* C=Character()) C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,Snapshot.AimYawDegrees);
+    if (auto* C=Character())
+    {
+        const auto* GS=GetWorld()->GetGameState();
+        const double Now=C->HasAuthority()?Snapshot.ServerSeconds:(GS?GS->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds());
+        FStartupTurn Turn;Turn.Begin(Snapshot.TurnFromYaw,Snapshot.AimYawDegrees,Snapshot.TurnStartSeconds,Snapshot.StartSeconds+.16);
+        C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,Turn.Sample(Now));
+    }
 }
 void UU02CombatComponent::OnRep_Snapshot() { ApplyMotorSnapshot(); }
 void UU02CombatComponent::TickComponent(float Dt, ELevelTick Type, FActorComponentTickFunction* Function)
@@ -190,10 +211,12 @@ void UU02CombatComponent::TickComponent(float Dt, ELevelTick Type, FActorCompone
     {
         AdvanceAuthority(Now);
         // Remote aim arrives through ServerAim. A stale replicated controller rotation must not overwrite it.
-        if (C->IsLocallyControlled() && C->GetController() && Model->UpdateAim(Now,C->GetControlRotation().Yaw)) Publish(Now);
+        if (C->IsLocallyControlled() && C->GetController() && Model->UpdateAim(Now,C->GetControlRotation().Yaw))
+        { StartupTurn.Retarget(Now,C->GetControlRotation().Yaw); Publish(Now); }
     }
     else if (C->IsLocallyControlled() && Snapshot.Phase==uint8(EPhase::Startup) && Now-LastAimSend>=1./30)
     { ServerAim(C->GetControlRotation().Yaw); LastAimSend=Now; }
+    if (!Model) ApplyMotorSnapshot();
     if (C->IsLocallyControlled() && GEngine && FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
     {
         const TCHAR* Phases[]={TEXT("Ready"),TEXT("Startup"),TEXT("Active"),TEXT("Recovery"),TEXT("Ready"),TEXT("Cancelled")};
@@ -212,6 +235,12 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("phase"),Snapshot.Phase); J->SetNumberField(TEXT("start"),Snapshot.StartSeconds);
     J->SetNumberField(TEXT("activeStart"),Snapshot.StartSeconds+.16); J->SetNumberField(TEXT("activeEnd"),Snapshot.StartSeconds+.22);
     J->SetNumberField(TEXT("end"),Snapshot.StartSeconds+.4); J->SetNumberField(TEXT("serverSnapshotSeconds"),Snapshot.ServerSeconds);
+    J->SetNumberField(TEXT("gameplayBodyYaw"),Character()?Character()->GetActorRotation().Yaw:0.);
+    J->SetNumberField(TEXT("meshWorldYaw"),Character()?Character()->GetMesh()->GetComponentRotation().Yaw:0.);
+    J->SetNumberField(TEXT("aimYaw"),Snapshot.AimYawDegrees);
+    J->SetNumberField(TEXT("turnFromYaw"),Snapshot.TurnFromYaw);
+    J->SetNumberField(TEXT("turnStart"),Snapshot.TurnStartSeconds);
+    J->SetNumberField(TEXT("actionSeconds"),GetWorld()->GetTimeSeconds()-Snapshot.StartSeconds);
     J->SetNumberField(TEXT("yaw"),Snapshot.AimYawDegrees); J->SetBoolField(TEXT("locked"),Snapshot.bLocked);
     J->SetBoolField(TEXT("yawLocked"),Snapshot.bYawLocked); J->SetNumberField(TEXT("accepted"),AcceptedCount);
     J->SetNumberField(TEXT("rejected"),RejectedCount); J->SetNumberField(TEXT("lastReject"),uint8(LastReject));

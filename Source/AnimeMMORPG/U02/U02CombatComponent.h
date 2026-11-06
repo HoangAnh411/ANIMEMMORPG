@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "U02ActionModel.h"
+#include "U02StartupTurn.h"
 #include "U02CombatComponent.generated.h"
 
 class AU01Character;
@@ -20,6 +21,8 @@ struct FU02RepCombatSnapshot
     UPROPERTY() double StartSeconds = 0;
     UPROPERTY() double ServerSeconds = 0;
     UPROPERTY() double AimYawDegrees = 0;
+    UPROPERTY() double TurnFromYaw = 0;
+    UPROPERTY() double TurnStartSeconds = 0;
     UPROPERTY() bool bLocked = false;
     UPROPERTY() bool bYawLocked = false;
 };
@@ -60,6 +63,7 @@ private:
     TUniquePtr<AnimeMMORPG::U02::FActionModel> Model;
     AU01Character* Character() const;
     bool bAuthorityPlaying = true;
+    AnimeMMORPG::U02::FStartupTurn StartupTurn;
     double LastAimSend = -1;
     uint64 LastCommand = 0;
     AnimeMMORPG::U02::EReject LastReject = AnimeMMORPG::U02::EReject::None;
