@@ -1,0 +1,1 @@
+First debug capture passed open/body, all-blocked, partial/head assertions. OUTSIDE fixture at Y=-9400 lay beyond platform Y=-9300, attack airborne/rejected; moved native lab fixture OUTSIDE to X400 on platform for repeat. Capture retained. Smoke processes were launched during this capture; final delivery capture will be isolated after smoke completion, retaining guard checks.

@@ -1,0 +1,60 @@
+{
+  "originalReviewAction": 66,
+  "originalSource": "9CCBE9A14402196C6C5B79AE5C0AB506:2",
+  "originalTarget": "6FEADC494323CF272968718B5926A5DC:1",
+  "notClaimedToIdentifyScreenshotAction": true,
+  "reconstructions": [
+    {
+      "case": "Action66Open",
+      "actionId": "9D3A76DC4933EE36E1236FAAB5FFA393:3:1",
+      "lifeId": "9D3A76DC4933EE36E1236FAAB5FFA393:3",
+      "expectedHits": 1,
+      "actualAction": 1,
+      "screenshot": "Action66Open.png",
+      "screenshotAcquisitionWindow": [
+        4.033032600001024,
+        8.776077700000315
+      ],
+      "screenshotTimestampLimit": "upper bound recorded after screenshot and following wait; image/action identity uses visible ID and native trace"
+    },
+    {
+      "case": "AllBlocked",
+      "actionId": "9D3A76DC4933EE36E1236FAAB5FFA393:4:1",
+      "lifeId": "9D3A76DC4933EE36E1236FAAB5FFA393:4",
+      "expectedHits": 0,
+      "actualAction": 1,
+      "screenshot": "AllBlocked.png",
+      "screenshotAcquisitionWindow": [
+        17.459475000000385,
+        26.858747300000687
+      ],
+      "screenshotTimestampLimit": "upper bound recorded after screenshot and following wait; image/action identity uses visible ID and native trace"
+    },
+    {
+      "case": "PartialHead",
+      "actionId": "9D3A76DC4933EE36E1236FAAB5FFA393:5:1",
+      "lifeId": "9D3A76DC4933EE36E1236FAAB5FFA393:5",
+      "expectedHits": 1,
+      "actualAction": 1,
+      "screenshot": "PartialHead.png",
+      "screenshotAcquisitionWindow": [
+        34.789961299999774,
+        37.602689200000896
+      ],
+      "screenshotTimestampLimit": "upper bound recorded after screenshot and following wait; image/action identity uses visible ID and native trace"
+    },
+    {
+      "case": "Outside",
+      "actionId": "9D3A76DC4933EE36E1236FAAB5FFA393:6:1",
+      "lifeId": "9D3A76DC4933EE36E1236FAAB5FFA393:6",
+      "expectedHits": 0,
+      "actualAction": 1,
+      "screenshot": "Outside.png",
+      "screenshotAcquisitionWindow": [
+        41.586548399999444,
+        43.259668200000306
+      ],
+      "screenshotTimestampLimit": "upper bound recorded after screenshot and following wait; image/action identity uses visible ID and native trace"
+    }
+  ]
+}

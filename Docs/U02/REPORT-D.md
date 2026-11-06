@@ -1,3 +1,5 @@
+> Current handoff: corner verification READY_FOR_REVIEW, source82bb890; see [CORNER-REVIEW-D.md](CORNER-REVIEW-D.md) and Evidence/D-Corner. Action66 is geometrically valid; no gameplay algorithm change. Original a0c6224/source3a63edd evidence below remains historical. No D acceptance, merge or E.
+
 # U02-D — READY_FOR_REVIEW
 
 Branch u02/d-collision-hurtbox-sweep from accepted C main 828f83f. C remote verified (Git ref and fresh storage containing 816 SHA-256 checked LFS objects), main fast-forward/push verified. No C rebuild/retest.

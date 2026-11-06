@@ -31,7 +31,7 @@ try:
   # Pitch camera after gameplay; selected geometry is frozen, hit yaw cannot change.
   mouse(1,0,180);wait(.8);ImageGrab.grab(bbox=bounds,all_screens=True).save(a.out/(label+'.png'));grab();wait(.8)
   stage['screenshotWallSeconds']=time.perf_counter()-start;m['stages'].append(stage)
- m['captureSeconds']=time.perf_counter()-start;m['videoSeconds']=encoded/30;m['encodedFrames']=encoded;m['encodedFPS']=30
+ m['processingEndSeconds']=time.perf_counter()-start;m['captureSeconds']=m['frames'][-1];m['videoSeconds']=encoded/30;m['encodedFrames']=encoded;m['encodedFPS']=30
  check('Video matches wall time',abs(m['captureSeconds']-m['videoSeconds'])<1/30+.01);m['completed']=True
 except Exception as e:m['error']=str(e);raise
 finally:

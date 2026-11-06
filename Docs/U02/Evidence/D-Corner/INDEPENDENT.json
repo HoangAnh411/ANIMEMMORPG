@@ -1,0 +1,154 @@
+{
+  "method": "independent segment/AABB slab clipping, closed spatial bounds; no game visibility/triangle call",
+  "originalAction": 66,
+  "notClaimedToBeScreenshotAction": true,
+  "reviewLog": "Artifacts\\U02\\D\\Review-20261106-125757\\Game.log",
+  "reviewLogSHA256": "b641f65bcd54c5013c74947009494941865cb9565e54d7aa9f01fba945dd1928",
+  "walls": [
+    {
+      "min": [
+        65,
+        -9140,
+        0
+      ],
+      "max": [
+        85,
+        -8980,
+        220
+      ]
+    },
+    {
+      "min": [
+        65,
+        -9140,
+        0
+      ],
+      "max": [
+        155,
+        -9120,
+        220
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "case": "Action66Open",
+      "origin": [
+        162.889,
+        -9181.335,
+        92.15
+      ],
+      "center": [
+        150,
+        -9000,
+        70
+      ],
+      "radius": 35,
+      "nearest": [
+        152.46326629732494,
+        -9034.655628367245,
+        74.23317157931162
+      ],
+      "wallIntervals": [
+        null,
+        null
+      ],
+      "xAtHorizontalWallFaces": {
+        "-9140": 159.95097471530596,
+        "-9120": 158.52940689883368
+      },
+      "blocked": false
+    },
+    {
+      "case": "Action66Open",
+      "origin": [
+        162.889,
+        -9181.335,
+        92.15
+      ],
+      "center": [
+        150,
+        -9000,
+        145
+      ],
+      "radius": 20,
+      "nearest": [
+        151.36161816599608,
+        -9019.156569953519,
+        139.4168267458381
+      ],
+      "wallIntervals": [
+        null,
+        null
+      ],
+      "xAtHorizontalWallFaces": {
+        "-9140": 159.950974715306,
+        "-9120": 158.52940689883368
+      },
+      "blocked": false
+    },
+    {
+      "case": "AllBlocked",
+      "origin": [
+        120,
+        -9181.335,
+        92.15
+      ],
+      "center": [
+        150,
+        -9000,
+        70
+      ],
+      "radius": 35,
+      "nearest": [
+        144.3283005546629,
+        -9034.28258729734,
+        74.18760475714056
+      ],
+      "wallIntervals": [
+        null,
+        [
+          0.28109025374224206,
+          0.4170961827332898
+        ]
+      ],
+      "xAtHorizontalWallFaces": {
+        "-9140": 126.83844817602773,
+        "-9120": 130.14724129373806
+      },
+      "blocked": true
+    },
+    {
+      "case": "AllBlocked",
+      "origin": [
+        120,
+        -9181.335,
+        92.15
+      ],
+      "center": [
+        150,
+        -9000,
+        145
+      ],
+      "radius": 20,
+      "nearest": [
+        146.86269973317224,
+        -9018.96341146284,
+        139.47312269660512
+      ],
+      "wallIntervals": [
+        null,
+        [
+          0.25457039850626134,
+          0.37774465688597186
+        ]
+      ],
+      "xAtHorizontalWallFaces": {
+        "-9140": 126.8384481760277,
+        "-9120": 130.14724129373803
+      },
+      "blocked": true
+    }
+  ],
+  "faceEdgeTangent": "BLOCKED"
+}

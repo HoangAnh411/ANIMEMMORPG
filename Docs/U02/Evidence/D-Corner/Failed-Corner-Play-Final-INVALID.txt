@@ -1,0 +1,1 @@
+All eight gameplay/selected-action runtime assertions passed. Video duration check failed: capture end included 0.54s encoder processing after final observed frame. No change to gameplay. Repeat uses last acquisition timestamp as capture horizon and records processing end separately; old invalid metadata/video retained.

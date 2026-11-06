@@ -2,6 +2,8 @@
 
 Chạy `Play-U02-D.cmd`. WASD di chuyển, chuột ngắm, LMB chém. HUD vàng đếm geometry hits; không có HP/damage ở D.
 
+Bản hiện tại có debug giữ riêng action. Trong console nhập `U02CornerCase open`, đóng console rồi LMB để tái dựng tọa độ action66; `U02CornerCase blocked` chuyển attacker ra sau tường, `U02CornerCase outside` kiểm ngoài vùng. Lệnh tự chọn action kế. Dùng `U02DebugAction 0` trước đòn ở trạm khác để giữ riêng đòn đó. HUD SELECTED ghi identity và số hit của action, sphere/đường xanh là confirmed, đỏ blocked, xám outside. Nét debug foreground giúp thấy đường sau bề mặt; không có nghĩa bỏ qua tường. Hình giữ action cũ cho tới khi chọn mới, không phải hit hiện thời của animation.
+
 Để tới trạm, Resume rồi mở console bằng phím `~`, nhập một trong các lệnh:
 
 - `U01FixtureReset CombatD1`: hai dummy; mỗi đòn có thể thêm hai hits, giữ LMB không tự đánh tiếp.

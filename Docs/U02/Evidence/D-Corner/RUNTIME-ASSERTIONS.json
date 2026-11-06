@@ -1,0 +1,103 @@
+{
+  "sourceSHA": "82bb890e108490692a5ff16cecc930c4807fb69d",
+  "passed": 23,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "Action66Open hit count",
+      "result": "PASS"
+    },
+    {
+      "check": "Action66Open one complete action",
+      "result": "PASS"
+    },
+    {
+      "check": "AllBlocked hit count",
+      "result": "PASS"
+    },
+    {
+      "check": "AllBlocked one complete action",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialHead hit count",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialHead one complete action",
+      "result": "PASS"
+    },
+    {
+      "check": "Outside hit count",
+      "result": "PASS"
+    },
+    {
+      "check": "Outside one complete action",
+      "result": "PASS"
+    },
+    {
+      "check": "Video matches wall time",
+      "result": "PASS"
+    },
+    {
+      "check": "Action66Open isolated selected action rows exist",
+      "result": "PASS"
+    },
+    {
+      "check": "Action66Open exact action confirmation count",
+      "result": "PASS"
+    },
+    {
+      "check": "Reconstruction body and head independently valid",
+      "result": "PASS"
+    },
+    {
+      "check": "Reconstruction confirms body once",
+      "result": "PASS"
+    },
+    {
+      "check": "AllBlocked isolated selected action rows exist",
+      "result": "PASS"
+    },
+    {
+      "check": "AllBlocked exact action confirmation count",
+      "result": "PASS"
+    },
+    {
+      "check": "Both hurtboxes blocked, actual wall marker recorded",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialHead isolated selected action rows exist",
+      "result": "PASS"
+    },
+    {
+      "check": "PartialHead exact action confirmation count",
+      "result": "PASS"
+    },
+    {
+      "check": "Partial body blocked, head valid and confirmed",
+      "result": "PASS"
+    },
+    {
+      "check": "Outside isolated selected action rows exist",
+      "result": "PASS"
+    },
+    {
+      "check": "Outside exact action confirmation count",
+      "result": "PASS"
+    },
+    {
+      "check": "Outside selected action hurtboxes reported",
+      "result": "PASS"
+    },
+    {
+      "check": "Encoded duration matches wall timestamp",
+      "result": "PASS"
+    }
+  ],
+  "scope": "real Windows input selected-action diagnostics and native confirmed geometry; no damage or screenshot-action identification",
+  "videoSeconds": 43.266666666666666,
+  "wallSeconds": 43.23603080000066,
+  "capturedFrames": 35
+}

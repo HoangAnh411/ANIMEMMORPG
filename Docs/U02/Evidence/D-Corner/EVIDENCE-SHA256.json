@@ -1,0 +1,477 @@
+[
+  {
+    "file": ".gitattributes",
+    "bytes": 30,
+    "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+  },
+  {
+    "file": "Action66Open.png",
+    "bytes": 477213,
+    "sha256": "b664a771133ea6e916325abfd3671ac3e068f189aa82934fb2dd176530866e7f"
+  },
+  {
+    "file": "AllBlocked.png",
+    "bytes": 504289,
+    "sha256": "e5f51146e460b78feafd93903fbdb309c24516ae0c2c6fb713d1cf855c12c0f4"
+  },
+  {
+    "file": "AUTOMATION-RESULTS.json",
+    "bytes": 7677,
+    "sha256": "3e6152e91147805a9e58910a3d15e390d9e4e6ceaee3e604006c2d28193ec782"
+  },
+  {
+    "file": "Build-20261106-115744-546-b8319570-Editor.log.gz",
+    "bytes": 5367,
+    "sha256": "fbb54db0caff30777290f9ae510252363e9ca3dbf5806b0c5c8eeba4feef8e4a"
+  },
+  {
+    "file": "Build-20261106-115744-546-b8319570-Generate.log.gz",
+    "bytes": 1133,
+    "sha256": "b049657190054f9b668a2010dd406459e07afa26681d576dac110e352e7d2610"
+  },
+  {
+    "file": "Build-20261106-120106-936-a46fea05-Editor.log.gz",
+    "bytes": 2487,
+    "sha256": "2ed89f976814ab9b4d039aec1d422b7357e70c198962b6ab1b0e8df01d026134"
+  },
+  {
+    "file": "Build-20261106-120106-936-a46fea05-Game.log.gz",
+    "bytes": 4224,
+    "sha256": "b85cb803386c00141892c8692e299dfb81f882754b87ab783fbea71e98851be4"
+  },
+  {
+    "file": "Build-20261106-120106-936-a46fea05-Generate.log.gz",
+    "bytes": 1143,
+    "sha256": "0663baa8e79f8f59839d6b392456d3a2a543a1826c7e5890e138ea97b1c0dea1"
+  },
+  {
+    "file": "Build-20261106-120709-336-dc8b5930-Editor.log.gz",
+    "bytes": 2505,
+    "sha256": "63891d96bf71e5ce03bf59b7e272f18faa0a04c97ef92e75640784b21c7acb5e"
+  },
+  {
+    "file": "Build-20261106-120709-336-dc8b5930-Game.log.gz",
+    "bytes": 2293,
+    "sha256": "e3e9eda5d3c24640dc649d6b821822800049e13205a7344a46e647a96dc48e5a"
+  },
+  {
+    "file": "Build-20261106-120709-336-dc8b5930-Generate.log.gz",
+    "bytes": 1145,
+    "sha256": "cf9ed70911f7359c546d6551c913ab9c47184df33542a458885c9821c671d66e"
+  },
+  {
+    "file": "Build-20261106-121306-876-9fc19246-Editor.log.gz",
+    "bytes": 2573,
+    "sha256": "bc1bc9da2ae94ed58e77b932cc80ac71f8e631be9557e9163b06e74576224671"
+  },
+  {
+    "file": "Build-20261106-121306-876-9fc19246-Game.log.gz",
+    "bytes": 2311,
+    "sha256": "78b2d308a0443c5af47a0304a7134cf216630bb593c676c160c18a2ebd79d521"
+  },
+  {
+    "file": "Build-20261106-121306-876-9fc19246-Generate.log.gz",
+    "bytes": 1144,
+    "sha256": "b43f127fd4a219257f5f14b9abce021f82c30e864e1d8df5684cd340ddd1994b"
+  },
+  {
+    "file": "Build-20261106-121651-856-34885abf-Editor.log.gz",
+    "bytes": 2503,
+    "sha256": "a43fdc1fe041f682e274e83a33878015fe61bcc0d1b90b087e5fffa90f9ff87e"
+  },
+  {
+    "file": "Build-20261106-121651-856-34885abf-Game.log.gz",
+    "bytes": 2287,
+    "sha256": "36b6674665d62751c9541298110f77539660fee768561b00d06e2b13409ba451"
+  },
+  {
+    "file": "Build-20261106-121651-856-34885abf-Generate.log.gz",
+    "bytes": 1141,
+    "sha256": "617912d4c3916615981e63a2492c5657c79b77b66e6f7bebae718e76681083cd"
+  },
+  {
+    "file": "Build-20261106-122006-720-043b75d0-Editor.log.gz",
+    "bytes": 2502,
+    "sha256": "0c75b45de8cc37fb453c3f4cfcdb7520b438710cd5dfcaa7720edc1fb9759901"
+  },
+  {
+    "file": "Build-20261106-122006-720-043b75d0-Game.log.gz",
+    "bytes": 2293,
+    "sha256": "0d81b0e4752d9b84eb4b69c23f9b1c77b75b0f654e7a5dfe9bab7bce14c3df90"
+  },
+  {
+    "file": "Build-20261106-122006-720-043b75d0-Generate.log.gz",
+    "bytes": 1142,
+    "sha256": "52da2de20333de2445afeb0f29b6aa7a998184280d65a419716bfc074a8df137"
+  },
+  {
+    "file": "Build-20261106-122521-218-8f7e896d-Editor.log.gz",
+    "bytes": 2523,
+    "sha256": "9e48e6cd0d3a5de786ce69683cdbbfe2717dbf7e318d27177de94eb06d9dd6fe"
+  },
+  {
+    "file": "Build-20261106-122521-218-8f7e896d-Game.log.gz",
+    "bytes": 2310,
+    "sha256": "cc850c59d0d2c52103e71ca992b6bf9eda48bf0e9a7483fe188a0ccfd51644a4"
+  },
+  {
+    "file": "Build-20261106-122521-218-8f7e896d-Generate.log.gz",
+    "bytes": 1143,
+    "sha256": "5346a6a0783bfac89170b896559054004806e75b624e3fc069428d06c29ba5bf"
+  },
+  {
+    "file": "Build-20261106-123424-062-6eae3eb0-Editor.log.gz",
+    "bytes": 2502,
+    "sha256": "4bcfb9a2a372fa7fa2251f0eb4b5e630b1af5f52f807d76f591f5cf33016a5ac"
+  },
+  {
+    "file": "Build-20261106-123424-062-6eae3eb0-Game.log.gz",
+    "bytes": 2291,
+    "sha256": "e89d2ec1a89f4cfa381d9a340490d1952e5cccf014fe75ddfa293202db9faeb1"
+  },
+  {
+    "file": "Build-20261106-123424-062-6eae3eb0-Generate.log.gz",
+    "bytes": 1149,
+    "sha256": "d5800c31845d86ac99e9c1c5a0524fbb8d876f8599e667fd832dde49d9727abe"
+  },
+  {
+    "file": "Build-20261106-130935-782-c2008fa4-Editor.log.gz",
+    "bytes": 2526,
+    "sha256": "e6b1499f0c7336db1469ff8e3d6815bfed58028903e741583d88f66a25076fce"
+  },
+  {
+    "file": "Build-20261106-130935-782-c2008fa4-Game.log.gz",
+    "bytes": 2312,
+    "sha256": "cc20441b2628af7210992daecea9bc84c82b0b2af1cb459d2d085c8288186831"
+  },
+  {
+    "file": "Build-20261106-130935-782-c2008fa4-Generate.log.gz",
+    "bytes": 1148,
+    "sha256": "47927ebeecda2c2c4b3d1b8f1bb4f10b9dea2d406fc63e438c4ac59afef8b414"
+  },
+  {
+    "file": "Build-20261106-131204-302-f11e8f83-Editor.log.gz",
+    "bytes": 2508,
+    "sha256": "16d90379701ef8d93df07c89e4c8809f58d3d46f7ec66ebf5490bf8fb78e4b33"
+  },
+  {
+    "file": "Build-20261106-131204-302-f11e8f83-Game.log.gz",
+    "bytes": 2294,
+    "sha256": "4b0710083ef9913269a5af196fab6dd6fe6dd4b321673ca21562118ba6ffaf61"
+  },
+  {
+    "file": "Build-20261106-131204-302-f11e8f83-Generate.log.gz",
+    "bytes": 1148,
+    "sha256": "de62e22927bf02b8a6208f4684f5f7849bf613f936becc11bd6d1a9c89d7b74b"
+  },
+  {
+    "file": "Build-20261106-131741-019-792fb12e-Editor.log.gz",
+    "bytes": 2502,
+    "sha256": "b15d612763d2699293b480b555b3da369e46fdfe68cfa7caecfb0625b887826c"
+  },
+  {
+    "file": "Build-20261106-131741-019-792fb12e-Game.log.gz",
+    "bytes": 2296,
+    "sha256": "25874e049b3993df2fab7cada3d7de2dfd59f2f3f805a7e0fd634b50d626e3e8"
+  },
+  {
+    "file": "Build-20261106-131741-019-792fb12e-Generate.log.gz",
+    "bytes": 1146,
+    "sha256": "bca0b7e9d3fb58e41f64252f82102f25f8f2717451ba04b6d4e3c6b28917f8bd"
+  },
+  {
+    "file": "BUILD-RESULTS.json",
+    "bytes": 2636,
+    "sha256": "4c890ba59a8c611755e069fc58f23d924c93c88f279a7f47615e0ebd3e9b04bf"
+  },
+  {
+    "file": "CASE-ACTIONS.json",
+    "bytes": 2252,
+    "sha256": "ff6a362e7c8ee7441b10dd58672eb6fa6a8e49f4afb4e2de8d02752e5869ae79"
+  },
+  {
+    "file": "Failed-Corner-Play-Final-INVALID.txt",
+    "bytes": 321,
+    "sha256": "53757e4d7e60cf2142e732fc8193d1539a1b3260ba160eaff3426663e6aaf88d"
+  },
+  {
+    "file": "Failed-Corner-Play-INVALID.txt",
+    "bytes": 379,
+    "sha256": "c4b72666c4536417f1a127468d915cb29569ed25844f3e83b838a200cb5a5d6f"
+  },
+  {
+    "file": "Failed-First-input.json",
+    "bytes": 32554,
+    "sha256": "a4cd330869cd7d3bc3ef4c41768d917c4167eb0fa9802d22081329040313ca66"
+  },
+  {
+    "file": "Failed-First-INVALID.txt",
+    "bytes": 379,
+    "sha256": "c4b72666c4536417f1a127468d915cb29569ed25844f3e83b838a200cb5a5d6f"
+  },
+  {
+    "file": "Failed-Play-Capture-input.json",
+    "bytes": 32554,
+    "sha256": "a4cd330869cd7d3bc3ef4c41768d917c4167eb0fa9802d22081329040313ca66"
+  },
+  {
+    "file": "Failed-Play-Final-Capture-input.json",
+    "bytes": 43418,
+    "sha256": "f81410b9a0de9abc984b175aa8f6a37dc01d2fb618262fb9dfec6e2afebc53d8"
+  },
+  {
+    "file": "Final.png",
+    "bytes": 502470,
+    "sha256": "b9dc9e05f17aa081edc357cea9a443e47aacaac1dfef4a968744daa68adea037"
+  },
+  {
+    "file": "History-Corner-build-console.log.gz",
+    "bytes": 3202,
+    "sha256": "707418b81747e9ef556b309cd26432388feb76e3a70c88646cb443ff22715eb5"
+  },
+  {
+    "file": "History-Corner-build-debug-console.log.gz",
+    "bytes": 3181,
+    "sha256": "2ef2354661e16b91c42205a98957749e45655ffa5cffc2e5447d21208bf52af2"
+  },
+  {
+    "file": "History-Corner-build-fixture-console.log.gz",
+    "bytes": 3192,
+    "sha256": "6fcbcaa7a130074bfe3e0f3941fb75957bfcaa4db8f91b3d7202b4099a2a2a8b"
+  },
+  {
+    "file": "History-Corner-package-console.log.gz",
+    "bytes": 18327,
+    "sha256": "151aa558d924a7ea75f3e9f5ac248cba2bcfe1a130dadb3ee11f4c9625f2d18c"
+  },
+  {
+    "file": "History-Corner-package-debug-console.log.gz",
+    "bytes": 18317,
+    "sha256": "9eb61af84ef5027b5e366c69e70b50c2cc980c07c2ff5fea15de900616a8a508"
+  },
+  {
+    "file": "History-Corner-smoke-console.log.gz",
+    "bytes": 206,
+    "sha256": "989d357fbd3157ad947bfdd1f69a088f3a3208ab036f25a5025178264886b54a"
+  },
+  {
+    "file": "History-Corner-smoke-debug-console.log.gz",
+    "bytes": 212,
+    "sha256": "c41aebc29e6432aa9ab620ec45d94b43173c18f8a08ca9c096d849956cbaf525"
+  },
+  {
+    "file": "History-Corner-tests-console.log.gz",
+    "bytes": 581,
+    "sha256": "695061d6daecf15806e2f30d0516f8484c5a27e9d04806e99a52f8a64c333f15"
+  },
+  {
+    "file": "History-Corner-tests-debug-console.log.gz",
+    "bytes": 193,
+    "sha256": "df86b05cea5e69599bb778d193724a3cbc21a9054dbf01e91e7ab39e975a150b"
+  },
+  {
+    "file": "History-Corner-tests-fixture-console.log.gz",
+    "bytes": 195,
+    "sha256": "a75d3ca03145b1be6bc59053a2e08828ed8b3a7d9066c48a7692e103b9f2cc64"
+  },
+  {
+    "file": "HISTORY-CORNER.json",
+    "bytes": 3157,
+    "sha256": "b83b0903bf5536c2412b72b3742ef93f0401be53cd2d80496a619079b446b222"
+  },
+  {
+    "file": "History-launcher-check.log.gz",
+    "bytes": 318,
+    "sha256": "93733f63eccadc1419782a5a36fce9292fa38d7dad8b88ace9e7b2a75ece8531"
+  },
+  {
+    "file": "History-Play-Final-Game.log.gz",
+    "bytes": 178074,
+    "sha256": "dc144795d73e2fe7a50250608cb2d53ecc409c0dcf9ae6352e42db79eeda6fac"
+  },
+  {
+    "file": "History-Play-Game.log.gz",
+    "bytes": 453474,
+    "sha256": "9dada247515bf67f841a65512580da11906777d6e1eb3e81b0f807ea85fad862"
+  },
+  {
+    "file": "History-Review-20261106-125757-Game.log.gz",
+    "bytes": 1099852,
+    "sha256": "3201941267252c272907e2875cb9bf092be0ee690a9bbf94cb2b406c9339893c"
+  },
+  {
+    "file": "Independent-TopView.svg",
+    "bytes": 2856,
+    "sha256": "228766c36272eb52f5b4c7829f912aca4251c3435e25b619330ee034ae7e9fda"
+  },
+  {
+    "file": "INDEPENDENT.json",
+    "bytes": 3012,
+    "sha256": "047a3090cf354a8f7d55f2791a64ac42fa1d3d5140c6c8bb397334d3cadddba5"
+  },
+  {
+    "file": "Input-D.mp4",
+    "bytes": 10620264,
+    "sha256": "60256e91d0c942ecb0f6adce988140bd44bd5ec5246e12bb8024e054dd08c68b"
+  },
+  {
+    "file": "INPUT.json",
+    "bytes": 43025,
+    "sha256": "5a5b5d7722abe26e271394cef8566c0e1de67d70d8bdb9172d08604aca5f20e5"
+  },
+  {
+    "file": "LAUNCHER.json",
+    "bytes": 5817,
+    "sha256": "264c27e370a9cbee38fbefc30d0a9b421e59359d30de27b442fda06e6a30836f"
+  },
+  {
+    "file": "LOGS.json",
+    "bytes": 16369,
+    "sha256": "3dc04e271acc9a801333e4e5da0aa26c54f5786377829817ecdd75a33c11da01"
+  },
+  {
+    "file": "MANIFEST.json",
+    "bytes": 2940,
+    "sha256": "9c82509784b5d795b5f1b570e19be9419b07393ef53310e3f86d48085fc60fe8"
+  },
+  {
+    "file": "MCP-RESULTS.json",
+    "bytes": 717181,
+    "sha256": "2b23332902b9bd970c783a672f5779973fea239807bc37c84733ef2366f154e8"
+  },
+  {
+    "file": "MCPTests-20261106-120347-Editor.log.gz",
+    "bytes": 100021,
+    "sha256": "ede1fe02299eeaf0ebd9877e0034d0908625e6574bd2b0fcd9518cd48d194ee4"
+  },
+  {
+    "file": "MCPTests-20261106-121052-Editor.log.gz",
+    "bytes": 100461,
+    "sha256": "3a49aade99da493e27c31794391c38458e487a943e5cd08604fe526292d47dd3"
+  },
+  {
+    "file": "MCPTests-20261106-121441-Editor.log.gz",
+    "bytes": 100221,
+    "sha256": "6d3a29d0954e194395129ea9f3ef239b213abb8895d42e375acee9a529b200d8"
+  },
+  {
+    "file": "MCPTests-20261106-121810-Editor.log.gz",
+    "bytes": 184525,
+    "sha256": "2b822223fdb68d89be3192c2a906bc99ae9fae05ef3c22d0920d60a0323a5805"
+  },
+  {
+    "file": "MCPTests-20261106-122122-Editor.log.gz",
+    "bytes": 97280,
+    "sha256": "9c6437301c768cfa2021f031b5588101555467a9461e8180e7ad035c657b4a13"
+  },
+  {
+    "file": "MCPTests-20261106-122643-Editor.log.gz",
+    "bytes": 97882,
+    "sha256": "5bf763a631002e839de5db4a76f8903b34fd006f0de5d4edf590a2c29d48ebc8"
+  },
+  {
+    "file": "MCPTests-20261106-123542-Editor.log.gz",
+    "bytes": 97499,
+    "sha256": "626c1f0b5106ec869b8368b4b0fdd00f41dd5fc26d2965b10753163319fbcde5"
+  },
+  {
+    "file": "MCPTests-20261106-131115-Editor.log.gz",
+    "bytes": 118611,
+    "sha256": "fbc46700e74da50b3f95aa7ddba7f76cbddfdf3e7d644f33ac965985d6f41cce"
+  },
+  {
+    "file": "MCPTests-20261106-131329-Editor.log.gz",
+    "bytes": 111155,
+    "sha256": "a661d8bf2463e1c696739eb0334f56a1878ae3f8d72de29155d65c7cc71a636c"
+  },
+  {
+    "file": "MCPTests-20261106-131917-Editor.log.gz",
+    "bytes": 111099,
+    "sha256": "e2fed0516cc8c787d44aababa8b9a396fa2d915885556836422e6b24eee343bb"
+  },
+  {
+    "file": "ORIGINAL-ACTION66.log",
+    "bytes": 6645,
+    "sha256": "b99cfeb05b1cd8ae89a706cd324d2d5c866f6df66062f9ca1873d450fe53c0cf"
+  },
+  {
+    "file": "Outside.png",
+    "bytes": 502470,
+    "sha256": "b9dc9e05f17aa081edc357cea9a443e47aacaac1dfef4a968744daa68adea037"
+  },
+  {
+    "file": "Package-20261106-132004-482-1b6ee417-Package.log.gz",
+    "bytes": 18312,
+    "sha256": "8705037df539657378e892ca0295dac6652fa8b9dbc9ab671bddb6b9282a3ddf"
+  },
+  {
+    "file": "PACKAGE-RESULT.json",
+    "bytes": 183,
+    "sha256": "173d11cf94e46352d72eb88a8e1e0b25d7dd1d6a024301fa4ddda303837eb38d"
+  },
+  {
+    "file": "PACKAGE.csv",
+    "bytes": 6135,
+    "sha256": "d4fa4d5b6636a986e384c4ee409ddf86ef65ab1a4298523bd38dfeb00000d53f"
+  },
+  {
+    "file": "PartialHead.png",
+    "bytes": 446538,
+    "sha256": "0117e978ad34a93c2a4d67d8b4208b546f76037bfd37530083074e703bcab9e9"
+  },
+  {
+    "file": "Play-Verified-Game.log.gz",
+    "bytes": 244633,
+    "sha256": "1f9ecabb6389dc51ca8eb3865763f8ec50beae2e96cd58714c865e2530d1ca34"
+  },
+  {
+    "file": "PROCESS.json",
+    "bytes": 1292,
+    "sha256": "79ac7eef0561f5258b59cc62e7435bda60fe4abb513f0a1568d967a6a718bc7a"
+  },
+  {
+    "file": "RUN-HISTORY.json",
+    "bytes": 13608,
+    "sha256": "89ee54fbf105115c0fbbbdf26977b7219682b5142df6e84d5c21a84811123916"
+  },
+  {
+    "file": "RUNTIME-ASSERTIONS.json",
+    "bytes": 2549,
+    "sha256": "ef3195598b2d2ebdde854fd6c0f41bf2f1fbfb7764e23aadde8a1e23fec4f312"
+  },
+  {
+    "file": "SELECTED.log",
+    "bytes": 4071,
+    "sha256": "80befc1fc1c728a2b7e52a3be01864093dfff41ad2a47026e0f8c7aa1e2610f9"
+  },
+  {
+    "file": "SMOKE.json",
+    "bytes": 369504,
+    "sha256": "828678a73561cdee3a6e2c091582dd2bef814b23df394097b06c8b9e97657b0d"
+  },
+  {
+    "file": "SmokeB-20261106-132307-L_Boot-Game.log.gz",
+    "bytes": 20830,
+    "sha256": "39d0c3d3eeb4a191bb5e5339234ada36473ae574fb063cb146a70a6b83e662b1"
+  },
+  {
+    "file": "SmokeB-20261106-132307-L_CharacterCombatLab-Game.log.gz",
+    "bytes": 26731,
+    "sha256": "a4fbca77e5335abc9912cc21705bd2b27596283d06d0180681f7a88ff1e514b2"
+  },
+  {
+    "file": "SmokeB-20261106-132307-L_NetworkLab-Game.log.gz",
+    "bytes": 26699,
+    "sha256": "5f864cb1d0c5bc30ab400f7c5eeb637701965c086ccbe977e6e48beebd53905e"
+  },
+  {
+    "file": "TIMELINE.log",
+    "bytes": 434836,
+    "sha256": "62295587d02a9817bb6373bd92223b68cfec4b4cd0af0d56e43e1bb3183520cb"
+  },
+  {
+    "file": "WARNINGS.json",
+    "bytes": 21143993,
+    "sha256": "283291d8fb59196126dcc42868a33bf7472fa8e29d584adb47c0e65761c16e02"
+  }
+]

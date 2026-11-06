@@ -33,3 +33,6 @@ A là model thuần; B ACCEPTED tại95a83ca/source94ebcc7 trên source94ebcc7: 
 U01 23 Automation/3 smoke/runtime là **kế thừa từ G**, không tự tính vào số đã chạy A. A chỉ cần tests liên quan; E/F mới full regression bắt buộc. Loại bằng chứng tách riêng: Automation / hậu xử lý assertions / input thật-video / user review. Không dùng model lock làm PASS motor thật; không dùng boolean obstruction làm PASS tường; không dùng lethal fixture làm PASS HP.
 
 C startup-turn revision: StartupTurnTrajectory (shortest arc, tie, retarget/deadline, 30/60/120 Hz), ActualBodyAndSkippedBoundary (real actor yaw before full skipped active delivery), ProxySamplesActionTurn (role fixture), and inherited motor/replay/presentation tests. Final manifest/results: Evidence/C-Turn. Real input/video and actual transform traces are separate from Automation. C accepted by user at cdaf102 / source 9aa7249; remote pending.
+
+
+D corner supplement (review pending): source82bb890; 50/50 Automation, 23/23 selected-action real-input assertions, smoke3/3. Independent action66 segment/AABB oracle and edge/face tangency; collider-order and 30/60/120Hz/whole-active step matrix. Evidence/D-Corner. Gameplay collision algorithm unchanged; selected debug runtime added. Original D48/36 evidence retained in Evidence/D.
