@@ -9,6 +9,7 @@
 class UCameraComponent;
 class UStaticMeshComponent;
 class UU02CombatComponent;
+class UU02VitalComponent;
 
 enum class EU01MotorLock : uint8 { Control = 1, Interacting = 2, Defeated = 4, Combat = 8 };
 
@@ -72,6 +73,7 @@ public:
     UPROPERTY(Replicated) FGuid NetworkPawnId;
     UPROPERTY(Replicated) bool bNetSprinting=false;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U02") TObjectPtr<UU02CombatComponent> Combat;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="U02") TObjectPtr<UU02VitalComponent> Vital;
     virtual void Jump() override;
     virtual void StopJumping() override;
     virtual void CheckJumpInput(float DeltaTime) override;

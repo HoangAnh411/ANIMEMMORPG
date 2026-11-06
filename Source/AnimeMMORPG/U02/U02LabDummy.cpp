@@ -1,10 +1,13 @@
 #include "U02LabDummy.h"
 #include "U02HurtboxComponent.h"
+#include "U02VitalComponent.h"
+#include "U02CollisionWorld.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 #include "UObject/ConstructorHelpers.h"
 AU02LabDummy::AU02LabDummy()
 {
+    Vital=CreateDefaultSubobject<UU02VitalComponent>(TEXT("U02Vital"));
     RootComponent=CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
     Body=CreateDefaultSubobject<UU02HurtboxComponent>(TEXT("Body"));Body->SetupAttachment(RootComponent);Body->SetRelativeLocation(FVector(0,0,70));Body->InitSphereRadius(35);Body->StableHurtboxId=1;
     Head=CreateDefaultSubobject<UU02HurtboxComponent>(TEXT("Head"));Head->SetupAttachment(RootComponent);Head->SetRelativeLocation(FVector(0,0,145));Head->InitSphereRadius(20);Head->StableHurtboxId=2;
@@ -23,6 +26,8 @@ void AU02LabDummy::BeginPlay()
 }
 bool AU02LabDummy::ResetLabCombat()
 {
-    if(!HasAuthority())return false;++LifeGeneration;
+    if(!HasAuthority()||LifeGeneration==MAX_uint64)return false;
+    GetWorld()->GetSubsystem<UU02CollisionWorld>()->DrainAt(GetWorld()->GetTimeSeconds());
+    ++LifeGeneration;Vital->ResetLabCombat(LifeGeneration);
     Body->SetFixtureSubject({NetworkPawnId,LifeGeneration});Head->SetFixtureSubject({NetworkPawnId,LifeGeneration});return true;
 }

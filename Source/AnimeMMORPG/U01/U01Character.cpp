@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 #include "U02/U02CombatComponent.h"
+#include "U02/U02VitalComponent.h"
 #include "U02/U02HurtboxComponent.h"
 
 void UU01CharacterMovement::BeginPlay()
@@ -26,6 +27,7 @@ void UU01CharacterMovement::SetMotorLock(EU01MotorLock Reason, bool bEnabled)
 {
     if (Reason == EU01MotorLock::Combat) return; // Owned by combat snapshot, not generic/client flags.
     auto* C = Cast<AU01Character>(CharacterOwner);
+    if (!bEnabled && Reason==EU01MotorLock::Defeated && C && C->Vital && C->Vital->GetSnapshot().bDead) return;
     if (bEnabled && Reason == EU01MotorLock::Interacting && bCombatAuthorityLocked) return;
     if (bEnabled && Reason == EU01MotorLock::Defeated && C && C->Combat) C->Combat->CancelAction(AnimeMMORPG::U02::ECancel::Death);
     const uint8 Bit = static_cast<uint8>(Reason);
@@ -170,6 +172,7 @@ AU01Character::AU01Character(const FObjectInitializer& ObjectInitializer)
     GetCharacterMovement()->AirControl = .35f;
     JumpMaxCount = 1;
     JumpMaxHoldTime = 0;
+    Vital = CreateDefaultSubobject<UU02VitalComponent>(TEXT("U02Vital"));
     Combat = CreateDefaultSubobject<UU02CombatComponent>(TEXT("U02Combat"));
     auto* BodyHurt=CreateDefaultSubobject<UU02HurtboxComponent>(TEXT("U02BodyHurtbox"));
     BodyHurt->SetupAttachment(RootComponent);BodyHurt->SetRelativeLocation(FVector(0,0,-26));BodyHurt->InitSphereRadius(35);BodyHurt->StableHurtboxId=1;

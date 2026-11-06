@@ -3,6 +3,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "U02ActionModel.h"
 #include "U02CollisionGeometry.h"
+#include "U02VitalModel.h"
 #include "U02CollisionWorld.generated.h"
 
 class UU02CombatComponent;
@@ -30,6 +31,12 @@ public:
     void DrawSelectedAction();
     FU02GeometryConfirmed OnGeometryConfirmed;
     TArray<AnimeMMORPG::U02::FHitCandidate> Confirmed;
+    struct FConfirmedDamage { AnimeMMORPG::U02::FHitCandidate Hit;AnimeMMORPG::U02::FDamageResult Result;double Roll=0; };
+    TArray<FConfirmedDamage> DamageResults;
+    uint64 CritRolls=0;
+    double FixtureCritRoll=-1; // native fixture only, -1 production server roll
+    bool SetLabCritRoll(double Roll);
+    void ResetLabDummies();
     uint64 Queries=0,Blocked=0,Discontinuities=0;
     uint32 UnsupportedObstructions=0;
     bool bCharacterFixtureTargets=false; // Native test fixture only; normal lab attacks dummies.
@@ -47,6 +54,7 @@ private:
         TWeakObjectPtr<UU02CombatComponent> Component;
         FDelegateHandle IntervalHandle;
         FPose Previous,Current;
+        uint64 FeedbackAction=0,FeedbackLife=0;
     };
     struct FHurt
     {
@@ -77,6 +85,8 @@ private:
     FDelegateHandle TickHandle;
     double PreviousTime=0,CurrentTime=-1;
     bool bDraining=false;
+    TWeakObjectPtr<AActor> HUDTarget;
+    void DrawVitalHUD();
     struct FDebugHurt
     {
         AnimeMMORPG::U02::FHitId Hit;

@@ -1,5 +1,8 @@
 #include "U02CollisionWorld.h"
 #include "U02CombatComponent.h"
+#include "U02VitalComponent.h"
+#include "U02LabDummy.h"
+#include "EngineUtils.h"
 #include "U02HurtboxComponent.h"
 #include "U01/U01Character.h"
 #include "Components/CapsuleComponent.h"
@@ -95,6 +98,7 @@ void UU02CollisionWorld::Capture(double Now)
     }
     for(auto& R:Hurts)if(auto* H=R.Component.Get())
     {R.Previous=R.Current;R.Current={H->GetComponentLocation(),H->GetSubject(),H->ContinuityEpoch,H->GetScaledSphereRadius()};Ledger.RegisterLife(R.Current.Life);}
+    for(const auto& R:Hurts)if(auto* H=R.Component.Get())if(auto* V=H->GetOwner()->FindComponentByClass<UU02VitalComponent>())V->Refresh(Now);
     CaptureEnvironment();
 }
 void UU02CollisionWorld::CaptureEnvironment()
@@ -217,12 +221,24 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
 {
     bool TargetCurrent=false;
     for(const auto& H:Hurts)if(auto* P=H.Component.Get())if(P->GetSubject()==C.Id.Target&&!P->GetOwner()->IsActorBeingDestroyed())TargetCurrent=true;
-    if(!TargetCurrent||!Ledger.ResolveHit(C))return false;
+    UU02VitalComponent* TargetVital=nullptr;UU02VitalComponent* SourceVital=nullptr;
+    for(const auto& H:Hurts)if(auto* P=H.Component.Get())if(P->GetSubject()==C.Id.Target)TargetVital=P->GetOwner()->FindComponentByClass<UU02VitalComponent>();
+    for(const auto& S:Sources)if(auto* B=S.Component.Get())
+    {
+        const auto Snap=B->GetCombatSnapshot();if(FLifeId{Snap.PawnId,Snap.LifeGeneration}==C.Id.Action.Source)SourceVital=B->GetOwner()->FindComponentByClass<UU02VitalComponent>();
+    }
+    if(!TargetCurrent||!TargetVital||!SourceVital||!TargetVital->IsAlive(C.Id.Target)||!SourceVital->IsAlive(C.Id.Action.Source)
+        ||!FMath::IsFinite(SourceVital->GetAttackFactor())||SourceVital->GetAttackFactor()<0||!Ledger.ResolveHit(C))return false;
+    const double Roll=FixtureCritRoll>=0?FixtureCritRoll:FMath::Min(double(FMath::FRand()),1.-DBL_EPSILON);++CritRolls;
+    const auto Result=TargetVital->ApplyResolved(C,SourceVital->GetAttackFactor(),Roll);
+    if(!Result.bApplied)return false;
+    DamageResults.Add({C,Result,Roll});
+    if(const auto* Pawn=Cast<APawn>(SourceVital->GetOwner()))if(Pawn->IsLocallyControlled())HUDTarget=TargetVital->GetOwner();
     Confirmed.Add(C);
     for(auto& D:DebugHurts)if(D.Hit==C.Id&&D.Hurtbox==C.HurtboxId)D.Result=TEXT("CONFIRMED");
     FString SHA;FParse::Value(FCommandLine::Get(),TEXT("U02SourceSHA="),SHA);
-    UE_LOG(LogU02Collision,Display,TEXT("U02D_CONFIRMED sourceSHA=%s world=%s time=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u damage=NOT_IMPLEMENTED"),
-        *SHA,*GetWorld()->GetPathName(),C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId);
+    UE_LOG(LogU02Collision,Display,TEXT("U02D_CONFIRMED sourceSHA=%s world=%s time=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u damage=%d crit=%d roll=%.17g absorbed=%d hpBefore=%d hpAfter=%d death=%d"),
+        *SHA,*GetWorld()->GetPathName(),C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,Result.Damage,Result.bCrit,Roll,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied);
     OnGeometryConfirmed.Broadcast(C);return true;
 }
 void UU02CollisionWorld::DrainAt(double Now)
@@ -237,7 +253,8 @@ void UU02CollisionWorld::DrainAt(double Now)
     Candidates.Sort(CandidateLess);
     for(const auto& C:Candidates)ResolveHit(C);
     if(GEngine&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))GEngine->AddOnScreenDebugMessage(290001,.15f,FColor::Yellow,
-        FString::Printf(TEXT("U02-D geometry | hits %d | queries %llu | blocked %llu | no damage"),Confirmed.Num(),Queries,Blocked));
+        FString::Printf(TEXT("U02-E confirmed | hits %d | queries %llu | blocked %llu | crit %s"),Confirmed.Num(),Queries,Blocked,FixtureCritRoll>=0?TEXT("FIXTURE controlled"):TEXT("server 5%")));
+    DrawVitalHUD();
 }
 
 bool UU02CollisionWorld::SelectDebugAction(uint64 Sequence)
@@ -314,4 +331,68 @@ FAutoConsoleCommandWithWorldAndArgs CornerU02Fixture(TEXT("U02CornerCase"),TEXT(
         W->GetSubsystem<UU02CollisionWorld>()->SelectDebugAction(0);
 #endif
     }));
+}
+
+bool UU02CollisionWorld::SetLabCritRoll(double Roll)
+{
+#if UE_BUILD_SHIPPING
+    return false;
+#else
+    const bool Lab=GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab"))||GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab"));
+    if(!Lab||GetWorld()->GetNetMode()==NM_Client||!FMath::IsFinite(Roll)||(Roll!=-1&&(Roll<0||Roll>=1)))return false;
+    FixtureCritRoll=Roll;UE_LOG(LogU02Collision,Display,TEXT("U02E_FIXTURE critRoll=%.17g productionCrit=5%%"),Roll);return true;
+#endif
+}
+void UU02CollisionWorld::ResetLabDummies()
+{
+#if !UE_BUILD_SHIPPING
+    if(!GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab"))||GetWorld()->GetNetMode()==NM_Client)return;
+    DrainAt(GetWorld()->GetTimeSeconds());
+    for(TActorIterator<AU02LabDummy> It(GetWorld());It;++It)It->ResetLabCombat();
+#endif
+}
+void UU02CollisionWorld::DrawVitalHUD()
+{
+    if(!GEngine)return;
+    auto* PC=GetWorld()->GetFirstPlayerController();auto* Pawn=PC?Cast<AU01Character>(PC->GetPawn()):nullptr;
+    if(!Pawn||!Pawn->IsLocallyControlled()||!Pawn->Vital)return;
+    const auto V=Pawn->Vital->GetSnapshot();GEngine->AddOnScreenDebugMessage(290010,.15f,V.bDead?FColor::Red:FColor::White,
+        FString::Printf(TEXT("HP %d/%d | shield %d | %s"),V.HP,V.MaxHP,V.Shield,V.bDead?TEXT("DEFEATED - lab reset only"):TEXT("Playing")));
+    if(auto* Target=HUDTarget.Get())if(auto* Vital=Target->FindComponentByClass<UU02VitalComponent>())
+    {
+        bool Visible=false;for(const auto& H:Hurts)if(auto* P=H.Component.Get())if(P->GetOwner()==Target)
+            Visible|=Unobstructed(Feet(Pawn)+FVector(0,0,90),P->GetComponentLocation(),P->GetScaledSphereRadius());
+        if(Visible)
+        {
+            const auto S=Vital->GetSnapshot();GEngine->AddOnScreenDebugMessage(290011,.15f,S.bDead?FColor::Red:FColor::Green,
+                FString::Printf(TEXT("Target HP %d/%d | shield %d | %s"),S.HP,S.MaxHP,S.Shield,S.bDead?TEXT("DEFEATED"):TEXT("confirmed server")));
+        }
+        else GEngine->RemoveOnScreenDebugMessage(290011);
+    }
+    for(auto& S:Sources)if(S.Component==Pawn->Combat&&Pawn->Combat->GetCombatSnapshot().Phase==uint8(EPhase::Finished))
+    {
+        const auto Snap=Pawn->Combat->GetCombatSnapshot();
+        if(Snap.ActionSequence&&(S.FeedbackAction!=Snap.ActionSequence||S.FeedbackLife!=Snap.LifeGeneration))
+        {
+            S.FeedbackAction=Snap.ActionSequence;S.FeedbackLife=Snap.LifeGeneration;
+            FActionId Id{{Snap.PawnId,Snap.LifeGeneration},Snap.ActionSequence};
+            const auto* Hit=DamageResults.FindByPredicate([&](const FConfirmedDamage& R){return R.Hit.Id.Action==Id;});
+            GEngine->AddOnScreenDebugMessage(290012,1.2f,Hit?FColor::Green:FColor::Silver,Hit?FString::Printf(TEXT("CONFIRMED %d%s"),Hit->Result.Damage,Hit->Result.bCrit?TEXT(" CRIT"):TEXT("")):TEXT("MISS"));
+        }
+    }
+}
+namespace
+{
+FAutoConsoleCommandWithWorldAndArgs CritU02Fixture(TEXT("U02ECrit"),TEXT("Lab only: off / force / normal"),FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& A,UWorld* W)
+{if(!W||A.IsEmpty())return;auto* S=W->GetSubsystem<UU02CollisionWorld>();if(S)S->SetLabCritRoll(A[0]==TEXT("off")?1.-1.e-9:A[0]==TEXT("force")?0.:-1.);}));
+FAutoConsoleCommandWithWorldAndArgs ResetU02DummyFixture(TEXT("U02EResetDummies"),TEXT("Lab only reset all dummy lives"),FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>&,UWorld* W)
+{if(W)if(auto* S=W->GetSubsystem<UU02CollisionWorld>())S->ResetLabDummies();}));
+FAutoConsoleCommandWithWorldAndArgs ShieldU02Fixture(TEXT("U02EShield"),TEXT("Lab only dummy shield source capacity duration; source>0"),FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& A,UWorld* W)
+{
+#if !UE_BUILD_SHIPPING
+    if(!W||!W->GetMapName().EndsWith(TEXT("L_CharacterCombatLab"))||W->GetNetMode()==NM_Client||A.Num()!=3)return;
+    auto* S=W->GetSubsystem<UU02CollisionWorld>();S->DrainAt(W->GetTimeSeconds());
+    for(TActorIterator<AU02LabDummy> It(W);It;++It)It->Vital->AddFixtureShield(FCString::Strtoui64(*A[0],nullptr,10),FCString::Atoi(*A[1]),W->GetTimeSeconds()+FCString::Atod(*A[2]),W->GetTimeSeconds());
+#endif
+}));
 }

@@ -1,5 +1,6 @@
 #include "U02CombatComponent.h"
 #include "U02CollisionWorld.h"
+#include "U02VitalComponent.h"
 #include "U01/U01Character.h"
 #include "U01/U01PlayerController.h"
 #include "Net/UnrealNetwork.h"
@@ -100,7 +101,7 @@ void UU02CombatComponent::HandleAttack(uint64 Sequence, double LocalInputSeconds
         Context.bPlaying &= PC->ControlState == EU01ControlState::Playing;
     Context.bGrounded = M->IsMovingOnGround();
     Context.bInteracting = (M->GetLockMask() & uint8(EU01MotorLock::Interacting)) != 0;
-    Context.bDefeated = (M->GetLockMask() & uint8(EU01MotorLock::Defeated)) != 0;
+    Context.bDefeated = (Character()->Vital&&Character()->Vital->GetSnapshot().bDead) || (M->GetLockMask() & uint8(EU01MotorLock::Defeated)) != 0;
     LastCommand = Sequence;
     // The client clock is diagnostic only; invalid local stamps are discarded, never backdated.
     LastReject = Model->SubmitAttackIntent(Sequence,Now,Yaw,Context);
@@ -161,12 +162,24 @@ bool UU02CombatComponent::CancelAt(ECancel Reason, double Now)
     if(!AdvanceAuthority(Now,WillCancel))return false;
     BeforeActionMutation.ExecuteIfBound(Now);
     const bool Cancelled = Model->CancelAction(Reason,Now);
-    if(Cancelled&&(Reason==ECancel::Death||Reason==ECancel::Removed))GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(Model->GetLife());
+    if(Cancelled&&(Reason==ECancel::Removed||(Reason==ECancel::Death&&Character()->Vital&&Character()->Vital->GetSnapshot().bDead)))GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(Model->GetLife());
     Publish(Now,true);
     Trace(Cancelled ? TEXT("Cancelled") : TEXT("CancelRejected"),Now,FString::Printf(TEXT("reason=%d"),int32(Reason)));
     return Cancelled;
 }
 bool UU02CombatComponent::CancelAction(ECancel Reason) { return CancelAt(Reason,GetWorld()->GetTimeSeconds()); }
+void UU02CombatComponent::HandleDefeat(double GameplayTime)
+{
+    if(!Model||!Character()->HasAuthority())return;
+    GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(Model->GetLife());
+    // The world batch already advanced every model to the snapshot endpoint.
+    // Cancel presentation at that observed endpoint, never rewind the model clock;
+    // the ledger/vital death timestamp is the earlier sorted gameplay hit time.
+    const double Observed=FMath::Max(double(GetWorld()->GetTimeSeconds()),Model->GetCombatSnapshot(GetWorld()->GetTimeSeconds()).LastAdvanceSeconds);
+    Model->CancelAction(ECancel::Death,Observed);Publish(Observed,true);
+    Character()->GetU01Movement()->SetMotorLock(EU01MotorLock::Defeated,true);
+    Trace(TEXT("VitalDeath"),GameplayTime);
+}
 void UU02CombatComponent::LostGround()
 {
     if (Snapshot.bLocked && Model) CancelAt(ECancel::LostGround,GetWorld()->GetTimeSeconds());
@@ -181,6 +194,7 @@ bool UU02CombatComponent::ResetLabCombat()
     if (!AdvanceAuthority(Now,true)) return false;
     BeforeActionMutation.ExecuteIfBound(Now);
     if (!Model->ResetLabCombat(Now)) return false;
+    if(Character()->Vital)Character()->Vital->ResetLabCombat(Model->GetLife().Generation);
     Publish(Now,true); Trace(TEXT("Reset"),Now); return true;
 #endif
 }
@@ -260,6 +274,7 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("lastSliceBegin"),LastInterval.BeginSeconds); J->SetNumberField(TEXT("lastSliceEnd"),LastInterval.EndSeconds);
     if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())
     {J->SetNumberField(TEXT("geometryConfirmed"),W->Confirmed.Num());J->SetNumberField(TEXT("geometryQueries"),W->Queries);J->SetNumberField(TEXT("geometryBlocked"),W->Blocked);J->SetNumberField(TEXT("geometryUnsupportedShapes"),W->UnsupportedObstructions);}
+    if(Character()&&Character()->Vital)J->SetObjectField(TEXT("vital"),Character()->Vital->GetDiagnostics());
     return J;
 }
 void UU02CombatComponent::Trace(const TCHAR* Event, double GameplaySeconds, const FString& Detail) const

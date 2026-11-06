@@ -46,6 +46,7 @@ public:
     bool CancelAction(AnimeMMORPG::U02::ECancel Reason);
     bool ResetLabCombat();
     void LostGround();
+    void HandleDefeat(double GameplayTime);
     const FU02RepCombatSnapshot& GetCombatSnapshot() const { return Snapshot; }
     TSharedRef<FJsonObject> GetDiagnostics() const;
     FU02ActiveIntervalDelegate OnActiveInterval;

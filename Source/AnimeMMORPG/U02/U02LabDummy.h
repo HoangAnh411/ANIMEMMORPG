@@ -3,6 +3,7 @@
 #include "GameFramework/Actor.h"
 #include "U02LabDummy.generated.h"
 class UU02HurtboxComponent;
+class UU02VitalComponent;
 class UStaticMeshComponent;
 // Technical lab target only. No vital state / damage / product respawn.
 UCLASS()
@@ -16,6 +17,7 @@ public:
     UPROPERTY(VisibleAnywhere) TObjectPtr<UU02HurtboxComponent> Body;
     UPROPERTY(VisibleAnywhere) TObjectPtr<UU02HurtboxComponent> Head;
     UPROPERTY(VisibleAnywhere) TObjectPtr<UStaticMeshComponent> Visual;
+    UPROPERTY(VisibleAnywhere) TObjectPtr<UU02VitalComponent> Vital;
     FGuid NetworkPawnId;
     uint64 LifeGeneration=1;
 };

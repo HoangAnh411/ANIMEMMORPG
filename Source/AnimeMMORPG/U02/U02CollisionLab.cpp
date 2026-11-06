@@ -28,7 +28,7 @@ void AU02CollisionLab::BeginPlay()
         auto* Point=GetWorld()->SpawnActor<ATargetPoint>(Base+FVector(0,0,110),FRotator::ZeroRotator);
         Point->Tags.Add(FName(*FString::Printf(TEXT("U01C_Reset_CombatD%d"),Lane+1)));
         auto* Label=NewObject<UTextRenderComponent>(this);Label->SetupAttachment(RootComponent);Label->SetRelativeLocation(Base-GetActorLocation()+FVector(250,0,220));
-        Label->SetText(FText::FromString(FString::Printf(TEXT("U02-D %d | geometry only / no damage"),Lane+1)));Label->SetWorldSize(24);Label->SetRelativeRotation(FRotator(0,180,0));Label->RegisterComponent();
+        Label->SetText(FText::FromString(FString::Printf(TEXT("U02-E %d | confirmed damage / lab dummy"),Lane+1)));Label->SetWorldSize(24);Label->SetRelativeRotation(FRotator(0,180,0));Label->RegisterComponent();
         GetWorld()->SpawnActor<AU02LabDummy>(Base+FVector(150,Lane==0?-35:0,0),FRotator::ZeroRotator);
         if(Lane==0)GetWorld()->SpawnActor<AU02LabDummy>(Base+FVector(150,35,0),FRotator::ZeroRotator);
         if(Lane==1)Box(Base-GetActorLocation()+FVector(75,0,110),FVector(10,200,110));
