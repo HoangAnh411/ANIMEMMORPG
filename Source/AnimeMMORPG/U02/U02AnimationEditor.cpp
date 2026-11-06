@@ -170,6 +170,10 @@ FString UU02AnimationEditor::BuildCAssets()
     auto* Arm=NewObject<UAnimGraphNode_LayeredBoneBlend>(Graph);Graph->AddNode(Arm,false,false);Arm->CreateNewGuid();
     Arm->Node.LayerSetup.SetNum(1);Arm->Node.BlendWeights.SetNum(1);Arm->Node.BlendWeights[0]=1;
     FBranchFilter ArmFilter;ArmFilter.BoneName=TEXT("pelvis");ArmFilter.BlendDepth=0;Arm->Node.LayerSetup[0].BranchFilters.Add(ArmFilter);
+    // Carry pose assets contain reference-pose left arm; retain locomotion there.
+    // Spine/clavicles and legs still participate in the authored preparation.
+    FBranchFilter PreserveLeft;PreserveLeft.BoneName=TEXT("upperarm_l");PreserveLeft.BlendDepth=-1;
+    Arm->Node.LayerSetup[0].BranchFilters.Add(PreserveLeft);
     Arm->Node.bMeshSpaceRotationBlend=true;Arm->PostPlacedNewNode();Arm->AllocateDefaultPins();
     auto* Alpha=NewObject<UK2Node_VariableGet>(Graph);Graph->AddNode(Alpha,false,false);Alpha->CreateNewGuid();Alpha->VariableReference.SetSelfMember(TEXT("AttackBlendWeight"));Alpha->PostPlacedNewNode();Alpha->AllocateDefaultPins();
     if(!Graph->GetSchema()->TryCreateConnection(Alpha->FindPin(TEXT("AttackBlendWeight")),Arm->FindPin(TEXT("BlendWeights_0"))))return TEXT("ERROR: attack weight pin");
