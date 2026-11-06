@@ -12,6 +12,8 @@ try{
  if($Clients -eq 1){$probeArgs+='--single'}
  & python @probeArgs
  if($LASTEXITCODE -ne 0){throw 'Focus probe failed'}
+ # Capture has ended; allow buffered native per-frame files to flush before Stop.
+ Start-Sleep -Seconds 3
  & (Join-Path $PSScriptRoot 'StopFocusSession.ps1') -SessionPath $session
  & python (Join-Path $PSScriptRoot 'AnalyzeFocus.py') --session $session --label $Label
  if($LASTEXITCODE -ne 0){throw 'Analysis failed'}

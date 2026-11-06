@@ -22,4 +22,12 @@ try{
  [string]([DateTime]::UtcNow.Ticks)+' hit' | Set-Content -Encoding UTF8 (Join-Path $session 'command.txt')
  Write-Host ('U02-F ready: '+$session)
  Write-Host 'Left=A, right=B. Resume after focus changes. Stop-U02-F.cmd restores Editor windows.'
-}catch{Restore-FOriginalEditorWindows $windows;throw}
+}catch{
+ $launchFailure=$_
+ if($session -and (Test-Path (Join-Path $session 'processes.json'))){
+  try{& (Join-Path $PSScriptRoot 'StopFSession.ps1') -SessionPath $session}
+  catch{Write-Warning ('Session cleanup refused or failed: '+$_.Exception.Message)}
+ }
+ Restore-FOriginalEditorWindows $windows
+ throw $launchFailure
+}
