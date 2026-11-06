@@ -190,4 +190,65 @@ bool FU02DShapes::RunTest(const FString&)
     }
     return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DCornerReview,"AnimeMMORPG.U02.D.CornerReviewAction66IndependentGeometry",U02DFlags)
+bool FU02DCornerReview::RunTest(const FString&)
+{
+    // Independent segment/AABB slab oracle. Does not call the triangle obstruction implementation.
+    auto Slab=[](FVector O,FVector E,FBox Box)
+    {
+        double A=0,B=1;
+        for(int I=0;I<3;++I)
+        {
+            double V=E[I]-O[I];if(V==0){if(O[I]<Box.Min[I]||O[I]>Box.Max[I])return false;continue;}
+            double X=(Box.Min[I]-O[I])/V,Y=(Box.Max[I]-O[I])/V;if(X>Y)Swap(X,Y);
+            A=FMath::Max(A,X);B=FMath::Min(B,Y);if(A>B)return false;
+        }
+        return true;
+    };
+    const FBox Walls[]={FBox(FVector(65,-9140,0),FVector(85,-8980,220)),FBox(FVector(65,-9140,0),FVector(155,-9120,220))};
+    for(FVector Feet:{FVector(162.889,-9181.335,2.15),FVector(120,-9181.335,2.15)})
+    {
+        FVector Origin=Feet+FVector(0,0,90);
+        for(double Height:{70.,145.})
+        {
+            FVector C(150,-9000,Height);double Radius=Height==70?35:20;
+            FVector End=C+(Origin-C).GetSafeNormal()*Radius;bool Oracle=false;
+            TArray<FTriangle> T;for(auto Wall:Walls){Oracle|=Slab(Origin,End,Wall);AddBoxTriangles(FTransform(Wall.GetCenter()),Wall.GetExtent(),T);}
+            bool Actual=false;for(auto Tri:T)Actual|=SegmentTriangleClosed(Origin,End,Tri);
+            TestEqual(TEXT("Independent slab and polygon agree at review coordinates"),Actual,Oracle);
+            TestEqual(TEXT("Outside corner open, moved attacker blocked for both hurtboxes"),Oracle,Feet.X==120);
+        }
+    }
+    for(auto Wall:Walls)
+    {
+        TArray<FTriangle> T;AddBoxTriangles(FTransform(Wall.GetCenter()),Wall.GetExtent(),T);
+        FVector O=Wall.Min-FVector(0,10,0),E=Wall.Min+FVector(0,10,0); // closed edge tangent
+        bool Actual=false;for(auto Tri:T)Actual|=SegmentTriangleClosed(O,E,Tri);
+        TestTrue(TEXT("Exact edge tangent independently blocks"),Slab(O,E,Wall)&&Actual);
+        O=Wall.GetCenter();O.X=Wall.Min.X;E=O+FVector(0,1,0);
+        Actual=false;for(auto Tri:T)Actual|=SegmentTriangleClosed(O,E,Tri);
+        TestTrue(TEXT("Exact face tangent independently blocks"),Slab(O,E,Wall)&&Actual);
+    }
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DCornerWorld,"AnimeMMORPG.U02.D.CornerReviewWorldOrderAndStepMatrix",U02DFlags)
+bool FU02DCornerWorld::RunTest(const FString&)
+{
+    for(bool Reverse:{false,true})for(double Step:{1./30,1./60,1./120,.5})for(bool Blocked:{false,true})
+    {
+        FDWorld W(*this);
+        if(Reverse){W.Wall(FVector(110,-9130,110),FVector(45,10,110));W.Wall(FVector(75,-9060,110),FVector(10,80,110));}
+        else {W.Wall(FVector(75,-9060,110),FVector(10,80,110));W.Wall(FVector(110,-9130,110),FVector(45,10,110));}
+        W.Dummy(FVector(150,-9000,0));
+        FVector Feet(Blocked?120:162.889,-9181.335,2.15);
+        W.Source->SetActorLocation(Feet+FVector(0,0,96),false,nullptr,ETeleportType::TeleportPhysics);
+        W.Resolver->DrainAt(W.Now());W.Attack(Blocked?80.6:90.720003351569176);
+        const double Start=W.Now();for(double T=Step;T<.5;T+=Step)W.Resolver->DrainAt(Start+T);
+        W.Resolver->DrainAt(Start+.5);
+        TestEqual(TEXT("Review corner invariant under collider registration and update step"),W.Resolver->Confirmed.Num(),Blocked?0:1);
+        if(!Blocked&&!W.Resolver->Confirmed.IsEmpty())TestEqual(TEXT("Both valid hurtboxes still one body confirmation"),W.Resolver->Confirmed[0].HurtboxId,uint32(1));
+    }
+    return true;
+}
 #endif

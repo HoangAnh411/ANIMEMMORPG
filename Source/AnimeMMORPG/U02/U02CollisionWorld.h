@@ -26,6 +26,8 @@ public:
     void ObserveCombat(UU02CombatComponent* Combat);
     void DrainAt(double Now);
     void MarkDead(AnimeMMORPG::U02::FLifeId Life);
+    bool SelectDebugAction(uint64 Sequence); // lab diagnostics only, 0 selects next local action
+    void DrawSelectedAction();
     FU02GeometryConfirmed OnGeometryConfirmed;
     TArray<AnimeMMORPG::U02::FHitCandidate> Confirmed;
     uint64 Queries=0,Blocked=0,Discontinuities=0;
@@ -75,6 +77,19 @@ private:
     FDelegateHandle TickHandle;
     double PreviousTime=0,CurrentTime=-1;
     bool bDraining=false;
+    struct FDebugHurt
+    {
+        AnimeMMORPG::U02::FHitId Hit;
+        uint32 Hurtbox=0;
+        FVector Feet,Center,Origin,Nearest,BlockPoint;
+        double Yaw=0,Radius=0,Time=0;
+        FString Result,Wall;
+        bool bHasBlock=false;
+    };
+    bool bSelectedDebug=false;
+    AnimeMMORPG::U02::FActionId DebugAction;
+    TArray<FDebugHurt> DebugHurts;
+    void RecordSelected(const FPending& P,AnimeMMORPG::U02::FLifeId Target,uint32 Hurtbox,FVector Feet,FVector Center,double Radius,double Time,const FString& Result);
     void PreActorTick(UWorld* World,ELevelTick Type,float Dt);
     void Capture(double Now);
     void CaptureEnvironment();

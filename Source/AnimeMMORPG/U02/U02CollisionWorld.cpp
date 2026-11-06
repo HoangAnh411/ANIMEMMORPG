@@ -17,6 +17,8 @@
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
 #include "DrawDebugHelpers.h"
+#include "HAL/IConsoleManager.h"
+#include "GameFramework/PlayerController.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogU02Collision,Log,All);
 using namespace AnimeMMORPG::U02;
@@ -36,7 +38,7 @@ void UU02CollisionWorld::Deinitialize()
 }
 void UU02CollisionWorld::PreActorTick(UWorld* W,ELevelTick Type,float Dt)
 {
-    if(W==GetWorld()&&W->GetNetMode()!=NM_Client&&Type!=LEVELTICK_ViewportsOnly)DrainAt(W->GetTimeSeconds());
+    if(W==GetWorld()&&W->GetNetMode()!=NM_Client&&Type!=LEVELTICK_ViewportsOnly){DrainAt(W->GetTimeSeconds());DrawSelectedAction();}
 }
 void UU02CollisionWorld::RegisterCombat(UU02CombatComponent* C)
 {
@@ -176,7 +178,8 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
             if(CurrentTime<P.Slice.BeginSeconds||CurrentTime>P.Slice.EndSeconds||P.Slice.bEndExclusive)continue;
             A=B=1;F0=F1;C0=C1;
         }
-        auto Range=SphereAttackContact(F0,F1,P.Yaw,C0,C1,H.Current.Radius,A,B);if(!Range.bHit)continue;++Queries;
+        auto Range=SphereAttackContact(F0,F1,P.Yaw,C0,C1,H.Current.Radius,A,B);
+        if(!Range.bHit){RecordSelected(P,H.Current.Life,Shape->StableHurtboxId,FMath::Lerp(F0,F1,A),FMath::Lerp(C0,C1,A),H.Current.Radius,P.Slice.BeginSeconds,TEXT("OUTSIDE"));continue;}++Queries;
         const FVector Up(0,0,90);
         auto Valid=[&](double T){return Unobstructed(FMath::Lerp(F0,F1,T)+Up,FMath::Lerp(C0,C1,T),H.Current.Radius);};
         auto Hit=FirstVisible(F0+Up,F1+Up,C0,C1,H.Current.Radius,Range,Triangles,Valid);
@@ -187,7 +190,8 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         if(!Hit.IsSet())
         {
             ++Blocked;
-            if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
+            RecordSelected(P,H.Current.Life,Shape->StableHurtboxId,FMath::Lerp(F0,F1,Range.Begin),FMath::Lerp(C0,C1,Range.Begin),H.Current.Radius,P.Slice.BeginSeconds,TEXT("BLOCKED"));
+            if(!bSelectedDebug&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
             {
                 const FVector Foot=FMath::Lerp(F0,F1,Range.Begin),Origin=Foot+Up;
                 DrawDebugBox(GetWorld(),AttackCenter(Foot,P.Yaw),FVector(100,60,90),FRotator(0,P.Yaw,0).Quaternion(),FColor::Red,false,.5f);
@@ -199,7 +203,8 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         const double Timestamp=T==P.Slice.BeginAlpha?P.Slice.BeginSeconds:T==P.Slice.EndAlpha?P.Slice.EndSeconds:FMath::Lerp(PreviousTime,CurrentTime,T);
         if(Timestamp<P.Slice.BeginSeconds||Timestamp>P.Slice.EndSeconds||(P.Slice.bEndExclusive&&Timestamp>=P.Slice.EndSeconds))continue;
         Out.Add({{P.Action,H.Current.Life},Timestamp,Shape->StableHurtboxId,true,true});
-        if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
+        RecordSelected(P,H.Current.Life,Shape->StableHurtboxId,FMath::Lerp(F0,F1,T),FMath::Lerp(C0,C1,T),H.Current.Radius,Timestamp,TEXT("VALID"));
+        if(!bSelectedDebug&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
         {
             const FVector FeetNow=FMath::Lerp(F0,F1,T);
             DrawDebugBox(GetWorld(),AttackCenter(FeetNow,P.Yaw),FVector(100,60,90),FRotator(0,P.Yaw,0).Quaternion(),FColor::Cyan,false,.5f);
@@ -213,6 +218,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     for(const auto& H:Hurts)if(auto* P=H.Component.Get())if(P->GetSubject()==C.Id.Target&&!P->GetOwner()->IsActorBeingDestroyed())TargetCurrent=true;
     if(!TargetCurrent||!Ledger.ResolveHit(C))return false;
     Confirmed.Add(C);
+    for(auto& D:DebugHurts)if(D.Hit==C.Id&&D.Hurtbox==C.HurtboxId)D.Result=TEXT("CONFIRMED");
     FString SHA;FParse::Value(FCommandLine::Get(),TEXT("U02SourceSHA="),SHA);
     UE_LOG(LogU02Collision,Display,TEXT("U02D_CONFIRMED sourceSHA=%s world=%s time=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u damage=NOT_IMPLEMENTED"),
         *SHA,*GetWorld()->GetPathName(),C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId);
@@ -231,4 +237,80 @@ void UU02CollisionWorld::DrainAt(double Now)
     for(const auto& C:Candidates)ResolveHit(C);
     if(GEngine&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))GEngine->AddOnScreenDebugMessage(290001,.15f,FColor::Yellow,
         FString::Printf(TEXT("U02-D geometry | hits %d | queries %llu | blocked %llu | no damage"),Confirmed.Num(),Queries,Blocked));
+}
+
+bool UU02CollisionWorld::SelectDebugAction(uint64 Sequence)
+{
+#if !UE_BUILD_SHIPPING
+    if(!GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab"))&&!GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab")))return false;
+    auto* PC=GetWorld()->GetFirstPlayerController();auto* C=PC?Cast<AU01Character>(PC->GetPawn()):nullptr;if(!C||!C->HasAuthority())return false;
+    auto S=C->Combat->GetCombatSnapshot();DebugAction={{S.PawnId,S.LifeGeneration},Sequence?Sequence:S.ActionSequence+1};
+    DebugHurts.Empty();bSelectedDebug=true;FlushPersistentDebugLines(GetWorld());
+    return true;
+#else
+    return false;
+#endif
+}
+void UU02CollisionWorld::RecordSelected(const FPending& P,FLifeId Target,uint32 Hurtbox,FVector Feet,FVector Center,double Radius,double Time,const FString& Result)
+{
+    if(!bSelectedDebug||!(P.Action==DebugAction)||(Center-Feet).Size()>400)return;
+    FHitId Id{P.Action,Target};
+    auto* Existing=DebugHurts.FindByPredicate([&](const FDebugHurt& D){return D.Hit==Id&&D.Hurtbox==Hurtbox;});
+    if(Existing&&(Existing->Result==TEXT("CONFIRMED")||Existing->Result==TEXT("VALID")||Result!=TEXT("VALID")))return;
+    FDebugHurt D;D.Hit=Id;D.Hurtbox=Hurtbox;D.Feet=Feet;D.Center=Center;D.Yaw=P.Yaw;D.Radius=Radius;D.Time=Time;D.Origin=Feet+FVector(0,0,90);D.Nearest=SphereNearest(D.Origin,Center,Radius);D.Result=Result;
+    if(Result==TEXT("BLOCKED"))
+    {
+        FHitResult Hit;FCollisionQueryParams Params(SCENE_QUERY_STAT(U02SelectedWall),false);
+        for(auto Weak:IgnoredObstructionComponents)if(auto* Comp=Weak.Get())Params.AddIgnoredComponent(Comp);
+        if(GetWorld()->LineTraceSingleByChannel(Hit,D.Origin,D.Nearest,ECC_GameTraceChannel2,Params))
+        {D.bHasBlock=true;D.BlockPoint=Hit.ImpactPoint;D.Wall=GetPathNameSafe(Hit.GetComponent());}
+        else for(const auto& E:Environment)if(E.bSupported)
+        {
+            for(int I=E.FirstTriangle;I<E.FirstTriangle+E.TriangleCount;++I)if(SegmentTriangleClosed(D.Origin,D.Nearest,Triangles[I]))
+            {
+                const auto& T=Triangles[I];FVector N=FVector::CrossProduct(T.B-T.A,T.C-T.A);double Den=FVector::DotProduct(N,D.Nearest-D.Origin);
+                D.bHasBlock=true;D.BlockPoint=Den!=0?D.Origin+(D.Nearest-D.Origin)*(FVector::DotProduct(N,T.A-D.Origin)/Den):D.Origin;D.Wall=GetPathNameSafe(E.Component.Get());break;
+            }
+            if(D.bHasBlock)break;
+        }
+    }
+    if(Existing)*Existing=D;else DebugHurts.Add(D);
+    UE_LOG(LogU02Collision,Display,TEXT("U02D_SELECTED action=%s:%llu:%llu target=%s:%llu hurtbox=%u time=%.17g result=%s origin=(%s) center=(%s) nearest=(%s) radius=%.17g block=(%s) wall=%s"),
+        *P.Action.Source.Pawn.ToString(),P.Action.Source.Generation,P.Action.Sequence,*Target.Pawn.ToString(),Target.Generation,Hurtbox,Time,*D.Result,*D.Origin.ToString(),*D.Center.ToString(),*D.Nearest.ToString(),Radius,*D.BlockPoint.ToString(),*D.Wall);
+}
+void UU02CollisionWorld::DrawSelectedAction()
+{
+    if(!bSelectedDebug)return;
+    int Count=0;for(const auto& C:Confirmed)if(C.Id.Action==DebugAction)++Count;
+    if(GEngine)GEngine->AddOnScreenDebugMessage(290002,.1f,FColor::White,FString::Printf(TEXT("SELECTED %s:%llu:%llu | action hits %d | frozen query only"),*DebugAction.Source.Pawn.ToString(),DebugAction.Source.Generation,DebugAction.Sequence,Count));
+    for(const auto& D:DebugHurts)
+    {
+        FColor Color=D.Result==TEXT("CONFIRMED")?FColor::Green:D.Result==TEXT("BLOCKED")?FColor::Red:D.Result==TEXT("OUTSIDE")?FColor::Silver:FColor::Yellow;
+        DrawDebugBox(GetWorld(),AttackCenter(D.Feet,D.Yaw),FVector(100,60,90),FRotator(0,D.Yaw,0).Quaternion(),FColor::Cyan,false,0,0,1);
+        DrawDebugSphere(GetWorld(),D.Center,D.Radius,24,Color,false,0,0,1.5f);
+        DrawDebugSphere(GetWorld(),D.Origin,3,8,FColor::Magenta,false,0);DrawDebugSphere(GetWorld(),D.Nearest,3,8,FColor::Yellow,false,0);
+        DrawDebugLine(GetWorld(),D.Origin,D.Nearest,Color,false,0,0,3);
+        DrawDebugString(GetWorld(),D.Center+FVector(0,0,D.Radius+10),FString::Printf(TEXT("%s:%llu HB%u %s"),*D.Hit.Target.Pawn.ToString().Left(8),D.Hit.Target.Generation,D.Hurtbox,*D.Result),nullptr,Color,0,true);
+        if(D.bHasBlock){DrawDebugPoint(GetWorld(),D.BlockPoint,15,FColor::Red,false,0);DrawDebugString(GetWorld(),D.BlockPoint+FVector(0,0,10),TEXT("WALL BLOCK"),nullptr,FColor::Red,0);}
+    }
+}
+namespace
+{
+FAutoConsoleCommandWithWorldAndArgs SelectU02Action(TEXT("U02DebugAction"),TEXT("Lab only: 0 freezes next local action; explicit sequence selects that action going forward"),
+    FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& Args,UWorld* W){if(W)if(auto* S=W->GetSubsystem<UU02CollisionWorld>())S->SelectDebugAction(Args.Num()?FCString::Strtoui64(*Args[0],nullptr,10):0);}));
+FAutoConsoleCommandWithWorldAndArgs CornerU02Fixture(TEXT("U02CornerCase"),TEXT("Lab-only action66 reconstruction: open or blocked"),
+    FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& Args,UWorld* W)
+    {
+#if !UE_BUILD_SHIPPING
+        if(!W||!W->GetMapName().EndsWith(TEXT("L_CharacterCombatLab")))return;
+        auto* PC=W->GetFirstPlayerController();auto* C=PC?Cast<AU01Character>(PC->GetPawn()):nullptr;if(!C||!C->HasAuthority()||C->Combat->GetCombatSnapshot().bLocked)return;
+        C->GetU01Movement()->ResetFixtureState();
+        FVector Feet(162.889,-9181.335,2.15);double Yaw=90.720003351569176;
+        if(Args.Num()&&Args[0].Equals(TEXT("blocked"),ESearchCase::IgnoreCase)){Feet.X=120;Yaw=80.6;}
+        if(Args.Num()&&Args[0].Equals(TEXT("outside"),ESearchCase::IgnoreCase)){Feet.Y=-9400;Yaw=90;}
+        C->SetActorLocation(Feet+FVector(0,0,C->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()),false,nullptr,ETeleportType::TeleportPhysics);
+        C->SetActorRotation(FRotator(0,Yaw,0));PC->SetControlRotation(FRotator(0,Yaw,0));C->GetU01Movement()->SetMovementMode(MOVE_Walking);
+        W->GetSubsystem<UU02CollisionWorld>()->SelectDebugAction(0);
+#endif
+    }));
 }
