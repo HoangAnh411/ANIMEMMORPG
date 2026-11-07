@@ -26,38 +26,38 @@ bool FU03Timeline::RunTest(const FString&)
     for(const double Step:{1./30,1./60,1./120,2.})
     {
         FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;
-        M.SubmitBatch({U03A0Intent(1,0)}, {},Out);M.SubmitBatch({U03A0Intent(2,.30)}, {},Out);
-        for(double T=.30+Step;T<1.;T+=Step) M.Advance(T,Out);
-        M.Advance(1.,Out);double Total=0;bool Second=false;
+        M.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);M.SubmitBatchUnopposed({U03A0Intent(2,.30)}, {},Out);
+        for(double T=.30+Step;T<1.;T+=Step) M.AdvanceUnopposed(T,Out);
+        M.AdvanceUnopposed(1.,Out);double Total=0;bool Second=false;
         for(const auto& S:Out){AddInfo(FString::Printf(TEXT("U03A0_TRACE step=%.17g action=%llu definition=%u raw=%d interval=%c%.17g,%.17g%c yaw=%.17g"),Step,S.Identity.Sequence,static_cast<uint32>(S.DefinitionId),S.RawDamage,TCHAR('['),S.Begin,S.End,S.bEndExclusive?TCHAR(')'):TCHAR(']'),S.Yaw));
             Total+=S.End-S.Begin;Second|=S.DefinitionId==EAction::Attack2;TestTrue(TEXT("nonempty clipped"),S.Begin<=S.End);}
         TestTrue(TEXT("whole active both actions"),FMath::Abs(Total-.13)<1e-12);TestTrue(TEXT("buffer starts second within long update"),Second);
     }
     FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;
-    M.SubmitBatch({U03A0Intent(1,0)}, {},Out);
-    auto R=M.SubmitBatch({U03A0Intent(2,.25)}, {},Out);TestTrue(TEXT("queue"),R[0].Result==EAdmission::Queued);
-    M.Advance(.40,Out);TestNull(TEXT("expiry exactly end not consumed"),M.Current());
-    M.SubmitBatch({U03A0Intent(3,.40)}, {},Out);TestTrue(TEXT("new edge exactly end uses combo grace"),M.Current()->GetDefinition().Id==EAction::Attack2);
-    FTimelineModel N(U03A0Life());Out.Reset();N.SubmitBatch({U03A0Intent(1,0)}, {},Out);
-    N.SubmitBatch({U03A0Intent(2,.26,ECommand::Attack,10)}, {},Out);
-    R=N.SubmitBatch({U03A0Intent(3,.35,ECommand::Attack,30)}, {},Out);TestTrue(TEXT("replacement"),R[0].Result==EAdmission::Replaced);
-    N.Advance(.40,Out);TestEqual(TEXT("known queued aim"),N.Current()->Yaw,30.);
-    N.SubmitBatch({U03A0Intent(4,.75)}, {},Out);N.Advance(.40+.45,Out);TestTrue(TEXT("third"),N.Current()->GetDefinition().Id==EAction::Attack3);
-    N.SubmitBatch({U03A0Intent(5,1.35)}, {},Out);N.Advance(.40+.45+.60,Out);TestTrue(TEXT("third buffers first"),N.Current()->GetDefinition().Id==EAction::Attack1);
+    M.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+    auto R=M.SubmitBatchUnopposed({U03A0Intent(2,.25)}, {},Out);TestTrue(TEXT("queue"),R[0].Result==EAdmission::Queued);
+    M.AdvanceUnopposed(.40,Out);TestNull(TEXT("expiry exactly end not consumed"),M.Current());
+    M.SubmitBatchUnopposed({U03A0Intent(3,.40)}, {},Out);TestTrue(TEXT("new edge exactly end uses combo grace"),M.Current()->GetDefinition().Id==EAction::Attack2);
+    FTimelineModel N(U03A0Life());Out.Reset();N.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+    N.SubmitBatchUnopposed({U03A0Intent(2,.26,ECommand::Attack,10)}, {},Out);
+    R=N.SubmitBatchUnopposed({U03A0Intent(3,.35,ECommand::Attack,30)}, {},Out);TestTrue(TEXT("replacement"),R[0].Result==EAdmission::Replaced);
+    N.AdvanceUnopposed(.40,Out);TestEqual(TEXT("known queued aim"),N.Current()->Yaw,30.);
+    N.SubmitBatchUnopposed({U03A0Intent(4,.75)}, {},Out);N.AdvanceUnopposed(.40+.45,Out);TestTrue(TEXT("third"),N.Current()->GetDefinition().Id==EAction::Attack3);
+    N.SubmitBatchUnopposed({U03A0Intent(5,1.35)}, {},Out);N.AdvanceUnopposed(.40+.45+.60,Out);TestTrue(TEXT("third buffers first"),N.Current()->GetDefinition().Id==EAction::Attack1);
     FTimelineModel Combo(U03A0Life()); Out.Reset();
-    Combo.SubmitBatch({U03A0Intent(1,0)}, {},Out);
-    Combo.SubmitBatch({U03A0Intent(2,.30)}, {},Out);
-    Combo.SubmitBatch({U03A0Intent(3,.75)}, {},Out);
-    Combo.Advance(.40+.45+.60,Out);
+    Combo.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+    Combo.SubmitBatchUnopposed({U03A0Intent(2,.30)}, {},Out);
+    Combo.SubmitBatchUnopposed({U03A0Intent(3,.75)}, {},Out);
+    Combo.AdvanceUnopposed(.40+.45+.60,Out);
     int32 Sum=0; TArray<uint64> Seen;
     for(const auto& Slice:Out) if(!Seen.Contains(Slice.Identity.Sequence)){Seen.Add(Slice.Identity.Sequence);Sum+=Slice.RawDamage;}
     TestEqual(TEXT("three definitions total220 raw"),Sum,220);
     TestNull(TEXT("chain ends at sum durations"),Combo.Current());
-    FTimelineModel Grace(U03A0Life()); Out.Reset();Grace.SubmitBatch({U03A0Intent(1,0)}, {},Out);
-    Grace.SubmitBatch({U03A0Intent(2,.40+.15)}, {},Out);
+    FTimelineModel Grace(U03A0Life()); Out.Reset();Grace.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+    Grace.SubmitBatchUnopposed({U03A0Intent(2,.40+.15)}, {},Out);
     TestTrue(TEXT("exact grace expiry returns first"),Grace.Current()->GetDefinition().Id==EAction::Attack1);
-    FTimelineModel Clear(U03A0Life());Out.Reset();Clear.SubmitBatch({U03A0Intent(1,0),U03A0Intent(2,.30)}, {},Out);
-    Clear.ClearPending();Clear.Advance(1,Out);TestNull(TEXT("menu/focus pending clear no successor"),Clear.Current());
+    FTimelineModel Clear(U03A0Life());Out.Reset();Clear.SubmitBatchUnopposed({U03A0Intent(1,0),U03A0Intent(2,.30)}, {},Out);
+    Clear.ClearPending();Clear.AdvanceUnopposed(1,Out);TestNull(TEXT("menu/focus pending clear no successor"),Clear.Current());
     AddInfo(TEXT("U03A0_TRACE buffer .30 -> action2 start .40; active [.58,.65), long endpoint 1.0; expiry .25+.15==.40 rejected"));
     return true;
 }
@@ -69,21 +69,21 @@ bool FU03Admission::RunTest(const FString&)
         FTimelineModel Bad(U03A0Life()); TArray<FActiveInterval> BadOut;
         TArray<FCombatIntent> Copies={U03A0Intent(1,0,ECommand::Attack),U03A0Intent(1,0,ECommand::Q)};
         if(Reverse) Algo::Reverse(Copies);
-        const auto Invalid=Bad.SubmitBatch(Copies,{},BadOut);
+        const auto Invalid=Bad.SubmitBatchUnopposed(Copies,{},BadOut);
         TestEqual(TEXT("conflicting duplicate copies rejected"),Invalid.Num(),2);
         TestTrue(TEXT("malformed duplicate invalid"),Invalid[0].Result==EAdmission::Invalid && Invalid[1].Result==EAdmission::Invalid);
         TestNull(TEXT("collection cannot choose conflicting duplicate action"),Bad.Current());
         FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;
         TArray<FCombatIntent> B={U03A0Intent(1,0,ECommand::Attack),U03A0Intent(2,0,ECommand::E),U03A0Intent(3,0,ECommand::Q),U03A0Intent(4,0,ECommand::Dodge)};
         if(Reverse) Algo::Reverse(B);
-        const auto R=M.SubmitBatch(B,{},Out);
+        const auto R=M.SubmitBatchUnopposed(B,{},Out);
         TestEqual(TEXT("all distinct sequences survive priority sorting"),R.Num(),4);
         TestTrue(TEXT("dodge explicit unsupported"),R[0].Result==EAdmission::Unsupported);
         TestTrue(TEXT("Q before E before attack"),M.Current()->GetDefinition().Id==EAction::Q);
-        TestTrue(TEXT("duplicate"),M.SubmitBatch({U03A0Intent(3,.1)}, {},Out)[0].Result==EAdmission::Stale);
+        TestTrue(TEXT("duplicate"),M.SubmitBatchUnopposed({U03A0Intent(3,.1)}, {},Out)[0].Result==EAdmission::Stale);
         auto Wrong=U03A0Intent(5,.1);Wrong.Life.Generation=2;
-        TestTrue(TEXT("wrong life"),M.SubmitBatch({Wrong},{},Out)[0].Result==EAdmission::Invalid);
-        TestTrue(TEXT("old time"),M.SubmitBatch({U03A0Intent(6,0)}, {},Out)[0].Result==EAdmission::Invalid);
+        TestTrue(TEXT("wrong life"),M.SubmitBatchUnopposed({Wrong},{},Out)[0].Result==EAdmission::Invalid);
+        TestTrue(TEXT("old time"),M.SubmitBatchUnopposed({U03A0Intent(6,0)}, {},Out)[0].Result==EAdmission::Invalid);
     }
     return true;
 }
@@ -97,8 +97,8 @@ bool FU03Resource::RunTest(const FString&)
     {
         FActionInstance A(EAction::Attack1,{U03A0Life(),1},0,0);TestFalse(TEXT("invalid replacement preserves action"),A.Cancel(Reason,.1,false));TestFalse(TEXT("exact active start cannot cancel"),A.Cancel(Reason,.16));TestTrue(TEXT("startup cancellable"),A.Cancel(Reason,.15));
     }
-    FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;M.SubmitBatch({U03A0Intent(1,0)}, {},Out);
-    TestTrue(TEXT("interrupt startup"),M.Cancel(ECutoff::Interrupt,.1,true,Out));M.Advance(1,Out);TestEqual(TEXT("no late active"),Out.Num(),0);
+    FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;M.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+    TestTrue(TEXT("interrupt startup"),M.CancelUnopposed(ECutoff::Interrupt,.1,true,Out));M.AdvanceUnopposed(1,Out);TestEqual(TEXT("no late active"),Out.Num(),0);
     FResourceModel Poor;
     // Only the two skill definitions consume energy in this reference set.
     TestTrue(TEXT("E cost"),Poor.Spend(Definition(EAction::E),0));
@@ -106,11 +106,11 @@ bool FU03Resource::RunTest(const FString&)
     TestEqual(TEXT("only Q/E cost"),Poor.Energy(),55.);
     TestFalse(TEXT("backwards resource time"),Poor.Advance(-1));
     FTimelineModel Skill(U03A0Life());TArray<FActiveInterval> SkillOut;
-    Skill.SubmitBatch({U03A0Intent(1,0)}, {},SkillOut);
-    TestTrue(TEXT("Q refuses normal active"),Skill.SubmitBatch({U03A0Intent(2,.16,ECommand::Q)}, {},SkillOut)[0].Result==EAdmission::Busy);
-    TestTrue(TEXT("Q takes normal recovery"),Skill.SubmitBatch({U03A0Intent(3,.22,ECommand::Q)}, {},SkillOut)[0].Result==EAdmission::Accepted);
-    TestTrue(TEXT("normal never buffers inside Q"),Skill.SubmitBatch({U03A0Intent(4,.30)}, {},SkillOut)[0].Result==EAdmission::Busy);
-    TestTrue(TEXT("E cannot cancel Q"),Skill.SubmitBatch({U03A0Intent(5,.31,ECommand::E)}, {},SkillOut)[0].Result==EAdmission::Busy);
+    Skill.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},SkillOut);
+    TestTrue(TEXT("Q refuses normal active"),Skill.SubmitBatchUnopposed({U03A0Intent(2,.16,ECommand::Q)}, {},SkillOut)[0].Result==EAdmission::Busy);
+    TestTrue(TEXT("Q takes normal recovery"),Skill.SubmitBatchUnopposed({U03A0Intent(3,.22,ECommand::Q)}, {},SkillOut)[0].Result==EAdmission::Accepted);
+    TestTrue(TEXT("normal never buffers inside Q"),Skill.SubmitBatchUnopposed({U03A0Intent(4,.30)}, {},SkillOut)[0].Result==EAdmission::Busy);
+    TestTrue(TEXT("E cannot cancel Q"),Skill.SubmitBatchUnopposed({U03A0Intent(5,.31,ECommand::E)}, {},SkillOut)[0].Result==EAdmission::Busy);
     return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03Barrier,"AnimeMMORPG.U03.A0.ResolveBarrierAndLethal",U03A0Flags)
@@ -131,14 +131,14 @@ bool FU03Barrier::RunTest(const FString&)
         }
         TestEqual(TEXT("same-time lethal only first survives"),Hits,1);TestTrue(TEXT("source1 survives"),L.IsAlive(A));TestFalse(TEXT("source2 dead before retaliation"),L.IsAlive(B));
     }
-    FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;M.SubmitBatch({U03A0Intent(1,0)}, {},Out);
-    M.Advance(.18,Out);
+    FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;M.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+    M.AdvanceUnopposed(.18,Out);
     TestEqual(TEXT("barrier reaches receive timestamp"),Out.Last().End,.18);
     TestFalse(TEXT("hit at current active endpoint belongs to old barrier"),Out.Last().bEndExclusive);
     const bool GuardAtHit=false;int32 HP=100;
     // Barrier consumes previously collected hit BEFORE accepting press stamped .18.
     if(Out.Num()>0&&!GuardAtHit)HP-=Out[0].RawDamage;
-    auto R=M.SubmitBatch({U03A0Intent(2,.18,ECommand::Guard)}, {},Out);
+    auto R=M.SubmitBatchUnopposed({U03A0Intent(2,.18,ECommand::Guard)}, {},Out);
     AddInfo(FString::Printf(TEXT("U03A0_TRACE barrier=%.17g exclusive=%d HP=%d guardAdmission=%u"),Out.Last().End,Out.Last().bEndExclusive,HP,static_cast<uint32>(R[0].Result)));
     TestEqual(TEXT("late guard cannot retroactively block"),HP,40);TestTrue(TEXT("guard runtime deferred"),R[0].Result==EAdmission::Unsupported);
     U02::FResolveLedger L;L.RegisterLife(U03A0Life(1));L.RegisterLife(U03A0Life(2));U02::FActionId Id{U03A0Life(1),1};L.RegisterAction(Id,.16,.22);L.InvalidateAction(Id,.18);
@@ -146,5 +146,108 @@ bool FU03Barrier::RunTest(const FString&)
     AddInfo(TEXT("U03A0_TRACE sorted .18 source1 kills source2; .18 source2 retaliation invalid; guard press admitted after old .18 hit barrier, HP40"));
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03IntegratedTimeline,"AnimeMMORPG.U03.A0.LongUpdateResolverInterruptAndDeath",U03A0Flags)
+bool FU03IntegratedTimeline::RunTest(const FString&)
+{
+    struct FResolver final : ITimelineResolver
+    {
+        U02::FResolveLedger Ledger;
+        TArray<U02::FHitCandidate> Events;
+        TArray<FActiveInterval> Intervals;
+        ECutoff Reason; bool Accepted=false; int32 Confirmed=0, LateHits=0;
+        FResolver(ECutoff InReason, bool Reverse) : Reason(InReason)
+        {
+            Ledger.RegisterLife(U03A0Life(1)); Ledger.RegisterLife(U03A0Life(2));
+            Ledger.RegisterAction({U03A0Life(2),1},.45,.50);
+            Events={{{{U03A0Life(2),1},U03A0Life(1)},.45,1},{{{U03A0Life(1),2},U03A0Life(2)},.60,1}};
+            if(Reverse) Algo::Reverse(Events);
+            Events.Sort(U02::CandidateLess);
+        }
+        TOptional<double> NextEvent(const FTimelineModel& M,double Through) override
+        {
+            if(const auto* A=M.Current())
+                Ledger.RegisterAction(A->Identity,A->Start+A->GetDefinition().ActiveStart,A->Start+A->GetDefinition().ActiveEnd);
+            return Events.Num() && Events[0].TimestampSeconds<=Through ? TOptional<double>(Events[0].TimestampSeconds) : TOptional<double>();
+        }
+        void ResolveInterval(const FActiveInterval& I) override
+        {
+            Intervals.Add(I);
+            if(I.Begin<=.18 && (I.End>.18 || (I.End==.18&&!I.bEndExclusive)))
+                if(Ledger.ResolveHit({{I.Identity,U03A0Life(2)},.18,1})) ++Confirmed;
+        }
+        void ResolveEvent(FTimelineModel& M,double At) override
+        {
+            const auto E=Events[0]; Events.RemoveAt(0);
+            if(!Ledger.ResolveHit(E)) return;
+            if(At==.45)
+            {
+                const auto* A=M.Current();
+                if(A && A->GetDefinition().Id==EAction::Attack2 && A->Start==.40 && M.Time()==.45)
+                {
+                    const auto Id=A->Identity;
+                    Accepted=M.CancelCurrent(Reason);
+                    Ledger.InvalidateAction(Id,At);
+                    if(Reason==ECutoff::Death) Ledger.MarkDead(U03A0Life(1));
+                }
+            }
+            else ++LateHits;
+        }
+    };
+    for(const auto Reason:{ECutoff::Interrupt,ECutoff::Death}) for(bool Reverse:{false,true})
+    {
+        FTimelineModel M(U03A0Life()); TArray<FActiveInterval> Setup;
+        M.SubmitBatchUnopposed({U03A0Intent(1,0),U03A0Intent(2,.30)}, {},Setup);
+        FResolver Resolver(Reason,Reverse);
+        // Include the already-confirmed interval from setup in the same real ledger.
+        Resolver.Ledger.RegisterAction({U03A0Life(),1},.16,.22);
+        for(const auto& I:Setup) Resolver.ResolveInterval(I);
+        TestTrue(TEXT("long update completes"),M.Advance(1.,Resolver));
+        TestTrue(TEXT("resolver interrupts/deaths live successor at .45 before endpoint1"),Resolver.Accepted);
+        TestNull(TEXT("successor removed"),M.Current());
+        TestEqual(TEXT("confirmed earlier hit retained"),Resolver.Confirmed,1);
+        TestEqual(TEXT("late source event removed by cutoff/death"),Resolver.LateHits,0);
+        TestFalse(TEXT("no successor active interval ever published"),Resolver.Intervals.ContainsByPredicate([](const auto& I){return I.DefinitionId==EAction::Attack2;}));
+        AddInfo(FString::Printf(TEXT("U03A0_TRACE integrated reason=%u reverse=%d acceptedAt=.45 successorStart=.40 confirmed=%d late=%d final=%.17g"),static_cast<uint32>(Reason),Reverse,Resolver.Confirmed,Resolver.LateHits,M.Time()));
+    }
+    // Submission cannot bypass the same resolver barrier and admit after a death event.
+    FTimelineModel Dead(U03A0Life());TArray<FActiveInterval> Setup;
+    Dead.SubmitBatchUnopposed({U03A0Intent(1,0),U03A0Intent(2,.30)}, {},Setup);
+    FResolver Resolver(ECutoff::Death,false);
+    const auto R=Dead.SubmitBatch({U03A0Intent(3,1.)},{},Resolver);
+    TestTrue(TEXT("death resolved before admission even with stale context"),R[0].Result==EAdmission::Locked);
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03CutoffIntervals,"AnimeMMORPG.U03.A0.CutoffIntervalsAndConfirmedHits",U03A0Flags)
+bool FU03CutoffIntervals::RunTest(const FString&)
+{
+    auto Contains=[](const TArray<FActiveInterval>& Out,double T)
+    { return Out.ContainsByPredicate([&](const auto& I){return T>=I.Begin&&(T<I.End||(T==I.End&&!I.bEndExclusive));}); };
+    for(const auto Reason:{ECutoff::Death,ECutoff::LostGround})
+    {
+        FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;
+        M.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+        TestTrue(TEXT("valid forced cutoff"),M.CancelUnopposed(Reason,.18,true,Out));
+        TestTrue(TEXT("contact immediately before cutoff remains"),Contains(Out,.179999));
+        TestFalse(TEXT("contact exactly cutoff excluded"),Contains(Out,.18));
+        M.AdvanceUnopposed(1.,Out);TestFalse(TEXT("no later contact"),Contains(Out,.19));
+    }
+    FTimelineModel Invalid(U03A0Life());TArray<FActiveInterval> Out;
+    Invalid.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+    TestFalse(TEXT("active guard cancel invalid"),Invalid.CancelUnopposed(ECutoff::Guard,.18,true,Out));
+    TestTrue(TEXT("invalid cancellation preserves current contact"),Contains(Out,.18));
+    FTimelineModel Confirmed(U03A0Life());Out.Reset();Confirmed.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+    Confirmed.AdvanceUnopposed(.17,Out);
+    U02::FResolveLedger Ledger;Ledger.RegisterLife(U03A0Life(1));Ledger.RegisterLife(U03A0Life(2));
+    Ledger.RegisterAction({U03A0Life(1),1},.16,.22);
+    TestTrue(TEXT("earlier contact confirmed"),Ledger.ResolveHit({{{U03A0Life(1),1},U03A0Life(2)},.17,1}));
+    const int32 EarlierCount=Out.Num();
+    TestTrue(TEXT("later death valid"),Confirmed.CancelUnopposed(ECutoff::Death,.18,true,Out));
+    TestTrue(TEXT("published earlier contact never erased"),Out.Num()>=EarlierCount&&Contains(Out,.17));
+    TestFalse(TEXT("cannot rewind confirmed time"),Confirmed.CancelUnopposed(ECutoff::Death,.16,true,Out));
+    TestFalse(TEXT("confirmed ledger dedup persists"),Ledger.ResolveHit({{{U03A0Life(1),1},U03A0Life(2)},.17,1}));
+    AddInfo(TEXT("U03A0_TRACE cutoff=.18 before=.179999 retained; exact excluded; invalid guard preserves endpoint; confirmed .17 never rewound"));
+    return true;
+}
+
 #endif
 

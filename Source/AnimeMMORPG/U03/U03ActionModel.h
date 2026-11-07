@@ -47,14 +47,31 @@ public:
 private:
     double Value=100, Last=0, RegenStart=0; double Ready[6] = {};
 };
+class FTimelineModel;
+// NextEvent discovers the earliest unresolved world event before the proposed structural boundary.
+// ResolveInterval is strictly before that event; ResolveEvent runs at the committed clock BEFORE
+// endpoint sampling, expiry, successor creation, or command admission. Consume events on delivery.
+class ITimelineResolver
+{
+public:
+    virtual ~ITimelineResolver() = default;
+    virtual TOptional<double> NextEvent(const FTimelineModel& Model, double Through) = 0;
+    virtual void ResolveInterval(const FActiveInterval& Interval) = 0;
+    virtual void ResolveEvent(FTimelineModel& Model, double At) = 0;
+};
 class FTimelineModel
 {
 public:
     explicit FTimelineModel(U02::FLifeId InLife) : Life(InLife) {}
-    bool Advance(double T, TArray<FActiveInterval>& Out);
-    // Caller drains old geometry/results through T before admission; Out contains those intervals.
-    TArray<FAdmissionResult> SubmitBatch(TArray<FCombatIntent> Batch, const FAdmissionContext& Context, TArray<FActiveInterval>& Out);
-    bool Cancel(ECutoff Reason, double T, bool bReplacementValid, TArray<FActiveInterval>& Out);
+    bool Advance(double T, ITimelineResolver& Resolver);
+    TArray<FAdmissionResult> SubmitBatch(TArray<FCombatIntent> Batch, const FAdmissionContext& Context, ITimelineResolver& Resolver);
+    // Only at the current resolver event; never advances or rewinds the clock.
+    bool CancelCurrent(ECutoff Reason, bool bReplacementValid = true);
+    double Time() const { return Now; }
+    // Explicitly event-free helpers for definition/admission tests, NOT world adapter APIs.
+    bool AdvanceUnopposed(double T, TArray<FActiveInterval>& Out);
+    TArray<FAdmissionResult> SubmitBatchUnopposed(TArray<FCombatIntent> Batch, const FAdmissionContext& Context, TArray<FActiveInterval>& Out);
+    bool CancelUnopposed(ECutoff Reason, double T, bool bReplacementValid, TArray<FActiveInterval>& Out);
     void ClearPending() { Pending.Reset(); }
     const FActionInstance* Current() const { return Action.Get(); }
     const FResourceModel& Resources() const { return Resource; }
@@ -65,5 +82,6 @@ private:
     EAction NextCombo=EAction::Attack1;
     TUniquePtr<FActionInstance> Action; TOptional<FCombatIntent> Pending;
     FResourceModel Resource;
+    bool bDead = false, bResolvingEvent = false, bAdvancing = false;
 };
 }

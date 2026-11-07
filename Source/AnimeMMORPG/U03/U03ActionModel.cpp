@@ -45,38 +45,110 @@ void FTimelineModel::Start(EAction Id,double T,double Yaw)
     if(Id<=EAction::Attack3) NextCombo=Id==EAction::Attack3?EAction::Attack1:static_cast<EAction>(static_cast<uint8>(Id)+1);
     else NextCombo=EAction::Attack1;
 }
-bool FTimelineModel::Advance(double T,TArray<FActiveInterval>& Out)
+bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
 {
-    if(!FMath::IsFinite(T)||T<Now) return false;
-    while(Action)
+    if (!FMath::IsFinite(T) || T < Now || bAdvancing) return false;
+    TGuardValue<bool> Advancing(bAdvancing, true);
+    bool First = true;
+    while (First || Now < T)
     {
-        const auto& D=Action->GetDefinition();
-        const double End=FMath::Min(Action->End(),Action->Cutoff);
-        const double A=FMath::Max(Now,Action->Start+D.ActiveStart);
-        const double B=FMath::Min(T,FMath::Min(Action->Start+D.ActiveEnd,End));
-        // Current-time contact belongs to the pre-admission barrier while still active.
-        // Active-end/cutoff remain exclusive. Dedup is owned by the resolve ledger.
-        if(T>Now && A<=B && A<Action->Start+D.ActiveEnd && A<End)
-            Out.Add({Action->Identity,D.Id,D.RawDamage,A,B,Action->Yaw,
-                B==Action->Start+D.ActiveEnd || B==End});
-        if(T<End) break;
-        const bool Natural=End==Action->End();
-        GraceEnd=Natural&&D.Id<=EAction::Attack3?End+.15:0;
-        Action.Reset();
-        Now=End;
-        if(Natural&&Pending.IsSet()&&Pending->Receive+.15>End)
+        First = false;
+        double Boundary = T;
+        auto Split = [&](double At) { if (At > Now) Boundary = FMath::Min(Boundary, At); };
+        if (Action)
         {
-            const double Yaw=Pending->AimYaw; Pending.Reset(); Start(NextCombo,End,Yaw);
+            const auto& D = Action->GetDefinition();
+            Split(Action->Start + D.ActiveStart);
+            Split(Action->Start + D.ActiveEnd);
+            Split(Action->End());
         }
-        else {Pending.Reset();break;}
+        if (Pending.IsSet()) Split(Pending->Receive + .15);
+        if (!Action) Split(GraceEnd);
+        const TOptional<double> Event = Resolver.NextEvent(*this, Boundary);
+        if (Event.IsSet() && (!FMath::IsFinite(Event.GetValue()) || Event.GetValue() < Now || Event.GetValue() > Boundary)) return false;
+        const double Stop = Event.IsSet() ? Event.GetValue() : Boundary;
+        if (Action && Stop > Now)
+        {
+            const auto& D = Action->GetDefinition();
+            const double Begin = FMath::Max(Now, Action->Start + D.ActiveStart);
+            const double End = FMath::Min(Stop, FMath::Min(Action->Start + D.ActiveEnd, Action->Cutoff));
+            if (Begin < End)
+                Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Begin,End,Action->Yaw,true});
+        }
+        Resource.Advance(Stop);
+        Now = Stop;
+        if (Event.IsSet())
+        {
+            TGuardValue<bool> Resolving(bResolvingEvent, true);
+            Resolver.ResolveEvent(*this, Now);
+        }
+        // Only now can an endpoint contact exist: cancellation at this timestamp excludes it.
+        if (Action)
+        {
+            const auto& D = Action->GetDefinition();
+            if (Now >= Action->Start + D.ActiveStart && Now < Action->Start + D.ActiveEnd && Now < Action->Cutoff)
+                Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Now,Now,Action->Yaw,false});
+            const bool Cancelled = Now >= Action->Cutoff;
+            if (Cancelled || Now >= Action->End())
+            {
+                const bool Natural = !Cancelled;
+                const double End = Natural ? Action->End() : Action->Cutoff;
+                GraceEnd = Natural && D.Id <= EAction::Attack3 ? End + .15 : 0;
+                Action.Reset();
+                if (Natural && Pending.IsSet() && Pending->Receive + .15 > End)
+                {
+                    const double Yaw = Pending->AimYaw;
+                    Pending.Reset();
+                    Start(NextCombo, End, Yaw);
+                }
+                else Pending.Reset();
+            }
+        }
+        if (Pending.IsSet() && Now >= Pending->Receive + .15) Pending.Reset();
+        if (!Action && Now >= GraceEnd) NextCombo = EAction::Attack1;
     }
-    if(Pending.IsSet()&&T>=Pending->Receive+.15) Pending.Reset();
-    if(!Action&&T>=GraceEnd) NextCombo=EAction::Attack1;
-    Resource.Advance(T); Now=T; return true;
+    return true;
+}
+bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
+{
+    if (!bResolvingEvent) return false;
+    if (Reason == ECutoff::Death) bDead = true;
+    if (!Action || !Action->Cancel(Reason, Now, Valid)) return false;
+    Pending.Reset();
+    NextCombo = EAction::Attack1;
+    return true;
+}
+namespace
+{
+class FUnopposedCollector final : public ITimelineResolver
+{
+public:
+    explicit FUnopposedCollector(TArray<FActiveInterval>& InOut) : Out(InOut) {}
+    TArray<FActiveInterval>& Out;
+    TOptional<double> CancelAt;
+    ECutoff Reason = ECutoff::Death;
+    bool Valid = true, Accepted = false;
+    TOptional<double> NextEvent(const FTimelineModel&, double Through) override
+    { return CancelAt.IsSet() && CancelAt.GetValue() <= Through ? CancelAt : TOptional<double>(); }
+    void ResolveInterval(const FActiveInterval& I) override { Out.Add(I); }
+    void ResolveEvent(FTimelineModel& M, double) override
+    { CancelAt.Reset(); Accepted = M.CancelCurrent(Reason, Valid); }
+};
+}
+bool FTimelineModel::AdvanceUnopposed(double T, TArray<FActiveInterval>& Out)
+{ FUnopposedCollector Collector(Out); return Advance(T, Collector); }
+TArray<FAdmissionResult> FTimelineModel::SubmitBatchUnopposed(TArray<FCombatIntent> Batch, const FAdmissionContext& C, TArray<FActiveInterval>& Out)
+{ FUnopposedCollector Collector(Out); return SubmitBatch(MoveTemp(Batch), C, Collector); }
+bool FTimelineModel::CancelUnopposed(ECutoff Reason, double T, bool Valid, TArray<FActiveInterval>& Out)
+{
+    if (!FMath::IsFinite(T) || T < Now) return false;
+    FUnopposedCollector Collector(Out);
+    Collector.CancelAt = T; Collector.Reason = Reason; Collector.Valid = Valid;
+    return Advance(T, Collector) && Collector.Accepted;
 }
 EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext& C)
 {
-    if(!C.bPlaying||!C.bGrounded||C.bHardCC||C.bGuard||C.bDodging||C.bFeint||C.bDead) return EAdmission::Locked;
+    if(bDead||!C.bPlaying||!C.bGrounded||C.bHardCC||C.bGuard||C.bDodging||C.bFeint||C.bDead) return EAdmission::Locked;
     if(I.Command!=ECommand::Attack&&I.Command!=ECommand::Q&&I.Command!=ECommand::E) return EAdmission::Unsupported;
     if(I.Command==ECommand::Attack)
     {
@@ -94,7 +166,7 @@ EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext&
     if(Can!=EAdmission::Accepted) return Can;
     Resource.Spend(Definition(Id),Now); Pending.Reset();Start(Id,Now,I.AimYaw); return EAdmission::Accepted;
 }
-TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch,const FAdmissionContext& C,TArray<FActiveInterval>& Out)
+TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch,const FAdmissionContext& C,ITimelineResolver& Resolver)
 {
     TArray<FAdmissionResult> Results;
     // Remove non-finite keys before sorting: NaN is not a strict weak ordering.
@@ -121,7 +193,7 @@ TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch
         const double T=Batch[Index].Receive; TArray<FCombatIntent> Group;
         int32 End=Index+1;while(End<Batch.Num()&&Batch[End].Receive==T)++End;
         const bool ValidTime=FMath::IsFinite(T)&&T>=Now;
-        if(ValidTime) Advance(T,Out);
+        if(ValidTime && !Advance(T,Resolver)) return Results;
         // Sequence validation precedes priority sorting so a higher-priority later sequence cannot erase an earlier command.
         for(;Index<End;++Index)
         {
@@ -134,10 +206,5 @@ TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch
         for(const auto& I:Group) Results.Add({I.Sequence,Admit(I,C),Action?Action->Identity.Sequence:0});
     }
     return Results;
-}
-bool FTimelineModel::Cancel(ECutoff Reason,double T,bool Valid,TArray<FActiveInterval>& Out)
-{
-    if(!Advance(T,Out)||!Action||!Action->Cancel(Reason,T,Valid))return false;
-    Pending.Reset();NextCombo=EAction::Attack1;return true;
 }
 }
