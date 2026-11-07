@@ -100,9 +100,9 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
             {
                 const bool Natural = !Cancelled;
                 const double End = Natural ? Action->End() : Action->Cutoff;
-                GraceEnd = Natural && D.Id <= EAction::Attack3 ? End + .15 : 0;
+                GraceEnd = Natural && bGrounded && !bDead && D.Id <= EAction::Attack3 ? End + .15 : 0;
                 Action.Reset();
-                if (Natural && Pending.IsSet() && Pending->Receive + .15 > End)
+                if (Natural && bGrounded && !bDead && Pending.IsSet() && Pending->Receive + .15 > End)
                 {
                     const double Yaw = Pending->AimYaw;
                     Pending.Reset();
