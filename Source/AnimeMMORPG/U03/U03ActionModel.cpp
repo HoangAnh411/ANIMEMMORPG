@@ -93,6 +93,11 @@ EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext&
 TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch,const FAdmissionContext& C,TArray<FActiveInterval>& Out)
 {
     TArray<FAdmissionResult> Results;
+    // Remove non-finite keys before sorting: NaN is not a strict weak ordering.
+    Batch.RemoveAll([&](const FCombatIntent& I){
+        if(FMath::IsFinite(I.Receive)) return false;
+        Results.Add({I.Sequence,EAdmission::Invalid,0});return true;
+    });
     Batch.Sort([](const auto& A,const auto& B){if(A.Receive!=B.Receive)return A.Receive<B.Receive;return A.Sequence<B.Sequence;});
     int32 Index=0;
     while(Index<Batch.Num())
