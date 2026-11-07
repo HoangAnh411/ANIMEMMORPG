@@ -262,5 +262,97 @@ bool FU03CutoffIntervals::RunTest(const FString&)
     return true;
 }
 
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03TimestampGroup,"AnimeMMORPG.U03.A0.TimestampGroupBeforeTransitionAndAdmission",U03A0Flags)
+bool FU03TimestampGroup::RunTest(const FString&)
+{
+    struct FGroup final : ITimelineResolver
+    {
+        double At; U02::FResolveLedger Ledger; TArray<U02::FHitCandidate> Events;
+        TArray<uint32> Order; int32 HP=100, Deaths=0, EndpointSamples=0;
+        bool SawPrematureSuccessor=false, DeathAccepted=false;
+        FGroup(double InAt,bool Reverse) : At(InAt)
+        {
+            for(uint32 Id=1;Id<=4;++Id) Ledger.RegisterLife(U03A0Life(Id));
+            for(uint32 Id=2;Id<=4;++Id) Ledger.RegisterAction({U03A0Life(Id),1},At,At+.01);
+            Events={{{{U03A0Life(2),1},U03A0Life(1)},At,1},{{{U03A0Life(3),1},U03A0Life(1)},At,1}};
+            if(Reverse) Algo::Reverse(Events);
+            Events.Sort(U02::CandidateLess);
+        }
+        TOptional<double> NextEvent(const FTimelineModel&,double Through) override
+        { return Events.Num()&&Events[0].TimestampSeconds<=Through?TOptional<double>(Events[0].TimestampSeconds):TOptional<double>(); }
+        void ResolveInterval(const FActiveInterval& I) override
+        { if(I.Begin==At&&I.End==At) ++EndpointSamples; }
+        void ResolveEvent(FTimelineModel& M,double Now) override
+        {
+            const auto E=Events[0];Events.RemoveAt(0);Order.Add(E.Id.Action.Source.Pawn.A);
+            SawPrematureSuccessor|=M.Current()&&M.Current()->Identity.Sequence!=1;
+            if(E.Id.Action.Source.Pawn.A==2)
+            {
+                // A callback can discover another event at the same timestamp.
+                Events.Add({{{U03A0Life(4),1},U03A0Life(1)},At,1});Events.Sort(U02::CandidateLess);
+            }
+            if(!Ledger.ResolveHit(E)) return;
+            HP-=E.Id.Action.Source.Pawn.A==2?20:100;
+            if(HP<=0){++Deaths;Ledger.MarkDead(U03A0Life(1));DeathAccepted=M.CancelCurrent(ECutoff::Death);}
+        }
+    };
+    for(double At:{.18,.40}) for(bool Reverse:{false,true}) for(bool Long:{false,true}) for(bool Submit:{false,true})
+    {
+        FTimelineModel M(U03A0Life());TArray<FActiveInterval> Setup;
+        M.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Setup);
+        if(At==.40) M.SubmitBatchUnopposed({U03A0Intent(2,.30)}, {},Setup);
+        FGroup Resolver(At,Reverse);const double End=Long?1.:At;
+        if(Submit)
+        {
+            const auto R=M.SubmitBatch({U03A0Intent(3,End)},{},Resolver);
+            TestTrue(TEXT("later death in timestamp group precedes admission"),R.Num()==1&&R[0].Result==EAdmission::Locked);
+        }
+        else TestTrue(TEXT("advance completes full endpoint group"),M.Advance(End,Resolver));
+        TestEqual(TEXT("all three events including dynamically discovered one delivered"),Resolver.Order.Num(),3);
+        TestTrue(TEXT("stable source order despite collection reverse"),Resolver.Order==TArray<uint32>{2,3,4});
+        TestTrue(TEXT("second event death accepted"),Resolver.DeathAccepted);
+        TestEqual(TEXT("dead target excludes third hit"),Resolver.Deaths,1);
+        TestFalse(TEXT("no successor between same-time events"),Resolver.SawPrematureSuccessor);
+        TestEqual(TEXT("no endpoint sample before lethal event"),Resolver.EndpointSamples,0);
+        TestNull(TEXT("death suppresses pending successor"),M.Current());
+        TestEqual(TEXT("timestamp group empty before return"),Resolver.Events.Num(),0);
+        AddInfo(FString::Printf(TEXT("U03A0_TRACE group at=%.17g end=%.17g reverse=%d submit=%d order=2,3,4 hp=%d deaths=%d premature=%d endpointSamples=%d remaining=%d"),At,End,Reverse,Submit,Resolver.HP,Resolver.Deaths,Resolver.SawPrematureSuccessor,Resolver.EndpointSamples,Resolver.Events.Num()));
+    }
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03LostGroundBoundary,"AnimeMMORPG.U03.A0.LostGroundAtActionEndAndGrace",U03A0Flags)
+bool FU03LostGroundBoundary::RunTest(const FString&)
+{
+    struct FGroundEvent final : ITimelineResolver
+    {
+        double At;bool Grounded,Pending=true,Accepted=false;
+        FGroundEvent(double InAt,bool InGrounded):At(InAt),Grounded(InGrounded){}
+        TOptional<double> NextEvent(const FTimelineModel&,double Through) override
+        { return Pending&&At<=Through?TOptional<double>(At):TOptional<double>(); }
+        void ResolveInterval(const FActiveInterval&) override {}
+        void ResolveEvent(FTimelineModel& M,double) override
+        { Pending=false;Accepted=Grounded?M.SetGroundedCurrent(true):M.CancelCurrent(ECutoff::LostGround); }
+    };
+    for(double At:{.40,.45}) for(bool Long:{false,true})
+    {
+        FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;
+        M.SubmitBatchUnopposed({U03A0Intent(1,0)}, {},Out);
+        if(At==.40) M.SubmitBatchUnopposed({U03A0Intent(2,.30)}, {},Out);
+        FGroundEvent Lost(At,false);const double End=Long?1.:At;
+        const auto R=M.SubmitBatch({U03A0Intent(3,End)},{},Lost);
+        TestTrue(TEXT("floor-loss accepted even ended action or idle grace"),Lost.Accepted);
+        TestTrue(TEXT("stale grounded context cannot admit airborne attack"),R.Num()==1&&R[0].Result==EAdmission::Locked);
+        TestNull(TEXT("floor-loss never consumes successor buffer"),M.Current());
+        TestFalse(TEXT("caller cannot grant landing outside resolver"),M.SetGroundedCurrent(true));
+        FGroundEvent Landing(End+.01,true);
+        const auto Landed=M.SubmitBatch({U03A0Intent(4,End+.01)},{},Landing);
+        TestTrue(TEXT("explicit authority landing event accepted"),Landing.Accepted);
+        TestTrue(TEXT("fresh command after landing accepted"),Landed.Num()==1&&Landed[0].Result==EAdmission::Accepted);
+        TestTrue(TEXT("combo/grace reset to first after actual landing"),M.Current()&&M.Current()->GetDefinition().Id==EAction::Attack1);
+        AddInfo(FString::Printf(TEXT("U03A0_TRACE floorLoss=%.17g advanceEnd=%.17g accepted=%d airborneAdmission=%u landing=%.17g nextDefinition=%u"),At,End,Lost.Accepted,static_cast<uint32>(R[0].Result),End+.01,static_cast<uint32>(M.Current()->GetDefinition().Id)));
+    }
+    return true;
+}
+
 #endif
 

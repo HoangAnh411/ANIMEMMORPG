@@ -51,6 +51,7 @@ class FTimelineModel;
 // NextEvent discovers the earliest unresolved world event before the proposed structural boundary.
 // ResolveInterval is strictly before that event; ResolveEvent runs at the committed clock BEFORE
 // endpoint sampling, expiry, successor creation, or command admission. Consume events on delivery.
+// NextEvent must return the next stable-ordered event; Advance drains ALL events at Now, even at T.
 class ITimelineResolver
 {
 public:
@@ -67,6 +68,7 @@ public:
     TArray<FAdmissionResult> SubmitBatch(TArray<FCombatIntent> Batch, const FAdmissionContext& Context, ITimelineResolver& Resolver);
     // Only at the current resolver event; never advances or rewinds the clock.
     bool CancelCurrent(ECutoff Reason, bool bReplacementValid = true);
+    bool SetGroundedCurrent(bool bGrounded); // Resolver-only authority event, not command permission.
     double Time() const { return Now; }
     // Explicitly event-free helpers for definition/admission tests, NOT world adapter APIs.
     bool AdvanceUnopposed(double T, TArray<FActiveInterval>& Out);
@@ -82,6 +84,6 @@ private:
     EAction NextCombo=EAction::Attack1;
     TUniquePtr<FActionInstance> Action; TOptional<FCombatIntent> Pending;
     FResourceModel Resource;
-    bool bDead = false, bResolvingEvent = false, bAdvancing = false;
+    bool bDead = false, bGrounded = true, bResolvingEvent = false, bAdvancing = false;
 };
 }

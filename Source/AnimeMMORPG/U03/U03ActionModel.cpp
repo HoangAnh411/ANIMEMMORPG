@@ -77,10 +77,17 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
         }
         Resource.Advance(Stop);
         Now = Stop;
-        if (Event.IsSet())
+        // Drain the complete timestamp group, including events discovered by a callback.
+        // Even at T, nothing may sample, expire, create a successor or admit between events.
+        TOptional<double> CurrentEvent = Event;
+        while (CurrentEvent.IsSet())
         {
-            TGuardValue<bool> Resolving(bResolvingEvent, true);
-            Resolver.ResolveEvent(*this, Now);
+            {
+                TGuardValue<bool> Resolving(bResolvingEvent, true);
+                Resolver.ResolveEvent(*this, Now);
+            }
+            CurrentEvent = Resolver.NextEvent(*this, Now);
+            if (CurrentEvent.IsSet() && (!FMath::IsFinite(CurrentEvent.GetValue()) || CurrentEvent.GetValue() != Now)) return false;
         }
         // Only now can an endpoint contact exist: cancellation at this timestamp excludes it.
         if (Action)
@@ -112,14 +119,24 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
 bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
 {
     if (!bResolvingEvent) return false;
-    if (Reason == ECutoff::Death)
+    const bool Lifecycle = Reason == ECutoff::Death || Reason == ECutoff::LostGround;
+    if (Lifecycle)
     {
-        bDead = true;
+        if (Reason == ECutoff::Death) bDead = true;
+        else bGrounded = false;
+        // Lifecycle state and combo invalidation do not depend on an old action's window.
         Pending.Reset(); NextCombo = EAction::Attack1; GraceEnd = 0;
     }
-    if (!Action || !Action->Cancel(Reason, Now, Valid)) return Reason == ECutoff::Death;
+    if (!Action || !Action->Cancel(Reason, Now, Valid)) return Lifecycle;
     Pending.Reset();
     NextCombo = EAction::Attack1;
+    return true;
+}
+bool FTimelineModel::SetGroundedCurrent(bool Grounded)
+{
+    if (!bResolvingEvent) return false;
+    if (!Grounded) return CancelCurrent(ECutoff::LostGround);
+    bGrounded = true; // Explicit authority landing event; never inferred from admission context.
     return true;
 }
 namespace
@@ -152,7 +169,7 @@ bool FTimelineModel::CancelUnopposed(ECutoff Reason, double T, bool Valid, TArra
 }
 EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext& C)
 {
-    if(bDead||!C.bPlaying||!C.bGrounded||C.bHardCC||C.bGuard||C.bDodging||C.bFeint||C.bDead) return EAdmission::Locked;
+    if(bDead||!bGrounded||!C.bPlaying||!C.bGrounded||C.bHardCC||C.bGuard||C.bDodging||C.bFeint||C.bDead) return EAdmission::Locked;
     if(I.Command!=ECommand::Attack&&I.Command!=ECommand::Q&&I.Command!=ECommand::E) return EAdmission::Unsupported;
     if(I.Command==ECommand::Attack)
     {
