@@ -66,6 +66,13 @@ bool FU03Admission::RunTest(const FString&)
 {
     for(bool Reverse:{false,true})
     {
+        FTimelineModel Bad(U03A0Life()); TArray<FActiveInterval> BadOut;
+        TArray<FCombatIntent> Copies={U03A0Intent(1,0,ECommand::Attack),U03A0Intent(1,0,ECommand::Q)};
+        if(Reverse) Algo::Reverse(Copies);
+        const auto Invalid=Bad.SubmitBatch(Copies,{},BadOut);
+        TestEqual(TEXT("conflicting duplicate copies rejected"),Invalid.Num(),2);
+        TestTrue(TEXT("malformed duplicate invalid"),Invalid[0].Result==EAdmission::Invalid && Invalid[1].Result==EAdmission::Invalid);
+        TestNull(TEXT("collection cannot choose conflicting duplicate action"),Bad.Current());
         FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;
         TArray<FCombatIntent> B={U03A0Intent(1,0,ECommand::Attack),U03A0Intent(2,0,ECommand::E),U03A0Intent(3,0,ECommand::Q),U03A0Intent(4,0,ECommand::Dodge)};
         if(Reverse) Algo::Reverse(B);

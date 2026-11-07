@@ -102,6 +102,18 @@ TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch
         if(FMath::IsFinite(I.Receive)) return false;
         Results.Add({I.Sequence,EAdmission::Invalid,0});return true;
     });
+    // A replay sequence with conflicting payload at the same receive timestamp is malformed.
+    // Reject every conflicting copy instead of letting collection order choose gameplay.
+    TArray<uint64> Conflicts;
+    for(int32 A=0;A<Batch.Num();++A) for(int32 B=A+1;B<Batch.Num();++B)
+        if(Batch[A].Sequence==Batch[B].Sequence && Batch[A].Receive==Batch[B].Receive
+            && (Batch[A].Command!=Batch[B].Command || Batch[A].AimYaw!=Batch[B].AimYaw
+                || !(Batch[A].Life==Batch[B].Life) || Batch[A].Direction!=Batch[B].Direction))
+            Conflicts.AddUnique(Batch[A].Sequence);
+    Batch.RemoveAll([&](const FCombatIntent& I){
+        if(!Conflicts.Contains(I.Sequence)) return false;
+        Results.Add({I.Sequence,EAdmission::Invalid,0});return true;
+    });
     Batch.Sort([](const auto& A,const auto& B){if(A.Receive!=B.Receive)return A.Receive<B.Receive;return A.Sequence<B.Sequence;});
     int32 Index=0;
     while(Index<Batch.Num())
