@@ -12,6 +12,7 @@
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"
 #include "Engine/GameViewportClient.h"
+#include "Engine/Console.h"
 #include "Engine/World.h"
 #include "Framework/Application/IInputProcessor.h"
 #include "Framework/Application/SlateApplication.h"
@@ -221,6 +222,8 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
 {
     if (!IsGameWindowActive()) return false; // Another window's releases never re-arm gameplay.
     const bool bNewPhysicalEdge = bDown && !ObservedKeys.Contains(Key);
+    const auto* LP=GetLocalPlayer();
+    const bool bConsoleInput=LP&&LP->ViewportClient&&LP->ViewportClient->ViewportConsole&&LP->ViewportClient->ViewportConsole->ConsoleActive();
     if(PendingRebind!=INDEX_NONE)
     {
         if(bDown){ObservedKeys.Add(Key);ReleaseGate.Down(Key,true);}
@@ -246,12 +249,12 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
         const auto* MotorPawn = Cast<AU01Character>(GetPawn());
         const bool bFixtureBlocked = MotorPawn &&
             (MotorPawn->GetU01Movement()->GetLockMask() & (uint8(EU01MotorLock::Control)|uint8(EU01MotorLock::Interacting)|uint8(EU01MotorLock::Defeated))) && IsMotorKey(Key);
-        ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing || bFixtureBlocked);
+        ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing || bFixtureBlocked || bConsoleInput);
         UE_LOG(LogU01Control, Display, TEXT("PhysicalPress key=%s state=%d accepted=%d reason=%s"),
             *Key.ToString(), int32(ControlState), IsMotorKey(Key) ? Accepts(Key) : (ControlState == EU01ControlState::Playing && ReleaseGate.Allows(Key)),
             ControlState != EU01ControlState::Playing ? TEXT("ControlLocked") : bFixtureBlocked ? TEXT("MotorFixtureLocked") : (ReleaseGate.Allows(Key) ? TEXT("Ready") : TEXT("AwaitingPhysicalRelease")));
         // The preprocessor sees UMG clicks BEFORE Resume changes state. No UI click can become an attack.
-        if(bNewPhysicalEdge && ControlState==EU01ControlState::Playing && !bMotorLocked && ReleaseGate.Allows(Key))
+        if(bNewPhysicalEdge && !bConsoleInput && ControlState==EU01ControlState::Playing && !bMotorLocked && ReleaseGate.Allows(Key))
             if(auto* C=Cast<AU01Character>(GetPawn());C&&C->Combat)
             {
                 using namespace AnimeMMORPG::U01;
