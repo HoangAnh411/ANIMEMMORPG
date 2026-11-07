@@ -40,8 +40,22 @@ bool FU03Timeline::RunTest(const FString&)
     N.SubmitBatch({Intent(2,.26,ECommand::Attack,10)}, {},Out);
     R=N.SubmitBatch({Intent(3,.35,ECommand::Attack,30)}, {},Out);TestTrue(TEXT("replacement"),R[0].Result==EAdmission::Replaced);
     N.Advance(.40,Out);TestEqual(TEXT("known queued aim"),N.Current()->Yaw,30.);
-    N.SubmitBatch({Intent(4,.75)}, {},Out);N.Advance(.85,Out);TestTrue(TEXT("third"),N.Current()->GetDefinition().Id==EAction::Attack3);
-    N.SubmitBatch({Intent(5,1.35)}, {},Out);N.Advance(1.45,Out);TestTrue(TEXT("third buffers first"),N.Current()->GetDefinition().Id==EAction::Attack1);
+    N.SubmitBatch({Intent(4,.75)}, {},Out);N.Advance(.40+.45,Out);TestTrue(TEXT("third"),N.Current()->GetDefinition().Id==EAction::Attack3);
+    N.SubmitBatch({Intent(5,1.35)}, {},Out);N.Advance(.40+.45+.60,Out);TestTrue(TEXT("third buffers first"),N.Current()->GetDefinition().Id==EAction::Attack1);
+    FTimelineModel Combo(Life()); Out.Reset();
+    Combo.SubmitBatch({Intent(1,0)}, {},Out);
+    Combo.SubmitBatch({Intent(2,.30)}, {},Out);
+    Combo.SubmitBatch({Intent(3,.75)}, {},Out);
+    Combo.Advance(.40+.45+.60,Out);
+    int32 Sum=0; TArray<uint64> Seen;
+    for(const auto& Slice:Out) if(!Seen.Contains(Slice.Identity.Sequence)){Seen.Add(Slice.Identity.Sequence);Sum+=Slice.RawDamage;}
+    TestEqual(TEXT("three definitions total220 raw"),Sum,220);
+    TestNull(TEXT("chain ends at sum durations"),Combo.Current());
+    FTimelineModel Grace(Life()); Out.Reset();Grace.SubmitBatch({Intent(1,0)}, {},Out);
+    Grace.SubmitBatch({Intent(2,.40+.15)}, {},Out);
+    TestTrue(TEXT("exact grace expiry returns first"),Grace.Current()->GetDefinition().Id==EAction::Attack1);
+    FTimelineModel Clear(Life());Out.Reset();Clear.SubmitBatch({Intent(1,0),Intent(2,.30)}, {},Out);
+    Clear.ClearPending();Clear.Advance(1,Out);TestNull(TEXT("menu/focus pending clear no successor"),Clear.Current());
     AddInfo(TEXT("U03A0_TRACE buffer .30 -> action2 start .40; active [.58,.65), long endpoint 1.0; expiry .25+.15==.40 rejected"));
     return true;
 }
@@ -76,6 +90,18 @@ bool FU03Resource::RunTest(const FString&)
     }
     FTimelineModel M(Life());TArray<FActiveInterval> Out;M.SubmitBatch({Intent(1,0)}, {},Out);
     TestTrue(TEXT("interrupt startup"),M.Cancel(ECutoff::Interrupt,.1,true,Out));M.Advance(1,Out);TestEqual(TEXT("no late active"),Out.Num(),0);
+    FResourceModel Poor;
+    // Six distinct fixed definitions consume only Q/E; advance by CD while keeping energy low via alternating spends.
+    TestTrue(TEXT("E cost"),Poor.Spend(Definition(EAction::E),0));
+    TestTrue(TEXT("Q cost same timestamp"),Poor.Spend(Definition(EAction::Q),0));
+    TestEqual(TEXT("only Q/E cost"),Poor.Energy(),55.);
+    TestFalse(TEXT("backwards resource time"),Poor.Advance(-1));
+    FTimelineModel Skill(Life());TArray<FActiveInterval> SkillOut;
+    Skill.SubmitBatch({Intent(1,0)}, {},SkillOut);
+    TestTrue(TEXT("Q refuses normal active"),Skill.SubmitBatch({Intent(2,.16,ECommand::Q)}, {},SkillOut)[0].Result==EAdmission::Busy);
+    TestTrue(TEXT("Q takes normal recovery"),Skill.SubmitBatch({Intent(3,.22,ECommand::Q)}, {},SkillOut)[0].Result==EAdmission::Accepted);
+    TestTrue(TEXT("normal never buffers inside Q"),Skill.SubmitBatch({Intent(4,.30)}, {},SkillOut)[0].Result==EAdmission::Busy);
+    TestTrue(TEXT("E cannot cancel Q"),Skill.SubmitBatch({Intent(5,.31,ECommand::E)}, {},SkillOut)[0].Result==EAdmission::Busy);
     return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03Barrier,"AnimeMMORPG.U03.A0.ResolveBarrierAndLethal",Flags)
