@@ -61,7 +61,7 @@ public:
     virtual bool HandleKeyDownEvent(FSlateApplication&, const FKeyEvent& Event) override
     {
         if (PC.IsValid() && !Event.IsRepeat())return PC->ObservePhysicalKey(Event.GetKey(),true,
-            Event.IsShiftDown()||Event.IsAltDown()||Event.IsCommandDown()||(Event.IsControlDown()&&Event.GetKey()!=EKeys::LeftControl&&Event.GetKey()!=EKeys::RightControl));
+            (Event.IsShiftDown()&&Event.GetKey()!=EKeys::LeftShift&&Event.GetKey()!=EKeys::RightShift)||Event.IsAltDown()||Event.IsCommandDown()||(Event.IsControlDown()&&Event.GetKey()!=EKeys::LeftControl&&Event.GetKey()!=EKeys::RightControl));
         return false;
     }
     virtual bool HandleKeyUpEvent(FSlateApplication&, const FKeyEvent& Event) override

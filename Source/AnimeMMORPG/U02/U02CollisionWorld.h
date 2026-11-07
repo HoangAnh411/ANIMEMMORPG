@@ -67,6 +67,7 @@ private:
     {
         TWeakObjectPtr<UU02HurtboxComponent> Component;
         FPose Previous,Current;
+        double AvailableFrom=0; // new life/pose cannot be collected into an earlier captured interval
     };
     struct FPending
     {

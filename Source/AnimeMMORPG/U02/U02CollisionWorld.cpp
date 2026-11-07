@@ -65,7 +65,7 @@ void UU02CollisionWorld::RegisterHurtbox(UU02HurtboxComponent* H)
     if(!Life.Pawn.IsValid()||!H->StableHurtboxId||Hurts.ContainsByPredicate([&](const FHurt& R)
         {auto* Other=R.Component.Get();return Other&&Other->GetSubject()==Life&&Other->StableHurtboxId==H->StableHurtboxId;}))
     {UE_LOG(LogU02Collision,Error,TEXT("Invalid/duplicate stable hurtbox registration %s"),*H->GetPathName());return;}
-    FHurt R;R.Component=H;R.Current={H->GetComponentLocation(),Life,H->ContinuityEpoch,H->GetScaledSphereRadius()};R.Previous=R.Current;Hurts.Add(R);Ledger.RegisterLife(Life);
+    FHurt R;R.Component=H;R.Current={H->GetComponentLocation(),Life,H->ContinuityEpoch,H->GetScaledSphereRadius()};R.Previous=R.Current;R.AvailableFrom=FMath::Max(double(GetWorld()->GetTimeSeconds()),CurrentTime);Hurts.Add(R);Ledger.RegisterLife(Life);
 }
 void UU02CollisionWorld::UnregisterHurtbox(UU02HurtboxComponent* H)
 {
@@ -87,7 +87,7 @@ void UU02CollisionWorld::RebaseResetSubject(AActor* Subject)
     }
     for(auto& H:Hurts)if(auto* C=H.Component.Get())if(C->GetOwner()==Subject)
     {
-        H.Current={C->GetComponentLocation(),C->GetSubject(),C->ContinuityEpoch,C->GetScaledSphereRadius()};H.Previous=H.Current;Ledger.RegisterLife(H.Current.Life);
+        H.Current={C->GetComponentLocation(),C->GetSubject(),C->ContinuityEpoch,C->GetScaledSphereRadius()};H.Previous=H.Current;H.AvailableFrom=FMath::Max(double(GetWorld()->GetTimeSeconds()),CurrentTime);Ledger.RegisterLife(H.Current.Life);
     }
 }
 void UU02CollisionWorld::ObserveCombat(UU02CombatComponent* C)
@@ -111,7 +111,7 @@ void UU02CollisionWorld::Capture(double Now)
         Ledger.RegisterLife(S.Current.Life);
     }
     for(auto& R:Hurts)if(auto* H=R.Component.Get())
-    {R.Previous=R.Current;R.Current={H->GetComponentLocation(),H->GetSubject(),H->ContinuityEpoch,H->GetScaledSphereRadius()};Ledger.RegisterLife(R.Current.Life);}
+    {R.Previous=R.Current;R.Current={H->GetComponentLocation(),H->GetSubject(),H->ContinuityEpoch,H->GetScaledSphereRadius()};if(!(R.Previous.Life==R.Current.Life))R.AvailableFrom=Now;Ledger.RegisterLife(R.Current.Life);}
     CaptureEnvironment();
 }
 void UU02CollisionWorld::CaptureEnvironment()
@@ -184,10 +184,13 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
     {
         auto* Shape=H.Component.Get();if(!Shape||!Shape->IsQueryCollisionEnabled()||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
         if(Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets)continue;
+        if(H.AvailableFrom>P.Slice.EndSeconds)continue;
         const bool Continuous=Source->Previous.Life==Source->Current.Life&&Source->Previous.Epoch==Source->Current.Epoch
             &&H.Previous.Life==H.Current.Life&&H.Previous.Epoch==H.Current.Epoch&&H.Previous.Radius==H.Current.Radius;
         if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))UE_LOG(LogU02Collision,Display,TEXT("U02D_SPAN source=%s target=%s hurtbox=%u continuous=%d epochs=%llu/%llu targetEpochs=%llu/%llu radius=%.17g/%.17g feet=%s target=%s"),*P.Action.Source.Pawn.ToString(),*H.Current.Life.Pawn.ToString(),Shape->StableHurtboxId,Continuous,Source->Previous.Epoch,Source->Current.Epoch,H.Previous.Epoch,H.Current.Epoch,H.Previous.Radius,H.Current.Radius,*Source->Current.Position.ToString(),*H.Current.Position.ToString());
         double A=P.Slice.BeginAlpha,B=P.Slice.EndAlpha;
+        if(CurrentTime>PreviousTime)A=FMath::Max(A,(H.AvailableFrom-PreviousTime)/(CurrentTime-PreviousTime));
+        if(A>B)continue;
         FVector F0=Source->Previous.Position,F1=Source->Current.Position,C0=H.Previous.Position,C1=H.Current.Position;
         if(!Continuous)
         {
