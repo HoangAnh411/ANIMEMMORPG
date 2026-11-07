@@ -46,3 +46,5 @@ Presentation blockout provenance, no root-motion gameplay, missing/duplicate not
 ## Gates
 
 A0 contracts/model -> A1 combo -> B1 dodge -> B2 defenseCC -> C1 skills -> C2 encounter -> D presentation/settings/integration. Each separate branch from accepted main, committed clone builds/tests, review stop. ACCEPTED grants neither merge nor next delivery. A0 no new playable content/package/launcher. A1-D package/input/video/dedicated Editor+2clients scoped launchers/stop/placement restore. Original Editor/private config untouched. No modules/plugins/GAS/framework. No packaged Server, prediction U05, performance U04, product art/progression/backend/free PvP.
+
+Interval endpoint contract: FActiveInterval carries bEndExclusive. At a current-time endpoint still inside active, contact at that timestamp belongs to the pre-admission barrier; a point at exact active entry is evaluable. Active-end/cancellation cutoff always excluded. Adjacent inclusive sampling endpoints rely on the shared action/target dedup, never double damage. This is consistent with inherited U02 active slices and does not widen gameplay deadlines.

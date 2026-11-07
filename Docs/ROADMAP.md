@@ -1,4 +1,4 @@
-# ANIMEMMORPG — ROADMAP UNREAL ENGINE
+﻿# ANIMEMMORPG — ROADMAP UNREAL ENGINE
 
 ## 1. Mục tiêu và hiện trạng
 
@@ -114,11 +114,11 @@ Cổng: đúng active, không xuyên tường hoặc nhân hit, một đòn đư
 
 Phụ thuộc: U02. Bàn giao lần lượt A–D.
 
-- [ ] U03.01 A: ba đòn 60/70/90, buffer 0,15 giây, chuỗi 1,45 giây, quyền hủy/hướng.
-- [ ] U03.02 A: năng lượng/cooldown, ưu tiên lệnh/reset combo.
-- [ ] U03.03 B: né hai lượt 3 m/0,25 giây, hồi tuần tự, chặn tường/người/vực, không i-frame.
-- [ ] U03.04 B: đỡ/parry/thế đỡ/phá đỡ, CC/chống khóa/X tại timestamp hit.
-- [ ] U03.05 C: Q Feint/E Interrupt, quái báo đòn phát hiện 10 m/leash 15 m, Tab, thắng/thua/thử lại.
+- [ ] U03.01 A0/A1: ba đòn 60/70/90, buffer 0,15 giây, chuỗi 1,45 giây, quyền hủy/hướng.
+- [ ] U03.02 A0/A1: năng lượng/cooldown, ưu tiên lệnh/reset combo.
+- [ ] U03.03 B1: né hai lượt 3 m/0,25 giây, hồi tuần tự, chặn tường/người/vực, không i-frame.
+- [ ] U03.04 B2: đỡ/parry/thế đỡ/phá đỡ, CC/chống khóa/X tại timestamp hit.
+- [ ] U03.05 C1/C2: Q Feint/E Interrupt, quái báo đòn phát hiện 10 m/leash 15 m, Tab, thắng/thua/thử lại.
 - [ ] U03.06 D: animation/kiếm/VFX/âm/HUD, kết quả/rebind/save/load và sân thử.
 - [ ] U03.07 Retry reset sân thử, không thay hồi sinh sản phẩm; giữ trạm hồi quy U01.
 
