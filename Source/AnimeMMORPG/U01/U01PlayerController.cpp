@@ -42,6 +42,7 @@ bool PhysicalDown(FKey Key)
     FInputKeyManager::Get().GetCodesFromKey(Key,KeyCode,CharCode);
     if(KeyCode)Code=*KeyCode;
     if(Key==EKeys::LeftMouseButton)Code=VK_LBUTTON;
+    if(Key==EKeys::RightMouseButton)Code=VK_RBUTTON;
     if(Key==EKeys::MiddleMouseButton)Code=VK_MBUTTON;
     if(Key==EKeys::ThumbMouseButton)Code=VK_XBUTTON1;
     if(Key==EKeys::ThumbMouseButton2)Code=VK_XBUTTON2;
@@ -250,10 +251,14 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
             *Key.ToString(), int32(ControlState), IsMotorKey(Key) ? Accepts(Key) : (ControlState == EU01ControlState::Playing && ReleaseGate.Allows(Key)),
             ControlState != EU01ControlState::Playing ? TEXT("ControlLocked") : bFixtureBlocked ? TEXT("MotorFixtureLocked") : (ReleaseGate.Allows(Key) ? TEXT("Ready") : TEXT("AwaitingPhysicalRelease")));
         // The preprocessor sees UMG clicks BEFORE Resume changes state. No UI click can become an attack.
-        if (Key==EKeys::LeftMouseButton && bNewPhysicalEdge && ControlState==EU01ControlState::Playing
-            && !bMotorLocked && ReleaseGate.Allows(Key))
-            if(auto* C=Cast<AU01Character>(GetPawn()); C && C->Combat)
-                C->Combat->SubmitAttackIntent(++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw);
+        if(bNewPhysicalEdge && ControlState==EU01ControlState::Playing && !bMotorLocked && ReleaseGate.Allows(Key))
+            if(auto* C=Cast<AU01Character>(GetPawn());C&&C->Combat)
+            {
+                using namespace AnimeMMORPG::U01;
+                const AnimeMMORPG::U03::ECommand Commands[]={AnimeMMORPG::U03::ECommand::Attack,AnimeMMORPG::U03::ECommand::Guard,AnimeMMORPG::U03::ECommand::Dodge,AnimeMMORPG::U03::ECommand::Escape,AnimeMMORPG::U03::ECommand::Q,AnimeMMORPG::U03::ECommand::E,AnimeMMORPG::U03::ECommand::Target};
+                for(int32 I=Attack;I<=Target;++I)if(CanonicalKey(Key)==ControlKey(I))
+                    C->Combat->SubmitCombatIntent(Commands[I-Attack],++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw);
+            }
     }
     else
     {

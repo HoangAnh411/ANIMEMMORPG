@@ -4,6 +4,7 @@
 #include "U02ActionModel.h"
 #include "U02CollisionGeometry.h"
 #include "U02VitalModel.h"
+#include "U03/U03ActionModel.h"
 #include "U02CollisionWorld.generated.h"
 
 class UU02CombatComponent;
@@ -26,6 +27,9 @@ public:
     void UnregisterHurtbox(UU02HurtboxComponent* Hurtbox);
     void ObserveCombat(UU02CombatComponent* Combat);
     void DrainAt(double Now);
+    bool ApplyLifecycle(UU02CombatComponent* Combat,double At,AnimeMMORPG::U03::ECutoff Reason,bool bLanding);
+    bool FixtureSpend(UU02CombatComponent* Combat,AnimeMMORPG::U03::EAction Skill);
+
     void MarkDead(AnimeMMORPG::U02::FLifeId Life);
     void RebaseResetSubject(AActor* Subject); // after authority reset drained the old batch
     bool SelectDebugAction(uint64 Sequence); // lab diagnostics only, 0 selects next local action
@@ -44,6 +48,7 @@ public:
 private:
     friend struct FU02CollisionTestAccess;
     friend struct FU02EVitalWorldAccess;
+    friend struct FU03RuntimeAccess;
     struct FPose
     {
         FVector Position=FVector::ZeroVector;
@@ -69,6 +74,7 @@ private:
         AnimeMMORPG::U02::FActionId Action;
         AnimeMMORPG::U02::FActiveSlice Slice;
         double Yaw=0;
+        uint8 DefinitionId=0; uint32 DefinitionVersion=1; int32 RawDamage=60;
     };
     struct FEnvironment
     {
@@ -87,6 +93,15 @@ private:
     FDelegateHandle TickHandle;
     double PreviousTime=0,CurrentTime=-1;
     bool bDraining=false;
+    double SimulationTime=-1;
+    struct FLifecycleEvent {TWeakObjectPtr<UU02CombatComponent> Combat;double At;AnimeMMORPG::U03::ECutoff Reason;bool Landing;uint64 Serial;};
+    TArray<FLifecycleEvent> LifecycleEvents;
+    uint64 NextLifecycle=0;
+    TMap<uint64,bool> LifecycleResults;
+    TArray<AnimeMMORPG::U02::FActionId> FixtureInterruptActions; // native fixtures, no client setter
+    void EmitInterval(UU02CombatComponent* Combat,const AnimeMMORPG::U03::FActiveInterval& Interval);
+    void CollectCurrent(double Through,TArray<AnimeMMORPG::U02::FHitCandidate>& Out);
+
     TWeakObjectPtr<AActor> HUDTarget;
     void DrawVitalHUD();
     struct FDebugHurt

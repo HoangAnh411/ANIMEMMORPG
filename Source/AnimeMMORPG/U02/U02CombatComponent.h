@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "U02ActionModel.h"
 #include "U02StartupTurn.h"
+#include "U03/U03ActionModel.h"
 #include "U02CombatComponent.generated.h"
 
 class AU01Character;
@@ -27,8 +28,28 @@ struct FU02RepCombatSnapshot
     UPROPERTY() uint64 Accepted = 0;
     UPROPERTY() uint64 Rejected = 0;
     UPROPERTY() uint8 RejectReason = 0;
+    UPROPERTY() uint8 DefinitionId = 0;
+    UPROPERTY() uint32 DefinitionVersion = 1;
+    UPROPERTY() int32 RawDamage = 60;
+    UPROPERTY() double ActiveStart = .16;
+    UPROPERTY() double ActiveEnd = .22;
+    UPROPERTY() double Duration = .40;
+    UPROPERTY() double Energy = 100;
+    UPROPERTY() double QReadyAt = 0;
+    UPROPERTY() double EReadyAt = 0;
     UPROPERTY() bool bLocked = false;
     UPROPERTY() bool bYawLocked = false;
+};
+
+USTRUCT()
+struct FU03OwnerAdmission
+{
+    GENERATED_BODY()
+    UPROPERTY() uint64 Command=0;
+    UPROPERTY() uint8 Admission=0;
+    UPROPERTY() uint64 PendingCommand=0;
+    UPROPERTY() double PendingExpires=0;
+    UPROPERTY() uint32 Revision=0;
 };
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FU02ActiveIntervalDelegate, const AnimeMMORPG::U02::FActionId&, const AnimeMMORPG::U02::FActiveSlice&);
@@ -47,6 +68,9 @@ public:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
     void SubmitAttackIntent(uint64 CommandSequence, double LocalInputSeconds, double AimYawDegrees);
     void SetControlPlaying(bool bPlaying);
+    void SubmitCombatIntent(AnimeMMORPG::U03::ECommand Command, uint64 Sequence, double LocalSeconds, double Yaw);
+    void Landed();
+    const FU03OwnerAdmission& GetAdmission() const { return OwnerAdmission; }
     void SendNetworkFixtureProbe(const FString& Kind); // opt-in lab only
     uint64 GetLastCommand() const {return LastCommand;}
     bool CancelAction(AnimeMMORPG::U02::ECancel Reason);
@@ -63,13 +87,25 @@ public:
 private:
     friend struct FU02CombatTestAccess;
     friend struct FU02FTestAccess;
+    friend struct FU03RuntimeAccess;
     friend class UU02CollisionWorld;
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepCombatSnapshot Snapshot;
     UFUNCTION() void OnRep_Snapshot();
     UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life);
     UFUNCTION(Server, Reliable) void ServerControlPlaying(bool bPlaying);
     UFUNCTION(Server, Unreliable) void ServerAim(double Yaw, FGuid Pawn, uint64 Life, uint64 Action);
-    TUniquePtr<AnimeMMORPG::U02::FActionModel> Model;
+    TUniquePtr<AnimeMMORPG::U03::FTimelineModel> Model;
+    UPROPERTY(Replicated) FU03OwnerAdmission OwnerAdmission;
+    UFUNCTION(Server,Reliable) void ServerCombat(uint8 Command,uint64 Sequence,double LocalSeconds,double Yaw,FGuid Pawn,uint64 Life);
+    struct FQueuedIntent { AnimeMMORPG::U03::FCombatIntent Intent; double LocalSeconds=0,Receive=0; };
+    TArray<FQueuedIntent> QueuedIntents;
+    struct FQueuedAim {double Yaw;FGuid Pawn;uint64 Life,Action;};
+    TArray<FQueuedAim> QueuedAim;
+    void ProcessQueuedIntents(double Now);
+    void RememberCurrent(double Now);
+    void ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double LocalSeconds,double Yaw,FGuid Pawn,uint64 Life);
+    uint64 QueuedCount=0,ReplacedCount=0,AdmissionWatermark=0;
+    bool bApplyingWorldDeath=false;
     AU01Character* Character() const;
     bool bAuthorityPlaying = true;
     AnimeMMORPG::U02::FStartupTurn StartupTurn;

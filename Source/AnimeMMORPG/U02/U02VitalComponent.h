@@ -35,6 +35,7 @@ public:
     TSharedRef<FJsonObject> GetDiagnostics() const;
 private:
     friend struct FU02VitalTestAccess;
+    friend struct FU03RuntimeAccess;
     AnimeMMORPG::U02::FVitalModel State;
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepVital Snapshot;
     UFUNCTION() void OnRep_Snapshot();

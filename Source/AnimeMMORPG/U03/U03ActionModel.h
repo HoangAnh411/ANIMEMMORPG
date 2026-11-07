@@ -6,7 +6,7 @@
 namespace AnimeMMORPG::U03
 {
 enum class EAction : uint8 { Attack1, Attack2, Attack3, Q, E, Monster };
-enum class ECommand : uint8 { Escape, Dodge, Guard, Feint, Q, E, Attack, Jump };
+enum class ECommand : uint8 { Escape, Dodge, Guard, Feint, Q, E, Attack, Jump, Target };
 enum class EAdmission : uint8 { Accepted, Queued, Replaced, Stale, Invalid, Locked, Busy, Resource, Cooldown, Unsupported };
 enum class ECutoff : uint8 { Dodge, Guard, Interrupt, Death, LostGround };
 struct FActionDefinition
@@ -43,6 +43,7 @@ public:
     double Energy() const { return Value; }
     bool Advance(double T);
     EAdmission CanSpend(const FActionDefinition& D, double T) const;
+    double ReadyAt(EAction Id) const { return Ready[static_cast<uint8>(Id)]; }
     bool Spend(const FActionDefinition& D, double T);
 private:
     double Value=100, Last=0, RegenStart=0; double Ready[6] = {};
@@ -63,13 +64,26 @@ public:
 class FTimelineModel
 {
 public:
-    explicit FTimelineModel(U02::FLifeId InLife) : Life(InLife) {}
+    explicit FTimelineModel(U02::FLifeId InLife, double StartClock = 0) : Life(InLife), Now(StartClock) {}
     bool Advance(double T, ITimelineResolver& Resolver);
     TArray<FAdmissionResult> SubmitBatch(TArray<FCombatIntent> Batch, const FAdmissionContext& Context, ITimelineResolver& Resolver);
     // Only at the current resolver event; never advances or rewinds the clock.
     bool CancelCurrent(ECutoff Reason, bool bReplacementValid = true);
     bool SetGroundedCurrent(bool bGrounded); // Resolver-only authority event, not command permission.
     double Time() const { return Now; }
+    U02::FLifeId GetLife() const { return Life; }
+    uint64 CommandWatermark() const { return Watermark; }
+    const TOptional<FCombatIntent>& GetPending() const { return Pending; }
+    bool UpdateAim(double T, double Yaw);
+    bool ResetLife(U02::FLifeId NewLife, double T);
+    bool SpendResourceFixture(EAction Skill) { return !bBarrierOpen && !bAdvancing && (Skill==EAction::Q||Skill==EAction::E) && Resource.Spend(Definition(Skill),Now); }
+    // Cooperative world barrier: arrive ALL subjects, resolve the sorted world group,
+    // then finish ALL subjects. No subject may transition/admit while another is behind.
+    double NextBoundaryThrough(double T) const;
+    bool ArriveAtBarrier(double T, ITimelineResolver& Collector);
+    bool CancelAtBarrier(ECutoff Reason);
+    bool GroundedAtBarrier(bool Grounded);
+    bool FinishBarrier(ITimelineResolver& Collector);
     // Explicitly event-free helpers for definition/admission tests, NOT world adapter APIs.
     bool AdvanceUnopposed(double T, TArray<FActiveInterval>& Out);
     TArray<FAdmissionResult> SubmitBatchUnopposed(TArray<FCombatIntent> Batch, const FAdmissionContext& Context, TArray<FActiveInterval>& Out);
@@ -84,6 +98,8 @@ private:
     EAction NextCombo=EAction::Attack1;
     TUniquePtr<FActionInstance> Action; TOptional<FCombatIntent> Pending;
     FResourceModel Resource;
-    bool bDead = false, bGrounded = true, bResolvingEvent = false, bAdvancing = false;
+    bool bDead = false, bGrounded = true, bResolvingEvent = false, bAdvancing = false, bBarrierOpen = false;
+    void DeliverBefore(double Stop, ITimelineResolver& Collector);
+    void CompleteCurrent(ITimelineResolver& Collector);
 };
 }

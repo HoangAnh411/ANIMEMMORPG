@@ -10,7 +10,7 @@ class UInputAction;
 
 namespace AnimeMMORPG::U01
 {
-enum EControl : int32 { Forward, Backward, Left, Right, Jump, Sprint, Shoulder, Interact, ControlCount };
+enum EControl : int32 { Forward, Backward, Left, Right, Jump, Sprint, Shoulder, Interact, Attack, Guard, Dodge, EscapeCC, SkillQ, SkillE, Target, ControlCount };
 struct FPreferences
 {
     FPreferences();

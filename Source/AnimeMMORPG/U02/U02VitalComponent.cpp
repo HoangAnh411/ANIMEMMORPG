@@ -25,7 +25,7 @@ bool UU02VitalComponent::IsAlive(FLifeId Life) const
 FDamageResult UU02VitalComponent::ApplyResolved(const FHitCandidate& Hit,double Attack,double Roll)
 {
     if(!IsAlive(Hit.Id.Target))return {};
-    auto R=State.Apply(FAttack1Definition().RawDamage,Attack,Roll,Hit.TimestampSeconds);
+    auto R=State.Apply(Hit.RawDamage,Attack,Roll,Hit.TimestampSeconds);
     if(!R.bApplied)return R;
     Publish(Hit.TimestampSeconds);
     if(R.bDied)

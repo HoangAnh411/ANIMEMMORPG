@@ -163,12 +163,17 @@ bool FResolveLedger::RegisterAction(FActionId Action, double Begin, double End)
     Windows.Add({Action,Begin,End});
     return true;
 }
-bool FResolveLedger::ResolveHit(const FHitCandidate& C)
+bool FResolveLedger::CanResolveHit(const FHitCandidate& C) const
 {
     if (!FMath::IsFinite(C.TimestampSeconds) || C.HurtboxId == 0 || !C.bGeometryValid || !C.bUnobstructed
         || C.Id.Action.Source.Pawn == C.Id.Target.Pawn || !IsAlive(C.Id.Action.Source) || !IsAlive(C.Id.Target)) return false;
     const FWindow* Window = Windows.FindByPredicate([&](const FWindow& W) { return W.Action == C.Id.Action; });
     if (!Window || C.TimestampSeconds < Window->Begin || C.TimestampSeconds >= Window->End || Resolved.Contains(C.Id)) return false;
+    return true;
+}
+bool FResolveLedger::ResolveHit(const FHitCandidate& C)
+{
+    if(!CanResolveHit(C))return false;
     Resolved.Add(C.Id); // Only valid resolution consumes per-target dedup.
     return true;
 }

@@ -14,7 +14,7 @@ inline FPresentationSample SamplePresentation(const FU02RepCombatSnapshot& S,dou
     FPresentationSample Out;
     if(!FMath::IsFinite(ServerNow)||!S.ActionSequence||!S.bLocked||S.Phase<uint8(EPhase::Startup)||S.Phase>uint8(EPhase::Recovery))return Out;
     const double Elapsed=ServerNow-S.StartSeconds;
-    if(Elapsed<0||Elapsed>=.4)return Out;
+    if(Elapsed<0||Elapsed>=S.Duration)return Out;
     Out.bPlay=true;Out.PositionSeconds=Elapsed;return Out;
 }
 }

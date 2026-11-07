@@ -103,6 +103,7 @@ struct FHitCandidate
     double TimestampSeconds = 0;
     uint32 HurtboxId = 0;
     bool bGeometryValid = true, bUnobstructed = true;
+    uint8 DefinitionId = 0; uint32 DefinitionVersion = 1; int32 RawDamage = 60;
 };
 bool CandidateLess(const FHitCandidate& A, const FHitCandidate& B);
 
@@ -115,6 +116,7 @@ public:
     bool RegisterLife(FLifeId Life);
     bool RegisterAction(FActionId Action, double ActiveStartSeconds, double ActiveEndSeconds);
     bool ResolveHit(const FHitCandidate& Candidate);
+    bool CanResolveHit(const FHitCandidate& Candidate) const;
     bool MarkDead(FLifeId Life);
     bool InvalidateAction(FActionId Action, double AtSeconds);
     bool IsAlive(FLifeId Life) const;

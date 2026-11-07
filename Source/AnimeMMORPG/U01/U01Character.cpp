@@ -124,7 +124,7 @@ void UU01CharacterMovement::SetPostLandedPhysics(const FHitResult& Hit)
 
 void UU01CharacterMovement::ObserveMovementMode(EMovementMode PreviousMode)
 {
-    if (IsMovingOnGround()) JumpWindow.Land();
+    if (IsMovingOnGround()) { JumpWindow.Land(); if(auto* C=Cast<AU01Character>(CharacterOwner); C&&C->Combat)C->Combat->Landed(); }
     else if ((PreviousMode == MOVE_Walking || PreviousMode == MOVE_NavWalking) && IsFalling())
     {
         JumpWindow.LeaveGround(EventSeconds.Get(SimulationSeconds), bAttemptingJump);

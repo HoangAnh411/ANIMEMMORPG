@@ -47,7 +47,7 @@ void FTimelineModel::Start(EAction Id,double T,double Yaw)
 }
 bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
 {
-    if (!FMath::IsFinite(T) || T < Now || bAdvancing) return false;
+    if (!FMath::IsFinite(T) || T < Now || bAdvancing || bBarrierOpen) return false;
     TGuardValue<bool> Advancing(bAdvancing, true);
     bool First = true;
     while (First || Now < T)
@@ -67,16 +67,7 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
         const TOptional<double> Event = Resolver.NextEvent(*this, Boundary);
         if (Event.IsSet() && (!FMath::IsFinite(Event.GetValue()) || Event.GetValue() < Now || Event.GetValue() > Boundary)) return false;
         const double Stop = Event.IsSet() ? Event.GetValue() : Boundary;
-        if (Action && Stop > Now)
-        {
-            const auto& D = Action->GetDefinition();
-            const double Begin = FMath::Max(Now, Action->Start + D.ActiveStart);
-            const double End = FMath::Min(Stop, FMath::Min(Action->Start + D.ActiveEnd, Action->Cutoff));
-            if (Begin < End)
-                Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Begin,End,Action->Yaw,true});
-        }
-        Resource.Advance(Stop);
-        Now = Stop;
+        DeliverBefore(Stop, Resolver);
         // Drain the complete timestamp group, including events discovered by a callback.
         // Even at T, nothing may sample, expire, create a successor or admit between events.
         TOptional<double> CurrentEvent = Event;
@@ -89,32 +80,78 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
             CurrentEvent = Resolver.NextEvent(*this, Now);
             if (CurrentEvent.IsSet() && (!FMath::IsFinite(CurrentEvent.GetValue()) || CurrentEvent.GetValue() != Now)) return false;
         }
-        // Only now can an endpoint contact exist: cancellation at this timestamp excludes it.
-        if (Action)
-        {
-            const auto& D = Action->GetDefinition();
-            if (Now >= Action->Start + D.ActiveStart && Now < Action->Start + D.ActiveEnd && Now < Action->Cutoff)
-                Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Now,Now,Action->Yaw,false});
-            const bool Cancelled = Now >= Action->Cutoff;
-            if (Cancelled || Now >= Action->End())
-            {
-                const bool Natural = !Cancelled;
-                const double End = Natural ? Action->End() : Action->Cutoff;
-                GraceEnd = Natural && bGrounded && !bDead && D.Id <= EAction::Attack3 ? End + .15 : 0;
-                Action.Reset();
-                if (Natural && bGrounded && !bDead && Pending.IsSet() && Pending->Receive + .15 > End)
-                {
-                    const double Yaw = Pending->AimYaw;
-                    Pending.Reset();
-                    Start(NextCombo, End, Yaw);
-                }
-                else Pending.Reset();
-            }
-        }
-        if (Pending.IsSet() && Now >= Pending->Receive + .15) Pending.Reset();
-        if (!Action && Now >= GraceEnd) NextCombo = EAction::Attack1;
+        CompleteCurrent(Resolver);
     }
     return true;
+}
+
+void FTimelineModel::CompleteCurrent(ITimelineResolver& Resolver)
+{
+    // Only now can an endpoint contact exist: cancellation at this timestamp excludes it.
+    if (Action)
+    {
+        const auto& D = Action->GetDefinition();
+        if (Now >= Action->Start + D.ActiveStart && Now < Action->Start + D.ActiveEnd && Now < Action->Cutoff)
+            Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Now,Now,Action->Yaw,false});
+        const bool Cancelled = Now >= Action->Cutoff;
+        if (Cancelled || Now >= Action->End())
+        {
+            const bool Natural = !Cancelled;
+            const double End = Natural ? Action->End() : Action->Cutoff;
+            GraceEnd = Natural && bGrounded && !bDead && D.Id <= EAction::Attack3 ? End + .15 : 0;
+            Action.Reset();
+            if (Natural && bGrounded && !bDead && Pending.IsSet() && Pending->Receive + .15 > End)
+            {
+                const double Yaw = Pending->AimYaw;
+                Pending.Reset();
+                Start(NextCombo, End, Yaw);
+            }
+            else Pending.Reset();
+        }
+    }
+    if (Pending.IsSet() && Now >= Pending->Receive + .15) Pending.Reset();
+    if (!Action && Now >= GraceEnd) NextCombo = EAction::Attack1;
+}
+void FTimelineModel::DeliverBefore(double Stop, ITimelineResolver& Resolver)
+{
+    if (Action && Stop > Now)
+    {
+        const auto& D = Action->GetDefinition();
+        const double Begin = FMath::Max(Now, Action->Start + D.ActiveStart);
+        const double End = FMath::Min(Stop, FMath::Min(Action->Start + D.ActiveEnd, Action->Cutoff));
+        if (Begin < End)
+            Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Begin,End,Action->Yaw,true});
+    }
+    Resource.Advance(Stop);
+    Now = Stop;
+}
+double FTimelineModel::NextBoundaryThrough(double T) const
+{
+    double Boundary = T;
+    auto Split = [&](double At) { if (At > Now) Boundary = FMath::Min(Boundary, At); };
+    if (Action) { const auto& D=Action->GetDefinition(); Split(Action->Start+D.ActiveStart); Split(Action->Start+D.ActiveEnd); Split(Action->End()); }
+    if (Pending.IsSet()) Split(Pending->Receive+.15);
+    if (!Action) Split(GraceEnd);
+    return Boundary;
+}
+bool FTimelineModel::ArriveAtBarrier(double T, ITimelineResolver& Collector)
+{
+    if (bAdvancing || bBarrierOpen || !FMath::IsFinite(T) || T<Now || NextBoundaryThrough(T)!=T) return false;
+    DeliverBefore(T,Collector); bBarrierOpen=true; return true;
+}
+bool FTimelineModel::CancelAtBarrier(ECutoff Reason)
+{ if(!bBarrierOpen)return false; TGuardValue<bool> Resolving(bResolvingEvent,true); return CancelCurrent(Reason); }
+bool FTimelineModel::GroundedAtBarrier(bool Grounded)
+{ if(!bBarrierOpen)return false; TGuardValue<bool> Resolving(bResolvingEvent,true); return SetGroundedCurrent(Grounded); }
+bool FTimelineModel::FinishBarrier(ITimelineResolver& Collector)
+{ if(!bBarrierOpen)return false; CompleteCurrent(Collector); bBarrierOpen=false; return true; }
+bool FTimelineModel::UpdateAim(double T,double Yaw)
+{ if(bBarrierOpen||bAdvancing||!FMath::IsFinite(Yaw)||T!=Now||!Action||!Action->Startup(T))return false; Action->Yaw=FRotator::NormalizeAxis(Yaw); return true; }
+bool FTimelineModel::ResetLife(U02::FLifeId NewLife,double T)
+{
+    if(bBarrierOpen||bAdvancing||T<Now||NewLife.Pawn!=Life.Pawn||NewLife.Generation<=Life.Generation)return false;
+    Life=NewLife;Now=T;Action.Reset();Pending.Reset();NextCombo=EAction::Attack1;GraceEnd=0;
+    bDead=false;bGrounded=true;Resource=FResourceModel();Next=0;return true;
 }
 bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
 {

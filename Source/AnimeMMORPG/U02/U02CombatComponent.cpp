@@ -21,242 +21,203 @@
 DEFINE_LOG_CATEGORY_STATIC(LogU02Combat, Log, All);
 using namespace AnimeMMORPG::U02;
 
+namespace
+{
+class FU03NoEvents final : public AnimeMMORPG::U03::ITimelineResolver
+{
+public:
+    TOptional<double> NextEvent(const AnimeMMORPG::U03::FTimelineModel&,double) override {return {};}
+    void ResolveInterval(const AnimeMMORPG::U03::FActiveInterval&) override {}
+    void ResolveEvent(AnimeMMORPG::U03::FTimelineModel&,double) override {checkNoEntry();}
+};
+}
 UU02CombatComponent::UU02CombatComponent()
 {
-    PrimaryComponentTick.bCanEverTick = true;
-    PrimaryComponentTick.TickGroup = TG_PrePhysics;
-    SetIsReplicatedByDefault(true);
+    PrimaryComponentTick.bCanEverTick=true;PrimaryComponentTick.TickGroup=TG_PrePhysics;SetIsReplicatedByDefault(true);
 }
-AU01Character* UU02CombatComponent::Character() const { return Cast<AU01Character>(GetOwner()); }
+AU01Character* UU02CombatComponent::Character() const {return Cast<AU01Character>(GetOwner());}
 void UU02CombatComponent::BeginPlay()
 {
-    Super::BeginPlay();
-    auto* C = Character();
-    if (!C || !GetWorld() || (GetWorld()->WorldType != EWorldType::Game && GetWorld()->WorldType != EWorldType::PIE))
-    { SetComponentTickEnabled(false); return; }
+    Super::BeginPlay();auto* C=Character();
+    if(!C||!GetWorld()||(GetWorld()->WorldType!=EWorldType::Game&&GetWorld()->WorldType!=EWorldType::PIE)){SetComponentTickEnabled(false);return;}
     C->GetU01Movement()->AddTickPrerequisiteComponent(this);
-    TArray<UPrimitiveComponent*> PresentationAndBody;C->GetComponents(PresentationAndBody);
-    for(auto* P:PresentationAndBody)P->SetCollisionResponseToChannel(ECC_GameTraceChannel2,ECR_Ignore);
-    // C owns a separate graph; keep the accepted U01 AnimBP bytes untouched.
-    if(C->GetMesh()->GetSkeletalMeshAsset())
+    TArray<UPrimitiveComponent*> Parts;C->GetComponents(Parts);for(auto* P:Parts)P->SetCollisionResponseToChannel(ECC_GameTraceChannel2,ECR_Ignore);
+    if(C->GetMesh()->GetSkeletalMeshAsset())if(auto* Class=LoadClass<UAnimInstance>(nullptr,TEXT("/Game/AnimeMMORPG/U02/Animation/ABP_U02.ABP_U02_C")))C->GetMesh()->SetAnimInstanceClass(Class);
+    if(C->HasAuthority())
     {
-        auto* PresentationClass=LoadClass<UAnimInstance>(nullptr,TEXT("/Game/AnimeMMORPG/U02/Animation/ABP_U02.ABP_U02_C"));
-        if(PresentationClass)C->GetMesh()->SetAnimInstanceClass(PresentationClass);
-    }
-    if (C->HasAuthority())
-    {
-        check(C->NetworkPawnId.IsValid());
-        check(FAttack1Definition().IsValid());
-        Model = MakeUnique<FActionModel>(FLifeId{C->NetworkPawnId,1});
-        Publish(GetWorld()->GetTimeSeconds(),true);
-        GetWorld()->GetSubsystem<UU02CollisionWorld>()->RegisterCombat(this);
+        Model=MakeUnique<AnimeMMORPG::U03::FTimelineModel>(FLifeId{C->NetworkPawnId,1},GetWorld()->GetTimeSeconds());
+        Publish(Model->Time(),true);GetWorld()->GetSubsystem<UU02CollisionWorld>()->RegisterCombat(this);
     }
 }
 void UU02CombatComponent::EndPlay(const EEndPlayReason::Type Reason)
 {
-    if (Model) CancelAt(ECancel::Removed,GetWorld()->GetTimeSeconds());
-    if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())W->UnregisterCombat(this);
-    OnActiveInterval.Clear();
-    BeforeActionMutation.Unbind();
-    Super::EndPlay(Reason);
+    if(GetWorld())if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())W->UnregisterCombat(this);
+    OnActiveInterval.Clear();BeforeActionMutation.Unbind();Super::EndPlay(Reason);
 }
 void UU02CombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{Super::GetLifetimeReplicatedProps(OutLifetimeProps);DOREPLIFETIME(UU02CombatComponent,Snapshot);DOREPLIFETIME_CONDITION(UU02CombatComponent,OwnerAdmission,COND_OwnerOnly);}
+void UU02CombatComponent::SubmitAttackIntent(uint64 Sequence,double Local,double Yaw)
+{SubmitCombatIntent(AnimeMMORPG::U03::ECommand::Attack,Sequence,Local,Yaw);}
+void UU02CombatComponent::SubmitCombatIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double Local,double Yaw)
 {
-    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-    DOREPLIFETIME(UU02CombatComponent,Snapshot);
+    if(!Character())return;
+    if(Character()->HasAuthority())ReceiveIntent(Command,Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration);
+    else {LastSentCommand=Sequence;LastSentLife=Snapshot.LifeGeneration;ServerCombat(uint8(Command),Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration);}
 }
-void UU02CombatComponent::SubmitAttackIntent(uint64 Sequence, double LocalInputSeconds, double Yaw)
-{
-    if (!Character()) return;
-    if (Character()->HasAuthority()) HandleAttack(Sequence,LocalInputSeconds,Yaw,GetWorld()->GetTimeSeconds());
-    else {LastSentCommand=Sequence;LastSentLife=Snapshot.LifeGeneration;ServerAttack(Sequence,LocalInputSeconds,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration);}
-}
-void UU02CombatComponent::ServerAttack_Implementation(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life)
+void UU02CombatComponent::ServerAttack_Implementation(uint64 Sequence,double Local,double Yaw,FGuid Pawn,uint64 Life)
+{ReceiveIntent(AnimeMMORPG::U03::ECommand::Attack,Sequence,Local,Yaw,Pawn,Life);}
+void UU02CombatComponent::ServerCombat_Implementation(uint8 Command,uint64 Sequence,double Local,double Yaw,FGuid Pawn,uint64 Life)
+{ReceiveIntent(static_cast<AnimeMMORPG::U03::ECommand>(Command),Sequence,Local,Yaw,Pawn,Life);}
+void UU02CombatComponent::ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double Local,double Yaw,FGuid Pawn,uint64 Life)
 {
     if(!Model||!Character()||!Character()->HasAuthority())return;
-    if(Pawn!=Model->GetLife().Pawn||Life!=Model->GetLife().Generation)
-    {++RejectedCount;LastReject=EReject::StaleCommand;Publish(GetWorld()->GetTimeSeconds(),true);Trace(TEXT("RejectedLife"),GetWorld()->GetTimeSeconds());return;}
-    HandleAttack(Sequence,LocalInputSeconds,Yaw,GetWorld()->GetTimeSeconds());
+    if(QueuedIntents.Num()>=64){++RejectedCount;return;}
+    QueuedIntents.Add({{Sequence,{Pawn,Life},Command,0,Yaw},Local,GetWorld()->GetTimeSeconds()});
 }
-void UU02CombatComponent::SetControlPlaying(bool bPlaying)
+void UU02CombatComponent::SetControlPlaying(bool Playing)
 {
-    if (!Character()) return;
-    if (Character()->HasAuthority()) bAuthorityPlaying = bPlaying;
-    else ServerControlPlaying(bPlaying);
+    if(!Character())return;
+    if(Character()->HasAuthority())ServerControlPlaying_Implementation(Playing);else ServerControlPlaying(Playing);
 }
-void UU02CombatComponent::ServerControlPlaying_Implementation(bool bPlaying) { bAuthorityPlaying = bPlaying; }
-void UU02CombatComponent::ServerAim_Implementation(double Yaw, FGuid Pawn, uint64 Life, uint64 Action)
+void UU02CombatComponent::ServerControlPlaying_Implementation(bool Playing)
 {
-    if (!Model || !FMath::IsFinite(Yaw)) return;
-    const auto Current=Model->GetCombatSnapshot(GetWorld()->GetTimeSeconds());
-    if(Pawn!=Current.Life.Pawn||Life!=Current.Life.Generation||Action!=Current.Action.Sequence)return;
-    const double Now = GetWorld()->GetTimeSeconds();
-    // Drain first: aim received at/after entry can never retroactively turn active.
-    AdvanceAuthority(Now);
-    if (Model->UpdateAim(Now,Yaw)) { StartupTurn.Retarget(Now,Yaw); Publish(Now); }
+    bAuthorityPlaying=Playing;
+    if(!Playing){for(const auto& E:QueuedIntents)if(E.Intent.Life==Model->GetLife())AdmissionWatermark=FMath::Max(AdmissionWatermark,E.Intent.Sequence);QueuedIntents.Empty();if(Model)Model->ClearPending();}
 }
-void UU02CombatComponent::HandleAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, double Now)
+void UU02CombatComponent::ServerAim_Implementation(double Yaw,FGuid Pawn,uint64 Life,uint64 Action)
+{if(Model&&FMath::IsFinite(Yaw)&&QueuedAim.Num()<16)QueuedAim.Add({Yaw,Pawn,Life,Action});}
+void UU02CombatComponent::HandleAttack(uint64 Sequence,double Local,double Yaw,double Now)
 {
-    if (!Model || !Character()->HasAuthority()) return;
-    // Mandatory adapter invariant: deliver the OLD interval before overwriting action.
-    if (!AdvanceAuthority(Now)) return;
-    BeforeActionMutation.ExecuteIfBound(Now);
-    auto* M = Character()->GetU01Movement();
-    FAttackContext Context;
-    Context.bPlaying = bAuthorityPlaying && !(M->GetLockMask() & uint8(EU01MotorLock::Control));
-    if (const auto* PC = Cast<AU01PlayerController>(Character()->GetController()))
-        Context.bPlaying &= PC->ControlState == EU01ControlState::Playing;
-    Context.bGrounded = M->IsMovingOnGround();
-    Context.bInteracting = (M->GetLockMask() & uint8(EU01MotorLock::Interacting)) != 0;
-    Context.bDefeated = (Character()->Vital&&Character()->Vital->GetSnapshot().bDead) || (M->GetLockMask() & uint8(EU01MotorLock::Defeated)) != 0;
-    LastCommand = Sequence;
-    // The client clock is diagnostic only; invalid local stamps are discarded, never backdated.
-    LastReject = Model->SubmitAttackIntent(Sequence,Now,Yaw,Context);
-    if (LastReject == EReject::None)
-    {
-        ++AcceptedCount;
-        StartupTurn.Begin(Character()->GetActorRotation().Yaw,Yaw,Now,Now+.16);
-    }
-    else ++RejectedCount;
-    Publish(Now,true);
-    Trace(LastReject == EReject::None ? TEXT("Accepted") : TEXT("Rejected"),Now,
-        FString::Printf(TEXT("command=%llu reason=%d localInput=%.17g receive=%.17g"),Sequence,int32(LastReject),
-            FMath::IsFinite(LocalInputSeconds) ? LocalInputSeconds : -1.,Now));
+    // Native test adapter uses the identical enqueue + world barrier path.
+    ReceiveIntent(AnimeMMORPG::U03::ECommand::Attack,Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration);
+    if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())W->DrainAt(Now);
 }
-bool UU02CombatComponent::AdvanceAuthority(double Now, bool bExcludeEnd)
+void UU02CombatComponent::ProcessQueuedIntents(double Now)
 {
-    if (!Model) return false;
-    const auto Before = Model->GetCombatSnapshot(Now);
-    const double Previous = Before.LastAdvanceSeconds;
-    FActiveSlice Slice;
-    if (!Model->AdvanceAction(Now,Slice)) return false;
-    if (bExcludeEnd && Slice.bEvaluate && Slice.EndSeconds==Now)
+    using namespace AnimeMMORPG::U03;
+    if(!Model)return;
+    for(const auto& A:QueuedAim)if(A.Pawn==Snapshot.PawnId&&A.Life==Snapshot.LifeGeneration&&A.Action==Snapshot.ActionSequence)
+        if(Model->UpdateAim(Now,A.Yaw)){StartupTurn.Retarget(Now,A.Yaw);Publish(Now,true);}
+    QueuedAim.Empty();
+    auto* C=Character();auto* M=C->GetU01Movement();FAdmissionContext Context;
+    Context.bPlaying=bAuthorityPlaying&&!(M->GetLockMask()&(uint8(EU01MotorLock::Control)|uint8(EU01MotorLock::Interacting)));
+    if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))Context.bPlaying&=PC->ControlState==EU01ControlState::Playing;
+    Context.bGrounded=M->IsMovingOnGround();Context.bDead=C->Vital&&C->Vital->GetSnapshot().bDead;
+    auto Commands=MoveTemp(QueuedIntents);QueuedIntents.Empty();
+    Commands.Sort([](const auto& A,const auto& B){return A.Intent.Sequence<B.Intent.Sequence;});
+    TSet<uint64> Conflicts;
+    for(int32 A=0;A<Commands.Num();++A)for(int32 B=A+1;B<Commands.Num();++B)
+        if(Commands[A].Intent.Sequence==Commands[B].Intent.Sequence && (Commands[A].Intent.Command!=Commands[B].Intent.Command||Commands[A].Intent.AimYaw!=Commands[B].Intent.AimYaw||!(Commands[A].Intent.Life==Commands[B].Intent.Life)))Conflicts.Add(Commands[A].Intent.Sequence);
+    for(auto& Entry:Commands)
     {
-        Slice.bEndExclusive=true;
-        if(Slice.BeginSeconds==Slice.EndSeconds)Slice.bEvaluate=false;
-    }
-    if (Before.Action.Sequence && Before.Phase != EPhase::Cancelled)
-    {
-        const double Boundaries[] = {Before.ActiveStartSeconds,Before.ActiveEndSeconds,Before.EndSeconds};
-        const TCHAR* Names[] = {TEXT("Active"),TEXT("Recovery"),TEXT("Finished")};
-        for (int32 I=0;I<3;++I) if (Previous < Boundaries[I] && Now >= Boundaries[I]) Trace(Names[I],Boundaries[I]);
-    }
-    // Complete the gameplay orientation boundary BEFORE handing any active interval to D.
-    // This also holds when a single update skips the entire active window.
-    if (Before.Action.Sequence && Before.Phase!=EPhase::Cancelled && Previous<Before.EndSeconds && Now>=Before.StartSeconds)
-    {
-        const double BodyYaw=StartupTurn.Sample(Now);
-        Character()->GetU01Movement()->ApplyCombatAuthority(true,Now>=Before.ActiveStartSeconds,BodyYaw);
-        Character()->SetActorRotation(FRotator(0,BodyYaw,0));
-    }
-    if (Slice.bEvaluate)
-    {
-        LastInterval = Slice; ++IntervalCount;
-        Trace(TEXT("ActiveInterval"),Slice.BeginSeconds,
-            FString::Printf(TEXT("begin=%.17g end=%.17g beginAlpha=%.17g endAlpha=%.17g endExclusive=%d"),
-                Slice.BeginSeconds,Slice.EndSeconds,Slice.BeginAlpha,Slice.EndAlpha,Slice.bEndExclusive));
-        OnActiveInterval.Broadcast(Before.Action,Slice); // D's collector must not apply damage in this callback.
+        auto& I=Entry.Intent;I.Receive=Now;LastCommand=FMath::Max(LastCommand,I.Sequence);
+        EAdmission Result=EAdmission::Invalid;
+        if(I.Life==Model->GetLife())
+        {
+            if(Conflicts.Contains(I.Sequence)){Result=EAdmission::Invalid;AdmissionWatermark=FMath::Max(AdmissionWatermark,I.Sequence);}
+            else if(I.Sequence==0||I.Sequence<=AdmissionWatermark)Result=EAdmission::Stale;
+            else
+            {
+                AdmissionWatermark=I.Sequence;
+                if(I.Command==ECommand::Attack){FU03NoEvents ResolvedBarrier;auto R=Model->SubmitBatch({I},Context,ResolvedBarrier);if(R.Num())Result=R[0].Result;}
+                else Result=EAdmission::Unsupported;
+            }
+        }
+        OwnerAdmission.Command=I.Sequence;OwnerAdmission.Admission=uint8(Result);++OwnerAdmission.Revision;
+        const bool Success=Result==EAdmission::Accepted||Result==EAdmission::Queued||Result==EAdmission::Replaced;
+        if(Success){++AcceptedCount;if(Result==EAdmission::Queued)++QueuedCount;if(Result==EAdmission::Replaced)++ReplacedCount;LastReject=EReject::None;}
+        else {++RejectedCount;LastReject=Result==EAdmission::Stale||!(I.Life==Model->GetLife())?EReject::StaleCommand:!Context.bPlaying?EReject::NotPlaying:!Context.bGrounded?EReject::Airborne:Context.bDead?EReject::Defeated:!FMath::IsFinite(I.AimYaw)?EReject::InvalidAim:EReject::Busy;}
+        Publish(Now,true);
+        Trace(Success?TEXT("Admitted"):TEXT("Rejected"),Now,FString::Printf(TEXT("command=%llu admission=%u localInput=%.17g receive=%.17g accept=%.17g"),I.Sequence,uint8(Result),Entry.LocalSeconds,Entry.Receive,Now));
     }
     Publish(Now);
-    return true;
 }
-bool UU02CombatComponent::CancelAt(ECancel Reason, double Now)
+void UU02CombatComponent::RememberCurrent(double Now)
 {
-    if (!Model || !Character()->HasAuthority()) return false;
-    const EPhase Phase=Model->PhaseAt(Now);
-    const bool WillCancel=Reason!=ECancel::Menu && Reason!=ECancel::Focus && Phase!=EPhase::Idle && Phase!=EPhase::Finished && Phase!=EPhase::Cancelled
-        && ((Reason!=ECancel::Dodge && Reason!=ECancel::Guard) || Phase==EPhase::Startup);
-    if(!AdvanceAuthority(Now,WillCancel))return false;
-    BeforeActionMutation.ExecuteIfBound(Now);
-    const bool Cancelled = Model->CancelAction(Reason,Now);
-    if(Cancelled&&(Reason==ECancel::Removed||(Reason==ECancel::Death&&Character()->Vital&&Character()->Vital->GetSnapshot().bDead)))GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(Model->GetLife());
-    Publish(Now,true);
-    Trace(Cancelled ? TEXT("Cancelled") : TEXT("CancelRejected"),Now,FString::Printf(TEXT("reason=%d"),int32(Reason)));
-    return Cancelled;
+    if(!Model||!Model->Current())return;
+    const auto& A=*Model->Current();const auto& D=A.GetDefinition();
+    if(Snapshot.ActionSequence!=A.Identity.Sequence||Snapshot.LifeGeneration!=A.Identity.Source.Generation)
+    {
+        StartupTurn.Begin(Character()->GetActorRotation().Yaw,A.Yaw,A.Start,A.Start+D.ActiveStart);
+        Snapshot.ActionSequence=A.Identity.Sequence;Snapshot.StartSeconds=A.Start;
+    }
+    Snapshot.DefinitionId=uint8(D.Id);Snapshot.DefinitionVersion=D.Version;Snapshot.RawDamage=D.RawDamage;
+    Snapshot.ActiveStart=D.ActiveStart;Snapshot.ActiveEnd=D.ActiveEnd;Snapshot.Duration=D.Duration;
+    Snapshot.AimYawDegrees=A.Yaw;
 }
-bool UU02CombatComponent::CancelAction(ECancel Reason) { return CancelAt(Reason,GetWorld()->GetTimeSeconds()); }
-void UU02CombatComponent::HandleDefeat(double GameplayTime)
+bool UU02CombatComponent::AdvanceAuthority(double Now,bool)
+{if(!Model)return false;GetWorld()->GetSubsystem<UU02CollisionWorld>()->DrainAt(Now);return Model->Time()==Now;}
+bool UU02CombatComponent::CancelAt(ECancel Reason,double Now)
+{
+    if(!Model)return false;
+    if(Reason==ECancel::Menu||Reason==ECancel::Focus){Model->ClearPending();QueuedIntents.Empty();return false;}
+    // Dodge/guard gameplay is not available until B1/B2.
+    if(Reason==ECancel::Dodge||Reason==ECancel::Guard)return false;
+    const auto Cut=Reason==ECancel::LostGround?AnimeMMORPG::U03::ECutoff::LostGround:AnimeMMORPG::U03::ECutoff::Death;
+    return GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(this,Now,Cut,false);
+}
+bool UU02CombatComponent::CancelAction(ECancel Reason){return CancelAt(Reason,GetWorld()->GetTimeSeconds());}
+void UU02CombatComponent::HandleDefeat(double At)
 {
     if(!Model||!Character()->HasAuthority())return;
-    GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(Model->GetLife());
-    // The world batch already advanced every model to the snapshot endpoint.
-    // Cancel presentation at that observed endpoint, never rewind the model clock;
-    // the ledger/vital death timestamp is the earlier sorted gameplay hit time.
-    const double Observed=FMath::Max(double(GetWorld()->GetTimeSeconds()),Model->GetCombatSnapshot(GetWorld()->GetTimeSeconds()).LastAdvanceSeconds);
-    Model->CancelAction(ECancel::Death,Observed);Publish(Observed,true);
-    Character()->GetU01Movement()->SetMotorLock(EU01MotorLock::Defeated,true);
-    Trace(TEXT("VitalDeath"),GameplayTime);
+    GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(this,At,AnimeMMORPG::U03::ECutoff::Death,false);
+    Character()->GetU01Movement()->SetMotorLock(EU01MotorLock::Defeated,true);Trace(TEXT("VitalDeath"),At);
 }
 void UU02CombatComponent::LostGround()
-{
-    if (Snapshot.bLocked && Model) CancelAt(ECancel::LostGround,GetWorld()->GetTimeSeconds());
-}
+{if(Model)GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(this,GetWorld()->GetTimeSeconds(),AnimeMMORPG::U03::ECutoff::LostGround,false);}
+void UU02CombatComponent::Landed()
+{if(Model)GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(this,GetWorld()->GetTimeSeconds(),AnimeMMORPG::U03::ECutoff::LostGround,true);}
 bool UU02CombatComponent::ResetLabCombat()
 {
 #if UE_BUILD_SHIPPING
     return false;
 #else
-    if (!Model || !Character()->HasAuthority()) return false;
-    const double Now = GetWorld()->GetTimeSeconds();
-    if (!AdvanceAuthority(Now,true)) return false;
-    BeforeActionMutation.ExecuteIfBound(Now);
-    if (!Model->ResetLabCombat(Now)) return false;
-    if(Character()->Vital)Character()->Vital->ResetLabCombat(Model->GetLife().Generation);
-    Publish(Now,true); GetWorld()->GetSubsystem<UU02CollisionWorld>()->RebaseResetSubject(Character()); Trace(TEXT("Reset"),Now); return true;
+    if(!Model||!Character()->HasAuthority())return false;
+    const double Now=FMath::Max(double(GetWorld()->GetTimeSeconds()),Model->Time());auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->DrainAt(Now);
+    auto Life=Model->GetLife();++Life.Generation;if(!Model->ResetLife(Life,Now))return false;
+    QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;
+    OwnerAdmission.PendingCommand=0;OwnerAdmission.PendingExpires=0;
+    if(Character()->Vital)Character()->Vital->ResetLabCombat(Life.Generation);
+    Publish(Now,true);W->RebaseResetSubject(Character());Trace(TEXT("Reset"),Now);return true;
 #endif
 }
-void UU02CombatComponent::Publish(double Now, bool bForce)
+void UU02CombatComponent::Publish(double Now,bool Force)
 {
-    if (!Model) return;
-    const auto S = Model->GetCombatSnapshot(Now);
-    const bool Changed = Snapshot.Phase != uint8(S.Phase) || Snapshot.ActionSequence != S.Action.Sequence
-        || Snapshot.LifeGeneration != S.Life.Generation || Snapshot.AimYawDegrees != S.AimYawDegrees;
-    if (!Changed && !bForce) return;
-    Snapshot.PawnId = S.Life.Pawn; Snapshot.LifeGeneration = S.Life.Generation;
-    Snapshot.ActionSequence = S.Action.Sequence; Snapshot.Phase = uint8(S.Phase);
-    Snapshot.StartSeconds = S.StartSeconds; Snapshot.ServerSeconds = Now; Snapshot.AimYawDegrees = S.AimYawDegrees;
-    Snapshot.TurnFromYaw=StartupTurn.FromYaw; Snapshot.TurnStartSeconds=StartupTurn.SegmentStart;
+    if(!Model)return;const auto Before=Snapshot;RememberCurrent(Now);const auto Life=Model->GetLife();
+    Snapshot.PawnId=Life.Pawn;Snapshot.LifeGeneration=Life.Generation;Snapshot.ServerSeconds=Now;
+    if(const auto* A=Model->Current())
+    {
+        Snapshot.Phase=uint8(Now>=A->Cutoff?EPhase::Cancelled:Now<A->Start+Snapshot.ActiveStart?EPhase::Startup:Now<A->Start+Snapshot.ActiveEnd?EPhase::Active:EPhase::Recovery);
+        Snapshot.bLocked=Now<A->Cutoff&&Now<A->End();Snapshot.bYawLocked=Snapshot.bLocked&&Now>=A->Start+Snapshot.ActiveStart;
+    }
+    else {Snapshot.bLocked=false;Snapshot.bYawLocked=false;if(Snapshot.ActionSequence&&Snapshot.Phase!=uint8(EPhase::Cancelled))Snapshot.Phase=uint8(EPhase::Finished);}
+    Snapshot.Energy=Model->Resources().Energy();Snapshot.QReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::Q);Snapshot.EReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::E);
+    const auto& Pending=Model->GetPending();OwnerAdmission.PendingCommand=Pending.IsSet()?Pending->Sequence:0;OwnerAdmission.PendingExpires=Pending.IsSet()?Pending->Receive+.15:0;
+    Snapshot.TurnFromYaw=StartupTurn.FromYaw;Snapshot.TurnStartSeconds=StartupTurn.SegmentStart;
     Snapshot.LastCommand=LastCommand;Snapshot.Accepted=AcceptedCount;Snapshot.Rejected=RejectedCount;Snapshot.RejectReason=uint8(LastReject);
-    Snapshot.bLocked = S.bCombatLocked; Snapshot.bYawLocked = S.bYawLocked; ++Snapshot.Revision;
-    if(auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>())W->ObserveCombat(this);
-    ApplyMotorSnapshot(); Character()->ForceNetUpdate();
+    ++Snapshot.Revision;ApplyMotorSnapshot();
+    if(Force||Before.Phase!=Snapshot.Phase||Before.ActionSequence!=Snapshot.ActionSequence||Before.AimYawDegrees!=Snapshot.AimYawDegrees||Before.Energy!=Snapshot.Energy)Character()->ForceNetUpdate();
+    if(Before.ActionSequence!=Snapshot.ActionSequence&&Snapshot.ActionSequence)Trace(TEXT("ActionStarted"),Snapshot.StartSeconds);
 }
 void UU02CombatComponent::ApplyMotorSnapshot()
 {
-    if (auto* C=Character())
+    if(auto* C=Character())
     {
-        const auto* GS=GetWorld()->GetGameState();
-        const double Now=C->HasAuthority()?Snapshot.ServerSeconds:(GS?GS->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds());
-        FStartupTurn Turn;Turn.Begin(Snapshot.TurnFromYaw,Snapshot.AimYawDegrees,Snapshot.TurnStartSeconds,Snapshot.StartSeconds+.16);
-        const double BodyYaw=Turn.Sample(Now);
-        C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,BodyYaw);
-        // Simulated proxies do not run PhysicsRotation. Sample the action trajectory
-        // explicitly there too; hit direction remains exclusively server-owned.
-        if (!C->HasAuthority() && Snapshot.bLocked) C->SetActorRotation(FRotator(0,BodyYaw,0));
+        const auto* GS=GetWorld()->GetGameState();const double Now=C->HasAuthority()?Snapshot.ServerSeconds:(GS?GS->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds());
+        FStartupTurn Turn;Turn.Begin(Snapshot.TurnFromYaw,Snapshot.AimYawDegrees,Snapshot.TurnStartSeconds,Snapshot.StartSeconds+Snapshot.ActiveStart);
+        const double Yaw=Turn.Sample(Now);C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,Yaw);
+        if(Snapshot.bLocked)C->SetActorRotation(FRotator(0,Yaw,0));
     }
 }
-void UU02CombatComponent::OnRep_Snapshot() { ApplyMotorSnapshot(); }
-void UU02CombatComponent::TickComponent(float Dt, ELevelTick Type, FActorComponentTickFunction* Function)
+void UU02CombatComponent::OnRep_Snapshot(){ApplyMotorSnapshot();}
+void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponentTickFunction* Function)
 {
-    Super::TickComponent(Dt,Type,Function);
-    const double Now=GetWorld()->GetTimeSeconds();
-    auto* C=Character(); if (!C) return;
-    if (Model)
-    {
-        AdvanceAuthority(Now);
-        // Remote aim arrives through ServerAim. A stale replicated controller rotation must not overwrite it.
-        if (C->IsLocallyControlled() && C->GetController() && Model->UpdateAim(Now,C->GetControlRotation().Yaw))
-        { StartupTurn.Retarget(Now,C->GetControlRotation().Yaw); Publish(Now); }
-    }
-    else if (C->IsLocallyControlled() && Snapshot.Phase==uint8(EPhase::Startup) && Now-LastAimSend>=1./30)
-    { ServerAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence); LastAimSend=Now; }
-    if (!Model) ApplyMotorSnapshot();
-    if (C->IsLocallyControlled() && GEngine && FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
-    {
-        const TCHAR* Phases[]={TEXT("Ready"),TEXT("Startup"),TEXT("Active"),TEXT("Recovery"),TEXT("Ready"),TEXT("Cancelled")};
-        GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+200000,.1f,FColor::Cyan,
-            FString::Printf(TEXT("U02 combat lab | LMB | %s | action %llu | lock %d"),Phases[FMath::Min<int32>(Snapshot.Phase,5)],Snapshot.ActionSequence,Snapshot.bLocked));
-    }
+    Super::TickComponent(Dt,Type,Function);auto* C=Character();if(!C)return;const double Now=GetWorld()->GetTimeSeconds();
+    if(C->IsLocallyControlled()&&C->GetController()&&Snapshot.Phase==uint8(EPhase::Startup)&&Now-LastAimSend>=1./30)
+    {if(Model)ServerAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);else ServerAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);LastAimSend=Now;}
+    if(!Model)ApplyMotorSnapshot();
+    if(C->IsLocallyControlled()&&GEngine)
+        GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+200000,.15f,FColor::Cyan,FString::Printf(TEXT("U03-A1 | Attack %u/3 | action %llu | phase %u | energy %.0f/100 | pending %llu | admission %u"),Snapshot.DefinitionId+1,Snapshot.ActionSequence,Snapshot.Phase,Snapshot.Energy,OwnerAdmission.PendingCommand,OwnerAdmission.Admission));
 }
 TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
 {
@@ -267,8 +228,12 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetStringField(TEXT("commandId"),FString::Printf(TEXT("%llu"),Model?LastCommand:Snapshot.LastCommand));
     J->SetNumberField(TEXT("life"),Snapshot.LifeGeneration); J->SetNumberField(TEXT("action"),Snapshot.ActionSequence);
     J->SetNumberField(TEXT("phase"),Snapshot.Phase); J->SetNumberField(TEXT("start"),Snapshot.StartSeconds);
-    J->SetNumberField(TEXT("activeStart"),Snapshot.StartSeconds+.16); J->SetNumberField(TEXT("activeEnd"),Snapshot.StartSeconds+.22);
-    J->SetNumberField(TEXT("end"),Snapshot.StartSeconds+.4); J->SetNumberField(TEXT("serverSnapshotSeconds"),Snapshot.ServerSeconds);
+    J->SetNumberField(TEXT("definition"),Snapshot.DefinitionId);J->SetNumberField(TEXT("raw"),Snapshot.RawDamage);
+    J->SetNumberField(TEXT("energy"),Snapshot.Energy);J->SetNumberField(TEXT("qReady"),Snapshot.QReadyAt);J->SetNumberField(TEXT("eReady"),Snapshot.EReadyAt);
+    J->SetNumberField(TEXT("admission"),OwnerAdmission.Admission);J->SetNumberField(TEXT("pendingCommand"),OwnerAdmission.PendingCommand);
+    J->SetNumberField(TEXT("pendingExpires"),OwnerAdmission.PendingExpires);J->SetNumberField(TEXT("queued"),QueuedCount);J->SetNumberField(TEXT("replaced"),ReplacedCount);
+    J->SetNumberField(TEXT("activeStart"),Snapshot.StartSeconds+Snapshot.ActiveStart); J->SetNumberField(TEXT("activeEnd"),Snapshot.StartSeconds+Snapshot.ActiveEnd);
+    J->SetNumberField(TEXT("end"),Snapshot.StartSeconds+Snapshot.Duration); J->SetNumberField(TEXT("serverSnapshotSeconds"),Snapshot.ServerSeconds);
     J->SetNumberField(TEXT("gameplayBodyYaw"),Character()?Character()->GetActorRotation().Yaw:0.);
     J->SetNumberField(TEXT("meshWorldYaw"),Character()?Character()->GetMesh()->GetComponentRotation().Yaw:0.);
     J->SetNumberField(TEXT("aimYaw"),Snapshot.AimYawDegrees);
@@ -296,7 +261,7 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
 void UU02CombatComponent::Trace(const TCHAR* Event, double GameplaySeconds, const FString& Detail) const
 {
     auto J=GetDiagnostics(); const auto* C=Character();
-    if(Model)J->SetNumberField(TEXT("phase"),uint8(Model->PhaseAt(GameplaySeconds)));
+    J->SetNumberField(TEXT("phase"),Snapshot.Phase);
     FString SHA,Run; FParse::Value(FCommandLine::Get(),TEXT("U02SourceSHA="),SHA); FParse::Value(FCommandLine::Get(),TEXT("U02RunId="),Run);
     J->SetStringField(TEXT("sourceSHA"),SHA); J->SetStringField(TEXT("runId"),Run); J->SetStringField(TEXT("event"),Event);
     J->SetStringField(TEXT("utc"),FDateTime::UtcNow().ToIso8601()); J->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());

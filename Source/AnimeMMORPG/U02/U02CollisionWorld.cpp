@@ -51,10 +51,6 @@ void UU02CollisionWorld::RegisterCombat(UU02CombatComponent* C)
     FSource S;S.Component=C;auto* Pawn=CastChecked<AU01Character>(C->GetOwner());
     const auto Snap=C->GetCombatSnapshot();S.Current.Position=Feet(Pawn);S.Current.Life={Snap.PawnId,Snap.LifeGeneration};TArray<UU02HurtboxComponent*> Boxes;Pawn->GetComponents(Boxes);for(auto* H:Boxes)S.Current.Epoch=FMath::Max(S.Current.Epoch,H->ContinuityEpoch);
     S.Previous=S.Current;
-    S.IntervalHandle=C->OnActiveInterval.AddLambda([this,Weak=TWeakObjectPtr<UU02CombatComponent>(C)](const FActionId& Id,const FActiveSlice& Slice)
-    {
-        if(auto* Component=Weak.Get())Pending.Add({Weak,Id,Slice,Component->GetCombatSnapshot().AimYawDegrees});
-    });
     C->BeforeActionMutation.BindUObject(this,&UU02CollisionWorld::DrainAt);Sources.Add(S);ObserveCombat(C);
 }
 void UU02CollisionWorld::UnregisterCombat(UU02CombatComponent* C)
@@ -99,7 +95,7 @@ void UU02CollisionWorld::ObserveCombat(UU02CombatComponent* C)
     const auto S=C->GetCombatSnapshot();FLifeId Life{S.PawnId,S.LifeGeneration};Ledger.RegisterLife(Life);
     if(S.ActionSequence)
     {
-        FActionId Id{Life,S.ActionSequence};Ledger.RegisterAction(Id,S.StartSeconds+.16,S.StartSeconds+.22);
+        FActionId Id{Life,S.ActionSequence};Ledger.RegisterAction(Id,S.StartSeconds+S.ActiveStart,S.StartSeconds+S.ActiveEnd);
         if(S.Phase==uint8(EPhase::Cancelled))Ledger.InvalidateAction(Id,S.ServerSeconds);
     }
 }
@@ -224,7 +220,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         const double T=Hit.GetValue();
         const double Timestamp=T==P.Slice.BeginAlpha?P.Slice.BeginSeconds:T==P.Slice.EndAlpha?P.Slice.EndSeconds:FMath::Lerp(PreviousTime,CurrentTime,T);
         if(Timestamp<P.Slice.BeginSeconds||Timestamp>P.Slice.EndSeconds||(P.Slice.bEndExclusive&&Timestamp>=P.Slice.EndSeconds))continue;
-        Out.Add({{P.Action,H.Current.Life},Timestamp,Shape->StableHurtboxId,true,true});
+        Out.Add({{P.Action,H.Current.Life},Timestamp,Shape->StableHurtboxId,true,true,P.DefinitionId,P.DefinitionVersion,P.RawDamage});
         RecordSelected(P,H.Current.Life,Shape->StableHurtboxId,FMath::Lerp(F0,F1,T),FMath::Lerp(C0,C1,T),H.Current.Radius,Timestamp,TEXT("VALID"));
         if(!bSelectedDebug&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
         {
@@ -258,26 +254,139 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     UE_LOG(LogU02Collision,Display,TEXT("U02D_CONFIRMED sourceSHA=%s world=%s time=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u damage=%d crit=%d roll=%.17g absorbed=%d hpBefore=%d hpAfter=%d death=%d"),
         *SHA,*GetWorld()->GetPathName(),C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,Result.Damage,Result.bCrit,Roll,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied);
     FString Order;for(uint64 Id:Result.ShieldOrder)Order+=FString::Printf(TEXT("%llu,"),Id);
-    UE_LOG(LogU02Collision,Display,TEXT("U02E_DAMAGE sourceSHA=%s timestamp=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u raw=60 attack=%.17g roll=%.17g crit=%d damage=%d absorbed=%d hpBefore=%d hpAfter=%d death=%d shieldOrder=%s"),
-        *SHA,C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,SourceVital->GetAttackFactor(),Roll,Result.bCrit,Result.Damage,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied,*Order);
+    UE_LOG(LogU02Collision,Display,TEXT("U02E_DAMAGE sourceSHA=%s timestamp=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u raw=%d attack=%.17g roll=%.17g crit=%d damage=%d absorbed=%d hpBefore=%d hpAfter=%d death=%d shieldOrder=%s"),
+        *SHA,C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,C.RawDamage,SourceVital->GetAttackFactor(),Roll,Result.bCrit,Result.Damage,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied,*Order);
+    // Native labelled fixture only: effect is attached to a real geometry-confirmed direct hit.
+    if(FixtureInterruptActions.Contains(C.Id.Action) && !Result.bDied)
+        if(auto* TargetCombat=TargetVital->GetOwner()->FindComponentByClass<UU02CombatComponent>())
+            ApplyLifecycle(TargetCombat,C.TimestampSeconds,AnimeMMORPG::U03::ECutoff::Interrupt,false);
     OnGeometryConfirmed.Broadcast(C);return true;
+}
+namespace
+{
+class FU03WorldCollector final : public AnimeMMORPG::U03::ITimelineResolver
+{
+public:
+    TFunction<void(const AnimeMMORPG::U03::FActiveInterval&)> Emit;
+    TOptional<double> NextEvent(const AnimeMMORPG::U03::FTimelineModel&,double) override {return {};}
+    void ResolveInterval(const AnimeMMORPG::U03::FActiveInterval& I) override {if(Emit)Emit(I);}
+    void ResolveEvent(AnimeMMORPG::U03::FTimelineModel&,double) override {checkNoEntry();}
+};
+}
+void UU02CollisionWorld::EmitInterval(UU02CombatComponent* C,const AnimeMMORPG::U03::FActiveInterval& I)
+{
+    FActiveSlice Slice;Slice.bEvaluate=true;Slice.BeginSeconds=I.Begin;Slice.EndSeconds=I.End;Slice.bEndExclusive=I.bEndExclusive;
+    const double Span=CurrentTime-PreviousTime;
+    Slice.BeginAlpha=Span>0?(I.Begin-PreviousTime)/Span:1;Slice.EndAlpha=Span>0?(I.End-PreviousTime)/Span:1;
+    C->LastInterval=Slice;++C->IntervalCount;C->Publish(I.End);
+    C->OnActiveInterval.Broadcast(I.Identity,Slice);
+}
+void UU02CollisionWorld::CollectCurrent(double Through,TArray<FHitCandidate>& Out)
+{
+    for(auto& Source:Sources)if(auto* C=Source.Component.Get())if(C->Model&&C->Model->Time()<=SimulationTime)
+    {
+        C->RememberCurrent(SimulationTime);ObserveCombat(C);
+        const auto* A=C->Model->Current();if(!A)continue;const auto& D=A->GetDefinition();
+        const double Begin=FMath::Max(SimulationTime,A->Start+D.ActiveStart);
+        const double End=FMath::Min(Through,FMath::Min(A->Start+D.ActiveEnd,A->Cutoff));
+        if(Begin>End||Begin>=A->Start+D.ActiveEnd||Begin>=A->Cutoff)continue;
+        FPending P;P.Component=C;P.Action=A->Identity;P.Yaw=A->Yaw;
+        P.DefinitionId=uint8(D.Id);P.DefinitionVersion=D.Version;P.RawDamage=D.RawDamage;
+        P.Slice.bEvaluate=true;P.Slice.BeginSeconds=Begin;P.Slice.EndSeconds=End;
+        P.Slice.bEndExclusive=End==A->Start+D.ActiveEnd||End==A->Cutoff;
+        const double Span=CurrentTime-PreviousTime;
+        P.Slice.BeginAlpha=Span>0?(Begin-PreviousTime)/Span:1;P.Slice.EndAlpha=Span>0?(End-PreviousTime)/Span:1;
+        CollectHitCandidates(P,Out);
+    }
+    Out.RemoveAll([&](const FHitCandidate& Hit){return !Ledger.CanResolveHit(Hit);});
+    Out.Sort(CandidateLess);
+}
+bool UU02CollisionWorld::ApplyLifecycle(UU02CombatComponent* C,double At,AnimeMMORPG::U03::ECutoff Reason,bool Landing)
+{
+    if(!C||!C->Model||!FMath::IsFinite(At)||At<C->Model->Time())return false;
+    if(bDraining)
+    {
+        if(C->Model->Time()!=At)return false;
+        const auto* A=C->Model->Current();const FActionId Id=A?A->Identity:FActionId{};
+        const bool Accepted=Landing?C->Model->GroundedAtBarrier(true):C->Model->CancelAtBarrier(Reason);
+        if(Accepted&&!Landing)
+        {
+            if(Id.Sequence)Ledger.InvalidateAction(Id,At);
+            C->Snapshot.Phase=uint8(EPhase::Cancelled);
+            if(Reason==AnimeMMORPG::U03::ECutoff::Death)Ledger.MarkDead(C->Model->GetLife());
+        }
+        return Accepted;
+    }
+    const uint64 Serial=++NextLifecycle;LifecycleEvents.Add({C,At,Reason,Landing,Serial});
+    DrainAt(At);const bool Accepted=LifecycleResults.FindRef(Serial);LifecycleResults.Remove(Serial);return Accepted;
 }
 void UU02CollisionWorld::DrainAt(double Now)
 {
     if(bDraining||GetWorld()->GetNetMode()==NM_Client||!FMath::IsFinite(Now)||Now<CurrentTime||GetWorld()->bIsTearingDown)return;
-    TGuardValue<bool> Guard(bDraining,true);
+    TGuardValue<bool> Draining(bDraining,true);
     if(Now>CurrentTime)Capture(Now);
-    // Sample every collider first, advance every source next, resolve one globally sorted batch last.
-    for(auto& S:Sources)if(auto* C=S.Component.Get()){ObserveCombat(C);C->AdvanceAuthority(Now);}
-    TArray<FHitCandidate> Candidates;auto Batch=MoveTemp(Pending);Pending.Empty();
-    for(const auto& P:Batch)CollectHitCandidates(P,Candidates);
-    Candidates.Sort(CandidateLess);
-    for(const auto& C:Candidates)ResolveHit(C);
-    // Expire at frame endpoint only AFTER sorted earlier hit timestamps consumed shields.
+    if(SimulationTime<0)
+    {SimulationTime=Now;for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)SimulationTime=FMath::Min(SimulationTime,C->Model->Time());}
+    bool First=true;
+    while(First||SimulationTime<Now)
+    {
+        First=false;double Boundary=Now;
+        for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)
+        {if(C->Model->Time()>SimulationTime)Boundary=FMath::Min(Boundary,C->Model->Time());else Boundary=FMath::Min(Boundary,C->Model->NextBoundaryThrough(Now));}
+        for(const auto& E:LifecycleEvents)if(E.At>=SimulationTime)Boundary=FMath::Min(Boundary,E.At);
+        TArray<FHitCandidate> Candidates;CollectCurrent(Boundary,Candidates);
+        const double Stop=Candidates.IsEmpty()?Boundary:FMath::Min(Boundary,Candidates[0].TimestampSeconds);
+        for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Time()<=Stop)
+        {
+            FU03WorldCollector Collector;Collector.Emit=[this,C](const auto& I){EmitInterval(C,I);};
+            check(C->Model->ArriveAtBarrier(Stop,Collector));
+        }
+        SimulationTime=Stop;
+        // Lifecycle mutation has an explicit authority timestamp and precedes new endpoint contact.
+        auto ApplyLifecycleGroup=[&]()
+        {
+            LifecycleEvents.Sort([](const auto& A,const auto& B){return A.At!=B.At?A.At<B.At:A.Serial<B.Serial;});
+            for(int32 I=0;I<LifecycleEvents.Num();)
+            {
+                if(LifecycleEvents[I].At!=Stop){++I;continue;}
+                const auto E=LifecycleEvents[I];LifecycleEvents.RemoveAt(I);
+                LifecycleResults.Add(E.Serial,ApplyLifecycle(E.Combat.Get(),Stop,E.Reason,E.Landing));
+            }
+        };
+        ApplyLifecycleGroup();
+        // ALL models are at Stop and unfinalized. Each death/cutoff applies before the next
+        // timestamp/source/event/hurtbox candidate. Callback-created endpoint events are re-collected.
+        for(;;)
+        {
+            bool Resolved=false;
+            for(const auto& Hit:Candidates)if(Hit.TimestampSeconds==Stop&&ResolveHit(Hit))Resolved=true;
+            ApplyLifecycleGroup();
+            Candidates.Empty();CollectCurrent(Stop,Candidates);
+            if(Candidates.IsEmpty())break;
+            if(!Resolved){for(const auto& Hit:Candidates)if(ResolveHit(Hit))Resolved=true;if(!Resolved)break;Candidates.Empty();CollectCurrent(Stop,Candidates);if(Candidates.IsEmpty())break;}
+        }
+        for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Time()==Stop)
+        {
+            FU03WorldCollector Collector;Collector.Emit=[this,C](const auto& I){EmitInterval(C,I);};
+            check(C->Model->FinishBarrier(Collector));C->Publish(Stop);ObserveCombat(C);
+        }
+    }
+    // New input is admitted only AFTER the complete old world barrier at Now.
+    for(auto& S:Sources)if(auto* C=S.Component.Get())C->ProcessQueuedIntents(Now);
     for(const auto& R:Hurts)if(auto* H=R.Component.Get())if(auto* V=H->GetOwner()->FindComponentByClass<UU02VitalComponent>())V->Refresh(Now);
-    if(GEngine&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))GEngine->AddOnScreenDebugMessage(290001,.15f,FColor::Yellow,
-        FString::Printf(TEXT("U02-E confirmed | hits %d | queries %llu | blocked %llu | crit %s"),Confirmed.Num(),Queries,Blocked,FixtureCritRoll>=.05?TEXT("FIXTURE CRIT OFF"):FixtureCritRoll>=0?TEXT("FIXTURE CRIT FORCED"):TEXT("server 5%")));
     DrawVitalHUD();
+}
+bool UU02CollisionWorld::FixtureSpend(UU02CombatComponent* C,AnimeMMORPG::U03::EAction Skill)
+{
+#if UE_BUILD_SHIPPING
+    return false;
+#else
+    if(!C||!C->Model||GetWorld()->GetNetMode()==NM_Client)return false;
+    DrainAt(GetWorld()->GetTimeSeconds());
+    // This fixture tests resource/snapshot integration; it never starts Q/E gameplay.
+    const bool Accepted=C->Model->SpendResourceFixture(Skill);
+    C->Publish(C->Model->Time(),true);return Accepted;
+#endif
 }
 
 bool UU02CollisionWorld::SelectDebugAction(uint64 Sequence)

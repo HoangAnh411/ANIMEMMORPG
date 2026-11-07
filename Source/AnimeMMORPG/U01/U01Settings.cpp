@@ -11,19 +11,19 @@
 
 namespace AnimeMMORPG::U01
 {
-static const TCHAR* Names[]={TEXT("Forward"),TEXT("Backward"),TEXT("Left"),TEXT("Right"),TEXT("Jump"),TEXT("Sprint"),TEXT("Shoulder"),TEXT("Interact")};
-FPreferences::FPreferences():Keys({EKeys::W,EKeys::S,EKeys::A,EKeys::D,EKeys::SpaceBar,EKeys::LeftControl,EKeys::V,EKeys::G}){}
-FKey CanonicalKey(FKey Key) {return Key==EKeys::RightControl?EKeys::LeftControl:Key;}
-TArray<FKey> PhysicalKeys(FKey Binding) {return CanonicalKey(Binding)==EKeys::LeftControl?TArray<FKey>{EKeys::LeftControl,EKeys::RightControl}:TArray<FKey>{Binding};}
+static const TCHAR* Names[]={TEXT("Forward"),TEXT("Backward"),TEXT("Left"),TEXT("Right"),TEXT("Jump"),TEXT("Sprint"),TEXT("Shoulder"),TEXT("Interact"),TEXT("Attack"),TEXT("Guard"),TEXT("Dodge"),TEXT("EscapeCC"),TEXT("Q"),TEXT("E"),TEXT("Target")};
+FPreferences::FPreferences():Keys({EKeys::W,EKeys::S,EKeys::A,EKeys::D,EKeys::SpaceBar,EKeys::LeftControl,EKeys::V,EKeys::G,EKeys::LeftMouseButton,EKeys::RightMouseButton,EKeys::LeftShift,EKeys::X,EKeys::Q,EKeys::E,EKeys::Tab}){}
+FKey CanonicalKey(FKey Key) {return Key==EKeys::RightControl?EKeys::LeftControl:Key==EKeys::RightShift?EKeys::LeftShift:Key;}
+TArray<FKey> PhysicalKeys(FKey Binding) {const auto K=CanonicalKey(Binding);return K==EKeys::LeftControl?TArray<FKey>{EKeys::LeftControl,EKeys::RightControl}:K==EKeys::LeftShift?TArray<FKey>{EKeys::LeftShift,EKeys::RightShift}:TArray<FKey>{Binding};}
 bool AllowedBinding(FKey Key,FString& Reason)
 {
-    const FKey Reserved[]={EKeys::Escape,EKeys::LeftShift,EKeys::RightShift,EKeys::LeftAlt,EKeys::RightAlt,EKeys::LeftCommand,EKeys::RightCommand,
-        EKeys::LeftMouseButton,EKeys::RightMouseButton,EKeys::Q,EKeys::E,EKeys::R,EKeys::F,EKeys::One,EKeys::Two,EKeys::Three,EKeys::Four,
-        EKeys::X,EKeys::Tab,EKeys::I,EKeys::K,EKeys::M,EKeys::Tilde,EKeys::AnyKey};
+    const FKey Reserved[]={EKeys::Escape,EKeys::LeftAlt,EKeys::RightAlt,EKeys::LeftCommand,EKeys::RightCommand,
+        EKeys::R,EKeys::F,EKeys::One,EKeys::Two,EKeys::Three,EKeys::Four,
+        EKeys::I,EKeys::K,EKeys::M,EKeys::Tilde,EKeys::AnyKey};
     for(FKey Entry:Reserved)if(Key==Entry){Reason=TEXT("Phím dành riêng cho menu/combat/hệ thống.");return false;}
     if(!Key.IsValid()||Key.IsGamepadKey()||Key.IsTouch()||Key.IsAnalog()||Key==EKeys::MouseScrollUp||Key==EKeys::MouseScrollDown)
     {Reason=TEXT("Chỉ nhận một phím bàn phím hoặc nút chuột, không nhận trục/cuộn/tay cầm.");return false;}
-    if(Key.IsMouseButton() && Key!=EKeys::MiddleMouseButton&&Key!=EKeys::ThumbMouseButton&&Key!=EKeys::ThumbMouseButton2)
+    if(Key.IsMouseButton() && Key!=EKeys::LeftMouseButton&&Key!=EKeys::RightMouseButton&&Key!=EKeys::MiddleMouseButton&&Key!=EKeys::ThumbMouseButton&&Key!=EKeys::ThumbMouseButton2)
     {Reason=TEXT("Nút chuột này được dành riêng.");return false;}
     Reason.Empty();return true;
 }
@@ -38,7 +38,7 @@ FString BindingError(const FPreferences& Data,int32 Action,FKey Key,bool bChord)
 }
 FString EncodePreferences(const FPreferences& Data)
 {
-    auto Json=MakeShared<FJsonObject>();Json->SetNumberField(TEXT("version"),1);Json->SetNumberField(TEXT("sensitivity"),Data.Sensitivity);
+    auto Json=MakeShared<FJsonObject>();Json->SetNumberField(TEXT("version"),2);Json->SetNumberField(TEXT("sensitivity"),Data.Sensitivity);
     Json->SetBoolField(TEXT("invertY"),Data.bInvertY);Json->SetBoolField(TEXT("rightShoulder"),Data.bRightShoulder);
     auto Bindings=MakeShared<FJsonObject>();for(int I=0;I<ControlCount;++I)Bindings->SetStringField(Names[I],Data.Keys[I].ToString());
     Json->SetObjectField(TEXT("bindings"),Bindings);FString Text;FJsonSerializer::Serialize(Json,TJsonWriterFactory<>::Create(&Text));return Text;
@@ -47,7 +47,7 @@ FString DecodePreferences(const FString& Text,FPreferences& Out)
 {
     Out=FPreferences();TSharedPtr<FJsonObject> Json;
     if(!FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text),Json)||!Json.IsValid())return TEXT("File thiết lập lỗi JSON: dùng mặc định, chưa ghi đè file.");
-    double Version=0;if(!Json->HasTypedField<EJson::Number>(TEXT("version"))||!Json->TryGetNumberField(TEXT("version"),Version)||Version!=1)return TEXT("Version thiết lập chưa hỗ trợ: dùng mặc định, chưa ghi đè file.");
+    double Version=0;if(!Json->HasTypedField<EJson::Number>(TEXT("version"))||!Json->TryGetNumberField(TEXT("version"),Version)||(Version!=1&&Version!=2))return TEXT("Version thiết lập chưa hỗ trợ: dùng mặc định, chưa ghi đè file.");
     TArray<FString> Restored;double Sensitivity=0;bool Flag=false;
     if(Json->HasTypedField<EJson::Number>(TEXT("sensitivity"))&&Json->TryGetNumberField(TEXT("sensitivity"),Sensitivity)&&FMath::IsFinite(Sensitivity)&&Sensitivity>=.1&&Sensitivity<=3)Out.Sensitivity=Sensitivity;
     else Restored.Add(TEXT("độ nhạy"));
@@ -58,6 +58,7 @@ FString DecodePreferences(const FString& Text,FPreferences& Out)
     for(int I=0;I<ControlCount;++I)
     {
         FString Name,Why;
+        if(Version==1&&I>=Attack)continue; // v1 has no combat fields; keep defaults without writing storage.
         if(!Bindings||!Bindings->IsValid()||!(*Bindings)->HasTypedField<EJson::String>(Names[I])||!(*Bindings)->TryGetStringField(Names[I],Name)||!AllowedBinding(FKey(*Name),Why))Recover[I]=true;
         else Out.Keys[I]=CanonicalKey(FKey(*Name));
     }
@@ -108,10 +109,10 @@ bool WritePreferences(const FString& Slot,int32 User,const FPreferences& Data,FS
 }
 UInputMappingContext* MakeLocalMapping(UObject* Owner,const UInputMappingContext* Template,const FPreferences& Data,const TArray<const UInputAction*>& Actions)
 {
-    if(!Owner||!Template||Actions.Num()!=ControlCount)return nullptr;
+    if(!Owner||!Template||(Actions.Num()!=ControlCount&&Actions.Num()!=Interact+1))return nullptr;
     for(auto* Action:Actions)if(!Action)return nullptr;
     auto* Context=DuplicateObject<UInputMappingContext>(Template,Owner);
-    for(int I=0;I<ControlCount;++I)
+    for(int I=0;I<Actions.Num();++I)
     {
         Context->UnmapAllKeysFromAction(Actions[I]);
         for(FKey Key:PhysicalKeys(Data.Keys[I]))Context->MapKey(Actions[I],Key);

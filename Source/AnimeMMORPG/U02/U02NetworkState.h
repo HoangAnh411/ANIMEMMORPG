@@ -15,6 +15,8 @@ struct FU02ConfirmedResult
     UPROPERTY() uint64 TargetLife=0;
     UPROPERTY() uint32 Hurtbox=0;
     UPROPERTY() double Timestamp=0;
+    UPROPERTY() uint8 DefinitionId=0;
+    UPROPERTY() int32 RawDamage=60;
     UPROPERTY() int32 Damage=0;
     UPROPERTY() int32 Absorbed=0;
     UPROPERTY() int32 HP=0;
