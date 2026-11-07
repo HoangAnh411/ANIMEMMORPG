@@ -4,6 +4,7 @@
 #include "U02/U02NetworkState.h"
 #include "U02/U02CollisionLab.h"
 #include "U02/U02CombatComponent.h"
+#include "U02/U02CollisionWorld.h"
 #include "U02/U02LabDummy.h"
 #include "U02/U02VitalComponent.h"
 #include "U01/U01Character.h"
@@ -17,8 +18,8 @@
 #include <limits>
 struct FU02FTestAccess
 {
-    static void Aim(UU02CombatComponent* C,FGuid Id,uint64 Life,uint64 Action,double Yaw){C->ServerAim_Implementation(Yaw,Id,Life,Action);}
-    static void Attack(UU02CombatComponent* C,uint64 Seq,FGuid Id,uint64 Life,double Yaw=0){C->ServerAttack_Implementation(Seq,0,Yaw,Id,Life);}
+    static void Aim(UU02CombatComponent* C,FGuid Id,uint64 Life,uint64 Action,double Yaw){C->ServerAim_Implementation(Yaw,Id,Life,Action);C->GetWorld()->GetSubsystem<UU02CollisionWorld>()->DrainAt(C->GetWorld()->GetTimeSeconds());}
+    static void Attack(UU02CombatComponent* C,uint64 Seq,FGuid Id,uint64 Life,double Yaw=0){C->ServerAttack_Implementation(Seq,0,Yaw,Id,Life);C->GetWorld()->GetSubsystem<UU02CollisionWorld>()->DrainAt(C->GetWorld()->GetTimeSeconds());}
 };
 namespace {
 constexpr auto U02FFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;

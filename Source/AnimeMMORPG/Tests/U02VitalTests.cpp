@@ -49,7 +49,7 @@ struct FEWorld : FTestWorldWrapper
     {
         FTransform X(P);auto* D=GetTestWorld()->SpawnActorDeferred<AU02LabDummy>(AU02LabDummy::StaticClass(),X);D->NetworkPawnId=FGuid(Id,0,0,1);UGameplayStatics::FinishSpawningActor(D,X);return D;
     }
-    void Attack(){A->Combat->SubmitAttackIntent(1,Now(),0);}
+    void Attack(){A->Combat->SubmitAttackIntent(1,Now(),0);Resolver->DrainAt(Now());}
 };
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02EDamage,"AnimeMMORPG.U02.E.DamageFormulaRoundingAndCrit",U02EFlags)
@@ -96,11 +96,11 @@ bool FU02EDeathOrder::RunTest(const FString&)
     {
     FEWorld W(*this);auto* B=W.Pawn(FVector(150,0,98),2);B->GetU01Movement()->SetMovementMode(MOVE_Walking);
     FU02VitalTestAccess::HP(W.A->Vital,60);FU02VitalTestAccess::HP(B->Vital,60);W.Resolver->bCharacterFixtureTargets=true;
-    W.Attack();B->Combat->SubmitAttackIntent(1,W.Now(),180);if(Reverse)FU02EVitalWorldAccess::ReverseSources(W.Resolver);W.Resolver->DrainAt(W.Now()+FrameEnd);
+    W.Attack();B->Combat->SubmitAttackIntent(1,W.Now(),180);W.Resolver->DrainAt(W.Now());if(Reverse)FU02EVitalWorldAccess::ReverseSources(W.Resolver);W.Resolver->DrainAt(W.Now()+FrameEnd);
     TestEqual(TEXT("Lower source kills first at identical time"),B->Vital->GetSnapshot().HP,0);TestEqual(TEXT("Dead source next lethal event rejected"),W.A->Vital->GetSnapshot().HP,60);
     TestEqual(TEXT("One damage and one RNG roll"),W.Resolver->DamageResults.Num(),1);TestEqual(TEXT("One roll"),W.Resolver->CritRolls,uint64(1));
     TestEqual(TEXT("One actual death"),B->Vital->GetSnapshot().DeathCount,uint32(1));TestTrue(TEXT("Real Defeated motor lock"),(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))!=0);
-    TestEqual(TEXT("Death cancels pending action presentation"),B->Combat->GetCombatSnapshot().Phase,uint8(FrameEnd<.4?EPhase::Cancelled:EPhase::Finished));
+    TestEqual(TEXT("Death cancels pending action presentation"),B->Combat->GetCombatSnapshot().Phase,uint8(EPhase::Cancelled));
     B->GetU01Movement()->SetMotorLock(EU01MotorLock::Defeated,false);TestTrue(TEXT("Old U01 fixture cannot clear actual HP0 Defeated"),(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))!=0);
     B->SetRole(ROLE_AutonomousProxy);B->GetU01Movement()->ResetFixtureState();B->SetRole(ROLE_Authority);
     TestTrue(TEXT("Non-authority U01 reset cannot clear actual HP0 Defeated"),B->Vital->GetSnapshot().HP==0&&(B->GetU01Movement()->GetLockMask()&uint8(EU01MotorLock::Defeated))!=0);
@@ -123,7 +123,7 @@ bool FU02EReset::RunTest(const FString&)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02ECancel,"AnimeMMORPG.U02.E.StartupCancelNoDamageActiveCancelRejected",U02EFlags)
 bool FU02ECancel::RunTest(const FString&)
 {
-    FEWorld Cancel(*this);auto* D=Cancel.Dummy();Cancel.Attack();TestTrue(TEXT("Real startup cancel"),Cancel.A->Combat->CancelAction(ECancel::Dodge));Cancel.Resolver->DrainAt(Cancel.Now()+.3);
+    FEWorld Cancel(*this);auto* D=Cancel.Dummy();Cancel.Attack();TestTrue(TEXT("Real startup cancel"),Cancel.Resolver->ApplyLifecycle(Cancel.A->Combat,Cancel.Now(),AnimeMMORPG::U03::ECutoff::Interrupt,false));Cancel.Resolver->DrainAt(Cancel.Now()+.3);
     TestEqual(TEXT("No damage / RNG after startup cancellation"),D->Vital->GetSnapshot().HP,600);TestEqual(TEXT("No roll"),Cancel.Resolver->CritRolls,uint64(0));
     FEWorld Active(*this);auto* Target=Active.Dummy();Active.Attack();for(int I=0;I<21;++I)Active.TickTestWorld(1.f/120);
     TestFalse(TEXT("Active guard cannot cancel"),Active.A->Combat->CancelAction(ECancel::Guard));Active.Resolver->DrainAt(Active.Now()+.2);TestEqual(TEXT("One damage remains"),Target->Vital->GetSnapshot().HP,540);return true;
@@ -143,7 +143,7 @@ bool FU02ENewLifeFrame::RunTest(const FString&)
     FEWorld W(*this);auto* D=W.Dummy();W.Attack();W.Resolver->DrainAt(W.Now()+.3);
     const double End=W.Now()+.35;for(int I=0;I<120&&W.Now()<End;++I)W.TickTestWorld(1.f/60);
     TestTrue(TEXT("Dummy reset"),D->ResetLabCombat());TestTrue(TEXT("Source reset"),W.A->Combat->ResetLabCombat());
-    W.A->Combat->SubmitAttackIntent(2,W.Now(),0);W.Resolver->DrainAt(W.Now()+.5);
+    W.A->Combat->SubmitAttackIntent(2,W.Now(),0);W.Resolver->DrainAt(W.Now());W.Resolver->DrainAt(W.Now()+.5);
     TestEqual(TEXT("New life action must not lose whole active merely because reset occurred at previous boundary"),D->Vital->GetSnapshot().HP,540);
     TestEqual(TEXT("Old life hit and new life hit each exactly once"),W.Resolver->DamageResults.Num(),2);
     return true;

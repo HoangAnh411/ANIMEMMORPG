@@ -51,7 +51,7 @@ struct FDWorld : FTestWorldWrapper
         FTransform X(P);auto* D=GetTestWorld()->SpawnActorDeferred<AU02LabDummy>(AU02LabDummy::StaticClass(),X);
         D->NetworkPawnId=FGuid(Id,0,0,1);UGameplayStatics::FinishSpawningActor(D,X);return D;
     }
-    void Attack(double Yaw=0){Source->Combat->SubmitAttackIntent(1,Now(),Yaw);}
+    void Attack(double Yaw=0){Source->Combat->SubmitAttackIntent(1,Now(),Yaw);GetTestWorld()->GetSubsystem<UU02CollisionWorld>()->DrainAt(Now());}
 };
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU02DGeometry,"AnimeMMORPG.U02.D.FeetBoxBoundaryAndRelativeSweep",U02DFlags)
@@ -147,7 +147,7 @@ bool FU02DGlobal::RunTest(const FString&)
         FDWorld W(*this);W.Dummy(FVector(150,0,0),10);
         FTransform X(FVector(0,40,98));auto* B=W.GetTestWorld()->SpawnActorDeferred<AU01Character>(AU01Character::StaticClass(),X,nullptr,nullptr,ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
         B->NetworkPawnId=FGuid(2,0,0,1);UGameplayStatics::FinishSpawningActor(B,X);B->GetU01Movement()->SetMovementMode(MOVE_Walking);
-        W.Attack();B->Combat->SubmitAttackIntent(1,W.Now(),0);
+        W.Attack();B->Combat->SubmitAttackIntent(1,W.Now(),0);W.GetTestWorld()->GetSubsystem<UU02CollisionWorld>()->DrainAt(W.Now());
         if(Reverse)FU02CollisionTestAccess::ReverseSources(W.Resolver);
         W.Resolver->OnGeometryConfirmed.AddLambda([&](const FHitCandidate& C)
         {

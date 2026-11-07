@@ -217,7 +217,11 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
     {if(Model)ServerAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);else ServerAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);LastAimSend=Now;}
     if(!Model)ApplyMotorSnapshot();
     if(C->IsLocallyControlled()&&GEngine)
-        GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+200000,.15f,FColor::Cyan,FString::Printf(TEXT("U03-A1 | Attack %u/3 | action %llu | phase %u | energy %.0f/100 | pending %llu | admission %u"),Snapshot.DefinitionId+1,Snapshot.ActionSequence,Snapshot.Phase,Snapshot.Energy,OwnerAdmission.PendingCommand,OwnerAdmission.Admission));
+    {
+        FString AttackKey=TEXT("LMB");if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))AttackKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Attack].GetDisplayName().ToString();
+        const TCHAR* Reasons[]={TEXT("Accepted"),TEXT("Queued"),TEXT("Replaced"),TEXT("Stale"),TEXT("Invalid"),TEXT("Locked"),TEXT("Busy"),TEXT("Energy"),TEXT("Cooldown"),TEXT("Unsupported")};
+        GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+200000,.15f,FColor::Cyan,FString::Printf(TEXT("%s Attack %u/3 | action %llu | energy %.0f/100 | pending %llu | %s"),*AttackKey,Snapshot.DefinitionId+1,Snapshot.ActionSequence,Snapshot.Energy,OwnerAdmission.PendingCommand,Reasons[FMath::Min<int32>(OwnerAdmission.Admission,9)]));
+    }
 }
 TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
 {

@@ -4,6 +4,12 @@
 #include "Tests/AutomationCommon.h"
 #include "U01/U01Character.h"
 #include "U01/U01Settings.h"
+#include "U01/U01AnimInstance.h"
+#include "U02/U02Presentation.h"
+#include "Animation/AnimMontage.h"
+#include "Animation/AnimSequence.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonSerializer.h"
 #include "U02/U02CombatComponent.h"
 #include "U02/U02CollisionWorld.h"
 #include "U02/U02LabDummy.h"
@@ -162,6 +168,48 @@ bool FU03A1Life::RunTest(const FString&)
     TestEqual(TEXT("old life rejected at authority dispatcher"),W.Player->Combat->GetAdmission().Admission,uint8(AnimeMMORPG::U03::EAdmission::Invalid));
     TestEqual(TEXT("new life action not resurrected"),W.Player->Combat->GetCombatSnapshot().ActionSequence,uint64(0));
     W.ForwardErrorMessages(this);return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03A1Presentation,"AnimeMMORPG.U03.A1.AuthoredThreeClipsAndDefinitionClock",U03A1Flags)
+bool FU03A1Presentation::RunTest(const FString&)
+{
+    auto* Class=LoadClass<UU01AnimInstance>(nullptr,TEXT("/Game/AnimeMMORPG/U03/Animation/ABP_U03.ABP_U03_C"));
+    TestNotNull(TEXT("A1 class loads"),Class);if(!Class)return false;
+    auto* Default=CastChecked<UU01AnimInstance>(Class->GetDefaultObject());
+    const UAnimMontage* Montages[]={Default->AttackMontage,Default->Attack2Montage,Default->Attack3Montage};
+    for(uint8 I=0;I<3;++I)
+    {
+        const auto& D=AnimeMMORPG::U03::Definition(static_cast<AnimeMMORPG::U03::EAction>(I));
+        TestNotNull(TEXT("each definition has authored montage"),Montages[I]);if(!Montages[I])return false;
+        TestTrue(TEXT("duration follows immutable action definition"),FMath::Abs(Montages[I]->GetPlayLength()-D.Duration)<1.e-6);
+        if(I)TestTrue(TEXT("clips distinguish each action"),Montages[I]!=Montages[I-1]);
+        FU02RepCombatSnapshot S;S.ActionSequence=1;S.bLocked=true;S.Phase=1;S.DefinitionId=I;S.Duration=D.Duration;
+        TestTrue(TEXT("presentation runs inside each duration"),AnimeMMORPG::U02::SamplePresentation(S,D.Duration-.001).bPlay);
+        TestFalse(TEXT("presentation exact own end excluded"),AnimeMMORPG::U02::SamplePresentation(S,D.Duration).bPlay);
+    }
+    TestTrue(TEXT("animation ignores root motion"),Default->RootMotionMode==ERootMotionMode::IgnoreRootMotion);
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03A1Bindings,"AnimeMMORPG.U03.A1.BindingFoundationAndV1Migration",U03A1Flags)
+bool FU03A1Bindings::RunTest(const FString&)
+{
+    namespace C=AnimeMMORPG::U01;
+    C::FPreferences Defaults,Out;
+    TestEqual(TEXT("Attack uses physical LMB by default"),Defaults.Keys[C::Attack],EKeys::LeftMouseButton);
+    TestEqual(TEXT("Dodge binding is Shift but runtime remains unsupported"),Defaults.Keys[C::Dodge],EKeys::LeftShift);
+    TSharedPtr<FJsonObject> Json;FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(C::EncodePreferences(Defaults)),Json);
+    Json->SetNumberField(TEXT("version"),1);auto B=Json->GetObjectField(TEXT("bindings"));
+    for(const TCHAR* Name:{TEXT("Attack"),TEXT("Guard"),TEXT("Dodge"),TEXT("EscapeCC"),TEXT("Q"),TEXT("E"),TEXT("Target")})B->RemoveField(Name);
+    B->SetStringField(TEXT("Jump"),TEXT("H"));FString V1;FJsonSerializer::Serialize(Json.ToSharedRef(),TJsonWriterFactory<>::Create(&V1));
+    TestTrue(TEXT("v1 loads without treating missing combat bindings as damage"),C::DecodePreferences(V1,Out).IsEmpty());
+    TestEqual(TEXT("valid legacy jump retained"),Out.Keys[C::Jump],EKeys::H);TestEqual(TEXT("new Attack gets default"),Out.Keys[C::Attack],EKeys::LeftMouseButton);
+    FString Why;TestTrue(TEXT("mouse buttons now legal bindings"),C::AllowedBinding(EKeys::RightMouseButton,Why));
+    TestTrue(TEXT("unused keyboard Attack rebind valid"),C::BindingError(Defaults,C::Attack,EKeys::H).IsEmpty());
+    TestFalse(TEXT("shared conflict namespace rejects duplicate movement binding"),C::BindingError(Defaults,C::Attack,EKeys::W).IsEmpty());
+    TestFalse(TEXT("reserved future skill R remains reserved"),C::AllowedBinding(EKeys::R,Why));
+    TestFalse(TEXT("wheel not a single button"),C::AllowedBinding(EKeys::MouseScrollUp,Why));
+    TestEqual(TEXT("Shift family canonical"),C::CanonicalKey(EKeys::RightShift),EKeys::LeftShift);
+    return true;
 }
 
 #endif
