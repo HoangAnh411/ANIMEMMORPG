@@ -1,11 +1,10 @@
 {
-  "publishedContentEqualsDecodedRedactedRaw": 102,
-  "oldRawFilesUnchanged": 68,
+  "publishedContentEqualsDecodedRedactedRaw": 136,
+  "oldRawFilesUnchanged": 102,
   "replacementCharacters": 0,
   "nulCharacters": 0,
-  "encodingRoundtrips": 4,
-  "invalidEncodingInputsRejected": 2,
-  "executed": 68,
+  "executed": 70,
+  "uniqueSuccesses": 70,
   "failed": 0,
-  "source": "ea302cf1a829339cdfa8ee7700218f17a6bcc3dd"
+  "source": "c33f2fc9aac3be7c64c75fa0680b2785ec2079fd"
 }
