@@ -1,4 +1,4 @@
-﻿param([int]$Port=17889)
+﻿param([int]$Port=17903)
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $project=Join-Path $root 'Artifacts/U03/A1/Source/AnimeMMORPG.uproject'

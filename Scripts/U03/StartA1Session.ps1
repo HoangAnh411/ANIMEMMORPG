@@ -7,7 +7,7 @@
  [ValidateSet(30,60)][int]$ClientMaxFPS=60,
  [ValidateSet(1,2)][int]$ClientCount=2,
  [switch]$BufferedDiagnostics,
- [int]$Port=17877,
+ [int]$Port=17903,
  [ValidateSet('A1')][string]$Stage='A1'
 )
 $ErrorActionPreference='Stop'
@@ -51,7 +51,7 @@ foreach($role in $roles){
   $commands+=',r.Lumen.DiffuseIndirect.Allow 0,r.Lumen.Reflections.Allow 0,r.Shadow.Virtual.Enable 0,r.ShadowQuality 2'
   Write-Host 'Focus review: simplified lighting/reflections/shadows for two clients; cap and networking unchanged.'
  }
- $arguments+=@(('-ExecCmds="'+$commands+'"'),'-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace','-U02FProbe','-U02Trace','-ModelContextProtocolStartServer',('-U02SourceSHA='+$sha),('-U02RunId='+(Split-Path $run -Leaf)),('-U02FCommands="'+(Join-Path $run 'command.txt')+'"'),('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18410+$records.Count)))
+ $arguments+=@(('-ExecCmds="'+$commands+'"'),'-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace','-U02FProbe','-U02Trace','-ModelContextProtocolStartServer',('-U02SourceSHA='+$sha),('-U02RunId='+(Split-Path $run -Leaf)),('-U02FCommands="'+(Join-Path $run 'command.txt')+'"'),('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18510+$records.Count)))
  Write-Host ('Starting '+$role+'; log: '+$log)
  # Interactive review clients must be visible during loading, before readiness.
  # The dedicated background server continues to run hidden.
