@@ -1,4 +1,10 @@
-# U03-A0 — READY_FOR_REVIEW sau lần review NOT ACCEPTED thứ hai
+# U03-A0 — ACCEPTED về kỹ thuật
+
+Reviewer đã nghiệm thu tại **32603b1**, source kiểm chứng **c33f2fc**, không phát hiện lỗi chặn còn lại trong phạm vi hợp đồng/model A0. [Căn cứ nghiệm thu](ACCEPTANCE-A0.md). Người dùng giao khép hồ sơ và fast-forward main rồi dừng, chưa giao A1. Lượt khép chỉ sửa tài liệu, không chạy lại build/tests và giữ nguyên bằng chứng gốc.
+
+Nghiệm thu chưa bao gồm gameplay, input, collision adapter hoặc hai client U03; các cổng đó thuộc A1 trở đi. Các trạng thái chưa ACCEPTED/READY_FOR_REVIEW bên dưới là lịch sử tại lúc bàn giao32603b1, đã được quyết định nghiệm thu phía trên thay thế.
+
+## Hồ sơ bàn giao lịch sử tại32603b1
 
 Hai lần bàn giao trước tại `6abfbf4` và `6f7b7b7` đều NOT ACCEPTED. Lượt này chỉ sửa riêng hai boundary mới trong A0; chưa khép, chưa merge main, chưa A1. Bản sửa cuối build Editor/Game thành công và đạt70/70 Automation Success,0 Failed. Không dùng kết quả68/68 cũ thay cho bản sửa; chưa tự kết luận ACCEPTED.
 

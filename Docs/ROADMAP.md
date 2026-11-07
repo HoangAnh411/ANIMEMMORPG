@@ -389,3 +389,5 @@ Cổng U05 bổ sung: hai client đồng thuận kết quả parry/đỡ/trúng;
 ## U03 delivery gates approved 2026-11-07
 
 Giữ ID U03.01–U03.09 và luật gameplay. Chia A–D thành A0 hợp đồng/model, A1 combo, B1 né/motor, B2 defense/CC/X, C1 Q/E, C2 encounter/Tab/Retry, D presentation/settings/integration. Mỗi đợt nhánh riêng từ main đã nghiệm thu đợt trước; build/test clone đã commit, báo cáo và dừng review. ACCEPTED không tự cho merge hoặc đợt sau. A0 không có gameplay mới nên không package/launcher; A1–D giữ cổng package/input thật/dedicated Editor+hai client. Chỉ A0 được giao. [Contracts](U03/CONTRACTS.md), [Tests](U03/TEST-MATRIX.md).
+
+**U03-A0 ACCEPTED về kỹ thuật tại32603b1, source kiểm chứngc33f2fc.** [Nghiệm thu](U03/ACCEPTANCE-A0.md), [báo cáo](U03/REPORT-A0.md):70/70 Automation, Generate/Editor/Game thành công; chỉ hợp đồng/model. Giữ lịch sử NOT ACCEPTED tại6abfbf4 và6f7b7b7 cùng bằng chứng gốc. Người dùng đã giao khép hồ sơ và fast-forward main; không chạy lại build/tests khi chỉ sửa tài liệu. Chưa nghiệm thu gameplay/input/collision adapter/hai client U03, chưa khép U03 tổng thể và **chưa giao A1**. Dừng sau khép/merge A0.

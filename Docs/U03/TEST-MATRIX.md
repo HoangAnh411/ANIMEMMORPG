@@ -1,5 +1,7 @@
 ﻿# U03-A0 test matrix
 
+**A0 ACCEPTED về kỹ thuật tại32603b1, source kiểm chứngc33f2fc**, theo [quyết định nghiệm thu](ACCEPTANCE-A0.md). 70/70 Automation Success,0 Failed; bằng chứng gốc giữ nguyên. Chỉ hợp đồng/model A0, chưa gameplay/input/collision adapter/hai client U03. Lượt khép chỉ cập nhật hồ sơ, không chạy lại build/tests; chưa giao A1. Các yêu cầu/ghi chú review bên dưới giữ làm lịch sử và phạm vi kiểm chứng.
+
 |AnimeMMORPG.U03.A0. test|Evidence|
 |---|---|
 |DefinitionIdentity|six definitions, captured old raw, geometry|
