@@ -16,6 +16,7 @@ bool FU03Definitions::RunTest(const FString&)
     const double Starts[]={.16,.18,.26,.30,.25,.60},Ends[]={.22,.25,.36,.40,.35,.75},Durations[]={.40,.45,.60,.80,.75,1.50};
     for(int32 I=0;I<6;++I){const auto& D=Definition(static_cast<EAction>(I));TestEqual(TEXT("raw"),D.RawDamage,Raw[I]);TestEqual(TEXT("start"),D.ActiveStart,Starts[I]);TestEqual(TEXT("end"),D.ActiveEnd,Ends[I]);TestEqual(TEXT("duration"),D.Duration,Durations[I]);TestEqual(TEXT("box"),D.HalfExtentsCm,FVector(100,60,90));}
     FActionInstance Old(EAction::Attack1,{U03A0Life(),1},0,0),New(EAction::Q,{U03A0Life(),2},1,0);
+    AddInfo(FString::Printf(TEXT("U03A0_TRACE oldAction=%llu oldRaw=%d newAction=%llu newRaw=%d"),Old.Identity.Sequence,Old.GetDefinition().RawDamage,New.Identity.Sequence,New.GetDefinition().RawDamage));
     TestEqual(TEXT("old immutable raw"),Old.GetDefinition().RawDamage,60);TestEqual(TEXT("new raw"),New.GetDefinition().RawDamage,100);
     return true;
 }
@@ -28,7 +29,8 @@ bool FU03Timeline::RunTest(const FString&)
         M.SubmitBatch({U03A0Intent(1,0)}, {},Out);M.SubmitBatch({U03A0Intent(2,.30)}, {},Out);
         for(double T=.30+Step;T<1.;T+=Step) M.Advance(T,Out);
         M.Advance(1.,Out);double Total=0;bool Second=false;
-        for(const auto& S:Out){Total+=S.End-S.Begin;Second|=S.DefinitionId==EAction::Attack2;TestTrue(TEXT("nonempty clipped"),S.Begin<=S.End);}
+        for(const auto& S:Out){AddInfo(FString::Printf(TEXT("U03A0_TRACE step=%.17g action=%llu definition=%u raw=%d interval=%c%.17g,%.17g%c yaw=%.17g"),Step,S.Identity.Sequence,static_cast<uint32>(S.DefinitionId),S.RawDamage,TCHAR('['),S.Begin,S.End,S.bEndExclusive?TCHAR(')'):TCHAR(']'),S.Yaw));
+            Total+=S.End-S.Begin;Second|=S.DefinitionId==EAction::Attack2;TestTrue(TEXT("nonempty clipped"),S.Begin<=S.End);}
         TestTrue(TEXT("whole active both actions"),FMath::Abs(Total-.13)<1e-12);TestTrue(TEXT("buffer starts second within long update"),Second);
     }
     FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;
@@ -114,7 +116,12 @@ bool FU03Barrier::RunTest(const FString&)
         const U02::FActionId AA{A,1},BB{B,1};L.RegisterAction(AA,.16,.22);L.RegisterAction(BB,.16,.22);
         TArray<U02::FHitCandidate> C={{{AA,B},.18,1},{{BB,A},.18,1},{{AA,B},.19,2}};
         if(Reverse) Algo::Reverse(C);C.Sort(U02::CandidateLess);int32 Hits=0;
-        for(const auto& H:C)if(L.ResolveHit(H)){++Hits;L.MarkDead(H.Id.Target);}
+        for(const auto& H:C)
+        {
+            const bool Accepted=L.ResolveHit(H);
+            AddInfo(FString::Printf(TEXT("U03A0_TRACE reverse=%d hit=%.17g source=%u action=%llu target=%u hurtbox=%u accepted=%d"),Reverse,H.TimestampSeconds,H.Id.Action.Source.Pawn.A,H.Id.Action.Sequence,H.Id.Target.Pawn.A,H.HurtboxId,Accepted));
+            if(Accepted){++Hits;L.MarkDead(H.Id.Target);}
+        }
         TestEqual(TEXT("same-time lethal only first survives"),Hits,1);TestTrue(TEXT("source1 survives"),L.IsAlive(A));TestFalse(TEXT("source2 dead before retaliation"),L.IsAlive(B));
     }
     FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;M.SubmitBatch({U03A0Intent(1,0)}, {},Out);
@@ -125,6 +132,7 @@ bool FU03Barrier::RunTest(const FString&)
     // Barrier consumes previously collected hit BEFORE accepting press stamped .18.
     if(Out.Num()>0&&!GuardAtHit)HP-=Out[0].RawDamage;
     auto R=M.SubmitBatch({U03A0Intent(2,.18,ECommand::Guard)}, {},Out);
+    AddInfo(FString::Printf(TEXT("U03A0_TRACE barrier=%.17g exclusive=%d HP=%d guardAdmission=%u"),Out.Last().End,Out.Last().bEndExclusive,HP,static_cast<uint32>(R[0].Result)));
     TestEqual(TEXT("late guard cannot retroactively block"),HP,40);TestTrue(TEXT("guard runtime deferred"),R[0].Result==EAdmission::Unsupported);
     U02::FResolveLedger L;L.RegisterLife(U03A0Life(1));L.RegisterLife(U03A0Life(2));U02::FActionId Id{U03A0Life(1),1};L.RegisterAction(Id,.16,.22);L.InvalidateAction(Id,.18);
     TestFalse(TEXT("interrupt removes remaining event at cutoff"),L.ResolveHit({{Id,U03A0Life(2)},.18,1}));
