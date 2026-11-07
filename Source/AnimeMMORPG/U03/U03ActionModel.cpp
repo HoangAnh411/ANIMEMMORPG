@@ -54,7 +54,11 @@ bool FTimelineModel::Advance(double T,TArray<FActiveInterval>& Out)
         const double End=FMath::Min(Action->End(),Action->Cutoff);
         const double A=FMath::Max(Now,Action->Start+D.ActiveStart);
         const double B=FMath::Min(T,FMath::Min(Action->Start+D.ActiveEnd,End));
-        if(A<B) Out.Add({Action->Identity,D.Id,D.RawDamage,A,B,Action->Yaw});
+        // Current-time contact belongs to the pre-admission barrier while still active.
+        // Active-end/cutoff remain exclusive. Dedup is owned by the resolve ledger.
+        if(T>Now && A<=B && A<Action->Start+D.ActiveEnd && A<End)
+            Out.Add({Action->Identity,D.Id,D.RawDamage,A,B,Action->Yaw,
+                B==Action->Start+D.ActiveEnd || B==End});
         if(T<End) break;
         const bool Natural=End==Action->End();
         GraceEnd=Natural&&D.Id<=EAction::Attack3?End+.15:0;

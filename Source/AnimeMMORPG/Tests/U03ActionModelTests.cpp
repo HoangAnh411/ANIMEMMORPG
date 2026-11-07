@@ -28,7 +28,7 @@ bool FU03Timeline::RunTest(const FString&)
         M.SubmitBatch({U03A0Intent(1,0)}, {},Out);M.SubmitBatch({U03A0Intent(2,.30)}, {},Out);
         for(double T=.30+Step;T<1.;T+=Step) M.Advance(T,Out);
         M.Advance(1.,Out);double Total=0;bool Second=false;
-        for(const auto& S:Out){Total+=S.End-S.Begin;Second|=S.DefinitionId==EAction::Attack2;TestTrue(TEXT("nonempty clipped"),S.Begin<S.End);}
+        for(const auto& S:Out){Total+=S.End-S.Begin;Second|=S.DefinitionId==EAction::Attack2;TestTrue(TEXT("nonempty clipped"),S.Begin<=S.End);}
         TestTrue(TEXT("whole active both actions"),FMath::Abs(Total-.13)<1e-12);TestTrue(TEXT("buffer starts second within long update"),Second);
     }
     FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;
@@ -118,7 +118,10 @@ bool FU03Barrier::RunTest(const FString&)
         TestEqual(TEXT("same-time lethal only first survives"),Hits,1);TestTrue(TEXT("source1 survives"),L.IsAlive(A));TestFalse(TEXT("source2 dead before retaliation"),L.IsAlive(B));
     }
     FTimelineModel M(U03A0Life());TArray<FActiveInterval> Out;M.SubmitBatch({U03A0Intent(1,0)}, {},Out);
-    M.Advance(.18,Out);const bool GuardAtHit=false;int32 HP=100;
+    M.Advance(.18,Out);
+    TestEqual(TEXT("barrier reaches receive timestamp"),Out.Last().End,.18);
+    TestFalse(TEXT("hit at current active endpoint belongs to old barrier"),Out.Last().bEndExclusive);
+    const bool GuardAtHit=false;int32 HP=100;
     // Barrier consumes previously collected hit BEFORE accepting press stamped .18.
     if(Out.Num()>0&&!GuardAtHit)HP-=Out[0].RawDamage;
     auto R=M.SubmitBatch({U03A0Intent(2,.18,ECommand::Guard)}, {},Out);

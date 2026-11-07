@@ -35,7 +35,7 @@ struct FCombatIntent
     double Receive = 0, AimYaw = 0; FVector2D Direction = FVector2D::ZeroVector;
 };
 struct FAdmissionResult { uint64 Sequence; EAdmission Result; uint64 ActionSequence; };
-struct FActiveInterval { U02::FActionId Identity; EAction DefinitionId; int32 RawDamage; double Begin, End; double Yaw; };
+struct FActiveInterval { U02::FActionId Identity; EAction DefinitionId; int32 RawDamage; double Begin, End; double Yaw; bool bEndExclusive = true; };
 struct FAdmissionContext { bool bPlaying=true, bGrounded=true, bHardCC=false, bGuard=false, bDodging=false, bFeint=false, bDead=false; };
 class FResourceModel
 {
