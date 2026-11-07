@@ -42,7 +42,7 @@ void UU02CombatComponent::BeginPlay()
     if(!C||!GetWorld()||(GetWorld()->WorldType!=EWorldType::Game&&GetWorld()->WorldType!=EWorldType::PIE)){SetComponentTickEnabled(false);return;}
     C->GetU01Movement()->AddTickPrerequisiteComponent(this);
     TArray<UPrimitiveComponent*> Parts;C->GetComponents(Parts);for(auto* P:Parts)P->SetCollisionResponseToChannel(ECC_GameTraceChannel2,ECR_Ignore);
-    if(C->GetMesh()->GetSkeletalMeshAsset())if(auto* Class=LoadClass<UAnimInstance>(nullptr,TEXT("/Game/AnimeMMORPG/U02/Animation/ABP_U02.ABP_U02_C")))C->GetMesh()->SetAnimInstanceClass(Class);
+    if(C->GetMesh()->GetSkeletalMeshAsset())if(auto* Class=LoadClass<UAnimInstance>(nullptr,TEXT("/Game/AnimeMMORPG/U03/Animation/ABP_U03.ABP_U03_C")))C->GetMesh()->SetAnimInstanceClass(Class);
     if(C->HasAuthority())
     {
         Model=MakeUnique<AnimeMMORPG::U03::FTimelineModel>(FLifeId{C->NetworkPawnId,1},GetWorld()->GetTimeSeconds());

@@ -1,5 +1,6 @@
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
+#include "Algo/Reverse.h"
 #include "Tests/AutomationCommon.h"
 #include "U01/U01Character.h"
 #include "U01/U01Settings.h"
@@ -102,4 +103,65 @@ bool FU03A1Resources::RunTest(const FString&)
     W.Collision->DrainAt(W.Now()+1.5);TestEqual(TEXT("resource integral is85 after1.5"),W.Player->Combat->GetCombatSnapshot().Energy,85.);
     W.ForwardErrorMessages(this);return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03A1Incoming,"AnimeMMORPG.U03.A1.GeometryIncomingInterruptAndDeathDuringSuccessor",U03A1Flags)
+bool FU03A1Incoming::RunTest(const FString&)
+{
+    for(bool Death:{false,true})for(bool Reverse:{false,true})
+    {
+        FU03A1World W;const double S=W.Now();W.Collision->bCharacterFixtureTargets=true;
+        auto* Enemy=W.SpawnPlayer(FVector(-150,0,98),2);
+        if(Death)FU03RuntimeAccess::HP(W.Player->Vital,60);
+        W.Press(1,S);
+        Enemy->Combat->SubmitAttackIntent(1,S,0);W.Collision->DrainAt(S+.29);
+        if(!Death)FU03RuntimeAccess::Interrupt(W.Collision,Enemy->Combat);
+        W.Press(2,S+.30);
+        if(Reverse)FU03RuntimeAccess::Reverse(W.Collision);
+        W.Collision->DrainAt(S+1.);
+        TestEqual(TEXT("real incoming hit during successor startup"),W.Player->Vital->GetSnapshot().HP,Death?0:940);
+        TestEqual(TEXT("successor actually started before incoming collision"),W.Player->Combat->GetCombatSnapshot().ActionSequence,uint64(2));
+        TestEqual(TEXT("incoming effect cutoff cancelled successor"),W.Player->Combat->GetCombatSnapshot().Phase,uint8(AnimeMMORPG::U02::EPhase::Cancelled));
+        TestEqual(TEXT("old confirmed60 retained, no successor damage"),W.Dummy->Vital->GetSnapshot().HP,540);
+        const auto& Events=W.Collision->DamageResults;
+        TestFalse(TEXT("no geometry damage from cancelled successor"),Events.ContainsByPredicate([&](const auto& R){return R.Hit.Id.Action.Source.Pawn==W.Player->NetworkPawnId&&R.Hit.Id.Action.Sequence==2;}));
+        AddInfo(FString::Printf(TEXT("U03A1_WORLD_CUTOFF death=%d reverse=%d incoming=%.17g action=%llu phase=%u hp=%d dummyHP=%d"),Death,Reverse,S+.45,W.Player->Combat->GetCombatSnapshot().ActionSequence,W.Player->Combat->GetCombatSnapshot().Phase,W.Player->Vital->GetSnapshot().HP,W.Dummy->Vital->GetSnapshot().HP));
+        W.ForwardErrorMessages(this);
+    }
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03A1Group,"AnimeMMORPG.U03.A1.WorldTimestampGroupBeforeSuccessor",U03A1Flags)
+bool FU03A1Group::RunTest(const FString&)
+{
+    for(bool Reverse:{false,true})
+    {
+        FU03A1World W;const double S=W.Now();W.Collision->bCharacterFixtureTargets=true;
+        auto* A=W.SpawnPlayer(FVector(-150,-25,98),2);auto* B=W.SpawnPlayer(FVector(-140,25,98),3);
+        FU03RuntimeAccess::HP(W.Player->Vital,100);W.Press(1,S);
+        A->Combat->SubmitAttackIntent(1,S,0);B->Combat->SubmitAttackIntent(1,S,0);W.Collision->DrainAt(S+.24);
+        W.Press(2,S+.30);if(Reverse)FU03RuntimeAccess::Reverse(W.Collision);
+        W.Collision->DrainAt(S+.40);
+        TestEqual(TEXT("second same-time source lethal"),W.Player->Vital->GetSnapshot().HP,0);
+        TestEqual(TEXT("pending successor never starts between same-time hits"),W.Player->Combat->GetCombatSnapshot().ActionSequence,uint64(1));
+        TestEqual(TEXT("one death from group"),W.Player->Vital->GetSnapshot().DeathCount,uint32(1));
+        TArray<uint32> Order;for(const auto& R:W.Collision->DamageResults)if(R.Hit.Id.Target.Pawn==W.Player->NetworkPawnId)Order.Add(R.Hit.Id.Action.Source.Pawn.A);
+        TestTrue(TEXT("global stable source order2 then3"),Order==TArray<uint32>{2,3});
+        W.ForwardErrorMessages(this);
+    }
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03A1Life,"AnimeMMORPG.U03.A1.LostGroundLandingResetAndStaleLife",U03A1Flags)
+bool FU03A1Life::RunTest(const FString&)
+{
+    FU03A1World W;const double S=W.Now();W.Press(1,S);W.Press(2,S+.30);
+    TestTrue(TEXT("world floor-loss exactly action-end accepted"),W.Collision->ApplyLifecycle(W.Player->Combat,S+.40,AnimeMMORPG::U03::ECutoff::LostGround,false));
+    TestEqual(TEXT("floor-loss clears pending before successor"),W.Player->Combat->GetCombatSnapshot().ActionSequence,uint64(1));
+    W.Press(3,S+.41);TestEqual(TEXT("model floor-loss latch blocks stale grounded motor context"),W.Player->Combat->GetAdmission().Admission,uint8(AnimeMMORPG::U03::EAdmission::Locked));
+    TestTrue(TEXT("authority landing permits fresh command"),W.Collision->ApplyLifecycle(W.Player->Combat,S+.42,AnimeMMORPG::U03::ECutoff::LostGround,true));
+    W.Press(4,S+.42);TestEqual(TEXT("landing starts first definition"),W.Player->Combat->GetCombatSnapshot().DefinitionId,uint8(0));
+    const auto Before=W.Player->Combat->GetCombatSnapshot();TestTrue(TEXT("real combat reset succeeds"),W.Player->Combat->ResetLabCombat());
+    FU03RuntimeAccess::Command(W.Player->Combat,5,Before.LifeGeneration,Before.PawnId);W.Collision->DrainAt(S+.42);
+    TestEqual(TEXT("old life rejected at authority dispatcher"),W.Player->Combat->GetAdmission().Admission,uint8(AnimeMMORPG::U03::EAdmission::Invalid));
+    TestEqual(TEXT("new life action not resurrected"),W.Player->Combat->GetCombatSnapshot().ActionSequence,uint64(0));
+    W.ForwardErrorMessages(this);return true;
+}
+
 #endif

@@ -22,6 +22,9 @@ public:
     // Idle=0, locomotion BlendSpace=1, jump ascent=2, falling=3, landing=4.
     UPROPERTY(BlueprintReadOnly, Category="U01") int32 PoseIndex = 0;
     UPROPERTY(EditDefaultsOnly, Category="U02") TObjectPtr<UAnimMontage> AttackMontage;
+    UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> Attack2Montage;
+    UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> Attack3Montage;
+    UPROPERTY(Transient) TObjectPtr<UAnimMontage> ActiveMontage;
     bool bAttackPresented=false;
     UPROPERTY(BlueprintReadOnly,Category="U02") float AttackBlendWeight=0;
     double AttackPositionSeconds=0;

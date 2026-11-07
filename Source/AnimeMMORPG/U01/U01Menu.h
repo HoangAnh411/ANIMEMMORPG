@@ -39,6 +39,13 @@ private:
     UFUNCTION() void BindSprint();
     UFUNCTION() void BindShoulder();
     UFUNCTION() void BindInteract();
+    UFUNCTION() void BindAttack();
+    UFUNCTION() void BindGuard();
+    UFUNCTION() void BindDodge();
+    UFUNCTION() void BindEscapeCC();
+    UFUNCTION() void BindSkillQ();
+    UFUNCTION() void BindSkillE();
+    UFUNCTION() void BindTarget();
     UPROPERTY(Transient) TObjectPtr<class UTextBlock> FixtureStatus;
     void UpdateFixtureStatus();
     UFUNCTION() void ResetFixtureClicked();

@@ -12,6 +12,7 @@
 #include "Components/HorizontalBox.h"
 #include "Components/HorizontalBoxSlot.h"
 #include "Components/SizeBox.h"
+#include "Components/ScrollBox.h"
 
 TSharedRef<SWidget> UU01Menu::RebuildWidget()
 {
@@ -23,7 +24,7 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
     Border->SetHorizontalAlignment(HAlign_Center);
     Border->SetVerticalAlignment(VAlign_Center);
     WidgetTree->RootWidget = Border;
-    USizeBox* Size=WidgetTree->ConstructWidget<USizeBox>();Size->SetWidthOverride(720);
+    USizeBox* Size=WidgetTree->ConstructWidget<USizeBox>();Size->SetWidthOverride(720);Size->SetMaxDesiredHeight(440);
     Border->SetContent(Size);
     Pages=WidgetTree->ConstructWidget<UWidgetSwitcher>();Size->SetContent(Pages);
     UVerticalBox* Box = WidgetTree->ConstructWidget<UVerticalBox>();
@@ -63,15 +64,15 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
     Button(TEXT("Back to Boot"))->OnClicked.AddDynamic(this, &UU01Menu::BootClicked);
     Button(TEXT("Quit"))->OnClicked.AddDynamic(this, &UU01Menu::QuitClicked);
     // Reuse the builders with a second page; every binding belongs to this LocalPlayer.
-    Box=WidgetTree->ConstructWidget<UVerticalBox>();Pages->AddChild(Box);
+    Box=WidgetTree->ConstructWidget<UVerticalBox>();auto* ControlsScroll=WidgetTree->ConstructWidget<UScrollBox>();ControlsScroll->AddChild(Box);Pages->AddChild(ControlsScroll);
     auto Label=[this](const TCHAR* Value)
     {
         auto* Result=WidgetTree->ConstructWidget<UTextBlock>();Result->SetText(FText::FromString(Value));
         auto Font=Result->GetFont();Font.Size=16;Result->SetFont(Font);return Result;
     };
     Box->AddChildToVerticalBox(Label(TEXT("Điều khiển — một phím/nút; Escape hủy nhận phím")));
-    const TCHAR* Names[]={TEXT("Tiến"),TEXT("Lùi"),TEXT("Trái"),TEXT("Phải"),TEXT("Nhảy"),TEXT("Sprint (giữ)"),TEXT("Đổi vai"),TEXT("Tương tác (fixture)")};
-    for(int32 I=0;I<8;++I)
+    const TCHAR* Names[]={TEXT("Tiến"),TEXT("Lùi"),TEXT("Trái"),TEXT("Phải"),TEXT("Nhảy"),TEXT("Sprint (giữ)"),TEXT("Đổi vai"),TEXT("Tương tác (fixture)"),TEXT("Attack"),TEXT("Guard (unavailable)"),TEXT("Dodge (unavailable)"),TEXT("Escape CC (unavailable)"),TEXT("Q (unavailable)"),TEXT("E (unavailable)"),TEXT("Target (unavailable)")};
+    for(int32 I=0;I<AnimeMMORPG::U01::ControlCount;++I)
     {
         auto* Row=WidgetTree->ConstructWidget<UHorizontalBox>();Box->AddChildToVerticalBox(Row)->SetPadding(FMargin(2));
         Row->AddChildToHorizontalBox(Label(Names[I]))->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
@@ -82,7 +83,7 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
         case 1:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindBackward);break;case 2:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindLeft);break;
         case 3:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindRight);break;case 4:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindJump);break;
         case 5:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindSprint);break;case 6:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindShoulder);break;
-        case 7:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindInteract);break;}
+        case 7:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindInteract);break;case 8:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindAttack);break;case 9:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindGuard);break;case 10:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindDodge);break;case 11:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindEscapeCC);break;case 12:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindSkillQ);break;case 13:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindSkillE);break;case 14:Bind->OnClicked.AddDynamic(this,&UU01Menu::BindTarget);break;}
     }
     SensitivityLabel=Label(TEXT(""));Box->AddChildToVerticalBox(SensitivityLabel);
     Sensitivity=WidgetTree->ConstructWidget<USlider>();Sensitivity->SetMinValue(.1f);Sensitivity->SetMaxValue(3.f);
@@ -161,3 +162,11 @@ void UU01Menu::ResetFixtureClicked() { if (auto* PC = Cast<AU01PlayerController>
 void UU01Menu::NextFixtureClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->NextFixtureStation(); UpdateFixtureStatus(); }
 void UU01Menu::InteractingFixtureClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->ToggleInteractingFixture(); UpdateFixtureStatus(); }
 void UU01Menu::DefeatedFixtureClicked() { if (auto* PC = Cast<AU01PlayerController>(GetOwningPlayer())) PC->ToggleDefeatedFixture(); UpdateFixtureStatus(); }
+
+void UU01Menu::BindAttack(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->BeginRebind(8);}
+void UU01Menu::BindGuard(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->BeginRebind(9);}
+void UU01Menu::BindDodge(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->BeginRebind(10);}
+void UU01Menu::BindEscapeCC(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->BeginRebind(11);}
+void UU01Menu::BindSkillQ(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->BeginRebind(12);}
+void UU01Menu::BindSkillE(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->BeginRebind(13);}
+void UU01Menu::BindTarget(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->BeginRebind(14);}

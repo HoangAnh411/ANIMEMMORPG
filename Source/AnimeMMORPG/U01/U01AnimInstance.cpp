@@ -51,7 +51,8 @@ void UU01AnimInstance::NativeUpdateAnimation(float Dt)
 
 void UU01AnimInstance::PresentCombat(const FU02RepCombatSnapshot& S,double Now)
 {
-    if(!AttackMontage)return;
+    UAnimMontage* Selected=S.DefinitionId==1?Attack2Montage.Get():S.DefinitionId==2?Attack3Montage.Get():AttackMontage.Get();
+    if(!Selected)return;
     // Stale snapshots/stops from an older life/action cannot stop a newer montage.
     if(PresentedPawn==S.PawnId && (S.LifeGeneration<PresentedLife ||
         (S.LifeGeneration==PresentedLife && S.ActionSequence && S.ActionSequence<PresentedAction)))return;
@@ -61,21 +62,21 @@ void UU01AnimInstance::PresentCombat(const FU02RepCombatSnapshot& S,double Now)
     AttackBlendWeight=Sample.bPlay?1.f:0.f;
     if(NewLife || NewAction)
     {
-        if(bAttackPresented)Montage_Stop(.04f,AttackMontage);
-        PresentedPawn=S.PawnId;PresentedLife=S.LifeGeneration;PresentedAction=S.ActionSequence;bAttackPresented=false;
+        if(bAttackPresented)Montage_Stop(.04f,ActiveMontage);
+        ActiveMontage=Selected;PresentedPawn=S.PawnId;PresentedLife=S.LifeGeneration;PresentedAction=S.ActionSequence;bAttackPresented=false;
     }
     if(!Sample.bPlay)
     {
-        if(bAttackPresented)Montage_Stop(.04f,AttackMontage);
+        if(bAttackPresented)Montage_Stop(.04f,ActiveMontage);
         bAttackPresented=false;AttackPositionSeconds=0;return;
     }
     if(!bAttackPresented)
     {
-        Montage_Play(AttackMontage,1.f,EMontagePlayReturnType::MontageLength,float(Sample.PositionSeconds),false);
+        Montage_Play(ActiveMontage,1.f,EMontagePlayReturnType::MontageLength,float(Sample.PositionSeconds),false);
         bAttackPresented=true;
     }
     // Seek late snapshots/correct drift against authority time; not notify-driven.
     AttackPositionSeconds=Sample.PositionSeconds;
-    if(FMath::Abs(Montage_GetPosition(AttackMontage)-AttackPositionSeconds)>.025)
-        Montage_SetPosition(AttackMontage,float(AttackPositionSeconds));
+    if(FMath::Abs(Montage_GetPosition(ActiveMontage)-AttackPositionSeconds)>.025)
+        Montage_SetPosition(ActiveMontage,float(AttackPositionSeconds));
 }

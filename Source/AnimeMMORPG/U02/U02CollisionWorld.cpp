@@ -298,7 +298,16 @@ void UU02CollisionWorld::CollectCurrent(double Through,TArray<FHitCandidate>& Ou
         P.Slice.BeginAlpha=Span>0?(Begin-PreviousTime)/Span:1;P.Slice.EndAlpha=Span>0?(End-PreviousTime)/Span:1;
         CollectHitCandidates(P,Out);
     }
-    Out.RemoveAll([&](const FHitCandidate& Hit){return !Ledger.CanResolveHit(Hit);});
+    Out.RemoveAll([&](const FHitCandidate& Hit)
+    {
+        if(!Ledger.CanResolveHit(Hit))return true;
+        bool SourceAlive=false,TargetAlive=false;
+        for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->GetLife()==Hit.Id.Action.Source)
+            if(auto* V=C->GetOwner()->FindComponentByClass<UU02VitalComponent>())SourceAlive=V->IsAlive(Hit.Id.Action.Source)&&FMath::IsFinite(V->GetAttackFactor())&&V->GetAttackFactor()>=0;
+        for(const auto& H:Hurts)if(auto* Shape=H.Component.Get())if(Shape->GetSubject()==Hit.Id.Target)
+            if(auto* V=Shape->GetOwner()->FindComponentByClass<UU02VitalComponent>())TargetAlive=V->IsAlive(Hit.Id.Target);
+        return !SourceAlive||!TargetAlive;
+    });
     Out.Sort(CandidateLess);
 }
 bool UU02CollisionWorld::ApplyLifecycle(UU02CombatComponent* C,double At,AnimeMMORPG::U03::ECutoff Reason,bool Landing)
@@ -339,7 +348,7 @@ void UU02CollisionWorld::DrainAt(double Now)
         for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Time()<=Stop)
         {
             FU03WorldCollector Collector;Collector.Emit=[this,C](const auto& I){EmitInterval(C,I);};
-            check(C->Model->ArriveAtBarrier(Stop,Collector));
+            check(C->Model->ArriveAtBarrier(Stop,Collector));C->Publish(Stop);
         }
         SimulationTime=Stop;
         // Lifecycle mutation has an explicit authority timestamp and precedes new endpoint contact.
