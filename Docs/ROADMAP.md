@@ -385,3 +385,7 @@ Các nhiệm vụ này bổ sung vào giai đoạn hiện có, không chờ tớ
 Cổng U03 bổ sung: thử parry tại 0, ngay trước/đúng 0,12 giây; mở lại trước/đúng 0,60; sai hướng, hết thế đỡ, giữ nút, đòn bắt/xuyên đỡ, đòn không parry được nhưng đỡ được, nhiều hit/người tấn công đồng thời. Xác nhận parry không tự counter và không ngắt boss. Thử Feint ngoài startup, khi đang hồi, ưu tiên lệnh với combo; ngắt không tự gây choáng. Chạy biên thời gian ở 30/60/120 FPS.
 
 Cổng U05 bổ sung: hai client đồng thuận kết quả parry/đỡ/trúng; không lợi dụng gửi lặp hoặc thời gian client để mở thêm cửa sổ. Cổng U06 bổ sung: phản công có điều kiện/đánh đổi rõ, không bảo đảm trúng và không tạo chuỗi hủy vô hạn.
+
+## U03 delivery gates approved 2026-11-07
+
+Giữ ID U03.01–U03.09 và luật gameplay. Chia A–D thành A0 hợp đồng/model, A1 combo, B1 né/motor, B2 defense/CC/X, C1 Q/E, C2 encounter/Tab/Retry, D presentation/settings/integration. Mỗi đợt nhánh riêng từ main đã nghiệm thu đợt trước; build/test clone đã commit, báo cáo và dừng review. ACCEPTED không tự cho merge hoặc đợt sau. A0 không có gameplay mới nên không package/launcher; A1–D giữ cổng package/input thật/dedicated Editor+hai client. Chỉ A0 được giao. [Contracts](U03/CONTRACTS.md), [Tests](U03/TEST-MATRIX.md).
