@@ -209,6 +209,19 @@ bool FU03IntegratedTimeline::RunTest(const FString&)
         TestFalse(TEXT("no successor active interval ever published"),Resolver.Intervals.ContainsByPredicate([](const auto& I){return I.DefinitionId==EAction::Attack2;}));
         AddInfo(FString::Printf(TEXT("U03A0_TRACE integrated reason=%u reverse=%d acceptedAt=.45 successorStart=.40 confirmed=%d late=%d final=%.17g"),static_cast<uint32>(Reason),Reverse,Resolver.Confirmed,Resolver.LateHits,M.Time()));
     }
+    struct FBoundaryDeath final : ITimelineResolver
+    {
+        bool Pending=true;
+        TOptional<double> NextEvent(const FTimelineModel&,double Through) override
+        { return Pending&&Through>=.40?TOptional<double>(.40):TOptional<double>(); }
+        void ResolveInterval(const FActiveInterval&) override {}
+        void ResolveEvent(FTimelineModel& M,double) override { Pending=false;M.CancelCurrent(ECutoff::Death); }
+    };
+    FTimelineModel BoundaryDead(U03A0Life());TArray<FActiveInterval> BoundarySetup;
+    BoundaryDead.SubmitBatchUnopposed({U03A0Intent(1,0),U03A0Intent(2,.30)}, {},BoundarySetup);
+    FBoundaryDeath BoundaryResolver;
+    TestTrue(TEXT("death exactly action-end completes update"),BoundaryDead.Advance(1.,BoundaryResolver));
+    TestNull(TEXT("death at action-end cannot consume pending successor"),BoundaryDead.Current());
     // Submission cannot bypass the same resolver barrier and admit after a death event.
     FTimelineModel Dead(U03A0Life());TArray<FActiveInterval> Setup;
     Dead.SubmitBatchUnopposed({U03A0Intent(1,0),U03A0Intent(2,.30)}, {},Setup);

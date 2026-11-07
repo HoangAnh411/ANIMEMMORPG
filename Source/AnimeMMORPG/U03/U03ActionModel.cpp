@@ -112,8 +112,12 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
 bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
 {
     if (!bResolvingEvent) return false;
-    if (Reason == ECutoff::Death) bDead = true;
-    if (!Action || !Action->Cancel(Reason, Now, Valid)) return false;
+    if (Reason == ECutoff::Death)
+    {
+        bDead = true;
+        Pending.Reset(); NextCombo = EAction::Attack1; GraceEnd = 0;
+    }
+    if (!Action || !Action->Cancel(Reason, Now, Valid)) return Reason == ECutoff::Death;
     Pending.Reset();
     NextCombo = EAction::Attack1;
     return true;
