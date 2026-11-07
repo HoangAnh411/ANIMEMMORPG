@@ -1,60 +1,49 @@
-# U03-A0 ? READY_FOR_REVIEW
+# U03-A0 — READY_FOR_REVIEW, bàn giao lại sau NOT ACCEPTED
 
-Ch? b?n giao A0. Ch?a ACCEPTED, ch?a merge main, ch?a b?t ??u A1. Ng??i d?ng duy?t k? ho?ch v? giao ri?ng A0 ng?y 2026-11-07.
+Bản bàn giao tại `6abfbf4` đã bị reviewer từ chối. Không khép, không merge main, không bắt đầu A1. Báo cáo này thay bản bị mất chữ; lịch sử và failed runs vẫn giữ trong Git và raw artifacts.
 
-## Ngu?n v? ph?m vi
+Source cuối đã build Editor/Game thành công và chạy **68/68 Automation Success, 0 Failed**. Đây là bằng chứng mới của lượt sửa; kết quả66/66 trước review không dùng thay cho nó. Chưa ACCEPTED.
 
-- N?n main v? remote x?c minh tr?c ti?p: `f8434d23e4f27a649dde4ea21f47dd296c0fc9ba`. Nh?nh `u03/a0-contract-model`.
-- **Source build/test cu?i: `9ef8e38c2f47f7b082fef32fb9d9a9a7cb8761cf`**, ?? push v? ??i chi?u `git ls-remote`. Commit h? s? ti?p sau kh?ng ??i Source/Content/Config/Plugins/project; kh?ng g?n SHA h? s? cho binary.
-- Source ch? th?m `U03/U03ActionModel.h/.cpp` v? `Tests/U03ActionModelTests.cpp`. [Contract](CONTRACTS.md), [matrix](TEST-MATRIX.md), ROADMAP chia A0/A1/B1/B2/C1/C2/D, gi? ID/lu?t gameplay.
-- Kh?ng ??i runtime U01/U02, input, animation, assets, maps, module/plugin/project ho?c config ?? commit. Kh?ng tri?n khai A1. Diff: `git diff f8434d2..9ef8e38c2f47f7b082fef32fb9d9a9a7cb8761cf -- Source Docs/U03 Docs/ROADMAP.md Scripts/U03`.
-- Working tree g?c ban ??u ch? `Config/DefaultEngine.ini` modified, kh?ng staged. Hash ??i chi?u tr??c/sau x?c nh?n nguy?n byte; kh?ng in/stage token, kh?ng restore config g?c. [Manifest](Evidence/A0/MANIFEST.json) ghi boolean b?t bi?n v? hash source/binary/log.
-- Editor g?c PID12280, start 2026-11-07 10:34:06 local, gi? m?; kh?ng save/restart/Live Coding hay d?ng binary g?c l?m b?ng ch?ng m?i. Header/model m?i d?ng full UBT trong clone; Editor g?c ch?a ???c x?c nh?n ?? n?p native m?i. Khi c?n refresh Editor g?c ph?i full build/restart t?i m?c ???c giao.
+## Nguồn và phạm vi
 
-## Model v? c?c trace c?n review
+Nhánh `u03/a0-contract-model`; nền main/remote vẫn `f8434d23e4f27a649dde4ea21f47dd296c0fc9ba`. Source sửa cuối `ea302cf1a829339cdfa8ee7700218f17a6bcc3dd`, đã push và đối chiếu SHA remote. Commit hồ sơ sau source này không thay Source/Content/Config/Plugins/project; không gán SHA hồ sơ cho binary.
 
-`FActionDefinition` fixed/versioned; `FActionInstance` ch?p const value, identity v? cutoff. `FTimelineModel` gi? buffer/grace/admission/timeline; `FResourceModel` t?ch ph?n energy v? CD. Kh?ng UObject, RPC, actor tick ho?c clock h? ?i?u h?nh. Q/E ch? l? command model, ch?a bind gameplay. X/dodge/guard/Feint/jump ch?a c? implementation ? A0 tr? Unsupported r? r?ng; priority sorting v?n ki?m tr??c c?c command ?? h? tr?.
+Chỉ sửa model/tests U03, công cụ seal và hồ sơ A0. Không bind input, đổi runtime đòn 1, thêm asset/module/plugin hoặc triển khai A1. [Hợp đồng](CONTRACTS.md), [ma trận](TEST-MATRIX.md). Không dùng GitNexus. Config riêng không in/stage/restore; đối chiếu hash baseline trong manifest. Editor gốc PID12280 vẫn mở lúc kiểm tra, không dùng binary gốc làm bằng chứng mới. Quan sát PID hiện tại không chứng minh toàn bộ lịch sử thao tác; các câu về thao tác chỉ là báo cáo hành động của lượt này.
 
-Sequence ???c x?t theo receive/sequence tr??c priority ?? kh?ng lo?i nh?m command sequence th?p nh?ng h?p l?. Payload xung ??t c?ng sequence/timestamp b? t? ch?i to?n b?, kh?ng cho collection ch?n h?nh ??ng. Batch ??o th? t? v?n ra c?ng action/k?t qu?.
+## Sửa lỗi timeline/API
 
-Timeline c? c?c ?o?n active c?a action c? v? successor b?t ??u ??ng action-end trong c?ng update d?i, gi? raw/aim ri?ng. TTL ??ng end kh?ng consume; c?nh m?i ??ng end x?t m?i; slot m?i thay c?; Attack3 n?i Attack1. Ba definition c?ng220 raw/1.45s. ??y l? raw/model, kh?ng ph?i HP runtime m?t220.
+`Advance` và `SubmitBatch` nhận `ITimelineResolver`, không trả cả một update đã mutate xong để caller giải về quá khứ nữa. Mỗi vòng chỉ đề xuất tới boundary gần nhất: active-start/end, action-end, TTL hoặc grace. Resolver tìm sự kiện sớm nhất trong khoảng đó qua `NextEvent`, kể cả hit tới trong startup của successor vừa tạo. Model giao interval **trước** sự kiện với endpoint loại trừ; sau đó clock tới đúng timestamp và gọi `ResolveEvent` trước sample tại timestamp, hết hạn, successor và admission.
 
-Endpoint hi?n t?i c?n active ???c sample tr??c admission; active-end/cutoff lu?n lo?i tr?, kh?ng epsilon. C?c sample ??u/cu?i k? nhau ph?i qua ledger dedup. H?y b?ng dodge/guard ch? khi replacement h?p l? v? c?n startup; ??ng active-start t? ch?i. Interrupt startup lo?i active t??ng lai. Death/Interrupt ledger c?t event tr??c event ti?p theo.
+Trong `ResolveEvent`, `CancelCurrent` chỉ làm việc tại clock hiện tại. Không advance/rewind trong cancellation. Reentrant advance bị từ chối. Resolver phải cung cấp mọi sự kiện có thể đổi model trước khi xác nhận interval, tiêu thụ sự kiện đã giao, giữ thứ tự candidate U02 và dedup. Những điều này là hợp đồng collection của resolver; barrier callback và thứ tự chuyển trạng thái được model A0 thực thi. Các helper có tên `Unopposed` chỉ dùng khi xác nhận không có world event, không phải API adapter gameplay.
 
-[Timeline th?c](Evidence/A0/TIMELINE.log) v? [log Editor cu?i](Evidence/A0/MCPTests-20261107-111345/Editor.log.gz) ghi tr?c ti?p interval/raw/action/yaw, source/target/hurtbox v? resolve accepted. C? trace buffer `.30 -> .40`, active successor `[.58,.65)`, expiry `.25+.15 == .40` kh?ng consume; hai lethal `.18` ch? source1 th?ng theo ID v? source2 retaliation b? lo?i. Barrier fixture l?y interval t?i `.18` c?n endpoint h?p l?, ?p raw60 c?nHP40 tr??c guard press.
+Test tích hợp mới dùng timeline và ledger U02 thật: Attack1 tại0, buffer0,30, Attack2 bắt đầu0,40; sự kiện địch0,45 được resolve khi clock còn0,45 và Attack2 vẫn startup. Cả Interrupt lẫn death đều loại active Attack2 và hit nguồn đó0,60 trong cùng update tới1,0. Đảo collection không đổi kết quả; hit0,18 đã confirmed vẫn giữ. Test SubmitBatch xác nhận death được giải trước admission tại1,0 dù context caller còn cũ. Test bổ sung death đúng action-end0,40 xóa pending trước khi có thể tạo successor. Model latch death để chặn admission sau đó.
 
-**Ranh gi?i quan tr?ng:** SubmitBatch tr? interval tr??c admission nh?ng kh?ng t? ch?y world collision/vital callback. Adapter A1 ph?i drain **v? resolve** ch?ng tr??c mutation/admission; B2 th?m defense history theo hit-time. Guard/barrier test l? fixture model v?i ledger U02 th?t, guard runtime v?n Unsupported; kh?ng ch?ng minh runtime parry/guard m?i. Kh?ng d?ng fixture HP l?m b?ng ch?ng ph?ng th? s?n ph?m.
+## Sửa cutoff
 
-## Build v? Automation m?i
+Interval trước event luôn loại endpoint. Cancellation được kiểm và áp trong callback tại event trước khi xuất point contact. Death/lost-ground0,18 giữ contact0,179999, loại đúng0,18; guard cancellation không hợp lệ vẫn giữ contact0,18. Hit0,17 đã confirmed và dedup không bị xóa; yêu cầu cancel lùi0,16 bị từ chối. Không epsilon nới deadline, không sửa lại interval đã publish để xóa confirmed hit.
 
-Clone: `D:/Data/AnimeMMORPG/Artifacts/U03/A0/Source`, source ?? commit, s?ch tr??c kh?i ??ng tests. Kh?ng copy binaries t? Editor g?c. UE5.8.4 CL58902052; MSVC14.51.36260/toolset14.51.36231; SDK10.0.26100.0; ISPC1.24.0, bundled DotNet10.0.
+Hai test mới là `AnimeMMORPG.U03.A0.LongUpdateResolverInterruptAndDeath` và `AnimeMMORPG.U03.A0.CutoffIntervalsAndConfirmedHits`. Năm test A0 cũ vẫn giữ; test ledger riêng không còn được dùng thay cho chứng minh timeline tích hợp. Guard gameplay vẫn chưa triển khai; ca guard sau barrier trước đây chỉ là fixture và không được coi là runtime defense.
 
-Build cu?i `Build-20261107-111220-338-9ff4c8e9`: Generate0, Editor0, Game0; log c? `Result: Succeeded`. [Commands/exits/logs](Evidence/A0/Build-20261107-111220-338-9ff4c8e9/SOURCE.json); c?c file command/result JSON v? log.gz c?nh ??. L?nh th?c d?ng `Scripts/U00.ps1 -Task Build -ProjectPath D:/Data/AnimeMMORPG/Artifacts/U03/A0/Source/AnimeMMORPG.uproject -EngineRoot D:/Software/UE_5.8 -OutputRoot D:/Data/AnimeMMORPG/Artifacts/U03/A0/Runs`; UBT target Editor/Game Win64 Development, WaitMutex/NoHotReloadFromIDE.
+## Sửa encoding và xuất lại bằng chứng
 
-Automation cu?i `MCPTests-20261107-111345`, PID17880, NullRHI clone, MCP ri?ng port18030. `VerifyA0Tests.ps1` ??c schema TestRunner/LogsToolset **t?i clone**, trigger filter `AnimeMMORPG`, ??c t?ng Test Completed v? queue66 ho?n t?t tr??c QUIT_EDITOR ch? clone. **66 executed /66 Success /0 Failed:5 A0 m?i +61 h?i quy U00?U02 m?i ch?y.** [T?ng test](Evidence/A0/MCPTests-20261107-111345/result.json), [raw MCP](Evidence/A0/MCPTests-20261107-111345/mcp-results.json), [process/hash/command](Evidence/A0/MCPTests-20261107-111345/process.json).
+Báo cáo được viết trực tiếp UTF-8, không chuyển qua shell codepage. `SealA0Evidence.py` nhận diện BOM UTF-16 LE/BE, UTF-8 BOM, UTF-16 LE không BOM theo byte cấu trúc; còn lại decode UTF-8 nghiêm ngặt. Không dùng `errors='replace'`. Decode thất bại sẽ dừng seal. Redact sau decode, publish UTF-8; manifest ghi encoding nguồn/publish, hash raw và hash publish, số redaction.
 
-| Test m?i `AnimeMMORPG.U03.A0.` | K?t qu? |
-|---|---|
-| AdmissionOrdering | Success |
-| DefinitionIdentity | Success |
-| ResolveBarrierAndLethal | Success |
-| ResourceAndCutoff | Success |
-| TimelineAndBuffer | Success |
+Toàn bộ log/warnings/manifest cũ được xuất lại từ raw đang giữ, gồm failed run đầu tiên; không sửa/xóa raw log. Git giữ bản publish lỗi tại `6abfbf4`. Kiểm tra encoding gồm bốn roundtrip UTF-8/UTF-8 BOM/UTF-16 BOM/UTF-16 LE không BOM và hai đầu vào lỗi phải bị từ chối. Đọc đúng raw build log UTF-16 LE thấy `Result: Succeeded`. Đã đối chiếu **102/102 nội dung publish bằng raw decode/redact**, cùng hash publish; **68/68 raw file lịch sử giữ nguyên hash**. Không có ký tự replacement hoặc NUL trong publish. Báo cáo UTF-8 có0 ký tự `?` literal. [Kết quả kiểm encoding](Evidence/A0/ENCODING-VERIFICATION.json). File JSON publish ghi byte UTF-8 trực tiếp để không nhân CR khi Windows chuyển newline.
 
-Model steps30/60/120Hz v? update2s; kh?ng ghi th?nh FPS runtime ?? ?o. Pure model world/net/pawn/owner/role N/A. C?c Game-world fixtures U00?U02 m?i ch?y trong c?ng process l? h?i quy Automation, kh?ng ph?i input Windows/network process m?i.
+## Build/test, warning và giới hạn
 
-Editor module SHA256 `9291705bf4bb7e05d431b1c156a281d637d93671efd66c98c978da9d3336b02c`. Game exe SHA256 `7baa6917877b1c8dcbcdfdbeeb4c436f4a2aef5a4b748e1f1944c8eca90c5148`. Manifest c? source Git blobs v? raw/published log SHA256. Package N/A v? A0 kh?ng c? gameplay m?i; kh?ng t?o launcher/package gi?.
+Build/test mới trong clone từ source đã commit `Artifacts/U03/A0/Source`, giữ Editor gốc mở. Full UBT Editor/Game Win64 Development qua `Scripts/U00.ps1 -Task Build`; không Live Coding. UE5.8.4 CL58902052, MSVC14.51.36260/toolset14.51.36231, SDK10.0.26100.0. Automation qua TestRunner/MCP tại process clone/port18030, đọc schema tại clone, từng kết quả và queue hoàn tất; không lấy trigger-success làm PASS.
 
-## L??t l?i, warning, gi?i h?n v? ?i?m d?ng
+Lượt sửa đầu source `c370ddf` đã build Editor/Game thành công và đạt68/68 Success. Bản cuối `ea302cf` thêm ca death đúng action-end đã được build/test lại riêng; không cộng dồn test giữa các run. Các run66/66 trước review và nghiệm thu U00–U02 là lịch sử, không chứng minh bản sửa này. [Manifest](Evidence/A0/MANIFEST.json), [trace](Evidence/A0/TIMELINE.log), [warnings](Evidence/A0/WARNINGS.json) đã xuất lại từ raw của mọi run.
 
-Build ??u `Build-20261107-110112-629-8c6e9a4f`, source1d65b53, Editor exit6: `U03ActionModelTests.cpp(87,44): error C2668: 'Life': ambiguous call to overloaded function`; th?m C4459 do global helper Flags trong unity build che t?n Flags c?a engine/U02. ?? ??i helper U03A0Life/U03A0Intent/U03A0Flags, gi? log th?t b?i. C?c build sau th?nh c?ng, hai l??t Automation trung gian182d7f2/1f8e897 ??u66/66, kh?ng c?ng d?n th?nh s? test cu?i.
+Build cuối **Build-20261107-112603-219-96b88ba5**: Generate0, Editor0, Game0; log đúng encoding có `Result: Succeeded`. [Source](Evidence/A0/Build-20261107-112603-219-96b88ba5/SOURCE.json), các command/result JSON và log.gz cạnh đó giữ lệnh thực/exit code. Full command dùng `Scripts/U00.ps1 -Task Build -ProjectPath D:/Data/AnimeMMORPG/Artifacts/U03/A0/Source/AnimeMMORPG.uproject -EngineRoot D:/Software/UE_5.8 -OutputRoot D:/Data/AnimeMMORPG/Artifacts/U03/A0/Runs`.
 
-Superseded build logs/source IDs gi? ??; kh?ng gi? l?i m?i binary trung gian n?n kh?ng c? binary hash ??y ?? cho build b5848ad ?? b? thay th?. Kh?ng d?ng build trung gian ?? l?m b?ng ch?ng b?n giao. Final binary/process/hash v? raw logs ni?m phong ??y ??. [Warnings/error nguy?n v?n](Evidence/A0/WARNINGS.json) gi? c? failed runs; logs ch?a redaction ? Artifacts, b?n publish c? s? redactions/hash trong manifest, kh?ng publish credential.
+Automation cuối **MCPTests-20261107-112725**: **68 executed, 68 Success, 0 Failed**, gồm7 test A0 và61 test U00–U02 hồi quy mới chạy. [Từng test](Evidence/A0/MCPTests-20261107-112725/result.json), [MCP results](Evidence/A0/MCPTests-20261107-112725/mcp-results.json), [PID/command/binary hash](Evidence/A0/MCPTests-20261107-112725/process.json), schema TestRunner/LogsToolset và trigger cạnh đó. Log xác nhận queue68 hoàn tất. Bảy test A0 đều Success: AdmissionOrdering, DefinitionIdentity, ResolveBarrierAndLethal, ResourceAndCutoff, TimelineAndBuffer, LongUpdateResolverInterruptAndDeath, CutoffIntervalsAndConfirmedHits.
 
-Warning c?n: compiler m?i h?n preferred; engine/U01 API deprecated, U01AnimationTests double->float; MCP/EULA v? c?nh b?o kh?i ??ng plugin trong log. Kh?ng b?t AllToolsets ?? che c?nh b?o. Kh?ng c? Automation fail tr?n source cu?i; l?i build do test helper ?? s?a. Reviewer quy?t ??nh c? l?i ch?n k? thu?t c?n l?i hay kh?ng.
+Editor DLL SHA256 `b9b30a3a819e9712e8cb13bf6fa20d5e2b1e7370e9dd2cc9c97ff4878f80903b`; Game exe SHA256 `f5611d73983bec1e8b55b2a83829080540ad6e9fbe399ce34aa7095d57daea02`. Manifest giữ ba source Git blobs, hash raw/publish và encoding nguồn. Hash module khớp process Automation cuối. Package N/A tại A0.
 
-U00/U01/U02 AF/focus ACCEPTED l? **nghi?m thu k? th?a**; kh?ng x?c minh l?i197 evidence hashes hay t? m? l?i review focus. 61 Automation h?i quy ? tr?n l? b?ng ch?ng m?i ri?ng l??t n?y, kh?ng thay input/video/package/network k? th?a. A0 kh?ng ch?y Play/input/video/package/cook/dedicated+hai client ho?c benchmark; c?c c?ng gameplay theo t?ng ??t v?n c?n nguy?n.
+Giữ failed build `1d65b53`: helper Life/Flags va chạm unity build, đã sửa trước review đầu; không xóa log lỗi. Warning toolchain mới hơn preferred, deprecated API engine/U01 và chuyển double sang float vẫn giữ nguyên văn. Không bật AllToolsets. Binary trung gian bị thay thế trước đây không được lưu đầy đủ/hash đầy đủ; chỉ dùng binary/hash/process cuối làm bằng chứng bàn giao.
 
-R?i ro ?? A1/B2 ki?m ti?p: adapter enforce barrier v? event queue cho action sinh trong interval, aim/defense history, immutable payload qua runtime resolver, release/control input batch v? snapshot/life. Model PASS kh?ng kh?p c?c r?i ro runtime ??.
+A0 chưa có runtime U03, input Windows/video, package/cook hoặc dedicated server/hai client mới. Pure model không có pawn/world/net owner/role thực, ghi N/A; model30/60/120Hz không phải FPS runtime. A1 vẫn cần collection geometry/world event toàn cục, payload và input/snapshot thực; B2 cần defense history/runtime. Kết quả A0 không tự khép các cổng đó.
 
-**READY_FOR_REVIEW U03-A0. D?ng t?i ??y; ch?a ACCEPTED, kh?ng merge main, kh?ng b?t ??u A1.**
+**READY_FOR_REVIEW U03-A0.** Ba vấn đề reviewer nêu đã có sửa đổi và bằng chứng để review lại; chưa tự kết luận ACCEPTED. Không merge main hoặc bắt đầu A1. Không có test fail ở bản cuối; giới hạn runtime/collection nêu trên vẫn giữ để reviewer đánh giá.

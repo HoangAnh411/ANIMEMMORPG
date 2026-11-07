@@ -1,8 +1,8 @@
-{
-    "content":  [
-                    {
-                        "type":  "text",
-                        "text":  "{\"returnValue\":\"Triggered automation tests with filter: AnimeMMORPG\"}"
-                    }
-                ]
-}
+{
+    "content":  [
+                    {
+                        "type":  "text",
+                        "text":  "{\"returnValue\":\"Triggered automation tests with filter: AnimeMMORPG\"}"
+                    }
+                ]
+}

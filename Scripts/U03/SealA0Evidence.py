@@ -24,7 +24,7 @@ for p in sorted(runs.rglob('*')):
  clean,n=re.subn(r'(?im)(SecurityToken\s*[=:]\s*|Authorization\s*:\s*Bearer\s+)[^\s,\"}]+',r'\1[REDACTED]',text)
  rel=p.relative_to(runs);out=dest/rel;out.parent.mkdir(parents=True,exist_ok=True)
  if p.suffix=='.log':out=out.with_suffix('.log.gz');out.write_bytes(gzip.compress(clean.encode(),mtime=0))
- else:out.write_text(clean,encoding='utf-8')
+ else:out.write_bytes(clean.encode('utf-8'))
  entries.append(dict(path=str(out.relative_to(dest)),rawSHA256=sha(p),publishedSHA256=sha(out),sourceEncoding=encoding,publishedEncoding='utf-8',redactions=n))
  for line in clean.splitlines():
   if re.search(r'warning |Warning:|error C\d|Error:',line):warnings.append(dict(run=str(rel),line=line))

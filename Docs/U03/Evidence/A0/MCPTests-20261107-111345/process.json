@@ -1,22 +1,22 @@
-{
-    "runId":  "MCPTests-20261107-111345",
-    "exeSHA256":  "A423AB94410AA4F4CC34D99A2AF75240C5D0E376A33D903A3E819FECF1177143",
-    "sourceSHA":  "9ef8e38c2f47f7b082fef32fb9d9a9a7cb8761cf",
-    "utc":  "2026-11-07T04:13:45.9610888Z",
-    "exe":  "D:\\Software\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
-    "scope":  "A0 pure models plus existing U00-U02 Game-world Automation fixtures; not input/network-process evidence",
-    "module":  "D:\\Data\\AnimeMMORPG\\Artifacts\\U03\\A0\\Source\\Binaries\\Win64\\UnrealEditor-AnimeMMORPG.dll",
-    "arguments":  [
-                      "\"D:\\Data\\AnimeMMORPG\\Artifacts\\U03\\A0\\Source\\AnimeMMORPG.uproject\"",
-                      "-NullRHI",
-                      "-nosound",
-                      "-unattended",
-                      "-NoLiveCoding",
-                      "-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False",
-                      "-ModelContextProtocolStartServer",
-                      "-ModelContextProtocolPort=18030",
-                      "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U03\\A0\\Runs\\MCPTests-20261107-111345\\Editor.log\""
-                  ],
-    "pid":  17880,
-    "moduleSHA256":  "9291705BF4BB7E05D431B1C156A281D637D93671EFD66C98C978DA9D3336B02C"
-}
+{
+    "runId":  "MCPTests-20261107-111345",
+    "exeSHA256":  "A423AB94410AA4F4CC34D99A2AF75240C5D0E376A33D903A3E819FECF1177143",
+    "sourceSHA":  "9ef8e38c2f47f7b082fef32fb9d9a9a7cb8761cf",
+    "utc":  "2026-11-07T04:13:45.9610888Z",
+    "exe":  "D:\\Software\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+    "scope":  "A0 pure models plus existing U00-U02 Game-world Automation fixtures; not input/network-process evidence",
+    "module":  "D:\\Data\\AnimeMMORPG\\Artifacts\\U03\\A0\\Source\\Binaries\\Win64\\UnrealEditor-AnimeMMORPG.dll",
+    "arguments":  [
+                      "\"D:\\Data\\AnimeMMORPG\\Artifacts\\U03\\A0\\Source\\AnimeMMORPG.uproject\"",
+                      "-NullRHI",
+                      "-nosound",
+                      "-unattended",
+                      "-NoLiveCoding",
+                      "-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False",
+                      "-ModelContextProtocolStartServer",
+                      "-ModelContextProtocolPort=18030",
+                      "-abslog=\"D:\\Data\\AnimeMMORPG\\Artifacts\\U03\\A0\\Runs\\MCPTests-20261107-111345\\Editor.log\""
+                  ],
+    "pid":  17880,
+    "moduleSHA256":  "9291705BF4BB7E05D431B1C156A281D637D93671EFD66C98C978DA9D3336B02C"
+}
