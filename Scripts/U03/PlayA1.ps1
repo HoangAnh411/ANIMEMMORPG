@@ -9,7 +9,7 @@ foreach($entry in (Import-Csv -LiteralPath (Join-Path $root 'Docs/U03/Evidence/A
  if(!$file.StartsWith($package+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase) -or !(Test-Path -LiteralPath $file) -or (Get-FileHash -LiteralPath $file).Hash -ine $entry.sha256){throw ('Package hash mismatch: '+$entry.path)}
 }
 $cloneSHA=git -C (Join-Path $root 'Artifacts/U03/A1/Source') rev-parse HEAD
-if($cloneSHA -ne $manifest.source){throw 'Review source association changed; inspect REPORT-E'}
+if($cloneSHA -ne $manifest.source){throw 'Review source association changed; inspect REPORT-A1'}
 $session=Join-Path $root ('Artifacts/U03/A1/Review-'+(Get-Date -Format 'yyyyMMdd-HHmmss'))
 & (Join-Path $PSScriptRoot 'StartA1Package.ps1') -Package $package -OutputRoot $session | Out-Null
 $record=Get-Content -Raw -LiteralPath (Join-Path $session 'process.json') | ConvertFrom-Json
