@@ -1,6 +1,6 @@
-# U03-A1 — READY_FOR_REVIEW
+# U03-A1 — ACCEPTED về kỹ thuật
 
-Triển khai riêng combo, dispatcher và resource runtime từ main đã nghiệm thu `5f8700e69b0f381a2f6b0d158667ac9283aa98ab`, nhánh `u03/a1-combo`. Source native/content kiểm chứng **0957867e11193081fb26b732864ccc006ffc975a**; commit bàn giao sau đó chỉ bổ sung scripts/hồ sơ/bằng chứng. Chưa ACCEPTED, chưa merge main, chưa bắt đầu B1. A0 đã khép là nền kế thừa, không thay thế bằng chứng runtime dưới đây.
+Triển khai riêng combo, dispatcher và resource runtime từ main đã nghiệm thu `5f8700e69b0f381a2f6b0d158667ac9283aa98ab`, nhánh `u03/a1-combo`. Source native/content kiểm chứng **0957867e11193081fb26b732864ccc006ffc975a**; commit bàn giao sau đó chỉ bổ sung scripts/hồ sơ/bằng chứng. **ACCEPTED về kỹ thuật tại `6ae268e0a19c385b9a2b573acb3e6be3080aac72`**, không phát hiện lỗi chặn A1. Người dùng đã giao khép tài liệu và fast-forward/push main rồi dừng; chưa giao B1. A0 đã khép là nền kế thừa, không thay thế bằng chứng runtime dưới đây. [Kết luận nghiệm thu](ACCEPTANCE-A1.md).
 
 ## Thay đổi
 
@@ -58,4 +58,8 @@ Warnings không bị lọc bỏ: phần lớn là `GetSocketInfoByName: No Skele
 
 Chạy [Play-U03-A1.cmd](../../Play-U03-A1.cmd), [Network](../../Play-U03-A1-Network.cmd), [Stop](../../Stop-U03-A1.cmd); [checklist](../../Play-U03-A1-CHECKLIST.md). Package/clone là artifact local ở manifest; launcher từ chối nếu source/hash không khớp.
 
-Chưa triển khai né/phòng thủ/CC/X/Q/E/AI/Tab/Retry gameplay; settings hoàn thiện D, Server đóng gói ngoài phạm vi. Blockout/HUD còn cần reviewer đánh giá cảm giác/đọc hình, không là art sản phẩm. Không tuyên bố benchmark U04 hoặc prediction U05. Không còn failure Automation ở source cuối; đây là báo cáo READY_FOR_REVIEW, quyền ACCEPTED/merge thuộc reviewer/người dùng.
+Chưa triển khai né/phòng thủ/CC/X/Q/E/AI/Tab/Retry gameplay; settings hoàn thiện D, Server đóng gói ngoài phạm vi. Animation là blockout dùng tạm để kiểm nhịp/hướng chém/đọc đòn: đòn1 giữ clip U02, đòn2–3 có clip riêng. Animation đẹp hơn sau này phải giữ timing gameplay; montage không quyết định hit/damage. ACCEPTED kỹ thuật A1 không phải nghiệm thu hình ảnh sản phẩm. Không tuyên bố benchmark U04 hoặc prediction U05.
+
+## Khép hồ sơ sau review
+
+Reviewer chỉ đọc source và đối chiếu bằng chứng đã bàn giao:165/165 artifact,147 bản text decode/redact và34 source blob khớp; không vừa chạy lại build/tests. Trạng thái READY_FOR_REVIEW trước đó và các failed/invalid runs giữ trong Git/bằng chứng gốc. Lượt khép chỉ cập nhật tài liệu, không sửa source/asset/config và không chạy lại build/tests. Không gán SHA khép hồ sơ cho binary nguồn0957867e. Editor hiện tại được giữ mở; xác nhận PID13168 phía trên chỉ thuộc lịch sử lượt triển khai, không kế thừa cho process mới. Dừng sau khép/merge A1; chưa B1.

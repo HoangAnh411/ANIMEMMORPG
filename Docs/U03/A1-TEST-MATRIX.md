@@ -15,6 +15,6 @@
 
 Các test U02 từng giả định Submit xử lý ngay phải đặt barrier tại timestamp nhận của fixture, vì RPC/runtime A1 enqueue. Busy-reject của model U02 lịch sử vẫn giữ trong test thuần; runtime normal Attack chuyển sang buffer theo luật U03. Không xóa coverage identity/collision cùng các giả định cũ. Failed runs giữ nguyên, không dùng0 tests/trigger-success làm PASS.
 
-Kết quả thực và SHA/run/hash sẽ ghi trong REPORT-A1. Ma trận này không tự xác nhận PASS hoặc ACCEPTED.
+Kết quả thực và SHA/run/hash ghi trong REPORT-A1. Ma trận không tự cấp nghiệm thu; kết luận reviewer ghi tại ACCEPTANCE-A1.
 
-Đối chiếu bàn giao: tám test `AnimeMMORPG.U03.A1` đều PASS trong run `MCPTests-20261107-194121`. Tổng78/78 gồm hồi quy U00/U01/U02/A0, chạy mới trên source A1. Package/smoke3/3; input46+16; network19 và reconnect2. Chi tiết từng test, failed/invalid runs và giới hạn xem REPORT-A1. Trạng thái READY_FOR_REVIEW, chưa ACCEPTED.
+Đối chiếu bàn giao: tám test `AnimeMMORPG.U03.A1` đều PASS trong run `MCPTests-20261107-194121`. Tổng78/78 gồm hồi quy U00/U01/U02/A0, chạy mới trên source A1. Package/smoke3/3; input46+16; network19 và reconnect2. Chi tiết từng test, failed/invalid runs và giới hạn xem REPORT-A1. **ACCEPTED về kỹ thuật tại6ae268e, source kiểm chứng0957867e**, theo [reviewer](ACCEPTANCE-A1.md). Reviewer đối chiếu source/log/hash, không chạy lại tests. Lượt khép chỉ sửa tài liệu; giữ nguyên evidence/failed runs. Animation vẫn blockout, không nghiệm thu hình ảnh sản phẩm; chưa B1.
