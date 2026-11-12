@@ -77,6 +77,7 @@ public:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
     void SubmitAttackIntent(uint64 CommandSequence, double LocalInputSeconds, double AimYawDegrees);
     void SetControlPlaying(bool bPlaying);
+    void DiscardPendingInputs(); // authority control/interaction locks, not an action cancel
     void SubmitCombatIntent(AnimeMMORPG::U03::ECommand Command, uint64 Sequence, double LocalSeconds, double Yaw,FVector2D Direction=FVector2D::ZeroVector);
     void Landed();
     const FU03OwnerAdmission& GetAdmission() const { return OwnerAdmission; }

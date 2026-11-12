@@ -29,6 +29,7 @@ void UU01CharacterMovement::SetMotorLock(EU01MotorLock Reason, bool bEnabled)
     auto* C = Cast<AU01Character>(CharacterOwner);
     if (!bEnabled && Reason==EU01MotorLock::Defeated && C && C->Vital && C->Vital->GetSnapshot().bDead) return;
     if (bEnabled && Reason == EU01MotorLock::Interacting && bCombatAuthorityLocked) return;
+    if(bEnabled && (Reason==EU01MotorLock::Control||Reason==EU01MotorLock::Interacting) && C && C->Combat)C->Combat->DiscardPendingInputs();
     if (bEnabled && Reason == EU01MotorLock::Defeated && C && C->Combat) C->Combat->CancelAction(AnimeMMORPG::U02::ECancel::Death);
     const uint8 Bit = static_cast<uint8>(Reason);
     if (bEnabled) LockMask |= Bit;

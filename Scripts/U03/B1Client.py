@@ -18,9 +18,15 @@ from PIL import ImageGrab
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'Scripts/U01'))
 from F60Input import Client, u, k, mouse, key, VK
+from F60Input import Input, Payload, Key, emit
 VK.update({'Alt':0xa4,'Tab':0x09})
 
 class B1Client(Client):
+    def press(self,name,down):
+        if name!='Shift':return super().press(name,down)
+        self.guard();emit(Input(type=1,payload=Payload(key=Key(vk=0,scan=0x2a,flags=8|(0 if down else 2)))))
+        if down:self.held.add(name)
+        else:self.held.discard(name)
     def __init__(self, record):
         self.record=record; self.pid=record['pid']; self.log=Path(record['log']); self.ime=False; self.held=set(); self.mouse_held=False
         exe=Path(record['executable']).resolve()

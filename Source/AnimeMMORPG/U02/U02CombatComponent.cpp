@@ -82,7 +82,13 @@ void UU02CombatComponent::SetControlPlaying(bool Playing)
 void UU02CombatComponent::ServerControlPlaying_Implementation(bool Playing)
 {
     bAuthorityPlaying=Playing;
-    if(!Playing){for(const auto& E:QueuedIntents)if(E.Intent.Life==Model->GetLife())AdmissionWatermark=FMath::Max(AdmissionWatermark,E.Intent.Sequence);QueuedIntents.Empty();if(Model)Model->ClearPending();}
+    if(!Playing)DiscardPendingInputs();
+}
+void UU02CombatComponent::DiscardPendingInputs()
+{
+    if(!Model)return;
+    for(const auto& E:QueuedIntents)if(E.Intent.Life==Model->GetLife())AdmissionWatermark=FMath::Max(AdmissionWatermark,E.Intent.Sequence);
+    QueuedIntents.Empty();Model->ClearPending();
 }
 void UU02CombatComponent::ServerAim_Implementation(double Yaw,FGuid Pawn,uint64 Life,uint64 Action)
 {if(Model&&FMath::IsFinite(Yaw)&&QueuedAim.Num()<16)QueuedAim.Add({Yaw,Pawn,Life,Action});}
@@ -171,7 +177,7 @@ bool UU02CombatComponent::AdvanceAuthority(double Now,bool)
 bool UU02CombatComponent::CancelAt(ECancel Reason,double Now)
 {
     if(!Model)return false;
-    if(Reason==ECancel::Menu||Reason==ECancel::Focus){Model->ClearPending();QueuedIntents.Empty();return false;}
+    if(Reason==ECancel::Menu||Reason==ECancel::Focus){DiscardPendingInputs();return false;}
     // Dodge/guard gameplay is not available until B1/B2.
     if(Reason==ECancel::Dodge||Reason==ECancel::Guard)return false;
     const auto Cut=Reason==ECancel::LostGround?AnimeMMORPG::U03::ECutoff::LostGround:AnimeMMORPG::U03::ECutoff::Death;

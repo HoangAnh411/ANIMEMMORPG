@@ -132,4 +132,11 @@ bool FDodgeSlow::RunTest(const FString&)
  // Labelled policy fixture only: B2 slow effect gameplay is not implemented.
  const double S=W.Now();const FVector Before=W.P->GetActorLocation();W.Press(S);W.Collision->DrainAt(S+.25);TestTrue(TEXT("low ordinary motor budget/friction does not scale dodge"),FMath::Abs((W.P->GetActorLocation()-Before).Size2D()-300.)<5.);TestEqual(TEXT("still one charge"),W.P->Combat->GetCombatSnapshot().DodgeCharges,1);W.ForwardErrorMessages(this);return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeInteraction,"AnimeMMORPG.U03.B1.RuntimeInteractionClearsWaitingDodge",U03B1Flags)
+bool FDodgeInteraction::RunTest(const FString&)
+{
+ for(auto Lock:{EU01MotorLock::Interacting,EU01MotorLock::Control})
+ {FWorld W;const double S=W.Now();W.Press(S);W.Press(S+.5);TestTrue(TEXT("waiting precondition queued"),W.P->Combat->GetAdmission().PendingCommand!=0);W.P->GetU01Movement()->SetMotorLock(Lock,true);W.Collision->DrainAt(S+.65);TestEqual(TEXT("authority lock discards pending before .60"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));TestEqual(TEXT("no second charge spent"),W.P->Combat->GetCombatSnapshot().DodgeCharges,1);TestEqual(TEXT("pending cleared"),W.P->Combat->GetAdmission().PendingCommand,uint64(0));W.P->GetU01Movement()->SetMotorLock(Lock,false);W.Press(S+.7);TestEqual(TEXT("fresh press after unlock still valid"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(2));W.ForwardErrorMessages(this);}
+ return true;
+}
 #endif
