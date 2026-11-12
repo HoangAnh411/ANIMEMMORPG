@@ -165,13 +165,14 @@ bool FDodgeMidHit::RunTest(const FString&)
   {
    FWorld W;const double S=W.Now();W.Box(FVector(Step?143:53,0,Step?15:150),FVector(Step?100:10,20,Step?15:150));
    auto* Enemy=W.Spawn(FVector(95.25,-150,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;if(Lethal)FU03B1Access::HP(W.P->Vital,60);
-   Enemy->Combat->SubmitAttackIntent(1,0,90);W.Collision->DrainAt(S);W.Press(S+.159);
-   auto* M=W.P->GetU01Movement();const auto Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(S+.159,S+.159+1./240.,FVector(1,0,0),Snapshot.LifeGeneration,Snapshot.DodgeSequence,{W.P});
+   const double DodgeStart=S+(Step?.158:.159);
+   Enemy->Combat->SubmitAttackIntent(1,0,90);W.Collision->DrainAt(S);W.Press(DodgeStart);
+   auto* M=W.P->GetU01Movement();const auto Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(DodgeStart,DodgeStart+1./240.,FVector(1,0,0),Snapshot.LifeGeneration,Snapshot.DodgeSequence,{W.P});
    const double HitTime=S+.16;const FVector Expected=M->DodgePositionAt(HitTime);FVector AtHit;double ActualTime=-1;
    W.Collision->OnGeometryConfirmed.AddLambda([&](const U02::FHitCandidate& Hit){if(Hit.Id.Target.Pawn==W.P->NetworkPawnId){ActualTime=Hit.TimestampSeconds;AtHit=W.P->GetActorLocation();}});
-   if(Short)for(double T=S+.1593;T<HitTime;T+=.0003)W.Collision->DrainAt(T);
+   if(Short)for(double T=DodgeStart+.0003;T<HitTime;T+=.0003)W.Collision->DrainAt(T);
    W.Collision->DrainAt(HitTime);
-   TestEqual(TEXT("contact at incoming active entry, not chord crossing later"),ActualTime,HitTime);
+   TestTrue(TEXT("contact exactly at incoming active entry, not chord crossing later"),ActualTime==HitTime);
    TestTrue(TEXT("contact geometry equals actual committed prefix"),AtHit.Equals(Expected,1.e-6));
    TestEqual(TEXT("real damage, no iframe"),W.P->Vital->GetSnapshot().HP,Lethal?0:940);
    if(Step)TestTrue(TEXT("hit occurs during vertical StepUp leg"),Expected.Z>98.2);
