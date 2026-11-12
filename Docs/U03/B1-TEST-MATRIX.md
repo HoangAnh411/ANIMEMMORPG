@@ -16,3 +16,10 @@ Kết quả thực, giới hạn và failed runs ghi trong REPORT-B1. Tài liệ
 Bàn giao b2c9676/source6603c30 có90/90 tests và các cổng input/network hợp lệ cho các ca đã kiểm, nhưng **NOT ACCEPTED** vì thiếu consistency tại timestamp giữa bước; [review](REVIEW-B1-b2c9676.md). Giữ nguyên bằng chứng lịch sử.
 
 R1 source3fd6c3d thêm `RetainedWallSlideAndStepPrefixes`, `IncomingMidWallAndStepLethal`, `SimultaneousPawnCCD`:93/93 Success,0 Failed, queue93 hoàn tất, build Editor/Game/package và smoke3/3 mới. Input/video38+17 mới. Trace phải kiểm actual pose tại incoming hit giữa wall/StepUp, lethal cutoff và long/short update; pawn CCD đối đầu/cùng hướng và đảo collection. Network/reconnect R1 ghi kết quả cuối trong [REPORT-B1](REPORT-B1.md). Chưa tự ACCEPTED/merge/B2.
+
+
+## B1 technical acceptance and closure
+
+The user confirmed **ACCEPTED (technical)** at `4a8b7e82c10b16c31a89bb0a0c25ce06019b6cc4`, verified source `3fd6c3d82e3c85a1eda6be8d35961c863019d4f7`, and authorized documentation closure, branch commit/push and fast-forward/push of main. Earlier READY_FOR_REVIEW/no-merge statements remain historical. See [acceptance](ACCEPTANCE-B1.md).
+
+Scope: U03-B1 dodge and motor integration only. Animation/presentation remain blockout; product visual quality is not accepted. Preserve all original B1/B1-R1 evidence, warnings, failed/invalid runs and the earlier NOT ACCEPTED review. This closure changes documentation only; no source/assets/config changes, no new builds/tests or Editor operations. Stop after merging B1; B2 has not been assigned.

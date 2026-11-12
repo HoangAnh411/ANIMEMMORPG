@@ -54,3 +54,10 @@ Phiên cleanup183400 có median FPS thực A59,966/B60,015/server29,917; p95 fra
 Editor gốc PID432 giữ mở, không restart/save hoặc xác nhận đã nạp R1. Config riêng so baseline nguyên byte; không stage/in token. Launcher lưu mọi HWND, verified minimized sau clients ready; Stop đúng PID/exe/project/userDir/source/hash, gồm reconnect và restore placement. Launcher B1 hiện kiểm manifest R1; [solo](../../Play-U03-B1.cmd), [network](../../Play-U03-B1-Network.cmd), [Stop](../../Stop-U03-B1.cmd), [checklist](../../Play-U03-B1-CHECKLIST.md).
 
 Điểm dừng cuối **READY_FOR_REVIEW U03-B1**, chưa khép/merge hoặc triển khai B2.
+
+
+## B1 technical acceptance and closure
+
+The user confirmed **ACCEPTED (technical)** at `4a8b7e82c10b16c31a89bb0a0c25ce06019b6cc4`, verified source `3fd6c3d82e3c85a1eda6be8d35961c863019d4f7`, and authorized documentation closure, branch commit/push and fast-forward/push of main. Earlier READY_FOR_REVIEW/no-merge statements remain historical. See [acceptance](ACCEPTANCE-B1.md).
+
+Scope: U03-B1 dodge and motor integration only. Animation/presentation remain blockout; product visual quality is not accepted. Preserve all original B1/B1-R1 evidence, warnings, failed/invalid runs and the earlier NOT ACCEPTED review. This closure changes documentation only; no source/assets/config changes, no new builds/tests or Editor operations. Stop after merging B1; B2 has not been assigned.

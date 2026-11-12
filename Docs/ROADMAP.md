@@ -116,7 +116,7 @@ Phụ thuộc: U02. Bàn giao lần lượt A–D.
 
 - [ ] U03.01 A0/A1: ba đòn 60/70/90, buffer 0,15 giây, chuỗi 1,45 giây, quyền hủy/hướng.
 - [ ] U03.02 A0/A1: năng lượng/cooldown, ưu tiên lệnh/reset combo.
-- [ ] U03.03 B1: né hai lượt 3 m/0,25 giây, hồi tuần tự, chặn tường/người/vực, không i-frame.
+- [x] U03.03 B1: né hai lượt 3 m/0,25 giây, hồi tuần tự, chặn tường/người/vực, không i-frame.
 - [ ] U03.04 B2: đỡ/parry/thế đỡ/phá đỡ, CC/chống khóa/X tại timestamp hit.
 - [ ] U03.05 C1/C2: Q Feint/E Interrupt, quái báo đòn phát hiện 10 m/leash 15 m, Tab, thắng/thua/thử lại.
 - [ ] U03.06 D: animation/kiếm/VFX/âm/HUD, kết quả/rebind/save/load và sân thử.
@@ -398,3 +398,6 @@ Giữ ID U03.01–U03.09 và luật gameplay. Chia A–D thành A0 hợp đồng
 **U03-B1 được giao riêng ngày2026-11-12 từ main04f902e; READY_FOR_REVIEW**, source `6603c30`: né/motor swept capsule,2 lượt hồi tuần tự, buffer, startup replacement, snapshot/HUD và reuse locomotion blockout. Editor/Game/package thành công; Automation90/90 gồm12 B1 mới; smoke3/3; input/video38+17, network20/reconnect2. [Báo cáo](U03/REPORT-B1.md), [hợp đồng](U03/B1-CONTRACTS.md), [ma trận](U03/B1-TEST-MATRIX.md), [checklist](../Play-U03-B1-CHECKLIST.md). Giữ failed/invalid runs và giới hạn trong báo cáo. Các câu chưa giao B1 phía trên là lịch sử A1. Chưa ACCEPTED, không merge main hoặc bắt đầu B2; art sản phẩm/prediction/U04 còn ngoài phạm vi.
 
 **Review B1 b2c9676: NOT ACCEPTED**, lỗi preview/commit khác vị trí tại timestamp giữa bước. Bằng chứng90 tests và216 artifacts giữ nguyên, hợp lệ cho ca đã kiểm; [review và lịch sử](U03/REVIEW-B1-b2c9676.md). **B1 R1 READY_FOR_REVIEW**, source `3fd6c3d`: retained swept trajectory dùng chung cho collect/commit, scope StepUp survivor, relative pawn CCD. Cold Editor/Game/package thành công;93/93 Automation, smoke3/3, input/video38+17, dedicated+hai client20 và live reconnect2 mới. [Báo cáo hiện tại](U03/REPORT-B1.md), [hợp đồng R1](U03/B1-R1-CONTRACTS.md), [manifest riêng](U03/Evidence/B1-R1/MANIFEST.json). Không đổi luật hướng/cost/timing, chưa ACCEPTED/merge/B2; đoạn READY source6603c30 phía trên là lịch sử bàn giao cũ.
+
+
+**U03-B1 ACCEPTED (technical) at `4a8b7e82c10b16c31a89bb0a0c25ce06019b6cc4`, verified source `3fd6c3d82e3c85a1eda6be8d35961c863019d4f7`.** The user authorized documentation closure and fast-forward/push of main. [Acceptance](U03/ACCEPTANCE-B1.md), [report](U03/REPORT-B1.md), [matrix](U03/B1-TEST-MATRIX.md). Previously reviewed results:93/93 Automation, Editor/Game/package succeeded, smoke3/3, physical input38+17, network20/reconnect2. No builds/tests were rerun for documentation closure. Keep the earlier NOT ACCEPTED review and all evidence/failed runs unchanged. Animation/presentation remain blockout; no product visual acceptance or overall U03 closure. Earlier READY_FOR_REVIEW/no-merge statements above are historical. Stop after B1 closure/merge; **B2 is not assigned**.
