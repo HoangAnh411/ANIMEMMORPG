@@ -105,11 +105,12 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
     Context.bGrounded=M->IsMovingOnGround();Context.bDead=C->Vital&&C->Vital->GetSnapshot().bDead;
     Context.bDodgeEnabled=true;
     auto Commands=MoveTemp(QueuedIntents);QueuedIntents.Empty();
-    Commands.Sort([](const auto& A,const auto& B){return A.Intent.Sequence<B.Intent.Sequence;});
+    Commands.Sort([](const auto& A,const auto& B){return A.Receive!=B.Receive?A.Receive<B.Receive:A.Intent.Sequence<B.Intent.Sequence;});
     TSet<uint64> Conflicts;
     for(int32 A=0;A<Commands.Num();++A)for(int32 B=A+1;B<Commands.Num();++B)
         if(Commands[A].Intent.Sequence==Commands[B].Intent.Sequence && (Commands[A].Intent.Command!=Commands[B].Intent.Command||Commands[A].Intent.AimYaw!=Commands[B].Intent.AimYaw||Commands[A].Intent.Direction!=Commands[B].Intent.Direction||!(Commands[A].Intent.Life==Commands[B].Intent.Life)))Conflicts.Add(Commands[A].Intent.Sequence);
-    TArray<FCombatIntent> Admissible;
+    TArray<TArray<FCombatIntent>> Admissible;
+    TArray<double> ReceiveGroups;
     for(auto& Entry:Commands)
     {
         auto& I=Entry.Intent;I.Receive=Now;LastCommand=FMath::Max(LastCommand,I.Sequence);
@@ -121,7 +122,12 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
             else
             {
                 AdmissionWatermark=I.Sequence;
-                if(I.Command==ECommand::Attack||I.Command==ECommand::Dodge){Admissible.Add(I);continue;}
+                if(I.Command==ECommand::Attack||I.Command==ECommand::Dodge)
+                {
+                    int32 Group=ReceiveGroups.Find(Entry.Receive);
+                    if(Group==INDEX_NONE){Group=ReceiveGroups.Add(Entry.Receive);Admissible.AddDefaulted();}
+                    Admissible[Group].Add(I);continue;
+                }
                 else Result=EAdmission::Unsupported;
             }
         }
@@ -133,7 +139,8 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
         Trace(Success?TEXT("Admitted"):TEXT("Rejected"),Now,FString::Printf(TEXT("command=%llu admission=%u localInput=%.17g receive=%.17g accept=%.17g"),I.Sequence,uint8(Result),Entry.LocalSeconds,Entry.Receive,Now));
     }
     const uint64 BeforeDodge=Model->Dodge().Sequence;
-    FU03NoEvents ResolvedBarrier;const auto Results=Model->SubmitBatch(MoveTemp(Admissible),Context,ResolvedBarrier);
+    FU03NoEvents ResolvedBarrier;TArray<FAdmissionResult> Results;
+    for(auto& Group:Admissible)Results.Append(Model->SubmitBatch(MoveTemp(Group),Context,ResolvedBarrier));
     if(BeforeDodge!=Model->Dodge().Sequence && Snapshot.ActionSequence)
     {Snapshot.Phase=uint8(EPhase::Cancelled);Snapshot.ServerSeconds=Now;GetWorld()->GetSubsystem<UU02CollisionWorld>()->ObserveCombat(this);}
     for(const auto& R:Results)

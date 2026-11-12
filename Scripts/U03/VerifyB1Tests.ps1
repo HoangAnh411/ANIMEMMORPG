@@ -22,7 +22,7 @@ $expected=@($expected | Where-Object {$_.StartsWith($Filter)})
 if($expected.Count -eq 0){throw 'Zero registered A tests'}
 $arguments=@(('"'+$project+'"'),'-NullRHI','-nosound','-unattended','-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-ModelContextProtocolStartServer',('-ModelContextProtocolPort='+$Port),('-abslog="'+(Join-Path $out 'Editor.log')+'"'))
 $p=Start-Process -FilePath $exe -ArgumentList $arguments -WindowStyle Hidden -PassThru
-@{runId=Split-Path $out -Leaf;utc=[DateTime]::UtcNow.ToString('o');pid=$p.Id;exe=$exe;arguments=$arguments;sourceSHA=$sourceSHA;exeSHA256=(Get-FileHash -LiteralPath $exe).Hash;module=$module;moduleSHA256=(Get-FileHash -LiteralPath $module).Hash;scope='A0 pure models plus existing U00-U02 Game-world Automation fixtures; not input/network-process evidence'} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $out 'process.json')
+@{runId=Split-Path $out -Leaf;utc=[DateTime]::UtcNow.ToString('o');pid=$p.Id;exe=$exe;arguments=$arguments;sourceSHA=$sourceSHA;exeSHA256=(Get-FileHash -LiteralPath $exe).Hash;module=$module;moduleSHA256=(Get-FileHash -LiteralPath $module).Hash;scope='B1 dodge models and real Game-world motor/collision fixtures plus U00-A1 regression; not physical input/network-process evidence'} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $out 'process.json')
 $uri='http://127.0.0.1:'+ $Port + '/mcp'
 $script:requestId=0
 $headers=@{Accept='application/json, text/event-stream'}

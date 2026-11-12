@@ -48,7 +48,7 @@ void UU01CharacterMovement::CommitDodge(double At)
     if(!bDodgePlan||At<PlanCommitted||At>PlanEnd||!CharacterOwner||!CharacterOwner->HasAuthority())return;
     const auto* Combat=CastChecked<AU01Character>(CharacterOwner)->Combat.Get();
     const auto& Snapshot=Combat->GetCombatSnapshot();
-    if(Snapshot.LifeGeneration!=PlanLife)return;
+    if(Snapshot.LifeGeneration!=PlanLife||Snapshot.DodgeSequence!=PlanSequence)return;
     // No saved move can set PlanLife/Sequence, restore a charge, or replay this clock.
     const bool WasLost=bDodgeLostGround;
     if(!WasLost)WalkDodge(float(At-PlanCommitted),PlanDirection);

@@ -72,6 +72,8 @@ bool FDodgeCancel::RunTest(const FString&)
  for(double T:{.159999,.16,.22}){FModel X;X.Press(0,U03::ECommand::Attack);const auto Result=X.Press(T);TestEqual(TEXT("only startup cancellable"),Result,T<.16?U03::EAdmission::Accepted:U03::EAdmission::Busy);TestEqual(TEXT("rejection leaves charges"),X.M.Dodge().Charges,T<.16?1:2);TestEqual(TEXT("rejection preserves old action"),X.M.Current()!=nullptr,T>=.16);}
  FModel X;X.Press(0);X.Press(.5);X.M.CancelUnopposed(U03::ECutoff::Death,.55,true,X.Out);X.Advance(3.);TestEqual(TEXT("death removes pending"),X.M.Dodge().Sequence,uint64(1));TestEqual(TEXT("dead cannot dodge"),X.Press(3.),U03::EAdmission::Locked);
  FModel Ground;Ground.Press(0);Ground.M.CancelUnopposed(U03::ECutoff::LostGround,.1,true,Ground.Out);TestFalse(TEXT("lost ground ends movement"),Ground.M.Dodge().Moving(.1));TestEqual(TEXT("stale grounded context cannot dodge"),Ground.Press(.6),U03::EAdmission::Locked);auto Life=Ground.Life;++Life.Generation;TestTrue(TEXT("reset"),Ground.M.ResetLife(Life,.6));TestEqual(TEXT("reset charges"),Ground.M.Dodge().Charges,2);
+ FModel Empty;Empty.Press(0);Empty.Press(.6);Empty.Press(1.,U03::ECommand::Attack);TestEqual(TEXT("exhausted replacement rejected"),Empty.Press(1.05),U03::EAdmission::Resource);TestTrue(TEXT("exhausted replacement leaves startup"),Empty.M.Current()&&Empty.M.Current()->Startup(1.05));
+ FModel CC;auto Context=Enabled();Context.bHardCC=true;auto Results=CC.M.SubmitBatchUnopposed({{1,CC.Life,U03::ECommand::Dodge,0,0}},Context,CC.Out);TestEqual(TEXT("hard CC admission gate fixture"),Results[0].Result,U03::EAdmission::Locked);TestEqual(TEXT("no charge consumed under CC fixture"),CC.M.Dodge().Charges,2);
  return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeDistance,"AnimeMMORPG.U03.B1.RuntimeSweptDistanceAndLongUpdate",U03B1Flags)
@@ -117,5 +119,10 @@ bool FDodgeGate::RunTest(const FString&)
 {
  FWorld W;const double S=W.Now();W.Press(S);W.P->Combat->SetControlPlaying(false);W.Collision->DrainAt(S+.25);TestTrue(TEXT("menu does not cancel accepted motion"),W.P->GetActorLocation().X>295);W.P->Combat->SetControlPlaying(true);W.Press(S+.5);TestTrue(TEXT("waiting dodge queued"),W.P->Combat->GetAdmission().PendingCommand!=0);W.P->Combat->SetControlPlaying(false);W.Collision->DrainAt(S+.7);TestEqual(TEXT("control lock clears queued dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));
  const uint64 OldLife=W.P->Combat->GetCombatSnapshot().LifeGeneration;W.P->Combat->ResetLabCombat();W.P->Combat->SetControlPlaying(true);FU03B1Access::Stale(W.P->Combat,100,OldLife);W.Collision->DrainAt(S+.7);TestEqual(TEXT("old life cannot dodge or spend"),W.P->Combat->GetCombatSnapshot().DodgeCharges,2);TestEqual(TEXT("old life no sequence"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(0));W.ForwardErrorMessages(this);return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeBatch,"AnimeMMORPG.U03.B1.RuntimeBatchPriorityAndRejectedReplacement",U03B1Flags)
+bool FDodgeBatch::RunTest(const FString&)
+{
+ FWorld W;const double S=W.Now();W.P->Combat->SubmitAttackIntent(1,0,0);W.P->Combat->SubmitCombatIntent(U03::ECommand::Dodge,2,0,0,FVector2D(1,1));W.Seq=2;W.Collision->DrainAt(S);TestEqual(TEXT("same timestamp dodge wins before attack"),W.P->Combat->GetCombatSnapshot().ActionSequence,uint64(0));TestEqual(TEXT("one dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));W.Collision->DrainAt(S+.6);W.Press(S+.6);W.Press(S+1.,U03::ECommand::Attack);W.Press(S+1.05);TestEqual(TEXT("no charge keeps sword startup"),W.P->Combat->GetCombatSnapshot().Phase,uint8(U02::EPhase::Startup));TestEqual(TEXT("no charge does not change dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(2));W.ForwardErrorMessages(this);return true;
 }
 #endif
