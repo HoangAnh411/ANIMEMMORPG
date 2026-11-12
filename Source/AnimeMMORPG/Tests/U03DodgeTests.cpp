@@ -148,9 +148,9 @@ bool FDodgeRetained::RunTest(const FString&)
  {
   FWorld W;const double S=W.Now();W.Box(FVector(53,0,Case==2?15:150),FVector(10,Case==1?200:20,Case==2?15:150));
   const FVector2D Direction=Case==1?FVector2D(1,1):FVector2D(1,0);W.Press(S,U03::ECommand::Dodge,Direction);auto* M=W.P->GetU01Movement();
-  const auto& Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(S,S+1./240.,FVector(Direction.X,Direction.Y,0).GetSafeNormal(),Snapshot.LifeGeneration,Snapshot.DodgeSequence);
+  const auto& Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(S,S+1./240.,FVector(Direction.X,Direction.Y,0).GetSafeNormal(),Snapshot.LifeGeneration,Snapshot.DodgeSequence,{W.P});
   for(double Offset:{.0002,.0005,.001,.002,.003,.004})
-  {const double At=S+Offset;const auto Expected=M->DodgePositionAt(At);M->CommitDodge(At);TestTrue(TEXT("retained swept prefix exactly equals actual transform"),W.P->GetActorLocation().Equals(Expected,1.e-6));}
+  {const double At=S+Offset;const auto Expected=M->DodgePositionAt(At);M->CommitDodge(At);TestTrue(TEXT("retained swept prefix exactly equals actual transform"),W.P->GetActorLocation().Equals(Expected,1.e-6));if(Case==0)TestTrue(TEXT("failed StepUp trial is not a physical excursion"),Expected.Z<99.);}
   W.ForwardErrorMessages(this);
  }
  return true;
@@ -164,9 +164,9 @@ bool FDodgeMidHit::RunTest(const FString&)
   for(bool Short:{false,true})
   {
    FWorld W;const double S=W.Now();W.Box(FVector(Step?143:53,0,Step?15:150),FVector(Step?100:10,20,Step?15:150));
-   auto* Enemy=W.Spawn(FVector(95.5,-150,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;if(Lethal)FU03B1Access::HP(W.P->Vital,60);
+   auto* Enemy=W.Spawn(FVector(95.25,-150,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;if(Lethal)FU03B1Access::HP(W.P->Vital,60);
    Enemy->Combat->SubmitAttackIntent(1,0,90);W.Collision->DrainAt(S);W.Press(S+.159);
-   auto* M=W.P->GetU01Movement();const auto Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(S+.159,S+.159+1./240.,FVector(1,0,0),Snapshot.LifeGeneration,Snapshot.DodgeSequence);
+   auto* M=W.P->GetU01Movement();const auto Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(S+.159,S+.159+1./240.,FVector(1,0,0),Snapshot.LifeGeneration,Snapshot.DodgeSequence,{W.P});
    const double HitTime=S+.16;const FVector Expected=M->DodgePositionAt(HitTime);FVector AtHit;double ActualTime=-1;
    W.Collision->OnGeometryConfirmed.AddLambda([&](const U02::FHitCandidate& Hit){if(Hit.Id.Target.Pawn==W.P->NetworkPawnId){ActualTime=Hit.TimestampSeconds;AtHit=W.P->GetActorLocation();}});
    if(Short)for(double T=S+.1593;T<HitTime;T+=.0003)W.Collision->DrainAt(T);

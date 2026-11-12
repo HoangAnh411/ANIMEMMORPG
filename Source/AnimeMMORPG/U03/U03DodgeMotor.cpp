@@ -9,8 +9,9 @@ void UU01CharacterMovement::TrimNativeDodgePath(FVector Position)
 {
     // Native StepUp rolls back failed trial branches. Retain only the survivor.
     if(NativeDodgePath.IsEmpty()){NativeDodgePath.Add(Position);return;}
-    if(NativeDodgePath.Last().Equals(Position,1.e-7))return;
-    for(int32 I=NativeDodgePath.Num()-1;I>=0;--I)if(NativeDodgePath[I].Equals(Position,1.e-7))
+    // Remove closed native search excursions as well as explicit scope reverts.
+    // A failed StepUp may sweep up/down and finish at a previous path vertex.
+    for(int32 I=0;I<NativeDodgePath.Num();++I)if(NativeDodgePath[I].Equals(Position,1.e-7))
     {NativeDodgePath.SetNum(I+1);return;}
     checkf(false,TEXT("Unrecorded native dodge movement rollback"));
 }
@@ -18,7 +19,8 @@ bool UU01CharacterMovement::MoveUpdatedComponentImpl(const FVector& Delta,const 
 {
     if(bPreviewDodge)TrimNativeDodgePath(UpdatedComponent->GetComponentLocation());
     const bool Moved=Super::MoveUpdatedComponentImpl(Delta,Rotation,Sweep,Hit,Teleport);
-    if(bPreviewDodge&&!NativeDodgePath.Last().Equals(UpdatedComponent->GetComponentLocation(),1.e-7))NativeDodgePath.Add(UpdatedComponent->GetComponentLocation());
+    if(bPreviewDodge&&!NativeDodgePath.Last().Equals(UpdatedComponent->GetComponentLocation(),1.e-7))
+    {NativeDodgePath.Add(UpdatedComponent->GetComponentLocation());TrimNativeDodgePath(UpdatedComponent->GetComponentLocation());}
     return Moved;
 }
 void UU01CharacterMovement::WalkDodge(float Seconds,FVector Direction)
