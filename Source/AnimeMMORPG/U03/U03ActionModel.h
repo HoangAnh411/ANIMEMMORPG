@@ -36,7 +36,17 @@ struct FCombatIntent
 };
 struct FAdmissionResult { uint64 Sequence; EAdmission Result; uint64 ActionSequence; };
 struct FActiveInterval { U02::FActionId Identity; EAction DefinitionId; int32 RawDamage; double Begin, End; double Yaw; bool bEndExclusive = true; };
-struct FAdmissionContext { bool bPlaying=true, bGrounded=true, bHardCC=false, bGuard=false, bDodging=false, bFeint=false, bDead=false; };
+struct FAdmissionContext { bool bPlaying=true, bGrounded=true, bHardCC=false, bGuard=false, bDodging=false, bFeint=false, bDead=false, bDodgeEnabled=false; };
+struct FDodgeState
+{
+    uint64 Sequence=0;
+    int32 Charges=2;
+    double Start=0, MotionEnd=0, LockEnd=0, NextStart=0, RestoreAt=0;
+    FVector Direction=FVector::ZeroVector;
+    bool Moving(double T) const { return Sequence && T>=Start && T<MotionEnd; }
+    bool Locked(double T) const { return Sequence && T>=Start && T<LockEnd; }
+    void Recharge(double T);
+};
 class FResourceModel
 {
 public:
@@ -88,7 +98,9 @@ public:
     bool AdvanceUnopposed(double T, TArray<FActiveInterval>& Out);
     TArray<FAdmissionResult> SubmitBatchUnopposed(TArray<FCombatIntent> Batch, const FAdmissionContext& Context, TArray<FActiveInterval>& Out);
     bool CancelUnopposed(ECutoff Reason, double T, bool bReplacementValid, TArray<FActiveInterval>& Out);
-    void ClearPending() { Pending.Reset(); }
+    void ClearPending() { Pending.Reset(); PendingDodge.Reset(); }
+    const FDodgeState& Dodge() const { return DodgeState; }
+    const TOptional<FCombatIntent>& GetPendingDodge() const { return PendingDodge; }
     const FActionInstance* Current() const { return Action.Get(); }
     const FResourceModel& Resources() const { return Resource; }
 private:
@@ -98,6 +110,9 @@ private:
     EAction NextCombo=EAction::Attack1;
     TUniquePtr<FActionInstance> Action; TOptional<FCombatIntent> Pending;
     FResourceModel Resource;
+    FDodgeState DodgeState;
+    TOptional<FCombatIntent> PendingDodge;
+    EAdmission AdmitDodge(const FCombatIntent& I);
     bool bDead = false, bGrounded = true, bResolvingEvent = false, bAdvancing = false, bBarrierOpen = false;
     void DeliverBefore(double Stop, ITimelineResolver& Collector);
     void CompleteCurrent(ITimelineResolver& Collector);

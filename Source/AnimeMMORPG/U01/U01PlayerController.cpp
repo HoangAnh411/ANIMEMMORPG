@@ -260,7 +260,11 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
                 using namespace AnimeMMORPG::U01;
                 const AnimeMMORPG::U03::ECommand Commands[]={AnimeMMORPG::U03::ECommand::Attack,AnimeMMORPG::U03::ECommand::Guard,AnimeMMORPG::U03::ECommand::Dodge,AnimeMMORPG::U03::ECommand::Escape,AnimeMMORPG::U03::ECommand::Q,AnimeMMORPG::U03::ECommand::E,AnimeMMORPG::U03::ECommand::Target};
                 for(int32 I=Attack;I<=Target;++I)if(CanonicalKey(Key)==ControlKey(I))
-                    C->Combat->SubmitCombatIntent(Commands[I-Attack],++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw);
+                {
+                    const float ForwardInput=float(IsInputKeyDown(ControlKey(Forward))&&ReleaseGate.Allows(ControlKey(Forward)))-float(IsInputKeyDown(ControlKey(Backward))&&ReleaseGate.Allows(ControlKey(Backward)));
+                    const float RightInput=float(IsInputKeyDown(ControlKey(Right))&&ReleaseGate.Allows(ControlKey(Right)))-float(IsInputKeyDown(ControlKey(Left))&&ReleaseGate.Allows(ControlKey(Left)));
+                    C->Combat->SubmitCombatIntent(Commands[I-Attack],++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw,FVector2D(ForwardInput,RightInput));
+                }
             }
     }
     else

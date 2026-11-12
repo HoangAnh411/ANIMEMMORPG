@@ -192,6 +192,17 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         if(CurrentTime>PreviousTime)A=FMath::Max(A,(H.AvailableFrom-PreviousTime)/(CurrentTime-PreviousTime));
         if(A>B)continue;
         FVector F0=Source->Previous.Position,F1=Source->Current.Position,C0=H.Previous.Position,C1=H.Current.Position;
+        // Dodge previews are piecewise swept walking paths, not a frame-end
+        // teleport. Evaluate the current world slice before committing its event.
+        auto Planned=[&](AU01Character* Pawn,FVector Relative,FVector& P0,FVector& P1)
+        {
+            if(!Pawn)return;auto* M=Pawn->GetU01Movement();if(!M->HasDodgePlan())return;
+            P0=M->DodgePlanOrigin()+Relative+M->DodgeOffsetAt(PreviousTime);
+            P1=M->DodgePlanOrigin()+Relative+M->DodgeOffsetAt(CurrentTime);
+        };
+        auto* SourcePawn=Cast<AU01Character>(P.Component->GetOwner());
+        Planned(SourcePawn,FVector(0,0,-SourcePawn->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()),F0,F1);
+        if(auto* TargetPawn=Cast<AU01Character>(Shape->GetOwner()))Planned(TargetPawn,Shape->GetComponentLocation()-TargetPawn->GetActorLocation(),C0,C1);
         if(!Continuous)
         {
             ++Discontinuities;
@@ -346,6 +357,12 @@ void UU02CollisionWorld::DrainAt(double Now)
         for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)
         {if(C->Model->Time()>SimulationTime)Boundary=FMath::Min(Boundary,C->Model->Time());else Boundary=FMath::Min(Boundary,C->Model->NextBoundaryThrough(Now));}
         for(const auto& E:LifecycleEvents)if(E.At>=SimulationTime)Boundary=FMath::Min(Boundary,E.At);
+        for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Dodge().Moving(SimulationTime))Boundary=FMath::Min(Boundary,SimulationTime+1./240.);
+        for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)
+        {
+            const auto& D=C->Model->Dodge();
+            C->Character()->GetU01Movement()->PlanDodge(SimulationTime,D.Moving(SimulationTime)?Boundary:SimulationTime,D.Direction,C->Model->GetLife().Generation,D.Sequence);
+        }
         TArray<FHitCandidate> Candidates;CollectCurrent(Boundary,Candidates);
         const double Stop=Candidates.IsEmpty()?Boundary:FMath::Min(Boundary,Candidates[0].TimestampSeconds);
         for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Time()<=Stop)
@@ -354,6 +371,11 @@ void UU02CollisionWorld::DrainAt(double Now)
             check(C->Model->ArriveAtBarrier(Stop,Collector));C->Publish(Stop);
         }
         SimulationTime=Stop;
+        for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)
+        {
+            auto* M=C->Character()->GetU01Movement();M->CommitDodge(Stop);
+            if(M->HasDodgePlan()&&M->DodgeLostGround())ApplyLifecycle(C,Stop,AnimeMMORPG::U03::ECutoff::LostGround,false);
+        }
         // Lifecycle mutation has an explicit authority timestamp and precedes new endpoint contact.
         auto ApplyLifecycleGroup=[&]()
         {

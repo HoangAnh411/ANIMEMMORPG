@@ -58,21 +58,21 @@ void UU02CombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 {Super::GetLifetimeReplicatedProps(OutLifetimeProps);DOREPLIFETIME(UU02CombatComponent,Snapshot);DOREPLIFETIME_CONDITION(UU02CombatComponent,OwnerAdmission,COND_OwnerOnly);}
 void UU02CombatComponent::SubmitAttackIntent(uint64 Sequence,double Local,double Yaw)
 {SubmitCombatIntent(AnimeMMORPG::U03::ECommand::Attack,Sequence,Local,Yaw);}
-void UU02CombatComponent::SubmitCombatIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double Local,double Yaw)
+void UU02CombatComponent::SubmitCombatIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double Local,double Yaw,FVector2D Direction)
 {
     if(!Character())return;
-    if(Character()->HasAuthority())ReceiveIntent(Command,Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration);
-    else {LastSentCommand=Sequence;LastSentLife=Snapshot.LifeGeneration;ServerCombat(uint8(Command),Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration);}
+    if(Character()->HasAuthority())ReceiveIntent(Command,Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Direction);
+    else {LastSentCommand=Sequence;LastSentLife=Snapshot.LifeGeneration;ServerCombat(uint8(Command),Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Direction);}
 }
 void UU02CombatComponent::ServerAttack_Implementation(uint64 Sequence,double Local,double Yaw,FGuid Pawn,uint64 Life)
 {ReceiveIntent(AnimeMMORPG::U03::ECommand::Attack,Sequence,Local,Yaw,Pawn,Life);}
-void UU02CombatComponent::ServerCombat_Implementation(uint8 Command,uint64 Sequence,double Local,double Yaw,FGuid Pawn,uint64 Life)
-{ReceiveIntent(static_cast<AnimeMMORPG::U03::ECommand>(Command),Sequence,Local,Yaw,Pawn,Life);}
-void UU02CombatComponent::ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double Local,double Yaw,FGuid Pawn,uint64 Life)
+void UU02CombatComponent::ServerCombat_Implementation(uint8 Command,uint64 Sequence,double Local,double Yaw,FGuid Pawn,uint64 Life,FVector2D Direction)
+{ReceiveIntent(static_cast<AnimeMMORPG::U03::ECommand>(Command),Sequence,Local,Yaw,Pawn,Life,Direction);}
+void UU02CombatComponent::ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double Local,double Yaw,FGuid Pawn,uint64 Life,FVector2D Direction)
 {
     if(!Model||!Character()||!Character()->HasAuthority())return;
     if(QueuedIntents.Num()>=64){++RejectedCount;return;}
-    QueuedIntents.Add({{Sequence,{Pawn,Life},Command,0,Yaw},Local,GetWorld()->GetTimeSeconds()});
+    QueuedIntents.Add({{Sequence,{Pawn,Life},Command,0,Yaw,Direction},Local,GetWorld()->GetTimeSeconds()});
 }
 void UU02CombatComponent::SetControlPlaying(bool Playing)
 {
@@ -103,11 +103,13 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
     Context.bPlaying=bAuthorityPlaying&&!(M->GetLockMask()&(uint8(EU01MotorLock::Control)|uint8(EU01MotorLock::Interacting)));
     if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))Context.bPlaying&=PC->ControlState==EU01ControlState::Playing;
     Context.bGrounded=M->IsMovingOnGround();Context.bDead=C->Vital&&C->Vital->GetSnapshot().bDead;
+    Context.bDodgeEnabled=true;
     auto Commands=MoveTemp(QueuedIntents);QueuedIntents.Empty();
     Commands.Sort([](const auto& A,const auto& B){return A.Intent.Sequence<B.Intent.Sequence;});
     TSet<uint64> Conflicts;
     for(int32 A=0;A<Commands.Num();++A)for(int32 B=A+1;B<Commands.Num();++B)
-        if(Commands[A].Intent.Sequence==Commands[B].Intent.Sequence && (Commands[A].Intent.Command!=Commands[B].Intent.Command||Commands[A].Intent.AimYaw!=Commands[B].Intent.AimYaw||!(Commands[A].Intent.Life==Commands[B].Intent.Life)))Conflicts.Add(Commands[A].Intent.Sequence);
+        if(Commands[A].Intent.Sequence==Commands[B].Intent.Sequence && (Commands[A].Intent.Command!=Commands[B].Intent.Command||Commands[A].Intent.AimYaw!=Commands[B].Intent.AimYaw||Commands[A].Intent.Direction!=Commands[B].Intent.Direction||!(Commands[A].Intent.Life==Commands[B].Intent.Life)))Conflicts.Add(Commands[A].Intent.Sequence);
+    TArray<FCombatIntent> Admissible;
     for(auto& Entry:Commands)
     {
         auto& I=Entry.Intent;I.Receive=Now;LastCommand=FMath::Max(LastCommand,I.Sequence);
@@ -119,7 +121,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
             else
             {
                 AdmissionWatermark=I.Sequence;
-                if(I.Command==ECommand::Attack){FU03NoEvents ResolvedBarrier;auto R=Model->SubmitBatch({I},Context,ResolvedBarrier);if(R.Num())Result=R[0].Result;}
+                if(I.Command==ECommand::Attack||I.Command==ECommand::Dodge){Admissible.Add(I);continue;}
                 else Result=EAdmission::Unsupported;
             }
         }
@@ -129,6 +131,18 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
         else {++RejectedCount;LastReject=Result==EAdmission::Stale||!(I.Life==Model->GetLife())?EReject::StaleCommand:!Context.bPlaying?EReject::NotPlaying:!Context.bGrounded?EReject::Airborne:Context.bDead?EReject::Defeated:!FMath::IsFinite(I.AimYaw)?EReject::InvalidAim:EReject::Busy;}
         Publish(Now,true);
         Trace(Success?TEXT("Admitted"):TEXT("Rejected"),Now,FString::Printf(TEXT("command=%llu admission=%u localInput=%.17g receive=%.17g accept=%.17g"),I.Sequence,uint8(Result),Entry.LocalSeconds,Entry.Receive,Now));
+    }
+    const uint64 BeforeDodge=Model->Dodge().Sequence;
+    FU03NoEvents ResolvedBarrier;const auto Results=Model->SubmitBatch(MoveTemp(Admissible),Context,ResolvedBarrier);
+    if(BeforeDodge!=Model->Dodge().Sequence && Snapshot.ActionSequence)
+    {Snapshot.Phase=uint8(EPhase::Cancelled);Snapshot.ServerSeconds=Now;GetWorld()->GetSubsystem<UU02CollisionWorld>()->ObserveCombat(this);}
+    for(const auto& R:Results)
+    {
+        OwnerAdmission.Command=R.Sequence;OwnerAdmission.Admission=uint8(R.Result);++OwnerAdmission.Revision;
+        const bool Success=R.Result==EAdmission::Accepted||R.Result==EAdmission::Queued||R.Result==EAdmission::Replaced;
+        if(Success){++AcceptedCount;if(R.Result==EAdmission::Queued)++QueuedCount;if(R.Result==EAdmission::Replaced)++ReplacedCount;LastReject=EReject::None;}
+        else {++RejectedCount;LastReject=R.Result==EAdmission::Stale?EReject::StaleCommand:!Context.bPlaying?EReject::NotPlaying:!Context.bGrounded?EReject::Airborne:Context.bDead?EReject::Defeated:EReject::Busy;}
+        Trace(Success?TEXT("Admitted"):TEXT("Rejected"),Now,FString::Printf(TEXT("command=%llu admission=%u accept=%.17g"),R.Sequence,uint8(R.Result),Now));
     }
     Publish(Now);
 }
@@ -191,8 +205,10 @@ void UU02CombatComponent::Publish(double Now,bool Force)
         Snapshot.bLocked=Now<A->Cutoff&&Now<A->End();Snapshot.bYawLocked=Snapshot.bLocked&&Now>=A->Start+Snapshot.ActiveStart;
     }
     else {Snapshot.bLocked=false;Snapshot.bYawLocked=false;if(Snapshot.ActionSequence&&Snapshot.Phase!=uint8(EPhase::Cancelled))Snapshot.Phase=uint8(EPhase::Finished);}
+    const auto& D=Model->Dodge();Snapshot.DodgeSequence=D.Sequence;Snapshot.DodgeCharges=D.Charges;Snapshot.DodgeStart=D.Start;Snapshot.DodgeMotionEnd=D.MotionEnd;Snapshot.DodgeLockEnd=D.LockEnd;Snapshot.DodgeNextStart=D.NextStart;Snapshot.DodgeRestoreAt=D.RestoreAt;Snapshot.DodgeDirection=D.Direction;
+    if(D.Locked(Now)){Snapshot.bLocked=true;Snapshot.bYawLocked=true;}
     Snapshot.Energy=Model->Resources().Energy();Snapshot.QReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::Q);Snapshot.EReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::E);
-    const auto& Pending=Model->GetPending();OwnerAdmission.PendingCommand=Pending.IsSet()?Pending->Sequence:0;OwnerAdmission.PendingExpires=Pending.IsSet()?Pending->Receive+.15:0;
+    const auto& Pending=Model->GetPendingDodge().IsSet()?Model->GetPendingDodge():Model->GetPending();OwnerAdmission.PendingCommand=Pending.IsSet()?Pending->Sequence:0;OwnerAdmission.PendingExpires=Pending.IsSet()?Pending->Receive+.15:0;
     Snapshot.TurnFromYaw=StartupTurn.FromYaw;Snapshot.TurnStartSeconds=StartupTurn.SegmentStart;
     Snapshot.LastCommand=LastCommand;Snapshot.Accepted=AcceptedCount;Snapshot.Rejected=RejectedCount;Snapshot.RejectReason=uint8(LastReject);
     ++Snapshot.Revision;ApplyMotorSnapshot();
@@ -205,7 +221,8 @@ void UU02CombatComponent::ApplyMotorSnapshot()
     {
         const auto* GS=GetWorld()->GetGameState();const double Now=C->HasAuthority()?Snapshot.ServerSeconds:(GS?GS->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds());
         FStartupTurn Turn;Turn.Begin(Snapshot.TurnFromYaw,Snapshot.AimYawDegrees,Snapshot.TurnStartSeconds,Snapshot.StartSeconds+Snapshot.ActiveStart);
-        const double Yaw=Turn.Sample(Now);C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,Yaw);
+        const bool DodgeLock=Snapshot.DodgeSequence&&Now>=Snapshot.DodgeStart&&Now<Snapshot.DodgeLockEnd;
+        const double Yaw=DodgeLock?Snapshot.DodgeDirection.Rotation().Yaw:Turn.Sample(Now);C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,Yaw);
         if(Snapshot.bLocked)C->SetActorRotation(FRotator(0,Yaw,0));
     }
 }
@@ -221,6 +238,9 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
         FString AttackKey=TEXT("LMB");if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))AttackKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Attack].GetDisplayName().ToString();
         const TCHAR* Reasons[]={TEXT("Accepted"),TEXT("Queued"),TEXT("Replaced"),TEXT("Stale"),TEXT("Invalid"),TEXT("Locked"),TEXT("Busy"),TEXT("Energy"),TEXT("Cooldown"),TEXT("Unsupported")};
         GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+200000,.15f,FColor::Cyan,FString::Printf(TEXT("%s Attack %u/3 | action %llu | energy %.0f/100 | pending %llu | %s"),*AttackKey,Snapshot.DefinitionId+1,Snapshot.ActionSequence,Snapshot.Energy,OwnerAdmission.PendingCommand,Reasons[FMath::Min<int32>(OwnerAdmission.Admission,9)]));
+        FString DodgeKey=TEXT("Shift");if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))DodgeKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Dodge].GetDisplayName().ToString();
+        const auto* Clock=GetWorld()->GetGameState();const double AuthorityNow=C->HasAuthority()?Now:Clock?Clock->GetServerWorldTimeSeconds():Snapshot.ServerSeconds;
+        GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+210000,.15f,FColor::Yellow,FString::Printf(TEXT("%s Dodge %d/2 | recharge %.2fs | %s"),*DodgeKey,Snapshot.DodgeCharges,Snapshot.DodgeCharges<2?FMath::Max(0.,Snapshot.DodgeRestoreAt-AuthorityNow):0.,AuthorityNow<Snapshot.DodgeMotionEnd?TEXT("DODGE"):AuthorityNow<Snapshot.DodgeLockEnd?TEXT("RECOVERY"):TEXT("READY")));
     }
 }
 TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
@@ -234,6 +254,7 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("phase"),Snapshot.Phase); J->SetNumberField(TEXT("start"),Snapshot.StartSeconds);
     J->SetNumberField(TEXT("definition"),Snapshot.DefinitionId);J->SetNumberField(TEXT("raw"),Snapshot.RawDamage);
     J->SetNumberField(TEXT("energy"),Snapshot.Energy);J->SetNumberField(TEXT("qReady"),Snapshot.QReadyAt);J->SetNumberField(TEXT("eReady"),Snapshot.EReadyAt);
+    J->SetNumberField(TEXT("dodge"),Snapshot.DodgeSequence);J->SetNumberField(TEXT("dodgeCharges"),Snapshot.DodgeCharges);J->SetNumberField(TEXT("dodgeStart"),Snapshot.DodgeStart);J->SetNumberField(TEXT("dodgeMotionEnd"),Snapshot.DodgeMotionEnd);J->SetNumberField(TEXT("dodgeLockEnd"),Snapshot.DodgeLockEnd);J->SetNumberField(TEXT("dodgeNextStart"),Snapshot.DodgeNextStart);J->SetNumberField(TEXT("dodgeRestoreAt"),Snapshot.DodgeRestoreAt);J->SetStringField(TEXT("dodgeDirection"),Snapshot.DodgeDirection.ToString());
     J->SetNumberField(TEXT("admission"),OwnerAdmission.Admission);J->SetNumberField(TEXT("pendingCommand"),OwnerAdmission.PendingCommand);
     J->SetNumberField(TEXT("pendingExpires"),OwnerAdmission.PendingExpires);J->SetNumberField(TEXT("queued"),QueuedCount);J->SetNumberField(TEXT("replaced"),ReplacedCount);
     J->SetNumberField(TEXT("activeStart"),Snapshot.StartSeconds+Snapshot.ActiveStart); J->SetNumberField(TEXT("activeEnd"),Snapshot.StartSeconds+Snapshot.ActiveEnd);

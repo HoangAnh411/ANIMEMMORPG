@@ -43,6 +43,8 @@ public:
         Super::PrepMoveFor(InCharacter);
         auto* Motor=CastChecked<AU01Character>(InCharacter)->GetU01Movement();
         // Saved local Control may replay; authority Interacting/Defeated/Combat cannot be cleared or resurrected.
+        if(const auto* Combat=CastChecked<AU01Character>(InCharacter)->Combat.Get();Combat&&Combat->GetCombatSnapshot().LifeGeneration!=CombatLife)
+        {Motor->JumpWindow.ClearInput();Motor->bNetworkJumpHeld=false;return;}
         const uint8 AuthorityLocks=Motor->LockMask & ~uint8(EU01MotorLock::Control);
         Motor->bSprintRequested=Sprint;Motor->LockMask=(SavedLocks & uint8(EU01MotorLock::Control))|AuthorityLocks;Motor->SimulationSeconds=Clock;
         Motor->JumpWindow=Window;Motor->bNetworkJumpHeld=PreviousNetworkHeld;

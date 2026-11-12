@@ -46,6 +46,16 @@ public:
     bool HasBufferedJump(double Now) const { return JumpWindow.HasBuffer(Now); }
     double GetMotorTimeSeconds() const { return SimulationSeconds; }
     void ResetFixtureState();
+    // Authority-only swept walking preview. Deferred transforms/overlaps are reverted;
+    // only CommitDodge moves the actor, at the world resolver's selected event time.
+    void PlanDodge(double Begin,double End,FVector Direction,uint64 Life,uint64 Sequence);
+    void CommitDodge(double At);
+    bool HasDodgePlan() const { return bDodgePlan; }
+    FVector DodgeOffsetAt(double At) const;
+    FVector DodgePlanOrigin() const { return PlanOrigin; }
+    bool DodgeLostGround() const { return bDodgeLostGround; }
+    bool DodgeBlocked() const { return bDodgeBlocked; }
+    virtual void HandleImpact(const FHitResult& Hit,float TimeSlice=0.f,const FVector& MoveDelta=FVector::ZeroVector) override;
 private:
     friend class FSavedMove_U01;
     bool bNetworkJumpHeld=false;
@@ -60,6 +70,11 @@ private:
     float FrameDeltaSeconds = 0;
     TOptional<double> EventSeconds;
     AnimeMMORPG::U01::FJumpWindow JumpWindow;
+    bool bDodgePlan=false,bPreviewDodge=false,bDodgeLostGround=false,bDodgeBlocked=false;
+    double PlanBegin=0,PlanEnd=0,PlanCommitted=0;
+    FVector PlanOrigin=FVector::ZeroVector,PlanDestination=FVector::ZeroVector,PlanDirection=FVector::ZeroVector;
+    uint64 PlanLife=0,PlanSequence=0;
+    void WalkDodge(float Seconds,FVector Direction);
 };
 
 UCLASS()

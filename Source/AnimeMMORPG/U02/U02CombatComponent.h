@@ -39,6 +39,14 @@ struct FU02RepCombatSnapshot
     UPROPERTY() double EReadyAt = 0;
     UPROPERTY() bool bLocked = false;
     UPROPERTY() bool bYawLocked = false;
+    UPROPERTY() uint64 DodgeSequence=0;
+    UPROPERTY() int32 DodgeCharges=2;
+    UPROPERTY() double DodgeStart=0;
+    UPROPERTY() double DodgeMotionEnd=0;
+    UPROPERTY() double DodgeLockEnd=0;
+    UPROPERTY() double DodgeNextStart=0;
+    UPROPERTY() double DodgeRestoreAt=0;
+    UPROPERTY() FVector DodgeDirection=FVector::ZeroVector;
 };
 
 USTRUCT()
@@ -68,7 +76,7 @@ public:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
     void SubmitAttackIntent(uint64 CommandSequence, double LocalInputSeconds, double AimYawDegrees);
     void SetControlPlaying(bool bPlaying);
-    void SubmitCombatIntent(AnimeMMORPG::U03::ECommand Command, uint64 Sequence, double LocalSeconds, double Yaw);
+    void SubmitCombatIntent(AnimeMMORPG::U03::ECommand Command, uint64 Sequence, double LocalSeconds, double Yaw,FVector2D Direction=FVector2D::ZeroVector);
     void Landed();
     const FU03OwnerAdmission& GetAdmission() const { return OwnerAdmission; }
     void SendNetworkFixtureProbe(const FString& Kind); // opt-in lab only
@@ -96,14 +104,14 @@ private:
     UFUNCTION(Server, Unreliable) void ServerAim(double Yaw, FGuid Pawn, uint64 Life, uint64 Action);
     TUniquePtr<AnimeMMORPG::U03::FTimelineModel> Model;
     UPROPERTY(Replicated) FU03OwnerAdmission OwnerAdmission;
-    UFUNCTION(Server,Reliable) void ServerCombat(uint8 Command,uint64 Sequence,double LocalSeconds,double Yaw,FGuid Pawn,uint64 Life);
+    UFUNCTION(Server,Reliable) void ServerCombat(uint8 Command,uint64 Sequence,double LocalSeconds,double Yaw,FGuid Pawn,uint64 Life,FVector2D Direction);
     struct FQueuedIntent { AnimeMMORPG::U03::FCombatIntent Intent; double LocalSeconds=0,Receive=0; };
     TArray<FQueuedIntent> QueuedIntents;
     struct FQueuedAim {double Yaw;FGuid Pawn;uint64 Life,Action;};
     TArray<FQueuedAim> QueuedAim;
     void ProcessQueuedIntents(double Now);
     void RememberCurrent(double Now);
-    void ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double LocalSeconds,double Yaw,FGuid Pawn,uint64 Life);
+    void ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double LocalSeconds,double Yaw,FGuid Pawn,uint64 Life,FVector2D Direction=FVector2D::ZeroVector);
     uint64 QueuedCount=0,ReplacedCount=0,AdmissionWatermark=0;
     bool bApplyingWorldDeath=false;
     AU01Character* Character() const;

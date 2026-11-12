@@ -1,6 +1,29 @@
 #include "U03ActionModel.h"
 namespace AnimeMMORPG::U03
 {
+void FDodgeState::Recharge(double T)
+{
+    while(Charges<2 && T>=RestoreAt){++Charges;RestoreAt=Charges<2?RestoreAt+2.:0.;}
+}
+EAdmission FTimelineModel::AdmitDodge(const FCombatIntent& I)
+{
+    if(DodgeState.Charges==0)return EAdmission::Resource;
+    if(Action && !Action->Startup(Now))return EAdmission::Busy;
+    if(Now<DodgeState.NextStart)
+    {
+        const bool Replaced=PendingDodge.IsSet();PendingDodge=I;
+        return Replaced?EAdmission::Replaced:EAdmission::Queued;
+    }
+    // All replacement conditions are validated before mutating an existing attack.
+    if(Action){Action->Cancel(ECutoff::Dodge,Now,true);Action.Reset();}
+    Pending.Reset();PendingDodge.Reset();GraceEnd=0;NextCombo=EAction::Attack1;
+    const FVector2D Local=I.Direction.GetSafeNormal();
+    const FRotator Aim(0,I.AimYaw,0);
+    DodgeState.Direction=Local.IsNearlyZero()?-Aim.Vector():Aim.RotateVector(FVector(Local.X,Local.Y,0));
+    ++DodgeState.Sequence;DodgeState.Start=Now;DodgeState.MotionEnd=Now+.25;DodgeState.LockEnd=Now+.35;DodgeState.NextStart=Now+.60;
+    if(DodgeState.Charges==2)DodgeState.RestoreAt=Now+2.;
+    --DodgeState.Charges;return EAdmission::Accepted;
+}
 const FActionDefinition& Definition(EAction Id)
 {
     static const FActionDefinition Table[] = {
@@ -53,17 +76,7 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
     while (First || Now < T)
     {
         First = false;
-        double Boundary = T;
-        auto Split = [&](double At) { if (At > Now) Boundary = FMath::Min(Boundary, At); };
-        if (Action)
-        {
-            const auto& D = Action->GetDefinition();
-            Split(Action->Start + D.ActiveStart);
-            Split(Action->Start + D.ActiveEnd);
-            Split(Action->End());
-        }
-        if (Pending.IsSet()) Split(Pending->Receive + .15);
-        if (!Action) Split(GraceEnd);
+        double Boundary = NextBoundaryThrough(T);
         const TOptional<double> Event = Resolver.NextEvent(*this, Boundary);
         if (Event.IsSet() && (!FMath::IsFinite(Event.GetValue()) || Event.GetValue() < Now || Event.GetValue() > Boundary)) return false;
         const double Stop = Event.IsSet() ? Event.GetValue() : Boundary;
@@ -87,6 +100,9 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
 
 void FTimelineModel::CompleteCurrent(ITimelineResolver& Resolver)
 {
+    if(PendingDodge.IsSet() && Now>=PendingDodge->Receive+.15)PendingDodge.Reset();
+    if(PendingDodge.IsSet() && Now>=DodgeState.NextStart && bGrounded && !bDead)
+    {const auto I=PendingDodge.GetValue();PendingDodge.Reset();AdmitDodge(I);}
     // Only now can an endpoint contact exist: cancellation at this timestamp excludes it.
     if (Action)
     {
@@ -123,6 +139,7 @@ void FTimelineModel::DeliverBefore(double Stop, ITimelineResolver& Resolver)
             Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Begin,End,Action->Yaw,true});
     }
     Resource.Advance(Stop);
+    DodgeState.Recharge(Stop);
     Now = Stop;
 }
 double FTimelineModel::NextBoundaryThrough(double T) const
@@ -132,6 +149,9 @@ double FTimelineModel::NextBoundaryThrough(double T) const
     if (Action) { const auto& D=Action->GetDefinition(); Split(Action->Start+D.ActiveStart); Split(Action->Start+D.ActiveEnd); Split(Action->End()); }
     if (Pending.IsSet()) Split(Pending->Receive+.15);
     if (!Action) Split(GraceEnd);
+    Split(DodgeState.MotionEnd);Split(DodgeState.LockEnd);Split(DodgeState.NextStart);
+    if(DodgeState.Charges<2)Split(DodgeState.RestoreAt);
+    if(PendingDodge.IsSet())Split(PendingDodge->Receive+.15);
     return Boundary;
 }
 bool FTimelineModel::ArriveAtBarrier(double T, ITimelineResolver& Collector)
@@ -151,7 +171,7 @@ bool FTimelineModel::ResetLife(U02::FLifeId NewLife,double T)
 {
     if(bBarrierOpen||bAdvancing||T<Now||NewLife.Pawn!=Life.Pawn||NewLife.Generation<=Life.Generation)return false;
     Life=NewLife;Now=T;Action.Reset();Pending.Reset();NextCombo=EAction::Attack1;GraceEnd=0;
-    bDead=false;bGrounded=true;Resource=FResourceModel();Next=0;return true;
+    bDead=false;bGrounded=true;Resource=FResourceModel();DodgeState=FDodgeState();PendingDodge.Reset();Next=0;return true;
 }
 bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
 {
@@ -163,6 +183,8 @@ bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
         else bGrounded = false;
         // Lifecycle state and combo invalidation do not depend on an old action's window.
         Pending.Reset(); NextCombo = EAction::Attack1; GraceEnd = 0;
+        PendingDodge.Reset();DodgeState.MotionEnd=FMath::Min(DodgeState.MotionEnd,Now);
+        if(Reason==ECutoff::Death)DodgeState.LockEnd=FMath::Min(DodgeState.LockEnd,Now);
     }
     if (!Action || !Action->Cancel(Reason, Now, Valid)) return Lifecycle;
     Pending.Reset();
@@ -207,6 +229,8 @@ bool FTimelineModel::CancelUnopposed(ECutoff Reason, double T, bool Valid, TArra
 EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext& C)
 {
     if(bDead||!bGrounded||!C.bPlaying||!C.bGrounded||C.bHardCC||C.bGuard||C.bDodging||C.bFeint||C.bDead) return EAdmission::Locked;
+    if(I.Command==ECommand::Dodge && C.bDodgeEnabled)return AdmitDodge(I);
+    if(DodgeState.Locked(Now))return EAdmission::Locked;
     if(I.Command!=ECommand::Attack&&I.Command!=ECommand::Q&&I.Command!=ECommand::E) return EAdmission::Unsupported;
     if(I.Command==ECommand::Attack)
     {
@@ -256,7 +280,7 @@ TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch
         for(;Index<End;++Index)
         {
             const auto& I=Batch[Index];
-            if(!ValidTime||!FMath::IsFinite(I.AimYaw)||!(I.Life==Life)||I.Sequence==0||I.Sequence<=Watermark)
+            if(!ValidTime||!FMath::IsFinite(I.AimYaw)||!FMath::IsFinite(I.Direction.X)||!FMath::IsFinite(I.Direction.Y)||!(I.Life==Life)||I.Sequence==0||I.Sequence<=Watermark)
                 Results.Add({I.Sequence,ValidTime&&I.Life==Life&&I.Sequence<=Watermark?EAdmission::Stale:EAdmission::Invalid,0});
             else {Watermark=I.Sequence;Group.Add(I);}
         }
