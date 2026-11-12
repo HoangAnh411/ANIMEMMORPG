@@ -15,7 +15,7 @@
 using namespace AnimeMMORPG;
 namespace
 {
-constexpr auto Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
+constexpr auto U03B1Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
 U03::FAdmissionContext Enabled(){U03::FAdmissionContext C;C.bDodgeEnabled=true;return C;}
 struct FModel
 {
@@ -44,7 +44,7 @@ struct FWorld:FTestWorldWrapper
  {auto* A=GetTestWorld()->SpawnActor<AActor>();auto* B=NewObject<UBoxComponent>(A);A->SetRootComponent(B);B->SetBoxExtent(Half);B->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);B->SetCollisionResponseToAllChannels(ECR_Block);B->RegisterComponent();A->SetActorLocationAndRotation(Center,Rotation);return B;}
 };
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeDeadlines,"AnimeMMORPG.U03.B1.ModelDeadlinesAndSequentialCharges",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeDeadlines,"AnimeMMORPG.U03.B1.ModelDeadlinesAndSequentialCharges",U03B1Flags)
 bool FDodgeDeadlines::RunTest(const FString&)
 {
  FModel X;TestEqual(TEXT("first admitted"),X.Press(0),U03::EAdmission::Accepted);const auto First=X.M.Dodge();
@@ -53,7 +53,7 @@ bool FDodgeDeadlines::RunTest(const FString&)
  TestEqual(TEXT("no-charge reject"),X.Press(.7),U03::EAdmission::Resource);TestFalse(TEXT("no-charge no buffer"),X.M.GetPendingDodge().IsSet());X.Advance(1.999999);TestEqual(TEXT("no early charge"),X.M.Dodge().Charges,0);X.Advance(2.);TestEqual(TEXT("charge at2"),X.M.Dodge().Charges,1);TestEqual(TEXT("sequential next4"),X.M.Dodge().RestoreAt,4.);X.Advance(4.);TestEqual(TEXT("full at4"),X.M.Dodge().Charges,2);TestEqual(TEXT("no energy spent"),X.M.Resources().Energy(),100.);
  return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeBuffer,"AnimeMMORPG.U03.B1.ModelBufferReplacementAndPriority",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeBuffer,"AnimeMMORPG.U03.B1.ModelBufferReplacementAndPriority",U03B1Flags)
 bool FDodgeBuffer::RunTest(const FString&)
 {
  for(int Case=0;Case<3;++Case){FModel X;X.Press(0);X.Press(Case==0?.45:.5);if(Case==1)X.Press(.55,U03::ECommand::Dodge,FVector2D(0,1),90);if(Case==2)X.M.ClearPending();X.Advance(1.);TestEqual(TEXT("exact expiry/control clear do not start"),X.M.Dodge().Sequence,Case==1?uint64(2):uint64(1));if(Case==1)TestTrue(TEXT("captured camera-local normalized direction"),X.M.Dodge().Direction.Equals(FVector(-1,0,0),1.e-6));}
@@ -61,7 +61,7 @@ bool FDodgeBuffer::RunTest(const FString&)
  auto Duplicate=X.M.SubmitBatchUnopposed({{2,X.Life,U03::ECommand::Dodge,0,0}},C,X.Out);TestEqual(TEXT("duplicate rejected"),Duplicate[0].Result,U03::EAdmission::Stale);
  return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeCancel,"AnimeMMORPG.U03.B1.ModelStartupReplacementAndLifecycle",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeCancel,"AnimeMMORPG.U03.B1.ModelStartupReplacementAndLifecycle",U03B1Flags)
 bool FDodgeCancel::RunTest(const FString&)
 {
  for(double T:{.159999,.16,.22}){FModel X;X.Press(0,U03::ECommand::Attack);const auto Result=X.Press(T);TestEqual(TEXT("only startup cancellable"),Result,T<.16?U03::EAdmission::Accepted:U03::EAdmission::Busy);TestEqual(TEXT("rejection leaves charges"),X.M.Dodge().Charges,T<.16?1:2);TestEqual(TEXT("rejection preserves old action"),X.M.Current()!=nullptr,T>=.16);}
@@ -69,21 +69,21 @@ bool FDodgeCancel::RunTest(const FString&)
  FModel Ground;Ground.Press(0);Ground.M.CancelUnopposed(U03::ECutoff::LostGround,.1,true,Ground.Out);TestFalse(TEXT("lost ground ends movement"),Ground.M.Dodge().Moving(.1));TestEqual(TEXT("stale grounded context cannot dodge"),Ground.Press(.6),U03::EAdmission::Locked);auto Life=Ground.Life;++Life.Generation;TestTrue(TEXT("reset"),Ground.M.ResetLife(Life,.6));TestEqual(TEXT("reset charges"),Ground.M.Dodge().Charges,2);
  return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeDistance,"AnimeMMORPG.U03.B1.RuntimeSweptDistanceAndLongUpdate",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeDistance,"AnimeMMORPG.U03.B1.RuntimeSweptDistanceAndLongUpdate",U03B1Flags)
 bool FDodgeDistance::RunTest(const FString&)
 {
  for(double Step:{1./30,1./60,1./120,1.})
  {FWorld W;const double S=W.Now();const FVector Before=W.P->GetActorLocation();W.Press(S);for(double T=S+Step;T<S+.25;T+=Step)W.Collision->DrainAt(T);W.Collision->DrainAt(S+.25);const FVector After=W.P->GetActorLocation();TestTrue(TEXT("300cm +/-5 swept native motor"),FMath::Abs((After-Before).Size2D()-300.)<=5.);W.Collision->DrainAt(S+.35);TestFalse(TEXT("unlock .35"),W.P->Combat->GetCombatSnapshot().bLocked);TestEqual(TEXT("charge consumed"),W.P->Combat->GetCombatSnapshot().DodgeCharges,1);W.ForwardErrorMessages(this);}
  return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeObstacle,"AnimeMMORPG.U03.B1.RuntimeWallPersonAndCliff",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeObstacle,"AnimeMMORPG.U03.B1.RuntimeWallPersonAndCliff",U03B1Flags)
 bool FDodgeObstacle::RunTest(const FString&)
 {
  for(int Case=0;Case<3;++Case)
  {FWorld W(Case==2?FVector(150,10000,50):FVector(10000,10000,50));const double S=W.Now();if(Case==0)W.Box(FVector(180,0,150),FVector(10,200,150));if(Case==1)W.Spawn(FVector(180,0,98),2);W.Press(S);W.Collision->DrainAt(S+1.);const double X=W.P->GetActorLocation().X;TestTrue(TEXT("capsule never crosses wall/person or centre leaves cliff"),X<(Case==2?151.:145.));TestTrue(TEXT("no falling over intentionally stopped edge"),W.P->GetU01Movement()->IsMovingOnGround());TestEqual(TEXT("blocked still consumes"),W.P->Combat->GetCombatSnapshot().DodgeCharges,1);W.ForwardErrorMessages(this);}
  return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeRuntimeCancel,"AnimeMMORPG.U03.B1.RuntimeStartupCancelResetAndDamage",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeRuntimeCancel,"AnimeMMORPG.U03.B1.RuntimeStartupCancelResetAndDamage",U03B1Flags)
 bool FDodgeRuntimeCancel::RunTest(const FString&)
 {
  FWorld W;const double S=W.Now();W.Press(S,U03::ECommand::Attack);W.Press(S+.1);TestEqual(TEXT("accepted dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));W.Collision->DrainAt(S+.6);TestEqual(TEXT("cancelled sword never hits"),W.Collision->Confirmed.Num(),0);W.Press(S+.6);const auto Sequence=W.P->Combat->GetCombatSnapshot().DodgeSequence;W.Press(S+.8,U03::ECommand::Attack);TestEqual(TEXT("dodge lock rejects sword"),W.P->Combat->GetCombatSnapshot().DodgeSequence,Sequence);

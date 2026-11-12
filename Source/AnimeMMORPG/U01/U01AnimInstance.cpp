@@ -45,6 +45,9 @@ void UU01AnimInstance::NativeUpdateAnimation(float Dt)
     {
         const auto* State=GetWorld()->GetGameState();
         const double ServerNow=State ? State->GetServerWorldTimeSeconds() : GetWorld()->GetTimeSeconds();
+        const auto& Snapshot=Character->Combat->GetCombatSnapshot();
+        if(Snapshot.DodgeSequence && ServerNow>=Snapshot.DodgeStart && ServerNow<Snapshot.DodgeMotionEnd)
+        {PoseIndex=1;GroundSpeed=1200;LandingRemaining=0;} // Existing locomotion blockout only; no motor/root-motion authority.
         PresentCombat(Character->Combat->GetCombatSnapshot(),ServerNow);
     }
 }

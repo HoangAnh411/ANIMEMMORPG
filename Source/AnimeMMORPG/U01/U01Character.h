@@ -55,6 +55,7 @@ public:
     FVector DodgePlanOrigin() const { return PlanOrigin; }
     bool DodgeLostGround() const { return bDodgeLostGround; }
     bool DodgeBlocked() const { return bDodgeBlocked; }
+    bool IsDodgePreview() const { return bPreviewDodge; }
     virtual void HandleImpact(const FHitResult& Hit,float TimeSlice=0.f,const FVector& MoveDelta=FVector::ZeroVector) override;
 private:
     friend class FSavedMove_U01;

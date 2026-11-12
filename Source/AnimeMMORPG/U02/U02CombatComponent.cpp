@@ -199,6 +199,8 @@ void UU02CombatComponent::Publish(double Now,bool Force)
 {
     if(!Model)return;const auto Before=Snapshot;RememberCurrent(Now);const auto Life=Model->GetLife();
     Snapshot.PawnId=Life.Pawn;Snapshot.LifeGeneration=Life.Generation;Snapshot.ServerSeconds=Now;
+    if(Before.DodgeSequence!=Model->Dodge().Sequence && Snapshot.ActionSequence && !Model->Current())
+    {Snapshot.Phase=uint8(EPhase::Cancelled);GetWorld()->GetSubsystem<UU02CollisionWorld>()->ObserveCombat(this);}
     if(const auto* A=Model->Current())
     {
         Snapshot.Phase=uint8(Now>=A->Cutoff?EPhase::Cancelled:Now<A->Start+Snapshot.ActiveStart?EPhase::Startup:Now<A->Start+Snapshot.ActiveEnd?EPhase::Active:EPhase::Recovery);

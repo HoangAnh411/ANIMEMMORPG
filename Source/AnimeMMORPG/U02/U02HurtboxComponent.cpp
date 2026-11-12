@@ -25,7 +25,8 @@ void UU02HurtboxComponent::EndPlay(EEndPlayReason::Type Reason)
 void UU02HurtboxComponent::OnUpdateTransform(EUpdateTransformFlags Flags,ETeleportType Teleport)
 {
     Super::OnUpdateTransform(Flags,Teleport);
-    if(Teleport!=ETeleportType::None)++ContinuityEpoch;
+    const auto* C=Cast<AU01Character>(GetOwner());
+    if(Teleport!=ETeleportType::None && !(C&&C->GetU01Movement()->IsDodgePreview()))++ContinuityEpoch;
 }
 AnimeMMORPG::U02::FLifeId UU02HurtboxComponent::GetSubject() const
 {

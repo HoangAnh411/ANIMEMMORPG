@@ -361,6 +361,12 @@ void UU02CollisionWorld::DrainAt(double Now)
         for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)
         {
             const auto& D=C->Model->Dodge();
+            auto* Motor=C->Character()->GetU01Movement();
+            if(Motor->HasDodgePlan()&&!D.Moving(SimulationTime))
+            {
+                S.Previous.Position=S.Current.Position=Feet(C->Character());
+                for(auto& H:Hurts)if(auto* Shape=H.Component.Get())if(Shape->GetOwner()==C->GetOwner())H.Previous.Position=H.Current.Position=Shape->GetComponentLocation();
+            }
             C->Character()->GetU01Movement()->PlanDodge(SimulationTime,D.Moving(SimulationTime)?Boundary:SimulationTime,D.Direction,C->Model->GetLife().Generation,D.Sequence);
         }
         TArray<FHitCandidate> Candidates;CollectCurrent(Boundary,Candidates);
