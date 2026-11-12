@@ -63,6 +63,7 @@ public:
     bool IsDodgePreview() const { return bPreviewDodge; }
     virtual void HandleImpact(const FHitResult& Hit,float TimeSlice=0.f,const FVector& MoveDelta=FVector::ZeroVector) override;
     virtual bool MoveUpdatedComponentImpl(const FVector& Delta,const FQuat& Rotation,bool bSweep,FHitResult* Hit=nullptr,ETeleportType Teleport=ETeleportType::None) override;
+    virtual bool StepUp(const FVector& Gravity,const FVector& Delta,const FHitResult& Hit,FStepDownResult* Down=nullptr) override;
 private:
     friend class FSavedMove_U01;
     bool bNetworkJumpHeld=false;

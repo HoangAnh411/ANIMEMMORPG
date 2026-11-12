@@ -23,6 +23,22 @@ bool UU01CharacterMovement::MoveUpdatedComponentImpl(const FVector& Delta,const 
     {NativeDodgePath.Add(UpdatedComponent->GetComponentLocation());TrimNativeDodgePath(UpdatedComponent->GetComponentLocation());}
     return Moved;
 }
+bool UU01CharacterMovement::StepUp(const FVector& Gravity,const FVector& Delta,const FHitResult& Hit,FStepDownResult* Down)
+{
+    if(!bPreviewDodge)return Super::StepUp(Gravity,Delta,Hit,Down);
+    const auto BeforePath=NativeDodgePath;const FVector Before=UpdatedComponent->GetComponentLocation();
+    const bool Result=Super::StepUp(Gravity,Delta,Hit,Down);const FVector After=UpdatedComponent->GetComponentLocation();
+    FCollisionQueryParams Params(SCENE_QUERY_STAT(U03StepSurvivor),false,CharacterOwner);
+    for(auto* Actor:UpdatedPrimitive->GetMoveIgnoreActors())if(Actor)Params.AddIgnoredActor(Actor);
+    const auto* Capsule=CharacterOwner->GetCapsuleComponent();
+    const bool DirectClear=!GetWorld()->SweepTestByChannel(Before,After,UpdatedComponent->GetComponentQuat(),UpdatedComponent->GetCollisionObjectType(),FCollisionShape::MakeCapsule(Capsule->GetScaledCapsuleRadius(),Capsule->GetScaledCapsuleHalfHeight()),Params);
+    // Native StepUp is a search scope. Discard reverted searches; also replace
+    // a no-op up/down search by its directly swept survivor when that chord is
+    // collision-free. Actual stair rises keep their validated up/forward/down legs.
+    if(!Result||DirectClear)
+    {NativeDodgePath=BeforePath;if(!NativeDodgePath.Last().Equals(After,1.e-7))NativeDodgePath.Add(After);}
+    return Result;
+}
 void UU01CharacterMovement::WalkDodge(float Seconds,FVector Direction)
 {
     if(Seconds<=0||!UpdatedComponent||!IsMovingOnGround())return;
