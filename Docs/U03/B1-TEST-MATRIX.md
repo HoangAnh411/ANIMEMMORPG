@@ -13,4 +13,6 @@
 
 Kết quả thực, giới hạn và failed runs ghi trong REPORT-B1. Tài liệu này không tự xác nhận PASS hoặc ACCEPTED; A1/A0 nghiệm thu là nền kế thừa, không thay bằng chứng B1.
 
-Bàn giao **READY_FOR_REVIEW**, source6603c30:12 test B1 cùng78 hồi quy chạy mới, tổng90/90 Success,0 Failed, queue hoàn tất. Build Editor/Game và Windows package thành công; smoke3/3; package input/video38 checks và terrain17; dedicated Editor+hai client20 và reconnect2. Chi tiết tên test/run/hash, phần fixture slow/hardCC, các lượt failed/invalid và giới hạn FPS/presentation trong [REPORT-B1](REPORT-B1.md). Chưa ACCEPTED/merge/B2.
+Bàn giao b2c9676/source6603c30 có90/90 tests và các cổng input/network hợp lệ cho các ca đã kiểm, nhưng **NOT ACCEPTED** vì thiếu consistency tại timestamp giữa bước; [review](REVIEW-B1-b2c9676.md). Giữ nguyên bằng chứng lịch sử.
+
+R1 source3fd6c3d thêm `RetainedWallSlideAndStepPrefixes`, `IncomingMidWallAndStepLethal`, `SimultaneousPawnCCD`:93/93 Success,0 Failed, queue93 hoàn tất, build Editor/Game/package và smoke3/3 mới. Input/video38+17 mới. Trace phải kiểm actual pose tại incoming hit giữa wall/StepUp, lethal cutoff và long/short update; pawn CCD đối đầu/cùng hướng và đảo collection. Network/reconnect R1 ghi kết quả cuối trong [REPORT-B1](REPORT-B1.md). Chưa tự ACCEPTED/merge/B2.

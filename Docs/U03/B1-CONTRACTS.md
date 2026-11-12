@@ -13,3 +13,5 @@ Motor dùng walking sweep capsule/MoveAlongFloor/StepUp/FindFloor/AdjustFloorHei
 Presentation/HUD có thể blockout, luôn lấy state authority; montage không quyết định né/hit/damage. Package/client60/server30 và placement/Stop giữ quy tắc A1, với đường dẫn/manifest/session riêng B1. Editor gốc/config riêng giữ nguyên. Source/header thay đổi được cold build và test trong clone, không Live Coding/restart Editor gốc.
 
 Bàn giao READY_FOR_REVIEW B1 với build Editor/Game, Automation/hồi quy, package/smoke3map, input/video thật và dedicated Editor+hai client; lưu failed/invalid runs/hash/warnings. Không tự ACCEPTED/merge/B2.
+
+Review b2c9676: NOT ACCEPTED vì nội suy endpoints và partial walking solve không cùng đường tại timestamp giữa bước. Hợp đồng motor R1 tại [B1-R1-CONTRACTS](B1-R1-CONTRACTS.md) thay cơ chế preview/commit ở trên bằng retained swept segments và batch pawn CCD; các luật gameplay không đổi. Geometry/commit phải cùng PositionAt(t), không chỉ cùng endpoint; không xóa bằng chứng cũ.
