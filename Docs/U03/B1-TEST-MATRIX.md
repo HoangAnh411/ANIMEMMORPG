@@ -12,3 +12,5 @@
 | Network |dedicated Editor+2clients: authority/admission/charges/position, peer presentation, duplicate/stale/ownership/reconnect; cvar thực và placement ready/Stop|
 
 Kết quả thực, giới hạn và failed runs ghi trong REPORT-B1. Tài liệu này không tự xác nhận PASS hoặc ACCEPTED; A1/A0 nghiệm thu là nền kế thừa, không thay bằng chứng B1.
+
+Bàn giao **READY_FOR_REVIEW**, source6603c30:12 test B1 cùng78 hồi quy chạy mới, tổng90/90 Success,0 Failed, queue hoàn tất. Build Editor/Game và Windows package thành công; smoke3/3; package input/video38 checks và terrain17; dedicated Editor+hai client20 và reconnect2. Chi tiết tên test/run/hash, phần fixture slow/hardCC, các lượt failed/invalid và giới hạn FPS/presentation trong [REPORT-B1](REPORT-B1.md). Chưa ACCEPTED/merge/B2.
