@@ -56,6 +56,8 @@ public:
     FVector DodgePositionAt(double At) const;
     double NextDodgePathBoundary(double At,double Through) const;
     bool ClipDodgePath(double At);
+    bool CanClipDodgePath(double At) const { return bDodgePlan&&At<PlanClip; }
+    void InvalidateDodgePath() { bDodgePlan=false; }
     bool DodgeLostGround() const { return bDodgeLostGround; }
     bool DodgeBlocked() const { return bDodgeBlocked; }
     bool IsDodgePreview() const { return bPreviewDodge; }
@@ -84,6 +86,7 @@ private:
     TArray<FVector> NativeDodgePath;
     FFindFloorResult PlanFloor;
     double PlanClip=TNumericLimits<double>::Max();
+    TArray<TWeakObjectPtr<AActor>> PlanBatch;
     void TrimNativeDodgePath(FVector Position);
     void WalkDodge(float Seconds,FVector Direction);
 };

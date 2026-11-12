@@ -117,6 +117,7 @@ void UU02CollisionWorld::Capture(double Now)
 }
 void UU02CollisionWorld::CaptureEnvironment()
 {
+    const auto PreviousEnvironment=Environment;const auto PreviousTriangles=Triangles;
     Environment.Empty();Triangles.Empty();IgnoredObstructionComponents.Empty();UnsupportedObstructions=0;
     for(TObjectIterator<UPrimitiveComponent> It;It;++It)
     {
@@ -161,6 +162,11 @@ void UU02CollisionWorld::CaptureEnvironment()
             if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))UE_LOG(LogU02Collision,Display,TEXT("U02D_UNSUPPORTED component=%s class=%s ownerClass=%s bounds=%s"),*P->GetPathName(),*P->GetClass()->GetName(),*P->GetOwner()->GetClass()->GetName(),*E.Bounds.ToString());
         }
     }
+    bool Changed=PreviousEnvironment.Num()!=Environment.Num()||PreviousTriangles.Num()!=Triangles.Num();
+    if(!Changed)for(int32 I=0;I<Environment.Num();++I)
+        Changed|=PreviousEnvironment[I].Component!=Environment[I].Component||PreviousEnvironment[I].Bounds.Min!=Environment[I].Bounds.Min||PreviousEnvironment[I].Bounds.Max!=Environment[I].Bounds.Max;
+    if(!Changed)for(int32 I=0;I<Triangles.Num();++I)Changed|=PreviousTriangles[I].A!=Triangles[I].A||PreviousTriangles[I].B!=Triangles[I].B||PreviousTriangles[I].C!=Triangles[I].C;
+    if(Changed)for(auto& S:Sources)if(auto* C=S.Component.Get())C->Character()->GetU01Movement()->InvalidateDodgePath();
 }
 bool UU02CollisionWorld::Unobstructed(FVector O,FVector C,double R) const
 {
@@ -349,6 +355,7 @@ void UU02CollisionWorld::DrainAt(double Now)
 {
     if(bDraining||GetWorld()->GetNetMode()==NM_Client||!FMath::IsFinite(Now)||Now<CurrentTime||GetWorld()->bIsTearingDown)return;
     TGuardValue<bool> Draining(bDraining,true);
+    Sources.Sort([](const auto& A,const auto& B){const auto* CA=A.Component.Get();const auto* CB=B.Component.Get();return CA&&CB?CA->GetCombatSnapshot().PawnId.ToString()<CB->GetCombatSnapshot().PawnId.ToString():CA!=nullptr;});
     if(Now>CurrentTime)Capture(Now);
     if(SimulationTime<0)
     {SimulationTime=Now;for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)SimulationTime=FMath::Min(SimulationTime,C->Model->Time());}
@@ -375,10 +382,9 @@ void UU02CollisionWorld::DrainAt(double Now)
         }
         // Solve moving capsules simultaneously. Previews ignore the other active
         // dodgers' stale transforms; relative CCD constrains both retained paths.
-        bool Clipped=true;
-        while(Clipped)
+        for(;;)
         {
-            Clipped=false;
+            TOptional<double> Earliest;UU01CharacterMovement* FirstMotor=nullptr;UU01CharacterMovement* SecondMotor=nullptr;
             for(int32 I=0;I<Sources.Num();++I)for(int32 J=I+1;J<Sources.Num();++J)
             {
                 auto* CA=Sources[I].Component.Get();auto* CB=Sources[J].Component.Get();if(!CA||!CB)continue;
@@ -393,10 +399,13 @@ void UU02CollisionWorld::DrainAt(double Now)
                 if(Contact.IsSet())
                 {
                     const double At=FMath::Lerp(SimulationTime,Boundary,Contact.GetValue());
-                    const bool AChanged=MA->ClipDodgePath(At),BChanged=MB->ClipDodgePath(At);Clipped|=AChanged||BChanged;
-                    if(At>SimulationTime)Boundary=FMath::Min(Boundary,At);
+                    if((MA->CanClipDodgePath(At)||MB->CanClipDodgePath(At))&&(!Earliest.IsSet()||At<Earliest.GetValue()))
+                    {Earliest=At;FirstMotor=MA;SecondMotor=MB;}
                 }
             }
+            if(!Earliest.IsSet())break;
+            FirstMotor->ClipDodgePath(Earliest.GetValue());SecondMotor->ClipDodgePath(Earliest.GetValue());
+            if(Earliest.GetValue()>SimulationTime)Boundary=FMath::Min(Boundary,Earliest.GetValue());
         }
         TArray<FHitCandidate> Candidates;CollectCurrent(Boundary,Candidates);
         const double Stop=Candidates.IsEmpty()?Boundary:FMath::Min(Boundary,Candidates[0].TimestampSeconds);

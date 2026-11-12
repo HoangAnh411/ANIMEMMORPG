@@ -29,7 +29,7 @@ void UU01CharacterMovement::WalkDodge(float Seconds,FVector Direction)
     const FVector Feet=UpdatedComponent->GetComponentLocation()-FVector(0,0,CharacterOwner->GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
     const FVector Next=Feet+Direction*(1200.*Seconds);
     FHitResult Support;FCollisionQueryParams Params(SCENE_QUERY_STAT(U03DodgeFloor),false,CharacterOwner);
-    for(const auto& Ignored:UpdatedPrimitive->GetMoveIgnoreActors())if(Ignored.IsValid())Params.AddIgnoredActor(Ignored.Get());
+    for(auto* Ignored:UpdatedPrimitive->GetMoveIgnoreActors())if(Ignored)Params.AddIgnoredActor(Ignored);
     const bool Floor=GetWorld()->LineTraceSingleByChannel(Support,Next+FVector(0,0,MaxStepHeight+MAX_FLOOR_DIST),Next-FVector(0,0,MaxStepHeight+MAX_FLOOR_DIST),UpdatedComponent->GetCollisionObjectType(),Params);
     if(!Floor||!IsWalkable(Support)){bDodgeBlocked=true;return;}
     Velocity=Direction*1200.;FStepDownResult Down;MoveAlongFloor(Velocity,Seconds,&Down);
@@ -39,12 +39,14 @@ void UU01CharacterMovement::WalkDodge(float Seconds,FVector Direction)
 }
 void UU01CharacterMovement::PlanDodge(double Begin,double End,FVector Direction,uint64 Life,uint64 Sequence,const TArray<AActor*>& BatchPawns)
 {
-    if(bDodgePlan&&Life==PlanLife&&Sequence==PlanSequence&&Begin<PlanEnd&&End>Begin
+    bool SameBatch=PlanBatch.Num()==BatchPawns.Num();for(auto* Pawn:BatchPawns)SameBatch&=PlanBatch.Contains(Pawn);
+    if(bDodgePlan&&SameBatch&&Life==PlanLife&&Sequence==PlanSequence&&Begin<PlanEnd&&End>Begin
         &&UpdatedComponent->GetComponentLocation().Equals(DodgePositionAt(Begin),1.e-6)
-        &&(!PlanFloor.HitResult.Component.IsValid()||PlanFloor.HitResult.Component->IsQueryCollisionEnabled()))return;
+        &&PlanFloor.HitResult.Component.IsValid()&&PlanFloor.HitResult.Component->IsQueryCollisionEnabled())return;
     bDodgePlan=false;bDodgeLostGround=false;bDodgeBlocked=false;DodgePath.Reset();
     if(!CharacterOwner||!CharacterOwner->HasAuthority()||End<=Begin||!UpdatedComponent)return;
     PlanBegin=PlanCommitted=Begin;PlanEnd=End;PlanClip=TNumericLimits<double>::Max();PlanDirection=Direction;PlanLife=Life;PlanSequence=Sequence;PlanOrigin=UpdatedComponent->GetComponentLocation();
+    PlanBatch.Reset();for(auto* Pawn:BatchPawns)PlanBatch.Add(Pawn);
     const auto Floor=CurrentFloor;const FVector OldVelocity=Velocity;const bool Teleported=bJustTeleported;
     const auto Ignored=UpdatedPrimitive->GetMoveIgnoreActors();
     for(auto* Pawn:BatchPawns)if(Pawn!=CharacterOwner)UpdatedPrimitive->IgnoreActorWhenMoving(Pawn,true);
@@ -54,7 +56,7 @@ void UU01CharacterMovement::PlanDodge(double Begin,double End,FVector Direction,
         WalkDodge(float(End-Begin),Direction);TrimNativeDodgePath(UpdatedComponent->GetComponentLocation());
         PlanDestination=UpdatedComponent->GetComponentLocation();PlanFloor=CurrentFloor;Deferred.RevertMove();
     }
-    UpdatedPrimitive->ClearMoveIgnoreActors();for(const auto& Actor:Ignored)if(Actor.IsValid())UpdatedPrimitive->IgnoreActorWhenMoving(Actor.Get(),true);
+    UpdatedPrimitive->ClearMoveIgnoreActors();for(auto* Actor:Ignored)if(Actor)UpdatedPrimitive->IgnoreActorWhenMoving(Actor,true);
     CurrentFloor=Floor;Velocity=OldVelocity;bJustTeleported=Teleported;
     double Length=0;for(int32 I=1;I<NativeDodgePath.Num();++I)Length+=(NativeDodgePath[I]-NativeDodgePath[I-1]).Size();
     // A blocked flat path consumes distance/1200 seconds then holds. Ramp and
