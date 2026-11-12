@@ -47,6 +47,7 @@ struct FU02RepCombatSnapshot
     UPROPERTY() double DodgeNextStart=0;
     UPROPERTY() double DodgeRestoreAt=0;
     UPROPERTY() FVector DodgeDirection=FVector::ZeroVector;
+    UPROPERTY() FVector DodgeOrigin=FVector::ZeroVector;
 };
 
 USTRUCT()
@@ -96,6 +97,7 @@ private:
     friend struct FU02CombatTestAccess;
     friend struct FU02FTestAccess;
     friend struct FU03RuntimeAccess;
+    friend struct FU03B1Access;
     friend class UU02CollisionWorld;
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepCombatSnapshot Snapshot;
     UFUNCTION() void OnRep_Snapshot();

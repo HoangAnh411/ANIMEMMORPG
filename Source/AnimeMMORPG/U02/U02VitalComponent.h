@@ -34,6 +34,7 @@ public:
     void Refresh(double GameplayNow);
     TSharedRef<FJsonObject> GetDiagnostics() const;
 private:
+    friend struct FU03B1Access;
     friend struct FU02VitalTestAccess;
     friend struct FU03RuntimeAccess;
     AnimeMMORPG::U02::FVitalModel State;

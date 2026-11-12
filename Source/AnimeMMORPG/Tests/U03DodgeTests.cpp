@@ -13,6 +13,11 @@
 #include "AIController.h"
 #include "Kismet/GameplayStatics.h"
 using namespace AnimeMMORPG;
+struct FU03B1Access
+{
+ static void HP(UU02VitalComponent* V,int32 Value){V->State.HP=Value;V->State.bDead=false;}
+ static void Stale(UU02CombatComponent* C,uint64 Seq,uint64 Life){C->ServerCombat_Implementation(uint8(U03::ECommand::Dodge),Seq,0,0,C->GetCombatSnapshot().PawnId,Life,FVector2D(1,0));}
+};
 namespace
 {
 constexpr auto U03B1Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
@@ -86,7 +91,31 @@ bool FDodgeObstacle::RunTest(const FString&)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeRuntimeCancel,"AnimeMMORPG.U03.B1.RuntimeStartupCancelResetAndDamage",U03B1Flags)
 bool FDodgeRuntimeCancel::RunTest(const FString&)
 {
- FWorld W;const double S=W.Now();W.Press(S,U03::ECommand::Attack);W.Press(S+.1);TestEqual(TEXT("accepted dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));W.Collision->DrainAt(S+.6);TestEqual(TEXT("cancelled sword never hits"),W.Collision->Confirmed.Num(),0);W.Press(S+.6);const auto Sequence=W.P->Combat->GetCombatSnapshot().DodgeSequence;W.Press(S+.8,U03::ECommand::Attack);TestEqual(TEXT("dodge lock rejects sword"),W.P->Combat->GetCombatSnapshot().DodgeSequence,Sequence);
+ FWorld W;const double S=W.Now();W.Press(S,U03::ECommand::Attack);W.Press(S+.1);TestEqual(TEXT("accepted dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));W.Collision->DrainAt(S+.6);TestEqual(TEXT("cancelled sword never hits"),W.Collision->Confirmed.Num(),0);const double Next=W.P->Combat->GetCombatSnapshot().DodgeNextStart;W.Press(Next);const auto Sequence=W.P->Combat->GetCombatSnapshot().DodgeSequence;W.Press(Next+.2,U03::ECommand::Attack);TestEqual(TEXT("dodge lock rejects sword"),W.P->Combat->GetCombatSnapshot().DodgeSequence,Sequence);TestEqual(TEXT("no new sword admitted in dodge lock"),W.P->Combat->GetCombatSnapshot().ActionSequence,uint64(1));
  W.P->Combat->ResetLabCombat();TestEqual(TEXT("reset charges"),W.P->Combat->GetCombatSnapshot().DodgeCharges,2);TestEqual(TEXT("reset sequence"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(0));W.ForwardErrorMessages(this);return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeTerrain,"AnimeMMORPG.U03.B1.RuntimeStepSlopeAndRemovedFloor",U03B1Flags)
+bool FDodgeTerrain::RunTest(const FString&)
+{
+ for(float Height:{30.f,60.f}){FWorld W;const double S=W.Now();W.Box(FVector(170,0,Height*.5),FVector(70,200,Height*.5));W.Press(S);W.Collision->DrainAt(S+.25);TestTrue(TEXT("native step policy"),Height<45?W.P->GetActorLocation().X>230:W.P->GetActorLocation().X<110);W.ForwardErrorMessages(this);}
+ for(double Angle:{30.,44.,46.,60.})
+ {FWorld W;const double R=FMath::DegreesToRadians(Angle);W.Box(FVector(400*FMath::Cos(R)+10*FMath::Sin(R),0,400*FMath::Sin(R)-10*FMath::Cos(R)),FVector(400,200,10),FRotator(Angle,0,0));const double S=W.Now();W.Press(S);W.Collision->DrainAt(S+.25);TestTrue(TEXT("dodge keeps walkable slope threshold"),Angle<45?W.P->GetActorLocation().Z>170:W.P->GetActorLocation().Z<158);W.ForwardErrorMessages(this);}
+ {FWorld W;const double S=W.Now();W.Press(S);W.Collision->DrainAt(S+.05);const FVector Before=W.P->GetActorLocation();W.Ground->SetCollisionEnabled(ECollisionEnabled::NoCollision);W.Collision->DrainAt(S+.2);TestTrue(TEXT("removed current support stops horizontal motion"),(W.P->GetActorLocation()-Before).Size2D()<1.);TestTrue(TEXT("lost ground falls"),W.P->GetU01Movement()->IsFalling());W.ForwardErrorMessages(this);}
+ return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeIncoming,"AnimeMMORPG.U03.B1.RuntimeNoIFrameAndDeathCutoff",U03B1Flags)
+bool FDodgeIncoming::RunTest(const FString&)
+{
+ for(bool Lethal:{false,true})
+ {FWorld W;const double S=W.Now();auto* Enemy=W.Spawn(FVector(-150,0,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;W.Box(FVector(100,0,150),FVector(10,200,150));if(Lethal)FU03B1Access::HP(W.P->Vital,60);
+  Enemy->Combat->SubmitAttackIntent(1,0,0);W.Press(S);W.Collision->DrainAt(S+1.);TestEqual(TEXT("dodge has no iframe"),W.P->Vital->GetSnapshot().HP,Lethal?0:940);if(Lethal){TestTrue(TEXT("motion stopped at death hit"),W.P->Combat->GetCombatSnapshot().DodgeMotionEnd<=S+.16);TestTrue(TEXT("no movement past wall/death"),W.P->GetActorLocation().X<50.);}
+  W.ForwardErrorMessages(this);}
+ return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeGate,"AnimeMMORPG.U03.B1.RuntimeMenuAndStaleLife",U03B1Flags)
+bool FDodgeGate::RunTest(const FString&)
+{
+ FWorld W;const double S=W.Now();W.Press(S);W.P->Combat->SetControlPlaying(false);W.Collision->DrainAt(S+.25);TestTrue(TEXT("menu does not cancel accepted motion"),W.P->GetActorLocation().X>295);W.P->Combat->SetControlPlaying(true);W.Press(S+.5);TestTrue(TEXT("waiting dodge queued"),W.P->Combat->GetAdmission().PendingCommand!=0);W.P->Combat->SetControlPlaying(false);W.Collision->DrainAt(S+.7);TestEqual(TEXT("control lock clears queued dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));
+ const uint64 OldLife=W.P->Combat->GetCombatSnapshot().LifeGeneration;W.P->Combat->ResetLabCombat();W.P->Combat->SetControlPlaying(true);FU03B1Access::Stale(W.P->Combat,100,OldLife);W.Collision->DrainAt(S+.7);TestEqual(TEXT("old life cannot dodge or spend"),W.P->Combat->GetCombatSnapshot().DodgeCharges,2);TestEqual(TEXT("old life no sequence"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(0));W.ForwardErrorMessages(this);return true;
 }
 #endif

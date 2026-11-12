@@ -207,7 +207,7 @@ void UU02CombatComponent::Publish(double Now,bool Force)
         Snapshot.bLocked=Now<A->Cutoff&&Now<A->End();Snapshot.bYawLocked=Snapshot.bLocked&&Now>=A->Start+Snapshot.ActiveStart;
     }
     else {Snapshot.bLocked=false;Snapshot.bYawLocked=false;if(Snapshot.ActionSequence&&Snapshot.Phase!=uint8(EPhase::Cancelled))Snapshot.Phase=uint8(EPhase::Finished);}
-    const auto& D=Model->Dodge();Snapshot.DodgeSequence=D.Sequence;Snapshot.DodgeCharges=D.Charges;Snapshot.DodgeStart=D.Start;Snapshot.DodgeMotionEnd=D.MotionEnd;Snapshot.DodgeLockEnd=D.LockEnd;Snapshot.DodgeNextStart=D.NextStart;Snapshot.DodgeRestoreAt=D.RestoreAt;Snapshot.DodgeDirection=D.Direction;
+    const auto& D=Model->Dodge();if(Snapshot.DodgeSequence!=D.Sequence)Snapshot.DodgeOrigin=Character()->GetActorLocation();Snapshot.DodgeSequence=D.Sequence;Snapshot.DodgeCharges=D.Charges;Snapshot.DodgeStart=D.Start;Snapshot.DodgeMotionEnd=D.MotionEnd;Snapshot.DodgeLockEnd=D.LockEnd;Snapshot.DodgeNextStart=D.NextStart;Snapshot.DodgeRestoreAt=D.RestoreAt;Snapshot.DodgeDirection=D.Direction;
     if(D.Locked(Now)){Snapshot.bLocked=true;Snapshot.bYawLocked=true;}
     Snapshot.Energy=Model->Resources().Energy();Snapshot.QReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::Q);Snapshot.EReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::E);
     const auto& Pending=Model->GetPendingDodge().IsSet()?Model->GetPendingDodge():Model->GetPending();OwnerAdmission.PendingCommand=Pending.IsSet()?Pending->Sequence:0;OwnerAdmission.PendingExpires=Pending.IsSet()?Pending->Receive+.15:0;
@@ -257,6 +257,7 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("definition"),Snapshot.DefinitionId);J->SetNumberField(TEXT("raw"),Snapshot.RawDamage);
     J->SetNumberField(TEXT("energy"),Snapshot.Energy);J->SetNumberField(TEXT("qReady"),Snapshot.QReadyAt);J->SetNumberField(TEXT("eReady"),Snapshot.EReadyAt);
     J->SetNumberField(TEXT("dodge"),Snapshot.DodgeSequence);J->SetNumberField(TEXT("dodgeCharges"),Snapshot.DodgeCharges);J->SetNumberField(TEXT("dodgeStart"),Snapshot.DodgeStart);J->SetNumberField(TEXT("dodgeMotionEnd"),Snapshot.DodgeMotionEnd);J->SetNumberField(TEXT("dodgeLockEnd"),Snapshot.DodgeLockEnd);J->SetNumberField(TEXT("dodgeNextStart"),Snapshot.DodgeNextStart);J->SetNumberField(TEXT("dodgeRestoreAt"),Snapshot.DodgeRestoreAt);J->SetStringField(TEXT("dodgeDirection"),Snapshot.DodgeDirection.ToString());
+    J->SetStringField(TEXT("dodgeOrigin"),Snapshot.DodgeOrigin.ToString());
     J->SetNumberField(TEXT("admission"),OwnerAdmission.Admission);J->SetNumberField(TEXT("pendingCommand"),OwnerAdmission.PendingCommand);
     J->SetNumberField(TEXT("pendingExpires"),OwnerAdmission.PendingExpires);J->SetNumberField(TEXT("queued"),QueuedCount);J->SetNumberField(TEXT("replaced"),ReplacedCount);
     J->SetNumberField(TEXT("activeStart"),Snapshot.StartSeconds+Snapshot.ActiveStart); J->SetNumberField(TEXT("activeEnd"),Snapshot.StartSeconds+Snapshot.ActiveEnd);
@@ -310,6 +311,10 @@ void UU02CombatComponent::SendNetworkFixtureProbe(const FString& Kind)
     if(Kind==TEXT("stale"))ServerAttack(LastSentCommand+1,GetWorld()->GetTimeSeconds(),0,Snapshot.PawnId,Snapshot.LifeGeneration-1);
     if(Kind==TEXT("nan"))ServerAttack(FMath::Max(LastSentCommand,Snapshot.LastCommand)+1,GetWorld()->GetTimeSeconds(),std::numeric_limits<double>::quiet_NaN(),Snapshot.PawnId,Snapshot.LifeGeneration);
     if(Kind==TEXT("other"))for(TActorIterator<AU01Character> It(GetWorld());It;++It)if(*It!=Character()){It->Combat->ServerAttack(1,0,0,It->NetworkPawnId,It->Combat->Snapshot.LifeGeneration);break;}
+    if(Kind==TEXT("dodgeduplicate"))ServerCombat(uint8(AnimeMMORPG::U03::ECommand::Dodge),LastSentCommand,0,0,Snapshot.PawnId,LastSentLife,FVector2D(1,0));
+    if(Kind==TEXT("dodgestale"))ServerCombat(uint8(AnimeMMORPG::U03::ECommand::Dodge),LastSentCommand+1,0,0,Snapshot.PawnId,Snapshot.LifeGeneration-1,FVector2D(1,0));
+    if(Kind==TEXT("dodgenan"))ServerCombat(uint8(AnimeMMORPG::U03::ECommand::Dodge),LastSentCommand+1,0,std::numeric_limits<double>::quiet_NaN(),Snapshot.PawnId,Snapshot.LifeGeneration,FVector2D(1,0));
+    if(Kind==TEXT("dodgeother"))for(TActorIterator<AU01Character> It(GetWorld());It;++It)if(*It!=Character()){It->Combat->ServerCombat(uint8(AnimeMMORPG::U03::ECommand::Dodge),1,0,0,It->NetworkPawnId,It->Combat->Snapshot.LifeGeneration,FVector2D(1,0));break;}
     // No damage/HP payload exists in the gameplay RPC schema.
     Trace(TEXT("ClientProbe"),GetWorld()->GetTimeSeconds(),Kind);
 #endif
