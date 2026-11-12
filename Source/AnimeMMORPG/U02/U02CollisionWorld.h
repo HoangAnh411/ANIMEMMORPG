@@ -46,6 +46,7 @@ public:
     uint32 UnsupportedObstructions=0;
     bool bCharacterFixtureTargets=false; // Native test fixture only; normal lab attacks dummies.
 private:
+    friend struct FU03B1Access;
     friend struct FU02CollisionTestAccess;
     friend struct FU02EVitalWorldAccess;
     friend struct FU03RuntimeAccess;

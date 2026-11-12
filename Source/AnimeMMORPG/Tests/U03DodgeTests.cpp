@@ -12,9 +12,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "AIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Algo/Reverse.h"
 using namespace AnimeMMORPG;
 struct FU03B1Access
 {
+ static void Reverse(UU02CollisionWorld* W){Algo::Reverse(W->Sources);}
  static void HP(UU02VitalComponent* V,int32 Value){V->State.HP=Value;V->State.bDead=false;}
  static void Stale(UU02CombatComponent* C,uint64 Seq,uint64 Life){C->ServerCombat_Implementation(uint8(U03::ECommand::Dodge),Seq,0,0,C->GetCombatSnapshot().PawnId,Life,FVector2D(1,0));}
 };
@@ -137,6 +139,68 @@ bool FDodgeInteraction::RunTest(const FString&)
 {
  for(auto Lock:{EU01MotorLock::Interacting,EU01MotorLock::Control})
  {FWorld W;const double S=W.Now();W.Press(S);W.Press(S+.5);TestTrue(TEXT("waiting precondition queued"),W.P->Combat->GetAdmission().PendingCommand!=0);W.P->GetU01Movement()->SetMotorLock(Lock,true);W.Collision->DrainAt(S+.65);TestEqual(TEXT("authority lock discards pending before .60"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));TestEqual(TEXT("no second charge spent"),W.P->Combat->GetCombatSnapshot().DodgeCharges,1);TestEqual(TEXT("pending cleared"),W.P->Combat->GetAdmission().PendingCommand,uint64(0));W.P->GetU01Movement()->SetMotorLock(Lock,false);W.Press(S+.7);TestEqual(TEXT("fresh press after unlock still valid"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(2));W.ForwardErrorMessages(this);}
+ return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeRetained,"AnimeMMORPG.U03.B1.R1.RetainedWallSlideAndStepPrefixes",U03B1Flags)
+bool FDodgeRetained::RunTest(const FString&)
+{
+ for(int Case=0;Case<3;++Case)
+ {
+  FWorld W;const double S=W.Now();W.Box(FVector(53,0,Case==2?15:150),FVector(10,Case==1?200:20,Case==2?15:150));
+  const FVector2D Direction=Case==1?FVector2D(1,1):FVector2D(1,0);W.Press(S,U03::ECommand::Dodge,Direction);auto* M=W.P->GetU01Movement();
+  const auto& Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(S,S+1./240.,FVector(Direction.X,Direction.Y,0).GetSafeNormal(),Snapshot.LifeGeneration,Snapshot.DodgeSequence);
+  for(double Offset:{.0002,.0005,.001,.002,.003,.004})
+  {const double At=S+Offset;const auto Expected=M->DodgePositionAt(At);M->CommitDodge(At);TestTrue(TEXT("retained swept prefix exactly equals actual transform"),W.P->GetActorLocation().Equals(Expected,1.e-6));}
+  W.ForwardErrorMessages(this);
+ }
+ return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeMidHit,"AnimeMMORPG.U03.B1.R1.IncomingMidWallAndStepLethal",U03B1Flags)
+bool FDodgeMidHit::RunTest(const FString&)
+{
+ for(bool Step:{false,true})for(bool Lethal:{false,true})
+ {
+  FVector Reference;double ReferenceTime=0;
+  for(bool Short:{false,true})
+  {
+   FWorld W;const double S=W.Now();W.Box(FVector(Step?143:53,0,Step?15:150),FVector(Step?100:10,20,Step?15:150));
+   auto* Enemy=W.Spawn(FVector(95.5,-150,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;if(Lethal)FU03B1Access::HP(W.P->Vital,60);
+   Enemy->Combat->SubmitAttackIntent(1,0,90);W.Collision->DrainAt(S);W.Press(S+.159);
+   auto* M=W.P->GetU01Movement();const auto Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(S+.159,S+.159+1./240.,FVector(1,0,0),Snapshot.LifeGeneration,Snapshot.DodgeSequence);
+   const double HitTime=S+.16;const FVector Expected=M->DodgePositionAt(HitTime);FVector AtHit;double ActualTime=-1;
+   W.Collision->OnGeometryConfirmed.AddLambda([&](const U02::FHitCandidate& Hit){if(Hit.Id.Target.Pawn==W.P->NetworkPawnId){ActualTime=Hit.TimestampSeconds;AtHit=W.P->GetActorLocation();}});
+   if(Short)for(double T=S+.1593;T<HitTime;T+=.0003)W.Collision->DrainAt(T);
+   W.Collision->DrainAt(HitTime);
+   TestEqual(TEXT("contact at incoming active entry, not chord crossing later"),ActualTime,HitTime);
+   TestTrue(TEXT("contact geometry equals actual committed prefix"),AtHit.Equals(Expected,1.e-6));
+   TestEqual(TEXT("real damage, no iframe"),W.P->Vital->GetSnapshot().HP,Lethal?0:940);
+   if(Step)TestTrue(TEXT("hit occurs during vertical StepUp leg"),Expected.Z>98.2);
+   if(!Short){Reference=AtHit;ReferenceTime=ActualTime;}else{TestTrue(TEXT("long and short update same contact position"),AtHit.Equals(Reference,1.e-6));TestEqual(TEXT("long and short update same hit time"),ActualTime,ReferenceTime);}
+   if(Lethal){W.Collision->DrainAt(S+1.);TestTrue(TEXT("lethal cutoff preserves intermediate position"),W.P->GetActorLocation().Equals(AtHit,1.e-6));}
+   AddInfo(FString::Printf(TEXT("U03B1_R1_MID step=%d lethal=%d short=%d expected=%.17g actual=%.17g position=%s"),Step,Lethal,Short,HitTime,ActualTime,*AtHit.ToString()));W.ForwardErrorMessages(this);
+  }
+ }
+ return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgePairs,"AnimeMMORPG.U03.B1.R1.SimultaneousPawnCCD",U03B1Flags)
+bool FDodgePairs::RunTest(const FString&)
+{
+ for(bool Follow:{false,true})
+ {
+  FVector ReferenceA,ReferenceB;
+  for(bool Reverse:{false,true})for(bool Short:{false,true})
+  {
+   FWorld W;const double S=W.Now();auto* Other=W.Spawn(FVector(Follow?85:100,0,98.15),2);
+   W.P->Combat->SubmitCombatIntent(U03::ECommand::Dodge,1,0,0,FVector2D(1,0));Other->Combat->SubmitCombatIntent(U03::ECommand::Dodge,1,0,0,FVector2D(Follow?1:-1,0));W.Collision->DrainAt(S);
+   if(Reverse)FU03B1Access::Reverse(W.Collision);
+   if(Short)for(double T=S+.0007;T<S+.25;T+=.0007)W.Collision->DrainAt(T);
+   W.Collision->DrainAt(S+.25);const auto A=W.P->GetActorLocation(),B=Other->GetActorLocation();
+   TestTrue(TEXT("moving capsules do not interpenetrate"),(A-B).Size2D()>=83.999);
+   if(Follow)TestTrue(TEXT("following motion not blocked by stale peer transform"),A.X>295&&B.X>380);else TestTrue(TEXT("opposed dodges stop before crossing"),A.X<10&&B.X>90);
+   if(!Reverse&&!Short){ReferenceA=A;ReferenceB=B;}else{TestTrue(TEXT("collection/update partition invariant A"),A.Equals(ReferenceA,1.e-5));TestTrue(TEXT("collection/update partition invariant B"),B.Equals(ReferenceB,1.e-5));}
+   TestEqual(TEXT("one charge each"),Other->Combat->GetCombatSnapshot().DodgeCharges,1);W.ForwardErrorMessages(this);
+  }
+ }
  return true;
 }
 #endif

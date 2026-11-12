@@ -4,55 +4,96 @@
 #include "Engine/World.h"
 
 void UU01CharacterMovement::HandleImpact(const FHitResult& Hit,float Dt,const FVector& Delta)
+{if(!bPreviewDodge)Super::HandleImpact(Hit,Dt,Delta);}
+void UU01CharacterMovement::TrimNativeDodgePath(FVector Position)
 {
-    if(!bPreviewDodge)Super::HandleImpact(Hit,Dt,Delta);
+    // Native StepUp rolls back failed trial branches. Retain only the survivor.
+    if(NativeDodgePath.IsEmpty()){NativeDodgePath.Add(Position);return;}
+    if(NativeDodgePath.Last().Equals(Position,1.e-7))return;
+    for(int32 I=NativeDodgePath.Num()-1;I>=0;--I)if(NativeDodgePath[I].Equals(Position,1.e-7))
+    {NativeDodgePath.SetNum(I+1);return;}
+    checkf(false,TEXT("Unrecorded native dodge movement rollback"));
+}
+bool UU01CharacterMovement::MoveUpdatedComponentImpl(const FVector& Delta,const FQuat& Rotation,bool Sweep,FHitResult* Hit,ETeleportType Teleport)
+{
+    if(bPreviewDodge)TrimNativeDodgePath(UpdatedComponent->GetComponentLocation());
+    const bool Moved=Super::MoveUpdatedComponentImpl(Delta,Rotation,Sweep,Hit,Teleport);
+    if(bPreviewDodge&&!NativeDodgePath.Last().Equals(UpdatedComponent->GetComponentLocation(),1.e-7))NativeDodgePath.Add(UpdatedComponent->GetComponentLocation());
+    return Moved;
 }
 void UU01CharacterMovement::WalkDodge(float Seconds,FVector Direction)
 {
-    if(Seconds<=0 || !UpdatedComponent || !IsMovingOnGround())return;
+    if(Seconds<=0||!UpdatedComponent||!IsMovingOnGround())return;
     FindFloor(UpdatedComponent->GetComponentLocation(),CurrentFloor,false);
     if(!CurrentFloor.IsWalkableFloor()){bDodgeLostGround=true;return;}
-    // Require support below the destination's centre, not just a trailing edge of
-    // the capsule. Each planned horizontal slice is <=5cm, so no gap is skipped.
     const FVector Feet=UpdatedComponent->GetComponentLocation()-FVector(0,0,CharacterOwner->GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
     const FVector Next=Feet+Direction*(1200.*Seconds);
     FHitResult Support;FCollisionQueryParams Params(SCENE_QUERY_STAT(U03DodgeFloor),false,CharacterOwner);
+    for(const auto& Ignored:UpdatedPrimitive->GetMoveIgnoreActors())if(Ignored.IsValid())Params.AddIgnoredActor(Ignored.Get());
     const bool Floor=GetWorld()->LineTraceSingleByChannel(Support,Next+FVector(0,0,MaxStepHeight+MAX_FLOOR_DIST),Next-FVector(0,0,MaxStepHeight+MAX_FLOOR_DIST),UpdatedComponent->GetCollisionObjectType(),Params);
     if(!Floor||!IsWalkable(Support)){bDodgeBlocked=true;return;}
-    Velocity=Direction*1200.;
-    FStepDownResult Down;MoveAlongFloor(Velocity,Seconds,&Down);
+    Velocity=Direction*1200.;FStepDownResult Down;MoveAlongFloor(Velocity,Seconds,&Down);
     if(Down.bComputedFloor)CurrentFloor=Down.FloorResult;else FindFloor(UpdatedComponent->GetComponentLocation(),CurrentFloor,false);
     if(!CurrentFloor.IsWalkableFloor()){bDodgeLostGround=true;return;}
     AdjustFloorHeight();
-    // Sweep/StepUp/slide all belong to the existing CharacterMovement walking path.
 }
-void UU01CharacterMovement::PlanDodge(double Begin,double End,FVector Direction,uint64 Life,uint64 Sequence)
+void UU01CharacterMovement::PlanDodge(double Begin,double End,FVector Direction,uint64 Life,uint64 Sequence,const TArray<AActor*>& BatchPawns)
 {
-    bDodgePlan=false;bDodgeLostGround=false;bDodgeBlocked=false;
+    if(bDodgePlan&&Life==PlanLife&&Sequence==PlanSequence&&Begin<PlanEnd&&End>Begin
+        &&UpdatedComponent->GetComponentLocation().Equals(DodgePositionAt(Begin),1.e-6)
+        &&(!PlanFloor.HitResult.Component.IsValid()||PlanFloor.HitResult.Component->IsQueryCollisionEnabled()))return;
+    bDodgePlan=false;bDodgeLostGround=false;bDodgeBlocked=false;DodgePath.Reset();
     if(!CharacterOwner||!CharacterOwner->HasAuthority()||End<=Begin||!UpdatedComponent)return;
-    PlanBegin=PlanCommitted=Begin;PlanEnd=End;PlanDirection=Direction;PlanLife=Life;PlanSequence=Sequence;PlanOrigin=UpdatedComponent->GetComponentLocation();
+    PlanBegin=PlanCommitted=Begin;PlanEnd=End;PlanClip=TNumericLimits<double>::Max();PlanDirection=Direction;PlanLife=Life;PlanSequence=Sequence;PlanOrigin=UpdatedComponent->GetComponentLocation();
     const auto Floor=CurrentFloor;const FVector OldVelocity=Velocity;const bool Teleported=bJustTeleported;
+    const auto Ignored=UpdatedPrimitive->GetMoveIgnoreActors();
+    for(auto* Pawn:BatchPawns)if(Pawn!=CharacterOwner)UpdatedPrimitive->IgnoreActorWhenMoving(Pawn,true);
+    NativeDodgePath.Reset();NativeDodgePath.Add(PlanOrigin);
     {
-        TGuardValue<bool> Preview(bPreviewDodge,true);
-        FScopedMovementUpdate Deferred(UpdatedComponent,EScopedUpdate::DeferredUpdates);
-        WalkDodge(float(End-Begin),Direction);
-        PlanDestination=UpdatedComponent->GetComponentLocation();
-        Deferred.RevertMove();
+        TGuardValue<bool> Preview(bPreviewDodge,true);FScopedMovementUpdate Deferred(UpdatedComponent,EScopedUpdate::DeferredUpdates);
+        WalkDodge(float(End-Begin),Direction);TrimNativeDodgePath(UpdatedComponent->GetComponentLocation());
+        PlanDestination=UpdatedComponent->GetComponentLocation();PlanFloor=CurrentFloor;Deferred.RevertMove();
     }
-    CurrentFloor=Floor;Velocity=OldVelocity;bJustTeleported=Teleported;bDodgePlan=true;
+    UpdatedPrimitive->ClearMoveIgnoreActors();for(const auto& Actor:Ignored)if(Actor.IsValid())UpdatedPrimitive->IgnoreActorWhenMoving(Actor.Get(),true);
+    CurrentFloor=Floor;Velocity=OldVelocity;bJustTeleported=Teleported;
+    double Length=0;for(int32 I=1;I<NativeDodgePath.Num();++I)Length+=(NativeDodgePath[I]-NativeDodgePath[I-1]).Size();
+    // A blocked flat path consumes distance/1200 seconds then holds. Ramp and
+    // vertical StepUp legs share the native horizontal quantum's time budget.
+    const double Speed=FMath::Max(1200.,Length/(End-Begin));double At=Begin;
+    DodgePath.Add({Begin,PlanOrigin});
+    for(int32 I=1;I<NativeDodgePath.Num();++I){At=FMath::Min(End,At+(NativeDodgePath[I]-NativeDodgePath[I-1]).Size()/Speed);DodgePath.Add({At,NativeDodgePath[I]});}
+    if(At<End)DodgePath.Add({End,PlanDestination});else DodgePath.Last().At=End;
+    bDodgePlan=true;
 }
-FVector UU01CharacterMovement::DodgeOffsetAt(double At) const
-{return bDodgePlan?(PlanDestination-PlanOrigin)*((At-PlanBegin)/(PlanEnd-PlanBegin)):FVector::ZeroVector;}
+FVector UU01CharacterMovement::DodgePositionAt(double At) const
+{
+    if(!bDodgePlan||DodgePath.IsEmpty())return PlanOrigin;
+    At=FMath::Min(At,PlanClip);
+    for(int32 I=1;I<DodgePath.Num();++I)if(At<=DodgePath[I].At)
+    {const auto& A=DodgePath[I-1];const auto& B=DodgePath[I];return FMath::Lerp(A.Position,B.Position,FMath::Clamp((At-A.At)/(B.At-A.At),0.,1.));}
+    return DodgePath.Last().Position;
+}
+FVector UU01CharacterMovement::DodgeOffsetAt(double At) const{return DodgePositionAt(At)-PlanOrigin;}
+double UU01CharacterMovement::NextDodgePathBoundary(double At,double Through) const
+{
+    if(!bDodgePlan)return Through;
+    if(PlanClip>At)Through=FMath::Min(Through,PlanClip);
+    for(const auto& Knot:DodgePath)if(Knot.At>At){Through=FMath::Min(Through,Knot.At);break;}
+    return Through;
+}
+bool UU01CharacterMovement::ClipDodgePath(double At)
+{if(!bDodgePlan||At>=PlanClip)return false;PlanClip=At;return true;}
 void UU01CharacterMovement::CommitDodge(double At)
 {
     if(!bDodgePlan||At<PlanCommitted||At>PlanEnd||!CharacterOwner||!CharacterOwner->HasAuthority())return;
-    const auto* Combat=CastChecked<AU01Character>(CharacterOwner)->Combat.Get();
-    const auto& Snapshot=Combat->GetCombatSnapshot();
+    const auto& Snapshot=CastChecked<AU01Character>(CharacterOwner)->Combat->GetCombatSnapshot();
     if(Snapshot.LifeGeneration!=PlanLife||Snapshot.DodgeSequence!=PlanSequence)return;
-    // No saved move can set PlanLife/Sequence, restore a charge, or replay this clock.
-    const bool WasLost=bDodgeLostGround;
-    if(!WasLost)WalkDodge(float(At-PlanCommitted),PlanDirection);
+    // Apply the retained capsule-swept path, already constrained by batch pawn
+    // CCD. Never run a second walking/StepUp/slide solve at this timestamp.
+    for(const auto& Knot:DodgePath)if(Knot.At>PlanCommitted&&Knot.At<At)
+        MoveUpdatedComponent(DodgePositionAt(Knot.At)-UpdatedComponent->GetComponentLocation(),UpdatedComponent->GetComponentQuat(),false,nullptr,ETeleportType::None);
+    MoveUpdatedComponent(DodgePositionAt(At)-UpdatedComponent->GetComponentLocation(),UpdatedComponent->GetComponentQuat(),false,nullptr,ETeleportType::None);
+    if(At==PlanEnd&&PlanClip>=PlanEnd)CurrentFloor=PlanFloor;
     if(bDodgeLostGround)SetMovementMode(MOVE_Falling);
-    Velocity.X=Velocity.Y=0;
-    PlanCommitted=At; // a repeated commit at the same time never translates again
+    Velocity.X=Velocity.Y=0;PlanCommitted=At;
 }

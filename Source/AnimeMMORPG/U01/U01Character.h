@@ -48,15 +48,19 @@ public:
     void ResetFixtureState();
     // Authority-only swept walking preview. Deferred transforms/overlaps are reverted;
     // only CommitDodge moves the actor, at the world resolver's selected event time.
-    void PlanDodge(double Begin,double End,FVector Direction,uint64 Life,uint64 Sequence);
+    void PlanDodge(double Begin,double End,FVector Direction,uint64 Life,uint64 Sequence,const TArray<AActor*>& BatchPawns={});
     void CommitDodge(double At);
     bool HasDodgePlan() const { return bDodgePlan; }
     FVector DodgeOffsetAt(double At) const;
     FVector DodgePlanOrigin() const { return PlanOrigin; }
+    FVector DodgePositionAt(double At) const;
+    double NextDodgePathBoundary(double At,double Through) const;
+    bool ClipDodgePath(double At);
     bool DodgeLostGround() const { return bDodgeLostGround; }
     bool DodgeBlocked() const { return bDodgeBlocked; }
     bool IsDodgePreview() const { return bPreviewDodge; }
     virtual void HandleImpact(const FHitResult& Hit,float TimeSlice=0.f,const FVector& MoveDelta=FVector::ZeroVector) override;
+    virtual bool MoveUpdatedComponentImpl(const FVector& Delta,const FQuat& Rotation,bool bSweep,FHitResult* Hit=nullptr,ETeleportType Teleport=ETeleportType::None) override;
 private:
     friend class FSavedMove_U01;
     bool bNetworkJumpHeld=false;
@@ -75,6 +79,12 @@ private:
     double PlanBegin=0,PlanEnd=0,PlanCommitted=0;
     FVector PlanOrigin=FVector::ZeroVector,PlanDestination=FVector::ZeroVector,PlanDirection=FVector::ZeroVector;
     uint64 PlanLife=0,PlanSequence=0;
+    struct FDodgeKnot {double At;FVector Position;};
+    TArray<FDodgeKnot> DodgePath;
+    TArray<FVector> NativeDodgePath;
+    FFindFloorResult PlanFloor;
+    double PlanClip=TNumericLimits<double>::Max();
+    void TrimNativeDodgePath(FVector Position);
     void WalkDodge(float Seconds,FVector Direction);
 };
 

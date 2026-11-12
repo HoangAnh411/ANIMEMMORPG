@@ -94,7 +94,12 @@ void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
         Acceleration = FVector::ZeroVector;
         Velocity.X = Velocity.Y = 0;
     }
-    Super::PerformMovement(DeltaSeconds); // Keep vertical movement and world simulation alive.
+    const auto* Combat=Cast<AU01Character>(CharacterOwner)?CastChecked<AU01Character>(CharacterOwner)->Combat.Get():nullptr;
+    const bool WorldOwnsDodge=CharacterOwner&&CharacterOwner->HasAuthority()&&HasDodgePlan()&&IsMovingOnGround()&&Combat
+        &&Combat->GetCombatSnapshot().ServerSeconds<Combat->GetCombatSnapshot().DodgeMotionEnd;
+    // During a retained walking path, another CMC solve would move the actor
+    // away from the resolver's trajectory. Falling still uses native gravity.
+    if(!WorldOwnsDodge)Super::PerformMovement(DeltaSeconds);
     if (bCombatAuthorityLocked) PhysicsRotation(DeltaSeconds);
     SimulationSeconds = FrameStartSeconds + DeltaSeconds;
     if(CharacterOwner&&CharacterOwner->HasAuthority())CastChecked<AU01Character>(CharacterOwner)->bNetSprinting=IsSprinting();

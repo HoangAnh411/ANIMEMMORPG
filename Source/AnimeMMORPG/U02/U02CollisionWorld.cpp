@@ -6,6 +6,7 @@
 #include "EngineUtils.h"
 #include "U02HurtboxComponent.h"
 #include "U01/U01Character.h"
+#include "U03/U03DodgeCollision.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -188,17 +189,18 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         const bool Continuous=Source->Previous.Life==Source->Current.Life&&Source->Previous.Epoch==Source->Current.Epoch
             &&H.Previous.Life==H.Current.Life&&H.Previous.Epoch==H.Current.Epoch&&H.Previous.Radius==H.Current.Radius;
         if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))UE_LOG(LogU02Collision,Display,TEXT("U02D_SPAN source=%s target=%s hurtbox=%u continuous=%d epochs=%llu/%llu targetEpochs=%llu/%llu radius=%.17g/%.17g feet=%s target=%s"),*P.Action.Source.Pawn.ToString(),*H.Current.Life.Pawn.ToString(),Shape->StableHurtboxId,Continuous,Source->Previous.Epoch,Source->Current.Epoch,H.Previous.Epoch,H.Current.Epoch,H.Previous.Radius,H.Current.Radius,*Source->Current.Position.ToString(),*H.Current.Position.ToString());
-        double A=P.Slice.BeginAlpha,B=P.Slice.EndAlpha;
-        if(CurrentTime>PreviousTime)A=FMath::Max(A,(H.AvailableFrom-PreviousTime)/(CurrentTime-PreviousTime));
-        if(A>B)continue;
-        FVector F0=Source->Previous.Position,F1=Source->Current.Position,C0=H.Previous.Position,C1=H.Current.Position;
-        // Dodge previews are piecewise swept walking paths, not a frame-end
-        // teleport. Evaluate the current world slice before committing its event.
+        const double Begin=FMath::Max(P.Slice.BeginSeconds,H.AvailableFrom),End=P.Slice.EndSeconds;
+        if(Begin>End)continue;
+        double A=0,B=1;
+        auto Sample=[&](FVector Previous,FVector Current,double At)
+        {return FMath::Lerp(Previous,Current,CurrentTime>PreviousTime?(At-PreviousTime)/(CurrentTime-PreviousTime):1.);};
+        FVector F0=Sample(Source->Previous.Position,Source->Current.Position,Begin),F1=Sample(Source->Previous.Position,Source->Current.Position,End);
+        FVector C0=Sample(H.Previous.Position,H.Current.Position,Begin),C1=Sample(H.Previous.Position,H.Current.Position,End);
         auto Planned=[&](AU01Character* Pawn,FVector Relative,FVector& P0,FVector& P1)
         {
             if(!Pawn)return;auto* M=Pawn->GetU01Movement();if(!M->HasDodgePlan())return;
-            P0=M->DodgePlanOrigin()+Relative+M->DodgeOffsetAt(PreviousTime);
-            P1=M->DodgePlanOrigin()+Relative+M->DodgeOffsetAt(CurrentTime);
+            P0=M->DodgePositionAt(Begin)+Relative;
+            P1=M->DodgePositionAt(End)+Relative;
         };
         auto* SourcePawn=Cast<AU01Character>(P.Component->GetOwner());
         Planned(SourcePawn,FVector(0,0,-SourcePawn->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()),F0,F1);
@@ -232,7 +234,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
             continue;
         }
         const double T=Hit.GetValue();
-        const double Timestamp=T==P.Slice.BeginAlpha?P.Slice.BeginSeconds:T==P.Slice.EndAlpha?P.Slice.EndSeconds:FMath::Lerp(PreviousTime,CurrentTime,T);
+        const double Timestamp=T==0?Begin:T==1?End:FMath::Lerp(Begin,End,T);
         if(Timestamp<P.Slice.BeginSeconds||Timestamp>P.Slice.EndSeconds||(P.Slice.bEndExclusive&&Timestamp>=P.Slice.EndSeconds))continue;
         Out.Add({{P.Action,H.Current.Life},Timestamp,Shape->StableHurtboxId,true,true,P.DefinitionId,P.DefinitionVersion,P.RawDamage});
         RecordSelected(P,H.Current.Life,Shape->StableHurtboxId,FMath::Lerp(F0,F1,T),FMath::Lerp(C0,C1,T),H.Current.Radius,Timestamp,TEXT("VALID"));
@@ -357,7 +359,8 @@ void UU02CollisionWorld::DrainAt(double Now)
         for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)
         {if(C->Model->Time()>SimulationTime)Boundary=FMath::Min(Boundary,C->Model->Time());else Boundary=FMath::Min(Boundary,C->Model->NextBoundaryThrough(Now));}
         for(const auto& E:LifecycleEvents)if(E.At>=SimulationTime)Boundary=FMath::Min(Boundary,E.At);
-        for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Dodge().Moving(SimulationTime))Boundary=FMath::Min(Boundary,SimulationTime+1./240.);
+        TArray<AActor*> BatchPawns;
+        for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Dodge().Moving(SimulationTime))BatchPawns.Add(C->GetOwner());
         for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)
         {
             const auto& D=C->Model->Dodge();
@@ -367,7 +370,33 @@ void UU02CollisionWorld::DrainAt(double Now)
                 S.Previous.Position=S.Current.Position=Feet(C->Character());
                 for(auto& H:Hurts)if(auto* Shape=H.Component.Get())if(Shape->GetOwner()==C->GetOwner())H.Previous.Position=H.Current.Position=Shape->GetComponentLocation();
             }
-            C->Character()->GetU01Movement()->PlanDodge(SimulationTime,D.Moving(SimulationTime)?Boundary:SimulationTime,D.Direction,C->Model->GetLife().Generation,D.Sequence);
+            Motor->PlanDodge(SimulationTime,D.Moving(SimulationTime)?FMath::Min(D.MotionEnd,SimulationTime+1./240.):SimulationTime,D.Direction,C->Model->GetLife().Generation,D.Sequence,BatchPawns);
+            Boundary=Motor->NextDodgePathBoundary(SimulationTime,Boundary);
+        }
+        // Solve moving capsules simultaneously. Previews ignore the other active
+        // dodgers' stale transforms; relative CCD constrains both retained paths.
+        bool Clipped=true;
+        while(Clipped)
+        {
+            Clipped=false;
+            for(int32 I=0;I<Sources.Num();++I)for(int32 J=I+1;J<Sources.Num();++J)
+            {
+                auto* CA=Sources[I].Component.Get();auto* CB=Sources[J].Component.Get();if(!CA||!CB)continue;
+                auto* PA=CA->Character();auto* PB=CB->Character();auto* MA=PA->GetU01Movement();auto* MB=PB->GetU01Movement();
+                if(!MA->HasDodgePlan()&&!MB->HasDodgePlan())continue;
+                const auto* ShapeA=PA->GetCapsuleComponent();const auto* ShapeB=PB->GetCapsuleComponent();
+                if(ShapeA->GetCollisionResponseToChannel(ShapeB->GetCollisionObjectType())!=ECR_Block||ShapeB->GetCollisionResponseToChannel(ShapeA->GetCollisionObjectType())!=ECR_Block)continue;
+                auto Position=[&](AU01Character* P,UU01CharacterMovement* M,double T){return M->HasDodgePlan()?M->DodgePositionAt(T):P->GetActorLocation();};
+                const double Radius=ShapeA->GetScaledCapsuleRadius()+ShapeB->GetScaledCapsuleRadius()+.01;
+                const double Half=ShapeA->GetScaledCapsuleHalfHeight()+ShapeB->GetScaledCapsuleHalfHeight()-Radius+.01;
+                auto Contact=AnimeMMORPG::U03::CapsuleContact(Position(PA,MA,SimulationTime),Position(PA,MA,Boundary),Position(PB,MB,SimulationTime),Position(PB,MB,Boundary),Radius,Half);
+                if(Contact.IsSet())
+                {
+                    const double At=FMath::Lerp(SimulationTime,Boundary,Contact.GetValue());
+                    const bool AChanged=MA->ClipDodgePath(At),BChanged=MB->ClipDodgePath(At);Clipped|=AChanged||BChanged;
+                    if(At>SimulationTime)Boundary=FMath::Min(Boundary,At);
+                }
+            }
         }
         TArray<FHitCandidate> Candidates;CollectCurrent(Boundary,Candidates);
         const double Stop=Candidates.IsEmpty()?Boundary:FMath::Min(Boundary,Candidates[0].TimestampSeconds);
