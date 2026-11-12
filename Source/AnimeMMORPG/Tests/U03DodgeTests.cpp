@@ -109,8 +109,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeIncoming,"AnimeMMORPG.U03.B1.RuntimeNoIFr
 bool FDodgeIncoming::RunTest(const FString&)
 {
  for(bool Lethal:{false,true})
- {FWorld W;const double S=W.Now();auto* Enemy=W.Spawn(FVector(-150,0,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;W.Box(FVector(100,0,150),FVector(10,200,150));if(Lethal)FU03B1Access::HP(W.P->Vital,60);
-  Enemy->Combat->SubmitAttackIntent(1,0,0);W.Press(S);W.Collision->DrainAt(S+1.);TestEqual(TEXT("dodge has no iframe"),W.P->Vital->GetSnapshot().HP,Lethal?0:940);if(Lethal){TestTrue(TEXT("motion stopped at death hit"),W.P->Combat->GetCombatSnapshot().DodgeMotionEnd<=S+.16);TestTrue(TEXT("no movement past wall/death"),W.P->GetActorLocation().X<50.);}
+ {FWorld W;const double S=W.Now();auto* Enemy=W.Spawn(FVector(350,0,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;if(Lethal)FU03B1Access::HP(W.P->Vital,60);
+  Enemy->Combat->SubmitAttackIntent(1,0,180);W.Press(S);W.Collision->DrainAt(S+1.);TestEqual(TEXT("dodge has no iframe"),W.P->Vital->GetSnapshot().HP,Lethal?0:940);if(Lethal){TestTrue(TEXT("motion stopped at death hit"),W.P->Combat->GetCombatSnapshot().DodgeMotionEnd<=S+.16);TestTrue(TEXT("moving path committed exactly through lethal .16"),FMath::Abs(W.P->GetActorLocation().X-192.)<1.);}
   W.ForwardErrorMessages(this);}
  return true;
 }
@@ -124,5 +124,12 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeBatch,"AnimeMMORPG.U03.B1.RuntimeBatchPri
 bool FDodgeBatch::RunTest(const FString&)
 {
  FWorld W;const double S=W.Now();W.P->Combat->SubmitAttackIntent(1,0,0);W.P->Combat->SubmitCombatIntent(U03::ECommand::Dodge,2,0,0,FVector2D(1,1));W.Seq=2;W.Collision->DrainAt(S);TestEqual(TEXT("same timestamp dodge wins before attack"),W.P->Combat->GetCombatSnapshot().ActionSequence,uint64(0));TestEqual(TEXT("one dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(1));W.Collision->DrainAt(S+.6);W.Press(S+.6);W.Press(S+1.,U03::ECommand::Attack);W.Press(S+1.05);TestEqual(TEXT("no charge keeps sword startup"),W.P->Combat->GetCombatSnapshot().Phase,uint8(U02::EPhase::Startup));TestEqual(TEXT("no charge does not change dodge"),W.P->Combat->GetCombatSnapshot().DodgeSequence,uint64(2));W.ForwardErrorMessages(this);return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDodgeSlow,"AnimeMMORPG.U03.B1.RuntimeSlowMotorBudgetFixture",U03B1Flags)
+bool FDodgeSlow::RunTest(const FString&)
+{
+ FWorld W;auto* Motor=W.P->GetU01Movement();Motor->MaxWalkSpeed=50;Motor->MaxAcceleration=5;Motor->GroundFriction=100;Motor->BrakingDecelerationWalking=100000;
+ // Labelled policy fixture only: B2 slow effect gameplay is not implemented.
+ const double S=W.Now();const FVector Before=W.P->GetActorLocation();W.Press(S);W.Collision->DrainAt(S+.25);TestTrue(TEXT("low ordinary motor budget/friction does not scale dodge"),FMath::Abs((W.P->GetActorLocation()-Before).Size2D()-300.)<5.);TestEqual(TEXT("still one charge"),W.P->Combat->GetCombatSnapshot().DodgeCharges,1);W.ForwardErrorMessages(this);return true;
 }
 #endif
