@@ -282,6 +282,9 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
             ParryTone->QueueAudio(reinterpret_cast<const uint8*>(PCM.GetData()),PCM.Num()*sizeof(int16));UGameplayStatics::PlaySound2D(this,ParryTone);
         }
     }
+    if(Snapshot.FeintSequence&&FeedbackNow-Snapshot.FeintLastSuccess<1.2)DrawDebugString(GetWorld(),C->GetActorLocation()+FVector(0,0,120),TEXT("< FEINT >"),nullptr,FColor::White,0,true);
+    if(Snapshot.InterruptSequence&&FeedbackNow-Snapshot.InterruptTime<1.2)DrawDebugString(GetWorld(),C->GetActorLocation()+FVector(0,0,145),TEXT("// INTERRUPTED //"),nullptr,FColor::White,0,true);
+    if(Snapshot.bLocked&&(Snapshot.DefinitionId==3||Snapshot.DefinitionId==4))DrawDebugString(GetWorld(),C->GetActorLocation()+FVector(0,0,100),Snapshot.Phase==uint8(EPhase::Startup)?TEXT("< STARTUP >"):Snapshot.Phase==uint8(EPhase::Active)?TEXT("!! ACTIVE !!"):TEXT("... RECOVERY ..."),nullptr,FColor::White,0,true);
     if(Snapshot.bGuard)DrawDebugBox(GetWorld(),C->GetActorLocation()+FRotator(0,Snapshot.GuardYaw,0).Vector()*45,FVector(3,35,55),FRotator(0,Snapshot.GuardYaw,0).Quaternion(),FColor::Blue,false,0,0,2);
     if(FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&Snapshot.ParryFeedbackSequence)
         DrawDebugCircle(GetWorld(),C->GetActorLocation(),65+30*FMath::Clamp(FeedbackNow-Snapshot.ParryFeedbackTime,0.,1.2),32,FColor::White,false,0,0,3,FVector::ForwardVector,FVector::RightVector,false);
