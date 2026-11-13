@@ -1,22 +1,24 @@
-# U03-C1 verification matrix
+# U03-C1 — ma trận kiểm chứng
 
-Evidence status starts PENDING; source assertions alone do not satisfy runtime, input, network or presentation gates. Do not predeclare test counts.
+Native/content source `dbe10dab1cd6a9b14c28c732aba66f21d525ac69`. [Manifest](Evidence/C1/MANIFEST.json), [report và failures](REPORT-C1.md). PASS là bằng chứng kỹ thuật đúng tầng, không nghiệm thu cảm giác.
 
-|Rule|Required layer and evidence|Status|
+|Luật|Tầng và bằng chứng cuối|Trạng thái|
 |---|---|---|
-|Definitions, boundaries, energy/CD/regen, rejection/no refund|Model boundary tests before/exact/after; world resources|PENDING|
-|Recovery replacement all three attacks; startup/active mutual refusal|Model and actual dispatcher; physical recovery chains|PENDING|
-|Dodge/guard valid startup replacement, zero charges/guard lock|Model + world, physical input|PENDING|
-|Q edge classification, no held repeat/buffer, .20/1s Feint boundaries|Model + physical keyboard + snapshots/video|PENDING|
-|Feint walk/no sprint/jump; held WASD resumes|Movement world + physical input|PENDING|
-|E startup-only Interrupt normal/Q/E; Q no effect|Actual collision/damage/shield/effect resolver|PENDING|
-|Block/parry/shield/lethal, multitarget/dedup|World fixtures with individual results|PENDING|
-|Long/short update, reversed collection, same timestamp, successor startup cutoff|World causality and inherited regression|PENDING|
-|Retained wall/StepUp/two-pawn dodge|B1-R1 regression rerun on C1 binary|PENDING|
-|Menu/focus/Resume/rebind/held/reset/newlife/invalid RPC|Physical input and network-process checks|PENDING|
-|Three-process identity/definition/resources/defense/damage/Interrupt/life|Dedicated Editor + two client saved samples|PENDING|
-|Provenance/phase/Feint/Interrupt signals|Asset validation and actual video|PENDING|
-|Editor/Game, all Automation, committed-clone package/smoke three maps|Logs/source/binary/package hashes and manifest|PENDING|
-|Launchers validate hashes/session/profile/placement; private bytes unchanged|Launcher checks and config hashes|PENDING|
+|Definition/raw/flags/version, active/recovery nửa mở|C1 InterruptEdgesAndCapturedEffects + BlockoutMontageAuthorityPolicy; trước/đúng/sau active-start/end/duration; world raw100/80|PASS|
+|Energy100, cost20/25, CD4/6, delay1s/integral10/s/cap; đủ/thiếu/reject/no refund|C1 CooldownRegenAndResourceRejection, FeintEdgesResourcesAndLife; A0/A1 resource/dispatcher; actual input và snapshot ba process|PASS|
+|Q/E nối recovery cả ba đòn, từ chối startup/active/lẫn nhau, reset combo/pending/no buffer|C1 RecoveryAndReplacementPermissions; input Recovery1/2/3; inherited combo/buffer rerun|PASS|
+|Né/guard chỉ thay startup; validate replacement trước cutoff, zero charges/guard lock|C1 RecoveryAndReplacementPermissions + SequencePriorityAndRejectedReplacement; B2 permission tests; actual Shift/RMB hủy Q/E startup|PASS|
+|Q edge Feint trước cast/CD, active-start đóng, held không lặp, min1s, lock.20|C1 FeintEdgesResourcesAndLife + SequencePriorityAndRejectedReplacement; real Q/Q, held Q và T/T sau rebind. Min1s có state-gate boundary test; CD Q4s vẫn ràng buộc cast|PASS|
+|Feint walk/no sprint/jump, slow/CC/control policy, không stale jump; giữ WASD đi tiếp|Life/action-qualified real in-window samples; movement-independent E (resume+.0156826s); U01/B2 motor/control/slow/CC; separate Feint motor/saved-move guard|PASS kỹ thuật|
+|E Interrupt startup normal/Q/E, exact active-start/active/recovery không pure Interrupt; không stun/refund, Q không Interrupt|C1 InterruptEdgesAndCapturedEffects, WorldSkillInterruptShieldDefenseDeath, actual outgoing/incoming E; hard CC/death giữ cutoff riêng|PASS|
+|Block/parry chặn, full shield không miễn, lethal không effect, nhiều target/dedup|C1 WorldSkillInterruptShieldDefenseDeath + WorldEPerTargetDedup; actual E block/parry network và histories ba process|PASS|
+|Long/short, collection đảo, successor startup, timestamp group/cutoff không rewind|C1 WorldIncomingEInSuccessorLongShort; Interrupt permutations; A0/A1/B2 causality rerun|PASS|
+|Retained wall/slide/StepUp, incoming CC/death và hai pawn né|B1-R1 Game-world tests trong MCP181220; DodgeNetworkRegression18284622/22 trên binary C1|PASS|
+|Menu/focus/Resume/rebind/held, reset/life, stale/duplicate/unowned RPC, reconnect|Input18165624/24; Network18240735/35 shared-dispatcher/ServerCombat negative probes/reset; reconnect2/2 có E CD trước disconnect. History chỉ trình bày|PASS|
+|Ba process identity/definition/resources/CD/defense/damage/Interrupt/life|Dedicated Editor + ClientA/ClientB35 checks +10 độc lập; resource so tại timestamp authority, không gọi mẫu khác thời điểm là cùng state|PASS|
+|Clip provenance, phase/cutoff cues ngoài màu, không notify/root-motion gameplay|C1-ASSET-PROVENANCE, ASSETS.csv; montage Automation + actual animation instance; video/text/world labels|PASS blockout|
+|Editor/Game, toàn bộ U00–C1 Automation, package committed clone, smoke ba map|Build181045, MCP181220117 Success/0 Failed, Package181403, Smoke1815583/3; source/binary/package hashes|PASS|
+|Launcher hash/profile/session/placement; private config|3 refusal guards, actual client60/server30 cvars, PID/exe/module/source/UserDir scoped stop; Editor restored và config byte hash unchanged|PASS|
+|Cảm giác, readability/art/âm sản phẩm và người dùng chơi thử|Người dùng chưa chơi B2/C1; assertions/video không thay xác nhận|CHƯA NGHIỆM THU|
 
-Simultaneous fixture hits are not simultaneous input from two clients. Model timesteps are not render FPS. User playtest/feel remains unconfirmed.
+Game-world simultaneous-hit không phải input hai client đồng thời. Bước model1/30–1/120 không là FPS render. Xem từng Test Completed trong TEST-TRACES và hashes trong manifest; không dùng kết quả cũ làm bằng chứng binary mới. Không mở C2 hoặc khép U03.

@@ -12,7 +12,7 @@ def record():
  global encoded,prev,last
  while not stop.is_set():
   try:
-   active.guard();bs=[c.bounds() for c in clients];l=min(x[0] for x in bs);t=min(x[1] for x in bs);r=max(x[2] for x in bs);b=max(x[3] for x in bs);screen=np.array(ImageGrab.grab(bbox=(l,t,r,b),all_screens=True));frame=cv2.cvtColor(np.concatenate([screen[y-t:yy-t,x-l:xx-l] for x,y,xx,yy in bs],axis=1),cv2.COLOR_RGC1BGR);now=time.perf_counter()-start
+   active.guard();bs=[c.bounds() for c in clients];l=min(x[0] for x in bs);t=min(x[1] for x in bs);r=max(x[2] for x in bs);b=max(x[3] for x in bs);screen=np.array(ImageGrab.grab(bbox=(l,t,r,b),all_screens=True));frame=cv2.cvtColor(np.concatenate([screen[y-t:yy-t,x-l:xx-l] for x,y,xx,yy in bs],axis=1),cv2.COLOR_RGB2BGR);now=time.perf_counter()-start
    while encoded/30<now:writer.write(prev if prev is not None else frame);encoded+=1
    prev=frame;last=now
   except (AssertionError,RuntimeError):m['skippedUnfocusedFrames']=m.get('skippedUnfocusedFrames',0)+1

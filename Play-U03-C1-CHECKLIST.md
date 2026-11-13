@@ -10,3 +10,5 @@ Chạy `Play-U03-C1.cmd` (package) hoặc `Play-U03-C1-Network.cmd` (dedicated E
 - Menu/focus: cooldown tiếp tục; Resume không phát lại phím giữ. Thử rebind Q/E rồi nhả/nhấn lại.
 
 Ghi lại cảm giác chuyển động và tín hiệu pha/Feint/Interrupt sau khi chơi. Assertions/video kỹ thuật không thay xác nhận của người dùng. B2/C1 presentation vẫn blockout.
+
+Solo fixture: m? console (ph?m d?u huy?n/~) r?i nh?p `U03B2Fixture target-q` (ho?c nh?n ? tr?n); `U03B2Fixture off` d?n fixture. T?n l?nh gi? t? B2. Trong session m?ng d?ng `powershell -File Scripts/U03/SetC1Fixture.ps1 -Label target-q`; k? n?ng v?n b?m th?t tr?n client. Fixture kh?ng ph?i AI/encounter C2.

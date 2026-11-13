@@ -14,6 +14,8 @@ def git(*args):return subprocess.check_output(['git','-C',str(root),*args],text=
 def write(path,value):Path(path).write_text(json.dumps(value,indent=2,ensure_ascii=False),encoding='utf-8')
 source=git('rev-parse',a.source);clone=base/'Source';assert subprocess.check_output(['git','-C',str(clone),'rev-parse','HEAD'],text=True).strip()==source
 assert not git('diff','--name-only',source,'HEAD','--','Source','Content','Config'),'Unverified committed native/content/config changes'
+assert not git('diff','--name-only','--','Source','Content'),'Uncommitted native/content changes'
+assert not subprocess.check_output(['git','-C',str(clone),'status','--porcelain','--untracked-files=no'],text=True).strip(),'Clone tracked source dirty'
 for name in ['package','build','automation','input','network','dodge','session','smoke']:
  value=Path(getattr(a,name)).resolve();assert value.is_relative_to(base.resolve());setattr(a,name,value)
 gates={}
@@ -21,18 +23,30 @@ for name in ['Generate','Editor','Game']:
  assert read(a.build/(name+'.result.json'))['ExitCode']==0
  assert read(a.build/(name+'.command.json'))['sourceSHA']==source
 gates['build']=str(a.build.relative_to(root))
+package_run=a.package.parent.parent
+assert read(package_run/'Package.command.json')['sourceSHA']==source and read(package_run/'Package.result.json')['ExitCode']==0
+gates['package']=str(package_run.relative_to(root))
+assert read(a.automation/'process.json')['moduleSHA256'].lower()==sha(clone/'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll')
 tests=read(a.automation/'result.json');assert tests['sourceSHA']==source and tests['executed']>0 and tests['failed']==0
 expected=set()
 for f in (clone/'Source/AnimeMMORPG/Tests').glob('*.cpp'):expected.update(re.findall(r'IMPLEMENT_SIMPLE_AUTOMATION_TEST\(\s*\w+\s*,\s*"(AnimeMMORPG\.[^"]+)"',f.read_text(encoding='utf-8-sig')))
 assert set(tests['tests'])==expected and tests['executed']==len(expected);gates['automation']={'run':str(a.automation.relative_to(root)),'executed':tests['executed'],'failed':0}
 smoke=read(a.smoke/'results.json');assert len(smoke)==3 and all(v['passed'] and v['sourceSHA']==source for v in smoke);gates['smoke']=str(a.smoke.relative_to(root))
 for kind,folder,file in [('input',a.input,'input.json'),('network',a.network,'network.json'),('dodgeNetworkRegression',a.dodge,'network.json')]:
- data=read(folder/file);assert data['completed']
+ data=read(folder/file);assert data['completed'] and read(folder/'process-result.json')['exitCode']==0
  assert all(v.get('result')=='PASS' or v.get('passed') is True for v in data['checks'])
  records=data.get('processes',[data.get('process')]);assert all(v['sourceSHA']==source for v in records)
  gates[kind]={'run':str(folder.relative_to(root)),'checks':len(data['checks'])}
+for filename in ['movement-independent.json','animation-independent.json']:
+ data=read(a.input/filename);assert data['completed'] and data['sourceSHA']==source
+ assert all(c['result']=='PASS' for c in data['checks'])
+ guards=read(base/'Audit/LAUNCH-GUARDS.json');assert guards['completed'] and guards['manifestRestoredByteForByte'] and guards['packageIndexRestoredByteForByte']
+ assert all(c['result']=='PASS' for c in guards['checks'])
+gates['launcherGuards']={'checks':len(guards['checks']),'run':'Artifacts/U03/C1/Audit/LAUNCH-GUARDS.json'}
 
 
+independent=read(a.network/'network-independent.json');assert independent['completed'] and independent['sourceSHA']==source and all(c['result']=='PASS' for c in independent['checks'])
+gates['network']['independentComparisons']=len(independent['checks'])
 reconnect=read(a.session/'reconnect-result.json');before=read(a.session/'reconnect-before.json')
 assert reconnect['completed'] and before['metrics']['combat']['eReady']>0 and reconnect['metrics']['combat']['eReady']==0
 assert before['metrics']['combat']['pawnId']!=reconnect['metrics']['combat']['pawnId']
@@ -66,10 +80,10 @@ for file in sorted(base.rglob('*')):
   if file.suffix=='.log':
    for line in clean.splitlines():
     if re.search(r'Warning:|warning [A-Z]|Error:|error C\d',line):warnings.append({'run':str(rel),'line':line})
-    if any(v in line for v in ['Test Completed.','Automation Test Queue Empty','U03C1_','U03B1_R1_']):traces.append({'run':str(rel),'line':line})
+    if any(v in line for v in ['Test Completed.','Automation Test Queue Empty','U03C1_','U03B2_','C1_WORLD','U03B1_R1_']):traces.append({'run':str(rel),'line':line})
  files.append({'path':out.relative_to(dest).as_posix(),'rawPath':file.relative_to(root).as_posix(),'rawSHA256':sha(file),'publishedSHA256':sha(out),'sourceEncoding':enc,'redactions':redactions,'verifiedDecodedContent':enc!='binary'})
 binaries=[{'path':str(file.relative_to(root)),'sha256':sha(file)} for file in [clone/'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll',clone/'Binaries/Win64/AnimeMMORPG.exe']]
-manifest={'status':'READY_FOR_REVIEW','base':'f826371b9409c39453e5bd2ed8f8414749f1d34b','source':source,'packageRelativePath':a.package.relative_to(root).as_posix(),'packageFiles':len(package_files),'engineExeSHA256':sha('D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe'),'binaries':binaries,'gates':gates,'privateConfigUnchanged':True,'files':files,'sourceFiles':[{'path':file,'gitBlob':git('rev-parse',source+':'+file)} for file in git('diff','--name-only','f826371',source,'--','Source','Content','Config').splitlines()]}
+manifest={'status':'READY_FOR_REVIEW','base':'f826371b9409c39453e5bd2ed8f8414749f1d34b','source':source,'packageRelativePath':a.package.relative_to(root).as_posix(),'packageFiles':len(package_files),'engineExeSHA256':sha('D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe'),'binaries':binaries,'assetPayloads':list(csv.DictReader((dest/'ASSETS.csv').open(encoding='utf-8'))),'gates':gates,'privateConfigUnchanged':True,'files':files,'sourceFiles':[{'path':file,'gitBlob':git('rev-parse',source+':'+file)} for file in git('diff','--name-only','f826371',source,'--','Source','Content','Config').splitlines()]}
 for file in files:assert sha(dest/file['path'])==file['publishedSHA256']
 write(dest/'MANIFEST.json',manifest);write(dest/'WARNINGS.json',warnings);write(dest/'TEST-TRACES.json',traces);write(dest/'ENCODING-VERIFICATION.json',{'files':len(files),'strictDecode':True,'roundTripVerified':True,'rawFilesPreserved':True})
 print(json.dumps({'files':len(files),'packageFiles':len(package_files),'privateConfigUnchanged':True,'gates':gates}))

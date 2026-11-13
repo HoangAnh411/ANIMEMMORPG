@@ -1,0 +1,2694 @@
+[
+  {
+    "run": "Runs\\Author-20261113-174422\\Editor.log",
+    "line": "[2026.11.13-10.46.21:324][388]LogPython: U03C1_AUTHOR SUCCESS: C1 Q diagonal feint .80s, E overhead interrupt .75s; original procedural arm keys derived from accepted U01 carry/grip; fixed roots, no gameplay notifies"
+  },
+  {
+    "run": "Runs\\Author-20261113-174628\\Editor.log",
+    "line": "[2026.11.13-10.46.37:521][  0]LogPython: U03C1_AUTHOR ERROR: refuses overwrite of C1 assets"
+  },
+  {
+    "run": "Runs\\InputSession-20261113-180214\\Game.log",
+    "line": "[2026.11.13-11.06.12:014][634]LogU02Collision: Display: U03B2_FIXTURE label=target-q start=229.62025549908867 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  },
+  {
+    "run": "Runs\\InputSession-20261113-181611\\Game.log",
+    "line": "[2026.11.13-11.18.00:032][793]LogU02Collision: Display: U03B2_FIXTURE label=target-q start=99.27385001903167 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  },
+  {
+    "run": "Runs\\InputSession-20261113-181611\\Game.log",
+    "line": "[2026.11.13-11.18.07:882][264]LogU02Collision: Display: U03B2_FIXTURE label=incoming-e start=107.1238753189682 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.36:702][310]LogAutomationController: Display: Test Completed. Result={Success} Name={Axes} Path={AnimeMMORPG.U00.Foundation.Axes}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.36:736][312]LogAutomationController: Display: Test Completed. Result={Success} Name={CallOrder} Path={AnimeMMORPG.U00.Foundation.CallOrder}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.36:785][315]LogAutomationController: Display: Test Completed. Result={Success} Name={HalfOpenInterval} Path={AnimeMMORPG.U00.Foundation.HalfOpenInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.36:835][318]LogAutomationController: Display: Test Completed. Result={Success} Name={Units} Path={AnimeMMORPG.U00.Foundation.Units}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.36:885][321]LogAutomationController: Display: Test Completed. Result={Success} Name={CameraPolicy} Path={AnimeMMORPG.U01.B.CameraPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.36:935][324]LogAutomationController: Display: Test Completed. Result={Success} Name={ReleaseGate} Path={AnimeMMORPG.U01.B.ReleaseGate}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.37:911][326]LogAutomationController: Display: Test Completed. Result={Success} Name={FlatMovement} Path={AnimeMMORPG.U01.C.FlatMovement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.38:417][328]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpPhysics} Path={AnimeMMORPG.U01.C.JumpPhysics}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.38:456][331]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpWindows} Path={AnimeMMORPG.U01.C.JumpWindows}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.38:507][333]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorLocks} Path={AnimeMMORPG.U01.C.MotorLocks}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.39:556][335]LogAutomationController: Display: Test Completed. Result={Success} Name={Terrain} Path={AnimeMMORPG.U01.C.Terrain}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.40:818][337]LogAutomationController: Display: Test Completed. Result={Success} Name={AnimatedMotor} Path={AnimeMMORPG.U01.D.AnimatedMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.40:857][340]LogAutomationController: Display: Test Completed. Result={Success} Name={AssetPolicy} Path={AnimeMMORPG.U01.D.AssetPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.41:785][342]LogAutomationController: Display: Test Completed. Result={Success} Name={CarryTrajectory} Path={AnimeMMORPG.U01.D.CarryTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.41:931][344]LogAutomationController: Display: Test Completed. Result={Success} Name={GripIsolationAndAttachment} Path={AnimeMMORPG.U01.D.GripIsolationAndAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.42:828][346]LogAutomationController: Display: Test Completed. Result={Success} Name={LandingTransitions} Path={AnimeMMORPG.U01.D.LandingTransitions}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:261][349]LogAutomationController: Display: Test Completed. Result={Success} Name={TransitionsAndAttachment} Path={AnimeMMORPG.U01.D.TransitionsAndAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:310][352]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingValidation} Path={AnimeMMORPG.U01.E.BindingValidation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:361][355]LogAutomationController: Display: Test Completed. Result={Success} Name={LocalMappingIsolation} Path={AnimeMMORPG.U01.E.LocalMappingIsolation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:411][358]LogAutomationController: Display: Test Completed. Result={Success} Name={PartialRecovery} Path={AnimeMMORPG.U01.E.PartialRecovery}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:492][361]LogAutomationController: Display: Test Completed. Result={Success} Name={SaveAndFailure} Path={AnimeMMORPG.U01.E.SaveAndFailure}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:547][364]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxyAnimation} Path={AnimeMMORPG.U01.F.ProxyAnimation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:593][367]LogAutomationController: Display: Test Completed. Result={Success} Name={SavedMoveReplay} Path={AnimeMMORPG.U01.F.SavedMoveReplay}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:626][369]LogAutomationController: Display: Test Completed. Result={Success} Name={CancellationAndAim} Path={AnimeMMORPG.U02.A.CancellationAndAim}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:675][372]LogAutomationController: Display: Test Completed. Result={Success} Name={CombatLockReleaseGateBoundary} Path={AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:726][375]LogAutomationController: Display: Test Completed. Result={Success} Name={IntentIdentityAndReset} Path={AnimeMMORPG.U02.A.IntentIdentityAndReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:776][378]LogAutomationController: Display: Test Completed. Result={Success} Name={PhaseDeadlines} Path={AnimeMMORPG.U02.A.PhaseDeadlines}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:826][381]LogAutomationController: Display: Test Completed. Result={Success} Name={ResolveDedupAndGeneration} Path={AnimeMMORPG.U02.A.ResolveDedupAndGeneration}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:876][384]LogAutomationController: Display: Test Completed. Result={Success} Name={StableResolveDeathOrdering} Path={AnimeMMORPG.U02.A.StableResolveDeathOrdering}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:926][387]LogAutomationController: Display: Test Completed. Result={Success} Name={WholeActiveInterval} Path={AnimeMMORPG.U02.A.WholeActiveInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.43:980][390]LogAutomationController: Display: Test Completed. Result={Success} Name={AdapterDrainBeforeMutation} Path={AnimeMMORPG.U02.B.AdapterDrainBeforeMutation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:059][393]LogAutomationController: Display: Test Completed. Result={Success} Name={AdmissionCancelAndYaw} Path={AnimeMMORPG.U02.B.AdmissionCancelAndYaw}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:116][395]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthorityLockSavedMoveReplay} Path={AnimeMMORPG.U02.B.AuthorityLockSavedMoveReplay}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:245][398]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorGravityAndHeldIntent} Path={AnimeMMORPG.U02.B.MotorGravityAndHeldIntent}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:392][399]LogAutomationController: Display: Test Completed. Result={Success} Name={ActualBodyAndSkippedBoundary} Path={AnimeMMORPG.U02.C.ActualBodyAndSkippedBoundary}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:427][402]LogAutomationController: Display: Test Completed. Result={Success} Name={MontageAssets} Path={AnimeMMORPG.U02.C.MontageAssets}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:463][404]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxySamplesActionTurn} Path={AnimeMMORPG.U02.C.ProxySamplesActionTurn}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:511][407]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeIdentityAndReturn} Path={AnimeMMORPG.U02.C.RuntimeIdentityAndReturn}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:561][410]LogAutomationController: Display: Test Completed. Result={Success} Name={SnapshotClock} Path={AnimeMMORPG.U02.C.SnapshotClock}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:611][413]LogAutomationController: Display: Test Completed. Result={Success} Name={StartupTurnTrajectory} Path={AnimeMMORPG.U02.C.StartupTurnTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:661][416]LogAutomationController: Display: Test Completed. Result={Success} Name={ContainmentRoundedCornersAndStepRates} Path={AnimeMMORPG.U02.D.ContainmentRoundedCornersAndStepRates}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.44:711][419]LogAutomationController: Display: Test Completed. Result={Success} Name={CornerReviewAction66IndependentGeometry} Path={AnimeMMORPG.U02.D.CornerReviewAction66IndependentGeometry}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:370][421]LogAutomationController: Display: Test Completed. Result={Success} Name={CornerReviewWorldOrderAndStepMatrix} Path={AnimeMMORPG.U02.D.CornerReviewWorldOrderAndStepMatrix}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:408][424]LogAutomationController: Display: Test Completed. Result={Success} Name={FeetBoxBoundaryAndRelativeSweep} Path={AnimeMMORPG.U02.D.FeetBoxBoundaryAndRelativeSweep}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:475][426]LogAutomationController: Display: Test Completed. Result={Success} Name={GlobalBatchAcrossSources} Path={AnimeMMORPG.U02.D.GlobalBatchAcrossSources}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:518][429]LogAutomationController: Display: Test Completed. Result={Success} Name={VisibilityChangesInsideContactInterval} Path={AnimeMMORPG.U02.D.VisibilityChangesInsideContactInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:590][432]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldResetAndResolveRevalidation} Path={AnimeMMORPG.U02.D.WorldResetAndResolveRevalidation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:683][435]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldTargetsOrderingAndLifetime} Path={AnimeMMORPG.U02.D.WorldTargetsOrderingAndLifetime}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:771][438]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldWallPartialHurtboxAndOrigin} Path={AnimeMMORPG.U02.D.WorldWallPartialHurtboxAndOrigin}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:824][441]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldWholeActiveCrossingAndDedup} Path={AnimeMMORPG.U02.D.WorldWholeActiveCrossingAndDedup}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:881][443]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthorityDamageDedupAndOneCritRoll} Path={AnimeMMORPG.U02.E.AuthorityDamageDedupAndOneCritRoll}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:926][446]LogAutomationController: Display: Test Completed. Result={Success} Name={DamageFormulaRoundingAndCrit} Path={AnimeMMORPG.U02.E.DamageFormulaRoundingAndCrit}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.45:972][448]LogAutomationController: Display: Test Completed. Result={Success} Name={NewLifeAttackWholeActiveAfterReset} Path={AnimeMMORPG.U02.E.NewLifeAttackWholeActiveAfterReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:019][450]LogAutomationController: Display: Test Completed. Result={Success} Name={ResetRejectsOldLifeAndClearsShield} Path={AnimeMMORPG.U02.E.ResetRejectsOldLifeAndClearsShield}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:188][453]LogAutomationController: Display: Test Completed. Result={Success} Name={SameTimestampLethalOrderAndDeadMotor} Path={AnimeMMORPG.U02.E.SameTimestampLethalOrderAndDeadMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:248][456]LogAutomationController: Display: Test Completed. Result={Success} Name={ShieldExpiryUsesHitTimestampBeforeFrameEnd} Path={AnimeMMORPG.U02.E.ShieldExpiryUsesHitTimestampBeforeFrameEnd}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:298][459]LogAutomationController: Display: Test Completed. Result={Success} Name={ShieldReplaceOrderExpiryAndOverkill} Path={AnimeMMORPG.U02.E.ShieldReplaceOrderExpiryAndOverkill}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:362][460]LogAutomationController: Display: Test Completed. Result={Success} Name={StartupCancelNoDamageActiveCancelRejected} Path={AnimeMMORPG.U02.E.StartupCancelNoDamageActiveCancelRejected}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:423][463]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthoritativeResultHistoryAndReplicationSchema} Path={AnimeMMORPG.U02.F.AuthoritativeResultHistoryAndReplicationSchema}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:476][465]LogAutomationController: Display: Test Completed. Result={Success} Name={CommandLifeAndDuplicateAdmission} Path={AnimeMMORPG.U02.F.CommandLifeAndDuplicateAdmission}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:534][468]LogAutomationController: Display: Test Completed. Result={Success} Name={NetworkLabStaticFloorAttachment} Path={AnimeMMORPG.U02.F.NetworkLabStaticFloorAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:578][471]LogAutomationController: Display: Test Completed. Result={Success} Name={AdmissionOrdering} Path={AnimeMMORPG.U03.A0.AdmissionOrdering}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:628][474]LogAutomationController: Display: Test Completed. Result={Success} Name={CutoffIntervalsAndConfirmedHits} Path={AnimeMMORPG.U03.A0.CutoffIntervalsAndConfirmedHits}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:679][477]LogAutomationController: Display: Test Completed. Result={Success} Name={DefinitionIdentity} Path={AnimeMMORPG.U03.A0.DefinitionIdentity}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:728][480]LogAutomationController: Display: Test Completed. Result={Success} Name={LongUpdateResolverInterruptAndDeath} Path={AnimeMMORPG.U03.A0.LongUpdateResolverInterruptAndDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:779][483]LogAutomationController: Display: Test Completed. Result={Success} Name={LostGroundAtActionEndAndGrace} Path={AnimeMMORPG.U03.A0.LostGroundAtActionEndAndGrace}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:829][486]LogAutomationController: Display: Test Completed. Result={Success} Name={ResolveBarrierAndLethal} Path={AnimeMMORPG.U03.A0.ResolveBarrierAndLethal}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:878][489]LogAutomationController: Display: Test Completed. Result={Success} Name={ResourceAndCutoff} Path={AnimeMMORPG.U03.A0.ResourceAndCutoff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:929][492]LogAutomationController: Display: Test Completed. Result={Success} Name={TimelineAndBuffer} Path={AnimeMMORPG.U03.A0.TimelineAndBuffer}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.46:978][495]LogAutomationController: Display: Test Completed. Result={Success} Name={TimestampGroupBeforeTransitionAndAdmission} Path={AnimeMMORPG.U03.A0.TimestampGroupBeforeTransitionAndAdmission}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:029][498]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthoredThreeClipsAndDefinitionClock} Path={AnimeMMORPG.U03.A1.AuthoredThreeClipsAndDefinitionClock}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:079][501]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingFoundationAndV1Migration} Path={AnimeMMORPG.U03.A1.BindingFoundationAndV1Migration}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:213][503]LogAutomationController: Display: Test Completed. Result={Success} Name={GeometryIncomingInterruptAndDeathDuringSuccessor} Path={AnimeMMORPG.U03.A1.GeometryIncomingInterruptAndDeathDuringSuccessor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:267][506]LogAutomationController: Display: Test Completed. Result={Success} Name={LostGroundLandingResetAndStaleLife} Path={AnimeMMORPG.U03.A1.LostGroundLandingResetAndStaleLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:326][508]LogAutomationController: Display: Test Completed. Result={Success} Name={ResourceSnapshotAndCooldownDispatcher} Path={AnimeMMORPG.U03.A1.ResourceSnapshotAndCooldownDispatcher}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:440][511]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeBufferExpiryReplacementAndControl} Path={AnimeMMORPG.U03.A1.RuntimeBufferExpiryReplacementAndControl}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:504][513]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldComboAndNineHitDeath} Path={AnimeMMORPG.U03.A1.WorldComboAndNineHitDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:592][515]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldTimestampGroupBeforeSuccessor} Path={AnimeMMORPG.U03.A1.WorldTimestampGroupBeforeSuccessor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:851][517]LogAutomationController: Display: Test Completed. Result={Success} Name={IncomingMidWallAndStepLethal} Path={AnimeMMORPG.U03.B1.R1.IncomingMidWallAndStepLethal}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:851][517]LogAutomationController: U03B1_R1_MID step=0 lethal=0 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:852][517]LogAutomationController: U03B1_R1_MID step=0 lethal=0 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:852][517]LogAutomationController: U03B1_R1_MID step=0 lethal=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:852][517]LogAutomationController: U03B1_R1_MID step=0 lethal=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:853][517]LogAutomationController: U03B1_R1_MID step=1 lethal=0 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:853][517]LogAutomationController: U03B1_R1_MID step=1 lethal=0 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:854][517]LogAutomationController: U03B1_R1_MID step=1 lethal=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:854][517]LogAutomationController: U03B1_R1_MID step=1 lethal=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.47:943][519]LogAutomationController: Display: Test Completed. Result={Success} Name={RetainedWallSlideAndStepPrefixes} Path={AnimeMMORPG.U03.B1.R1.RetainedWallSlideAndStepPrefixes}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.48:954][521]LogAutomationController: Display: Test Completed. Result={Success} Name={SimultaneousPawnCCD} Path={AnimeMMORPG.U03.B1.R1.SimultaneousPawnCCD}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:029][524]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelBufferReplacementAndPriority} Path={AnimeMMORPG.U03.B1.ModelBufferReplacementAndPriority}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:078][527]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelDeadlinesAndSequentialCharges} Path={AnimeMMORPG.U03.B1.ModelDeadlinesAndSequentialCharges}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:129][530]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelStartupReplacementAndLifecycle} Path={AnimeMMORPG.U03.B1.ModelStartupReplacementAndLifecycle}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:242][532]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeBatchPriorityAndRejectedReplacement} Path={AnimeMMORPG.U03.B1.RuntimeBatchPriorityAndRejectedReplacement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:435][534]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeInteractionClearsWaitingDodge} Path={AnimeMMORPG.U03.B1.RuntimeInteractionClearsWaitingDodge}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:475][537]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeMenuAndStaleLife} Path={AnimeMMORPG.U03.B1.RuntimeMenuAndStaleLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:539][539]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeNoIFrameAndDeathCutoff} Path={AnimeMMORPG.U03.B1.RuntimeNoIFrameAndDeathCutoff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:577][541]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeSlowMotorBudgetFixture} Path={AnimeMMORPG.U03.B1.RuntimeSlowMotorBudgetFixture}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:621][543]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeStartupCancelResetAndDamage} Path={AnimeMMORPG.U03.B1.RuntimeStartupCancelResetAndDamage}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:774][545]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeStepSlopeAndRemovedFloor} Path={AnimeMMORPG.U03.B1.RuntimeStepSlopeAndRemovedFloor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:864][547]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeSweptDistanceAndLongUpdate} Path={AnimeMMORPG.U03.B1.RuntimeSweptDistanceAndLongUpdate}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:938][549]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeWallPersonAndCliff} Path={AnimeMMORPG.U03.B1.RuntimeWallPersonAndCliff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.49:979][552]LogAutomationController: Display: Test Completed. Result={Success} Name={AngleAndIndependentHitFlags} Path={AnimeMMORPG.U03.B2.AngleAndIndependentHitFlags}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:030][555]LogAutomationController: Display: Test Completed. Result={Success} Name={ControlReplacementBudgetAndFreeReset} Path={AnimeMMORPG.U03.B2.ControlReplacementBudgetAndFreeReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:080][558]LogAutomationController: Display: Test Completed. Result={Success} Name={EscapeSlowAndCooldown} Path={AnimeMMORPG.U03.B2.EscapeSlowAndCooldown}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:221][561]LogAutomationController: Display: Test Completed. Result={Success} Name={HardCCMidWallAndStepTrajectory} Path={AnimeMMORPG.U03.B2.HardCCMidWallAndStepTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:221][561]LogAutomationController: U03B2_HARD_MID step=0 hardCC=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:221][561]LogAutomationController: U03B2_HARD_MID step=0 hardCC=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:221][561]LogAutomationController: U03B2_HARD_MID step=1 hardCC=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:222][561]LogAutomationController: U03B2_HARD_MID step=1 hardCC=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:270][564]LogAutomationController: Display: Test Completed. Result={Success} Name={ParryHalfOpenEdges} Path={AnimeMMORPG.U03.B2.ParryHalfOpenEdges}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:321][567]LogAutomationController: Display: Test Completed. Result={Success} Name={PhysicalRebindLetterReconciliation} Path={AnimeMMORPG.U03.B2.PhysicalRebindLetterReconciliation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:370][570]LogAutomationController: Display: Test Completed. Result={Success} Name={PostureBreakAndEligibleRegen} Path={AnimeMMORPG.U03.B2.PostureBreakAndEligibleRegen}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:427][573]LogAutomationController: Display: Test Completed. Result={Success} Name={SlowPreservesRetainedDodge} Path={AnimeMMORPG.U03.B2.SlowPreservesRetainedDodge}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:460][575]LogAutomationController: Display: Test Completed. Result={Success} Name={TimelineGuardReplacementAndAirborneX} Path={AnimeMMORPG.U03.B2.TimelineGuardReplacementAndAirborneX}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:523][577]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldAimCausalityOwnershipLifeAndMotor} Path={AnimeMMORPG.U03.B2.WorldAimCausalityOwnershipLifeAndMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:624][579]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldFlagsInterruptAndLethalEffects} Path={AnimeMMORPG.U03.B2.WorldFlagsInterruptAndLethalEffects}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:806][581]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldGuardAnglesAndHitTimeAim} Path={AnimeMMORPG.U03.B2.WorldGuardAnglesAndHitTimeAim}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.50:949][583]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldLateInputAndStableSimultaneousHits} Path={AnimeMMORPG.U03.B2.WorldLateInputAndStableSimultaneousHits}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.51:015][586]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldParryBlockDedupCritShield} Path={AnimeMMORPG.U03.B2.WorldParryBlockDedupCritShield}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.51:066][589]LogAutomationController: Display: Test Completed. Result={Success} Name={CooldownRegenAndResourceRejection} Path={AnimeMMORPG.U03.C1.CooldownRegenAndResourceRejection}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.51:115][592]LogAutomationController: Display: Test Completed. Result={Success} Name={FeintEdgesResourcesAndLife} Path={AnimeMMORPG.U03.C1.FeintEdgesResourcesAndLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.51:149][594]LogAutomationController: Display: Test Completed. Result={Success} Name={InterruptEdgesAndCapturedEffects} Path={AnimeMMORPG.U03.C1.InterruptEdgesAndCapturedEffects}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.51:199][597]LogAutomationController: Display: Test Completed. Result={Success} Name={RecoveryAndReplacementPermissions} Path={AnimeMMORPG.U03.C1.RecoveryAndReplacementPermissions}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.51:256][600]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldEPerTargetDedup} Path={AnimeMMORPG.U03.C1.WorldEPerTargetDedup}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.51:319][602]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldFeintCutoffAndMotor} Path={AnimeMMORPG.U03.C1.WorldFeintCutoffAndMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.51:465][604]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldIncomingEInSuccessorLongShort} Path={AnimeMMORPG.U03.C1.WorldIncomingEInSuccessorLongShort}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:910][606]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldSkillInterruptShieldDefenseDeath} Path={AnimeMMORPG.U03.C1.WorldSkillInterruptShieldDefenseDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:910][606]LogAutomationController: C1_WORLD victim=6 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:910][606]LogAutomationController: C1_WORLD victim=6 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:910][606]LogAutomationController: C1_WORLD victim=6 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:911][606]LogAutomationController: C1_WORLD victim=6 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:911][606]LogAutomationController: C1_WORLD victim=6 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:911][606]LogAutomationController: C1_WORLD victim=6 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:911][606]LogAutomationController: C1_WORLD victim=6 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:912][606]LogAutomationController: C1_WORLD victim=6 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:912][606]LogAutomationController: C1_WORLD victim=6 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:912][606]LogAutomationController: C1_WORLD victim=6 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:912][606]LogAutomationController: C1_WORLD victim=6 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:912][606]LogAutomationController: C1_WORLD victim=6 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:913][606]LogAutomationController: C1_WORLD victim=4 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:913][606]LogAutomationController: C1_WORLD victim=4 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:913][606]LogAutomationController: C1_WORLD victim=4 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:913][606]LogAutomationController: C1_WORLD victim=4 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:913][606]LogAutomationController: C1_WORLD victim=4 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:914][606]LogAutomationController: C1_WORLD victim=4 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:914][606]LogAutomationController: C1_WORLD victim=4 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:914][606]LogAutomationController: C1_WORLD victim=4 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:914][606]LogAutomationController: C1_WORLD victim=4 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:914][606]LogAutomationController: C1_WORLD victim=4 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:915][606]LogAutomationController: C1_WORLD victim=4 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:915][606]LogAutomationController: C1_WORLD victim=4 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:915][606]LogAutomationController: C1_WORLD victim=5 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:916][606]LogAutomationController: C1_WORLD victim=5 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:916][606]LogAutomationController: C1_WORLD victim=5 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:916][606]LogAutomationController: C1_WORLD victim=5 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:916][606]LogAutomationController: C1_WORLD victim=5 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:916][606]LogAutomationController: C1_WORLD victim=5 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:917][606]LogAutomationController: C1_WORLD victim=5 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:917][606]LogAutomationController: C1_WORLD victim=5 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:917][606]LogAutomationController: C1_WORLD victim=5 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:917][606]LogAutomationController: C1_WORLD victim=5 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:917][606]LogAutomationController: C1_WORLD victim=5 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:918][606]LogAutomationController: C1_WORLD victim=5 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-174906\\Editor.log",
+    "line": "[2026.11.13-10.49.52:918][606]LogAutomationCommandLine: Display: ...Automation Test Queue Empty 115 tests performed."
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.25:511][308]LogAutomationController: Display: Test Completed. Result={Success} Name={Axes} Path={AnimeMMORPG.U00.Foundation.Axes}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.25:561][311]LogAutomationController: Display: Test Completed. Result={Success} Name={CallOrder} Path={AnimeMMORPG.U00.Foundation.CallOrder}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.25:611][314]LogAutomationController: Display: Test Completed. Result={Success} Name={HalfOpenInterval} Path={AnimeMMORPG.U00.Foundation.HalfOpenInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.25:645][316]LogAutomationController: Display: Test Completed. Result={Success} Name={Units} Path={AnimeMMORPG.U00.Foundation.Units}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.25:694][319]LogAutomationController: Display: Test Completed. Result={Success} Name={CameraPolicy} Path={AnimeMMORPG.U01.B.CameraPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.25:744][322]LogAutomationController: Display: Test Completed. Result={Success} Name={ReleaseGate} Path={AnimeMMORPG.U01.B.ReleaseGate}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.27:055][324]LogAutomationController: Display: Test Completed. Result={Success} Name={FlatMovement} Path={AnimeMMORPG.U01.C.FlatMovement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.27:746][326]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpPhysics} Path={AnimeMMORPG.U01.C.JumpPhysics}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.27:785][329]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpWindows} Path={AnimeMMORPG.U01.C.JumpWindows}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.27:873][332]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorLocks} Path={AnimeMMORPG.U01.C.MotorLocks}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.29:573][334]LogAutomationController: Display: Test Completed. Result={Success} Name={Terrain} Path={AnimeMMORPG.U01.C.Terrain}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.31:666][337]LogAutomationController: Display: Test Completed. Result={Success} Name={AnimatedMotor} Path={AnimeMMORPG.U01.D.AnimatedMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.31:701][339]LogAutomationController: Display: Test Completed. Result={Success} Name={AssetPolicy} Path={AnimeMMORPG.U01.D.AssetPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.32:972][341]LogAutomationController: Display: Test Completed. Result={Success} Name={CarryTrajectory} Path={AnimeMMORPG.U01.D.CarryTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.33:248][343]LogAutomationController: Display: Test Completed. Result={Success} Name={GripIsolationAndAttachment} Path={AnimeMMORPG.U01.D.GripIsolationAndAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.35:263][346]LogAutomationController: Display: Test Completed. Result={Success} Name={LandingTransitions} Path={AnimeMMORPG.U01.D.LandingTransitions}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.35:766][348]LogAutomationController: Display: Test Completed. Result={Success} Name={TransitionsAndAttachment} Path={AnimeMMORPG.U01.D.TransitionsAndAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.35:807][351]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingValidation} Path={AnimeMMORPG.U01.E.BindingValidation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.35:857][354]LogAutomationController: Display: Test Completed. Result={Success} Name={LocalMappingIsolation} Path={AnimeMMORPG.U01.E.LocalMappingIsolation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.35:908][357]LogAutomationController: Display: Test Completed. Result={Success} Name={PartialRecovery} Path={AnimeMMORPG.U01.E.PartialRecovery}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.35:997][360]LogAutomationController: Display: Test Completed. Result={Success} Name={SaveAndFailure} Path={AnimeMMORPG.U01.E.SaveAndFailure}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:052][363]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxyAnimation} Path={AnimeMMORPG.U01.F.ProxyAnimation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:087][365]LogAutomationController: Display: Test Completed. Result={Success} Name={SavedMoveReplay} Path={AnimeMMORPG.U01.F.SavedMoveReplay}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:130][368]LogAutomationController: Display: Test Completed. Result={Success} Name={CancellationAndAim} Path={AnimeMMORPG.U02.A.CancellationAndAim}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:179][371]LogAutomationController: Display: Test Completed. Result={Success} Name={CombatLockReleaseGateBoundary} Path={AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:230][374]LogAutomationController: Display: Test Completed. Result={Success} Name={IntentIdentityAndReset} Path={AnimeMMORPG.U02.A.IntentIdentityAndReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:280][377]LogAutomationController: Display: Test Completed. Result={Success} Name={PhaseDeadlines} Path={AnimeMMORPG.U02.A.PhaseDeadlines}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:329][380]LogAutomationController: Display: Test Completed. Result={Success} Name={ResolveDedupAndGeneration} Path={AnimeMMORPG.U02.A.ResolveDedupAndGeneration}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:380][383]LogAutomationController: Display: Test Completed. Result={Success} Name={StableResolveDeathOrdering} Path={AnimeMMORPG.U02.A.StableResolveDeathOrdering}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:430][386]LogAutomationController: Display: Test Completed. Result={Success} Name={WholeActiveInterval} Path={AnimeMMORPG.U02.A.WholeActiveInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:469][388]LogAutomationController: Display: Test Completed. Result={Success} Name={AdapterDrainBeforeMutation} Path={AnimeMMORPG.U02.B.AdapterDrainBeforeMutation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:547][391]LogAutomationController: Display: Test Completed. Result={Success} Name={AdmissionCancelAndYaw} Path={AnimeMMORPG.U02.B.AdmissionCancelAndYaw}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:606][393]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthorityLockSavedMoveReplay} Path={AnimeMMORPG.U02.B.AuthorityLockSavedMoveReplay}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:735][395]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorGravityAndHeldIntent} Path={AnimeMMORPG.U02.B.MotorGravityAndHeldIntent}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:909][398]LogAutomationController: Display: Test Completed. Result={Success} Name={ActualBodyAndSkippedBoundary} Path={AnimeMMORPG.U02.C.ActualBodyAndSkippedBoundary}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.36:959][401]LogAutomationController: Display: Test Completed. Result={Success} Name={MontageAssets} Path={AnimeMMORPG.U02.C.MontageAssets}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:014][404]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxySamplesActionTurn} Path={AnimeMMORPG.U02.C.ProxySamplesActionTurn}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:064][407]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeIdentityAndReturn} Path={AnimeMMORPG.U02.C.RuntimeIdentityAndReturn}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:113][410]LogAutomationController: Display: Test Completed. Result={Success} Name={SnapshotClock} Path={AnimeMMORPG.U02.C.SnapshotClock}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:164][413]LogAutomationController: Display: Test Completed. Result={Success} Name={StartupTurnTrajectory} Path={AnimeMMORPG.U02.C.StartupTurnTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:214][416]LogAutomationController: Display: Test Completed. Result={Success} Name={ContainmentRoundedCornersAndStepRates} Path={AnimeMMORPG.U02.D.ContainmentRoundedCornersAndStepRates}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:249][418]LogAutomationController: Display: Test Completed. Result={Success} Name={CornerReviewAction66IndependentGeometry} Path={AnimeMMORPG.U02.D.CornerReviewAction66IndependentGeometry}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:734][420]LogAutomationController: Display: Test Completed. Result={Success} Name={CornerReviewWorldOrderAndStepMatrix} Path={AnimeMMORPG.U02.D.CornerReviewWorldOrderAndStepMatrix}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:772][423]LogAutomationController: Display: Test Completed. Result={Success} Name={FeetBoxBoundaryAndRelativeSweep} Path={AnimeMMORPG.U02.D.FeetBoxBoundaryAndRelativeSweep}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:848][426]LogAutomationController: Display: Test Completed. Result={Success} Name={GlobalBatchAcrossSources} Path={AnimeMMORPG.U02.D.GlobalBatchAcrossSources}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:898][429]LogAutomationController: Display: Test Completed. Result={Success} Name={VisibilityChangesInsideContactInterval} Path={AnimeMMORPG.U02.D.VisibilityChangesInsideContactInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.37:966][431]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldResetAndResolveRevalidation} Path={AnimeMMORPG.U02.D.WorldResetAndResolveRevalidation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:047][433]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldTargetsOrderingAndLifetime} Path={AnimeMMORPG.U02.D.WorldTargetsOrderingAndLifetime}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:137][436]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldWallPartialHurtboxAndOrigin} Path={AnimeMMORPG.U02.D.WorldWallPartialHurtboxAndOrigin}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:183][438]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldWholeActiveCrossingAndDedup} Path={AnimeMMORPG.U02.D.WorldWholeActiveCrossingAndDedup}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:252][440]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthorityDamageDedupAndOneCritRoll} Path={AnimeMMORPG.U02.E.AuthorityDamageDedupAndOneCritRoll}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:513][442]LogAutomationController: Display: Test Completed. Result={Success} Name={DamageFormulaRoundingAndCrit} Path={AnimeMMORPG.U02.E.DamageFormulaRoundingAndCrit}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:565][444]LogAutomationController: Display: Test Completed. Result={Success} Name={NewLifeAttackWholeActiveAfterReset} Path={AnimeMMORPG.U02.E.NewLifeAttackWholeActiveAfterReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:624][447]LogAutomationController: Display: Test Completed. Result={Success} Name={ResetRejectsOldLifeAndClearsShield} Path={AnimeMMORPG.U02.E.ResetRejectsOldLifeAndClearsShield}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:778][449]LogAutomationController: Display: Test Completed. Result={Success} Name={SameTimestampLethalOrderAndDeadMotor} Path={AnimeMMORPG.U02.E.SameTimestampLethalOrderAndDeadMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:829][452]LogAutomationController: Display: Test Completed. Result={Success} Name={ShieldExpiryUsesHitTimestampBeforeFrameEnd} Path={AnimeMMORPG.U02.E.ShieldExpiryUsesHitTimestampBeforeFrameEnd}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:880][455]LogAutomationController: Display: Test Completed. Result={Success} Name={ShieldReplaceOrderExpiryAndOverkill} Path={AnimeMMORPG.U02.E.ShieldReplaceOrderExpiryAndOverkill}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.38:963][457]LogAutomationController: Display: Test Completed. Result={Success} Name={StartupCancelNoDamageActiveCancelRejected} Path={AnimeMMORPG.U02.E.StartupCancelNoDamageActiveCancelRejected}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:025][460]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthoritativeResultHistoryAndReplicationSchema} Path={AnimeMMORPG.U02.F.AuthoritativeResultHistoryAndReplicationSchema}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:091][463]LogAutomationController: Display: Test Completed. Result={Success} Name={CommandLifeAndDuplicateAdmission} Path={AnimeMMORPG.U02.F.CommandLifeAndDuplicateAdmission}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:147][465]LogAutomationController: Display: Test Completed. Result={Success} Name={NetworkLabStaticFloorAttachment} Path={AnimeMMORPG.U02.F.NetworkLabStaticFloorAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:190][468]LogAutomationController: Display: Test Completed. Result={Success} Name={AdmissionOrdering} Path={AnimeMMORPG.U03.A0.AdmissionOrdering}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:240][471]LogAutomationController: Display: Test Completed. Result={Success} Name={CutoffIntervalsAndConfirmedHits} Path={AnimeMMORPG.U03.A0.CutoffIntervalsAndConfirmedHits}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:289][474]LogAutomationController: Display: Test Completed. Result={Success} Name={DefinitionIdentity} Path={AnimeMMORPG.U03.A0.DefinitionIdentity}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:339][477]LogAutomationController: Display: Test Completed. Result={Success} Name={LongUpdateResolverInterruptAndDeath} Path={AnimeMMORPG.U03.A0.LongUpdateResolverInterruptAndDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:389][480]LogAutomationController: Display: Test Completed. Result={Success} Name={LostGroundAtActionEndAndGrace} Path={AnimeMMORPG.U03.A0.LostGroundAtActionEndAndGrace}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:439][483]LogAutomationController: Display: Test Completed. Result={Success} Name={ResolveBarrierAndLethal} Path={AnimeMMORPG.U03.A0.ResolveBarrierAndLethal}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:489][486]LogAutomationController: Display: Test Completed. Result={Success} Name={ResourceAndCutoff} Path={AnimeMMORPG.U03.A0.ResourceAndCutoff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:538][489]LogAutomationController: Display: Test Completed. Result={Success} Name={TimelineAndBuffer} Path={AnimeMMORPG.U03.A0.TimelineAndBuffer}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:589][492]LogAutomationController: Display: Test Completed. Result={Success} Name={TimestampGroupBeforeTransitionAndAdmission} Path={AnimeMMORPG.U03.A0.TimestampGroupBeforeTransitionAndAdmission}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:639][495]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthoredThreeClipsAndDefinitionClock} Path={AnimeMMORPG.U03.A1.AuthoredThreeClipsAndDefinitionClock}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:689][498]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingFoundationAndV1Migration} Path={AnimeMMORPG.U03.A1.BindingFoundationAndV1Migration}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:825][501]LogAutomationController: Display: Test Completed. Result={Success} Name={GeometryIncomingInterruptAndDeathDuringSuccessor} Path={AnimeMMORPG.U03.A1.GeometryIncomingInterruptAndDeathDuringSuccessor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:894][504]LogAutomationController: Display: Test Completed. Result={Success} Name={LostGroundLandingResetAndStaleLife} Path={AnimeMMORPG.U03.A1.LostGroundLandingResetAndStaleLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.39:956][507]LogAutomationController: Display: Test Completed. Result={Success} Name={ResourceSnapshotAndCooldownDispatcher} Path={AnimeMMORPG.U03.A1.ResourceSnapshotAndCooldownDispatcher}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:058][509]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeBufferExpiryReplacementAndControl} Path={AnimeMMORPG.U03.A1.RuntimeBufferExpiryReplacementAndControl}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:109][511]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldComboAndNineHitDeath} Path={AnimeMMORPG.U03.A1.WorldComboAndNineHitDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:203][513]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldTimestampGroupBeforeSuccessor} Path={AnimeMMORPG.U03.A1.WorldTimestampGroupBeforeSuccessor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:476][515]LogAutomationController: Display: Test Completed. Result={Success} Name={IncomingMidWallAndStepLethal} Path={AnimeMMORPG.U03.B1.R1.IncomingMidWallAndStepLethal}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:476][515]LogAutomationController: U03B1_R1_MID step=0 lethal=0 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:478][515]LogAutomationController: U03B1_R1_MID step=0 lethal=0 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:478][515]LogAutomationController: U03B1_R1_MID step=0 lethal=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:479][515]LogAutomationController: U03B1_R1_MID step=0 lethal=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:479][515]LogAutomationController: U03B1_R1_MID step=1 lethal=0 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:479][515]LogAutomationController: U03B1_R1_MID step=1 lethal=0 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:480][515]LogAutomationController: U03B1_R1_MID step=1 lethal=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:481][515]LogAutomationController: U03B1_R1_MID step=1 lethal=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.40:577][517]LogAutomationController: Display: Test Completed. Result={Success} Name={RetainedWallSlideAndStepPrefixes} Path={AnimeMMORPG.U03.B1.R1.RetainedWallSlideAndStepPrefixes}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.41:276][519]LogAutomationController: Display: Test Completed. Result={Success} Name={SimultaneousPawnCCD} Path={AnimeMMORPG.U03.B1.R1.SimultaneousPawnCCD}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.41:337][522]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelBufferReplacementAndPriority} Path={AnimeMMORPG.U03.B1.ModelBufferReplacementAndPriority}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.41:387][525]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelDeadlinesAndSequentialCharges} Path={AnimeMMORPG.U03.B1.ModelDeadlinesAndSequentialCharges}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.41:437][528]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelStartupReplacementAndLifecycle} Path={AnimeMMORPG.U03.B1.ModelStartupReplacementAndLifecycle}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.41:505][531]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeBatchPriorityAndRejectedReplacement} Path={AnimeMMORPG.U03.B1.RuntimeBatchPriorityAndRejectedReplacement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.41:952][532]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeInteractionClearsWaitingDodge} Path={AnimeMMORPG.U03.B1.RuntimeInteractionClearsWaitingDodge}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:005][535]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeMenuAndStaleLife} Path={AnimeMMORPG.U03.B1.RuntimeMenuAndStaleLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:078][537]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeNoIFrameAndDeathCutoff} Path={AnimeMMORPG.U03.B1.RuntimeNoIFrameAndDeathCutoff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:118][539]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeSlowMotorBudgetFixture} Path={AnimeMMORPG.U03.B1.RuntimeSlowMotorBudgetFixture}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:176][542]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeStartupCancelResetAndDamage} Path={AnimeMMORPG.U03.B1.RuntimeStartupCancelResetAndDamage}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:335][543]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeStepSlopeAndRemovedFloor} Path={AnimeMMORPG.U03.B1.RuntimeStepSlopeAndRemovedFloor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:458][545]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeSweptDistanceAndLongUpdate} Path={AnimeMMORPG.U03.B1.RuntimeSweptDistanceAndLongUpdate}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:564][547]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeWallPersonAndCliff} Path={AnimeMMORPG.U03.B1.RuntimeWallPersonAndCliff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:604][550]LogAutomationController: Display: Test Completed. Result={Success} Name={AngleAndIndependentHitFlags} Path={AnimeMMORPG.U03.B2.AngleAndIndependentHitFlags}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:654][553]LogAutomationController: Display: Test Completed. Result={Success} Name={ControlReplacementBudgetAndFreeReset} Path={AnimeMMORPG.U03.B2.ControlReplacementBudgetAndFreeReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:689][555]LogAutomationController: Display: Test Completed. Result={Success} Name={EscapeSlowAndCooldown} Path={AnimeMMORPG.U03.B2.EscapeSlowAndCooldown}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:858][557]LogAutomationController: Display: Test Completed. Result={Success} Name={HardCCMidWallAndStepTrajectory} Path={AnimeMMORPG.U03.B2.HardCCMidWallAndStepTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:858][557]LogAutomationController: U03B2_HARD_MID step=0 hardCC=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:859][557]LogAutomationController: U03B2_HARD_MID step=0 hardCC=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:859][557]LogAutomationController: U03B2_HARD_MID step=1 hardCC=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:859][557]LogAutomationController: U03B2_HARD_MID step=1 hardCC=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:896][560]LogAutomationController: Display: Test Completed. Result={Success} Name={ParryHalfOpenEdges} Path={AnimeMMORPG.U03.B2.ParryHalfOpenEdges}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:930][562]LogAutomationController: Display: Test Completed. Result={Success} Name={PhysicalRebindLetterReconciliation} Path={AnimeMMORPG.U03.B2.PhysicalRebindLetterReconciliation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.42:980][565]LogAutomationController: Display: Test Completed. Result={Success} Name={PostureBreakAndEligibleRegen} Path={AnimeMMORPG.U03.B2.PostureBreakAndEligibleRegen}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:054][568]LogAutomationController: Display: Test Completed. Result={Success} Name={SlowPreservesRetainedDodge} Path={AnimeMMORPG.U03.B2.SlowPreservesRetainedDodge}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:087][570]LogAutomationController: Display: Test Completed. Result={Success} Name={TimelineGuardReplacementAndAirborneX} Path={AnimeMMORPG.U03.B2.TimelineGuardReplacementAndAirborneX}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:177][572]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldAimCausalityOwnershipLifeAndMotor} Path={AnimeMMORPG.U03.B2.WorldAimCausalityOwnershipLifeAndMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:303][574]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldFlagsInterruptAndLethalEffects} Path={AnimeMMORPG.U03.B2.WorldFlagsInterruptAndLethalEffects}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:539][576]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldGuardAnglesAndHitTimeAim} Path={AnimeMMORPG.U03.B2.WorldGuardAnglesAndHitTimeAim}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:723][578]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldLateInputAndStableSimultaneousHits} Path={AnimeMMORPG.U03.B2.WorldLateInputAndStableSimultaneousHits}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:790][580]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldParryBlockDedupCritShield} Path={AnimeMMORPG.U03.B2.WorldParryBlockDedupCritShield}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:831][583]LogAutomationController: Display: Test Completed. Result={Success} Name={BlockoutMontageAuthorityPolicy} Path={AnimeMMORPG.U03.C1.BlockoutMontageAuthorityPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:880][586]LogAutomationController: Display: Test Completed. Result={Success} Name={CooldownRegenAndResourceRejection} Path={AnimeMMORPG.U03.C1.CooldownRegenAndResourceRejection}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:931][589]LogAutomationController: Display: Test Completed. Result={Success} Name={FeintEdgesResourcesAndLife} Path={AnimeMMORPG.U03.C1.FeintEdgesResourcesAndLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.43:981][592]LogAutomationController: Display: Test Completed. Result={Success} Name={InterruptEdgesAndCapturedEffects} Path={AnimeMMORPG.U03.C1.InterruptEdgesAndCapturedEffects}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.44:031][595]LogAutomationController: Display: Test Completed. Result={Success} Name={RecoveryAndReplacementPermissions} Path={AnimeMMORPG.U03.C1.RecoveryAndReplacementPermissions}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.44:081][598]LogAutomationController: Display: Test Completed. Result={Success} Name={SequencePriorityAndRejectedReplacement} Path={AnimeMMORPG.U03.C1.SequencePriorityAndRejectedReplacement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.44:137][600]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldEPerTargetDedup} Path={AnimeMMORPG.U03.C1.WorldEPerTargetDedup}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.44:221][603]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldFeintCutoffAndMotor} Path={AnimeMMORPG.U03.C1.WorldFeintCutoffAndMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.44:382][605]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldIncomingEInSuccessorLongShort} Path={AnimeMMORPG.U03.C1.WorldIncomingEInSuccessorLongShort}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:963][607]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldSkillInterruptShieldDefenseDeath} Path={AnimeMMORPG.U03.C1.WorldSkillInterruptShieldDefenseDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:963][607]LogAutomationController: C1_WORLD victim=6 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:963][607]LogAutomationController: C1_WORLD victim=6 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:963][607]LogAutomationController: C1_WORLD victim=6 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:963][607]LogAutomationController: C1_WORLD victim=6 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:964][607]LogAutomationController: C1_WORLD victim=6 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:964][607]LogAutomationController: C1_WORLD victim=6 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:964][607]LogAutomationController: C1_WORLD victim=6 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:965][607]LogAutomationController: C1_WORLD victim=6 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:965][607]LogAutomationController: C1_WORLD victim=6 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:965][607]LogAutomationController: C1_WORLD victim=6 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:965][607]LogAutomationController: C1_WORLD victim=6 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:965][607]LogAutomationController: C1_WORLD victim=6 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:966][607]LogAutomationController: C1_WORLD victim=4 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:966][607]LogAutomationController: C1_WORLD victim=4 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:966][607]LogAutomationController: C1_WORLD victim=4 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:966][607]LogAutomationController: C1_WORLD victim=4 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:967][607]LogAutomationController: C1_WORLD victim=4 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:967][607]LogAutomationController: C1_WORLD victim=4 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:967][607]LogAutomationController: C1_WORLD victim=4 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:967][607]LogAutomationController: C1_WORLD victim=4 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:967][607]LogAutomationController: C1_WORLD victim=4 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:968][607]LogAutomationController: C1_WORLD victim=4 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:968][607]LogAutomationController: C1_WORLD victim=4 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:968][607]LogAutomationController: C1_WORLD victim=4 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:968][607]LogAutomationController: C1_WORLD victim=5 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:968][607]LogAutomationController: C1_WORLD victim=5 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:968][607]LogAutomationController: C1_WORLD victim=5 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:968][607]LogAutomationController: C1_WORLD victim=5 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:968][607]LogAutomationController: C1_WORLD victim=5 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:969][607]LogAutomationController: C1_WORLD victim=5 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:969][607]LogAutomationController: C1_WORLD victim=5 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:969][607]LogAutomationController: C1_WORLD victim=5 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:969][607]LogAutomationController: C1_WORLD victim=5 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:969][607]LogAutomationController: C1_WORLD victim=5 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:970][607]LogAutomationController: C1_WORLD victim=5 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:970][607]LogAutomationController: C1_WORLD victim=5 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175444\\Editor.log",
+    "line": "[2026.11.13-10.55.45:972][607]LogAutomationCommandLine: Display: ...Automation Test Queue Empty 117 tests performed."
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.42:368][315]LogAutomationController: Display: Test Completed. Result={Success} Name={Axes} Path={AnimeMMORPG.U00.Foundation.Axes}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.42:402][317]LogAutomationController: Display: Test Completed. Result={Success} Name={CallOrder} Path={AnimeMMORPG.U00.Foundation.CallOrder}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.42:451][320]LogAutomationController: Display: Test Completed. Result={Success} Name={HalfOpenInterval} Path={AnimeMMORPG.U00.Foundation.HalfOpenInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.42:500][323]LogAutomationController: Display: Test Completed. Result={Success} Name={Units} Path={AnimeMMORPG.U00.Foundation.Units}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.42:551][326]LogAutomationController: Display: Test Completed. Result={Success} Name={CameraPolicy} Path={AnimeMMORPG.U01.B.CameraPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.42:601][329]LogAutomationController: Display: Test Completed. Result={Success} Name={ReleaseGate} Path={AnimeMMORPG.U01.B.ReleaseGate}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.43:450][331]LogAutomationController: Display: Test Completed. Result={Success} Name={FlatMovement} Path={AnimeMMORPG.U01.C.FlatMovement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.43:840][333]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpPhysics} Path={AnimeMMORPG.U01.C.JumpPhysics}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.43:878][336]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpWindows} Path={AnimeMMORPG.U01.C.JumpWindows}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.44:061][339]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorLocks} Path={AnimeMMORPG.U01.C.MotorLocks}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.45:157][341]LogAutomationController: Display: Test Completed. Result={Success} Name={Terrain} Path={AnimeMMORPG.U01.C.Terrain}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.46:400][344]LogAutomationController: Display: Test Completed. Result={Success} Name={AnimatedMotor} Path={AnimeMMORPG.U01.D.AnimatedMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.46:447][347]LogAutomationController: Display: Test Completed. Result={Success} Name={AssetPolicy} Path={AnimeMMORPG.U01.D.AssetPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.47:357][349]LogAutomationController: Display: Test Completed. Result={Success} Name={CarryTrajectory} Path={AnimeMMORPG.U01.D.CarryTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.47:524][351]LogAutomationController: Display: Test Completed. Result={Success} Name={GripIsolationAndAttachment} Path={AnimeMMORPG.U01.D.GripIsolationAndAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.48:431][354]LogAutomationController: Display: Test Completed. Result={Success} Name={LandingTransitions} Path={AnimeMMORPG.U01.D.LandingTransitions}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.48:845][356]LogAutomationController: Display: Test Completed. Result={Success} Name={TransitionsAndAttachment} Path={AnimeMMORPG.U01.D.TransitionsAndAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.48:888][359]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingValidation} Path={AnimeMMORPG.U01.E.BindingValidation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.48:938][362]LogAutomationController: Display: Test Completed. Result={Success} Name={LocalMappingIsolation} Path={AnimeMMORPG.U01.E.LocalMappingIsolation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.48:988][365]LogAutomationController: Display: Test Completed. Result={Success} Name={PartialRecovery} Path={AnimeMMORPG.U01.E.PartialRecovery}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:068][368]LogAutomationController: Display: Test Completed. Result={Success} Name={SaveAndFailure} Path={AnimeMMORPG.U01.E.SaveAndFailure}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:122][371]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxyAnimation} Path={AnimeMMORPG.U01.F.ProxyAnimation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:169][374]LogAutomationController: Display: Test Completed. Result={Success} Name={SavedMoveReplay} Path={AnimeMMORPG.U01.F.SavedMoveReplay}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:219][377]LogAutomationController: Display: Test Completed. Result={Success} Name={CancellationAndAim} Path={AnimeMMORPG.U02.A.CancellationAndAim}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:268][380]LogAutomationController: Display: Test Completed. Result={Success} Name={CombatLockReleaseGateBoundary} Path={AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:318][383]LogAutomationController: Display: Test Completed. Result={Success} Name={IntentIdentityAndReset} Path={AnimeMMORPG.U02.A.IntentIdentityAndReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:368][386]LogAutomationController: Display: Test Completed. Result={Success} Name={PhaseDeadlines} Path={AnimeMMORPG.U02.A.PhaseDeadlines}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:418][389]LogAutomationController: Display: Test Completed. Result={Success} Name={ResolveDedupAndGeneration} Path={AnimeMMORPG.U02.A.ResolveDedupAndGeneration}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:468][392]LogAutomationController: Display: Test Completed. Result={Success} Name={StableResolveDeathOrdering} Path={AnimeMMORPG.U02.A.StableResolveDeathOrdering}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:519][395]LogAutomationController: Display: Test Completed. Result={Success} Name={WholeActiveInterval} Path={AnimeMMORPG.U02.A.WholeActiveInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:570][398]LogAutomationController: Display: Test Completed. Result={Success} Name={AdapterDrainBeforeMutation} Path={AnimeMMORPG.U02.B.AdapterDrainBeforeMutation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:652][401]LogAutomationController: Display: Test Completed. Result={Success} Name={AdmissionCancelAndYaw} Path={AnimeMMORPG.U02.B.AdmissionCancelAndYaw}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:724][404]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthorityLockSavedMoveReplay} Path={AnimeMMORPG.U02.B.AuthorityLockSavedMoveReplay}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.49:851][406]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorGravityAndHeldIntent} Path={AnimeMMORPG.U02.B.MotorGravityAndHeldIntent}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.50:015][409]LogAutomationController: Display: Test Completed. Result={Success} Name={ActualBodyAndSkippedBoundary} Path={AnimeMMORPG.U02.C.ActualBodyAndSkippedBoundary}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.50:065][412]LogAutomationController: Display: Test Completed. Result={Success} Name={MontageAssets} Path={AnimeMMORPG.U02.C.MontageAssets}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.50:106][414]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxySamplesActionTurn} Path={AnimeMMORPG.U02.C.ProxySamplesActionTurn}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.50:152][417]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeIdentityAndReturn} Path={AnimeMMORPG.U02.C.RuntimeIdentityAndReturn}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.50:202][420]LogAutomationController: Display: Test Completed. Result={Success} Name={SnapshotClock} Path={AnimeMMORPG.U02.C.SnapshotClock}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.50:252][423]LogAutomationController: Display: Test Completed. Result={Success} Name={StartupTurnTrajectory} Path={AnimeMMORPG.U02.C.StartupTurnTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.50:302][426]LogAutomationController: Display: Test Completed. Result={Success} Name={ContainmentRoundedCornersAndStepRates} Path={AnimeMMORPG.U02.D.ContainmentRoundedCornersAndStepRates}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.50:352][429]LogAutomationController: Display: Test Completed. Result={Success} Name={CornerReviewAction66IndependentGeometry} Path={AnimeMMORPG.U02.D.CornerReviewAction66IndependentGeometry}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:028][431]LogAutomationController: Display: Test Completed. Result={Success} Name={CornerReviewWorldOrderAndStepMatrix} Path={AnimeMMORPG.U02.D.CornerReviewWorldOrderAndStepMatrix}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:067][434]LogAutomationController: Display: Test Completed. Result={Success} Name={FeetBoxBoundaryAndRelativeSweep} Path={AnimeMMORPG.U02.D.FeetBoxBoundaryAndRelativeSweep}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:137][437]LogAutomationController: Display: Test Completed. Result={Success} Name={GlobalBatchAcrossSources} Path={AnimeMMORPG.U02.D.GlobalBatchAcrossSources}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:186][440]LogAutomationController: Display: Test Completed. Result={Success} Name={VisibilityChangesInsideContactInterval} Path={AnimeMMORPG.U02.D.VisibilityChangesInsideContactInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:261][443]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldResetAndResolveRevalidation} Path={AnimeMMORPG.U02.D.WorldResetAndResolveRevalidation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:356][446]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldTargetsOrderingAndLifetime} Path={AnimeMMORPG.U02.D.WorldTargetsOrderingAndLifetime}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:449][449]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldWallPartialHurtboxAndOrigin} Path={AnimeMMORPG.U02.D.WorldWallPartialHurtboxAndOrigin}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:503][452]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldWholeActiveCrossingAndDedup} Path={AnimeMMORPG.U02.D.WorldWholeActiveCrossingAndDedup}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:567][454]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthorityDamageDedupAndOneCritRoll} Path={AnimeMMORPG.U02.E.AuthorityDamageDedupAndOneCritRoll}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:596][456]LogAutomationController: Display: Test Completed. Result={Success} Name={DamageFormulaRoundingAndCrit} Path={AnimeMMORPG.U02.E.DamageFormulaRoundingAndCrit}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:646][458]LogAutomationController: Display: Test Completed. Result={Success} Name={NewLifeAttackWholeActiveAfterReset} Path={AnimeMMORPG.U02.E.NewLifeAttackWholeActiveAfterReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:697][461]LogAutomationController: Display: Test Completed. Result={Success} Name={ResetRejectsOldLifeAndClearsShield} Path={AnimeMMORPG.U02.E.ResetRejectsOldLifeAndClearsShield}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:835][463]LogAutomationController: Display: Test Completed. Result={Success} Name={SameTimestampLethalOrderAndDeadMotor} Path={AnimeMMORPG.U02.E.SameTimestampLethalOrderAndDeadMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:871][465]LogAutomationController: Display: Test Completed. Result={Success} Name={ShieldExpiryUsesHitTimestampBeforeFrameEnd} Path={AnimeMMORPG.U02.E.ShieldExpiryUsesHitTimestampBeforeFrameEnd}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:917][468]LogAutomationController: Display: Test Completed. Result={Success} Name={ShieldReplaceOrderExpiryAndOverkill} Path={AnimeMMORPG.U02.E.ShieldReplaceOrderExpiryAndOverkill}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.51:984][470]LogAutomationController: Display: Test Completed. Result={Success} Name={StartupCancelNoDamageActiveCancelRejected} Path={AnimeMMORPG.U02.E.StartupCancelNoDamageActiveCancelRejected}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:046][473]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthoritativeResultHistoryAndReplicationSchema} Path={AnimeMMORPG.U02.F.AuthoritativeResultHistoryAndReplicationSchema}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:100][475]LogAutomationController: Display: Test Completed. Result={Success} Name={CommandLifeAndDuplicateAdmission} Path={AnimeMMORPG.U02.F.CommandLifeAndDuplicateAdmission}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:159][478]LogAutomationController: Display: Test Completed. Result={Success} Name={NetworkLabStaticFloorAttachment} Path={AnimeMMORPG.U02.F.NetworkLabStaticFloorAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:205][481]LogAutomationController: Display: Test Completed. Result={Success} Name={AdmissionOrdering} Path={AnimeMMORPG.U03.A0.AdmissionOrdering}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:254][484]LogAutomationController: Display: Test Completed. Result={Success} Name={CutoffIntervalsAndConfirmedHits} Path={AnimeMMORPG.U03.A0.CutoffIntervalsAndConfirmedHits}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:305][487]LogAutomationController: Display: Test Completed. Result={Success} Name={DefinitionIdentity} Path={AnimeMMORPG.U03.A0.DefinitionIdentity}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:354][490]LogAutomationController: Display: Test Completed. Result={Success} Name={LongUpdateResolverInterruptAndDeath} Path={AnimeMMORPG.U03.A0.LongUpdateResolverInterruptAndDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:404][493]LogAutomationController: Display: Test Completed. Result={Success} Name={LostGroundAtActionEndAndGrace} Path={AnimeMMORPG.U03.A0.LostGroundAtActionEndAndGrace}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:454][496]LogAutomationController: Display: Test Completed. Result={Success} Name={ResolveBarrierAndLethal} Path={AnimeMMORPG.U03.A0.ResolveBarrierAndLethal}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:504][499]LogAutomationController: Display: Test Completed. Result={Success} Name={ResourceAndCutoff} Path={AnimeMMORPG.U03.A0.ResourceAndCutoff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:555][502]LogAutomationController: Display: Test Completed. Result={Success} Name={TimelineAndBuffer} Path={AnimeMMORPG.U03.A0.TimelineAndBuffer}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:605][505]LogAutomationController: Display: Test Completed. Result={Success} Name={TimestampGroupBeforeTransitionAndAdmission} Path={AnimeMMORPG.U03.A0.TimestampGroupBeforeTransitionAndAdmission}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:654][508]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthoredThreeClipsAndDefinitionClock} Path={AnimeMMORPG.U03.A1.AuthoredThreeClipsAndDefinitionClock}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:689][510]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingFoundationAndV1Migration} Path={AnimeMMORPG.U03.A1.BindingFoundationAndV1Migration}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:820][512]LogAutomationController: Display: Test Completed. Result={Success} Name={GeometryIncomingInterruptAndDeathDuringSuccessor} Path={AnimeMMORPG.U03.A1.GeometryIncomingInterruptAndDeathDuringSuccessor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:859][514]LogAutomationController: Display: Test Completed. Result={Success} Name={LostGroundLandingResetAndStaleLife} Path={AnimeMMORPG.U03.A1.LostGroundLandingResetAndStaleLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.52:913][517]LogAutomationController: Display: Test Completed. Result={Success} Name={ResourceSnapshotAndCooldownDispatcher} Path={AnimeMMORPG.U03.A1.ResourceSnapshotAndCooldownDispatcher}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:008][519]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeBufferExpiryReplacementAndControl} Path={AnimeMMORPG.U03.A1.RuntimeBufferExpiryReplacementAndControl}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:053][521]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldComboAndNineHitDeath} Path={AnimeMMORPG.U03.A1.WorldComboAndNineHitDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:139][523]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldTimestampGroupBeforeSuccessor} Path={AnimeMMORPG.U03.A1.WorldTimestampGroupBeforeSuccessor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:441][525]LogAutomationController: Display: Test Completed. Result={Success} Name={IncomingMidWallAndStepLethal} Path={AnimeMMORPG.U03.B1.R1.IncomingMidWallAndStepLethal}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:442][525]LogAutomationController: U03B1_R1_MID step=0 lethal=0 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:442][525]LogAutomationController: U03B1_R1_MID step=0 lethal=0 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:443][525]LogAutomationController: U03B1_R1_MID step=0 lethal=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:443][525]LogAutomationController: U03B1_R1_MID step=0 lethal=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:443][525]LogAutomationController: U03B1_R1_MID step=1 lethal=0 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:445][525]LogAutomationController: U03B1_R1_MID step=1 lethal=0 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:445][525]LogAutomationController: U03B1_R1_MID step=1 lethal=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:446][525]LogAutomationController: U03B1_R1_MID step=1 lethal=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.53:588][527]LogAutomationController: Display: Test Completed. Result={Success} Name={RetainedWallSlideAndStepPrefixes} Path={AnimeMMORPG.U03.B1.R1.RetainedWallSlideAndStepPrefixes}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.54:953][529]LogAutomationController: Display: Test Completed. Result={Success} Name={SimultaneousPawnCCD} Path={AnimeMMORPG.U03.B1.R1.SimultaneousPawnCCD}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:047][532]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelBufferReplacementAndPriority} Path={AnimeMMORPG.U03.B1.ModelBufferReplacementAndPriority}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:100][535]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelDeadlinesAndSequentialCharges} Path={AnimeMMORPG.U03.B1.ModelDeadlinesAndSequentialCharges}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:158][538]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelStartupReplacementAndLifecycle} Path={AnimeMMORPG.U03.B1.ModelStartupReplacementAndLifecycle}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:234][541]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeBatchPriorityAndRejectedReplacement} Path={AnimeMMORPG.U03.B1.RuntimeBatchPriorityAndRejectedReplacement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:305][542]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeInteractionClearsWaitingDodge} Path={AnimeMMORPG.U03.B1.RuntimeInteractionClearsWaitingDodge}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:360][544]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeMenuAndStaleLife} Path={AnimeMMORPG.U03.B1.RuntimeMenuAndStaleLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:459][546]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeNoIFrameAndDeathCutoff} Path={AnimeMMORPG.U03.B1.RuntimeNoIFrameAndDeathCutoff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:518][548]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeSlowMotorBudgetFixture} Path={AnimeMMORPG.U03.B1.RuntimeSlowMotorBudgetFixture}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:582][550]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeStartupCancelResetAndDamage} Path={AnimeMMORPG.U03.B1.RuntimeStartupCancelResetAndDamage}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:836][552]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeStepSlopeAndRemovedFloor} Path={AnimeMMORPG.U03.B1.RuntimeStepSlopeAndRemovedFloor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.55:982][554]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeSweptDistanceAndLongUpdate} Path={AnimeMMORPG.U03.B1.RuntimeSweptDistanceAndLongUpdate}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:103][556]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeWallPersonAndCliff} Path={AnimeMMORPG.U03.B1.RuntimeWallPersonAndCliff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:144][559]LogAutomationController: Display: Test Completed. Result={Success} Name={AngleAndIndependentHitFlags} Path={AnimeMMORPG.U03.B2.AngleAndIndependentHitFlags}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:203][562]LogAutomationController: Display: Test Completed. Result={Success} Name={ControlReplacementBudgetAndFreeReset} Path={AnimeMMORPG.U03.B2.ControlReplacementBudgetAndFreeReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:264][565]LogAutomationController: Display: Test Completed. Result={Success} Name={EscapeSlowAndCooldown} Path={AnimeMMORPG.U03.B2.EscapeSlowAndCooldown}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:391][567]LogAutomationController: Display: Test Completed. Result={Success} Name={HardCCMidWallAndStepTrajectory} Path={AnimeMMORPG.U03.B2.HardCCMidWallAndStepTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:392][567]LogAutomationController: U03B2_HARD_MID step=0 hardCC=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:392][567]LogAutomationController: U03B2_HARD_MID step=0 hardCC=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:392][567]LogAutomationController: U03B2_HARD_MID step=1 hardCC=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:392][567]LogAutomationController: U03B2_HARD_MID step=1 hardCC=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:440][570]LogAutomationController: Display: Test Completed. Result={Success} Name={ParryHalfOpenEdges} Path={AnimeMMORPG.U03.B2.ParryHalfOpenEdges}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:475][572]LogAutomationController: Display: Test Completed. Result={Success} Name={PhysicalRebindLetterReconciliation} Path={AnimeMMORPG.U03.B2.PhysicalRebindLetterReconciliation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:523][575]LogAutomationController: Display: Test Completed. Result={Success} Name={PostureBreakAndEligibleRegen} Path={AnimeMMORPG.U03.B2.PostureBreakAndEligibleRegen}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:579][577]LogAutomationController: Display: Test Completed. Result={Success} Name={SlowPreservesRetainedDodge} Path={AnimeMMORPG.U03.B2.SlowPreservesRetainedDodge}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:625][580]LogAutomationController: Display: Test Completed. Result={Success} Name={TimelineGuardReplacementAndAirborneX} Path={AnimeMMORPG.U03.B2.TimelineGuardReplacementAndAirborneX}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:702][582]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldAimCausalityOwnershipLifeAndMotor} Path={AnimeMMORPG.U03.B2.WorldAimCausalityOwnershipLifeAndMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.56:813][584]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldFlagsInterruptAndLethalEffects} Path={AnimeMMORPG.U03.B2.WorldFlagsInterruptAndLethalEffects}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:012][586]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldGuardAnglesAndHitTimeAim} Path={AnimeMMORPG.U03.B2.WorldGuardAnglesAndHitTimeAim}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:148][588]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldLateInputAndStableSimultaneousHits} Path={AnimeMMORPG.U03.B2.WorldLateInputAndStableSimultaneousHits}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:206][590]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldParryBlockDedupCritShield} Path={AnimeMMORPG.U03.B2.WorldParryBlockDedupCritShield}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:249][593]LogAutomationController: Display: Test Completed. Result={Success} Name={BlockoutMontageAuthorityPolicy} Path={AnimeMMORPG.U03.C1.BlockoutMontageAuthorityPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:299][596]LogAutomationController: Display: Test Completed. Result={Success} Name={CooldownRegenAndResourceRejection} Path={AnimeMMORPG.U03.C1.CooldownRegenAndResourceRejection}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:349][599]LogAutomationController: Display: Test Completed. Result={Success} Name={FeintEdgesResourcesAndLife} Path={AnimeMMORPG.U03.C1.FeintEdgesResourcesAndLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:399][602]LogAutomationController: Display: Test Completed. Result={Success} Name={InterruptEdgesAndCapturedEffects} Path={AnimeMMORPG.U03.C1.InterruptEdgesAndCapturedEffects}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:433][604]LogAutomationController: Display: Test Completed. Result={Success} Name={RecoveryAndReplacementPermissions} Path={AnimeMMORPG.U03.C1.RecoveryAndReplacementPermissions}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:482][607]LogAutomationController: Display: Test Completed. Result={Success} Name={SequencePriorityAndRejectedReplacement} Path={AnimeMMORPG.U03.C1.SequencePriorityAndRejectedReplacement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:543][610]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldEPerTargetDedup} Path={AnimeMMORPG.U03.C1.WorldEPerTargetDedup}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:627][613]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldFeintCutoffAndMotor} Path={AnimeMMORPG.U03.C1.WorldFeintCutoffAndMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.57:790][616]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldIncomingEInSuccessorLongShort} Path={AnimeMMORPG.U03.C1.WorldIncomingEInSuccessorLongShort}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:301][618]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldSkillInterruptShieldDefenseDeath} Path={AnimeMMORPG.U03.C1.WorldSkillInterruptShieldDefenseDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:301][618]LogAutomationController: C1_WORLD victim=6 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:301][618]LogAutomationController: C1_WORLD victim=6 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:301][618]LogAutomationController: C1_WORLD victim=6 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:301][618]LogAutomationController: C1_WORLD victim=6 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:301][618]LogAutomationController: C1_WORLD victim=6 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:301][618]LogAutomationController: C1_WORLD victim=6 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:301][618]LogAutomationController: C1_WORLD victim=6 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:303][618]LogAutomationController: C1_WORLD victim=6 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:303][618]LogAutomationController: C1_WORLD victim=6 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:303][618]LogAutomationController: C1_WORLD victim=6 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:303][618]LogAutomationController: C1_WORLD victim=6 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:303][618]LogAutomationController: C1_WORLD victim=6 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:304][618]LogAutomationController: C1_WORLD victim=4 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:304][618]LogAutomationController: C1_WORLD victim=4 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:304][618]LogAutomationController: C1_WORLD victim=4 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:304][618]LogAutomationController: C1_WORLD victim=4 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:305][618]LogAutomationController: C1_WORLD victim=4 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:305][618]LogAutomationController: C1_WORLD victim=4 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:305][618]LogAutomationController: C1_WORLD victim=4 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:305][618]LogAutomationController: C1_WORLD victim=4 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:305][618]LogAutomationController: C1_WORLD victim=4 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:306][618]LogAutomationController: C1_WORLD victim=4 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:306][618]LogAutomationController: C1_WORLD victim=4 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:306][618]LogAutomationController: C1_WORLD victim=4 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:306][618]LogAutomationController: C1_WORLD victim=5 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:306][618]LogAutomationController: C1_WORLD victim=5 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:306][618]LogAutomationController: C1_WORLD victim=5 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:306][618]LogAutomationController: C1_WORLD victim=5 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:308][618]LogAutomationController: C1_WORLD victim=5 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:308][618]LogAutomationController: C1_WORLD victim=5 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:308][618]LogAutomationController: C1_WORLD victim=5 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:308][618]LogAutomationController: C1_WORLD victim=5 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:308][618]LogAutomationController: C1_WORLD victim=5 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:308][618]LogAutomationController: C1_WORLD victim=5 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:308][618]LogAutomationController: C1_WORLD victim=5 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:308][618]LogAutomationController: C1_WORLD victim=5 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-175924\\Editor.log",
+    "line": "[2026.11.13-10.59.59:310][618]LogAutomationCommandLine: Display: ...Automation Test Queue Empty 117 tests performed."
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.40:696][270]LogAutomationController: Display: Test Completed. Result={Success} Name={Axes} Path={AnimeMMORPG.U00.Foundation.Axes}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.40:758][273]LogAutomationController: Display: Test Completed. Result={Success} Name={CallOrder} Path={AnimeMMORPG.U00.Foundation.CallOrder}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.40:807][276]LogAutomationController: Display: Test Completed. Result={Success} Name={HalfOpenInterval} Path={AnimeMMORPG.U00.Foundation.HalfOpenInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.40:867][279]LogAutomationController: Display: Test Completed. Result={Success} Name={Units} Path={AnimeMMORPG.U00.Foundation.Units}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.40:918][282]LogAutomationController: Display: Test Completed. Result={Success} Name={CameraPolicy} Path={AnimeMMORPG.U01.B.CameraPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.40:977][285]LogAutomationController: Display: Test Completed. Result={Success} Name={ReleaseGate} Path={AnimeMMORPG.U01.B.ReleaseGate}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.42:067][287]LogAutomationController: Display: Test Completed. Result={Success} Name={FlatMovement} Path={AnimeMMORPG.U01.C.FlatMovement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.42:685][289]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpPhysics} Path={AnimeMMORPG.U01.C.JumpPhysics}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.42:710][291]LogAutomationController: Display: Test Completed. Result={Success} Name={JumpWindows} Path={AnimeMMORPG.U01.C.JumpWindows}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.42:777][293]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorLocks} Path={AnimeMMORPG.U01.C.MotorLocks}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.44:121][295]LogAutomationController: Display: Test Completed. Result={Success} Name={Terrain} Path={AnimeMMORPG.U01.C.Terrain}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.45:775][297]LogAutomationController: Display: Test Completed. Result={Success} Name={AnimatedMotor} Path={AnimeMMORPG.U01.D.AnimatedMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.45:794][299]LogAutomationController: Display: Test Completed. Result={Success} Name={AssetPolicy} Path={AnimeMMORPG.U01.D.AssetPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.46:704][301]LogAutomationController: Display: Test Completed. Result={Success} Name={CarryTrajectory} Path={AnimeMMORPG.U01.D.CarryTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.46:889][303]LogAutomationController: Display: Test Completed. Result={Success} Name={GripIsolationAndAttachment} Path={AnimeMMORPG.U01.D.GripIsolationAndAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.47:928][305]LogAutomationController: Display: Test Completed. Result={Success} Name={LandingTransitions} Path={AnimeMMORPG.U01.D.LandingTransitions}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.48:418][307]LogAutomationController: Display: Test Completed. Result={Success} Name={TransitionsAndAttachment} Path={AnimeMMORPG.U01.D.TransitionsAndAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.48:461][310]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingValidation} Path={AnimeMMORPG.U01.E.BindingValidation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.48:520][313]LogAutomationController: Display: Test Completed. Result={Success} Name={LocalMappingIsolation} Path={AnimeMMORPG.U01.E.LocalMappingIsolation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.48:555][315]LogAutomationController: Display: Test Completed. Result={Success} Name={PartialRecovery} Path={AnimeMMORPG.U01.E.PartialRecovery}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.48:646][318]LogAutomationController: Display: Test Completed. Result={Success} Name={SaveAndFailure} Path={AnimeMMORPG.U01.E.SaveAndFailure}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.48:684][320]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxyAnimation} Path={AnimeMMORPG.U01.F.ProxyAnimation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.48:744][323]LogAutomationController: Display: Test Completed. Result={Success} Name={SavedMoveReplay} Path={AnimeMMORPG.U01.F.SavedMoveReplay}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.48:790][326]LogAutomationController: Display: Test Completed. Result={Success} Name={CancellationAndAim} Path={AnimeMMORPG.U02.A.CancellationAndAim}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:083][328]LogAutomationController: Display: Test Completed. Result={Success} Name={CombatLockReleaseGateBoundary} Path={AnimeMMORPG.U02.A.CombatLockReleaseGateBoundary}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:117][330]LogAutomationController: Display: Test Completed. Result={Success} Name={IntentIdentityAndReset} Path={AnimeMMORPG.U02.A.IntentIdentityAndReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:150][332]LogAutomationController: Display: Test Completed. Result={Success} Name={PhaseDeadlines} Path={AnimeMMORPG.U02.A.PhaseDeadlines}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:192][334]LogAutomationController: Display: Test Completed. Result={Success} Name={ResolveDedupAndGeneration} Path={AnimeMMORPG.U02.A.ResolveDedupAndGeneration}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:225][336]LogAutomationController: Display: Test Completed. Result={Success} Name={StableResolveDeathOrdering} Path={AnimeMMORPG.U02.A.StableResolveDeathOrdering}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:259][338]LogAutomationController: Display: Test Completed. Result={Success} Name={WholeActiveInterval} Path={AnimeMMORPG.U02.A.WholeActiveInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:308][340]LogAutomationController: Display: Test Completed. Result={Success} Name={AdapterDrainBeforeMutation} Path={AnimeMMORPG.U02.B.AdapterDrainBeforeMutation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:388][342]LogAutomationController: Display: Test Completed. Result={Success} Name={AdmissionCancelAndYaw} Path={AnimeMMORPG.U02.B.AdmissionCancelAndYaw}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:449][344]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthorityLockSavedMoveReplay} Path={AnimeMMORPG.U02.B.AuthorityLockSavedMoveReplay}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:588][346]LogAutomationController: Display: Test Completed. Result={Success} Name={MotorGravityAndHeldIntent} Path={AnimeMMORPG.U02.B.MotorGravityAndHeldIntent}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:801][349]LogAutomationController: Display: Test Completed. Result={Success} Name={ActualBodyAndSkippedBoundary} Path={AnimeMMORPG.U02.C.ActualBodyAndSkippedBoundary}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:851][352]LogAutomationController: Display: Test Completed. Result={Success} Name={MontageAssets} Path={AnimeMMORPG.U02.C.MontageAssets}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:914][354]LogAutomationController: Display: Test Completed. Result={Success} Name={ProxySamplesActionTurn} Path={AnimeMMORPG.U02.C.ProxySamplesActionTurn}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:948][356]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeIdentityAndReturn} Path={AnimeMMORPG.U02.C.RuntimeIdentityAndReturn}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.49:987][358]LogAutomationController: Display: Test Completed. Result={Success} Name={SnapshotClock} Path={AnimeMMORPG.U02.C.SnapshotClock}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:036][361]LogAutomationController: Display: Test Completed. Result={Success} Name={StartupTurnTrajectory} Path={AnimeMMORPG.U02.C.StartupTurnTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:080][363]LogAutomationController: Display: Test Completed. Result={Success} Name={ContainmentRoundedCornersAndStepRates} Path={AnimeMMORPG.U02.D.ContainmentRoundedCornersAndStepRates}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:114][365]LogAutomationController: Display: Test Completed. Result={Success} Name={CornerReviewAction66IndependentGeometry} Path={AnimeMMORPG.U02.D.CornerReviewAction66IndependentGeometry}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:584][367]LogAutomationController: Display: Test Completed. Result={Success} Name={CornerReviewWorldOrderAndStepMatrix} Path={AnimeMMORPG.U02.D.CornerReviewWorldOrderAndStepMatrix}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:614][369]LogAutomationController: Display: Test Completed. Result={Success} Name={FeetBoxBoundaryAndRelativeSweep} Path={AnimeMMORPG.U02.D.FeetBoxBoundaryAndRelativeSweep}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:702][371]LogAutomationController: Display: Test Completed. Result={Success} Name={GlobalBatchAcrossSources} Path={AnimeMMORPG.U02.D.GlobalBatchAcrossSources}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:742][374]LogAutomationController: Display: Test Completed. Result={Success} Name={VisibilityChangesInsideContactInterval} Path={AnimeMMORPG.U02.D.VisibilityChangesInsideContactInterval}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:825][376]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldResetAndResolveRevalidation} Path={AnimeMMORPG.U02.D.WorldResetAndResolveRevalidation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.50:921][378]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldTargetsOrderingAndLifetime} Path={AnimeMMORPG.U02.D.WorldTargetsOrderingAndLifetime}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:029][380]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldWallPartialHurtboxAndOrigin} Path={AnimeMMORPG.U02.D.WorldWallPartialHurtboxAndOrigin}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:087][382]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldWholeActiveCrossingAndDedup} Path={AnimeMMORPG.U02.D.WorldWholeActiveCrossingAndDedup}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:165][384]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthorityDamageDedupAndOneCritRoll} Path={AnimeMMORPG.U02.E.AuthorityDamageDedupAndOneCritRoll}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:201][386]LogAutomationController: Display: Test Completed. Result={Success} Name={DamageFormulaRoundingAndCrit} Path={AnimeMMORPG.U02.E.DamageFormulaRoundingAndCrit}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:256][388]LogAutomationController: Display: Test Completed. Result={Success} Name={NewLifeAttackWholeActiveAfterReset} Path={AnimeMMORPG.U02.E.NewLifeAttackWholeActiveAfterReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:303][390]LogAutomationController: Display: Test Completed. Result={Success} Name={ResetRejectsOldLifeAndClearsShield} Path={AnimeMMORPG.U02.E.ResetRejectsOldLifeAndClearsShield}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:466][392]LogAutomationController: Display: Test Completed. Result={Success} Name={SameTimestampLethalOrderAndDeadMotor} Path={AnimeMMORPG.U02.E.SameTimestampLethalOrderAndDeadMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:520][394]LogAutomationController: Display: Test Completed. Result={Success} Name={ShieldExpiryUsesHitTimestampBeforeFrameEnd} Path={AnimeMMORPG.U02.E.ShieldExpiryUsesHitTimestampBeforeFrameEnd}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:549][396]LogAutomationController: Display: Test Completed. Result={Success} Name={ShieldReplaceOrderExpiryAndOverkill} Path={AnimeMMORPG.U02.E.ShieldReplaceOrderExpiryAndOverkill}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:666][398]LogAutomationController: Display: Test Completed. Result={Success} Name={StartupCancelNoDamageActiveCancelRejected} Path={AnimeMMORPG.U02.E.StartupCancelNoDamageActiveCancelRejected}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:743][400]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthoritativeResultHistoryAndReplicationSchema} Path={AnimeMMORPG.U02.F.AuthoritativeResultHistoryAndReplicationSchema}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:849][402]LogAutomationController: Display: Test Completed. Result={Success} Name={CommandLifeAndDuplicateAdmission} Path={AnimeMMORPG.U02.F.CommandLifeAndDuplicateAdmission}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:939][405]LogAutomationController: Display: Test Completed. Result={Success} Name={NetworkLabStaticFloorAttachment} Path={AnimeMMORPG.U02.F.NetworkLabStaticFloorAttachment}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.51:982][408]LogAutomationController: Display: Test Completed. Result={Success} Name={AdmissionOrdering} Path={AnimeMMORPG.U03.A0.AdmissionOrdering}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:026][410]LogAutomationController: Display: Test Completed. Result={Success} Name={CutoffIntervalsAndConfirmedHits} Path={AnimeMMORPG.U03.A0.CutoffIntervalsAndConfirmedHits}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:059][412]LogAutomationController: Display: Test Completed. Result={Success} Name={DefinitionIdentity} Path={AnimeMMORPG.U03.A0.DefinitionIdentity}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:093][414]LogAutomationController: Display: Test Completed. Result={Success} Name={LongUpdateResolverInterruptAndDeath} Path={AnimeMMORPG.U03.A0.LongUpdateResolverInterruptAndDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:447][416]LogAutomationController: Display: Test Completed. Result={Success} Name={LostGroundAtActionEndAndGrace} Path={AnimeMMORPG.U03.A0.LostGroundAtActionEndAndGrace}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:495][419]LogAutomationController: Display: Test Completed. Result={Success} Name={ResolveBarrierAndLethal} Path={AnimeMMORPG.U03.A0.ResolveBarrierAndLethal}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:554][422]LogAutomationController: Display: Test Completed. Result={Success} Name={ResourceAndCutoff} Path={AnimeMMORPG.U03.A0.ResourceAndCutoff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:590][424]LogAutomationController: Display: Test Completed. Result={Success} Name={TimelineAndBuffer} Path={AnimeMMORPG.U03.A0.TimelineAndBuffer}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:621][426]LogAutomationController: Display: Test Completed. Result={Success} Name={TimestampGroupBeforeTransitionAndAdmission} Path={AnimeMMORPG.U03.A0.TimestampGroupBeforeTransitionAndAdmission}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:680][429]LogAutomationController: Display: Test Completed. Result={Success} Name={AuthoredThreeClipsAndDefinitionClock} Path={AnimeMMORPG.U03.A1.AuthoredThreeClipsAndDefinitionClock}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.52:715][431]LogAutomationController: Display: Test Completed. Result={Success} Name={BindingFoundationAndV1Migration} Path={AnimeMMORPG.U03.A1.BindingFoundationAndV1Migration}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:021][433]LogAutomationController: Display: Test Completed. Result={Success} Name={GeometryIncomingInterruptAndDeathDuringSuccessor} Path={AnimeMMORPG.U03.A1.GeometryIncomingInterruptAndDeathDuringSuccessor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:094][435]LogAutomationController: Display: Test Completed. Result={Success} Name={LostGroundLandingResetAndStaleLife} Path={AnimeMMORPG.U03.A1.LostGroundLandingResetAndStaleLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:150][438]LogAutomationController: Display: Test Completed. Result={Success} Name={ResourceSnapshotAndCooldownDispatcher} Path={AnimeMMORPG.U03.A1.ResourceSnapshotAndCooldownDispatcher}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:270][440]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeBufferExpiryReplacementAndControl} Path={AnimeMMORPG.U03.A1.RuntimeBufferExpiryReplacementAndControl}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:342][442]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldComboAndNineHitDeath} Path={AnimeMMORPG.U03.A1.WorldComboAndNineHitDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:443][444]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldTimestampGroupBeforeSuccessor} Path={AnimeMMORPG.U03.A1.WorldTimestampGroupBeforeSuccessor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:763][446]LogAutomationController: Display: Test Completed. Result={Success} Name={IncomingMidWallAndStepLethal} Path={AnimeMMORPG.U03.B1.R1.IncomingMidWallAndStepLethal}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:763][446]LogAutomationController: U03B1_R1_MID step=0 lethal=0 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:763][446]LogAutomationController: U03B1_R1_MID step=0 lethal=0 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:763][446]LogAutomationController: U03B1_R1_MID step=0 lethal=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:765][446]LogAutomationController: U03B1_R1_MID step=0 lethal=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:765][446]LogAutomationController: U03B1_R1_MID step=1 lethal=0 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:766][446]LogAutomationController: U03B1_R1_MID step=1 lethal=0 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:767][446]LogAutomationController: U03B1_R1_MID step=1 lethal=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:768][446]LogAutomationController: U03B1_R1_MID step=1 lethal=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.53:897][449]LogAutomationController: Display: Test Completed. Result={Success} Name={RetainedWallSlideAndStepPrefixes} Path={AnimeMMORPG.U03.B1.R1.RetainedWallSlideAndStepPrefixes}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.54:583][451]LogAutomationController: Display: Test Completed. Result={Success} Name={SimultaneousPawnCCD} Path={AnimeMMORPG.U03.B1.R1.SimultaneousPawnCCD}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.54:677][454]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelBufferReplacementAndPriority} Path={AnimeMMORPG.U03.B1.ModelBufferReplacementAndPriority}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.54:712][456]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelDeadlinesAndSequentialCharges} Path={AnimeMMORPG.U03.B1.ModelDeadlinesAndSequentialCharges}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.54:770][459]LogAutomationController: Display: Test Completed. Result={Success} Name={ModelStartupReplacementAndLifecycle} Path={AnimeMMORPG.U03.B1.ModelStartupReplacementAndLifecycle}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.54:863][461]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeBatchPriorityAndRejectedReplacement} Path={AnimeMMORPG.U03.B1.RuntimeBatchPriorityAndRejectedReplacement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.54:987][463]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeInteractionClearsWaitingDodge} Path={AnimeMMORPG.U03.B1.RuntimeInteractionClearsWaitingDodge}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.55:076][465]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeMenuAndStaleLife} Path={AnimeMMORPG.U03.B1.RuntimeMenuAndStaleLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.55:209][467]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeNoIFrameAndDeathCutoff} Path={AnimeMMORPG.U03.B1.RuntimeNoIFrameAndDeathCutoff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.55:281][469]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeSlowMotorBudgetFixture} Path={AnimeMMORPG.U03.B1.RuntimeSlowMotorBudgetFixture}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.55:374][471]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeStartupCancelResetAndDamage} Path={AnimeMMORPG.U03.B1.RuntimeStartupCancelResetAndDamage}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:399][473]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeStepSlopeAndRemovedFloor} Path={AnimeMMORPG.U03.B1.RuntimeStepSlopeAndRemovedFloor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:581][475]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeSweptDistanceAndLongUpdate} Path={AnimeMMORPG.U03.B1.RuntimeSweptDistanceAndLongUpdate}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:697][477]LogAutomationController: Display: Test Completed. Result={Success} Name={RuntimeWallPersonAndCliff} Path={AnimeMMORPG.U03.B1.RuntimeWallPersonAndCliff}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:736][479]LogAutomationController: Display: Test Completed. Result={Success} Name={AngleAndIndependentHitFlags} Path={AnimeMMORPG.U03.B2.AngleAndIndependentHitFlags}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:769][481]LogAutomationController: Display: Test Completed. Result={Success} Name={ControlReplacementBudgetAndFreeReset} Path={AnimeMMORPG.U03.B2.ControlReplacementBudgetAndFreeReset}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:826][484]LogAutomationController: Display: Test Completed. Result={Success} Name={EscapeSlowAndCooldown} Path={AnimeMMORPG.U03.B2.EscapeSlowAndCooldown}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:970][486]LogAutomationController: Display: Test Completed. Result={Success} Name={HardCCMidWallAndStepTrajectory} Path={AnimeMMORPG.U03.B2.HardCCMidWallAndStepTrajectory}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:970][486]LogAutomationController: U03B2_HARD_MID step=0 hardCC=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:971][486]LogAutomationController: U03B2_HARD_MID step=0 hardCC=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=0.532 Y=0.000 Z=97.296"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:971][486]LogAutomationController: U03B2_HARD_MID step=1 hardCC=1 short=0 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.56:971][486]LogAutomationController: U03B2_HARD_MID step=1 hardCC=1 short=1 expected=0.66000002607703212 actual=0.66000002607703212 position=X=3.523 Y=0.000 Z=99.470"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:014][489]LogAutomationController: Display: Test Completed. Result={Success} Name={ParryHalfOpenEdges} Path={AnimeMMORPG.U03.B2.ParryHalfOpenEdges}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:048][491]LogAutomationController: Display: Test Completed. Result={Success} Name={PhysicalRebindLetterReconciliation} Path={AnimeMMORPG.U03.B2.PhysicalRebindLetterReconciliation}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:107][494]LogAutomationController: Display: Test Completed. Result={Success} Name={PostureBreakAndEligibleRegen} Path={AnimeMMORPG.U03.B2.PostureBreakAndEligibleRegen}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:181][496]LogAutomationController: Display: Test Completed. Result={Success} Name={SlowPreservesRetainedDodge} Path={AnimeMMORPG.U03.B2.SlowPreservesRetainedDodge}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:220][498]LogAutomationController: Display: Test Completed. Result={Success} Name={TimelineGuardReplacementAndAirborneX} Path={AnimeMMORPG.U03.B2.TimelineGuardReplacementAndAirborneX}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:325][500]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldAimCausalityOwnershipLifeAndMotor} Path={AnimeMMORPG.U03.B2.WorldAimCausalityOwnershipLifeAndMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:490][502]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldFlagsInterruptAndLethalEffects} Path={AnimeMMORPG.U03.B2.WorldFlagsInterruptAndLethalEffects}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:751][504]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldGuardAnglesAndHitTimeAim} Path={AnimeMMORPG.U03.B2.WorldGuardAnglesAndHitTimeAim}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.57:973][506]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldLateInputAndStableSimultaneousHits} Path={AnimeMMORPG.U03.B2.WorldLateInputAndStableSimultaneousHits}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:072][508]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldParryBlockDedupCritShield} Path={AnimeMMORPG.U03.B2.WorldParryBlockDedupCritShield}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:124][511]LogAutomationController: Display: Test Completed. Result={Success} Name={BlockoutMontageAuthorityPolicy} Path={AnimeMMORPG.U03.C1.BlockoutMontageAuthorityPolicy}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:184][514]LogAutomationController: Display: Test Completed. Result={Success} Name={CooldownRegenAndResourceRejection} Path={AnimeMMORPG.U03.C1.CooldownRegenAndResourceRejection}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:218][516]LogAutomationController: Display: Test Completed. Result={Success} Name={FeintEdgesResourcesAndLife} Path={AnimeMMORPG.U03.C1.FeintEdgesResourcesAndLife}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:276][519]LogAutomationController: Display: Test Completed. Result={Success} Name={InterruptEdgesAndCapturedEffects} Path={AnimeMMORPG.U03.C1.InterruptEdgesAndCapturedEffects}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:310][521]LogAutomationController: Display: Test Completed. Result={Success} Name={RecoveryAndReplacementPermissions} Path={AnimeMMORPG.U03.C1.RecoveryAndReplacementPermissions}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:344][523]LogAutomationController: Display: Test Completed. Result={Success} Name={SequencePriorityAndRejectedReplacement} Path={AnimeMMORPG.U03.C1.SequencePriorityAndRejectedReplacement}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:413][525]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldEPerTargetDedup} Path={AnimeMMORPG.U03.C1.WorldEPerTargetDedup}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:702][527]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldFeintCutoffAndMotor} Path={AnimeMMORPG.U03.C1.WorldFeintCutoffAndMotor}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.12.58:839][529]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldIncomingEInSuccessorLongShort} Path={AnimeMMORPG.U03.C1.WorldIncomingEInSuccessorLongShort}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:385][531]LogAutomationController: Display: Test Completed. Result={Success} Name={WorldSkillInterruptShieldDefenseDeath} Path={AnimeMMORPG.U03.C1.WorldSkillInterruptShieldDefenseDeath}"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:385][531]LogAutomationController: C1_WORLD victim=6 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:385][531]LogAutomationController: C1_WORLD victim=6 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:386][531]LogAutomationController: C1_WORLD victim=6 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:386][531]LogAutomationController: C1_WORLD victim=6 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:386][531]LogAutomationController: C1_WORLD victim=6 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=6 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=6 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=6 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=6 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=6 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=6 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=6 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=4 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=4 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:387][531]LogAutomationController: C1_WORLD victim=4 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:389][531]LogAutomationController: C1_WORLD victim=4 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:389][531]LogAutomationController: C1_WORLD victim=4 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:389][531]LogAutomationController: C1_WORLD victim=4 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:389][531]LogAutomationController: C1_WORLD victim=4 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:389][531]LogAutomationController: C1_WORLD victim=4 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:389][531]LogAutomationController: C1_WORLD victim=4 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:390][531]LogAutomationController: C1_WORLD victim=4 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:390][531]LogAutomationController: C1_WORLD victim=4 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:390][531]LogAutomationController: C1_WORLD victim=4 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:390][531]LogAutomationController: C1_WORLD victim=5 mode=0 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:391][531]LogAutomationController: C1_WORLD victim=5 mode=0 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=920"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:391][531]LogAutomationController: C1_WORLD victim=5 mode=1 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:391][531]LogAutomationController: C1_WORLD victim=5 mode=1 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=1 action=1 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:391][531]LogAutomationController: C1_WORLD victim=5 mode=2 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:391][531]LogAutomationController: C1_WORLD victim=5 mode=2 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=976"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:391][531]LogAutomationController: C1_WORLD victim=5 mode=3 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:391][531]LogAutomationController: C1_WORLD victim=5 mode=3 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=1000"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:391][531]LogAutomationController: C1_WORLD victim=5 mode=4 reverse=0 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:392][531]LogAutomationController: C1_WORLD victim=5 mode=4 reverse=1 hit=0.75000002607703209 expected=0.75000002607703209 interrupted=0 action=0 hp=0"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:392][531]LogAutomationController: C1_WORLD victim=5 mode=5 reverse=0 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:392][531]LogAutomationController: C1_WORLD victim=5 mode=5 reverse=1 hit=0.80000002607703213 expected=0.80000002607703213 interrupted=0 action=0 hp=900"
+  },
+  {
+    "run": "Runs\\MCPTests-20261113-181220\\Editor.log",
+    "line": "[2026.11.13-11.13.00:400][531]LogAutomationCommandLine: Display: ...Automation Test Queue Empty 117 tests performed."
+  },
+  {
+    "run": "Session-20261113-181942\\Server\\Server.log",
+    "line": "[2026.11.13-11.24.32:972][199]LogU02Collision: Display: U03B2_FIXTURE label=incoming-e start=273.95944030210376 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  },
+  {
+    "run": "Session-20261113-181942\\Server\\Server.log",
+    "line": "[2026.11.13-11.24.37:238][327]LogU02Collision: Display: U03B2_FIXTURE label=incoming-e start=278.23236590251327 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  },
+  {
+    "run": "Session-20261113-181942\\Server\\Server.log",
+    "line": "[2026.11.13-11.24.41:443][453]LogU02Collision: Display: U03B2_FIXTURE label=incoming-e start=282.43793770298362 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  },
+  {
+    "run": "Session-20261113-181942\\Server\\Server.log",
+    "line": "[2026.11.13-11.25.01:175][ 44]LogU02Collision: Display: U03B2_FIXTURE label=incoming-e start=302.16796830296516 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  },
+  {
+    "run": "Session-20261113-181942\\Server\\Server.log",
+    "line": "[2026.11.13-11.25.05:520][174]LogU02Collision: Display: U03B2_FIXTURE label=incoming-e start=306.51449470221996 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  },
+  {
+    "run": "Session-20261113-181942\\Server\\Server.log",
+    "line": "[2026.11.13-11.25.09:897][305]LogU02Collision: Display: U03B2_FIXTURE label=incoming-e start=310.88698320090771 duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"
+  }
+]

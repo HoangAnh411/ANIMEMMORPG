@@ -28,9 +28,14 @@ def tap(key):c.press(key,True);wait(.035);c.press(key,False);m['events'].append(
 def console(text):c.console(text);m['events'].append({'wall':time.perf_counter()-start,'fixture':text});wait(.15)
 def reset():
  console('U03B2Fixture off');console('U01FixtureReset Runway');wait(.2)
+def tailtext(limit=2000000):
+ with c.log.open('rb') as f:f.seek(0,2);end=f.tell();f.seek(max(0,end-limit));raw=f.read()
+ if end>limit:raw=raw[raw.find(b'\n')+1:]
+ return raw[:raw.rfind(b'\n')+1].decode('utf-8-sig')
+
 def fixture(label):
  console('U03B2Fixture '+label)
- raw=c.log.read_text(encoding='utf-8-sig');hits=re.findall(r'U03B2_FIXTURE label='+label+r' start=([0-9.]+)',raw);assert hits
+ raw=tailtext();hits=re.findall(r'U03B2_FIXTURE label='+label+r' start=([0-9.]+)',raw);assert hits
  line=[l for l in raw.splitlines() if 'U03B2_FIXTURE label='+label+' start=' in l][-1]
  global fixture_wall;fixture_wall=datetime.strptime(re.search(r'\[([0-9.:-]+)\]',line).group(1),'%Y.%m.%d-%H.%M.%S:%f').replace(tzinfo=timezone.utc).timestamp()
  return float(hits[-1])
@@ -49,7 +54,7 @@ try:
  reset();skill('Q',3);check('Q accepted spends20 and starts4s CD',b()['energy']==80 and 3.8<b()['qReady']-b()['serverSnapshotSeconds']<=4)
 
  tap('Q');c.press('W',True);c.press('Ctrl',True);tap('Space');until(lambda:b()['feintSequence']==1);check('New Q edge Feints current Q, no refund',not b()['locked'] and b()['energy']==80 and b()['feintAction']==b()['action']);wait(.35)
- feint=b();raw=c.log.read_text(encoding='utf-8-sig');samples=[json.loads(l.split('Metrics ',1)[1]) for l in raw.splitlines() if 'Metrics {' in l];samples=[v for v in samples if v['combat']['life']==feint['life'] and v['combat']['feintLastSuccess']==feint['feintLastSuccess'] and v['combat']['feintSequence']==1 and v['combat']['feintLastSuccess']+.08<=v['worldSeconds']<v['combat']['feintLockEnd']]
+ feint=b();raw=tailtext();samples=[json.loads(l.split('Metrics ',1)[1]) for l in raw.splitlines() if 'Metrics {' in l];samples=[v for v in samples if v['combat']['life']==feint['life'] and v['combat']['feintLastSuccess']==feint['feintLastSuccess'] and v['combat']['feintSequence']==1 and v['combat']['feintLastSuccess']+.08<=v['worldSeconds']<v['combat']['feintLockEnd']]
  check('Feint window contains real moving input samples',len(samples)>0 and any(np.linalg.norm([float(x) for x in re.findall(r'[XY]=([-0-9.]+)',v['velocityCmPerSec'])])>0 for v in samples));check('Feint refuses jump and sprint inside authority deadline',all(not v['bufferedJump'] and not v['sprinting'] for v in samples));m['stages'].append({'stage':'Feint','samples':samples,'metrics':c.metrics()})
  wait(.2);check('Feint permits held walking after skill cutoff',speed()>400);c.press('W',False);c.press('Ctrl',False)
  reset();c.press('Q',True);until(lambda:b()['definition']==3 and b()['phase']==1);wait(.45);check('Held Q does not Feint or repeat',b()['feintSequence']==0 and b()['definition']==3 and b()['phase']==3);c.press('Q',False);wait(.5)
@@ -61,12 +66,11 @@ try:
   until(lambda:b()['definition']==combo and b()['phase']==3);old=b()['action'];tap('Q' if combo!=1 else 'E');until(lambda:b()['action']>old)
   check('Physical recovery chain attack'+str(combo+1),b()['definition']==(4 if combo==1 else 3));m['stages'].append({'stage':'Recovery'+str(combo+1),'metrics':c.metrics()});wait(.9)
  for key,replace in [('Q','Shift'),('E','RMB')]:
-  reset();skill(key,3 if key=='Q' else 4);c.press(replace,True);wait(.08);check('Physical '+replace+' cancels '+key+' startup',b()['phase']==5 and (b()['guard'] if replace=='RMB' else b()['dodge']>0));c.press(replace,False);wait(.7)
+  reset();skill(key,3 if key=='Q' else 4);c.press(replace,True);until(lambda:b()['guard'] if replace=='RMB' else b()['dodge']>0);check('Physical '+replace+' cancels '+key+' startup',b()['phase']==5 and (b()['guard'] if replace=='RMB' else b()['dodge']>0));c.press(replace,False);wait(.7)
  reset();c.press('RMB',True);until(lambda:b()['guard']);tap('Q');wait(.08);check('Guard requires voluntary release before Q',b()['guard'] and b()['energy']==100);c.press('RMB',False)
  reset();s=fixture('target-q');until(lambda:time.time()>=fixture_wall+.90);tap('E');until(lambda:b()['definition']==4);cast_start=b()['start'];owner_id=b()['pawnId']
  def enemy_interrupt():
-  with c.log.open('rb') as f:f.seek(0,2);end=f.tell();f.seek(max(0,end-2000000));raw=f.read()
-  lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig').splitlines();events=[json.loads(l.split('U02B_EVENT ',1)[1]) for l in lines if 'U02B_EVENT {' in l]
+  events=[json.loads(l.split('U02B_EVENT ',1)[1]) for l in tailtext().splitlines() if 'U02B_EVENT {' in l]
   return [v for v in events if v['pawnId']!=owner_id and v['interruptSequence']>0 and v['interruptTime']>=cast_start and v['interruptedAction']>0]
  until(lambda:len(enemy_interrupt())>0);check('Real E collision Interrupts labelled Q startup',bool(enemy_interrupt()));m['stages'].append({'stage':'OutgoingInterrupt','events':enemy_interrupt()});console('U03B2Fixture off')
  reset();fixture('incoming-e');until(lambda:time.time()>=fixture_wall+1.05);tap('Q');until(lambda:b()['interruptSequence']>0);check('Incoming real E Interrupt cancels player Q without refund',b()['energy']==80 and b()['hardCC']==0 and b()['phase']==5);console('U03B2Fixture off');m['stages'].append({'stage':'IncomingInterrupt','metrics':c.metrics()})

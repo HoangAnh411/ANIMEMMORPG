@@ -40,6 +40,12 @@ def until(f,t=3):
   time.sleep(.006)
 def command(label):
  (a.session/'command.txt').write_text(str(time.time_ns())+' '+label,encoding='utf-8');time.sleep(.2)
+def server_tail():
+ path=Path(next(r for r in records if r['role']=='Server')['log'])
+ with path.open('rb') as f:f.seek(0,2);end=f.tell();f.seek(max(0,end-2000000));raw=f.read()
+ if end>2000000:raw=raw[raw.find(b'\n')+1:]
+ return raw[:raw.rfind(b'\n')+1].decode('utf-8-sig')
+
 def owned(identity):
  return [next(p for p in v['pawns'] if p['id']==identity) for v in states()]
 def compare(identity,label):
@@ -57,19 +63,28 @@ try:
   tap('Q');until(lambda:combat()['definition']==3 and combat()['phase']==1);tap('Q');until(lambda:combat()['feintSequence']==1)
   compare(identity,'Client'+str(ix)+'Feint');ps=owned(identity)
   keys=['action','definition','definitionVersion','qReady','eReady','feintSequence','feintAction','feintLockEnd','feintLastSuccess']
-  check('Three-process Q/Feint identity and deadlines',all(all(p[k]==ps[0][k] for k in keys) for p in ps));check('Feint spends only cast energy',all(80<=p['energy']<84 for p in ps))
+  check('Three-process Q/Feint identity and deadlines',all(all(p[k]==ps[0][k] for k in keys) for p in ps));check('Feint spends only cast energy with eligible regen',all(abs(p['energy']-min(100,80+10*max(0,p['serverSnapshotSeconds']-p['start']-1)))<.000001 and p['qReady']==p['start']+4 for p in ps))
   reset();tap('E');until(lambda:combat()['definition']==4);compare(identity,'Client'+str(ix)+'E');ps=owned(identity)
-  check('Three-process E definition/raw/cooldown',all(p['definition']==4 and p['raw']==80 and p['eReady']==ps[0]['eReady'] and 75<=p['energy']<79 for p in ps))
+  check('Three-process E definition/raw/cooldown',all(p['definition']==4 and p['raw']==80 and p['eReady']==ps[0]['eReady'] and abs(p['energy']-min(100,75+10*max(0,p['serverSnapshotSeconds']-p['start']-1)))<.000001 for p in ps))
   time.sleep(.5);base=owned(identity)[0];before=(base['qReady'],base['eReady'],base['action'],base['feintSequence'])
   for probe in ['duplicate','stale','nan','other']:c.console('U02NetProbe '+probe);time.sleep(.2)
   after=owned(identity)[0];check('Rejected RPCs do not replay skills/resources',before==(after['qReady'],after['eReady'],after['action'],after['feintSequence']))
+  # The malformed probe deliberately consumes one ahead sequence; catch up real physical edges before the next measured cast.
+  for _ in range(2):tap('Shift');time.sleep(.12)
   reset();command('b2-incoming-e')
-  server=Path(records[0]['log']).read_text(encoding='utf-8-sig');line=[l for l in server.splitlines() if 'U03B2_FIXTURE label=incoming-e start=' in l][-1];wall=datetime.strptime(re.search(r'\[([0-9.:-]+)\]',line).group(1),'%Y.%m.%d-%H.%M.%S:%f').replace(tzinfo=timezone.utc).timestamp()
+  server=server_tail();line=[l for l in server.splitlines() if 'U03B2_FIXTURE label=incoming-e start=' in l][-1];wall=datetime.strptime(re.search(r'\[([0-9.:-]+)\]',line).group(1),'%Y.%m.%d-%H.%M.%S:%f').replace(tzinfo=timezone.utc).timestamp()
   until(lambda:time.time()>=wall+1.05);tap('Q');until(lambda:combat()['interruptSequence']>0);command('b2-off');compare(identity,'Client'+str(ix)+'IncomingInterrupt');ps=owned(identity)
   keys=['action','life','interruptSequence','interruptedAction','interruptTime','qReady','hardCC']
   check('Three-process incoming E Interrupt matches life/action',all(all(p[k]==ps[0][k] for k in keys) for p in ps) and ps[0]['hardCC']==0)
   vs=states();last=[next(r for r in reversed(v['results']) if r['target']==identity and r['interrupted']) for v in vs]
   check('Damage/Interrupt history agrees across three processes',last[0]==last[1]==last[2]);m['stages'].append({'stage':'InterruptedResults'+str(ix),'states':vs})
+  for parry in [False,True]:
+   reset();command('b2-incoming-e')
+   server=server_tail();line=[l for l in server.splitlines() if 'U03B2_FIXTURE label=incoming-e start=' in l][-1];wall=datetime.strptime(re.search(r'\[([0-9.:-]+)\]',line).group(1),'%Y.%m.%d-%H.%M.%S:%f').replace(tzinfo=timezone.utc).timestamp()
+   if parry:until(lambda:time.time()>=wall+1.13)
+   c.press('RMB',True);until(lambda:combat()['defenseResult']==(2 if parry else 1),4);command('b2-off');c.press('RMB',False);compare(identity,'Client'+str(ix)+('EParry' if parry else 'EBlock'));ps=owned(identity)
+   check('E defense blocks Interrupt across three processes',all(p['interruptSequence']==0 and p['posture']==(100 if parry else 75) and p['vital']['hp']==(1000 if parry else 976) for p in ps))
+   vs=states();last=[next(r for r in reversed(v['results']) if r['target']==identity and r['targetLife']==ps[0]['life'] and r['definition']==4) for v in vs];check('E defense/damage result history agrees',last[0]==last[1]==last[2] and last[0]['defense']==(2 if parry else 1) and not last[0]['interrupted']);m['stages'].append({'stage':'EDefenseResults'+str(ix)+str(parry),'states':vs})
   oldlife=ps[0]['life'];reset();ps=owned(identity);check('New life resets skill/Feint/Interrupt without replay',all(p['life']>oldlife and p['action']==0 and p['energy']==100 and p['qReady']==p['eReady']==p['feintSequence']==p['interruptSequence']==0 for p in ps))
  expected={'t.MaxFPS':60,'r.ScreenPercentage':50,'t.IdleWhenNotForeground':0}
  for i,v in enumerate(states()[1:]):check('Client'+str(i)+' client60 profile',all(v[k]==x for k,x in expected.items()))

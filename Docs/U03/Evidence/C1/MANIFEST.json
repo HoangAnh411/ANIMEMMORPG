@@ -1,0 +1,2323 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "base": "f826371b9409c39453e5bd2ed8f8414749f1d34b",
+  "source": "dbe10dab1cd6a9b14c28c732aba66f21d525ac69",
+  "packageRelativePath": "Artifacts/U03/C1/Runs/Package-20261113-181403/Archive/Windows",
+  "packageFiles": 48,
+  "engineExeSHA256": "a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143",
+  "binaries": [
+    {
+      "path": "Artifacts\\U03\\C1\\Source\\Binaries\\Win64\\UnrealEditor-AnimeMMORPG.dll",
+      "sha256": "7e98bbc5d55bbafe6a57931773740bfbf950e3d6f75adc01208393feea9d1313"
+    },
+    {
+      "path": "Artifacts\\U03\\C1\\Source\\Binaries\\Win64\\AnimeMMORPG.exe",
+      "sha256": "d43346f61d6ebcf0d51d4635408c8220a90ce1622f4638bd33d1719ad7c0811f"
+    }
+  ],
+  "assetPayloads": [
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/ABP_U03.uasset",
+      "sha256": "578a167b56d55b4b384a0ac173be4d4f94f5717f2ae370d8c56e90bea04bef8d",
+      "bytes": "205962"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/AM_U03_Q.uasset",
+      "sha256": "ab88e1680e6197b0242bab3d250733c51770e0c6f77d2b44aac60a6117a485fb",
+      "bytes": "5565"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/AM_U03_E.uasset",
+      "sha256": "92c0e22ca50b813875571c2de247a9e0679cea7b2e5bbc14f69d6357f86d7ade",
+      "bytes": "5565"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/A_U03_Q.uasset",
+      "sha256": "cb0d284a4910ab67f3c45f382949342e468c0ec2b8609ea2163938a1e6342a2c",
+      "bytes": "210284"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/A_U03_E.uasset",
+      "sha256": "c35687b516803e0f0eaae8bbfa6ac9e6febe8f26b8d09de73bde7642b3f68c90",
+      "bytes": "206604"
+    }
+  ],
+  "gates": {
+    "build": "Artifacts\\U03\\C1\\Runs\\Build-20261113-181045",
+    "package": "Artifacts\\U03\\C1\\Runs\\Package-20261113-181403",
+    "automation": {
+      "run": "Artifacts\\U03\\C1\\Runs\\MCPTests-20261113-181220",
+      "executed": 117,
+      "failed": 0
+    },
+    "smoke": "Artifacts\\U03\\C1\\Runs\\Smoke-20261113-181558",
+    "input": {
+      "run": "Artifacts\\U03\\C1\\Runs\\InputCapture-20261113-181656",
+      "checks": 24
+    },
+    "network": {
+      "run": "Artifacts\\U03\\C1\\Runs\\NetworkCapture-20261113-182407",
+      "checks": 35,
+      "independentComparisons": 10
+    },
+    "dodgeNetworkRegression": {
+      "run": "Artifacts\\U03\\C1\\Runs\\DodgeNetworkRegression-20261113-182846",
+      "checks": 22
+    },
+    "launcherGuards": {
+      "checks": 3,
+      "run": "Artifacts/U03/C1/Audit/LAUNCH-GUARDS.json"
+    },
+    "reconnect": {
+      "session": "Artifacts\\U03\\C1\\Session-20261113-181942",
+      "checks": 2
+    }
+  },
+  "privateConfigUnchanged": true,
+  "files": [
+    {
+      "path": "Runs/Audit/CONFIG-BEFORE.sha256.gz",
+      "rawPath": "Artifacts/U03/C1/Audit/CONFIG-BEFORE.sha256",
+      "rawSHA256": "e62264c4f4dfd4433abbeb81fc0d4d4754744b9ab72e102e2aea5cf7ef2e382f",
+      "publishedSHA256": "1d3fa876aebdf8f0e437207f86e05fb01c327476a05e3a0e745fc067f6dac25b",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Audit/LAUNCH-GUARDS.json.gz",
+      "rawPath": "Artifacts/U03/C1/Audit/LAUNCH-GUARDS.json",
+      "rawSHA256": "c716c551f5b0e0d9e77557f22a0ab890d1f64c7de8404befe49f0330d236e8f3",
+      "publishedSHA256": "2053d485fd01dcf867deffbf0b418235ef0441750878a14e14c25f05fb76d2cb",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Audit/LiveCoding-Final-MCP.json.gz",
+      "rawPath": "Artifacts/U03/C1/Audit/LiveCoding-Final-MCP.json",
+      "rawSHA256": "313d8fbf3cdbf2920ccb0b903c7de0b51555e00fc37ff0a9e064f52e3123219a",
+      "publishedSHA256": "04d110d692c7da5ccc381378b7e2003a2ceb38b1a34a5abf24809a5b5a6a397d",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Audit/LiveCoding-MCP.json.gz",
+      "rawPath": "Artifacts/U03/C1/Audit/LiveCoding-MCP.json",
+      "rawSHA256": "0ea5d2c44da28fbdfd152e2fb88ef941d33df32026d8d0641a4b553dbc6276ce",
+      "publishedSHA256": "87e84030dbacd17a1f81f785402858eba3c985212dc58016eeaaf2f038c351f4",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/LatestReview.txt.gz",
+      "rawPath": "Artifacts/U03/C1/LatestReview.txt",
+      "rawSHA256": "9dbc80db6bd536814693217d3adc7412af49166a21ccca7fdcc6f81dda353dd7",
+      "publishedSHA256": "2158500508701a74007da1efbc768909e7a019098c3f9fb1b7a8b0d89cbb63a8",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/LatestSolo.txt.gz",
+      "rawPath": "Artifacts/U03/C1/LatestSolo.txt",
+      "rawSHA256": "948339ae6509c066e78f8bf763230a4d655e94ee22247f073932169d01775ae2",
+      "publishedSHA256": "f85508c1e3bfe8271b429b15c5c008056c3f42362882c38959ba38a3d3bf3b3e",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/original-config-sha256.json.gz",
+      "rawPath": "Artifacts/U03/C1/original-config-sha256.json",
+      "rawSHA256": "5b826de295f425f33ad631bb5eae275db30ccae8d689f4b3dc3c489abcd35e47",
+      "publishedSHA256": "0e3772cccccb09159246826868102cb406aa6f46f522f1ef947cbfd4055aaadb",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Author-20261113-174422/correction.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Author-20261113-174422/correction.json",
+      "rawSHA256": "0f567d585d862b641de25a4fbf5abb0b3736d51e6668213e7178d49951681552",
+      "publishedSHA256": "874299f149aa0f478431ecf23b90c4e9b6479635b92b551031d61b3d2956cdaa",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Author-20261113-174422/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Author-20261113-174422/Editor.log",
+      "rawSHA256": "8bcbc7a430d020998cbbf14e294d835561405be2e1b1010500154f98c75591eb",
+      "publishedSHA256": "fbad6ce814c24434c6e974a257c5d46e622b35d983e6f36f651190ff92f4c0cc",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Author-20261113-174422/invalid.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Author-20261113-174422/invalid.json",
+      "rawSHA256": "378bf3bb59480f265b754ad029926a4a8804776b0028cf4fd258616dcb57da96",
+      "publishedSHA256": "bcfd85a76eab9dfea6a4e2d3026fd191d63caf75bf9fe91a67139bd4f092cc83",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Author-20261113-174422/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Author-20261113-174422/process.json",
+      "rawSHA256": "2f65928cfe0e6e278a87608eb4989d592e6f7f1eabeb797436500368d043a755",
+      "publishedSHA256": "17342feb94de74bf936eaf75fb18f6a8ff4c0a654f8484f5308504636823f46f",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Author-20261113-174422/result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Author-20261113-174422/result.json",
+      "rawSHA256": "542061da4eb7c4b995cbc72394d5dfa5c46293098096162978f5f3dc4abc7666",
+      "publishedSHA256": "dd2f6d6f613ab8a3819e814e5d406386544806a29780bc206497f3b9978300b8",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Author-20261113-174628/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Author-20261113-174628/Editor.log",
+      "rawSHA256": "d0d74bbb4e39ee0d51543a09c1fab67c8cc5164570c683831c7acf4db6bff22e",
+      "publishedSHA256": "6ecb50e9de712bee5dbcd1b58648620fdf834f5a547189d6f9018714a1dd978a",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Author-20261113-174628/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Author-20261113-174628/process.json",
+      "rawSHA256": "5e0bc0da35c82974e07e6015705c8872051cbd15c27c2fd45257c9d2efd60f21",
+      "publishedSHA256": "49b315fab449702aa033e13b3dd5ff5cde48c8ffa2f755fbcccaa642e79e1c63",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Author-20261113-174628/result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Author-20261113-174628/result.json",
+      "rawSHA256": "50ae7ef7cef638c93f3336e70e6c35c5b84ec0297e41ca7715d3e5ad7737e134",
+      "publishedSHA256": "6b625dc554e8c44782496ee8b8a412a9e5d12b2486c71c0b8e9d0949624b43c9",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Editor.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Editor.command.json",
+      "rawSHA256": "bb655cafb6233853b1016399cd94fb2146cb74df52f1b33dae1c3cb20f8af03d",
+      "publishedSHA256": "c9dd9536e934aa5874dae61e746dcd55bbc99520dfae7815d8eb9bdbf27b9004",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Editor.log",
+      "rawSHA256": "5ff220629a4fd7542c716b31db864e0ed13effa589fa43d82145265ce309fbd8",
+      "publishedSHA256": "2b3ceb63e4e95a45e85f8159b5b2438e2a0315aaec5d2c5f6f5cda4238523d3f",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Editor.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Editor.result.json",
+      "rawSHA256": "5a8f701383e60df45f6144eaed7829a4fa86b275b76a04a5a433e4d28ea82a3b",
+      "publishedSHA256": "40d120172dd4db4f4fc17e6d2fc424fcf0786dc98e039931bc7993ebb8d96d82",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Game.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Game.command.json",
+      "rawSHA256": "000d57e9aae0344507279158108c1553bd40676aa0f671a4f5e16c09faffcd70",
+      "publishedSHA256": "9e96abd97ba406a8cafd06599d5f0a44ed5745b3cb4fecde3110a093cb5ddfac",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Game.log",
+      "rawSHA256": "aaaeb26c23b43fc0e35a69acf108b8e76b647d238dde61b8a40d23f91358fed8",
+      "publishedSHA256": "680c9eb8b5cae721bd0147303510669688de7fbc737a913b592118f8a1a495cc",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Game.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Game.result.json",
+      "rawSHA256": "7a67cf9fff0718289ebcdf9c404c6ccf4c6511daf01fb76f10f24810d8fc0fcf",
+      "publishedSHA256": "f904bb5b0416b706529226760c2c5544bbcbc48682bf3997062a0d24053db5d3",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Generate.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Generate.command.json",
+      "rawSHA256": "b5d2c3d51011827a891498b4ac13ce3a4167ebac2a0f7c6b567153144bb66c11",
+      "publishedSHA256": "b78250b8bfedee4b82b1393d89305042b89970a8e15ae7786b01596b7fc0091f",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Generate.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Generate.log",
+      "rawSHA256": "29df6e73e26b13d4c209623c993983f1b1136dfdffb0c52fa50a507c63cca5d3",
+      "publishedSHA256": "46c93660efeda278b2945ab28c20df5bc5f693725a2c624e622167145aec07c7",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174142/Generate.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174142/Generate.result.json",
+      "rawSHA256": "d8dbaced54c2a76432b8473bcdd1eabbbeaa4e8e1a7c2b69a70f2c7715242790",
+      "publishedSHA256": "f899172536dd42467e5ae4256a87ac49543a5bf72ab464afc6c0cbf9173998c7",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Editor.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Editor.command.json",
+      "rawSHA256": "f71d193ecfcd05c8ddcdc69684ea2476a8b9d39936b78535413c111fc809082c",
+      "publishedSHA256": "1a922e2785000a6c1d652cb0f3beac8d051c966ae580da0118cf2e463856b461",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Editor.log",
+      "rawSHA256": "24850e24f5b4229b9e3354ff1ecf5974cd542889e56f7a88a9ae0cb6e94c0c57",
+      "publishedSHA256": "db3e116c474adaf46d4a2b2cc1f02d93480ea16ac831a04f088b017562654cbd",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Editor.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Editor.result.json",
+      "rawSHA256": "8a2bcfa333a17db706b7cd40f667a1474b06e82418929d179999c913d1b4b218",
+      "publishedSHA256": "b2bde15ee8bbf6b15476f2e45b7d84d55ca1c17ca425c7e7affb0bd13965f199",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Game.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Game.command.json",
+      "rawSHA256": "02787af6961f1e02aa1e94746fd54bcdc0b1cd2fda22aa31b8b052ebd51d9828",
+      "publishedSHA256": "67c9bafa27be543a80948ba4f73f2959cf33a95c7f5c1c2244a2119305da9770",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Game.log",
+      "rawSHA256": "591c2ab64867681e52c0bb0b29447dae72681da11b38048f3301622b9e7ab424",
+      "publishedSHA256": "dfe0f0ca3ef0dafd97bcb42bf28b149825f7f4ca71917773e2646da34506cb2c",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Game.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Game.result.json",
+      "rawSHA256": "e3f8d5da0905faf59f072c565c45e7361fc9d729afa155dcb560b7bd1a66a9ed",
+      "publishedSHA256": "730892bfe4f9b89dc73acfc7890f68ba5d6c383b32205b620a69e8ce66ce32e0",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Generate.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Generate.command.json",
+      "rawSHA256": "7d42a3b69da408a167da5ae91b4ef35349d9cc8cb774522986b767e00ac3761f",
+      "publishedSHA256": "e8d3474092a597ac16e5ac53ce8b2acad33bdb99a2b496c638e331f577bfae23",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Generate.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Generate.log",
+      "rawSHA256": "f7e9b5afa745cde3fd4a2289911893d6b86e755aefe3814f33ee6b528454fb17",
+      "publishedSHA256": "fae747d69fcb63ebecb89006edf4b3c46777f5776e570b3d3ce5e0e03d942bf9",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-174747/Generate.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-174747/Generate.result.json",
+      "rawSHA256": "9d133eab2bca00f9e2c81fce65cf2dd2087a186e220f6ea69a99ff3346fc29b8",
+      "publishedSHA256": "835f48be8a71f47e7c149aa114b93da4b34e8680abaca28d050a29d43e21b8a5",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Editor.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Editor.command.json",
+      "rawSHA256": "5f849ee89811de3bb1ef39c9e3fa41b9fba53dcb1ec93a15706610b00b897d23",
+      "publishedSHA256": "b9ff5f0050adf614dfc3160c4113203edde5d65c4523cb046c2155aa32bac4ca",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Editor.log",
+      "rawSHA256": "bdd4407a58db235e688338ee9ee139eceec3edbbf895415af2b9472bee58ccbf",
+      "publishedSHA256": "de9ff02857df1d6c55225a0ba4e2c37b2ee32306ad7b77f19cd671ae98955fcd",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Editor.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Editor.result.json",
+      "rawSHA256": "6c31844b112148e75600ecd932872f02dc306d7e96268735c644c4b690c5c62b",
+      "publishedSHA256": "556e82c26c7e4c62e2153fc58dcb6d7cd119e109e417753d8a5319afaf36dcc9",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Game.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Game.command.json",
+      "rawSHA256": "3ed4dd3e625e0fab656f15f3ed5d34eac959c886e1a4eedcb146bc829f34256e",
+      "publishedSHA256": "eb71bc5b791b74a38fdb146f202d89d1b63791b209e9fb4cd6c1e7a7d4997195",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Game.log",
+      "rawSHA256": "f119de7313c031ae8c0f8e8abc32703b09e1a71907844b143900ef83b8601526",
+      "publishedSHA256": "720338a2c2857c32e2f9110542ecdc84300ae8e8935e2803739b614ce1d5cb94",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Game.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Game.result.json",
+      "rawSHA256": "63b590cbd90e8385fca2f1e5307996b04e179711a435f2c053e4e9366240c2aa",
+      "publishedSHA256": "9a18a987786848bb42619e3248aaf29608f6f6596ea456ca2b19c7ed6fa3e1be",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Generate.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Generate.command.json",
+      "rawSHA256": "2b72005bdee13528c4b4aea999b2579781c45fe308eef5a7b4dfd7ce2c292554",
+      "publishedSHA256": "9ec1863c0108d223fcbae228a86acafb0a3920dc8ca5826fbe1be58b4c324a9d",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Generate.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Generate.log",
+      "rawSHA256": "5a21656514472f1227cb848d41e186d0b55dfd6a70c225a4ca0c2f2869800dd4",
+      "publishedSHA256": "895042e4984d8b47b3c9206403868c94d10040afc2d462c98f06544823d284a0",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175059/Generate.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175059/Generate.result.json",
+      "rawSHA256": "4df4cbf5a3392f057256ea6b91aa0d0c89b6faa055d004460457ef779cccd0e6",
+      "publishedSHA256": "47e735bc496b5ad6863d1a5f98bb2f4a6bdf995066a788ec166d9feef518ce77",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Editor.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Editor.command.json",
+      "rawSHA256": "97677f9d2efbf4d3272fe24f6eecf43f60ce5def5214789bb322667555036a3d",
+      "publishedSHA256": "d93d14e7c09c551d897057ff09b2c29814786054e42d134d04b6bb7fad7500bf",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Editor.log",
+      "rawSHA256": "dbc4d9ae434418a6147c805b0b8cd9927548189953c47c2e6b1e80be72503cd9",
+      "publishedSHA256": "b5cacda67a1ce4e462de1c1404506aa541e88963056774b8cd2e4902328cfd0f",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Editor.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Editor.result.json",
+      "rawSHA256": "c740fc7bc49c3ac5bebc56d54eddc47d1c3828da597768bd481de0dcefe37677",
+      "publishedSHA256": "52b95cca1f534758600b9e65425e0da3841d77c85231305c4f6e020bfb8dbc99",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Game.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Game.command.json",
+      "rawSHA256": "c0ea91d5c4ff5cea0aa96fc48b5321954bf57d19e07b39832e1ac01f665fe73b",
+      "publishedSHA256": "0331695498049ddc678886a79587979d24d95d0f8cf5de9575b4757b5404e3ee",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Game.log",
+      "rawSHA256": "23af4b8c27bfae2a4483c7a3ab6e8df97f11b892ad9ff67852690d49640b1c2b",
+      "publishedSHA256": "16bcfbcee6bb47cba27b97771f8cc5a0270d483f061e6e30394a7aa1fb8a5544",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Game.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Game.result.json",
+      "rawSHA256": "f159db0a90317eadc8ba5f03013a480341368c7c97c1185d9d19b36de47c2f9c",
+      "publishedSHA256": "770ab45b200e5c40fa6b0246be90d1da106ec15bdbf5e273dcf9ededc895ba0e",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Generate.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Generate.command.json",
+      "rawSHA256": "3257c9cf2a5b1d0541715b2cd06b78cbf742b0b5262c7bda170565d0ae10c6c6",
+      "publishedSHA256": "09adfd05bef76798b30aaffee14f79caafe84e6bc2d57a78a462b7dcc94936b9",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Generate.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Generate.log",
+      "rawSHA256": "55ce3332bfe9ce113d06cd96f6382d965083dedf8110ec46cd774c6422a40aff",
+      "publishedSHA256": "2b11527da4b062cb40eaf91d73dae04e6cdaa4a0ea6754c39495290e4a1e23c6",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/Generate.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/Generate.result.json",
+      "rawSHA256": "49ebd48ea12ba78fbc8f88270125fb16b618962b4248fdd171bc1472bd7adbcd",
+      "publishedSHA256": "c26afdace05d458c55d2248b8999fe41d97e1b2db35a7305a31e93b5f0e5ce1b",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175229/invalid.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175229/invalid.json",
+      "rawSHA256": "bac5e6e783a6a140961968805b908db23e94ce343e91c0e8317b282765d3caf1",
+      "publishedSHA256": "34d91b6b2d9518cfd4963c3e4d1a871b4a3954d759a5de9f0b0d4c3ca24c8867",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Editor.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Editor.command.json",
+      "rawSHA256": "3af22670fb27708cf2b3a86fe75cfb9459473e0eca106496721649944f294a34",
+      "publishedSHA256": "5c4029e68e7eb93a1c668a993af1567947cee8520f4b5b47fceb97f291975697",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Editor.log",
+      "rawSHA256": "280eb778303d436dc0f2ba5cbb5afb8359a1641d4a535eb762022c609e7fce8f",
+      "publishedSHA256": "690d2756566fd653fb030fed2940aef97007cf7c1a638779fa4c0484ee75afd5",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Editor.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Editor.result.json",
+      "rawSHA256": "f395dbaa2c88e37e3ddd0610066000e074925258b951946ac2328d54e32810b8",
+      "publishedSHA256": "7fc56c49eecca52974f65058b841b5c07fa0931d6e932f3e4e0a4324da8aa10b",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Game.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Game.command.json",
+      "rawSHA256": "a246389ddefdaf641e50f1107d0f1b948627e50d50f51723ba9e67ce0d4bd81b",
+      "publishedSHA256": "afbc75add557f8dfd4018922878aeae123e04991dc23eefd328e03f084f04f95",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Game.log",
+      "rawSHA256": "6c549b58424a5a0c2943c041bd2cf4517c7152423d46b349bc31d55a9a9e3977",
+      "publishedSHA256": "fdf0173f757f6dda50be338dbd4afd9021d8666cf725b6b6cf7bb742a069ce5a",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Game.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Game.result.json",
+      "rawSHA256": "a53c52ae5b55ee558717378b29d13e5b4dfa9ea5d0fdbeb3d058bbb5833cc94e",
+      "publishedSHA256": "e4d7ceff15984cb32cc7c0b40395c34b8e4e0586104148f6811b1afeb6dad3b3",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Generate.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Generate.command.json",
+      "rawSHA256": "4c84f684d8b5143d8882fe441ebed9040dd017c8e3596a43b3b55900dc166a6b",
+      "publishedSHA256": "acbedb5cc8a5fa27fed9b0efb2c6ed271d0f90dbf195ec431e4ad1a0920d3bc4",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Generate.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Generate.log",
+      "rawSHA256": "becc436697e9a3639bdd6a210d5a5ab29c1567ba7aa17c8ff1f0e37764dd53a3",
+      "publishedSHA256": "901306b74a8c28621cb9b448755859898656f872775505a978640f47d47de4ef",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175342/Generate.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175342/Generate.result.json",
+      "rawSHA256": "bb070c086eb96676b101abe036335332e4b79be5670349d19eb571f05a92af98",
+      "publishedSHA256": "306d356dcfc574376e9102c7824c3c601e9dbbd7e3ebdc1034423f103515f6f9",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Editor.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Editor.command.json",
+      "rawSHA256": "90c9f87a269b3e59c12602fb22c2d4da0ab6fa3158d79290aa96aa598b233d35",
+      "publishedSHA256": "c4d8373b12247651a72afd3ba8eb7fa9d82295cd25688fdd197ae518e17cd427",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Editor.log",
+      "rawSHA256": "950ebda4379cdc0e98c2c470eeb9d5847b6e36cf42437bdd3a1779f5f973ac21",
+      "publishedSHA256": "9ab72f95381053e9319454e272d63de0343a668375d152318088af4812c91c7f",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Editor.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Editor.result.json",
+      "rawSHA256": "8d05d0b62466aee4e5a367ef93eaacd4360da8a936dd911077cbf325f66859a9",
+      "publishedSHA256": "b622bb1f827366cdc39518bd4f61ffbd89a43ee27fc5ca18c9144608b7e78daf",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Game.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Game.command.json",
+      "rawSHA256": "d40d2dc9c5a274bbce2118a1f747fe512d1b18ca3b8d5f4e6329a2db6d869a5b",
+      "publishedSHA256": "16a4190363cf8d1c8c00c842542359b973a0b75b58dd5ca16c814882b838dbfd",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Game.log",
+      "rawSHA256": "a9d62df123c67da2519a92d307836a6fa4ebc39d733f3dfdbf0645887da60c5e",
+      "publishedSHA256": "9be5316fe1f39cfaccba3e4764f4fd3c4ed96cc23343aaeaa59c013a2a9bdc92",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Game.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Game.result.json",
+      "rawSHA256": "5613494620ff2a878a4a5a0b715274b32ef551d8e54c5ae3ad52270b347fdf16",
+      "publishedSHA256": "af9df9bd1c52d11b2b96aedfbd1f1fb056c1298f3931b9999121b25f96045bb1",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Generate.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Generate.command.json",
+      "rawSHA256": "b99d15557d6abd2c65d58aaa5bd7518c480df4b8df3706565f71f65b5a4bdf36",
+      "publishedSHA256": "39a593f5dd62ca0e61eb9e87a214f0fddab4cbf519403d3651a3dde8754c2944",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Generate.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Generate.log",
+      "rawSHA256": "ccd4c85b293b01eda89852ab42075e24bd675350206460eeede2ad835387d90c",
+      "publishedSHA256": "86400d9de89eff272c72d4eab061be265c2651b0c2373b80e55370eded70a8ac",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-175750/Generate.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-175750/Generate.result.json",
+      "rawSHA256": "6a681e94765e337c7c587ef633519f43928d6bd6bf50731150c34ee9e9f6148b",
+      "publishedSHA256": "b9967c8f93811affebdbe2c9660afaf6e580125a2b5168ef7827013b65ebc4f6",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Editor.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Editor.command.json",
+      "rawSHA256": "59578f7a2527c46ecc9da628ebccda438fc3be869d7b7acf1c5846b655e81d52",
+      "publishedSHA256": "414bb53aff78f5a6b81769dd64758bdf8339a8ca898615cb4ef734a7cb4145eb",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Editor.log",
+      "rawSHA256": "4ea9327ea70016694560052292db5eb4cffe821f88ef0cecf2f7ca98b86b1908",
+      "publishedSHA256": "1fbf065b4288af2b445107f0668fcaa9f000f6644a6220e781329e9224859a9c",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Editor.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Editor.result.json",
+      "rawSHA256": "7acadc738f69a44f1c0cfc1916a10501946b77c916cdf8e6ac3ff0032f86b514",
+      "publishedSHA256": "60f0c58dca556b0dc5bf95c66e7b4da8c8a211a8946467b47b7cf924578cf4c9",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Game.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Game.command.json",
+      "rawSHA256": "1e4f8ac00c808a2264d72a5f0d4ab9aae277b5c62cf5bd59c974d2d0952f4acc",
+      "publishedSHA256": "ed377c90ec0bfcb856c87e6c19a2d90798f7a2d7f08411a20e1b441a5fb7575b",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Game.log",
+      "rawSHA256": "1f9952982f43877214c8ca3bc99f0489657fd140a1e5a64bf661f806f3422cb4",
+      "publishedSHA256": "504c576351345be396a25e1cef7889cad4d96f50fdfbdfcd851386d14d768079",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Game.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Game.result.json",
+      "rawSHA256": "84d6225a880effc5b88513e56e9db5feb101eae769ed0d231176feb54339f712",
+      "publishedSHA256": "d32cc0a3f53a1a42954ba0fac7faf528169ef16505eaa9e3e5c341da1770554f",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Generate.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Generate.command.json",
+      "rawSHA256": "11ea80779486aa3f98b3a6b652c8d96b1f25c9eb20ca713579386f152eec8038",
+      "publishedSHA256": "a47d00ae76561f5e74791a445fd958fbe94e5ae0ab750b578281a7cb3ff53b7d",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Generate.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Generate.log",
+      "rawSHA256": "3b311760f462d367d2bd0b35b87b9100c005f77ae8e027f0ca93f92ae7780287",
+      "publishedSHA256": "f114638928e54b553ceeda70c9c4116194c191469c602895607fc0968e20a7a6",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-20261113-181045/Generate.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-20261113-181045/Generate.result.json",
+      "rawSHA256": "fb4613f1ec6c1f449a2884f1017e871a012b707882a4e76186b84c72f4dbb4df",
+      "publishedSHA256": "68af1c51619e24ba13a69bc5966dab829eb563b2eb754d12099ab0eab6844a87",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Build-guard-20261113-1758/result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Build-guard-20261113-1758/result.json",
+      "rawSHA256": "11d7d943b27c708568d99561e549ed0fad811f822b643baa644cacbedb5801f0",
+      "publishedSHA256": "2b6d55a28cce13d447311ad4a3fe054bd59cf987a374d35c06817d6f0b1586a7",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182707/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182707/capture.log",
+      "rawSHA256": "d97900ae6b171cfa064391989f225b76d4ab4a6294557e61caa2bc80b167b508",
+      "publishedSHA256": "2aa9752421f090a489f281b1a7b4b6fee06f8f23dc95110979a6549f5739de52",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182707/diagnosis.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182707/diagnosis.json",
+      "rawSHA256": "ece446437e432cec42df92578357d981d1a8241a43d1e6bcf199b107d59382e2",
+      "publishedSHA256": "3f079fb77ff4ad1f2fb52add88c3380450e50b16d0064530f305da168a636c50",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182707/Network-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182707/Network-C1.mp4",
+      "rawSHA256": "6f916babb56f5ccf245cdf68d355e9d062f793740cc6439b023715626a616ea3",
+      "publishedSHA256": "6f916babb56f5ccf245cdf68d355e9d062f793740cc6439b023715626a616ea3",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182707/network.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182707/network.json",
+      "rawSHA256": "dc69728cbe24739a4b17f71810a652bb51ef80bbc15ec88a3d120d2dd9d3b124",
+      "publishedSHA256": "4e8ae310ea4d41f1805b9863e6e436a258981ef29b27a6db23e5d62bd3af28fe",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182707/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182707/process-result.json",
+      "rawSHA256": "e937ca157d5566ed5ca2b1601410c6244b4fe526fe7e3f825eec7792d74d0c3c",
+      "publishedSHA256": "1e852f9ca6cd570b53c695e352571f3e00ba56ab8c057baca03ab0ee0b722492",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182846/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182846/capture.log",
+      "rawSHA256": "9177f698c84ed08113935fda94f27ac5ce55f3508177810a6c0ef1491228bcec",
+      "publishedSHA256": "3ea2b986b737dcd6b4332014a1299b85b95384a9da2e1fe484ad0e8e41b5bea9",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182846/Client0Dodge.png",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182846/Client0Dodge.png",
+      "rawSHA256": "10000fe50bd72ac16b0959f8635dc6bef7c9208d22e8ad598c6fca28b97b0726",
+      "publishedSHA256": "10000fe50bd72ac16b0959f8635dc6bef7c9208d22e8ad598c6fca28b97b0726",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182846/Client1Dodge.png",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182846/Client1Dodge.png",
+      "rawSHA256": "8da0995753b0c093aab81e64304613291b7fe8111028c4b94de37737ecec8c35",
+      "publishedSHA256": "8da0995753b0c093aab81e64304613291b7fe8111028c4b94de37737ecec8c35",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182846/Network-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182846/Network-C1.mp4",
+      "rawSHA256": "c20f7fb6895c2660234a36b08a7e3f112a33d7894ca3483434d1e86d1cfdb567",
+      "publishedSHA256": "c20f7fb6895c2660234a36b08a7e3f112a33d7894ca3483434d1e86d1cfdb567",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182846/network.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182846/network.json",
+      "rawSHA256": "c00e0aea07f3b581746cfa64766745b040c9a3ed60ebef640b0636314f8429b1",
+      "publishedSHA256": "7ea504d624a8bffceb31a767649c86329879231b76c18c1276966822978e5ecd",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/DodgeNetworkRegression-20261113-182846/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/DodgeNetworkRegression-20261113-182846/process-result.json",
+      "rawSHA256": "4e8b9f72407841f918ee90c7abbaa6c969c07cfbec615a0db387ee20c08cbf0c",
+      "publishedSHA256": "db8b41822f23d0f1d0e4534c79f80aea3390c6a1d0df9491f6caec8c06207b3a",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180329/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180329/capture.log",
+      "rawSHA256": "d2df0802a3b718e353d06427d191c1edd17003200463ef20f4ee600341852bd0",
+      "publishedSHA256": "88fbfdbc222b3a357e9e8946184924ba6a647ef824101ee8f13e3f09d3bc12af",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180329/diagnosis.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180329/diagnosis.json",
+      "rawSHA256": "1405b2f323b6ec43738bc0405031716a4a2b68507d8f86704ff809e3b5f4691b",
+      "publishedSHA256": "c775c18865f508f6ecce4c105a9792853c8529af3d6057a3aef4a2dd6fd598e8",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180329/Input-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180329/Input-C1.mp4",
+      "rawSHA256": "522c3c17f7557be24a24dc57048b4137c3fb323e85db375e3eca3d571721b7fd",
+      "publishedSHA256": "522c3c17f7557be24a24dc57048b4137c3fb323e85db375e3eca3d571721b7fd",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180329/input.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180329/input.json",
+      "rawSHA256": "635f090f009daf3745566189b267beb534501957bd5b9a891c2dc578d7172da9",
+      "publishedSHA256": "5af36cbf58906f0956581cee630790470cbbd3cdb25fa839f7c91b3dfa11e843",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180329/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180329/process-result.json",
+      "rawSHA256": "29c6128846ee9225be8cb11622aebc3989b1f6199f9bbc5243a9aabc5246ae5d",
+      "publishedSHA256": "cfd3a04b736299311ea27a24fdfdfdc25d4591001a20f2c6d1b5eae984c42ac5",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180523/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180523/capture.log",
+      "rawSHA256": "1ed0e741e7fe54a0e5cadd5787a93bf53b7e0e8258d26289140d5aa2e50d89d0",
+      "publishedSHA256": "2ebc0a2bf55627838ee552bbe741ead2881a3fd76b67f2e31aa39e7509bee2ec",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180523/diagnosis.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180523/diagnosis.json",
+      "rawSHA256": "0fda3a22d57d196b6eec49b1fbc9279be0511f3603672b4e112dbc9be2f2b100",
+      "publishedSHA256": "48630eb5c1d115fe02a4cec1efd651a80103d5b6d50d06279cc49f9fe8c2dc21",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180523/Input-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180523/Input-C1.mp4",
+      "rawSHA256": "410e033b95da72777d37dbca6f2404d6bb23e76463a30ad8a0d0e706028b7f0c",
+      "publishedSHA256": "410e033b95da72777d37dbca6f2404d6bb23e76463a30ad8a0d0e706028b7f0c",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180523/input.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180523/input.json",
+      "rawSHA256": "abe858e116c5131675eafd5f0b4d49663d765e799d463e08012b9171af7f3fd8",
+      "publishedSHA256": "e4bb2118f2bccb687039da413deaa2bd5a0ff2c6cee3bd42e8cf9aead395a2c0",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180523/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180523/process-result.json",
+      "rawSHA256": "34d4b0447251df7e0937d18c4bb5325476dec708c6821c4d64e6511ba4f19cfa",
+      "publishedSHA256": "cff7fbbd6dda32f4601230eda2ba84a76e7c8e62e70e01ff3bae1294a47958da",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180754/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180754/capture.log",
+      "rawSHA256": "87f566d4194a3da503955adde1f935d0a77ab14d51be5dc53865290ca57dc303",
+      "publishedSHA256": "9205c7d2634d7314cc5f1917fdad4da28c5a6460c8f595bd52a590b2a655b0b4",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180754/diagnosis.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180754/diagnosis.json",
+      "rawSHA256": "92d14e5ce46c9ac230aa36c0449afb8bd016f7eef6c12e00aa6fac2364408570",
+      "publishedSHA256": "a1d251d8813abfa471b8ea1458ba06cb2a59cdefacd3b8d4f4d468cbe9d00d5c",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180754/Input-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180754/Input-C1.mp4",
+      "rawSHA256": "82d902d803fe355a30937333c580053514249d21425b1acf8d63dee54c38bc28",
+      "publishedSHA256": "82d902d803fe355a30937333c580053514249d21425b1acf8d63dee54c38bc28",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180754/input.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180754/input.json",
+      "rawSHA256": "c6d82301feb860cb24d851ecd2dddb67e2b5b577e0769b479e8e0237234f817d",
+      "publishedSHA256": "e5438942f620be86df90aea39d4cf35096de58027996188379e6e052074cb118",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180754/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180754/process-result.json",
+      "rawSHA256": "4d6be2afc51b7c65eeb1cdd6893a39f9a5d3dd6bb5c872603fb754effbce4280",
+      "publishedSHA256": "0fb00ec2545db8b86cd81c5b40ba9ce9f12be01df026c1ee03f80cda816e0aae",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180958/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180958/capture.log",
+      "rawSHA256": "2ab03199e7a99b24769908c278cc29ce1fd0e4e3cd1a76c1bb9ce220e478b8dd",
+      "publishedSHA256": "7d164667e94034f37c0a82b0e88cc7667aab0500dfedc7f8433438d27afef906",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180958/diagnosis.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180958/diagnosis.json",
+      "rawSHA256": "39fe12113184b1f23a947e35ef5c7f4589762343109bbbcce8f40f5a6f235824",
+      "publishedSHA256": "adf056afba665ebd58b449798d2c1c595bbb0a01bad327fec8a25dfb192349f5",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180958/Input-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180958/Input-C1.mp4",
+      "rawSHA256": "6c18d66475cc9d6eef084c27caf985ade30766e7a628040e5e456622149d9c2f",
+      "publishedSHA256": "6c18d66475cc9d6eef084c27caf985ade30766e7a628040e5e456622149d9c2f",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180958/input.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180958/input.json",
+      "rawSHA256": "75e1d649fb3f15242e5057d3f04a8b56226fffd139501b631432b4b42d87532a",
+      "publishedSHA256": "52312047e6a4048691e283f6db884c339e7a1cc3d01cb5bb97e0b6b772a5b8a3",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-180958/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-180958/process-result.json",
+      "rawSHA256": "b38b59a9572ffcfabe073bcdb09412a2f1823720286e9d1f9cdb048be5486d14",
+      "publishedSHA256": "7dbc8a6bd993e8a0b84cb18a5559376af1189def9e6f1974d26fef948dfc7301",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181159/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181159/capture.log",
+      "rawSHA256": "76d51de414b65c8529042103340ea8e358d97502dd5a4ec2139dfab2a4ed5635",
+      "publishedSHA256": "169be026168505ca412f6455a0fa975b401db03010f09fbbaa6e0ec102423b28",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181159/diagnosis.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181159/diagnosis.json",
+      "rawSHA256": "d2a3116559948d904db4bb1a94766b1945250fff2e9693e54d675408bb8610ed",
+      "publishedSHA256": "627cfd8737ebeb261e0c2e305ab16db655892cd6be24da8290e205a2c9e08e3d",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181159/Input-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181159/Input-C1.mp4",
+      "rawSHA256": "347edc0543358310e2d032235a99643a80058f570c181217117c440c2d858a68",
+      "publishedSHA256": "347edc0543358310e2d032235a99643a80058f570c181217117c440c2d858a68",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181159/input.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181159/input.json",
+      "rawSHA256": "eceac6c6ac5af9a4446507009080013ba6d6d6397d7aa94a8f189f31752c7ee9",
+      "publishedSHA256": "fe27c697914c82df6828d96161a151f7544af38f059efb86d97123ef095f2648",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181159/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181159/process-result.json",
+      "rawSHA256": "af0d1633d1e39526b204b269a93f84abc74328ac1fe746dd5de06e222be1a6a5",
+      "publishedSHA256": "08523e27e80a5317e9869eb383e48e8687193faacee76ff4ee3f48ccb44b9863",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/animation-independent.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/animation-independent.json",
+      "rawSHA256": "c58cfc26d66804ed09226bbddd09fec3d5fa95b1190bfc69ea65525865ee4c0b",
+      "publishedSHA256": "34787c9bd2c428b569db569e777bb68dc70c82c7bd79a1549fc63da17be321c7",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/capture.log",
+      "rawSHA256": "5b0415fd76886900c427a9fcb0603e01b736d81126feeaaeac1397c906b62bb6",
+      "publishedSHA256": "66e1dfa62884feb65ed945e72154dc6a12aa4a046a92e6a8928402cab907399b",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/E-active.png",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/E-active.png",
+      "rawSHA256": "5b0dee477866ef8228245fe239660ff08bf2c3f8c7314138544570fa85486106",
+      "publishedSHA256": "5b0dee477866ef8228245fe239660ff08bf2c3f8c7314138544570fa85486106",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/E-recovery.png",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/E-recovery.png",
+      "rawSHA256": "14cd4051e74fe1a345e40adb2e2afa366a494c361fc4ba29669f7b66541b9292",
+      "publishedSHA256": "14cd4051e74fe1a345e40adb2e2afa366a494c361fc4ba29669f7b66541b9292",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/E-startup.png",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/E-startup.png",
+      "rawSHA256": "0e671aeea068defe7a5fa8a6531a2d9929e9adb67464ebffae404ef39f9f772d",
+      "publishedSHA256": "0e671aeea068defe7a5fa8a6531a2d9929e9adb67464ebffae404ef39f9f772d",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/Feint.png",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/Feint.png",
+      "rawSHA256": "79868846d43f4fbb234c69cbac07f347125863cc668bea89e21c81caa370921d",
+      "publishedSHA256": "79868846d43f4fbb234c69cbac07f347125863cc668bea89e21c81caa370921d",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/Final.png",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/Final.png",
+      "rawSHA256": "2c477991b4925b5a2520dbb303b5d8524d5104edbfaebdba129f03f63977e96f",
+      "publishedSHA256": "2c477991b4925b5a2520dbb303b5d8524d5104edbfaebdba129f03f63977e96f",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/Input-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/Input-C1.mp4",
+      "rawSHA256": "cf71d66a12e4d0a558953c968702feaf966ae6f1bbf0d8941afeb6766509d252",
+      "publishedSHA256": "cf71d66a12e4d0a558953c968702feaf966ae6f1bbf0d8941afeb6766509d252",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/input.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/input.json",
+      "rawSHA256": "147fbf7ad02384a3f66993d7287b6837fafa9bafbf2652cabc2fe5ef159e760b",
+      "publishedSHA256": "3eaef0a7df5ea07f85ce9cccfc771c5ace6a58aa61f0cef5700a4d347cf905f2",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/movement-independent.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/movement-independent.json",
+      "rawSHA256": "befd48caa6117e959cd385dcb71af95d690800e08052bed837408d71266b495f",
+      "publishedSHA256": "178a3129124f27fe5656ed1b8c0ffc1d58a06f8459526f4b0e7bbaad78f2c3fd",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/process-result.json",
+      "rawSHA256": "717bb5619effc45421f7b6c5ac9a6aef680c1446bcf9a8971fb04c3c9413c865",
+      "publishedSHA256": "a5e760d4b0a82e563585f54dd8c98023feb4851c6866c9ab6a4f57b43c903ca3",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/Q-startup.png",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/Q-startup.png",
+      "rawSHA256": "c0bff8a4f6c5b9f2ac3ed1949f63e4667767f6fce615361e40c477268c6028d1",
+      "publishedSHA256": "c0bff8a4f6c5b9f2ac3ed1949f63e4667767f6fce615361e40c477268c6028d1",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputCapture-20261113-181656/Rebound-T-Y.png",
+      "rawPath": "Artifacts/U03/C1/Runs/InputCapture-20261113-181656/Rebound-T-Y.png",
+      "rawSHA256": "2cd4c2ce63eafc83590a481571c144cdd4b84b3bbc5ed5c2e54937664155ecec",
+      "publishedSHA256": "2cd4c2ce63eafc83590a481571c144cdd4b84b3bbc5ed5c2e54937664155ecec",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-180214/editor-minimized-verified.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-180214/editor-minimized-verified.json",
+      "rawSHA256": "8d8bb4a873fa8b9e81f53285dfcd5237c6eaac40e7820da6cf8972182bf0a75f",
+      "publishedSHA256": "3c138b5d664240b00cfb76f919d73ea5dc89853d57d4d9d35dadbff16370bb07",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-180214/editor-restored-verified.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-180214/editor-restored-verified.json",
+      "rawSHA256": "27ba39ca8a4841842fd0d348b069bd668e9a8ebed59a9dbb56850c02a76702de",
+      "publishedSHA256": "a8ec1e6bf91a0a3a66ce4e4d6b08c66c9e28b6e7fdd3281d935c970ac35e5501",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-180214/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-180214/Game.log",
+      "rawSHA256": "41a48694d85fa9e3aab4963fc9161a98e1ae38fd5cf839e0a1a30807b6c42c48",
+      "publishedSHA256": "657e2f5c88a3d432ec3e61f556d9c9f452142c4582e5c5ad81f34c45667e7ee8",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-180214/original-editor-windows.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-180214/original-editor-windows.json",
+      "rawSHA256": "8e29fec73f3bb8e4568c66a599f6030e34c2cc6f28d7833fa19f62f2b7ad3f50",
+      "publishedSHA256": "10ec0bc8690d0129a43756dbaae2055ffeaf7bd81a623ff3be9a47eabcd1ef8b",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-180214/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-180214/process.json",
+      "rawSHA256": "5b4ff4ff83c8a6b9574516e2aefc7190aa9cb7316034fc2852158a18e6611752",
+      "publishedSHA256": "c6903ab1b05b17086e00945f34d8db13c5aed589efc889ed3573d59279bb0091",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-181611/editor-minimized-verified.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-181611/editor-minimized-verified.json",
+      "rawSHA256": "87a542b581ea7c1795e466247e70a1fd61c21b71a1d408e42362952bd84b9fdd",
+      "publishedSHA256": "5efcb24fe8d48dadee4678477bba72ef3c5b7769e63ae4124808f5e651ebf170",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-181611/editor-restored-verified.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-181611/editor-restored-verified.json",
+      "rawSHA256": "266ee8e0104ea87839fec8df5e77033f4380d6d99d6b5b2b186b8f1b48dc9eb0",
+      "publishedSHA256": "7a59e3aad75fbb411154ad3f2cdd54831c63af6afba05e672e2b9b28dca63602",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-181611/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-181611/Game.log",
+      "rawSHA256": "7969bb1117d5bcfa2e659aacb94e7945e363edb585a57e357e7b2aad7fe12baa",
+      "publishedSHA256": "abf8cc01c81cf23de834b256ca7d5aff9c5558308628da373beb5e89bdb9956b",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-181611/original-editor-windows.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-181611/original-editor-windows.json",
+      "rawSHA256": "27ba39ca8a4841842fd0d348b069bd668e9a8ebed59a9dbb56850c02a76702de",
+      "publishedSHA256": "a8ec1e6bf91a0a3a66ce4e4d6b08c66c9e28b6e7fdd3281d935c970ac35e5501",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/InputSession-20261113-181611/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/InputSession-20261113-181611/process.json",
+      "rawSHA256": "515ab7435c1ca562df24d2b77341e82f9a5517d0b1951f06853cba53126a4160",
+      "publishedSHA256": "96e308be8955227e19636301130d6019b80643a7033199d5a2144da01a4d9f15",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-174906/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-174906/Editor.log",
+      "rawSHA256": "2b725891b3374bf48e54c4aca822c1b7fae163a855599e56ec198a88e376eb74",
+      "publishedSHA256": "411db95fec1a67416afbdd67eb890b990fe70f56e372eced4edd7916ff9af516",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-174906/LogsToolset.schema.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-174906/LogsToolset.schema.json",
+      "rawSHA256": "817e1d2cda35985245e221f864dc40e4144f00d4017aa69459930fe6c5655bb7",
+      "publishedSHA256": "952a7b3a259383f0a78762267f614054a974f15a06d020c0669ae32cb95fab38",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-174906/mcp-results.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-174906/mcp-results.json",
+      "rawSHA256": "c1d185195a3c0ea55b127b7b2fe27ebb4f986579ddaf645d78c1c43e38a4bb66",
+      "publishedSHA256": "28dda82e92bcdd249f1f70afdfa75831f9c593679c18566938281a0c623a88ee",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-174906/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-174906/process.json",
+      "rawSHA256": "9076355cdcacffafdd6bb3aacca60f163775283a30671e74995e355f44a09836",
+      "publishedSHA256": "005a4466d743ccc4645dc05c4cb7ea35cf5d9b5e4386523f33e2380831a943a1",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-174906/result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-174906/result.json",
+      "rawSHA256": "9fa203dc87936ae5e8c157cf0e909077e39ee7b7b87701b2dd2ebbeaed7bffe6",
+      "publishedSHA256": "2e18bc9e709eb3c4bba1a57a52c684f241cbf15809f7128cd4e0c713dbcb4a32",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-174906/TestRunnerTools.schema.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-174906/TestRunnerTools.schema.json",
+      "rawSHA256": "6fdf1c99219a765b31458831007ce8cb5529ce5fed1181cfecc7ad81136b8a77",
+      "publishedSHA256": "d2c3b658518e97fc283741bd1f236b2c6cddc6d360c1841861716a916296de10",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-174906/trigger.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-174906/trigger.json",
+      "rawSHA256": "022eed9cc58333cd5017a80fd3450e25a3e5cb47b758bff8ca7cc0725210445d",
+      "publishedSHA256": "7ad1c12e3f57633c0bbfa58bfc8ea8821551ecf43ba756e2805d7bee2028cc48",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175444/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175444/Editor.log",
+      "rawSHA256": "1c435990307e1f499b947d85a40dde89b9a463f8c8ee2bee4f7c0aa0959cfc80",
+      "publishedSHA256": "44bc39aeaa34b6a4ed682eb2b2b7e32b11d416a458f0dbb0a23e995520a7f762",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175444/LogsToolset.schema.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175444/LogsToolset.schema.json",
+      "rawSHA256": "817e1d2cda35985245e221f864dc40e4144f00d4017aa69459930fe6c5655bb7",
+      "publishedSHA256": "952a7b3a259383f0a78762267f614054a974f15a06d020c0669ae32cb95fab38",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175444/mcp-results.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175444/mcp-results.json",
+      "rawSHA256": "06dae9bb77988ca9e742df34603b65b4100779b07a80bcbf31812f6662945fac",
+      "publishedSHA256": "05c5dd1e03f1caa110d066f04af463f5ea7b154d550b5a58171693fdaa9adde8",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175444/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175444/process.json",
+      "rawSHA256": "d45f18b9696f2650798a4e30b8499b4be136905e624692675bc45f45a7e287b8",
+      "publishedSHA256": "aec98d6bff37796d0d8da4d92ef50213ea5bd216d4a2f2342f4b8c7145361f09",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175444/result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175444/result.json",
+      "rawSHA256": "1c4dba398fdbb3b225e2ee8c384c1da77fc60cbd4c89bf41650be5439698dfaf",
+      "publishedSHA256": "3b4f84fa6bac7fefeb58ef8ab9714ae25858d125a400e43c5cd1a719b547875d",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175444/TestRunnerTools.schema.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175444/TestRunnerTools.schema.json",
+      "rawSHA256": "6fdf1c99219a765b31458831007ce8cb5529ce5fed1181cfecc7ad81136b8a77",
+      "publishedSHA256": "d2c3b658518e97fc283741bd1f236b2c6cddc6d360c1841861716a916296de10",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175444/trigger.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175444/trigger.json",
+      "rawSHA256": "022eed9cc58333cd5017a80fd3450e25a3e5cb47b758bff8ca7cc0725210445d",
+      "publishedSHA256": "7ad1c12e3f57633c0bbfa58bfc8ea8821551ecf43ba756e2805d7bee2028cc48",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175924/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175924/Editor.log",
+      "rawSHA256": "fe69ed262ce2f41a20ee194ff697309618e99f73ef058d9f3562344d574bfd33",
+      "publishedSHA256": "28493804a1659758739f1d94a04c720a5ec81b88f8cfd8718a4917c3061a7d4f",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175924/LogsToolset.schema.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175924/LogsToolset.schema.json",
+      "rawSHA256": "817e1d2cda35985245e221f864dc40e4144f00d4017aa69459930fe6c5655bb7",
+      "publishedSHA256": "952a7b3a259383f0a78762267f614054a974f15a06d020c0669ae32cb95fab38",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175924/mcp-results.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175924/mcp-results.json",
+      "rawSHA256": "979ca311553a26210f465729e7d34bb8a72f160025bc905a93d25b4aff6b71f3",
+      "publishedSHA256": "7a02a47d061b0624ded4411ab0c11f360e324ad54b05b62a664136f0a262ffb4",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175924/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175924/process.json",
+      "rawSHA256": "02fa2b0132b7279c231ad20986eb26cb027d309ad1e7a227715af783bad71c8d",
+      "publishedSHA256": "4da604da28f30c971efee8f88aab63f2b0d667f30620ccc6456999a3125903a3",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175924/result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175924/result.json",
+      "rawSHA256": "89765e554d07b45dc8999f3bbaf517eba92770b38207730e37c2a6db63a67e52",
+      "publishedSHA256": "232e5d7c04ad39153122fb4d0f678c8b43541e33cb39212f30ef72c9086c665b",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175924/TestRunnerTools.schema.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175924/TestRunnerTools.schema.json",
+      "rawSHA256": "6fdf1c99219a765b31458831007ce8cb5529ce5fed1181cfecc7ad81136b8a77",
+      "publishedSHA256": "d2c3b658518e97fc283741bd1f236b2c6cddc6d360c1841861716a916296de10",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-175924/trigger.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-175924/trigger.json",
+      "rawSHA256": "022eed9cc58333cd5017a80fd3450e25a3e5cb47b758bff8ca7cc0725210445d",
+      "publishedSHA256": "7ad1c12e3f57633c0bbfa58bfc8ea8821551ecf43ba756e2805d7bee2028cc48",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-181220/Editor.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-181220/Editor.log",
+      "rawSHA256": "507940f41779f9568a00bc0e5cc6265d2f95db7586f043f85ae72ad72bd97751",
+      "publishedSHA256": "986dfccaab463082969677a8e4d18c48e7b652454b8065576d110ec0a943fec3",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-181220/LogsToolset.schema.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-181220/LogsToolset.schema.json",
+      "rawSHA256": "817e1d2cda35985245e221f864dc40e4144f00d4017aa69459930fe6c5655bb7",
+      "publishedSHA256": "952a7b3a259383f0a78762267f614054a974f15a06d020c0669ae32cb95fab38",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-181220/mcp-results.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-181220/mcp-results.json",
+      "rawSHA256": "271d242f1df0c8b0b30cb5f4ab414e554bf6c48e4fe133cde37fcefa3734d530",
+      "publishedSHA256": "4b9f4a3b48b3a6768b5e6fb501c944b5a4e88fd8802654ba672b5fc7ef5f447f",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-181220/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-181220/process.json",
+      "rawSHA256": "ceba2705f8772f4a1f8de7ec41d250a0949473a98ba38e74887e3fdadd5e0134",
+      "publishedSHA256": "eecc19e70e335083a4f8742da0eed53fbeacf7df7ff03960d768d66761320d8a",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-181220/result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-181220/result.json",
+      "rawSHA256": "910d40dc39ef809be7ff9c9c0a6e26b421a6de153f5a629513e2454ec3975686",
+      "publishedSHA256": "a976404ebfb43ed073e2ee096e85932c165e759f8c3ddc7e62a9961ca54f243c",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-181220/TestRunnerTools.schema.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-181220/TestRunnerTools.schema.json",
+      "rawSHA256": "6fdf1c99219a765b31458831007ce8cb5529ce5fed1181cfecc7ad81136b8a77",
+      "publishedSHA256": "d2c3b658518e97fc283741bd1f236b2c6cddc6d360c1841861716a916296de10",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/MCPTests-20261113-181220/trigger.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/MCPTests-20261113-181220/trigger.json",
+      "rawSHA256": "022eed9cc58333cd5017a80fd3450e25a3e5cb47b758bff8ca7cc0725210445d",
+      "publishedSHA256": "7ad1c12e3f57633c0bbfa58bfc8ea8821551ecf43ba756e2805d7bee2028cc48",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182148/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182148/capture.log",
+      "rawSHA256": "588ed283c8f1497bc91d97fbb08bc1072339dcbf02ce771162023df0526feec4",
+      "publishedSHA256": "b209df77bd3a427f2250f8acf0399ff0e0c9abd468dc6a630c62f180b90315c2",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182148/diagnosis.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182148/diagnosis.json",
+      "rawSHA256": "cc7ff1b689cacd78647e238071bfca7b189de793afaac7d4f7f2ee45c6a60ae9",
+      "publishedSHA256": "9885ee6883689324c98da8fb0540911a21a9d8e0a7aa7f0754c3d9c20cf6fc4a",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182148/Network-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182148/Network-C1.mp4",
+      "rawSHA256": "8b97223f61060514b30853cbc2a5dd7dc2d71a5887b20107fe8323e4c7f2ee1c",
+      "publishedSHA256": "8b97223f61060514b30853cbc2a5dd7dc2d71a5887b20107fe8323e4c7f2ee1c",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182148/network.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182148/network.json",
+      "rawSHA256": "47297e30ceeaa0f0ac990ecbfb72f2243fcdf42a3f891e521415c44ec1db66a0",
+      "publishedSHA256": "6bd27161f2f614c8f2a33875f6eb9b1ea4f7e10ec73c742f27c8a6e77c042933",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182148/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182148/process-result.json",
+      "rawSHA256": "e3608aadd2f702362dd3a2522d0f71d8553a6fc8827c0f22a7ef975f27adbdbb",
+      "publishedSHA256": "bf44b737800eedc8bacd074f068bd0c19608ea4096bc75287087377d1444eda1",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182407/capture.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182407/capture.log",
+      "rawSHA256": "e1060637cd93f1fc2ac39d97b458cc1aa65d4108db084cf94e3a5aa86b21c8d5",
+      "publishedSHA256": "c5f529158495aa70024d61a59ffb914ba26a65384a18949b515443a5c5c175f2",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182407/Network-C1.mp4",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182407/Network-C1.mp4",
+      "rawSHA256": "1d47e012e8c30d7475d187777d5a660caa11a8f08f9e4618d356c9e62b4a7dff",
+      "publishedSHA256": "1d47e012e8c30d7475d187777d5a660caa11a8f08f9e4618d356c9e62b4a7dff",
+      "sourceEncoding": "binary",
+      "redactions": 0,
+      "verifiedDecodedContent": false
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182407/network-independent.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182407/network-independent.json",
+      "rawSHA256": "00c4fd5161647f68b129799c30f28bf296ce66ccbf0c9b51ca9c6220776018a2",
+      "publishedSHA256": "305b9b6b81bcf34507bb4c098947fc1b63baa6718c266c3528c6ed419006ed69",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182407/network.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182407/network.json",
+      "rawSHA256": "31575f384e341ef9612369a7200e629762f5e3f7fc80af62d474712baffe6e09",
+      "publishedSHA256": "41384f161e96ad7695ee728dbfbfb4660a2b9ca3425fca3a92135e3c6ce21c6c",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/NetworkCapture-20261113-182407/process-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/NetworkCapture-20261113-182407/process-result.json",
+      "rawSHA256": "bfb438af9d2d67d157a6f8e554ab47452d67d94a466a222dae84181c7a844e22",
+      "publishedSHA256": "daf11150d8e65d7a918ad01335ef01251d312612a09ec650c6440ace82a7b794",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-175602/Package.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-175602/Package.command.json",
+      "rawSHA256": "4e956f1df58f6c5197141424b1770d05f56466def9bd0b8051ccdf763800a494",
+      "publishedSHA256": "c70ab20289305874ae5daba860c9ade23eb71d2c0cc5207f0b671c3d1477fcb6",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-175602/Package.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-175602/Package.log",
+      "rawSHA256": "4c711735f2b3979e875cef2b8349b5b8ab70f9957c5f3fd6e0dbc3eb04a0812f",
+      "publishedSHA256": "6c9955f786e2e4062321f2e79b46303c9f7c41c2c837a367df0dcff0151e283c",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-175602/Package.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-175602/Package.result.json",
+      "rawSHA256": "2096b483b1b109215d520a5de3f8be312fed80779f69b7aaedf09a19a406af7b",
+      "publishedSHA256": "54545a760291e026723fe6ab4bb3fda60736cc92b93ec919f6dbe300e0fa4a0c",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-180029/Package.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-180029/Package.command.json",
+      "rawSHA256": "d64263db955a3dcbdf1fdcad8921aeb901cbfa099c6f5acb1797c7d82001ba68",
+      "publishedSHA256": "218d51e0f3c85e7f257c43474d03a27d56ceda1e472b14ddf86ceeebd6deb370",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-180029/Package.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-180029/Package.log",
+      "rawSHA256": "7bede21a30f6834cf3ac9a240e0663f3d51abae9cc85ccc8bfb39bbbfac0cabb",
+      "publishedSHA256": "5b163769f969149f3ed549f8bb5aee4d2419023473b99d737d184360df05f2a5",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-180029/Package.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-180029/Package.result.json",
+      "rawSHA256": "50b86585f5361511473cdeccbc6463c5337e93c99164823a7e380b3210a175a1",
+      "publishedSHA256": "0f54efd5abd013280a6fde15b1fff32b98c2aa25ddfc87affc2e2c3d3878fa3e",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-181403/Package.command.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-181403/Package.command.json",
+      "rawSHA256": "de428f83e4f2d8fc29e5351b555d0c7608def07e99e1ff8589c0a0d09a209f49",
+      "publishedSHA256": "ced3ad75f709c67cf5b0834558d142c8878a36bd7b91b2d20e86bc0e547919dc",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-181403/Package.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-181403/Package.log",
+      "rawSHA256": "139745d75224897b758e0b4d8b198bdc0a43bd2cf89b20b430654d3a6feb5162",
+      "publishedSHA256": "26b676b64e2bae0983167da8f719c7f17572ca5c6eca4a9b63589be273ec60be",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Package-20261113-181403/Package.result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Package-20261113-181403/Package.result.json",
+      "rawSHA256": "9e6a1c2069ddc31b9e19f4cf37a1d5b64ba97d30443c22b760014cf578a36dfc",
+      "publishedSHA256": "2abc80895b8c2b10dd82cf8752cd02c20aeb66d9348d686a5cef4245e86cf317",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/L_Boot/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/L_Boot/Game.log",
+      "rawSHA256": "d0089a0eea4e121459ec01cbed339ca773a3404e3e442243c081b70c48bde736",
+      "publishedSHA256": "7561f1176004f2efa9d99492b07db3f0af42152c03a6aca0fa72fafe29712870",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/L_Boot/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/L_Boot/process.json",
+      "rawSHA256": "4bfa259c7fff13b06cab598b73eb0cb435686acfef5ec351f7b8876ac994f8ce",
+      "publishedSHA256": "be1896d7abe4da1f81bd221929f40052f6b1d1100da19c424c3cd803e433898a",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/L_CharacterCombatLab/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/L_CharacterCombatLab/Game.log",
+      "rawSHA256": "409a2fef5e931a8056f0a8ebb359e4255f407f68c74189cd6acbbb8629bc8f07",
+      "publishedSHA256": "d0c4fb6e74e82ee97fb3d05b3dadbbef769aede76d9de54a47ebde23f4998f86",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/L_CharacterCombatLab/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/L_CharacterCombatLab/process.json",
+      "rawSHA256": "4bef4b77342dff6cd6ed208d6c342b6b6130cf4ac0a95fa00a98a85fa8d00880",
+      "publishedSHA256": "335988b00e4775dc0665acb654ea7a7850bf0171bb81dea8c62caa9aabebfacc",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/L_CharacterCombatLab/Saved/U01/Metrics-0179DEFC4AF0C91B111F758AD513BD54.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/L_CharacterCombatLab/Saved/U01/Metrics-0179DEFC4AF0C91B111F758AD513BD54.json",
+      "rawSHA256": "acb7b926f6efac34f9c149d987141f5bb02cf7efc6fbac803f391b93e76f0661",
+      "publishedSHA256": "1b4c2a7e80abc631b9a49bdd2d8dbd5986b684030f57d4c380a003a3d69aefa7",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/L_NetworkLab/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/L_NetworkLab/Game.log",
+      "rawSHA256": "0312ff322220b00c9a8bf609ca2495f2121434335a3b26ca0b33fc9b7aaf88e5",
+      "publishedSHA256": "4e95d2184c2125f611a684e37f15b0749f16968785b9d8b2d9cab95d9f975b8f",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/L_NetworkLab/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/L_NetworkLab/process.json",
+      "rawSHA256": "eefe9c7d6b663999c043dbd4c0519f9bd8f6ec63c775c944f9eed293e6b56c38",
+      "publishedSHA256": "288522d0ec793c507025465f5250497b96178f2e49ea98861ce3176be485d508",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/L_NetworkLab/Saved/U01/Metrics-DE65C7A54E656A246189A187B69A7691.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/L_NetworkLab/Saved/U01/Metrics-DE65C7A54E656A246189A187B69A7691.json",
+      "rawSHA256": "69901362927796c58ad85e96fd2a37beeebb3a8735b2e9f728f3e075240bf02c",
+      "publishedSHA256": "ccc0ac4e9a599dc0f3684deadab00dd02b3f9cee560cc3289409bd2da7b1c368",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-180200/results.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-180200/results.json",
+      "rawSHA256": "1407bfde7a754640377f120bdbc011aace895e2b79228f41919df22f6e71a844",
+      "publishedSHA256": "eb32c4e6bbc5e6b68d69a4dc17b5387acb91e37e3ef706717c0ad480f0fd9fdb",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/L_Boot/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/L_Boot/Game.log",
+      "rawSHA256": "cd1af53eed4adf2124948506adae94e7d90d65cf259a2b483f1524b16e29498a",
+      "publishedSHA256": "20931093f07c165ab95cc899319d69238f5c68a0330d6242dcb84f356ccde365",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/L_Boot/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/L_Boot/process.json",
+      "rawSHA256": "ed4561ee9bb9d6d4ead33e7d24bc185988696deb6d8cbe58b86bdeab6160b1c5",
+      "publishedSHA256": "e585729c73c911eb2df26a8fd5d99bd38919c30385375856fcb3e8410456f0dd",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/L_CharacterCombatLab/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/L_CharacterCombatLab/Game.log",
+      "rawSHA256": "28d9274dee3d207c9e730992e658130a263312e83a637f3c27d81587f4bca340",
+      "publishedSHA256": "fe0a1ffd0efe18cdfbcb8f2482ce2866113c458dc110e24a487717aaf6b157ad",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/L_CharacterCombatLab/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/L_CharacterCombatLab/process.json",
+      "rawSHA256": "84cea7eefaa0c1c5675d0ea3d52595d6cf962e9ffa683ecbf493e4d4a2171e82",
+      "publishedSHA256": "6f23e006b201db06a9a471b49e7d0c8928c8f846bb0b487fbbfb1572f8c60640",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/L_CharacterCombatLab/Saved/U01/Metrics-B7D73C594AE1F63FCDB0A99D79867568.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/L_CharacterCombatLab/Saved/U01/Metrics-B7D73C594AE1F63FCDB0A99D79867568.json",
+      "rawSHA256": "bf6ad7d08e7ea6ee65c03741d739dc878ef6e9c797c950bd9c1908191215e3cf",
+      "publishedSHA256": "a9bc37f0113b4a47ca459d462bc2be88cd2826717ac2f7394dab90323041d241",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/L_NetworkLab/Game.log.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/L_NetworkLab/Game.log",
+      "rawSHA256": "d1dd132333622b9fe478406ea7dd39a93fe0a7df5571a2feddddfe1f923eaba1",
+      "publishedSHA256": "d240f11f8dce0edb62f9381ea863e5cbe1c617284657ee768f5dece790d0e87a",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/L_NetworkLab/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/L_NetworkLab/process.json",
+      "rawSHA256": "6da69f7e7f6ea18e3dbadd3a1528bbb912d4ae2c245a94a066613ad89a81d0e1",
+      "publishedSHA256": "3681af3588b0dceaa8f69b405139fc50d4b502dc53cf13546da5ca0812c562a5",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/L_NetworkLab/Saved/U01/Metrics-C065A9754389EDCF3F256C9DC01083EE.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/L_NetworkLab/Saved/U01/Metrics-C065A9754389EDCF3F256C9DC01083EE.json",
+      "rawSHA256": "099838da0a443cc8d42367c4394c8f6c8fa00ddf666bb5a4275d71680778bb91",
+      "publishedSHA256": "09559c923e49b3dfe1cbee5e274ace314f7e9852fb69f5a9498e57b57ee3efd2",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Runs/Smoke-20261113-181558/results.json.gz",
+      "rawPath": "Artifacts/U03/C1/Runs/Smoke-20261113-181558/results.json",
+      "rawSHA256": "4758b3db9b8f5702ed09dd1b8ceb9d360dcc1c4967eb053a796b005f56cd95e9",
+      "publishedSHA256": "730b141e0dbdcece9dbfba20d79c5a4fecb35ea11a2255b74c1280422cab8929",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/all-processes.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/all-processes.json",
+      "rawSHA256": "4cbf1fce6c237a58f2ac360612626780bc0ac9b9d863f4c12280beb9ee30e7ca",
+      "publishedSHA256": "199223d0ee22c41ca4261bf5ddcd6df97bc8afcf0e427eac66b48f3d9de65116",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA/ClientA.log.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA/ClientA.log",
+      "rawSHA256": "6b86d4e4572076b5bd83c96e75a67796ed6d0c89e1e1236d7feae51cab7d2393",
+      "publishedSHA256": "90e5e42fd4372f9b73672ffa310d62389920446668a7d0eca00b01d50af421e5",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA/Frames.jsonl.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA/Frames.jsonl",
+      "rawSHA256": "08da30be2e96abcea88aaa3034d511b8e95be823da9d0702be7fb0d921ca5a3e",
+      "publishedSHA256": "c88da3ad1e04f8fd9fd306214a8a1e62d60e211ac1e1205c009a69ef6db9dcb2",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA/process.json",
+      "rawSHA256": "6c919d3fc648c36c180595eddd92d3e167ae08924171da39017b246232cbd303",
+      "publishedSHA256": "6d1ab957e5ba6500928a043640236e9f14dc4266d8a3d1bb6ab214089e91b05b",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA/Saved/Logs/AutoSDKInfo.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA/Saved/Logs/AutoSDKInfo.json",
+      "rawSHA256": "c1a228df1774a9b294780b61f886d2cd1232fd8abf53ba3edbdb2f799e910de2",
+      "publishedSHA256": "8a6b1298e8cc5990e957ead30e4c8d48ab5369cc5ba82d91513a880ffee71e4f",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA/Saved/Logs/AutoSDKInfo.txt.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA/Saved/Logs/AutoSDKInfo.txt",
+      "rawSHA256": "295bcbe41f1b2efbef6502112fd5b41a76e340ed6f19feb000a67f894e539bbc",
+      "publishedSHA256": "e5ae84ec50af58540a48468fa932230678863e02229fea315225c61140ce7a0b",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA/Saved/ShaderDebugInfo/PCD3D_SM6/WorldGridMaterial_67bacdd81a65e5e9/Default/DDCKey-Editor.txt.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA/Saved/ShaderDebugInfo/PCD3D_SM6/WorldGridMaterial_67bacdd81a65e5e9/Default/DDCKey-Editor.txt",
+      "rawSHA256": "5cbfb43c5ab51789e1c36991f28cc5a779429e1448fd4fbf186b1e99a953de24",
+      "publishedSHA256": "c7129dcf56411e70198c268d44cbbd74e1dbf6b4c429228247416b530b2a6d0d",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA-Reconnect-183012/ClientA.log.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA-Reconnect-183012/ClientA.log",
+      "rawSHA256": "c948e0b1f6105e1a4880ed94dc7cd17b30ee8aa661a7e025569f8877077ab78a",
+      "publishedSHA256": "80186f0f7884936e7b795e949a663f9e33522cd10169ea00cf659e2813f47951",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA-Reconnect-183012/Frames.jsonl.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA-Reconnect-183012/Frames.jsonl",
+      "rawSHA256": "2aee07b748a9d6db1d60ca36789ad22762d4586eac7f88b151b4b0282bbe44cf",
+      "publishedSHA256": "50ab2420ec4cbfbc691b225bfc9b5f278d7a0504bbd8ff0ef856e03e52c777bd",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA-Reconnect-183012/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA-Reconnect-183012/process.json",
+      "rawSHA256": "885e9bd17bb833a637c15c517d5c8258b22d99189a560710dbe1ac25b30f27ec",
+      "publishedSHA256": "1204a18a8aeccb092ca06ca8f029a7b1a5cff13a8d5037f0a530cd4a72eb0b7c",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA-Reconnect-183012/Saved/Logs/AutoSDKInfo.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA-Reconnect-183012/Saved/Logs/AutoSDKInfo.json",
+      "rawSHA256": "834240723cad57fc5b896fa177ba4c367606951eea51d1b8805f0951956684ee",
+      "publishedSHA256": "b9aab8c6f35bbbf86cde718cfbff8968e051d6493a996f2572197b708ec18d67",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA-Reconnect-183012/Saved/Logs/AutoSDKInfo.txt.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA-Reconnect-183012/Saved/Logs/AutoSDKInfo.txt",
+      "rawSHA256": "898f99f7ea95c2fff118ff819714761234855a59d04b5a3dc86f659c73d07df9",
+      "publishedSHA256": "796d3f18f144f1ad58f454d900c840d890299456491878913ad0b7c7aeeee362",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientA-Reconnect-183012/Saved/ShaderDebugInfo/PCD3D_SM6/WorldGridMaterial_67bacdd81a65e5e9/Default/DDCKey-Editor.txt.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientA-Reconnect-183012/Saved/ShaderDebugInfo/PCD3D_SM6/WorldGridMaterial_67bacdd81a65e5e9/Default/DDCKey-Editor.txt",
+      "rawSHA256": "5cbfb43c5ab51789e1c36991f28cc5a779429e1448fd4fbf186b1e99a953de24",
+      "publishedSHA256": "c7129dcf56411e70198c268d44cbbd74e1dbf6b4c429228247416b530b2a6d0d",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientB/ClientB.log.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientB/ClientB.log",
+      "rawSHA256": "b0dcdf61a1656b606bca21d3ed173d7a67f1ae39ca154635ca4732d7ca22c1d7",
+      "publishedSHA256": "4d5db58723d672496dc9ab11a99d6f84e98ea8a7a1306e2b4625e64c0f6b417e",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientB/Frames.jsonl.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientB/Frames.jsonl",
+      "rawSHA256": "ebb239dff4787f6dbdd88e40317d512748bf2bcbbc8d4fb8eb925d84dafe8613",
+      "publishedSHA256": "fdd14007455f2a2e68a8c172701c3c1ef260076b8ce897070d8b511b5e6b3509",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientB/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientB/process.json",
+      "rawSHA256": "9cd8cde6b9cac25964548f5a0757137546351913beeaf451c474be45ab75d22c",
+      "publishedSHA256": "9a38ed4748eb938eb7014b17bf6424857714b3f0d12372be2bd55c0450a45dd0",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientB/Saved/Logs/AutoSDKInfo.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientB/Saved/Logs/AutoSDKInfo.json",
+      "rawSHA256": "7814b522d50bd45f15da60dd7c292e4c2a7da74d5ec989e39862dea151e66f30",
+      "publishedSHA256": "57153ba9ec1fb06b5288d32f82ec0e902392cf3f9654aa46b90ee0a32b5556d6",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientB/Saved/Logs/AutoSDKInfo.txt.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientB/Saved/Logs/AutoSDKInfo.txt",
+      "rawSHA256": "7d15302ff8cc01a86a27d8b51a8a699f346e76858357cc5f62924345fe60ce1a",
+      "publishedSHA256": "62b266cec400e3bc0abffba207b38766540bb4ab26c3ba9a6cf8d1db00b688b8",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/ClientB/Saved/ShaderDebugInfo/PCD3D_SM6/WorldGridMaterial_67bacdd81a65e5e9/Default/DDCKey-Editor.txt.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/ClientB/Saved/ShaderDebugInfo/PCD3D_SM6/WorldGridMaterial_67bacdd81a65e5e9/Default/DDCKey-Editor.txt",
+      "rawSHA256": "5cbfb43c5ab51789e1c36991f28cc5a779429e1448fd4fbf186b1e99a953de24",
+      "publishedSHA256": "c7129dcf56411e70198c268d44cbbd74e1dbf6b4c429228247416b530b2a6d0d",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/command.txt.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/command.txt",
+      "rawSHA256": "4d2d863829a0ddae7386857ee955d6f31a0d00afc286a9f6328b53675c7e755c",
+      "publishedSHA256": "a8c3fee76ec0c61e89291cd6c60fd5ae6dd77e3c9339722ce468a26c05936cd5",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/editor-minimized-verified.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/editor-minimized-verified.json",
+      "rawSHA256": "a5d6a0864c7e309d5367318d14076171f82b14c485b44cc85e4d8fafd32de59c",
+      "publishedSHA256": "f4fef3451522bfb31529bc8882de7d9dcdef992fa8dfc6a2cb71d3c3dc6029cd",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/editor-restored-verified.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/editor-restored-verified.json",
+      "rawSHA256": "266ee8e0104ea87839fec8df5e77033f4380d6d99d6b5b2b186b8f1b48dc9eb0",
+      "publishedSHA256": "7a59e3aad75fbb411154ad3f2cdd54831c63af6afba05e672e2b9b28dca63602",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/original-editor-windows.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/original-editor-windows.json",
+      "rawSHA256": "266ee8e0104ea87839fec8df5e77033f4380d6d99d6b5b2b186b8f1b48dc9eb0",
+      "publishedSHA256": "7a59e3aad75fbb411154ad3f2cdd54831c63af6afba05e672e2b9b28dca63602",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/processes.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/processes.json",
+      "rawSHA256": "315fcae66fadb1ef40fa00f59ab2d7bef3572cf91cbcc59a9415488cbf37f1e8",
+      "publishedSHA256": "46786bb9b465e6b8915c175bcc8ac51a7a521d07d21958bc1605517c728e252c",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/reconnect-before.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/reconnect-before.json",
+      "rawSHA256": "9470a252f60ec203498706fb6dc208ad7e348c1b1e1e340460be3cc8d70bc173",
+      "publishedSHA256": "490b100e4569121d751f39ff2ba2402c857b79d7fbb534a7be0490e30f9404b7",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/reconnect-prepare.log.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/reconnect-prepare.log",
+      "rawSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "publishedSHA256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/reconnect-result.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/reconnect-result.json",
+      "rawSHA256": "6a517d6b68b78bc610679bc8964dd03a2fac4ff768c56062014a3f8237b6e797",
+      "publishedSHA256": "b108bd8e180e85689540283558d7b958fed14495b51b80e9fc0a493cd5791a97",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/reconnect-verify.log.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/reconnect-verify.log",
+      "rawSHA256": "c92392712ad2cbd4038fe6d084a0d137c09de4e7021ca6981ec38fe3344f7612",
+      "publishedSHA256": "22fa122735c85ee38395987e25cd1d90743b9c075068b1b22a38000861620e76",
+      "sourceEncoding": "utf-16-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/Server/Frames.jsonl.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/Server/Frames.jsonl",
+      "rawSHA256": "d181eca4f8bf5fd05e0e2d1ec85207aaa8c2aed458f076d00960656a4270028d",
+      "publishedSHA256": "fa08969e2f3b3fa1a66815c528b08a2222380abca970ccc40c9e0cd0d6ab7285",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/Server/process.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/Server/process.json",
+      "rawSHA256": "d435f7894da6d97bcbd496db253574f2e0172c345a59a9d1362830b3c8f34171",
+      "publishedSHA256": "cbb57b359901639d387cea371730689934db26efddb992f8b929965e65fc088b",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/Server/Saved/Logs/AutoSDKInfo.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/Server/Saved/Logs/AutoSDKInfo.json",
+      "rawSHA256": "79e0e980ba6de2ba090dcb107e7ba5aa92e3cbe0e1b89ee996bddd08d02c9ea0",
+      "publishedSHA256": "1c697b965463b1dce941aff97004fa43538daccdf0f75de37ce40527a9e088b8",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/Server/Saved/Logs/AutoSDKInfo.txt.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/Server/Saved/Logs/AutoSDKInfo.txt",
+      "rawSHA256": "5b9f657c7b97eed5b3d77b6775efc86c7c5c952ed22b3b263d102f253eb17ba6",
+      "publishedSHA256": "d26149d032322c262865c8a8192c8c27e2e5645801faa68072d087563e596c40",
+      "sourceEncoding": "utf-8",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/Server/Server.log.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/Server/Server.log",
+      "rawSHA256": "91be2654edcb40ececb0bb3271fa7da5a623c8ad04ddf4464cd42c9661360508",
+      "publishedSHA256": "f0436301bfb87a97d0838cbc905588535e767c2f1e42e5b24dec4dd493fae54d",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    },
+    {
+      "path": "Runs/Session-20261113-181942/server-timer.json.gz",
+      "rawPath": "Artifacts/U03/C1/Session-20261113-181942/server-timer.json",
+      "rawSHA256": "568dd7e13f8cf67fbf36ab6b22fa2ae5e4b21b41f86105dc4bff296d8c02f2a8",
+      "publishedSHA256": "9b2f7ffdd3c8c40a9ba10e1684417585061331545b76ff411e8c8be0621b1ce8",
+      "sourceEncoding": "utf-8-bom",
+      "redactions": 0,
+      "verifiedDecodedContent": true
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/ABP_U03.uasset",
+      "gitBlob": "2b7ed365c3b40154c9e70379aa11fd6d513d80c6"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/AM_U03_E.uasset",
+      "gitBlob": "b6f093c3fd19f87563477ae5c605975f33213989"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/AM_U03_Q.uasset",
+      "gitBlob": "26ca9308391e5a1b440c1884d64817046624a6a3"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/A_U03_E.uasset",
+      "gitBlob": "b1aa18af47c57addbe0017e165fcc5a061e554ce"
+    },
+    {
+      "path": "Content/AnimeMMORPG/U03/Animation/A_U03_Q.uasset",
+      "gitBlob": "a82bbb2e70d0139f4ffd584f13b70a9b70a80b1f"
+    },
+    {
+      "path": "Source/AnimeMMORPG/Tests/U03DefenseWorldTests.cpp",
+      "gitBlob": "c89f53882056e9db7ff49c36aad64c101687068f"
+    },
+    {
+      "path": "Source/AnimeMMORPG/Tests/U03RuntimeTests.cpp",
+      "gitBlob": "91f14aff05df074f2e35ccf00f34e6db997fa09a"
+    },
+    {
+      "path": "Source/AnimeMMORPG/Tests/U03SkillTests.cpp",
+      "gitBlob": "4045bc6253f642be635ef924be754b0f08d15b6c"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U01/U01AnimInstance.cpp",
+      "gitBlob": "8eadb53ed37166f0144dd2691a8c31d09c4a657c"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U01/U01AnimInstance.h",
+      "gitBlob": "c12c0191201ff8b0b50cd7c6b94676dd40c69d4c"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U01/U01Character.cpp",
+      "gitBlob": "8af755bab7d7c6b62b0dbde99f38f6a8982837bc"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U01/U01Character.h",
+      "gitBlob": "37ed9cbc7a46456dbfe96078146c3a114df609a4"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U01/U01Menu.cpp",
+      "gitBlob": "31d28e809f6b2ae6e79d98efe9a55241a955c37f"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U01/U01NetworkMovement.cpp",
+      "gitBlob": "b2bdd7333845d2bc9ddcfb54197f88415c6f5457"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U02/U02ActionModel.h",
+      "gitBlob": "64eb76e54bbc9cd831a204e57c91b0368bc61e3d"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U02/U02CollisionWorld.cpp",
+      "gitBlob": "33052956ac992a34a99c6d162eaeede0cbd0cf47"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U02/U02CollisionWorld.h",
+      "gitBlob": "75f4d087454059bf36e05dff0e4134996ce1371f"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U02/U02CombatComponent.cpp",
+      "gitBlob": "1cc65ab1d03fed154bbbddf1c36bdd6350032f2c"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U02/U02CombatComponent.h",
+      "gitBlob": "0cd617b640db8330e666397b978924768ad1b2d6"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U02/U02NetworkState.cpp",
+      "gitBlob": "0cadf975e310ef8252b4fde17bf62e250ea0046a"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U02/U02NetworkState.h",
+      "gitBlob": "687a0700c6a225b0f86d5def839b710188b50910"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U03/U03ActionModel.cpp",
+      "gitBlob": "c16bdc29612a83891f0695979180de6138eda16d"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U03/U03ActionModel.h",
+      "gitBlob": "b9bfa7f414aed6a50bb307ba0535af34e202e0bc"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U03/U03AnimationEditor.cpp",
+      "gitBlob": "60655996f3ca2b9020e3f2d3b415974d39c582fc"
+    },
+    {
+      "path": "Source/AnimeMMORPG/U03/U03AnimationEditor.h",
+      "gitBlob": "de21ebd0c51485e1def81c53b08f3fa54bd92689"
+    }
+  ]
+}
