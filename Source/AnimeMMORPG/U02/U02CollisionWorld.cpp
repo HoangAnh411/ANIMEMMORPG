@@ -61,7 +61,13 @@ void UU02CollisionWorld::TickDefenseFixture(double Now)
 #if !UE_BUILD_SHIPPING
     for(auto& E:DefenseEnemies)
     {
-        auto* A=E.Actor.Get();auto* Target=E.Target.Get();if(!A||!Target||Now<E.Next||Target->Vital->GetSnapshot().bDead)continue;
+        auto* A=E.Actor.Get();auto* Target=E.Target.Get();if(!A||!Target)continue;
+        const auto* Current=A->Combat->Model?A->Combat->Model->Current():nullptr;
+        const TCHAR* Phase=!Current?TEXT("waiting"):Now<Current->Start+Current->GetDefinition().ActiveStart?TEXT("STARTUP"):Now<Current->Start+Current->GetDefinition().ActiveEnd?TEXT("ACTIVE"):TEXT("recovery");
+        DrawDebugString(GetWorld(),A->GetActorLocation()+FVector(0,0,120),TEXT("B2 FIXTURE ")+E.Label+TEXT(" | ")+Phase,nullptr,FColor::White,0,true);
+        DrawDebugCapsule(GetWorld(),A->GetActorLocation(),96,42,FQuat::Identity,FColor::White,false,0,0,1.5);
+        if(Current)DrawDebugBox(GetWorld(),Feet(A)+FRotator(0,Current->Yaw,0).RotateVector(FVector(100,0,90)),FVector(100,60,90),FRotator(0,Current->Yaw,0).Quaternion(),FColor::Orange,false,0,0,Current->Startup(Now)?1.f:3.f);
+        if(Now<E.Next||Target->Vital->GetSnapshot().bDead)continue;
         E.Next=Now+.75;
         if(A->Combat->Model&&A->Combat->Model->Current())continue;
         FDefenseFixtureHit H;H.Duration=1.25;
