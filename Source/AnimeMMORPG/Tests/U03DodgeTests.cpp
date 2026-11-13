@@ -17,6 +17,7 @@ using namespace AnimeMMORPG;
 struct FU03B1Access
 {
  static void Hard(UU02CollisionWorld* W,AU01Character* C){UU02CollisionWorld::FDefenseFixtureHit H;H.Hard=U03::EHardCC::Stun;H.Duration=1.25;W->DefenseFixtureHits.Add({{C->NetworkPawnId,1},1},H);}
+ static void Slow(UU02CollisionWorld* W,AU01Character* C){UU02CollisionWorld::FDefenseFixtureHit H;H.Slow=.5;H.Duration=1.25;W->DefenseFixtureHits.Add({{C->NetworkPawnId,1},1},H);}
  static void Reverse(UU02CollisionWorld* W){Algo::Reverse(W->Sources);}
  static void HP(UU02VitalComponent* V,int32 Value){V->State.HP=Value;V->State.bDead=false;}
  static void Stale(UU02CombatComponent* C,uint64 Seq,uint64 Life){C->ServerCombat_Implementation(uint8(U03::ECommand::Dodge),Seq,0,0,C->GetCombatSnapshot().PawnId,Life,FVector2D(1,0));}
@@ -231,6 +232,16 @@ bool FDodgePairs::RunTest(const FString&)
    TestEqual(TEXT("one charge each"),Other->Combat->GetCombatSnapshot().DodgeCharges,1);W.ForwardErrorMessages(this);
   }
  }
+ return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FB2DodgeSlow,"AnimeMMORPG.U03.B2.SlowPreservesRetainedDodge",U03B1Flags)
+bool FB2DodgeSlow::RunTest(const FString&)
+{
+ FWorld W;const double S=W.Now();auto* Enemy=W.Spawn(FVector(350,0,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;FU03B1Access::Slow(W.Collision,Enemy);
+ Enemy->Combat->SubmitAttackIntent(1,0,180);const FVector Origin=W.P->GetActorLocation();W.Press(S);W.Collision->DrainAt(S+.25);
+ TestTrue(TEXT("incoming slow applied during dodge"),W.P->Combat->GetCombatSnapshot().SlowFraction==.5);
+ TestTrue(TEXT("slow preserves full300cm and direction"),W.P->GetActorLocation().Equals(Origin+FVector(300,0,0),1.));
+ W.Collision->DrainAt(S+.35);TestEqual(TEXT("after dodge slow affects ordinary movement"),W.P->GetU01Movement()->GetMaxSpeed(),250.f);
  return true;
 }
 #endif

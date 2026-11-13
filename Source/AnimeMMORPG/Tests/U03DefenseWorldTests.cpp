@@ -22,6 +22,10 @@ struct FU03B2Access
     static void Interrupt(UU02CollisionWorld* W,AU01Character* Source){W->FixtureInterruptActions.Add({{Source->NetworkPawnId,1},1});}
     static FTimelineModel* Model(AU01Character* C){return C->Combat->Model.Get();}
     static void HP(AU01Character* C,int32 HP){C->Vital->State.HP=HP;C->Vital->Publish(C->GetWorld()->GetTimeSeconds());}
+    static void Aim(AU01Character* C,double Yaw,uint64 Guard)
+    {C->Combat->ServerGuardAim_Implementation(Yaw,C->NetworkPawnId,C->Combat->GetCombatSnapshot().LifeGeneration,Guard);}
+    static void Intent(AU01Character* C,ECommand Kind,uint64 Seq,uint64 Life)
+    {C->Combat->ServerCombat_Implementation(uint8(Kind),Seq,0,0,C->NetworkPawnId,Life,FVector2D::ZeroVector);}
 };
 namespace
 {
@@ -107,6 +111,25 @@ bool FB2WorldAngle::RunTest(const FString&)
     FB2World W;W.Source->SetActorLocation(W.Target->GetActorLocation(),false,nullptr,ETeleportType::TeleportPhysics);W.Collision->RebaseResetSubject(W.Source);
     W.Command(W.Target,ECommand::Guard,1,0,180);W.Command(W.Source,ECommand::Attack,1,0,0);W.End();
     TestEqual(TEXT("coincident actual world uses reverse attack"),W.Collision->DamageResults.Last().Result.Defense,uint8(EDefense::Block));
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FB2WorldIdentity,"AnimeMMORPG.U03.B2.WorldAimCausalityOwnershipLifeAndMotor",B2WorldFlags)
+bool FB2WorldIdentity::RunTest(const FString&)
+{
+    for(bool Early:{false,true})
+    {
+        FB2World W;W.Command(W.Target,ECommand::Guard,1,0,0);W.Command(W.Source,ECommand::Attack,1,0,0);
+        W.End(Early?.15:.17);FU03B2Access::Aim(W.Target,180,W.Target->Combat->GetCombatSnapshot().GuardSequence);W.End(Early?.15:.18);W.End();
+        TestEqual(TEXT("aim only affects future hits"),W.Target->Vital->GetSnapshot().HP,Early?982:940);
+        TestEqual(TEXT("guard speed200"),W.Target->GetU01Movement()->GetMaxSpeed(),200.f);
+        W.Target->GetU01Movement()->SetSprintRequested(true);TestFalse(TEXT("guard cannot sprint"),W.Target->GetU01Movement()->IsSprinting());
+        W.Target->GetU01Movement()->PressJump(W.Start+.3);TestFalse(TEXT("guard cannot buffer jump"),W.Target->GetU01Movement()->HasBufferedJump(W.Start+.3));
+        const auto Old=W.Target->Combat->GetCombatSnapshot();W.Command(W.Target,ECommand::GuardRelease,2,.31,0);W.Command(W.Target,ECommand::Guard,3,.60,180);
+        FU03B2Access::Aim(W.Target,0,Old.GuardSequence);W.End(.61);TestEqual(TEXT("old guard aim identity rejected"),W.Target->Combat->GetCombatSnapshot().GuardYaw,180.);
+        FU03B2Access::Intent(W.Target,ECommand::Guard,3,Old.LifeGeneration);W.End(.62);TestEqual(TEXT("duplicate cannot reopen window"),W.Target->Combat->GetCombatSnapshot().ParryStart,W.Start+.60);
+        W.Target->Combat->ResetLabCombat();FU03B2Access::Intent(W.Target,ECommand::GuardRelease,100,Old.LifeGeneration);W.End(.63);
+        const auto New=W.Target->Combat->GetCombatSnapshot();TestEqual(TEXT("new life posture"),New.Posture,100.);TestEqual(TEXT("new life X"),New.XReadyAt,0.);TestFalse(TEXT("new life no replay guard"),New.bGuard);
+    }
     return true;
 }
 #endif
