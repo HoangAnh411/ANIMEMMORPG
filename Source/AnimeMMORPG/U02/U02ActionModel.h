@@ -39,7 +39,7 @@ struct FHitId
     bool operator==(const FHitId& Other) const { return Action == Other.Action && Target == Other.Target; }
 };
 inline uint32 GetTypeHash(const FActionId& Id)
-{return HashCombine(HashCombine(::GetTypeHash(Id.Source.Pawn),::GetTypeHash(Id.Source.Generation)),::GetTypeHash(Id.Sequence));}
+{return HashCombine(HashCombine(GetTypeHash(Id.Source.Pawn),::GetTypeHash(Id.Source.Generation)),::GetTypeHash(Id.Sequence));}
 bool HitLess(const FHitId& A, const FHitId& B);
 
 struct FAttackContext
