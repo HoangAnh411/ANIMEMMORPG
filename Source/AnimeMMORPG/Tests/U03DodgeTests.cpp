@@ -237,7 +237,7 @@ bool FDodgePairs::RunTest(const FString&)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FB2DodgeSlow,"AnimeMMORPG.U03.B2.SlowPreservesRetainedDodge",U03B1Flags)
 bool FB2DodgeSlow::RunTest(const FString&)
 {
- FWorld W;const double S=W.Now();auto* Enemy=W.Spawn(FVector(350,0,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;FU03B1Access::Slow(W.Collision,Enemy);
+ FWorld W;const double S=W.Now();auto* Enemy=W.Spawn(FVector(350,90,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;FU03B1Access::Slow(W.Collision,Enemy);
  Enemy->Combat->SubmitAttackIntent(1,0,180);const FVector Origin=W.P->GetActorLocation();W.Press(S);W.Collision->DrainAt(S+.25);
  TestTrue(TEXT("incoming slow applied during dodge"),W.P->Combat->GetCombatSnapshot().SlowFraction==.5);
  TestTrue(TEXT("slow preserves full300cm and direction"),W.P->GetActorLocation().Equals(Origin+FVector(300,0,0),1.));
