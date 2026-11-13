@@ -259,7 +259,7 @@ void UU02CombatComponent::OnRep_Snapshot(){ApplyMotorSnapshot();}
 void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponentTickFunction* Function)
 {
     Super::TickComponent(Dt,Type,Function);auto* C=Character();if(!C)return;const double Now=GetWorld()->GetTimeSeconds();
-    if(C->IsLocallyControlled()&&C->GetController()&&(Snapshot.bGuard||Snapshot.Phase==uint8(EPhase::Startup))&&Now-LastAimSend>=1./30)
+    if(C->IsPlayerControlled()&&C->IsLocallyControlled()&&C->GetController()&&(Snapshot.bGuard||Snapshot.Phase==uint8(EPhase::Startup))&&Now-LastAimSend>=1./30)
     {
         if(Snapshot.bGuard){if(Model)ServerGuardAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.GuardSequence);else ServerGuardAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.GuardSequence);}
         else {if(Model)ServerAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);else ServerAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);}
@@ -271,7 +271,7 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
     if(Snapshot.ParryFeedbackSequence!=PresentedDefenseEvent)
     {
         PresentedDefenseEvent=Snapshot.ParryFeedbackSequence;
-        if(Snapshot.ParryFeedbackSequence&&FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&C->IsLocallyControlled())
+        if(Snapshot.ParryFeedbackSequence&&FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&C->IsPlayerControlled()&&C->IsLocallyControlled())
         {
             ParryTone=NewObject<USoundWaveProcedural>(this);ParryTone->SetSampleRate(24000);ParryTone->NumChannels=1;ParryTone->Duration=.24f;
             TArray<int16> PCM;PCM.SetNumZeroed(5760);
@@ -282,7 +282,7 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
     if(Snapshot.bGuard)DrawDebugBox(GetWorld(),C->GetActorLocation()+FRotator(0,Snapshot.GuardYaw,0).Vector()*45,FVector(3,35,55),FRotator(0,Snapshot.GuardYaw,0).Quaternion(),FColor::Blue,false,0,0,2);
     if(FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&Snapshot.ParryFeedbackSequence)
         DrawDebugCircle(GetWorld(),C->GetActorLocation(),65+30*FMath::Clamp(FeedbackNow-Snapshot.ParryFeedbackTime,0.,1.2),32,FColor::White,false,0,0,3,FVector::ForwardVector,FVector::RightVector,false);
-    if(C->IsLocallyControlled()&&GEngine)
+    if(C->IsPlayerControlled()&&C->IsLocallyControlled()&&GEngine)
     {
         FString AttackKey=TEXT("LMB");if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))AttackKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Attack].GetDisplayName().ToString();
         const TCHAR* Reasons[]={TEXT("Accepted"),TEXT("Queued"),TEXT("Replaced"),TEXT("Stale"),TEXT("Invalid"),TEXT("Locked"),TEXT("Busy"),TEXT("Energy"),TEXT("Cooldown"),TEXT("Unsupported")};

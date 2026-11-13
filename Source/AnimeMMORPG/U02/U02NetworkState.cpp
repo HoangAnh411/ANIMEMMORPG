@@ -45,7 +45,7 @@ void AU02NetworkState::Tick(float Dt)
     {if(HasAuthority())ProcessFixture();ProbeElapsed+=Dt;if(ProbeElapsed>=.1f){ProbeElapsed=0;EmitState();}}
     if(GetNetMode()!=NM_DedicatedServer&&GEngine)
     {
-        AU01Character* Local=nullptr;for(TActorIterator<AU01Character> It(GetWorld());It;++It)if(It->IsLocallyControlled())Local=*It;
+        AU01Character* Local=nullptr;for(TActorIterator<AU01Character> It(GetWorld());It;++It)if(It->IsPlayerControlled()&&It->IsLocallyControlled())Local=*It;
         if(Local){const auto V=Local->Vital->GetSnapshot();GEngine->AddOnScreenDebugMessage(290001,.2f,FColor::White,FString::Printf(TEXT("U02-F | HP %d/%d | shield %d | server confirmed %d | %s"),V.HP,V.MaxHP,V.Shield,Results.Num(),CritMode==0?TEXT("server crit5%"):CritMode==1?TEXT("FIXTURE CRIT OFF"):TEXT("FIXTURE CRIT FORCED")));}
         if(!Results.IsEmpty()){const auto& R=Results.Last();const double Now=GetWorld()->GetGameState()?GetWorld()->GetGameState()->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds();bool CurrentLife=false;for(TActorIterator<AU02LabDummy> It(GetWorld());It;++It)if(It->NetworkPawnId==R.Target&&It->Vital->GetSnapshot().Generation==R.TargetLife)CurrentLife=true;if(CurrentLife&&Now-R.Timestamp<1.5)GEngine->AddOnScreenDebugMessage(290002,.2f,FColor::Green,FString::Printf(TEXT("CONFIRMED action %llu | damage %d | absorbed %d | HP %d%s%s"),R.Action,R.Damage,R.Absorbed,R.HP,R.Crit?TEXT(" CRIT"):TEXT(""),R.Death?TEXT(" DEFEATED"):TEXT("")));}
     }

@@ -345,7 +345,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     if(!Result.bApplied)return false;
     DamageResults.Add({C,Result,Roll});
     for(TActorIterator<AU02NetworkState> It(GetWorld());It;++It)It->Confirm(DamageResults.Last());
-    if(const auto* Pawn=Cast<APawn>(SourceVital->GetOwner()))if(Pawn->IsLocallyControlled())HUDTarget=TargetVital->GetOwner();
+    if(const auto* Pawn=Cast<APawn>(SourceVital->GetOwner()))if(Pawn->IsPlayerControlled()&&Pawn->IsLocallyControlled())HUDTarget=TargetVital->GetOwner();
     Confirmed.Add(C);
     for(auto& D:DebugHurts)if(D.Hit==C.Id&&D.Hurtbox==C.HurtboxId)D.Result=TEXT("CONFIRMED");
     FString SHA;FParse::Value(FCommandLine::Get(),TEXT("U02SourceSHA="),SHA);
