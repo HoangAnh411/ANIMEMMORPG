@@ -182,7 +182,7 @@ bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
     const bool Lifecycle = Reason == ECutoff::Death || Reason == ECutoff::LostGround || Reason == ECutoff::HardCC;
     if (Lifecycle)
     {
-        if (Reason == ECutoff::Death) bDead = true;
+        if (Reason == ECutoff::Death){bDead = true;DefenseState.EndHard(Now);DefenseState.Slows.Empty();}
         else if(Reason==ECutoff::LostGround)bGrounded = false;
         DefenseState.DropGuard();
         // Lifecycle state and combo invalidation do not depend on an old action's window.

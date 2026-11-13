@@ -53,7 +53,7 @@ void UU02CollisionWorld::StartDefenseFixture(const FString& Label)
         auto* Controller=GetWorld()->SpawnActor<AAIController>();Controller->bSetControlRotationFromPawnOrientation=false;Controller->Possess(Enemy);Controller->SetControlRotation((Target->GetActorLocation()-P).Rotation());
         Enemy->Tags.Add(FName(*(TEXT("B2_FIXTURE_")+Label)));DefenseEnemies.Add({Enemy,Target,Label,GetWorld()->GetTimeSeconds()+1.});
     }
-    UE_LOG(LogU02Collision,Display,TEXT("U03B2_FIXTURE label=%s duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"),*Label);
+    UE_LOG(LogU02Collision,Display,TEXT("U03B2_FIXTURE label=%s start=%.17g duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"),*Label,GetWorld()->GetTimeSeconds());
 #endif
 }
 void UU02CollisionWorld::TickDefenseFixture(double Now)
@@ -349,7 +349,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
         *SHA,C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,C.RawDamage,SourceVital->GetAttackFactor(),Roll,Result.bCrit,Result.Damage,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied,*Order);
     // Native labelled fixture only: effect is attached to a real geometry-confirmed direct hit.
     if(FixtureInterruptActions.Contains(C.Id.Action) && !Result.bDied && Defense==EDefense::Hit)
-        if(auto* TargetCombat=TargetVital->GetOwner()->FindComponentByClass<UU02CombatComponent>())
+        if(TargetCombat)
             ApplyLifecycle(TargetCombat,C.TimestampSeconds,AnimeMMORPG::U03::ECutoff::Interrupt,false);
     if(const auto* Fixture=DefenseFixtureHits.Find(C.Id.Action))
         if(TargetCombat && TargetCombat->Model && !Result.bDied && Defense==EDefense::Hit)

@@ -95,4 +95,17 @@ bool FB2WorldCausality::RunTest(const FString&)
     TestEqual(TEXT("late guard/release cannot rewrite HP"),W.Target->Vital->GetSnapshot().HP,Before);TestEqual(TEXT("past hit unguarded"),Before,940);
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FB2WorldAngle,"AnimeMMORPG.U03.B2.WorldGuardAnglesAndHitTimeAim",B2WorldFlags)
+bool FB2WorldAngle::RunTest(const FString&)
+{
+    for(double Angle:{-180.,-60.00001,-60.,0.,60.,60.00001,180.})
+    {
+        FB2World W;W.Command(W.Target,ECommand::Guard,1,0,180+Angle);W.Command(W.Source,ECommand::Attack,1,0,0);W.End();
+        TestEqual(TEXT("world inclusive yaw boundary"),W.Collision->DamageResults.Last().Result.Defense,uint8(FMath::Abs(Angle)<=60?EDefense::Block:EDefense::Hit));
+    }
+    FB2World W;W.Source->SetActorLocation(W.Target->GetActorLocation(),false,nullptr,ETeleportType::TeleportPhysics);W.Collision->RebaseResetSubject(W.Source);
+    W.Command(W.Target,ECommand::Guard,1,0,180);W.Command(W.Source,ECommand::Attack,1,0,0);W.End();
+    TestEqual(TEXT("coincident actual world uses reverse attack"),W.Collision->DamageResults.Last().Result.Defense,uint8(EDefense::Block));
+    return true;
+}
 #endif

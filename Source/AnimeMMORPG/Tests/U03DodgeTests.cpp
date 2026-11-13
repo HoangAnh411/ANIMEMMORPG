@@ -16,6 +16,7 @@
 using namespace AnimeMMORPG;
 struct FU03B1Access
 {
+ static void Hard(UU02CollisionWorld* W,AU01Character* C){UU02CollisionWorld::FDefenseFixtureHit H;H.Hard=U03::EHardCC::Stun;H.Duration=1.25;W->DefenseFixtureHits.Add({{C->NetworkPawnId,1},1},H);}
  static void Reverse(UU02CollisionWorld* W){Algo::Reverse(W->Sources);}
  static void HP(UU02VitalComponent* V,int32 Value){V->State.HP=Value;V->State.bDead=false;}
  static void Stale(UU02CombatComponent* C,uint64 Seq,uint64 Life){C->ServerCombat_Implementation(uint8(U03::ECommand::Dodge),Seq,0,0,C->GetCombatSnapshot().PawnId,Life,FVector2D(1,0));}
@@ -179,6 +180,34 @@ bool FDodgeMidHit::RunTest(const FString&)
    if(!Short){Reference=AtHit;ReferenceTime=ActualTime;}else{TestTrue(TEXT("long and short update same contact position"),AtHit.Equals(Reference,1.e-6));TestEqual(TEXT("long and short update same hit time"),ActualTime,ReferenceTime);}
    if(Lethal){W.Collision->DrainAt(S+1.);TestTrue(TEXT("lethal cutoff preserves intermediate position"),W.P->GetActorLocation().Equals(AtHit,1.e-6));}
    AddInfo(FString::Printf(TEXT("U03B1_R1_MID step=%d lethal=%d short=%d expected=%.17g actual=%.17g position=%s"),Step,Lethal,Short,HitTime,ActualTime,*AtHit.ToString()));W.ForwardErrorMessages(this);
+  }
+ }
+ return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FB2DodgeMidHard,"AnimeMMORPG.U03.B2.HardCCMidWallAndStepTrajectory",U03B1Flags)
+bool FB2DodgeMidHard::RunTest(const FString&)
+{
+ for(bool Step:{false,true})
+ {
+  FVector Reference;double ReferenceTime=0;
+  for(bool Short:{false,true})
+  {
+   FWorld W;const double S=W.Now();W.Box(FVector(Step?143:53,0,Step?15:150),FVector(Step?100:10,20,Step?15:150));
+   auto* Enemy=W.Spawn(FVector(95.25,-150,98),2);W.Collision->bCharacterFixtureTargets=true;W.Collision->FixtureCritRoll=.5;FU03B1Access::Hard(W.Collision,Enemy);
+   const double DodgeStart=S+(Step?.158:.159);
+   Enemy->Combat->SubmitAttackIntent(1,0,90);W.Collision->DrainAt(S);W.Press(DodgeStart);
+   auto* M=W.P->GetU01Movement();const auto Snapshot=W.P->Combat->GetCombatSnapshot();M->PlanDodge(DodgeStart,DodgeStart+1./240.,FVector(1,0,0),Snapshot.LifeGeneration,Snapshot.DodgeSequence,{W.P});
+   const double HitTime=S+.16;const FVector Expected=M->DodgePositionAt(HitTime);FVector AtHit;double ActualTime=-1;
+   W.Collision->OnGeometryConfirmed.AddLambda([&](const U02::FHitCandidate& Hit){if(Hit.Id.Target.Pawn==W.P->NetworkPawnId){ActualTime=Hit.TimestampSeconds;AtHit=W.P->GetActorLocation();}});
+   if(Short)for(double T=DodgeStart+.0003;T<HitTime;T+=.0003)W.Collision->DrainAt(T);
+   W.Collision->DrainAt(HitTime);
+   TestTrue(TEXT("contact exactly at incoming active entry, not chord crossing later"),ActualTime==HitTime);
+   TestTrue(TEXT("contact geometry equals actual committed prefix"),AtHit.Equals(Expected,1.e-6));
+   TestEqual(TEXT("real damage, no iframe"),W.P->Vital->GetSnapshot().HP,940);
+   if(Step)TestTrue(TEXT("hit occurs during vertical StepUp leg"),Expected.Z>98.2);
+   if(!Short){Reference=AtHit;ReferenceTime=ActualTime;}else{TestTrue(TEXT("long and short update same contact position"),AtHit.Equals(Reference,1.e-6));TestEqual(TEXT("long and short update same hit time"),ActualTime,ReferenceTime);}
+   {W.Collision->DrainAt(S+1.);TestTrue(TEXT("hard CC cutoff preserves intermediate position"),W.P->GetActorLocation().Equals(AtHit,1.e-6));}
+   AddInfo(FString::Printf(TEXT("U03B2_HARD_MID step=%d hardCC=1 short=%d expected=%.17g actual=%.17g position=%s"),Step,Short,HitTime,ActualTime,*AtHit.ToString()));W.ForwardErrorMessages(this);
   }
  }
  return true;

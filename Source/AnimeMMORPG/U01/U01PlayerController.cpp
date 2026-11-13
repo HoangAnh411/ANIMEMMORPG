@@ -211,6 +211,8 @@ void AU01PlayerController::ReconcilePhysicalReleases()
     for (FKey Key:Keys)
         if (!PhysicalDown(Key))
         {
+            if(ObservedKeys.Contains(Key)&&AnimeMMORPG::U01::CanonicalKey(Key)==ControlKey(AnimeMMORPG::U01::Guard))
+                if(auto* C=Cast<AU01Character>(GetPawn());C&&C->Combat)C->Combat->SubmitCombatIntent(AnimeMMORPG::U03::ECommand::GuardRelease,++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw);
             ReleaseGate.Up(Key);ObservedKeys.Remove(Key);
         }
     bool JumpHeld=false;for(FKey Key:AnimeMMORPG::U01::PhysicalKeys(ControlKey(AnimeMMORPG::U01::Jump)))JumpHeld|=PhysicalDown(Key);
