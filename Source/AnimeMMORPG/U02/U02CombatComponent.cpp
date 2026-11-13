@@ -259,7 +259,7 @@ void UU02CombatComponent::OnRep_Snapshot(){ApplyMotorSnapshot();}
 void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponentTickFunction* Function)
 {
     Super::TickComponent(Dt,Type,Function);auto* C=Character();if(!C)return;const double Now=GetWorld()->GetTimeSeconds();
-    if(C->IsPlayerControlled()&&C->IsLocallyControlled()&&C->GetController()&&(Snapshot.bGuard||Snapshot.Phase==uint8(EPhase::Startup))&&Now-LastAimSend>=1./30)
+    if(C->IsLocallyControlled()&&C->GetController()&&(Snapshot.bGuard||Snapshot.Phase==uint8(EPhase::Startup))&&Now-LastAimSend>=1./30)
     {
         if(Snapshot.bGuard){if(Model)ServerGuardAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.GuardSequence);else ServerGuardAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.GuardSequence);}
         else {if(Model)ServerAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);else ServerAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);}

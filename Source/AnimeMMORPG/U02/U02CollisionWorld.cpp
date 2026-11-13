@@ -79,6 +79,7 @@ void UU02CollisionWorld::TickDefenseFixture(double Now)
         if(E.Label==TEXT("launch"))H.Hard=EHardCC::Launch;
         if(E.Label==TEXT("grab"))H.Hard=EHardCC::Grab;
         const double Yaw=(Target->GetActorLocation()-A->GetActorLocation()).Rotation().Yaw;
+        if(auto* Controller=A->GetController())Controller->SetControlRotation(FRotator(0,Yaw,0));
         A->Combat->SubmitAttackIntent(A->Combat->GetLastCommand()+1,Now,Yaw);
         DrainAt(Now);
         if(const auto* Action=A->Combat->Model->Current())DefenseFixtureHits.Add(Action->Identity,H);
