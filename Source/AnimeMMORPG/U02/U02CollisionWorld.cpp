@@ -325,6 +325,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
         check(TargetCombat->Model->Time()==C.TimestampSeconds);
         Defense=TargetCombat->Model->DefendAtBarrier(C.ToSource,C.AttackDirection,C.bBlockable,C.bParryable);
         if(Defense!=EDefense::Hit){++TargetCombat->Snapshot.DefenseEvent;TargetCombat->Snapshot.DefenseResult=uint8(Defense);TargetCombat->Snapshot.DefenseEventTime=C.TimestampSeconds;}
+        if(Defense==EDefense::Parry){++TargetCombat->Snapshot.ParryFeedbackSequence;TargetCombat->Snapshot.ParryFeedbackTime=C.TimestampSeconds;}
     }
     double Roll=-1;FDamageResult Result;
     if(Defense==EDefense::Parry)

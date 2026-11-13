@@ -209,7 +209,7 @@ bool UU02CombatComponent::ResetLabCombat()
     if(!Model||!Character()->HasAuthority())return false;
     const double Now=FMath::Max(double(GetWorld()->GetTimeSeconds()),Model->Time());auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->DrainAt(Now);
     auto Life=Model->GetLife();++Life.Generation;if(!Model->ResetLife(Life,Now))return false;
-    QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;Snapshot.DefenseEvent=0;Snapshot.DefenseResult=0;Snapshot.DefenseEventTime=0;
+    QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;Snapshot.DefenseEvent=0;Snapshot.DefenseResult=0;Snapshot.DefenseEventTime=0;Snapshot.ParryFeedbackSequence=0;Snapshot.ParryFeedbackTime=0;
     OwnerAdmission.PendingCommand=0;OwnerAdmission.PendingExpires=0;
     if(Character()->Vital)Character()->Vital->ResetLabCombat(Life.Generation);
     Publish(Now,true);W->RebaseResetSubject(Character());Trace(TEXT("Reset"),Now);return true;
@@ -268,10 +268,10 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
     if(!Model)ApplyMotorSnapshot();
     const auto* FeedbackClock=GetWorld()->GetGameState();const double FeedbackNow=FeedbackClock?FeedbackClock->GetServerWorldTimeSeconds():Now;
     if(PresentedDefenseLife!=Snapshot.LifeGeneration){PresentedDefenseLife=Snapshot.LifeGeneration;PresentedDefenseEvent=0;}
-    if(Snapshot.DefenseEvent!=PresentedDefenseEvent)
+    if(Snapshot.ParryFeedbackSequence!=PresentedDefenseEvent)
     {
-        PresentedDefenseEvent=Snapshot.DefenseEvent;
-        if(Snapshot.DefenseResult==uint8(AnimeMMORPG::U03::EDefense::Parry)&&FeedbackNow-Snapshot.DefenseEventTime<1.2&&C->IsLocallyControlled())
+        PresentedDefenseEvent=Snapshot.ParryFeedbackSequence;
+        if(Snapshot.ParryFeedbackSequence&&FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&C->IsLocallyControlled())
         {
             ParryTone=NewObject<USoundWaveProcedural>(this);ParryTone->SetSampleRate(24000);ParryTone->NumChannels=1;ParryTone->Duration=.24f;
             TArray<int16> PCM;PCM.SetNumZeroed(5760);
@@ -280,8 +280,8 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
         }
     }
     if(Snapshot.bGuard)DrawDebugBox(GetWorld(),C->GetActorLocation()+FRotator(0,Snapshot.GuardYaw,0).Vector()*45,FVector(3,35,55),FRotator(0,Snapshot.GuardYaw,0).Quaternion(),FColor::Blue,false,0,0,2);
-    if(FeedbackNow-Snapshot.DefenseEventTime<1.2&&Snapshot.DefenseEvent&&Snapshot.DefenseResult==uint8(AnimeMMORPG::U03::EDefense::Parry))
-        DrawDebugCircle(GetWorld(),C->GetActorLocation(),65+30*FMath::Clamp(FeedbackNow-Snapshot.DefenseEventTime,0.,1.2),32,FColor::White,false,0,0,3,FVector::ForwardVector,FVector::RightVector,false);
+    if(FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&Snapshot.ParryFeedbackSequence)
+        DrawDebugCircle(GetWorld(),C->GetActorLocation(),65+30*FMath::Clamp(FeedbackNow-Snapshot.ParryFeedbackTime,0.,1.2),32,FColor::White,false,0,0,3,FVector::ForwardVector,FVector::RightVector,false);
     if(C->IsLocallyControlled()&&GEngine)
     {
         FString AttackKey=TEXT("LMB");if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))AttackKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Attack].GetDisplayName().ToString();

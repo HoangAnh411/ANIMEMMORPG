@@ -65,6 +65,8 @@ struct FU02RepCombatSnapshot
     UPROPERTY() uint64 DefenseEvent=0;
     UPROPERTY() uint8 DefenseResult=0;
     UPROPERTY() double DefenseEventTime=0;
+    UPROPERTY() uint64 ParryFeedbackSequence=0;
+    UPROPERTY() double ParryFeedbackTime=0;
 };
 
 USTRUCT()

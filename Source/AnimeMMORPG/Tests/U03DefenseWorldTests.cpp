@@ -28,12 +28,12 @@ namespace
 constexpr auto B2WorldFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
 struct FB2World:FTestWorldWrapper
 {
-    AU01Character *Source=nullptr,*Target=nullptr;UU02CollisionWorld* Collision=nullptr;double Start=0;
-    FB2World()
+    AU01Character *Source=nullptr,*Target=nullptr,*Third=nullptr;UU02CollisionWorld* Collision=nullptr;double Start=0;
+    FB2World(bool Multi=false)
     {
         CreateTestWorld(EWorldType::Game);auto* W=GetTestWorld();W->GetWorldSettings()->DefaultGameMode=AGameModeBase::StaticClass();
         auto* Floor=W->SpawnActor<AActor>();auto* B=NewObject<UBoxComponent>(Floor);Floor->SetRootComponent(B);B->SetBoxExtent(FVector(10000,10000,50));B->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);B->SetCollisionResponseToAllChannels(ECR_Block);B->RegisterComponent();Floor->SetActorLocation(FVector(0,0,-50));
-        Source=Spawn(FVector(0,0,98),101);Target=Spawn(FVector(150,0,98),102);BeginPlayInTestWorld();for(int I=0;I<30;++I)TickTestWorld(1.f/60);
+        Source=Spawn(FVector(0,0,98),101);Target=Spawn(FVector(150,0,98),102);if(Multi)Third=Spawn(FVector(0,90,98),103);BeginPlayInTestWorld();for(int I=0;I<30;++I)TickTestWorld(1.f/60);
         Collision=W->GetSubsystem<UU02CollisionWorld>();Collision->FixtureCritRoll=.5;Collision->bCharacterFixtureTargets=true;Start=W->GetTimeSeconds();
     }
     AU01Character* Spawn(FVector P,uint32 Id)
@@ -82,8 +82,9 @@ bool FB2WorldCausality::RunTest(const FString&)
 {
     for(bool Reverse:{false,true})for(bool Short:{false,true})
     {
-        FB2World W;auto* Other=W.Spawn(FVector(0,35,98),103);W.Collision->DrainAt(W.Start);
-        W.Source->Combat->SubmitAttackIntent(1,0,0);Other->Combat->SubmitAttackIntent(1,0,0);W.Collision->DrainAt(W.Start);
+        FB2World W(true);auto* Other=W.Third;
+        W.Source->Combat->SubmitAttackIntent(1,0,0);Other->Combat->SubmitAttackIntent(1,0,(W.Target->GetActorLocation()-Other->GetActorLocation()).Rotation().Yaw);W.Collision->DrainAt(W.Start);
+        TestTrue(TEXT("both attackers admitted before comparison"),W.Source->Combat->GetCombatSnapshot().bLocked&&Other->Combat->GetCombatSnapshot().bLocked);
         if(Reverse)FU03B2Access::Reverse(W.Collision);
         W.Command(W.Target,ECommand::Guard,1,.10,180);
         if(Short)for(int I=11;I<30;++I)W.End(I*.01);W.End();
