@@ -56,7 +56,7 @@ try:
   def combat():return c.metrics()['combat']
   tap('Q');until(lambda:combat()['definition']==3 and combat()['phase']==1);tap('Q');until(lambda:combat()['feintSequence']==1)
   compare(identity,'Client'+str(ix)+'Feint');ps=owned(identity)
-  keys=['action','definition','qReady','eReady','feintSequence','feintAction','feintLockEnd','feintLastSuccess']
+  keys=['action','definition','definitionVersion','qReady','eReady','feintSequence','feintAction','feintLockEnd','feintLastSuccess']
   check('Three-process Q/Feint identity and deadlines',all(all(p[k]==ps[0][k] for k in keys) for p in ps));check('Feint spends only cast energy',all(80<=p['energy']<84 for p in ps))
   reset();tap('E');until(lambda:combat()['definition']==4);compare(identity,'Client'+str(ix)+'E');ps=owned(identity)
   check('Three-process E definition/raw/cooldown',all(p['definition']==4 and p['raw']==80 and p['eReady']==ps[0]['eReady'] and 75<=p['energy']<79 for p in ps))

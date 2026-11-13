@@ -118,4 +118,22 @@ bool FC1Assets::RunTest(const FString&)
     TestEqual(TEXT("runtime ignores root motion"),GetDefault<UU01AnimInstance>()->RootMotionMode,ERootMotionMode::IgnoreRootMotion);
     return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC1Priority,"AnimeMMORPG.U03.C1.SequencePriorityAndRejectedReplacement",SkillFlags)
+bool FC1Priority::RunTest(const FString&)
+{
+    FAdmissionContext C;C.bDodgeEnabled=C.bDefenseEnabled=true;
+    FTimelineModel M(SkillLife());TArray<FActiveInterval> Out;SkillPress(M,1,0,ECommand::Q,Out,C);
+    const auto R=M.SubmitBatchUnopposed({SkillIntent(2,.10,ECommand::E),SkillIntent(3,.10,ECommand::Q)},C,Out);
+    TestEqual(TEXT("Q classified Feint before E"),R[0].Sequence,uint64(3));TestEqual(TEXT("Feint admitted"),R[0].Result,EAdmission::Accepted);
+    TestEqual(TEXT("lower-sequence E validated before priority, then locked"),R[1].Result,EAdmission::Locked);TestEqual(TEXT("no E spend"),M.Resources().Energy(),80.);
+    TestEqual(TEXT("client cannot declare Feint after cancellation"),SkillPress(M,4,.31,ECommand::Feint,Out,C),EAdmission::Unsupported);
+    FTimelineModel D(SkillLife());Out.Empty();SkillPress(D,1,0,ECommand::Dodge,Out,C);SkillPress(D,2,.60,ECommand::Dodge,Out,C);
+    TestEqual(TEXT("zero dodge charges"),D.Dodge().Charges,0);SkillPress(D,3,.95,ECommand::Q,Out,C);const uint64 Action=D.Current()->Identity.Sequence;
+    TestEqual(TEXT("empty dodge rejection"),SkillPress(D,4,.96,ECommand::Dodge,Out,C),EAdmission::Resource);TestEqual(TEXT("failed replacement preserves skill"),D.Current()->Identity.Sequence,Action);TestEqual(TEXT("failed replacement preserves skill spend"),D.Resources().Energy(),80.);
+    FTimelineModel G(SkillLife());Out.Empty();SkillPress(G,1,0,ECommand::Guard,Out,C);
+    const auto Released=G.SubmitBatchUnopposed({SkillIntent(2,.10,ECommand::Q),SkillIntent(3,.10,ECommand::GuardRelease)},C,Out);
+    TestEqual(TEXT("release before Q press"),Released[0].Sequence,uint64(3));TestEqual(TEXT("explicit release permits Q"),Released[1].Result,EAdmission::Accepted);
+    return true;
+}
 #endif
