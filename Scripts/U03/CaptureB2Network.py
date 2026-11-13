@@ -40,7 +40,7 @@ def command(label):
 def owned(identity):
  return [next(p for p in v['pawns'] if p['id']==identity) for v in states()]
 def compare(identity,label):
- time.sleep(.4);ps=owned(identity);keys=['life','guard','posture','hardCC','hardEnd','xReady','parryReady','defenseResult','defenseEvent']
+ time.sleep(.4);ps=owned(identity);keys=['life','guardSequence','guard','posture','hardCC','hardEnd','xReady','parryReady','defenseResult','defenseEvent']
  check(label+' identity/state agreement across server and both clients',all(all(p[k]==ps[0][k] for k in keys) and p['vital']['hp']==ps[0]['vital']['hp'] for p in ps));m['stages'].append({'stage':label,'states':states(),'samples':ps})
 def reset():command('b2-off');command('hit');time.sleep(.3)
 try:
