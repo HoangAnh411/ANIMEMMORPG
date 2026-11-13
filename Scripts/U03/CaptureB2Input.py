@@ -1,6 +1,7 @@
 """B2 package: guarded physical defense input and wall-clock video; enemies only via fixture."""
 import argparse,json,time,threading,re,cv2,numpy as np
 from pathlib import Path
+from datetime import datetime,timezone
 from PIL import ImageGrab
 from B2Client import B2Client,u
 p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
@@ -30,6 +31,8 @@ def reset():
 def fixture(label):
  console('U03B2Fixture '+label)
  raw=c.log.read_text(encoding='utf-8-sig');hits=re.findall(r'U03B2_FIXTURE label='+label+r' start=([0-9.]+)',raw);assert hits
+ line=[l for l in raw.splitlines() if 'U03B2_FIXTURE label='+label+' start=' in l][-1]
+ global fixture_wall;fixture_wall=datetime.strptime(re.search(r'\[([0-9.:-]+)\]',line).group(1),'%Y.%m.%d-%H.%M.%S:%f').replace(tzinfo=timezone.utc).timestamp()
  return float(hits[-1])
 def b():return c.metrics()['combat']
 try:
@@ -40,7 +43,7 @@ try:
  if c.metrics()['controlState']!=0:c.click(640,305);wait(.4)
  check('Actual Resume enters Playing',c.metrics()['controlState']==0)
  reset();c.press('RMB',True);until(lambda:b()['guard']);wait(.7);check('Held guard does not reopen parry',not b()['parryOpen']);c.press('RMB',False);until(lambda:not b()['guard']);check('Physical RMB release drops guard',not b()['guard'])
- reset();s=fixture('block');until(lambda:c.metrics()['worldSeconds']>=s+1.045);c.press('RMB',True);until(lambda:b()['defenseResult']==2);check('Physical parry confirmed',b()['posture']==100);until(lambda:b()['defenseResult']==1);check('Same held input becomes ordinary block',b()['posture']==75);m['stages'].append({'stage':'ParryThenBlock','metrics':c.metrics()});c.press('RMB',False);console('U03B2Fixture off')
+ reset();s=fixture('block');until(lambda:time.time()>=fixture_wall+1.10);c.press('RMB',True);until(lambda:b()['defenseResult']==2);check('Physical parry confirmed',b()['posture']==100);until(lambda:b()['defenseResult']==1);check('Same held input becomes ordinary block',b()['posture']==75);m['stages'].append({'stage':'ParryThenBlock','metrics':c.metrics()});c.press('RMB',False);console('U03B2Fixture off')
  reset();fixture('unparryable');c.press('RMB',True);until(lambda:b()['hardCC']==5,6);check('Four held blocks break guard',not b()['guard'] and b()['posture']==0);tap('X');until(lambda:b()['hardCC']==0);check('Physical X clears break and refills posture',b()['posture']==100 and b()['xReady']>c.metrics()['worldSeconds']+29);check('X grants immunity',b()['immuneEnd']>c.metrics()['worldSeconds']);m['stages'].append({'stage':'BreakX','metrics':c.metrics()});c.press('RMB',False);console('U03B2Fixture off')
  reset();fixture('grab');until(lambda:b()['hardCC']==4);tap('X');until(lambda:b()['hardCC']==0);check('Physical X clears labelled grab',b()['xReady']>c.metrics()['worldSeconds']);console('U03B2Fixture off')
  reset();c.press('RMB',True);until(lambda:b()['guard']);tap('Escape');wait(.3);check('Menu forcibly drops guard',not b()['guard']);c.click(640,305);wait(.3);check('Held RMB across Resume does not rearm',not b()['guard']);c.press('RMB',False);wait(.1);c.press('RMB',True);until(lambda:b()['guard']);c.press('RMB',False)
@@ -55,5 +58,6 @@ finally:
  stop.set()
  if worker:worker.join()
  if writer:writer.release()
+ if c.ime and c.metrics()['controlState']==0:tap('Escape');wait(.2)
  c.finish();m.update(captureSeconds=last,videoSeconds=encoded/30,encodedFPS=30,externalInputMethodRestored=not c.ime);(a.out/'input.json').write_text(json.dumps(m,indent=2),encoding='utf-8')
 print(json.dumps({'completed':m['completed'],'checks':len(m['checks'])}))

@@ -1,5 +1,6 @@
 #include "U01PlayerController.h"
 #include "U01Character.h"
+#include "U01PhysicalInput.h"
 #include "U02/U02CombatComponent.h"
 #include "U01AnimInstance.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -39,14 +40,7 @@ namespace
 bool PhysicalDown(FKey Key)
 {
 #if PLATFORM_WINDOWS
-    uint32 Code=0;const uint32* KeyCode=nullptr;const uint32* CharCode=nullptr;
-    FInputKeyManager::Get().GetCodesFromKey(Key,KeyCode,CharCode);
-    if(KeyCode)Code=*KeyCode;
-    if(Key==EKeys::LeftMouseButton)Code=VK_LBUTTON;
-    if(Key==EKeys::RightMouseButton)Code=VK_RBUTTON;
-    if(Key==EKeys::MiddleMouseButton)Code=VK_MBUTTON;
-    if(Key==EKeys::ThumbMouseButton)Code=VK_XBUTTON1;
-    if(Key==EKeys::ThumbMouseButton2)Code=VK_XBUTTON2;
+    const uint32 Code=AnimeMMORPG::U01::WindowsVirtualKey(Key);
     return Code && (::GetAsyncKeyState(Code)&0x8000)!=0;
 #else
     return false;

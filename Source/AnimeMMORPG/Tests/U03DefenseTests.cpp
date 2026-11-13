@@ -2,6 +2,7 @@
 #include "Misc/AutomationTest.h"
 #include "U03/U03ActionModel.h"
 #include "U02/U02VitalModel.h"
+#include "U01/U01PhysicalInput.h"
 using namespace AnimeMMORPG::U03;
 namespace { constexpr auto B2Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter; }
 
@@ -93,6 +94,18 @@ bool FB2Admission::RunTest(const FString&)
     auto R=M.SubmitBatchUnopposed({{1,Life,ECommand::Escape,0,0}},C,Out);TestTrue(TEXT("airborne X"),R[0].Result==EAdmission::Accepted);
     TestFalse(TEXT("pending cleared"),M.Defense().bPendingLaunch);TestEqual(TEXT("no energy cost"),M.Resources().Energy(),100.);
     U02::FVitalModel V;const auto Damage=V.Apply(61,1,.01,0,.30);TestEqual(TEXT("crit once block before round"),Damage.Damage,U02::FVitalModel::Calculate(61,1,0,true,.30));
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FB2LetterRebind,"AnimeMMORPG.U03.B2.PhysicalRebindLetterReconciliation",B2Flags)
+bool FB2LetterRebind::RunTest(const FString&)
+{
+#if PLATFORM_WINDOWS
+    TestEqual(TEXT("Guard letter C has OS hold-state code"),AnimeMMORPG::U01::WindowsVirtualKey(EKeys::C),uint32(0x43));
+    TestEqual(TEXT("X rebind letter Z has OS hold-state code"),AnimeMMORPG::U01::WindowsVirtualKey(EKeys::Z),uint32(0x5a));
+    TestEqual(TEXT("W mapping remains valid"),AnimeMMORPG::U01::WindowsVirtualKey(EKeys::W),uint32(0x57));
+    TestEqual(TEXT("RMB mapping remains valid"),AnimeMMORPG::U01::WindowsVirtualKey(EKeys::RightMouseButton),uint32(VK_RBUTTON));
+    TestEqual(TEXT("invalid key cannot become held"),AnimeMMORPG::U01::WindowsVirtualKey(FKey()),uint32(0));
+#endif
     return true;
 }
 #endif

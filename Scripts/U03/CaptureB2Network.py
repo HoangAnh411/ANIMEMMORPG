@@ -1,6 +1,7 @@
 """Physical Dodge across two clients, compare authority state/position and negative probes."""
 import argparse,json,time,threading,re,cv2,numpy as np
 from pathlib import Path
+from datetime import datetime,timezone
 from PIL import ImageGrab
 from B2NetworkClient import B2NetworkClient
 p=argparse.ArgumentParser();p.add_argument('--session',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
@@ -50,7 +51,7 @@ try:
   if ix:active.finish()
   active=c;c.prepare();reset();identity=c.metrics()['combat']['pawnId'];c.press('RMB',True);command('b2-block');until(lambda:c.metrics()['combat']['posture']==75,4);command('b2-off');c.press('RMB',False);compare(identity,'Client'+str(ix)+'Block')
   ps=owned(identity);check('Block damage18 and posture75',all(p['vital']['hp']==982 and p['posture']==75 for p in ps))
-  reset();command('b2-block');server=Path(records[0]['log']).read_text(encoding='utf-8-sig');s=float(re.findall(r'U03B2_FIXTURE label=block start=([0-9.]+)',server)[-1]);until(lambda:c.metrics()['combat']['serverSnapshotSeconds']>=s+1.045);c.press('RMB',True);until(lambda:c.metrics()['combat']['defenseResult']==2);command('b2-off');c.press('RMB',False);compare(identity,'Client'+str(ix)+'Parry');check('Parry leaves HP and posture intact',all(p['vital']['hp']==1000 and p['posture']==100 for p in owned(identity)))
+  reset();command('b2-block');server=Path(records[0]['log']).read_text(encoding='utf-8-sig');s=float(re.findall(r'U03B2_FIXTURE label=block start=([0-9.]+)',server)[-1]);line=[l for l in server.splitlines() if 'U03B2_FIXTURE label=block start=' in l][-1];wall=datetime.strptime(re.search(r'\[([0-9.:-]+)\]',line).group(1),'%Y.%m.%d-%H.%M.%S:%f').replace(tzinfo=timezone.utc).timestamp();until(lambda:time.time()>=wall+1.10);c.press('RMB',True);until(lambda:c.metrics()['combat']['defenseResult']==2);command('b2-off');c.press('RMB',False);compare(identity,'Client'+str(ix)+'Parry');check('Parry leaves HP and posture intact',all(p['vital']['hp']==1000 and p['posture']==100 for p in owned(identity)))
   reset();command('b2-unparryable');c.press('RMB',True);until(lambda:c.metrics()['combat']['hardCC']==5,6);check('Physical network break',c.metrics()['combat']['posture']==0);tap('X');until(lambda:c.metrics()['combat']['xReady']>c.metrics()['combat']['serverSnapshotSeconds']+28);command('b2-off');c.press('RMB',False);compare(identity,'Client'+str(ix)+'BreakX');check('X release agrees',all(p['hardCC']==0 and p['posture']==100 and p['xReady']>p['serverSnapshotSeconds'] for p in owned(identity)))
   base=owned(identity)[0];before=(base['xReady'],base['parryReady'],base['action'])
   for probe in ['duplicate','stale','nan','other']:c.console('U02NetProbe '+probe);time.sleep(.2)
