@@ -75,6 +75,26 @@ bool FC1InterruptEdges::RunTest(const FString&)
         TestEqual(TEXT("pure Interrupt is half-open startup"),M.CancelUnopposed(ECutoff::Interrupt,At,true,Out),Offset<0);
         TestFalse(TEXT("Interrupt adds no hard CC"),M.Defense().Locked(At));
     }
+
+    for(auto Command:{ECommand::Q,ECommand::E})
+    {
+        const auto& D=Definition(Command==ECommand::Q?EAction::Q:EAction::E);
+        for(double Boundary:{D.ActiveStart,D.ActiveEnd,D.Duration})for(double Delta:{-.000001,0.,.000001})
+        {
+            FTimelineModel M(SkillLife());TArray<FActiveInterval> Slices;SkillPress(M,1,0,Command,Slices);const double T=Boundary+Delta;M.AdvanceUnopposed(T,Slices);
+            TestEqual(TEXT("skill recovery end is half-open"),M.Current()!=nullptr,T<D.Duration);
+            TestEqual(TEXT("no contacts before active entry, point at exact entry"),Slices.IsEmpty(),T<D.ActiveStart);
+            for(const auto& I:Slices){TestTrue(TEXT("no sample before active"),I.Begin>=D.ActiveStart);TestTrue(TEXT("no sample after active"),I.End<=D.ActiveEnd);if(I.End==D.ActiveEnd)TestTrue(TEXT("exact active exit excluded"),I.bEndExclusive);}
+            TestEqual(TEXT("attack edge at recovery end is fresh, no skill buffer"),SkillPress(M,2,T,ECommand::Attack,Slices),T<D.Duration?EAdmission::Busy:EAdmission::Accepted);
+        }
+        for(auto Reason:{ECutoff::Death,ECutoff::HardCC,ECutoff::LostGround})for(double T:{.10,D.ActiveStart,D.ActiveStart+.01,D.ActiveEnd+.01})
+        {
+            FTimelineModel M(SkillLife());TArray<FActiveInterval> Slices;SkillPress(M,1,0,Command,Slices);TestTrue(TEXT("lifecycle cuts every skill phase"),M.CancelUnopposed(Reason,T,true,Slices));
+            M.AdvanceUnopposed(2,Slices);TestNull(TEXT("no successor after skill cutoff"),M.Current());
+            for(const auto& I:Slices){TestTrue(TEXT("confirmed prefix only"),I.End<=T);if(I.End==T)TestTrue(TEXT("cutoff endpoint excluded"),I.bEndExclusive);}
+            TestEqual(TEXT("cancellation retains cooldown"),M.Resources().ReadyAt(D.Id),D.Cooldown);
+        }
+    }
     for(auto Command:{ECommand::Q,ECommand::E})
     {
         FTimelineModel M(SkillLife());TArray<FActiveInterval> Out;SkillPress(M,1,0,Command,Out);M.AdvanceUnopposed(1,Out);
