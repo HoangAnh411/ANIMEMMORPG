@@ -19,7 +19,7 @@ try{
  $observed=@(Confirm-U02EditorMinimized $windows)
  ConvertTo-Json -InputObject $observed -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $session 'editor-minimized-verified.json')
  $session | Set-Content -Encoding UTF8 (Join-Path $root 'Artifacts/U03/B2/LatestReview.txt')
- [string]([DateTime]::UtcNow.Ticks)+' hit' | Set-Content -Encoding UTF8 (Join-Path $session 'command.txt')
+ [string]([DateTime]::UtcNow.Ticks)+' b2-off' | Set-Content -Encoding UTF8 (Join-Path $session 'command.txt')
  Write-Host ('U03-B2 ready: '+$session)
  Write-Host 'Left=A, right=B. Resume after focus changes. Stop-U03-B2.cmd restores Editor windows.'
 }catch{
