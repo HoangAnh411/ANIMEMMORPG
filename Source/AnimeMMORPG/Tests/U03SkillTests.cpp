@@ -68,7 +68,7 @@ bool FC1Replacement::RunTest(const FString&)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC1InterruptEdges,"AnimeMMORPG.U03.C1.InterruptEdgesAndCapturedEffects",SkillFlags)
 bool FC1InterruptEdges::RunTest(const FString&)
 {
-    for(auto Id:{EAction::Attack1,EAction::Q,EAction::E})for(double Offset:{-.000001,0.,.000001})
+    for(auto Id:{EAction::Attack1,EAction::Q,EAction::E})for(double Offset:{-.000001,0.,.000001,.15,.40})
     {
         FTimelineModel M(SkillLife());TArray<FActiveInterval> Out;const auto Command=Id==EAction::Q?ECommand::Q:Id==EAction::E?ECommand::E:ECommand::Attack;
         SkillPress(M,1,0,Command,Out);const double At=Definition(Id).ActiveStart+Offset;

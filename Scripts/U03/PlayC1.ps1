@@ -8,6 +8,9 @@ foreach($entry in (Import-Csv -LiteralPath (Join-Path $root 'Docs/U03/Evidence/C
  $file=[IO.Path]::GetFullPath((Join-Path $package $entry.path))
  if(!$file.StartsWith($package+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase) -or !(Test-Path -LiteralPath $file) -or (Get-FileHash -LiteralPath $file).Hash -ine $entry.sha256){throw ('Package hash mismatch: '+$entry.path)}
 }
+& python (Join-Path $PSScriptRoot 'PrepareC1CloneConfig.py') --root (Join-Path $root 'Artifacts/U03/C1/Source')
+if($LASTEXITCODE -ne 0){throw 'Clone config guard failed'}
+if(@(git -C (Join-Path $root 'Artifacts/U03/C1/Source') status --porcelain --untracked-files=no).Count){throw 'Review clone tracked source is dirty'}
 $cloneSHA=git -C (Join-Path $root 'Artifacts/U03/C1/Source') rev-parse HEAD
 if($cloneSHA -ne $manifest.source){throw 'Review source association changed; inspect REPORT-C1'}
 $session=Join-Path $root ('Artifacts/U03/C1/Review-'+(Get-Date -Format 'yyyyMMdd-HHmmss'))
