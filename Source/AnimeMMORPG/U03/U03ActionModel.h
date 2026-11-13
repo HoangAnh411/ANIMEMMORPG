@@ -3,13 +3,13 @@
 #include "U02/U02ActionModel.h"
 #include "U03DefenseModel.h"
 
-// A0 only: no UObject, input, clock, world or runtime binding.
+// Authority model: no UObject, input, clock or world ownership.
 namespace AnimeMMORPG::U03
 {
 enum class EAction : uint8 { Attack1, Attack2, Attack3, Q, E, Monster };
 enum class ECommand : uint8 { Escape, Dodge, Guard, Feint, Q, E, Attack, Jump, Target, GuardRelease };
 enum class EAdmission : uint8 { Accepted, Queued, Replaced, Stale, Invalid, Locked, Busy, Resource, Cooldown, Unsupported };
-enum class ECutoff : uint8 { Dodge, Guard, Interrupt, Death, LostGround, HardCC };
+enum class ECutoff : uint8 { Dodge, Guard, Interrupt, Death, LostGround, HardCC, Feint };
 struct FActionDefinition
 {
     EAction Id; uint32 Version; double ActiveStart, ActiveEnd, Duration; int32 RawDamage;
@@ -36,7 +36,7 @@ struct FCombatIntent
     double Receive = 0, AimYaw = 0; FVector2D Direction = FVector2D::ZeroVector;
 };
 struct FAdmissionResult { uint64 Sequence; EAdmission Result; uint64 ActionSequence; };
-struct FActiveInterval { U02::FActionId Identity; EAction DefinitionId; int32 RawDamage; double Begin, End; double Yaw; bool bEndExclusive = true; };
+struct FActiveInterval { U02::FActionId Identity; EAction DefinitionId; int32 RawDamage; double Begin, End; double Yaw; bool bEndExclusive = true; bool bBlockable=true, bParryable=true, bInterrupt=false; uint32 DefinitionVersion=1; };
 struct FAdmissionContext { bool bPlaying=true, bGrounded=true, bHardCC=false, bGuard=false, bDodging=false, bFeint=false, bDead=false, bDodgeEnabled=false, bDefenseEnabled=false; };
 struct FDodgeState
 {
@@ -47,6 +47,12 @@ struct FDodgeState
     bool Moving(double T) const { return Sequence && T>=Start && T<MotionEnd; }
     bool Locked(double T) const { return Sequence && T>=Start && T<LockEnd; }
     void Recharge(double T);
+};
+struct FFeintState
+{
+    double LockEnd=0, LastSuccess=-1;
+    uint64 Sequence=0, ActionSequence=0;
+    bool Locked(double T) const { return Sequence && T<LockEnd; }
 };
 class FResourceModel
 {
@@ -103,6 +109,8 @@ public:
     const FDodgeState& Dodge() const { return DodgeState; }
     const TOptional<FCombatIntent>& GetPendingDodge() const { return PendingDodge; }
     const FActionInstance* Current() const { return Action.Get(); }
+    const FFeintState& Feint() const { return FeintState; }
+    bool IsFeintRequest(ECommand Command) const { return Command==ECommand::Q && Action && Action->GetDefinition().Id==EAction::Q && Action->Startup(Now); }
     const FResourceModel& Resources() const { return Resource; }
     const FDefenseState& Defense() const { return DefenseState; }
     EDefense DefendAtBarrier(FVector ToSource,FVector AttackDirection,bool Blockable,bool Parryable);
@@ -116,6 +124,7 @@ private:
     EAction NextCombo=EAction::Attack1;
     TUniquePtr<FActionInstance> Action; TOptional<FCombatIntent> Pending;
     FResourceModel Resource;
+    FFeintState FeintState;
     FDefenseState DefenseState;
     FDodgeState DodgeState;
     TOptional<FCombatIntent> PendingDodge;

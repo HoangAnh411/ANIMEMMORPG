@@ -72,7 +72,7 @@ void UU01CharacterMovement::PhysicsRotation(float DeltaSeconds)
 bool UU01CharacterMovement::IsSprinting() const
 {
     if(CharacterOwner&&CharacterOwner->GetLocalRole()==ROLE_SimulatedProxy)return CastChecked<AU01Character>(CharacterOwner)->bNetSprinting;
-    return !IsMotorLocked() && !bGuardAuthority && bSprintRequested && Acceleration.SizeSquared2D() > UE_SMALL_NUMBER;
+    return !IsMotorLocked() && !bGuardAuthority && !bFeintAuthority && bSprintRequested && Acceleration.SizeSquared2D() > UE_SMALL_NUMBER;
 }
 
 float UU01CharacterMovement::GetMaxSpeed() const
@@ -141,7 +141,7 @@ void UU01CharacterMovement::ObserveMovementMode(EMovementMode PreviousMode)
 bool UU01CharacterMovement::TryJump(double Now, float DeltaSeconds)
 {
     const bool bGrounded = IsMovingOnGround();
-    if (IsMotorLocked() || bGuardAuthority || !JumpWindow.CanConsume(Now, bGrounded)) return false;
+    if (IsMotorLocked() || bGuardAuthority || bFeintAuthority || !JumpWindow.CanConsume(Now, bGrounded)) return false;
     auto* MotorPawn = Cast<AU01Character>(CharacterOwner);
     if (!MotorPawn) return false;
     const float GravityMagnitude = FMath::Abs(GetGravityZ());

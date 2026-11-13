@@ -132,4 +132,52 @@ bool FB2WorldIdentity::RunTest(const FString&)
     }
     return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC1WorldInterrupt,"AnimeMMORPG.U03.C1.WorldSkillInterruptShieldDefenseDeath",B2WorldFlags)
+bool FC1WorldInterrupt::RunTest(const FString&)
+{
+    for(auto Victim:{ECommand::Attack,ECommand::Q,ECommand::E})for(int Mode=0;Mode<6;++Mode)for(bool Reverse:{false,true})
+    {
+        FB2World W;
+        if(Mode==1)W.Target->Vital->AddFixtureShield(1,500,W.Start+5,W.Start);
+        if(Mode==4)FU03B2Access::HP(W.Target,1);
+        const bool IsQ=Mode==5;const double Hit=IsQ?.30:.25;
+        W.Command(W.Source,IsQ?ECommand::Q:ECommand::E,1,0,0);
+        if(Mode==2||Mode==3)W.Command(W.Target,ECommand::Guard,1,Mode==2?0:.20,180);
+        else W.Command(W.Target,Victim,1,.20,180);
+        if(Reverse)FU03B2Access::Reverse(W.Collision);
+        W.End(1.5);
+        const auto* R=W.Collision->DamageResults.FindByPredicate([&](const auto& D){return D.Hit.Id.Action.Source.Pawn==W.Source->NetworkPawnId&&D.Hit.Id.Target.Pawn==W.Target->NetworkPawnId;});
+        TestNotNull(TEXT("real geometry contact"),R);if(!R)return false;
+        TestEqual(TEXT("one skill hit on target"),W.Collision->DamageResults.FilterByPredicate([&](const auto& D){return D.Hit.Id.Action.Source.Pawn==W.Source->NetworkPawnId&&D.Hit.Id.Target.Pawn==W.Target->NetworkPawnId;}).Num(),1);
+        TestEqual(TEXT("captured raw"),R->Hit.RawDamage,IsQ?100:80);
+        TestEqual(TEXT("E effect survives shield, blocked/parried/lethal/Q suppress"),R->bInterrupted,Mode<2);
+        TestEqual(TEXT("identity feedback"),W.Target->Combat->GetCombatSnapshot().InterruptSequence,Mode<2?uint64(1):uint64(0));
+        TestEqual(TEXT("Interrupt is not stun"),W.Target->Combat->GetCombatSnapshot().HardCC,uint8(0));
+        if(Mode==1)TestEqual(TEXT("full shield no HP loss"),W.Target->Vital->GetSnapshot().HP,1000);
+        if(Mode==2||Mode==3)TestEqual(TEXT("actual defense"),R->Result.Defense,uint8(Mode==2?EDefense::Block:EDefense::Parry));
+        TestEqual(TEXT("source cooldown"),W.Source->Combat->GetCombatSnapshot().EReadyAt,IsQ?0.:W.Start+6);
+        AddInfo(FString::Printf(TEXT("C1_WORLD victim=%u mode=%d reverse=%d hit=%.17g expected=%.17g interrupted=%d action=%llu hp=%d"),uint8(Victim),Mode,Reverse,R->Hit.TimestampSeconds,W.Start+Hit,R->bInterrupted,R->InterruptedAction,W.Target->Vital->GetSnapshot().HP));
+    }
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC1WorldFeint,"AnimeMMORPG.U03.C1.WorldFeintCutoffAndMotor",B2WorldFlags)
+bool FC1WorldFeint::RunTest(const FString&)
+{
+    for(bool Feint:{false,true})
+    {
+        FB2World W;W.Command(W.Source,ECommand::Q,1,0,0);
+        if(Feint)W.Command(W.Source,ECommand::Q,2,.10,0);
+        TestEqual(TEXT("Feint releases horizontal skill lock"),W.Source->Combat->GetCombatSnapshot().bLocked,!Feint);
+        W.Source->GetU01Movement()->SetSprintRequested(true);
+        W.Source->GetU01Movement()->PressJump(W.Start+.10);
+        W.End(1.5);
+        TestEqual(TEXT("cutoff prevents all unfired skill contacts"),W.Collision->DamageResults.Num(),Feint?0:1);
+        TestEqual(TEXT("no resource refund, original regen delay"),W.Source->Combat->GetCombatSnapshot().Energy,85.);
+        TestEqual(TEXT("original Q cooldown"),W.Source->Combat->GetCombatSnapshot().QReadyAt,W.Start+4);
+        TestEqual(TEXT("Feint feedback identity"),W.Source->Combat->GetCombatSnapshot().FeintSequence,Feint?uint64(1):uint64(0));
+        TestEqual(TEXT("Feint action identity"),W.Source->Combat->GetCombatSnapshot().FeintAction,Feint?uint64(1):uint64(0));
+    }
+    return true;
+}
 #endif

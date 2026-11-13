@@ -41,7 +41,8 @@ FActionInstance::FActionInstance(EAction Id,U02::FActionId InIdentity,double InS
 bool FActionInstance::Cancel(ECutoff Reason,double T,bool Valid)
 {
     if(!FMath::IsFinite(T)||T<Start||T>=End()||T>=Cutoff) return false;
-    if(Reason==ECutoff::Dodge||Reason==ECutoff::Guard||Reason==ECutoff::Interrupt)
+    if(Reason==ECutoff::Feint && Rules.Id!=EAction::Q)return false;
+    if(Reason==ECutoff::Dodge||Reason==ECutoff::Guard||Reason==ECutoff::Interrupt||Reason==ECutoff::Feint)
         if(!Valid||!Startup(T)) return false;
     Cutoff=T; return true;
 }
@@ -108,7 +109,7 @@ void FTimelineModel::CompleteCurrent(ITimelineResolver& Resolver)
     {
         const auto& D = Action->GetDefinition();
         if (Now >= Action->Start + D.ActiveStart && Now < Action->Start + D.ActiveEnd && Now < Action->Cutoff)
-            Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Now,Now,Action->Yaw,false});
+            Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Now,Now,Action->Yaw,false,D.bBlockable,D.bParryable,D.bInterrupt,D.Version});
         const bool Cancelled = Now >= Action->Cutoff;
         if (Cancelled || Now >= Action->End())
         {
@@ -136,7 +137,7 @@ void FTimelineModel::DeliverBefore(double Stop, ITimelineResolver& Resolver)
         const double Begin = FMath::Max(Now, Action->Start + D.ActiveStart);
         const double End = FMath::Min(Stop, FMath::Min(Action->Start + D.ActiveEnd, Action->Cutoff));
         if (Begin < End)
-            Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Begin,End,Action->Yaw,true});
+            Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Begin,End,Action->Yaw,true,D.bBlockable,D.bParryable,D.bInterrupt,D.Version});
     }
     Resource.Advance(Stop);
     DefenseState.Advance(Stop);
@@ -150,6 +151,7 @@ double FTimelineModel::NextBoundaryThrough(double T) const
     if (Action) { const auto& D=Action->GetDefinition(); Split(Action->Start+D.ActiveStart); Split(Action->Start+D.ActiveEnd); Split(Action->End()); }
     if (Pending.IsSet()) Split(Pending->Receive+.15);
     if (!Action) Split(GraceEnd);
+    Split(FeintState.LockEnd);
     Split(DodgeState.MotionEnd);Split(DodgeState.LockEnd);Split(DodgeState.NextStart);
     if(DodgeState.Charges<2)Split(DodgeState.RestoreAt);
     if(PendingDodge.IsSet())Split(PendingDodge->Receive+.15);
@@ -174,7 +176,7 @@ bool FTimelineModel::ResetLife(U02::FLifeId NewLife,double T)
 {
     if(bBarrierOpen||bAdvancing||T<Now||NewLife.Pawn!=Life.Pawn||NewLife.Generation<=Life.Generation)return false;
     Life=NewLife;Now=T;Action.Reset();Pending.Reset();NextCombo=EAction::Attack1;GraceEnd=0;
-    bDead=false;bGrounded=true;Resource=FResourceModel();DefenseState=FDefenseState();DefenseState.Last=T;DefenseState.FreeSince=T;DodgeState=FDodgeState();PendingDodge.Reset();Next=0;return true;
+    bDead=false;bGrounded=true;FeintState=FFeintState();Resource=FResourceModel();DefenseState=FDefenseState();DefenseState.Last=T;DefenseState.FreeSince=T;DodgeState=FDodgeState();PendingDodge.Reset();Next=0;return true;
 }
 bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
 {
@@ -243,15 +245,24 @@ EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext&
     if(C.bDefenseEnabled && I.Command==ECommand::Guard)
     {
         const bool Valid=!bDead&&bGrounded&&C.bPlaying&&C.bGrounded&&!C.bHardCC&&!C.bDead&&!C.bFeint&&!C.bDodging
-            &&!DodgeState.Locked(Now)&&!DefenseState.Locked(Now)&&(!Action||(Action->GetDefinition().Id<=EAction::Attack3&&Action->Startup(Now)));
+            &&!FeintState.Locked(Now)&&!DodgeState.Locked(Now)&&!DefenseState.Locked(Now)&&(!Action||Action->Startup(Now));
         if(!DefenseState.PressGuard(Now,I.AimYaw,Valid))return EAdmission::Locked;
         if(Action){Action->Cancel(ECutoff::Guard,Now);Action.Reset();}
         ClearPending();GraceEnd=0;NextCombo=EAction::Attack1;return EAdmission::Accepted;
     }
-    if(DefenseState.bGuard||DefenseState.Locked(Now))return EAdmission::Locked;
+    if(FeintState.Locked(Now)||DefenseState.bGuard||DefenseState.Locked(Now))return EAdmission::Locked;
     if(bDead||!bGrounded||!C.bPlaying||!C.bGrounded||C.bHardCC||C.bGuard||C.bDodging||C.bFeint||C.bDead) return EAdmission::Locked;
     if(I.Command==ECommand::Dodge && C.bDodgeEnabled)return AdmitDodge(I);
     if(DodgeState.Locked(Now))return EAdmission::Locked;
+    if(IsFeintRequest(I.Command))
+    {
+        if(Now<FeintState.LastSuccess+1.)return EAdmission::Cooldown;
+        FeintState.ActionSequence=Action->Identity.Sequence;
+        if(!Action->Cancel(ECutoff::Feint,Now))return EAdmission::Busy;
+        Action.Reset();ClearPending();GraceEnd=0;NextCombo=EAction::Attack1;
+        FeintState.LastSuccess=Now;FeintState.LockEnd=Now+.20;++FeintState.Sequence;
+        return EAdmission::Accepted;
+    }
     if(I.Command!=ECommand::Attack&&I.Command!=ECommand::Q&&I.Command!=ECommand::E) return EAdmission::Unsupported;
     if(I.Command==ECommand::Attack)
     {
@@ -267,7 +278,7 @@ EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext&
     const EAction Id=I.Command==ECommand::Q?EAction::Q:EAction::E;
     const EAdmission Can=Resource.CanSpend(Definition(Id),Now);
     if(Can!=EAdmission::Accepted) return Can;
-    Resource.Spend(Definition(Id),Now); Pending.Reset();Start(Id,Now,I.AimYaw); return EAdmission::Accepted;
+    Resource.Spend(Definition(Id),Now); ClearPending();GraceEnd=0;Start(Id,Now,I.AimYaw); return EAdmission::Accepted;
 }
 TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch,const FAdmissionContext& C,ITimelineResolver& Resolver)
 {
@@ -305,8 +316,9 @@ TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch
                 Results.Add({I.Sequence,ValidTime&&I.Life==Life&&I.Sequence<=Watermark?EAdmission::Stale:EAdmission::Invalid,0});
             else {Watermark=I.Sequence;Group.Add(I);}
         }
-        Group.Sort([](const auto& A,const auto& B){
-            const int32 AP=A.Command==ECommand::GuardRelease?-1:int32(A.Command), BP=B.Command==ECommand::GuardRelease?-1:int32(B.Command);
+        Group.Sort([this](const auto& A,const auto& B){
+            const auto Priority=[this](ECommand Command){return Command==ECommand::GuardRelease?-1:IsFeintRequest(Command)?int32(ECommand::Feint):int32(Command);};
+            const int32 AP=Priority(A.Command), BP=Priority(B.Command);
             return AP!=BP?AP<BP:A.Sequence<B.Sequence;});
         for(const auto& I:Group) Results.Add({I.Sequence,Admit(I,C),Action?Action->Identity.Sequence:0});
     }

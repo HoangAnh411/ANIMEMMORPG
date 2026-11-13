@@ -8,4 +8,5 @@ class ANIMEMMORPG_API UU03AnimationEditor : public UBlueprintFunctionLibrary
     GENERATED_BODY()
 public:
     UFUNCTION(BlueprintCallable,Category="U03|Authoring") static FString BuildA1Assets();
+    UFUNCTION(BlueprintCallable,Category="U03|Authoring") static FString BuildC1Assets();
 };

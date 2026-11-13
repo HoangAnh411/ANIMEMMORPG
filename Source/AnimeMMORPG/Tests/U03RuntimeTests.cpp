@@ -94,7 +94,7 @@ bool FU03A1Buffer::RunTest(const FString&)
     }
     return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03A1Resources,"AnimeMMORPG.U03.A1.ResourceSnapshotAndUnsupportedDispatcher",U03A1Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03A1Resources,"AnimeMMORPG.U03.A1.ResourceSnapshotAndCooldownDispatcher",U03A1Flags)
 bool FU03A1Resources::RunTest(const FString&)
 {
     FU03A1World W;
@@ -103,7 +103,7 @@ bool FU03A1Resources::RunTest(const FString&)
     TestFalse(TEXT("CD rejects fixture without charging"),W.Collision->FixtureSpend(W.Player->Combat,AnimeMMORPG::U03::EAction::Q));
     TestEqual(TEXT("no skill gameplay action from fixture"),W.Player->Combat->GetCombatSnapshot().ActionSequence,uint64(0));
     W.Player->Combat->SubmitCombatIntent(AnimeMMORPG::U03::ECommand::Q,1,0,0);W.Collision->DrainAt(W.Now());
-    TestEqual(TEXT("Q physical dispatcher explicit unsupported"),W.Player->Combat->GetAdmission().Admission,uint8(AnimeMMORPG::U03::EAdmission::Unsupported));
+    TestEqual(TEXT("Q dispatcher honors existing cooldown"),W.Player->Combat->GetAdmission().Admission,uint8(AnimeMMORPG::U03::EAdmission::Cooldown));
     W.Player->Combat->SubmitAttackIntent(1,0,0);W.Collision->DrainAt(W.Now());
     TestEqual(TEXT("unsupported sequence cannot replay as attack"),W.Player->Combat->GetAdmission().Admission,uint8(AnimeMMORPG::U03::EAdmission::Stale));
     W.Collision->DrainAt(W.Now()+1.5);TestEqual(TEXT("resource integral is85 after1.5"),W.Player->Combat->GetCombatSnapshot().Energy,85.);

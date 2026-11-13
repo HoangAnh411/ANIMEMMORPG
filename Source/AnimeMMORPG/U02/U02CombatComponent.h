@@ -37,6 +37,13 @@ struct FU02RepCombatSnapshot
     UPROPERTY() double Energy = 100;
     UPROPERTY() double QReadyAt = 0;
     UPROPERTY() double EReadyAt = 0;
+    UPROPERTY() double FeintLockEnd=0;
+    UPROPERTY() double FeintLastSuccess=-1;
+    UPROPERTY() uint64 FeintSequence=0;
+    UPROPERTY() uint64 FeintAction=0;
+    UPROPERTY() uint64 InterruptSequence=0;
+    UPROPERTY() uint64 InterruptedAction=0;
+    UPROPERTY() double InterruptTime=0;
     UPROPERTY() bool bLocked = false;
     UPROPERTY() bool bYawLocked = false;
     UPROPERTY() uint64 DodgeSequence=0;

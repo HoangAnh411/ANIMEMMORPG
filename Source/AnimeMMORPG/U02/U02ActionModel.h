@@ -107,7 +107,7 @@ struct FHitCandidate
     bool bGeometryValid = true, bUnobstructed = true;
     uint8 DefinitionId = 0; uint32 DefinitionVersion = 1; int32 RawDamage = 60;
     FVector ToSource=FVector::ForwardVector, AttackDirection=FVector::ForwardVector;
-    bool bBlockable=true,bParryable=true;
+    bool bBlockable=true,bParryable=true,bInterrupt=false;
 };
 bool CandidateLess(const FHitCandidate& A, const FHitCandidate& B);
 

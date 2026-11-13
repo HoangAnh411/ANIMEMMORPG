@@ -38,11 +38,11 @@ void UU02CollisionWorld::StartDefenseFixture(const FString& Label)
 {
 #if !UE_BUILD_SHIPPING
     if(GetWorld()->GetNetMode()==NM_Client)return;
-    const TArray<FString> Labels={TEXT("off"),TEXT("block"),TEXT("unparryable"),TEXT("bypass"),TEXT("slow"),TEXT("stun"),TEXT("knockdown"),TEXT("launch"),TEXT("grab"),TEXT("multi")};
+    const TArray<FString> Labels={TEXT("off"),TEXT("block"),TEXT("unparryable"),TEXT("bypass"),TEXT("slow"),TEXT("stun"),TEXT("knockdown"),TEXT("launch"),TEXT("grab"),TEXT("multi"),TEXT("target-attack"),TEXT("target-q"),TEXT("target-e"),TEXT("target-block"),TEXT("target-parry"),TEXT("target-shield"),TEXT("incoming-e")};
     if(!Labels.Contains(Label))return;
     DrainAt(GetWorld()->GetTimeSeconds());
     for(auto& E:DefenseEnemies)if(auto* A=E.Actor.Get()){if(auto* PC=A->GetController())PC->Destroy();A->Destroy();}
-    DefenseEnemies.Empty();DefenseFixtureHits.Empty();
+    DefenseEnemies.Empty();DefenseFixtureHits.Empty();FixtureInterruptActions.Empty();
     if(Label==TEXT("off"))return;
     TArray<AU01Character*> Targets;for(TActorIterator<AU01Character> It(GetWorld());It;++It)if(Cast<APlayerController>(It->GetController()))Targets.Add(*It);
     for(auto* Target:Targets)for(int32 I=0;I<(Label==TEXT("multi")?2:1);++I)
@@ -51,6 +51,7 @@ void UU02CollisionWorld::StartDefenseFixture(const FString& Label)
         FActorSpawnParameters Params;Params.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
         auto* Enemy=GetWorld()->SpawnActor<AU01Character>(P,(Target->GetActorLocation()-P).Rotation(),Params);
         auto* Controller=GetWorld()->SpawnActor<AAIController>();Controller->bSetControlRotationFromPawnOrientation=false;Controller->Possess(Enemy);Controller->SetControlRotation((Target->GetActorLocation()-P).Rotation());
+        if(Label.StartsWith(TEXT("target-")))Enemy->Tags.Add(TEXT("C1_TARGET_FIXTURE"));
         Enemy->Tags.Add(FName(*(TEXT("B2_FIXTURE_")+Label)));DefenseEnemies.Add({Enemy,Target,Label,GetWorld()->GetTimeSeconds()+1.});
     }
     UE_LOG(LogU02Collision,Display,TEXT("U03B2_FIXTURE label=%s start=%.17g duration=1.25 slow=.5 launchImpulse=NONE enemyOnly=1"),*Label,GetWorld()->GetTimeSeconds());
@@ -69,6 +70,8 @@ void UU02CollisionWorld::TickDefenseFixture(double Now)
         if(Current)DrawDebugBox(GetWorld(),Feet(A)+FRotator(0,Current->Yaw,0).RotateVector(FVector(100,0,90)),FVector(100,60,90),FRotator(0,Current->Yaw,0).Quaternion(),FColor::Orange,false,0,0,Current->Startup(Now)?1.f:3.f);
         if(Now<E.Next||Target->Vital->GetSnapshot().bDead)continue;
         E.Next=Now+.75;
+        if(E.Label==TEXT("target-shield")){A->Vital->AddFixtureShield(100,500,Now+60,Now);continue;}
+        if(E.Label==TEXT("target-block")&&A->Combat->Model&&A->Combat->Model->Defense().bGuard)continue;
         if(A->Combat->Model&&A->Combat->Model->Current())continue;
         FDefenseFixtureHit H;H.Duration=1.25;
         H.bParryable=E.Label!=TEXT("unparryable");H.bBlockable=E.Label!=TEXT("bypass")&&E.Label!=TEXT("grab");
@@ -80,7 +83,9 @@ void UU02CollisionWorld::TickDefenseFixture(double Now)
         if(E.Label==TEXT("grab"))H.Hard=EHardCC::Grab;
         const double Yaw=(Target->GetActorLocation()-A->GetActorLocation()).Rotation().Yaw;
         if(auto* Controller=A->GetController())Controller->SetControlRotation(FRotator(0,Yaw,0));
-        A->Combat->SubmitAttackIntent(A->Combat->GetLastCommand()+1,Now,Yaw);
+        ECommand Command=E.Label==TEXT("target-q")?ECommand::Q:E.Label==TEXT("target-e")||E.Label==TEXT("incoming-e")?ECommand::E:E.Label==TEXT("target-block")||E.Label==TEXT("target-parry")?ECommand::Guard:ECommand::Attack;
+        if(E.Label==TEXT("target-parry")){A->Combat->SubmitCombatIntent(ECommand::GuardRelease,A->Combat->GetLastCommand()+1,Now,Yaw);DrainAt(Now);}
+        A->Combat->SubmitCombatIntent(Command,A->Combat->GetLastCommand()+1,Now,Yaw);
         DrainAt(Now);
         if(const auto* Action=A->Combat->Model->Current())DefenseFixtureHits.Add(Action->Identity,H);
     }
@@ -245,7 +250,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
     for(const auto& H:Hurts)
     {
         auto* Shape=H.Component.Get();if(!Shape||!Shape->IsQueryCollisionEnabled()||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
-        if(Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets && !DefenseEnemies.ContainsByPredicate([&](const FDefenseEnemy& E){return E.Actor.Get()==P.Component->GetOwner()&&E.Target.Get()==Shape->GetOwner();}))continue;
+        if(Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets && !DefenseEnemies.ContainsByPredicate([&](const FDefenseEnemy& E){return (E.Actor.Get()==P.Component->GetOwner()&&E.Target.Get()==Shape->GetOwner())||(E.Actor.Get()==Shape->GetOwner()&&E.Target.Get()==P.Component->GetOwner());}))continue;
         if(H.AvailableFrom>P.Slice.EndSeconds)continue;
         const bool Continuous=Source->Previous.Life==Source->Current.Life&&Source->Previous.Epoch==Source->Current.Epoch
             &&H.Previous.Life==H.Current.Life&&H.Previous.Epoch==H.Current.Epoch&&H.Previous.Radius==H.Current.Radius;
@@ -300,8 +305,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         Out.Add({{P.Action,H.Current.Life},Timestamp,Shape->StableHurtboxId,true,true,P.DefinitionId,P.DefinitionVersion,P.RawDamage});
         auto& Candidate=Out.Last();Candidate.ToSource=FMath::Lerp(F0,F1,T)-FMath::Lerp(C0,C1,T);Candidate.ToSource.Z=0;
         Candidate.AttackDirection=FRotator(0,P.Yaw,0).Vector();
-        const auto& Rules=AnimeMMORPG::U03::Definition(AnimeMMORPG::U03::EAction(P.DefinitionId));
-        Candidate.bBlockable=Rules.bBlockable;Candidate.bParryable=Rules.bParryable;
+        Candidate.bBlockable=P.bBlockable;Candidate.bParryable=P.bParryable;Candidate.bInterrupt=P.bInterrupt;
         if(const auto* Fixture=DefenseFixtureHits.Find(P.Action)){Candidate.bBlockable=Fixture->bBlockable;Candidate.bParryable=Fixture->bParryable;}
         RecordSelected(P,H.Current.Life,Shape->StableHurtboxId,FMath::Lerp(F0,F1,T),FMath::Lerp(C0,C1,T),H.Current.Radius,Timestamp,TEXT("VALID"));
         if(!bSelectedDebug&&FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))
@@ -345,7 +349,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     Result.Defense=uint8(Defense);
     if(!Result.bApplied)return false;
     DamageResults.Add({C,Result,Roll});
-    for(TActorIterator<AU02NetworkState> It(GetWorld());It;++It)It->Confirm(DamageResults.Last());
+
     if(const auto* Pawn=Cast<APawn>(SourceVital->GetOwner()))if(Pawn->IsPlayerControlled()&&Pawn->IsLocallyControlled())HUDTarget=TargetVital->GetOwner();
     Confirmed.Add(C);
     for(auto& D:DebugHurts)if(D.Hit==C.Id&&D.Hurtbox==C.HurtboxId)D.Result=TEXT("CONFIRMED");
@@ -356,9 +360,13 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     UE_LOG(LogU02Collision,Display,TEXT("U02E_DAMAGE sourceSHA=%s timestamp=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u raw=%d attack=%.17g roll=%.17g crit=%d damage=%d absorbed=%d hpBefore=%d hpAfter=%d death=%d shieldOrder=%s"),
         *SHA,C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,C.RawDamage,SourceVital->GetAttackFactor(),Roll,Result.bCrit,Result.Damage,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied,*Order);
     // Native labelled fixture only: effect is attached to a real geometry-confirmed direct hit.
-    if(FixtureInterruptActions.Contains(C.Id.Action) && !Result.bDied && Defense==EDefense::Hit)
-        if(TargetCombat)
-            ApplyLifecycle(TargetCombat,C.TimestampSeconds,AnimeMMORPG::U03::ECutoff::Interrupt,false);
+    if((C.bInterrupt||FixtureInterruptActions.Contains(C.Id.Action)) && !Result.bDied && Defense==EDefense::Hit)
+        if(TargetCombat && TargetCombat->Model && TargetCombat->Model->Current())
+        {
+            const uint64 Interrupted=TargetCombat->Model->Current()->Identity.Sequence;
+            if(ApplyLifecycle(TargetCombat,C.TimestampSeconds,AnimeMMORPG::U03::ECutoff::Interrupt,false))
+            {DamageResults.Last().bInterrupted=true;DamageResults.Last().InterruptedAction=Interrupted;++TargetCombat->Snapshot.InterruptSequence;TargetCombat->Snapshot.InterruptedAction=Interrupted;TargetCombat->Snapshot.InterruptTime=C.TimestampSeconds;}
+        }
     if(const auto* Fixture=DefenseFixtureHits.Find(C.Id.Action))
         if(TargetCombat && TargetCombat->Model && !Result.bDied && Defense==EDefense::Hit)
         {
@@ -366,6 +374,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
             if(Fixture->Hard!=EHardCC::None && TargetCombat->Model->HardAtBarrier(Fixture->Hard,Fixture->Duration))
                 ApplyLifecycle(TargetCombat,C.TimestampSeconds,ECutoff::HardCC,false);
         }
+    for(TActorIterator<AU02NetworkState> It(GetWorld());It;++It)It->Confirm(DamageResults.Last());
     OnGeometryConfirmed.Broadcast(C);return true;
 }
 namespace
@@ -398,6 +407,7 @@ void UU02CollisionWorld::CollectCurrent(double Through,TArray<FHitCandidate>& Ou
         if(Begin>End||Begin>=A->Start+D.ActiveEnd||Begin>=A->Cutoff)continue;
         FPending P;P.Component=C;P.Action=A->Identity;P.Yaw=A->Yaw;
         P.DefinitionId=uint8(D.Id);P.DefinitionVersion=D.Version;P.RawDamage=D.RawDamage;
+        P.bBlockable=D.bBlockable;P.bParryable=D.bParryable;P.bInterrupt=D.bInterrupt;
         P.Slice.bEvaluate=true;P.Slice.BeginSeconds=Begin;P.Slice.EndSeconds=End;
         P.Slice.bEndExclusive=End==A->Start+D.ActiveEnd||End==A->Cutoff;
         const double Span=CurrentTime-PreviousTime;

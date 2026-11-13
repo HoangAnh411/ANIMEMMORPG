@@ -23,6 +23,9 @@ struct FU02ConfirmedResult
     UPROPERTY() bool Crit=false;
     UPROPERTY() bool Death=false;
     UPROPERTY() uint8 Defense=0;
+    UPROPERTY() bool Interrupted=false;
+    UPROPERTY() uint64 InterruptedAction=0;
+    UPROPERTY() uint32 DefinitionVersion=1;
 };
 // Bounded authoritative event history for presentation/diagnostics; never mutates client HP.
 UCLASS()

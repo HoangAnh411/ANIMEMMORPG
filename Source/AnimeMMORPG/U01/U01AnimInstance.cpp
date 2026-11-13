@@ -4,10 +4,14 @@
 #include "GameFramework/GameStateBase.h"
 #include "Engine/World.h"
 #include "Animation/AnimMontage.h"
+#include "UObject/ConstructorHelpers.h"
 
 UU01AnimInstance::UU01AnimInstance()
 {
     RootMotionMode = ERootMotionMode::IgnoreRootMotion;
+    static ConstructorHelpers::FObjectFinder<UAnimMontage> QAsset(TEXT("/Game/AnimeMMORPG/U03/Animation/AM_U03_Q"));
+    static ConstructorHelpers::FObjectFinder<UAnimMontage> EAsset(TEXT("/Game/AnimeMMORPG/U03/Animation/AM_U03_E"));
+    QMontage=QAsset.Object;EMontage=EAsset.Object;
 }
 void UU01AnimInstance::NativeInitializeAnimation()
 {
@@ -54,7 +58,7 @@ void UU01AnimInstance::NativeUpdateAnimation(float Dt)
 
 void UU01AnimInstance::PresentCombat(const FU02RepCombatSnapshot& S,double Now)
 {
-    UAnimMontage* Selected=S.DefinitionId==1?Attack2Montage.Get():S.DefinitionId==2?Attack3Montage.Get():AttackMontage.Get();
+    UAnimMontage* Selected=S.DefinitionId==3?QMontage.Get():S.DefinitionId==4?EMontage.Get():S.DefinitionId==1?Attack2Montage.Get():S.DefinitionId==2?Attack3Montage.Get():AttackMontage.Get();
     if(!Selected)return;
     // Stale snapshots/stops from an older life/action cannot stop a newer montage.
     if(PresentedPawn==S.PawnId && (S.LifeGeneration<PresentedLife ||

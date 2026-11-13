@@ -135,7 +135,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
             else
             {
                 AdmissionWatermark=I.Sequence;
-                if(I.Command==ECommand::Attack||I.Command==ECommand::Dodge||I.Command==ECommand::Guard||I.Command==ECommand::GuardRelease||I.Command==ECommand::Escape)
+                if(I.Command==ECommand::Q||I.Command==ECommand::E||I.Command==ECommand::Attack||I.Command==ECommand::Dodge||I.Command==ECommand::Guard||I.Command==ECommand::GuardRelease||I.Command==ECommand::Escape)
                 {
                     int32 Group=ReceiveGroups.Find(Entry.Receive);
                     if(Group==INDEX_NONE){Group=ReceiveGroups.Add(Entry.Receive);Admissible.AddDefaulted();}
@@ -152,9 +152,10 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
         Trace(Success?TEXT("Admitted"):TEXT("Rejected"),Now,FString::Printf(TEXT("command=%llu admission=%u localInput=%.17g receive=%.17g accept=%.17g"),I.Sequence,uint8(Result),Entry.LocalSeconds,Entry.Receive,Now));
     }
     const uint64 BeforeDodge=Model->Dodge().Sequence;
+    const uint64 BeforeFeint=Model->Feint().Sequence;
     FU03NoEvents ResolvedBarrier;TArray<FAdmissionResult> Results;
     for(auto& Group:Admissible)Results.Append(Model->SubmitBatch(MoveTemp(Group),Context,ResolvedBarrier));
-    if((BeforeDodge!=Model->Dodge().Sequence||(!Model->Current()&&Model->Defense().bGuard)) && Snapshot.ActionSequence)
+    if((BeforeFeint!=Model->Feint().Sequence||BeforeDodge!=Model->Dodge().Sequence||(!Model->Current()&&Model->Defense().bGuard)) && Snapshot.ActionSequence)
     {Snapshot.Phase=uint8(EPhase::Cancelled);Snapshot.ServerSeconds=Now;GetWorld()->GetSubsystem<UU02CollisionWorld>()->ObserveCombat(this);}
     for(const auto& R:Results)
     {
@@ -209,7 +210,7 @@ bool UU02CombatComponent::ResetLabCombat()
     if(!Model||!Character()->HasAuthority())return false;
     const double Now=FMath::Max(double(GetWorld()->GetTimeSeconds()),Model->Time());auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->DrainAt(Now);
     auto Life=Model->GetLife();++Life.Generation;if(!Model->ResetLife(Life,Now))return false;
-    QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;Snapshot.DefenseEvent=0;Snapshot.DefenseResult=0;Snapshot.DefenseEventTime=0;Snapshot.ParryFeedbackSequence=0;Snapshot.ParryFeedbackTime=0;
+    QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;Snapshot.DefenseEvent=0;Snapshot.DefenseResult=0;Snapshot.DefenseEventTime=0;Snapshot.ParryFeedbackSequence=0;Snapshot.ParryFeedbackTime=0;Snapshot.FeintLockEnd=0;Snapshot.FeintLastSuccess=-1;Snapshot.FeintSequence=0;Snapshot.FeintAction=0;Snapshot.InterruptSequence=0;Snapshot.InterruptedAction=0;Snapshot.InterruptTime=0;
     OwnerAdmission.PendingCommand=0;OwnerAdmission.PendingExpires=0;
     if(Character()->Vital)Character()->Vital->ResetLabCombat(Life.Generation);
     Publish(Now,true);W->RebaseResetSubject(Character());Trace(TEXT("Reset"),Now);return true;
@@ -230,6 +231,7 @@ void UU02CombatComponent::Publish(double Now,bool Force)
     const auto& D=Model->Dodge();if(Snapshot.DodgeSequence!=D.Sequence)Snapshot.DodgeOrigin=Character()->GetActorLocation();Snapshot.DodgeSequence=D.Sequence;Snapshot.DodgeCharges=D.Charges;Snapshot.DodgeStart=D.Start;Snapshot.DodgeMotionEnd=D.MotionEnd;Snapshot.DodgeLockEnd=D.LockEnd;Snapshot.DodgeNextStart=D.NextStart;Snapshot.DodgeRestoreAt=D.RestoreAt;Snapshot.DodgeDirection=D.Direction;
     if(D.Locked(Now)){Snapshot.bLocked=true;Snapshot.bYawLocked=true;}
     Snapshot.Energy=Model->Resources().Energy();Snapshot.QReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::Q);Snapshot.EReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::E);
+    const auto& F=Model->Feint();Snapshot.FeintLockEnd=F.LockEnd;Snapshot.FeintLastSuccess=F.LastSuccess;Snapshot.FeintSequence=F.Sequence;Snapshot.FeintAction=F.ActionSequence;
     const auto& Defense=Model->Defense();Snapshot.bGuard=Defense.bGuard;Snapshot.GuardSequence=Defense.GuardSequence;Snapshot.GuardYaw=Defense.Yaw;Snapshot.Posture=Defense.Posture;
     Snapshot.bParryOpen=Defense.bParryOpen;Snapshot.ParryStart=Defense.ParryStart;Snapshot.ParryEnd=Defense.ParryEnd;Snapshot.ParryReadyAt=Defense.ParryReadyAt;
     Snapshot.HardCC=uint8(Defense.Hard);Snapshot.HardEnd=Defense.HardEnd;Snapshot.LockedBudget=Defense.LockedBudget;Snapshot.ImmuneEnd=Defense.ImmuneEnd;Snapshot.SlowFraction=Defense.Slow(Now);Snapshot.XReadyAt=Defense.XReadyAt;
@@ -250,6 +252,7 @@ void UU02CombatComponent::ApplyMotorSnapshot()
         FStartupTurn Turn;Turn.Begin(Snapshot.TurnFromYaw,Snapshot.AimYawDegrees,Snapshot.TurnStartSeconds,Snapshot.StartSeconds+Snapshot.ActiveStart);
         const bool DodgeLock=Snapshot.DodgeSequence&&Now>=Snapshot.DodgeStart&&Now<Snapshot.DodgeLockEnd;
         const double Yaw=Snapshot.bGuard?Snapshot.GuardYaw:DodgeLock?Snapshot.DodgeDirection.Rotation().Yaw:Turn.Sample(Now);
+        C->GetU01Movement()->ApplyFeintAuthority(Snapshot.FeintSequence&&Now<Snapshot.FeintLockEnd);
         C->GetU01Movement()->ApplyDefenseAuthority(Snapshot.bGuard,Snapshot.SlowFraction);
         C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked||Snapshot.bGuard,Yaw);
         if(Snapshot.bLocked)C->SetActorRotation(FRotator(0,Yaw,0));
@@ -293,6 +296,11 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
         FString GuardKey=TEXT("RMB"),XKey=TEXT("X");if(const auto* PC=Cast<AU01PlayerController>(C->GetController())){GuardKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Guard].GetDisplayName().ToString();XKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::EscapeCC].GetDisplayName().ToString();}
         const TCHAR* CCNames[]={TEXT("FREE"),TEXT("STUN"),TEXT("KNOCKDOWN"),TEXT("LAUNCH (fixture; no impulse)"),TEXT("GRAB"),TEXT("!! GUARD BREAK !!")};
         GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+220000,.15f,FColor::White,FString::Printf(TEXT("[%s] %s | POSTURE [%.0f/100] | %s %.2fs | IMMUNE %.2fs | [%s] X %.2fs | slow %.0f%%"),*GuardKey,Snapshot.bGuard?TEXT("[BLOCK]"):TEXT("released"),Snapshot.Posture,CCNames[FMath::Min<int32>(Snapshot.HardCC,5)],FMath::Max(0.,Snapshot.HardEnd-AuthorityNow),FMath::Max(0.,Snapshot.ImmuneEnd-AuthorityNow),*XKey,FMath::Max(0.,Snapshot.XReadyAt-AuthorityNow),Snapshot.SlowFraction*100));
+        FString QKey=TEXT("Q"),EKey=TEXT("E");if(const auto* PC=Cast<AU01PlayerController>(C->GetController())){QKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::SkillQ].GetDisplayName().ToString();EKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::SkillE].GetDisplayName().ToString();}
+        const TCHAR* SkillPhase=Snapshot.bLocked?(Snapshot.Phase==uint8(EPhase::Startup)?TEXT("< STARTUP >"):Snapshot.Phase==uint8(EPhase::Active)?TEXT("!! ACTIVE !!"):TEXT("... RECOVERY ...")):TEXT("READY");
+        GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+230000,.15f,FColor::White,FString::Printf(TEXT("[%s] Q Hu Tram %.2fs | [%s] E Pha The %.2fs | energy %.0f/100 | %s"),*QKey,FMath::Max(0.,Snapshot.QReadyAt-AuthorityNow),*EKey,FMath::Max(0.,Snapshot.EReadyAt-AuthorityNow),Snapshot.Energy,SkillPhase));
+        if(Snapshot.FeintSequence&&AuthorityNow-Snapshot.FeintLastSuccess<1.2)GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+230001,.15f,FColor::White,TEXT("< FEINT > walk / action lock 0.20s"));
+        if(Snapshot.InterruptSequence&&AuthorityNow-Snapshot.InterruptTime<1.2)GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+230002,.15f,FColor::White,TEXT("// INTERRUPTED //"));
         if(Snapshot.DefenseEvent&&AuthorityNow-Snapshot.DefenseEventTime<1.2)GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+220001,.15f,FColor::White,Snapshot.DefenseResult==2?TEXT("(( PARRY ))"):Snapshot.HardCC==5?TEXT("!! BREAK !!"):TEXT("[ BLOCK ]"));
     }
 }
@@ -306,6 +314,7 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("life"),Snapshot.LifeGeneration); J->SetNumberField(TEXT("action"),Snapshot.ActionSequence);
     J->SetNumberField(TEXT("phase"),Snapshot.Phase); J->SetNumberField(TEXT("start"),Snapshot.StartSeconds);
     J->SetNumberField(TEXT("definition"),Snapshot.DefinitionId);J->SetNumberField(TEXT("raw"),Snapshot.RawDamage);
+    J->SetNumberField(TEXT("feintSequence"),Snapshot.FeintSequence);J->SetNumberField(TEXT("feintAction"),Snapshot.FeintAction);J->SetNumberField(TEXT("feintLockEnd"),Snapshot.FeintLockEnd);J->SetNumberField(TEXT("feintLastSuccess"),Snapshot.FeintLastSuccess);J->SetNumberField(TEXT("interruptSequence"),Snapshot.InterruptSequence);J->SetNumberField(TEXT("interruptedAction"),Snapshot.InterruptedAction);J->SetNumberField(TEXT("interruptTime"),Snapshot.InterruptTime);
     J->SetNumberField(TEXT("energy"),Snapshot.Energy);J->SetNumberField(TEXT("qReady"),Snapshot.QReadyAt);J->SetNumberField(TEXT("eReady"),Snapshot.EReadyAt);
     J->SetNumberField(TEXT("dodge"),Snapshot.DodgeSequence);J->SetNumberField(TEXT("dodgeCharges"),Snapshot.DodgeCharges);J->SetNumberField(TEXT("dodgeStart"),Snapshot.DodgeStart);J->SetNumberField(TEXT("dodgeMotionEnd"),Snapshot.DodgeMotionEnd);J->SetNumberField(TEXT("dodgeLockEnd"),Snapshot.DodgeLockEnd);J->SetNumberField(TEXT("dodgeNextStart"),Snapshot.DodgeNextStart);J->SetNumberField(TEXT("dodgeRestoreAt"),Snapshot.DodgeRestoreAt);J->SetStringField(TEXT("dodgeDirection"),Snapshot.DodgeDirection.ToString());
     J->SetStringField(TEXT("dodgeOrigin"),Snapshot.DodgeOrigin.ToString());

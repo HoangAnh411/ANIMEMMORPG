@@ -37,7 +37,7 @@ public:
     void DrawSelectedAction();
     FU02GeometryConfirmed OnGeometryConfirmed;
     TArray<AnimeMMORPG::U02::FHitCandidate> Confirmed;
-    struct FConfirmedDamage { AnimeMMORPG::U02::FHitCandidate Hit;AnimeMMORPG::U02::FDamageResult Result;double Roll=0; };
+    struct FConfirmedDamage { AnimeMMORPG::U02::FHitCandidate Hit;AnimeMMORPG::U02::FDamageResult Result;double Roll=0; bool bInterrupted=false; uint64 InterruptedAction=0; };
     TArray<FConfirmedDamage> DamageResults;
     uint64 CritRolls=0;
     double FixtureCritRoll=-1; // native fixture only, -1 production server roll
@@ -88,6 +88,7 @@ private:
         AnimeMMORPG::U02::FActiveSlice Slice;
         double Yaw=0;
         uint8 DefinitionId=0; uint32 DefinitionVersion=1; int32 RawDamage=60;
+        bool bBlockable=true,bParryable=true,bInterrupt=false;
     };
     struct FEnvironment
     {

@@ -24,6 +24,8 @@ public:
     UPROPERTY(EditDefaultsOnly, Category="U02") TObjectPtr<UAnimMontage> AttackMontage;
     UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> Attack2Montage;
     UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> Attack3Montage;
+    UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> QMontage;
+    UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> EMontage;
     UPROPERTY(Transient) TObjectPtr<UAnimMontage> ActiveMontage;
     bool bAttackPresented=false;
     UPROPERTY(BlueprintReadOnly,Category="U02") float AttackBlendWeight=0;

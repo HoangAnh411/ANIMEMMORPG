@@ -48,6 +48,7 @@ public:
         const uint8 AuthorityLocks=Motor->LockMask & ~uint8(EU01MotorLock::Control);
         Motor->bSprintRequested=Sprint;Motor->LockMask=(SavedLocks & uint8(EU01MotorLock::Control))|AuthorityLocks;Motor->SimulationSeconds=Clock;
         Motor->JumpWindow=Window;Motor->bNetworkJumpHeld=PreviousNetworkHeld;
+        if(Motor->bFeintAuthority){Motor->JumpWindow.ClearInput();Motor->bSprintRequested=false;}
         Motor->SetControlLocked(Locked); // Clears replayed jump/sprint under ANY remaining authority lock.
     }
 };
