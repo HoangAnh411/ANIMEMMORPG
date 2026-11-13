@@ -257,7 +257,7 @@ EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext&
     if(DodgeState.Locked(Now))return EAdmission::Locked;
     if(IsFeintRequest(I.Command))
     {
-        if(Now<FeintState.LastSuccess+1.)return EAdmission::Cooldown;
+        if(!FeintState.Ready(Now))return EAdmission::Cooldown;
         FeintState.ActionSequence=Action->Identity.Sequence;
         if(!Action->Cancel(ECutoff::Feint,Now))return EAdmission::Busy;
         Action.Reset();ClearPending();GraceEnd=0;NextCombo=EAction::Attack1;

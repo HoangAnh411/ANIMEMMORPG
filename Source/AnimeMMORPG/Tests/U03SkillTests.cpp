@@ -1,6 +1,9 @@
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "U03/U03ActionModel.h"
+#include "U01/U01AnimInstance.h"
+#include "Animation/AnimMontage.h"
+#include "Animation/AnimSequence.h"
 using namespace AnimeMMORPG;
 using namespace AnimeMMORPG::U03;
 namespace {
@@ -13,6 +16,8 @@ EAdmission SkillPress(FTimelineModel& M,uint64 S,double T,ECommand C,TArray<FAct
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC1Feint,"AnimeMMORPG.U03.C1.FeintEdgesResourcesAndLife",SkillFlags)
 bool FC1Feint::RunTest(const FString&)
 {
+    FFeintState F;F.Sequence=1;F.LastSuccess=.10;F.LockEnd=.30;
+    for(double Delta:{-.000001,0.,.000001}){TestEqual(TEXT("minimum successful Feint spacing"),F.Ready(F.LastSuccess+1.+Delta),Delta>=0);TestEqual(TEXT("Feint lock endpoint"),F.Locked(F.LockEnd+Delta),Delta<0);}
     for(double At:{.299999,.30,.300001})
     {
         FTimelineModel M(SkillLife());TArray<FActiveInterval> Out;
@@ -91,6 +96,26 @@ bool FC1Cooldown::RunTest(const FString&)
     FResourceModel R;FActionDefinition D=Definition(EAction::Q);D.Cooldown=0;
     for(int I=0;I<5;++I)TestTrue(TEXT("exact energy accepted"),R.Spend(D,0));
     TestEqual(TEXT("zero energy"),R.Energy(),0.);TestFalse(TEXT("insufficient energy"),R.Spend(D,0));R.Advance(20);TestEqual(TEXT("regen cap"),R.Energy(),100.);
+    return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC1Assets,"AnimeMMORPG.U03.C1.BlockoutMontageAuthorityPolicy",SkillFlags)
+bool FC1Assets::RunTest(const FString&)
+{
+    for(bool Q:{true,false})
+    {
+        auto* M=LoadObject<UAnimMontage>(nullptr,Q?TEXT("/Game/AnimeMMORPG/U03/Animation/AM_U03_Q"):TEXT("/Game/AnimeMMORPG/U03/Animation/AM_U03_E"));
+        TestNotNull(TEXT("distinct skill montage"),M);if(!M)return false;
+        const auto& D=Definition(Q?EAction::Q:EAction::E);
+        TestTrue(TEXT("authority duration"),FMath::Abs(M->GetPlayLength()-D.Duration)<.000001);
+        TestEqual(TEXT("named phases"),M->CompositeSections.Num(),3);
+        TestTrue(TEXT("active section deadline"),FMath::Abs(M->CompositeSections[1].GetTime()-D.ActiveStart)<.000001);
+        TestTrue(TEXT("recovery section deadline"),FMath::Abs(M->CompositeSections[2].GetTime()-D.ActiveEnd)<.000001);
+        TestTrue(TEXT("no gameplay notifies"),M->Notifies.IsEmpty());
+        auto* Clip=Cast<UAnimSequence>(M->SlotAnimTracks[0].AnimTrack.AnimSegments[0].GetAnimReference());TestNotNull(TEXT("clip exists"),Clip);
+        if(Clip)TestFalse(TEXT("clip cannot authorize root motion"),Clip->bEnableRootMotion);
+    }
+    TestEqual(TEXT("runtime ignores root motion"),GetDefault<UU01AnimInstance>()->RootMotionMode,ERootMotionMode::IgnoreRootMotion);
     return true;
 }
 #endif

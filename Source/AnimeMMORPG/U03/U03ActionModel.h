@@ -53,6 +53,7 @@ struct FFeintState
     double LockEnd=0, LastSuccess=-1;
     uint64 Sequence=0, ActionSequence=0;
     bool Locked(double T) const { return Sequence && T<LockEnd; }
+    bool Ready(double T) const { return !Sequence || T>=LastSuccess+1.; }
 };
 class FResourceModel
 {

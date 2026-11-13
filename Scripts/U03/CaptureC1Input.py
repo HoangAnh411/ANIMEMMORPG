@@ -64,6 +64,12 @@ try:
  reset();fixture('incoming-e');until(lambda:time.time()>=fixture_wall+1.05);tap('Q');until(lambda:b()['interruptSequence']>0);check('Incoming real E Interrupt cancels player Q without refund',b()['energy']==80 and b()['hardCC']==0 and b()['phase']==5);console('U03B2Fixture off');m['stages'].append({'stage':'IncomingInterrupt','metrics':c.metrics()})
  reset();c.press('Q',True);until(lambda:b()['definition']==3);tap('Escape');wait(.2);check('Menu does not refund or cancel accepted Q',b()['qReady']>b()['serverSnapshotSeconds']);c.click(640,305);wait(.5);check('Held Q across Resume does not replay',b()['action']==1 and b()['feintSequence']==0);c.press('Q',False)
  c.guard();u.ShowWindow(c.hwnd,6);wait(.4);c.focus();check('Focus loss requires Resume',c.metrics()['controlState']!=0);c.click(640,305);wait(.3)
+
+ tap('Escape');wait(.2);c.click(640,346);wait(.2);c.click(785,520);tap('T');wait(.15);c.click(785,543);tap('Y');wait(.15)
+ settings=json.loads(c.metrics()['settings']);check('Physical UI rebind Q/E to T/Y',settings['bindings']['Q']=='T' and settings['bindings']['E']=='Y');c.click(640,705);wait(.15);c.click(640,305);wait(.3)
+ reset();tap('Q');wait(.15);check('Old Q binding no longer casts',b()['action']==0);tap('T');until(lambda:b()['definition']==3);tap('T');until(lambda:b()['feintSequence']==1);check('Rebound T is Q and Feint',b()['energy']==80)
+ reset();tap('Y');until(lambda:b()['definition']==4);check('Rebound Y is E',b()['energy']==75);wait(.8)
+ tap('Escape');wait(.2);c.click(640,346);wait(.2);c.click(785,520);tap('Q');wait(.15);c.click(785,543);tap('E');wait(.15);c.click(640,705);wait(.15);c.click(640,305);wait(.3)
  ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/'Final.png');m['completed']=True
 finally:
  stop.set()
