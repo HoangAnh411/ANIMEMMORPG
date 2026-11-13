@@ -12,7 +12,10 @@ def until(f):
   if time.perf_counter()>end:raise RuntimeError('Reconnect setup timeout')
   time.sleep(.01)
 try:
- c.prepare();command('b2-off');command('hit');command('b2-grab');until(lambda:c.metrics()['combat']['hardCC']==4)
+ c.prepare();command('b2-off')
+ # Catch up real controller edges after the deliberately ahead-sequence negative probes.
+ for _ in range(3):c.press('Shift',True);time.sleep(.035);c.press('Shift',False);time.sleep(.12)
+ command('hit');time.sleep(.4);command('b2-grab');until(lambda:c.metrics()['combat']['hardCC']==4)
  c.press('X',True);time.sleep(.035);c.press('X',False);until(lambda:c.metrics()['combat']['xReady']>c.metrics()['combat']['serverSnapshotSeconds']+28);command('b2-off')
  v=c.metrics();assert v['combat']['xReady']>0
  (a.session/'reconnect-before.json').write_text(json.dumps({'process':c.record,'metrics':v,'method':'Physical X on labelled authority grab before disconnect'},indent=2),encoding='utf-8')

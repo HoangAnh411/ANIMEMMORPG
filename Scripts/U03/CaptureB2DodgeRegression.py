@@ -20,13 +20,15 @@ def record():
 def states():
  out=[]
  for r in records:
-  with Path(r['log']).open('rb') as f:f.seek(0,2);f.seek(max(0,f.tell()-500000));raw=f.read()
+  with Path(r['log']).open('rb') as f:f.seek(0,2);end=f.tell();f.seek(max(0,end-500000));raw=f.read()
+  if end>500000:raw=raw[raw.find(b'\n')+1:]
   lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig').splitlines();v=[json.loads(l.split('U02F_STATE ',1)[1]) for l in lines if 'U02F_STATE {' in l][-1];assert v['pid']==r['pid'] and v['sourceSHA']==r['sourceSHA'];out.append(v)
  return out
 def histories():
  out=[]
  for r in records:
-  with Path(r['log']).open('rb') as f:f.seek(0,2);f.seek(max(0,f.tell()-15000000));raw=f.read()
+  with Path(r['log']).open('rb') as f:f.seek(0,2);end=f.tell();f.seek(max(0,end-15000000));raw=f.read()
+  if end>15000000:raw=raw[raw.find(b'\n')+1:]
   lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig').splitlines();out.append([json.loads(l.split('U02F_STATE ',1)[1]) for l in lines if 'U02F_STATE {' in l])
  return out
 def tap():active.press('Shift',True);time.sleep(.035);active.press('Shift',False)
@@ -40,7 +42,11 @@ try:
  active=clients[0];active.prepare();writer=cv2.VideoWriter(str(a.out/'Network-B2.mp4'),cv2.VideoWriter_fourcc(*'mp4v'),30,(1800,540));assert writer.isOpened();start=time.perf_counter();worker=threading.Thread(target=record);worker.start()
  for ix,c in enumerate(clients):
   if ix:active.finish()
-  active=c;c.prepare();(a.session/'command.txt').write_text(str(time.time_ns())+' hit',encoding='utf-8');time.sleep(.8)
+  active=c;c.prepare()
+  # Earlier negative RPC probes intentionally advanced the server watermark beyond
+  # the real controller counter. Real warm-up edges catch up; reset then measures fresh charges.
+  for _ in range(3):tap();time.sleep(.12)
+  (a.session/'command.txt').write_text(str(time.time_ns())+' hit',encoding='utf-8');time.sleep(.8)
   # Forward uses the open part of the technical lane. Its rear edge is only300cm
   # away, so it is unsuitable as an unrestricted backwards-distance measurement.
   before=c.metrics();identity=before['combat']['pawnId'];life=before['combat']['life'];c.press('W',True);time.sleep(.04);tap();time.sleep(.10);c.press('W',False);time.sleep(.60);tap();time.sleep(.10);tap();time.sleep(.55)
@@ -48,7 +54,7 @@ try:
   # Select evidence retrospectively by authority timestamps and current life.
   hs=histories();tracks=[[p for v in h for p in v['pawns'] if p['id']==identity and p['life']==life] for h in hs]
   pawns=[next(p for p in reversed(track) if p['dodge']==1 and p['serverSnapshotSeconds']-p['dodgeStart']>=.4) for track in tracks];s=states();first=pawns[0]
-  check('Client'+str(ix)+' server accepted physical Dodge',pawns[0]['dodge']==1);check('Client'+str(ix)+' two peers agree sequence/charges',all(p['dodge']==1 and p['dodgeCharges']==1 for p in pawns));check('Client'+str(ix)+' authority swept distance',abs(np.linalg.norm((vec(pawns[0]['position'])-vec(pawns[0]['dodgeOrigin']))[:2])-300)<5)
+  check('Client'+str(ix)+' actual W dodge direction',np.linalg.norm(vec(pawns[0]['dodgeDirection'])-np.array([1,0,0]))<.01);check('Client'+str(ix)+' server accepted physical Dodge',pawns[0]['dodge']==1);check('Client'+str(ix)+' two peers agree sequence/charges',all(p['dodge']==1 and p['dodgeCharges']==1 for p in pawns));check('Client'+str(ix)+' authority swept distance',abs(np.linalg.norm((vec(pawns[0]['position'])-vec(pawns[0]['dodgeOrigin']))[:2])-300)<5)
   check('Client'+str(ix)+' peers converge to authority position',all(np.linalg.norm(vec(p['position'])-vec(pawns[0]['position']))<5 for p in pawns));check('Client'+str(ix)+' energy unchanged / idle vital HP1000',all(p['energy']==100 and p['vital']['hp']==1000 for p in pawns));m['stages'].append({'stage':'Client'+str(ix)+'Dodge','first':first,'states':s});screens[ix]=prev.copy()
   p2=[next(p for p in track if p['dodge']==2 and p['dodgeCharges']==0) for track in tracks];check('Client'+str(ix)+' second consumes final charge',all(p['dodgeCharges']==0 for p in p2));check('Client'+str(ix)+' second preserves original restore',all(p['dodgeRestoreAt']==pawns[0]['dodgeRestoreAt'] for p in p2));check('Client'+str(ix)+' exhausted edge cannot create third',all(next(p for p in v['pawns'] if p['id']==identity)['dodge']==2 for v in s));m['stages'].append({'stage':'Client'+str(ix)+'Second','zeroChargeSamples':p2,'latestStates':s,'firstSamples':pawns})
  before=states();base=[(p['id'],p['dodge'],p['action']) for p in before[0]['pawns']]

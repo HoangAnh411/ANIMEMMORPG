@@ -21,13 +21,15 @@ def record():
 def states():
  out=[]
  for r in records:
-  with Path(r['log']).open('rb') as f:f.seek(0,2);f.seek(max(0,f.tell()-500000));raw=f.read()
+  with Path(r['log']).open('rb') as f:f.seek(0,2);end=f.tell();f.seek(max(0,end-500000));raw=f.read()
+  if end>500000:raw=raw[raw.find(b'\n')+1:]
   lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig').splitlines();v=[json.loads(l.split('U02F_STATE ',1)[1]) for l in lines if 'U02F_STATE {' in l][-1];assert v['pid']==r['pid'] and v['sourceSHA']==r['sourceSHA'];out.append(v)
  return out
 def histories():
  out=[]
  for r in records:
-  with Path(r['log']).open('rb') as f:f.seek(0,2);f.seek(max(0,f.tell()-15000000));raw=f.read()
+  with Path(r['log']).open('rb') as f:f.seek(0,2);end=f.tell();f.seek(max(0,end-15000000));raw=f.read()
+  if end>15000000:raw=raw[raw.find(b'\n')+1:]
   lines=raw[:raw.rfind(b'\n')+1].decode('utf-8-sig').splitlines();out.append([json.loads(l.split('U02F_STATE ',1)[1]) for l in lines if 'U02F_STATE {' in l])
  return out
 def tap(key):active.press(key,True);time.sleep(.035);active.press(key,False)
