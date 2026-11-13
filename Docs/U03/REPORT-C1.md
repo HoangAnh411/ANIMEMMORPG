@@ -1,8 +1,8 @@
-# U03-C1 — READY_FOR_REVIEW
+# U03-C1 — ACCEPTED (technical)
 
 Nhánh `u03/c1-skills` từ main `f826371b9409c39453e5bd2ed8f8414749f1d34b`. Native/content source đã kiểm chứng: **`dbe10dab1cd6a9b14c28c732aba66f21d525ac69`**. Commit bàn giao sau source này chỉ thêm hồ sơ, bằng chứng và sửa harness/launcher; không thay Source/Content/Config đã build. Các câu chưa giao C1 trong hồ sơ trước là lịch sử.
 
-**Người dùng chưa chơi thử B2/C1. Presentation vẫn blockout; chưa nghiệm thu cảm giác, readability hoặc hình ảnh sản phẩm.** Không tự ACCEPTED, không merge/khép main/U03 hoặc triển khai C2.
+**Người dùng chưa chơi thử B2/C1. Presentation vẫn blockout; chưa nghiệm thu cảm giác, readability hoặc hình ảnh sản phẩm.** Người dùng đã xác nhận ACCEPTED về kỹ thuật tại bàn giao `db592ff` và cho phép khép tài liệu, sửa lỗi dấu checklist, commit/push và fast-forward/push main; xem [ACCEPTANCE-C1](ACCEPTANCE-C1.md). Không khép U03 tổng thể hoặc triển khai C2. Các kết quả dưới đây giữ nguyên, không chạy lại build/tests và không tác động Editor trong lượt khép này.
 
 ## Runtime
 
@@ -62,4 +62,4 @@ Giữ các lượt dưới trong manifest; FAIL/completed=false không đổi th
 - Network182148 dùng dải energy cố định khi regen đã bắt đầu; thay bằng eligible integral tại timestamp snapshot. Dodge182707 đổi nhầm hằng OpenCV khi rename stage, capture worker hỏng; giữ video/log invalid rồi rerun22/22.
 - Nhiều warning socket/`No SkeletalMesh` từ native fixture không mesh và deprecation/toolchain/engine được giữ trong WARNINGS/raw logs. Không bật AllToolsets hoặc che warning bằng config.
 
-Animation/fixture/tín hiệu text vẫn blockout; chưa nghiệm thu art, âm sản phẩm hoặc feel. Feint1s test riêng ở state gate; đường cast thường còn bị Q CD4s ràng buộc. Network là localhost/profile đã ghi, không chứng minh mạng xấu U05 hoặc performance U04. C2 AI/encounter/Tab/Retry, tám kỹ năng nghề và packaged Server chưa triển khai. Dừng **READY_FOR_REVIEW** để người dùng review/chơi thử.
+Animation/fixture/tín hiệu text vẫn blockout; chưa nghiệm thu art, âm sản phẩm hoặc feel. Feint1s test riêng ở state gate; đường cast thường còn bị Q CD4s ràng buộc. Network là localhost/profile đã ghi, không chứng minh mạng xấu U05 hoặc performance U04. C2 AI/encounter/Tab/Retry, tám kỹ năng nghề và packaged Server chưa triển khai. Trạng thái READY_FOR_REVIEW của bàn giao/bằng chứng là lịch sử trước nghiệm thu kỹ thuật; sau khép tài liệu và xác minh remote thì dừng, chưa C2.

@@ -2,6 +2,8 @@
 
 Native/content source `dbe10dab1cd6a9b14c28c732aba66f21d525ac69`. [Manifest](Evidence/C1/MANIFEST.json), [report và failures](REPORT-C1.md). PASS là bằng chứng kỹ thuật đúng tầng, không nghiệm thu cảm giác.
 
+Người dùng đã ACCEPTED về kỹ thuật tại bàn giao `db592ff` và cho phép khép tài liệu/fast-forward main; [hồ sơ nghiệm thu](ACCEPTANCE-C1.md). Giữ nguyên kết quả và bằng chứng, không chạy lại tests. Người dùng chưa chơi thử B2/C1; presentation vẫn blockout, chưa nghiệm thu feel/readability/art và chưa C2.
+
 |Luật|Tầng và bằng chứng cuối|Trạng thái|
 |---|---|---|
 |Definition/raw/flags/version, active/recovery nửa mở|C1 InterruptEdgesAndCapturedEffects + BlockoutMontageAuthorityPolicy; trước/đúng/sau active-start/end/duration; world raw100/80|PASS|
