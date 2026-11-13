@@ -180,4 +180,31 @@ bool FC1WorldFeint::RunTest(const FString&)
     }
     return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC1Successor,"AnimeMMORPG.U03.C1.WorldIncomingEInSuccessorLongShort",B2WorldFlags)
+bool FC1Successor::RunTest(const FString&)
+{
+    for(bool Reverse:{false,true})for(double Step:{.01,1.})
+    {
+        FB2World W;W.Command(W.Source,ECommand::Attack,1,0,0);W.Command(W.Target,ECommand::E,1,.29,180);W.Command(W.Source,ECommand::Attack,2,.30,0);
+        if(Reverse)FU03B2Access::Reverse(W.Collision);
+        for(double T=.30+Step;T<1.3;T+=Step)W.End(T);W.End(1.3);
+        TestEqual(TEXT("successor started"),W.Source->Combat->GetCombatSnapshot().ActionSequence,uint64(2));
+        // Incoming E starts .29, hits .54 inside successor [.40,.56) startup.
+        TestEqual(TEXT("real E cut successor startup"),W.Source->Combat->GetCombatSnapshot().InterruptedAction,uint64(2));
+        TestEqual(TEXT("old confirmed attack retained"),W.Target->Vital->GetSnapshot().HP,940);
+        TestEqual(TEXT("no successor hit after cutoff"),W.Collision->DamageResults.FilterByPredicate([&](const auto& D){return D.Hit.Id.Action.Source.Pawn==W.Source->NetworkPawnId;}).Num(),1);
+        TestEqual(TEXT("E raw80"),W.Source->Vital->GetSnapshot().HP,920);
+    }
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC1MultiTarget,"AnimeMMORPG.U03.C1.WorldEPerTargetDedup",B2WorldFlags)
+bool FC1MultiTarget::RunTest(const FString&)
+{
+    FB2World W(true);W.Command(W.Source,ECommand::E,1,0,0);W.Command(W.Target,ECommand::Q,1,.20,180);W.Command(W.Third,ECommand::Q,1,.20,180);W.End(1.5);
+    const auto Hits=W.Collision->DamageResults.FilterByPredicate([&](const auto& D){return D.Hit.Id.Action.Source.Pawn==W.Source->NetworkPawnId;});
+    TestEqual(TEXT("one contact on each distinct target"),Hits.Num(),2);
+    for(const auto& D:Hits){TestTrue(TEXT("each target interrupted independently"),D.bInterrupted);TestEqual(TEXT("each target80"),D.Result.Damage,80);}
+    return true;
+}
 #endif

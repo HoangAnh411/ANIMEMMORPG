@@ -42,6 +42,7 @@ bool FActionInstance::Cancel(ECutoff Reason,double T,bool Valid)
 {
     if(!FMath::IsFinite(T)||T<Start||T>=End()||T>=Cutoff) return false;
     if(Reason==ECutoff::Feint && Rules.Id!=EAction::Q)return false;
+    if(Reason==ECutoff::Interrupt && Rules.Id==EAction::Monster)return false;
     if(Reason==ECutoff::Dodge||Reason==ECutoff::Guard||Reason==ECutoff::Interrupt||Reason==ECutoff::Feint)
         if(!Valid||!Startup(T)) return false;
     Cutoff=T; return true;
@@ -245,7 +246,7 @@ EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext&
     if(C.bDefenseEnabled && I.Command==ECommand::Guard)
     {
         const bool Valid=!bDead&&bGrounded&&C.bPlaying&&C.bGrounded&&!C.bHardCC&&!C.bDead&&!C.bFeint&&!C.bDodging
-            &&!FeintState.Locked(Now)&&!DodgeState.Locked(Now)&&!DefenseState.Locked(Now)&&(!Action||Action->Startup(Now));
+            &&!FeintState.Locked(Now)&&!DodgeState.Locked(Now)&&!DefenseState.Locked(Now)&&(!Action||(Action->GetDefinition().Id<=EAction::E&&Action->Startup(Now)));
         if(!DefenseState.PressGuard(Now,I.AimYaw,Valid))return EAdmission::Locked;
         if(Action){Action->Cancel(ECutoff::Guard,Now);Action.Reset();}
         ClearPending();GraceEnd=0;NextCombo=EAction::Attack1;return EAdmission::Accepted;

@@ -71,7 +71,7 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
         auto Font=Result->GetFont();Font.Size=16;Result->SetFont(Font);return Result;
     };
     Box->AddChildToVerticalBox(Label(TEXT("Điều khiển — một phím/nút; Escape hủy nhận phím")));
-    const TCHAR* Names[]={TEXT("Tiến"),TEXT("Lùi"),TEXT("Trái"),TEXT("Phải"),TEXT("Nhảy"),TEXT("Sprint (giữ)"),TEXT("Đổi vai"),TEXT("Tương tác (fixture)"),TEXT("Attack"),TEXT("Guard"),TEXT("Dodge"),TEXT("Escape CC"),TEXT("Q (unavailable)"),TEXT("E (unavailable)"),TEXT("Target (unavailable)")};
+    const TCHAR* Names[]={TEXT("Tiến"),TEXT("Lùi"),TEXT("Trái"),TEXT("Phải"),TEXT("Nhảy"),TEXT("Sprint (giữ)"),TEXT("Đổi vai"),TEXT("Tương tác (fixture)"),TEXT("Attack"),TEXT("Guard"),TEXT("Dodge"),TEXT("Escape CC"),TEXT("Q - Hu Tram / Feint"),TEXT("E - Pha The"),TEXT("Target (unavailable)")};
     for(int32 I=0;I<AnimeMMORPG::U01::ControlCount;++I)
     {
         auto* Row=WidgetTree->ConstructWidget<UHorizontalBox>();Box->AddChildToVerticalBox(Row)->SetPadding(FMargin(2));
