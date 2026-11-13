@@ -30,6 +30,7 @@ public:
     bool IsMotorLocked() const { return GetLockMask() != 0; }
     uint8 GetLockMask() const { return LockMask | (bCombatAuthorityLocked ? uint8(EU01MotorLock::Combat) : 0); }
     void ApplyCombatAuthority(bool bLocked, bool bYawLocked, double YawDegrees);
+    void ApplyDefenseAuthority(bool Guard,double Slow) { bGuardAuthority=Guard;SlowAuthority=Slow;if(Guard)JumpWindow.ClearInput(); }
     void SetSprintRequested(bool bRequested) { bSprintRequested = bRequested && !IsMotorLocked(); }
     bool IsSprinting() const;
     virtual float GetMaxSpeed() const override;
@@ -40,7 +41,7 @@ public:
     virtual void SetPostLandedPhysics(const FHitResult& Hit) override;
     void ObserveMovementMode(EMovementMode PreviousMode);
     bool TryJump(double Now, float DeltaSeconds);
-    void PressJump(double Now) { if (!IsMotorLocked()) JumpWindow.Press(Now); }
+    void PressJump(double Now) { if (!IsMotorLocked()&&!bGuardAuthority) JumpWindow.Press(Now); }
     void ReleaseJump() { JumpWindow.Release(); }
     bool CanUseCoyote(double Now) const { return !IsMotorLocked() && JumpWindow.HasCoyote(Now); }
     bool HasBufferedJump(double Now) const { return JumpWindow.HasBuffer(Now); }
@@ -71,6 +72,8 @@ private:
     // Never restored from a saved move or client compressed flag.
     bool bCombatAuthorityLocked = false, bCombatYawLocked = false;
     double CombatYawDegrees = 0;
+    bool bGuardAuthority=false;
+    double SlowAuthority=0;
     bool bSprintRequested = false;
     bool bAttemptingJump = false;
     double FrameStartSeconds = 0;

@@ -60,7 +60,7 @@ void UU01CharacterMovement::ApplyCombatAuthority(bool bLocked, bool bYawLocked, 
 
 void UU01CharacterMovement::PhysicsRotation(float DeltaSeconds)
 {
-    if (bCombatAuthorityLocked)
+    if (bCombatAuthorityLocked||bGuardAuthority)
     {
         // Authoritative/snapshot yaw also wins during movement replay.
         if (UpdatedComponent) MoveUpdatedComponent(FVector::ZeroVector,FRotator(0,CombatYawDegrees,0).Quaternion(),true);
@@ -72,7 +72,7 @@ void UU01CharacterMovement::PhysicsRotation(float DeltaSeconds)
 bool UU01CharacterMovement::IsSprinting() const
 {
     if(CharacterOwner&&CharacterOwner->GetLocalRole()==ROLE_SimulatedProxy)return CastChecked<AU01Character>(CharacterOwner)->bNetSprinting;
-    return !IsMotorLocked() && bSprintRequested && Acceleration.SizeSquared2D() > UE_SMALL_NUMBER;
+    return !IsMotorLocked() && !bGuardAuthority && bSprintRequested && Acceleration.SizeSquared2D() > UE_SMALL_NUMBER;
 }
 
 float UU01CharacterMovement::GetMaxSpeed() const
@@ -80,7 +80,7 @@ float UU01CharacterMovement::GetMaxSpeed() const
 #if !UE_BUILD_SHIPPING
     if(CharacterOwner&&CharacterOwner->GetLocalRole()==ROLE_AutonomousProxy&&ProbeSpeed>0)return ProbeSpeed;
 #endif
-    return IsMotorLocked() ? 0.f : (IsSprinting() ? 700.f : 500.f);
+    return IsMotorLocked() ? 0.f : float((bGuardAuthority?200.:(IsSprinting()?700.:500.))*(1.-SlowAuthority));
 }
 
 void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
@@ -100,7 +100,7 @@ void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
     // During a retained walking path, another CMC solve would move the actor
     // away from the resolver's trajectory. Falling still uses native gravity.
     if(!WorldOwnsDodge)Super::PerformMovement(DeltaSeconds);
-    if (bCombatAuthorityLocked) PhysicsRotation(DeltaSeconds);
+    if (bCombatAuthorityLocked||bGuardAuthority) PhysicsRotation(DeltaSeconds);
     SimulationSeconds = FrameStartSeconds + DeltaSeconds;
     if(CharacterOwner&&CharacterOwner->HasAuthority())CastChecked<AU01Character>(CharacterOwner)->bNetSprinting=IsSprinting();
 }
@@ -141,7 +141,7 @@ void UU01CharacterMovement::ObserveMovementMode(EMovementMode PreviousMode)
 bool UU01CharacterMovement::TryJump(double Now, float DeltaSeconds)
 {
     const bool bGrounded = IsMovingOnGround();
-    if (IsMotorLocked() || !JumpWindow.CanConsume(Now, bGrounded)) return false;
+    if (IsMotorLocked() || bGuardAuthority || !JumpWindow.CanConsume(Now, bGrounded)) return false;
     auto* MotorPawn = Cast<AU01Character>(CharacterOwner);
     if (!MotorPawn) return false;
     const float GravityMagnitude = FMath::Abs(GetGravityZ());

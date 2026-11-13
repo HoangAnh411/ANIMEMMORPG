@@ -101,7 +101,7 @@ bool FTimelineModel::Advance(double T, ITimelineResolver& Resolver)
 void FTimelineModel::CompleteCurrent(ITimelineResolver& Resolver)
 {
     if(PendingDodge.IsSet() && Now>=PendingDodge->Receive+.15)PendingDodge.Reset();
-    if(PendingDodge.IsSet() && Now>=DodgeState.NextStart && bGrounded && !bDead)
+    if(PendingDodge.IsSet() && Now>=DodgeState.NextStart && bGrounded && !bDead && !DefenseState.Locked(Now) && !DefenseState.bGuard)
     {const auto I=PendingDodge.GetValue();PendingDodge.Reset();AdmitDodge(I);}
     // Only now can an endpoint contact exist: cancellation at this timestamp excludes it.
     if (Action)
@@ -139,12 +139,13 @@ void FTimelineModel::DeliverBefore(double Stop, ITimelineResolver& Resolver)
             Resolver.ResolveInterval({Action->Identity,D.Id,D.RawDamage,Begin,End,Action->Yaw,true});
     }
     Resource.Advance(Stop);
+    DefenseState.Advance(Stop);
     DodgeState.Recharge(Stop);
     Now = Stop;
 }
 double FTimelineModel::NextBoundaryThrough(double T) const
 {
-    double Boundary = T;
+    double Boundary = DefenseState.Boundary(Now,T);
     auto Split = [&](double At) { if (At > Now) Boundary = FMath::Min(Boundary, At); };
     if (Action) { const auto& D=Action->GetDefinition(); Split(Action->Start+D.ActiveStart); Split(Action->Start+D.ActiveEnd); Split(Action->End()); }
     if (Pending.IsSet()) Split(Pending->Receive+.15);
@@ -166,25 +167,28 @@ bool FTimelineModel::GroundedAtBarrier(bool Grounded)
 bool FTimelineModel::FinishBarrier(ITimelineResolver& Collector)
 { if(!bBarrierOpen)return false; CompleteCurrent(Collector); bBarrierOpen=false; return true; }
 bool FTimelineModel::UpdateAim(double T,double Yaw)
-{ if(bBarrierOpen||bAdvancing||!FMath::IsFinite(Yaw)||T!=Now||!Action||!Action->Startup(T))return false; Action->Yaw=FRotator::NormalizeAxis(Yaw); return true; }
+{ if(bBarrierOpen||bAdvancing||!FMath::IsFinite(Yaw)||T!=Now)return false;
+  if(DefenseState.bGuard){DefenseState.Yaw=FRotator::NormalizeAxis(Yaw);return true;}
+  if(!Action||!Action->Startup(T))return false; Action->Yaw=FRotator::NormalizeAxis(Yaw); return true; }
 bool FTimelineModel::ResetLife(U02::FLifeId NewLife,double T)
 {
     if(bBarrierOpen||bAdvancing||T<Now||NewLife.Pawn!=Life.Pawn||NewLife.Generation<=Life.Generation)return false;
     Life=NewLife;Now=T;Action.Reset();Pending.Reset();NextCombo=EAction::Attack1;GraceEnd=0;
-    bDead=false;bGrounded=true;Resource=FResourceModel();DodgeState=FDodgeState();PendingDodge.Reset();Next=0;return true;
+    bDead=false;bGrounded=true;Resource=FResourceModel();DefenseState=FDefenseState();DefenseState.Last=T;DefenseState.FreeSince=T;DodgeState=FDodgeState();PendingDodge.Reset();Next=0;return true;
 }
 bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
 {
     if (!bResolvingEvent) return false;
-    const bool Lifecycle = Reason == ECutoff::Death || Reason == ECutoff::LostGround;
+    const bool Lifecycle = Reason == ECutoff::Death || Reason == ECutoff::LostGround || Reason == ECutoff::HardCC;
     if (Lifecycle)
     {
         if (Reason == ECutoff::Death) bDead = true;
-        else bGrounded = false;
+        else if(Reason==ECutoff::LostGround)bGrounded = false;
+        DefenseState.DropGuard();
         // Lifecycle state and combo invalidation do not depend on an old action's window.
         Pending.Reset(); NextCombo = EAction::Attack1; GraceEnd = 0;
         PendingDodge.Reset();DodgeState.MotionEnd=FMath::Min(DodgeState.MotionEnd,Now);
-        if(Reason==ECutoff::Death)DodgeState.LockEnd=FMath::Min(DodgeState.LockEnd,Now);
+        if(Reason==ECutoff::Death||Reason==ECutoff::HardCC)DodgeState.LockEnd=FMath::Min(DodgeState.LockEnd,Now);
     }
     if (!Action || !Action->Cancel(Reason, Now, Valid)) return Lifecycle;
     Pending.Reset();
@@ -228,6 +232,23 @@ bool FTimelineModel::CancelUnopposed(ECutoff Reason, double T, bool Valid, TArra
 }
 EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext& C)
 {
+    if(C.bDefenseEnabled && I.Command==ECommand::GuardRelease){DefenseState.ReleaseGuard();return EAdmission::Accepted;}
+    if(C.bDefenseEnabled && I.Command==ECommand::Escape)
+    {
+        if(bDead||!C.bPlaying||C.bDead)return EAdmission::Locked;
+        if(!DefenseState.Locked(Now))return EAdmission::Locked;
+        if(Now<DefenseState.XReadyAt)return EAdmission::Cooldown;
+        DefenseState.Escape(Now);ClearPending();return EAdmission::Accepted;
+    }
+    if(C.bDefenseEnabled && I.Command==ECommand::Guard)
+    {
+        const bool Valid=!bDead&&bGrounded&&C.bPlaying&&C.bGrounded&&!C.bHardCC&&!C.bDead&&!C.bFeint&&!C.bDodging
+            &&!DodgeState.Locked(Now)&&!DefenseState.Locked(Now)&&(!Action||(Action->GetDefinition().Id<=EAction::Attack3&&Action->Startup(Now)));
+        if(!DefenseState.PressGuard(Now,I.AimYaw,Valid))return EAdmission::Locked;
+        if(Action){Action->Cancel(ECutoff::Guard,Now);Action.Reset();}
+        ClearPending();GraceEnd=0;NextCombo=EAction::Attack1;return EAdmission::Accepted;
+    }
+    if(DefenseState.bGuard||DefenseState.Locked(Now))return EAdmission::Locked;
     if(bDead||!bGrounded||!C.bPlaying||!C.bGrounded||C.bHardCC||C.bGuard||C.bDodging||C.bFeint||C.bDead) return EAdmission::Locked;
     if(I.Command==ECommand::Dodge && C.bDodgeEnabled)return AdmitDodge(I);
     if(DodgeState.Locked(Now))return EAdmission::Locked;
@@ -284,9 +305,28 @@ TArray<FAdmissionResult> FTimelineModel::SubmitBatch(TArray<FCombatIntent> Batch
                 Results.Add({I.Sequence,ValidTime&&I.Life==Life&&I.Sequence<=Watermark?EAdmission::Stale:EAdmission::Invalid,0});
             else {Watermark=I.Sequence;Group.Add(I);}
         }
-        Group.Sort([](const auto& A,const auto& B){return A.Command!=B.Command?A.Command<B.Command:A.Sequence<B.Sequence;});
+        Group.Sort([](const auto& A,const auto& B){
+            const int32 AP=A.Command==ECommand::GuardRelease?-1:int32(A.Command), BP=B.Command==ECommand::GuardRelease?-1:int32(B.Command);
+            return AP!=BP?AP<BP:A.Sequence<B.Sequence;});
         for(const auto& I:Group) Results.Add({I.Sequence,Admit(I,C),Action?Action->Identity.Sequence:0});
     }
     return Results;
+}
+EDefense FTimelineModel::DefendAtBarrier(FVector ToSource,FVector Direction,bool Blockable,bool Parryable)
+{
+    check(bBarrierOpen);
+    const auto R=DefenseState.Defend(Now,ToSource,Direction,Blockable,Parryable);
+    if(DefenseState.Locked(Now))CancelAtBarrier(ECutoff::HardCC);
+    return R;
+}
+bool FTimelineModel::HardAtBarrier(EHardCC Kind,double Duration)
+{
+    if(!bBarrierOpen||bDead||!DefenseState.ApplyHard(Kind,Duration,Now))return false;
+    CancelAtBarrier(ECutoff::HardCC);return true;
+}
+bool FTimelineModel::SlowAtBarrier(double Fraction,double Duration)
+{
+    if(!bBarrierOpen||bDead||!FMath::IsFinite(Fraction)||Fraction<=0||Fraction>1||!FMath::IsFinite(Duration)||Duration<=0)return false;
+    DefenseState.Slows.Add({Fraction,Now+Duration});return true;
 }
 }

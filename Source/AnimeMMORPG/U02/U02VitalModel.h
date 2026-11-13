@@ -7,6 +7,7 @@ struct FDamageResult
 {
     bool bApplied=false,bCrit=false,bDied=false;
     int32 Damage=0,Absorbed=0,HPDamage=0,BeforeHP=0,AfterHP=0;
+    uint8 Defense=0;
     TArray<uint64> ShieldOrder;
 };
 struct FVitalModel

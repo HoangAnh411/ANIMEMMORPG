@@ -1,14 +1,15 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "U02/U02ActionModel.h"
+#include "U03DefenseModel.h"
 
 // A0 only: no UObject, input, clock, world or runtime binding.
 namespace AnimeMMORPG::U03
 {
 enum class EAction : uint8 { Attack1, Attack2, Attack3, Q, E, Monster };
-enum class ECommand : uint8 { Escape, Dodge, Guard, Feint, Q, E, Attack, Jump, Target };
+enum class ECommand : uint8 { Escape, Dodge, Guard, Feint, Q, E, Attack, Jump, Target, GuardRelease };
 enum class EAdmission : uint8 { Accepted, Queued, Replaced, Stale, Invalid, Locked, Busy, Resource, Cooldown, Unsupported };
-enum class ECutoff : uint8 { Dodge, Guard, Interrupt, Death, LostGround };
+enum class ECutoff : uint8 { Dodge, Guard, Interrupt, Death, LostGround, HardCC };
 struct FActionDefinition
 {
     EAction Id; uint32 Version; double ActiveStart, ActiveEnd, Duration; int32 RawDamage;
@@ -36,7 +37,7 @@ struct FCombatIntent
 };
 struct FAdmissionResult { uint64 Sequence; EAdmission Result; uint64 ActionSequence; };
 struct FActiveInterval { U02::FActionId Identity; EAction DefinitionId; int32 RawDamage; double Begin, End; double Yaw; bool bEndExclusive = true; };
-struct FAdmissionContext { bool bPlaying=true, bGrounded=true, bHardCC=false, bGuard=false, bDodging=false, bFeint=false, bDead=false, bDodgeEnabled=false; };
+struct FAdmissionContext { bool bPlaying=true, bGrounded=true, bHardCC=false, bGuard=false, bDodging=false, bFeint=false, bDead=false, bDodgeEnabled=false, bDefenseEnabled=false; };
 struct FDodgeState
 {
     uint64 Sequence=0;
@@ -103,6 +104,11 @@ public:
     const TOptional<FCombatIntent>& GetPendingDodge() const { return PendingDodge; }
     const FActionInstance* Current() const { return Action.Get(); }
     const FResourceModel& Resources() const { return Resource; }
+    const FDefenseState& Defense() const { return DefenseState; }
+    EDefense DefendAtBarrier(FVector ToSource,FVector AttackDirection,bool Blockable,bool Parryable);
+    bool HardAtBarrier(EHardCC Kind,double Duration);
+    bool SlowAtBarrier(double Fraction,double Duration);
+    void DropGuardCurrent() { DefenseState.DropGuard();ClearPending(); }
 private:
     void Start(EAction Id, double T, double Yaw);
     EAdmission Admit(const FCombatIntent& I, const FAdmissionContext& C);
@@ -110,6 +116,7 @@ private:
     EAction NextCombo=EAction::Attack1;
     TUniquePtr<FActionInstance> Action; TOptional<FCombatIntent> Pending;
     FResourceModel Resource;
+    FDefenseState DefenseState;
     FDodgeState DodgeState;
     TOptional<FCombatIntent> PendingDodge;
     EAdmission AdmitDodge(const FCombatIntent& I);

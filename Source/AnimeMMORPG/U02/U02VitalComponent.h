@@ -28,13 +28,14 @@ public:
     AnimeMMORPG::U02::FLifeId GetLife() const;
     bool IsAlive(AnimeMMORPG::U02::FLifeId Life) const;
     double GetAttackFactor() const {return State.AttackFactor;}
-    AnimeMMORPG::U02::FDamageResult ApplyResolved(const AnimeMMORPG::U02::FHitCandidate& Hit,double Attack,double Roll);
+    AnimeMMORPG::U02::FDamageResult ApplyResolved(const AnimeMMORPG::U02::FHitCandidate& Hit,double Attack,double Roll,double BlockFactor=1);
     bool ResetLabCombat(uint64 Generation);
     bool AddFixtureShield(uint64 Source,int32 Capacity,double Deadline,double Now);
     void Refresh(double GameplayNow);
     TSharedRef<FJsonObject> GetDiagnostics() const;
 private:
     friend struct FU03B1Access;
+    friend struct FU03B2Access;
     friend struct FU02VitalTestAccess;
     friend struct FU03RuntimeAccess;
     AnimeMMORPG::U02::FVitalModel State;

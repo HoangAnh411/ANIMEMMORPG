@@ -22,10 +22,10 @@ FLifeId UU02VitalComponent::GetLife() const
 }
 bool UU02VitalComponent::IsAlive(FLifeId Life) const
 {return GetOwner()->HasAuthority()&&!GetOwner()->IsActorBeingDestroyed()&&GetLife()==Life&&State.Generation==Life.Generation&&!State.bDead&&State.HP>0;}
-FDamageResult UU02VitalComponent::ApplyResolved(const FHitCandidate& Hit,double Attack,double Roll)
+FDamageResult UU02VitalComponent::ApplyResolved(const FHitCandidate& Hit,double Attack,double Roll,double BlockFactor)
 {
     if(!IsAlive(Hit.Id.Target))return {};
-    auto R=State.Apply(Hit.RawDamage,Attack,Roll,Hit.TimestampSeconds);
+    auto R=State.Apply(Hit.RawDamage,Attack,Roll,Hit.TimestampSeconds,BlockFactor);
     if(!R.bApplied)return R;
     Publish(Hit.TimestampSeconds);
     if(R.bDied)

@@ -10,6 +10,7 @@
 class UU02CombatComponent;
 class UU02HurtboxComponent;
 class UPrimitiveComponent;
+class AU01Character;
 DECLARE_MULTICAST_DELEGATE_OneParam(FU02GeometryConfirmed,const AnimeMMORPG::U02::FHitCandidate&);
 
 // One server Game/PIE world scheduler. No HP, RNG, damage or overlap-callback resolution.
@@ -45,7 +46,17 @@ public:
     uint64 Queries=0,Blocked=0,Discontinuities=0;
     uint32 UnsupportedObstructions=0;
     bool bCharacterFixtureTargets=false; // Native test fixture only; normal lab attacks dummies.
+    struct FDefenseFixtureHit
+    {
+        bool bBlockable=true,bParryable=true;
+        AnimeMMORPG::U03::EHardCC Hard=AnimeMMORPG::U03::EHardCC::None;
+        double Duration=0,Slow=0;
+    };
+    // Explicit labelled fixtures only; no product PvP or client outcome RPC.
+    void StartDefenseFixture(const FString& Label);
+    void TickDefenseFixture(double Now);
 private:
+    friend struct FU03B2Access;
     friend struct FU03B1Access;
     friend struct FU02CollisionTestAccess;
     friend struct FU02EVitalWorldAccess;
@@ -101,6 +112,9 @@ private:
     uint64 NextLifecycle=0;
     TMap<uint64,bool> LifecycleResults;
     TArray<AnimeMMORPG::U02::FActionId> FixtureInterruptActions; // native fixtures, no client setter
+    TMap<AnimeMMORPG::U02::FActionId,FDefenseFixtureHit> DefenseFixtureHits;
+    struct FDefenseEnemy {TWeakObjectPtr<AU01Character> Actor;TWeakObjectPtr<AU01Character> Target;FString Label;double Next=0;};
+    TArray<FDefenseEnemy> DefenseEnemies;
     void EmitInterval(UU02CombatComponent* Combat,const AnimeMMORPG::U03::FActiveInterval& Interval);
     void CollectCurrent(double Through,TArray<AnimeMMORPG::U02::FHitCandidate>& Out);
 

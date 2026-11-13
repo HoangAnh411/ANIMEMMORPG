@@ -269,6 +269,9 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
     }
     else
     {
+        if(AnimeMMORPG::U01::CanonicalKey(Key)==ControlKey(AnimeMMORPG::U01::Guard))
+            if(auto* C=Cast<AU01Character>(GetPawn());C&&C->Combat)
+                C->Combat->SubmitCombatIntent(AnimeMMORPG::U03::ECommand::GuardRelease,++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw);
         ReleaseGate.Up(Key);ObservedKeys.Remove(Key);
         if (AnimeMMORPG::U01::CanonicalKey(Key)==ControlKey(AnimeMMORPG::U01::Jump)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->StopJumping();
         UE_LOG(LogU01Control, Display, TEXT("PhysicalRelease/Rearm key=%s"), *Key.ToString());

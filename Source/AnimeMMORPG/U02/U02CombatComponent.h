@@ -48,6 +48,23 @@ struct FU02RepCombatSnapshot
     UPROPERTY() double DodgeRestoreAt=0;
     UPROPERTY() FVector DodgeDirection=FVector::ZeroVector;
     UPROPERTY() FVector DodgeOrigin=FVector::ZeroVector;
+    UPROPERTY() bool bGuard=false;
+    UPROPERTY() uint64 GuardSequence=0;
+    UPROPERTY() double GuardYaw=0;
+    UPROPERTY() double Posture=100;
+    UPROPERTY() bool bParryOpen=false;
+    UPROPERTY() double ParryStart=0;
+    UPROPERTY() double ParryEnd=0;
+    UPROPERTY() double ParryReadyAt=0;
+    UPROPERTY() uint8 HardCC=0;
+    UPROPERTY() double HardEnd=0;
+    UPROPERTY() double LockedBudget=0;
+    UPROPERTY() double ImmuneEnd=0;
+    UPROPERTY() double SlowFraction=0;
+    UPROPERTY() double XReadyAt=0;
+    UPROPERTY() uint64 DefenseEvent=0;
+    UPROPERTY() uint8 DefenseResult=0;
+    UPROPERTY() double DefenseEventTime=0;
 };
 
 USTRUCT()
@@ -99,18 +116,20 @@ private:
     friend struct FU02FTestAccess;
     friend struct FU03RuntimeAccess;
     friend struct FU03B1Access;
+    friend struct FU03B2Access;
     friend class UU02CollisionWorld;
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepCombatSnapshot Snapshot;
     UFUNCTION() void OnRep_Snapshot();
     UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life);
     UFUNCTION(Server, Reliable) void ServerControlPlaying(bool bPlaying);
     UFUNCTION(Server, Unreliable) void ServerAim(double Yaw, FGuid Pawn, uint64 Life, uint64 Action);
+    UFUNCTION(Server, Unreliable) void ServerGuardAim(double Yaw,FGuid Pawn,uint64 Life,uint64 Guard);
     TUniquePtr<AnimeMMORPG::U03::FTimelineModel> Model;
     UPROPERTY(Replicated) FU03OwnerAdmission OwnerAdmission;
     UFUNCTION(Server,Reliable) void ServerCombat(uint8 Command,uint64 Sequence,double LocalSeconds,double Yaw,FGuid Pawn,uint64 Life,FVector2D Direction);
     struct FQueuedIntent { AnimeMMORPG::U03::FCombatIntent Intent; double LocalSeconds=0,Receive=0; };
     TArray<FQueuedIntent> QueuedIntents;
-    struct FQueuedAim {double Yaw;FGuid Pawn;uint64 Life,Action;};
+    struct FQueuedAim {double Yaw;FGuid Pawn;uint64 Life,Action;uint64 Guard=0;};
     TArray<FQueuedAim> QueuedAim;
     void ProcessQueuedIntents(double Now);
     void RememberCurrent(double Now);
@@ -122,6 +141,8 @@ private:
     AnimeMMORPG::U02::FStartupTurn StartupTurn;
     double LastAimSend = -1;
     uint64 LastCommand = 0;
+    uint64 PresentedDefenseEvent=0,PresentedDefenseLife=0;
+    UPROPERTY(Transient) TObjectPtr<class USoundWaveProcedural> ParryTone;
     uint64 LastSentCommand=0,LastSentLife=0;
     AnimeMMORPG::U02::EReject LastReject = AnimeMMORPG::U02::EReject::None;
     AnimeMMORPG::U02::FActiveSlice LastInterval;

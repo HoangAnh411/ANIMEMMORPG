@@ -17,6 +17,9 @@
 #include "Policies/CondensedJsonPrintPolicy.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
+#include "DrawDebugHelpers.h"
+#include "Sound/SoundWaveProcedural.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogU02Combat, Log, All);
 using namespace AnimeMMORPG::U02;
@@ -87,11 +90,14 @@ void UU02CombatComponent::ServerControlPlaying_Implementation(bool Playing)
 void UU02CombatComponent::DiscardPendingInputs()
 {
     if(!Model)return;
+    if(BeforeActionMutation.IsBound())BeforeActionMutation.Execute(GetWorld()->GetTimeSeconds());
     for(const auto& E:QueuedIntents)if(E.Intent.Life==Model->GetLife())AdmissionWatermark=FMath::Max(AdmissionWatermark,E.Intent.Sequence);
-    QueuedIntents.Empty();Model->ClearPending();
+    QueuedIntents.Empty();Model->DropGuardCurrent();Publish(Model->Time(),true);
 }
 void UU02CombatComponent::ServerAim_Implementation(double Yaw,FGuid Pawn,uint64 Life,uint64 Action)
 {if(Model&&FMath::IsFinite(Yaw)&&QueuedAim.Num()<16)QueuedAim.Add({Yaw,Pawn,Life,Action});}
+void UU02CombatComponent::ServerGuardAim_Implementation(double Yaw,FGuid Pawn,uint64 Life,uint64 Guard)
+{if(Model&&Guard&&FMath::IsFinite(Yaw)&&QueuedAim.Num()<16)QueuedAim.Add({Yaw,Pawn,Life,0,Guard});}
 void UU02CombatComponent::HandleAttack(uint64 Sequence,double Local,double Yaw,double Now)
 {
     // Native test adapter uses the identical enqueue + world barrier path.
@@ -102,14 +108,15 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
 {
     using namespace AnimeMMORPG::U03;
     if(!Model)return;
-    for(const auto& A:QueuedAim)if(A.Pawn==Snapshot.PawnId&&A.Life==Snapshot.LifeGeneration&&A.Action==Snapshot.ActionSequence)
+    for(const auto& A:QueuedAim)if(A.Pawn==Snapshot.PawnId&&A.Life==Snapshot.LifeGeneration&&
+        (A.Guard?(Model->Defense().bGuard&&A.Guard==Model->Defense().GuardSequence):(!Model->Defense().bGuard&&A.Action==Snapshot.ActionSequence)))
         if(Model->UpdateAim(Now,A.Yaw)){StartupTurn.Retarget(Now,A.Yaw);Publish(Now,true);}
     QueuedAim.Empty();
     auto* C=Character();auto* M=C->GetU01Movement();FAdmissionContext Context;
     Context.bPlaying=bAuthorityPlaying&&!(M->GetLockMask()&(uint8(EU01MotorLock::Control)|uint8(EU01MotorLock::Interacting)));
     if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))Context.bPlaying&=PC->ControlState==EU01ControlState::Playing;
     Context.bGrounded=M->IsMovingOnGround();Context.bDead=C->Vital&&C->Vital->GetSnapshot().bDead;
-    Context.bDodgeEnabled=true;
+    Context.bDodgeEnabled=true;Context.bDefenseEnabled=true;
     auto Commands=MoveTemp(QueuedIntents);QueuedIntents.Empty();
     Commands.Sort([](const auto& A,const auto& B){return A.Receive!=B.Receive?A.Receive<B.Receive:A.Intent.Sequence<B.Intent.Sequence;});
     TSet<uint64> Conflicts;
@@ -128,7 +135,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
             else
             {
                 AdmissionWatermark=I.Sequence;
-                if(I.Command==ECommand::Attack||I.Command==ECommand::Dodge)
+                if(I.Command==ECommand::Attack||I.Command==ECommand::Dodge||I.Command==ECommand::Guard||I.Command==ECommand::GuardRelease||I.Command==ECommand::Escape)
                 {
                     int32 Group=ReceiveGroups.Find(Entry.Receive);
                     if(Group==INDEX_NONE){Group=ReceiveGroups.Add(Entry.Receive);Admissible.AddDefaulted();}
@@ -147,7 +154,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
     const uint64 BeforeDodge=Model->Dodge().Sequence;
     FU03NoEvents ResolvedBarrier;TArray<FAdmissionResult> Results;
     for(auto& Group:Admissible)Results.Append(Model->SubmitBatch(MoveTemp(Group),Context,ResolvedBarrier));
-    if(BeforeDodge!=Model->Dodge().Sequence && Snapshot.ActionSequence)
+    if((BeforeDodge!=Model->Dodge().Sequence||(!Model->Current()&&Model->Defense().bGuard)) && Snapshot.ActionSequence)
     {Snapshot.Phase=uint8(EPhase::Cancelled);Snapshot.ServerSeconds=Now;GetWorld()->GetSubsystem<UU02CollisionWorld>()->ObserveCombat(this);}
     for(const auto& R:Results)
     {
@@ -202,7 +209,7 @@ bool UU02CombatComponent::ResetLabCombat()
     if(!Model||!Character()->HasAuthority())return false;
     const double Now=FMath::Max(double(GetWorld()->GetTimeSeconds()),Model->Time());auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->DrainAt(Now);
     auto Life=Model->GetLife();++Life.Generation;if(!Model->ResetLife(Life,Now))return false;
-    QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;
+    QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;Snapshot.DefenseEvent=0;Snapshot.DefenseResult=0;Snapshot.DefenseEventTime=0;
     OwnerAdmission.PendingCommand=0;OwnerAdmission.PendingExpires=0;
     if(Character()->Vital)Character()->Vital->ResetLabCombat(Life.Generation);
     Publish(Now,true);W->RebaseResetSubject(Character());Trace(TEXT("Reset"),Now);return true;
@@ -223,6 +230,11 @@ void UU02CombatComponent::Publish(double Now,bool Force)
     const auto& D=Model->Dodge();if(Snapshot.DodgeSequence!=D.Sequence)Snapshot.DodgeOrigin=Character()->GetActorLocation();Snapshot.DodgeSequence=D.Sequence;Snapshot.DodgeCharges=D.Charges;Snapshot.DodgeStart=D.Start;Snapshot.DodgeMotionEnd=D.MotionEnd;Snapshot.DodgeLockEnd=D.LockEnd;Snapshot.DodgeNextStart=D.NextStart;Snapshot.DodgeRestoreAt=D.RestoreAt;Snapshot.DodgeDirection=D.Direction;
     if(D.Locked(Now)){Snapshot.bLocked=true;Snapshot.bYawLocked=true;}
     Snapshot.Energy=Model->Resources().Energy();Snapshot.QReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::Q);Snapshot.EReadyAt=Model->Resources().ReadyAt(AnimeMMORPG::U03::EAction::E);
+    const auto& Defense=Model->Defense();Snapshot.bGuard=Defense.bGuard;Snapshot.GuardSequence=Defense.GuardSequence;Snapshot.GuardYaw=Defense.Yaw;Snapshot.Posture=Defense.Posture;
+    Snapshot.bParryOpen=Defense.bParryOpen;Snapshot.ParryStart=Defense.ParryStart;Snapshot.ParryEnd=Defense.ParryEnd;Snapshot.ParryReadyAt=Defense.ParryReadyAt;
+    Snapshot.HardCC=uint8(Defense.Hard);Snapshot.HardEnd=Defense.HardEnd;Snapshot.LockedBudget=Defense.LockedBudget;Snapshot.ImmuneEnd=Defense.ImmuneEnd;Snapshot.SlowFraction=Defense.Slow(Now);Snapshot.XReadyAt=Defense.XReadyAt;
+    if(Defense.Locked(Now)){Snapshot.bLocked=true;Snapshot.bYawLocked=true;}
+    if(Defense.bGuard)Snapshot.AimYawDegrees=Defense.Yaw;
     const auto& Pending=Model->GetPendingDodge().IsSet()?Model->GetPendingDodge():Model->GetPending();OwnerAdmission.PendingCommand=Pending.IsSet()?Pending->Sequence:0;OwnerAdmission.PendingExpires=Pending.IsSet()?Pending->Receive+.15:0;
     Snapshot.TurnFromYaw=StartupTurn.FromYaw;Snapshot.TurnStartSeconds=StartupTurn.SegmentStart;
     Snapshot.LastCommand=LastCommand;Snapshot.Accepted=AcceptedCount;Snapshot.Rejected=RejectedCount;Snapshot.RejectReason=uint8(LastReject);
@@ -237,7 +249,9 @@ void UU02CombatComponent::ApplyMotorSnapshot()
         const auto* GS=GetWorld()->GetGameState();const double Now=C->HasAuthority()?Snapshot.ServerSeconds:(GS?GS->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds());
         FStartupTurn Turn;Turn.Begin(Snapshot.TurnFromYaw,Snapshot.AimYawDegrees,Snapshot.TurnStartSeconds,Snapshot.StartSeconds+Snapshot.ActiveStart);
         const bool DodgeLock=Snapshot.DodgeSequence&&Now>=Snapshot.DodgeStart&&Now<Snapshot.DodgeLockEnd;
-        const double Yaw=DodgeLock?Snapshot.DodgeDirection.Rotation().Yaw:Turn.Sample(Now);C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked,Yaw);
+        const double Yaw=Snapshot.bGuard?Snapshot.GuardYaw:DodgeLock?Snapshot.DodgeDirection.Rotation().Yaw:Turn.Sample(Now);
+        C->GetU01Movement()->ApplyDefenseAuthority(Snapshot.bGuard,Snapshot.SlowFraction);
+        C->GetU01Movement()->ApplyCombatAuthority(Snapshot.bLocked,Snapshot.bYawLocked||Snapshot.bGuard,Yaw);
         if(Snapshot.bLocked)C->SetActorRotation(FRotator(0,Yaw,0));
     }
 }
@@ -245,9 +259,29 @@ void UU02CombatComponent::OnRep_Snapshot(){ApplyMotorSnapshot();}
 void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponentTickFunction* Function)
 {
     Super::TickComponent(Dt,Type,Function);auto* C=Character();if(!C)return;const double Now=GetWorld()->GetTimeSeconds();
-    if(C->IsLocallyControlled()&&C->GetController()&&Snapshot.Phase==uint8(EPhase::Startup)&&Now-LastAimSend>=1./30)
-    {if(Model)ServerAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);else ServerAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);LastAimSend=Now;}
+    if(C->IsLocallyControlled()&&C->GetController()&&(Snapshot.bGuard||Snapshot.Phase==uint8(EPhase::Startup))&&Now-LastAimSend>=1./30)
+    {
+        if(Snapshot.bGuard){if(Model)ServerGuardAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.GuardSequence);else ServerGuardAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.GuardSequence);}
+        else {if(Model)ServerAim_Implementation(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);else ServerAim(C->GetControlRotation().Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Snapshot.ActionSequence);}
+        LastAimSend=Now;
+    }
     if(!Model)ApplyMotorSnapshot();
+    const auto* FeedbackClock=GetWorld()->GetGameState();const double FeedbackNow=FeedbackClock?FeedbackClock->GetServerWorldTimeSeconds():Now;
+    if(PresentedDefenseLife!=Snapshot.LifeGeneration){PresentedDefenseLife=Snapshot.LifeGeneration;PresentedDefenseEvent=0;}
+    if(Snapshot.DefenseEvent!=PresentedDefenseEvent)
+    {
+        PresentedDefenseEvent=Snapshot.DefenseEvent;
+        if(Snapshot.DefenseResult==uint8(AnimeMMORPG::U03::EDefense::Parry)&&FeedbackNow-Snapshot.DefenseEventTime<1.2&&C->IsLocallyControlled())
+        {
+            ParryTone=NewObject<USoundWaveProcedural>(this);ParryTone->SetSampleRate(24000);ParryTone->NumChannels=1;ParryTone->Duration=.24f;
+            TArray<int16> PCM;PCM.SetNumZeroed(5760);
+            for(int I=0;I<PCM.Num();++I){const double T=I/24000.,Local=FMath::Fmod(T,.12);const double Envelope=FMath::Min(1.,Local/.005)*FMath::Max(0.,1.-Local/.12);PCM[I]=int16(6000.*Envelope*FMath::Sin(2.*PI*(T<.12?660.:990.)*Local));}
+            ParryTone->QueueAudio(reinterpret_cast<const uint8*>(PCM.GetData()),PCM.Num()*sizeof(int16));UGameplayStatics::PlaySound2D(this,ParryTone);
+        }
+    }
+    if(Snapshot.bGuard)DrawDebugBox(GetWorld(),C->GetActorLocation()+FRotator(0,Snapshot.GuardYaw,0).Vector()*45,FVector(3,35,55),FRotator(0,Snapshot.GuardYaw,0).Quaternion(),FColor::Blue,false,0,0,2);
+    if(FeedbackNow-Snapshot.DefenseEventTime<1.2&&Snapshot.DefenseEvent&&Snapshot.DefenseResult==uint8(AnimeMMORPG::U03::EDefense::Parry))
+        DrawDebugCircle(GetWorld(),C->GetActorLocation(),65+30*FMath::Clamp(FeedbackNow-Snapshot.DefenseEventTime,0.,1.2),32,FColor::White,false,0,0,3,FVector::ForwardVector,FVector::RightVector,false);
     if(C->IsLocallyControlled()&&GEngine)
     {
         FString AttackKey=TEXT("LMB");if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))AttackKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Attack].GetDisplayName().ToString();
@@ -256,6 +290,10 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
         FString DodgeKey=TEXT("Shift");if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))DodgeKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Dodge].GetDisplayName().ToString();
         const auto* Clock=GetWorld()->GetGameState();const double AuthorityNow=C->HasAuthority()?Now:Clock?Clock->GetServerWorldTimeSeconds():Snapshot.ServerSeconds;
         GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+210000,.15f,FColor::Yellow,FString::Printf(TEXT("%s Dodge %d/2 | recharge %.2fs | %s"),*DodgeKey,Snapshot.DodgeCharges,Snapshot.DodgeCharges<2?FMath::Max(0.,Snapshot.DodgeRestoreAt-AuthorityNow):0.,AuthorityNow<Snapshot.DodgeMotionEnd?TEXT("DODGE"):AuthorityNow<Snapshot.DodgeLockEnd?TEXT("RECOVERY"):TEXT("READY")));
+        FString GuardKey=TEXT("RMB"),XKey=TEXT("X");if(const auto* PC=Cast<AU01PlayerController>(C->GetController())){GuardKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::Guard].GetDisplayName().ToString();XKey=PC->GetPreferences().Keys[AnimeMMORPG::U01::EscapeCC].GetDisplayName().ToString();}
+        const TCHAR* CCNames[]={TEXT("FREE"),TEXT("STUN"),TEXT("KNOCKDOWN"),TEXT("LAUNCH (fixture; no impulse)"),TEXT("GRAB"),TEXT("!! GUARD BREAK !!")};
+        GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+220000,.15f,FColor::White,FString::Printf(TEXT("[%s] %s | POSTURE [%.0f/100] | %s %.2fs | IMMUNE %.2fs | [%s] X %.2fs | slow %.0f%%"),*GuardKey,Snapshot.bGuard?TEXT("[BLOCK]"):TEXT("released"),Snapshot.Posture,CCNames[FMath::Min<int32>(Snapshot.HardCC,5)],FMath::Max(0.,Snapshot.HardEnd-AuthorityNow),FMath::Max(0.,Snapshot.ImmuneEnd-AuthorityNow),*XKey,FMath::Max(0.,Snapshot.XReadyAt-AuthorityNow),Snapshot.SlowFraction*100));
+        if(Snapshot.DefenseEvent&&AuthorityNow-Snapshot.DefenseEventTime<1.2)GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+220001,.15f,FColor::White,Snapshot.DefenseResult==2?TEXT("(( PARRY ))"):Snapshot.HardCC==5?TEXT("!! BREAK !!"):TEXT("[ BLOCK ]"));
     }
 }
 TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
@@ -271,6 +309,10 @@ TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const
     J->SetNumberField(TEXT("energy"),Snapshot.Energy);J->SetNumberField(TEXT("qReady"),Snapshot.QReadyAt);J->SetNumberField(TEXT("eReady"),Snapshot.EReadyAt);
     J->SetNumberField(TEXT("dodge"),Snapshot.DodgeSequence);J->SetNumberField(TEXT("dodgeCharges"),Snapshot.DodgeCharges);J->SetNumberField(TEXT("dodgeStart"),Snapshot.DodgeStart);J->SetNumberField(TEXT("dodgeMotionEnd"),Snapshot.DodgeMotionEnd);J->SetNumberField(TEXT("dodgeLockEnd"),Snapshot.DodgeLockEnd);J->SetNumberField(TEXT("dodgeNextStart"),Snapshot.DodgeNextStart);J->SetNumberField(TEXT("dodgeRestoreAt"),Snapshot.DodgeRestoreAt);J->SetStringField(TEXT("dodgeDirection"),Snapshot.DodgeDirection.ToString());
     J->SetStringField(TEXT("dodgeOrigin"),Snapshot.DodgeOrigin.ToString());
+    J->SetBoolField(TEXT("guard"),Snapshot.bGuard);J->SetNumberField(TEXT("guardYaw"),Snapshot.GuardYaw);J->SetNumberField(TEXT("posture"),Snapshot.Posture);
+    J->SetBoolField(TEXT("parryOpen"),Snapshot.bParryOpen);J->SetNumberField(TEXT("parryStart"),Snapshot.ParryStart);J->SetNumberField(TEXT("parryEnd"),Snapshot.ParryEnd);J->SetNumberField(TEXT("parryReady"),Snapshot.ParryReadyAt);
+    J->SetNumberField(TEXT("hardCC"),Snapshot.HardCC);J->SetNumberField(TEXT("hardEnd"),Snapshot.HardEnd);J->SetNumberField(TEXT("lockedBudget"),Snapshot.LockedBudget);J->SetNumberField(TEXT("immuneEnd"),Snapshot.ImmuneEnd);J->SetNumberField(TEXT("slow"),Snapshot.SlowFraction);J->SetNumberField(TEXT("xReady"),Snapshot.XReadyAt);
+    J->SetNumberField(TEXT("defenseEvent"),Snapshot.DefenseEvent);J->SetNumberField(TEXT("defenseResult"),Snapshot.DefenseResult);J->SetNumberField(TEXT("defenseEventTime"),Snapshot.DefenseEventTime);
     J->SetNumberField(TEXT("admission"),OwnerAdmission.Admission);J->SetNumberField(TEXT("pendingCommand"),OwnerAdmission.PendingCommand);
     J->SetNumberField(TEXT("pendingExpires"),OwnerAdmission.PendingExpires);J->SetNumberField(TEXT("queued"),QueuedCount);J->SetNumberField(TEXT("replaced"),ReplacedCount);
     J->SetNumberField(TEXT("activeStart"),Snapshot.StartSeconds+Snapshot.ActiveStart); J->SetNumberField(TEXT("activeEnd"),Snapshot.StartSeconds+Snapshot.ActiveEnd);
