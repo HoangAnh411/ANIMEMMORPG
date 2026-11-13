@@ -1,6 +1,6 @@
-# U03-B2 — READY_FOR_REVIEW
+# U03-B2 — ACCEPTED (technical)
 
-Branch `u03/b2-defense-cc`, based on main `88244cf67ddc679fec2ceaccb0d9f68c40ce653a`. Verified native source **515f8190a35afbc8663669419c6ce502967e3df3**. Technical gates below are complete. This is a review handoff, not ACCEPTED, a main merge or permission to begin C1.
+Branch `u03/b2-defense-cc`, based on main `88244cf67ddc679fec2ceaccb0d9f68c40ce653a`. The user confirmed **ACCEPTED về kỹ thuật tại fa5c74cb**, verified native source **515f8190a35afbc8663669419c6ce502967e3df3**, and authorized documentation closure and fast-forward/push of main. **Người dùng chưa chơi thử; presentation vẫn blockout. Chưa chấp nhận cảm giác chơi hoặc hình ảnh sản phẩm.** See [technical acceptance](ACCEPTANCE-B2.md). No C1 is authorized.
 
 ## Runtime
 
@@ -71,3 +71,9 @@ Compiler/toolchain preference warnings, engine deprecations, native fixture mesh
 [Final input video](Evidence/B2/Runs/Runs/InputCapture-20261113-1219/Input-B2.mp4), [network defense video](Evidence/B2/Runs/Runs/NetworkCapture-20261113-1225/Network-B2.mp4), [network dodge video](Evidence/B2/Runs/Runs/DodgeNetworkRegression-20261113-1235/Network-B2.mp4), [parry ring](Evidence/B2/Runs/Runs/Audio-20261113-1221/ParryRing.png) and [actual two-note output](Evidence/B2/Runs/Runs/Audio-20261113-1221/Parry-Output-Loopback.wav).
 
 Stop at **READY_FOR_REVIEW U03-B2** after branch push/remote SHA verification. No ACCEPTED marker, main merge, C1/C2 implementation or original-Editor synchronization is performed.
+
+## Technical acceptance and documentation closure
+
+The READY_FOR_REVIEW/no-merge statements above describe the original handoff. The user subsequently accepted B2 **technically at `fa5c74cbd9853faa23a642d8c73c667c7e3682d2`, source `515f8190a35afbc8663669419c6ce502967e3df3`**, and explicitly authorized this documentation closure and fast-forward/push of main. [ACCEPTANCE-B2](ACCEPTANCE-B2.md) records its scope and limits.
+
+**The user has not playtested B2. Presentation remains blockout; user feel/readability and product visuals are not accepted.** The existing automated input/video evidence is not user playtesting. All results above are inherited from the recorded handoff; no builds/tests were rerun for this documentation-only closure. Original evidence/manifests, failed/invalid runs and warnings remain unchanged. No runtime/assets/config/tooling changes or Editor interaction are made. Stop after verifying the branch/main remote SHA; do not begin C1 or close U03 overall.

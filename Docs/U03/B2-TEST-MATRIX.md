@@ -1,6 +1,6 @@
 # U03-B2 - test matrix
 
-Verified native source `515f8190a35afbc8663669419c6ce502967e3df3`; READY_FOR_REVIEW, not ACCEPTED. Actual results and failed/invalid runs are in [REPORT-B2](REPORT-B2.md). No count was used as a coverage target.
+**ACCEPTED (technical) at `fa5c74cb`**, verified native source `515f8190a35afbc8663669419c6ce502967e3df3`; see [ACCEPTANCE-B2](ACCEPTANCE-B2.md). The user has not playtested B2; presentation remains blockout and feel/product visuals are not accepted. Results below are existing handoff evidence, not reruns during documentation closure. Actual results and failed/invalid runs are in [REPORT-B2](REPORT-B2.md). No count was used as a coverage target.
 
 | Rule/layer | Evidence | Result |
 |---|---|---|

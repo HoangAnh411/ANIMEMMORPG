@@ -10,4 +10,4 @@ Launchers use the verified B2 clone/package and check hashes. Play in the origin
 6. Run `Play-U03-B2-Network.cmd` for dedicated Editor server + two clients (client60/server30). Resume after each focus change. Use `powershell -File Scripts/U03/SetB2Fixture.ps1 -Label block` to create only server-authority enemies; client console cannot create server outcomes. Defense still requires physical input in the focused client.
 7. Run `Stop-U03-B2.cmd`. It targets only recorded B2 processes, including reconnects, verifies identity/hash and restores original Editor placement.
 
-Technical review decides ACCEPTED; the user judges feel/readability. No merge, C1/C2 or packaged Server is authorized by this checklist.
+B2 is ACCEPTED technically at `fa5c74cb`, source `515f8190`; see [acceptance](Docs/U03/ACCEPTANCE-B2.md). The user has not playtested it. Presentation remains blockout; feel/readability and product visuals are not accepted. The separate closure instruction authorizes fast-forward/push of main only; C1/C2 and packaged Server remain outside scope.

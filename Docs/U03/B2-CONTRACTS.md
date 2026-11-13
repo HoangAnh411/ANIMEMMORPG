@@ -25,3 +25,7 @@ Slow uses the strongest active fraction, retaining weaker unexpired applications
 ## Delivery gates
 
 Full Editor/Game build, fresh complete Automation, Windows package and three-map smoke from committed source in a clone; physical defensive input/video and dedicated Editor server plus two clients, including reset/reconnect/replay/ownership checks. Evidence distinguishes model, world, physical input and network processes; retains failed/invalid runs. Original Editor remains open without save/restart. Private config bytes and secrets are preserved. Launchers verify source/binary/package hashes, client60/server30, ready/minimize/restore behavior. Original Editor Play is not guaranteed to run B2. Stop at READY_FOR_REVIEW only after all required work and remote SHA verification.
+
+## Technical acceptance and closure
+
+The user confirmed ACCEPTED (technical) at `fa5c74cb`, source `515f8190`, and explicitly authorized documentation closure and fast-forward/push of main; see [ACCEPTANCE-B2](ACCEPTANCE-B2.md). Earlier review-stop/no-merge statements are historical. The user has not playtested B2; presentation remains blockout and feel/product visuals are not accepted. Gameplay contracts and original evidence are unchanged. This closure performs no runtime/config/tooling changes, test reruns or Editor interaction. Stop after remote SHA verification; C1 remains unassigned.
