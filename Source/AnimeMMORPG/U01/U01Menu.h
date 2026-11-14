@@ -14,6 +14,7 @@ public:
     virtual void NativeTick(const FGeometry& Geometry,float DeltaSeconds) override;
     void ShowMainMenu();
     void ShowControls();
+    TSharedRef<class FJsonObject> GetButtonDiagnostics() const;
 private:
     UPROPERTY(Transient) TObjectPtr<class UTextBlock> EncounterResult;
     UPROPERTY(Transient) TObjectPtr<class UButton> RetryButton;

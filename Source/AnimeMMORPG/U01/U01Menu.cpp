@@ -1,5 +1,7 @@
 #include "U01Menu.h"
 #include "U03/U03Encounter.h"
+#include "Dom/JsonObject.h"
+#include "Blueprint/SlateBlueprintLibrary.h"
 #include "U01PlayerController.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
@@ -123,6 +125,21 @@ void UU01Menu::NativeTick(const FGeometry& Geometry,float DeltaSeconds)
 }
 void UU01Menu::RetryClicked(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->RequestEncounterRetry();}
 void UU01Menu::RegressionClicked(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->OpenRegressionLab();}
+TSharedRef<FJsonObject> UU01Menu::GetButtonDiagnostics() const
+{
+    auto J=MakeShared<FJsonObject>();if(!WidgetTree||!Pages)return J;
+    const auto Clip=Pages->GetCachedGeometry();const FVector2D Min=Clip.LocalToAbsolute(FVector2D::ZeroVector),Max=Clip.LocalToAbsolute(Clip.GetLocalSize());
+    TArray<UWidget*> Widgets;WidgetTree->GetAllWidgets(Widgets);
+    for(auto* W:Widgets)if(auto* B=Cast<UButton>(W))if(auto* Label=Cast<UTextBlock>(B->GetContent()))
+    {
+        bool Active=false;for(auto* Parent=B->GetParent();Parent;Parent=Parent->GetParent())if(Parent==Pages->GetActiveWidget()){Active=true;break;}
+        const auto G=B->GetCachedGeometry();const FVector2D Center=G.LocalToAbsolute(G.GetLocalSize()*.5);
+        if(!Active||!B->IsVisible()||G.GetLocalSize().IsNearlyZero()||Center.X<Min.X||Center.X>Max.X||Center.Y<Min.Y||Center.Y>Max.Y)continue;
+        FVector2D Pixel,Viewport;USlateBlueprintLibrary::AbsoluteToViewport(this,Center,Pixel,Viewport);
+        auto P=MakeShared<FJsonObject>();P->SetNumberField(TEXT("x"),Pixel.X);P->SetNumberField(TEXT("y"),Pixel.Y);P->SetBoolField(TEXT("enabled"),B->GetIsEnabled());J->SetObjectField(Label->GetText().ToString(),P);
+    }
+    return J;
+}
 void UU01Menu::ShowMainMenu(){if(Pages)Pages->SetActiveWidgetIndex(0);}
 void UU01Menu::ShowControls(){if(Pages)Pages->SetActiveWidgetIndex(1);RefreshSettings();}
 void UU01Menu::RefreshSettings()

@@ -563,6 +563,7 @@ FString AU01PlayerController::GetMetricsJson() const
     Json->SetNumberField(TEXT("pendingRebind"),PendingRebind);
     Json->SetStringField(TEXT("localMapping"),GetPathNameSafe(LocalMapping));
     Json->SetBoolField(TEXT("menuVisible"),MenuWidget&&MenuWidget->IsInViewport());
+    if(bTrace&&MenuWidget&&MenuWidget->IsInViewport())Json->SetObjectField(TEXT("menuButtons"),MenuWidget->GetButtonDiagnostics());
     if(const auto* Input=ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
     {
         int32 ContextCount=0;
@@ -579,7 +580,7 @@ bool AU01PlayerController::FixtureAllowed() const
 #if UE_BUILD_SHIPPING
     return false;
 #else
-    return IsLocalPlayerController() && GetNetMode() == NM_Standalone && GetPawn() &&
+    return IsLocalPlayerController() && GetNetMode() == NM_Standalone && GetPawn() && !AU03Encounter::ForSubject(GetPawn()) &&
         (GetWorld()->GetMapName().EndsWith(TEXT("L_CharacterCombatLab")) || GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab")));
 #endif
 }

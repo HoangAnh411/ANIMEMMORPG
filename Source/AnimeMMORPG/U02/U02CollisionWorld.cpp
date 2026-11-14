@@ -38,6 +38,7 @@ bool UU02CollisionWorld::DoesSupportWorldType(EWorldType::Type Type) const {retu
 void UU02CollisionWorld::StartDefenseFixture(const FString& Label)
 {
 #if !UE_BUILD_SHIPPING
+    for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)if(!E->GetSnapshot().bClosed)return;
     if(GetWorld()->GetNetMode()==NM_Client)return;
     const TArray<FString> Labels={TEXT("off"),TEXT("block"),TEXT("unparryable"),TEXT("bypass"),TEXT("slow"),TEXT("stun"),TEXT("knockdown"),TEXT("launch"),TEXT("grab"),TEXT("multi"),TEXT("target-attack"),TEXT("target-q"),TEXT("target-e"),TEXT("target-block"),TEXT("target-parry"),TEXT("target-shield"),TEXT("incoming-e")};
     if(!Labels.Contains(Label))return;

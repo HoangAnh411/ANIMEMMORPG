@@ -3,6 +3,7 @@
 #include "U02/U02CombatComponent.h"
 #include "U02/U02VitalComponent.h"
 #include "U02/U02CollisionWorld.h"
+#include "U02/U02LabDummy.h"
 #include "AIController.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -182,6 +183,19 @@ AU03EncounterGameMode::AU03EncounterGameMode()
 void AU03EncounterGameMode::RestartPlayer(AController* Controller)
 {
     Super::RestartPlayer(Controller);auto* PC=Cast<AU01PlayerController>(Controller);auto* P=PC?Cast<AU01Character>(PC->GetPawn()):nullptr;
+    if(P&&UGameplayStatics::ParseOption(OptionsString,TEXT("U03TabFixture"))==TEXT("1"))
+    {
+        P->SetActorLocation(FVector(15000,0,98.15),false,nullptr,ETeleportType::TeleportPhysics);GetWorld()->GetSubsystem<UU02CollisionWorld>()->RebaseResetSubject(P);
+        for(TActorIterator<AU02LabDummy> D(GetWorld());D;++D)if(D->ActorHasTag(TEXT("U03TabFixture")))return;
+        const FVector Positions[]={FVector(15500,45,78.15),FVector(15500,45,78.15),FVector(16000,45,78.15),FVector(15600,250,0),FVector(17000,-200,0)};
+        for(int I=0;I<UE_ARRAY_COUNT(Positions);++I)
+        {
+            const FTransform X(Positions[I]);auto* D=GetWorld()->SpawnActorDeferred<AU02LabDummy>(AU02LabDummy::StaticClass(),X);
+            D->NetworkPawnId=FGuid(703,2,9,I+1);D->Tags.Add(TEXT("U03TabFixture"));UGameplayStatics::FinishSpawningActor(D,X);
+            auto* Label=NewObject<UTextRenderComponent>(D);Label->SetupAttachment(D->GetRootComponent());Label->SetRelativeLocation(FVector(0,0,220+I*22));Label->SetRelativeRotation(FRotator(0,180,0));Label->SetWorldSize(16);Label->SetText(FText::FromString(FString::Printf(TEXT("TAB FIXTURE ID%d | %s"),I+1,I<2?TEXT("coincident tie"):I==2?TEXT("same screen ray / farther"):TEXT("screen/distance candidate"))));Label->RegisterComponent();
+        }
+        return; // information fixture only, no extra gameplay encounter or AI
+    }
     if(!P||IsRegression()||AU03Encounter::ForSubject(P))return;
     TSet<int32> Occupied;for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)if(!E->GetSnapshot().bClosed)Occupied.Add(E->GetSnapshot().Station);
     int32 Station=0;while(Occupied.Contains(Station))++Station;
