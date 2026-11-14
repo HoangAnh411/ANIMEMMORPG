@@ -136,6 +136,17 @@ void UU02CollisionWorld::UnregisterHurtbox(UU02HurtboxComponent* H)
     Hurts.RemoveAll([&](const FHurt& R){return R.Component==H;});
 }
 void UU02CollisionWorld::MarkDead(FLifeId Life) {Ledger.MarkDead(Life);}
+bool UU02CollisionWorld::EnvironmentLineClear(FVector From,FVector To) const
+{
+    FBox Segment(ForceInit);Segment+=From;Segment+=To;
+    for(const auto& E:Environment)if(E.Bounds.Intersect(Segment))
+    {
+        if(!E.bSupported)return false;
+        if(E.Bounds.IsInsideOrOn(From)&&InsideClosedPolyhedron(From,MakeArrayView(Triangles.GetData()+E.FirstTriangle,E.TriangleCount)))return false;
+    }
+    for(const auto& T:Triangles)if(SegmentTriangleClosed(From,To,T))return false;
+    return true;
+}
 void UU02CollisionWorld::RebaseResetSubject(AActor* Subject)
 {
     if(!Subject||!Subject->HasAuthority())return;

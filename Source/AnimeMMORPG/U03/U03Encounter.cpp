@@ -68,10 +68,9 @@ bool AU03Encounter::CanDamage(const AActor* A,const AActor* B)
 }
 bool AU03Encounter::EnvironmentClear(FVector A,FVector B) const
 {
-    FCollisionQueryParams Q(SCENE_QUERY_STAT(U03MonsterLOS),false);
-    // Only solid environment occludes; every pawn is ignored, including other stations.
-    for(TActorIterator<APawn> P(GetWorld());P;++P)Q.AddIgnoredActor(*P);
-    return !GetWorld()->LineTraceTestByChannel(A,B,ECC_GameTraceChannel2,Q);
+    // Same captured solid geometry as the damage resolver, including conservative
+    // unsupported-shape rejection. Avoid frame-dependent Chaos ray rounding in AI event discovery.
+    return GetWorld()->GetSubsystem<UU02CollisionWorld>()->EnvironmentLineClear(A,B);
 }
 FMonsterObservation AU03Encounter::Observe(double At,const TFunction<FVector(AActor*,double)>& Feet) const
 {
@@ -187,12 +186,12 @@ void AU03EncounterGameMode::RestartPlayer(AController* Controller)
     {
         P->SetActorLocation(FVector(15000,0,98.15),false,nullptr,ETeleportType::TeleportPhysics);GetWorld()->GetSubsystem<UU02CollisionWorld>()->RebaseResetSubject(P);
         for(TActorIterator<AU02LabDummy> D(GetWorld());D;++D)if(D->ActorHasTag(TEXT("U03TabFixture")))return;
-        const FVector Positions[]={FVector(15500,45,78.15),FVector(15500,45,78.15),FVector(16000,45,78.15),FVector(15600,250,0),FVector(17000,-200,0)};
+        const FVector Positions[]={FVector(15500,45,78.15),FVector(15500,45,78.15),FVector(16000,70,78.15),FVector(15600,250,0),FVector(17000,-200,0)};
         for(int I=0;I<UE_ARRAY_COUNT(Positions);++I)
         {
             const FTransform X(Positions[I]);auto* D=GetWorld()->SpawnActorDeferred<AU02LabDummy>(AU02LabDummy::StaticClass(),X);
             D->NetworkPawnId=FGuid(703,2,9,I+1);D->Tags.Add(TEXT("U03TabFixture"));UGameplayStatics::FinishSpawningActor(D,X);
-            auto* Label=NewObject<UTextRenderComponent>(D);Label->SetupAttachment(D->GetRootComponent());Label->SetRelativeLocation(FVector(0,0,220+I*22));Label->SetRelativeRotation(FRotator(0,180,0));Label->SetWorldSize(16);Label->SetText(FText::FromString(FString::Printf(TEXT("TAB FIXTURE ID%d | %s"),I+1,I<2?TEXT("coincident tie"):I==2?TEXT("same screen ray / farther"):TEXT("screen/distance candidate"))));Label->RegisterComponent();
+            auto* Label=NewObject<UTextRenderComponent>(D);Label->SetupAttachment(D->GetRootComponent());Label->SetRelativeLocation(FVector(0,0,220+I*22));Label->SetRelativeRotation(FRotator(0,180,0));Label->SetWorldSize(16);Label->SetText(FText::FromString(FString::Printf(TEXT("TAB FIXTURE ID%d | %s"),I+1,I<2?TEXT("coincident tie"):TEXT("screen/distance candidate"))));Label->RegisterComponent();
         }
         return; // information fixture only, no extra gameplay encounter or AI
     }

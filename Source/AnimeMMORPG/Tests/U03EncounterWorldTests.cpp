@@ -197,6 +197,7 @@ bool FC2WorldLOS::RunTest(const FString&)
         for(int I=1;I<=Steps;++I){W.Player->SetActorLocation(FVector(450,400.*I/Steps,98.15));W.Collision->DrainAt(Start+.5*I/Steps);}
         const auto* Cut=W.Collision->LifecycleAudit.FindByPredicate([&](const auto& E){return E.Life==Life&&E.Reason==ECutoff::Return&&E.Accepted;});
         TestNotNull(TEXT("moving feet+90 LOS schedules a real Return cutoff"),Cut);if(!Cut)return false;
+        AddInfo(FString::Printf(TEXT("C2_LOS short=%d reverse=%d start=%.17g cutoff=%.17g relative=%.17g"),Short,Reverse,Start,Cut->At,Cut->At-Start));
         Cutoffs.Add(Cut->At-Start);TestTrue(TEXT("cutoff occurs inside movement span"),Cut->At>Start&&Cut->At<Start+.5);
         TestEqual(TEXT("startup hit suppressed"),W.Collision->DamageResults.Num(),0);TestEqual(TEXT("Return remains latched"),W.Encounter->GetSnapshot().AI,uint8(EMonsterState::Return));
     }

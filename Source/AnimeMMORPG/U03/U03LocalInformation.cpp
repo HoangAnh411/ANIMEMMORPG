@@ -88,7 +88,7 @@ void AU01PlayerController::U03C2RetryClaim(const FString& Text,uint64 Revision,u
     FGuid Id;
     if(!FParse::Param(FCommandLine::Get(),TEXT("U02FProbe"))||!GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab"))||!FGuid::Parse(Text,Id))return;
     // Probe the product request through this controller's real owned RPC channel. No fixture reset path.
-    ServerEncounterRetry(Id,Revision,Sequence);
+    RetrySequence=FMath::Max(RetrySequence,Sequence);ServerEncounterRetry(Id,Revision,Sequence);
 #endif
 }
 void AU01PlayerController::OpenRegressionLab()

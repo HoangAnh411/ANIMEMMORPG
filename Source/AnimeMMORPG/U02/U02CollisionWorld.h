@@ -28,6 +28,7 @@ public:
     void UnregisterHurtbox(UU02HurtboxComponent* Hurtbox);
     void ObserveCombat(UU02CombatComponent* Combat);
     void DrainAt(double Now);
+    bool EnvironmentLineClear(FVector From,FVector To) const;
     bool ApplyLifecycle(UU02CombatComponent* Combat,double At,AnimeMMORPG::U03::ECutoff Reason,bool bLanding);
     bool FixtureSpend(UU02CombatComponent* Combat,AnimeMMORPG::U03::EAction Skill);
 
