@@ -10,6 +10,7 @@
 
 class AU01PlayerController;
 class UU02CollisionWorld;
+class UU03MonsterStateComponent;
 
 USTRUCT()
 struct FU03EncounterSnapshot
@@ -32,6 +33,7 @@ class ANIMEMMORPG_API AU03Monster : public AU01Character
     GENERATED_BODY()
 public:
     AU03Monster(const FObjectInitializer& Initializer);
+    UPROPERTY(VisibleAnywhere,Category="U03|AI") TObjectPtr<UU03MonsterStateComponent> State;
     virtual void Tick(float Dt) override;
 };
 

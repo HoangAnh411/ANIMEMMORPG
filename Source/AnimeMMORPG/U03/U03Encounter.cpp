@@ -1,4 +1,5 @@
 #include "U03Encounter.h"
+#include "U03MonsterStateComponent.h"
 #include "U01/U01PlayerController.h"
 #include "U02/U02CombatComponent.h"
 #include "U02/U02VitalComponent.h"
@@ -26,6 +27,7 @@ void StopAIHorizontal(AU01Character* C)
 }
 AU03Monster::AU03Monster(const FObjectInitializer& I):Super(I)
 {
+    State=CreateDefaultSubobject<UU03MonsterStateComponent>(TEXT("MonsterServerState"));
     PrimaryActorTick.bCanEverTick=true;AIControllerClass=AAIController::StaticClass();AutoPossessAI=EAutoPossessAI::PlacedInWorldOrSpawned;
     auto* Body=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MonsterBlockout"));Body->SetupAttachment(RootComponent);
     static ConstructorHelpers::FObjectFinder<UStaticMesh> Shape(TEXT("/Engine/BasicShapes/Cone.Cone"));
@@ -113,7 +115,7 @@ double AU03Encounter::NextBoundary(double From,double Through,const TFunction<FV
 void AU03Encounter::BeforeContacts(double At,const TFunction<FVector(AActor*,double)>& Feet)
 {
     if(Model.bClosed||Model.Result!=EEncounterResult::Running||!Snapshot.Monster)return;
-    auto* M=Snapshot.Monster.Get();const auto O=Observe(At,Feet);const auto D=DecideMonster(EMonsterState(Snapshot.AI),O);
+    auto* M=Snapshot.Monster.Get();const auto O=Observe(At,Feet);const auto D=CastChecked<AU03Monster>(M)->State->DecideServer(O);
     if(D.bCancel)GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(M->Combat,At,ECutoff::Return,false);
     Snapshot.AI=uint8(D.State);bResetOnBarrier|=D.bReset;
     if(O.bAction&&D.State==EMonsterState::Action)
@@ -133,7 +135,7 @@ void AU03Encounter::AfterBarrier(double At)
 {
     if(Model.bClosed||Model.Result!=EEncounterResult::Running||!Snapshot.Monster)return;
     auto* M=Snapshot.Monster.Get();auto* AI=Cast<AAIController>(M->GetController());
-    if(bResetOnBarrier){bResetOnBarrier=false;ResetSubjects(At,false);Snapshot.AI=uint8(EMonsterState::Idle);Publish();return;}
+    if(bResetOnBarrier){bResetOnBarrier=false;ResetSubjects(At,false);CastChecked<AU03Monster>(M)->State->ResetServer();Snapshot.AI=uint8(EMonsterState::Idle);Publish();return;}
     const auto State=EMonsterState(Snapshot.AI);
     if(State==EMonsterState::Return){if(AI)AI->MoveToLocation(MonsterSpawn.GetLocation(),0,false,true,false,false,nullptr,false);return;}
     if(State==EMonsterState::Chase){if(AI)AI->MoveToLocation(Snapshot.Player->GetActorLocation(),0,false,true,false,false,nullptr,false);return;}
@@ -159,12 +161,13 @@ bool AU03Encounter::Retry(AU01PlayerController* Requester,FGuid Id,uint64 Revisi
 {
     if(!HasAuthority()||Id!=Snapshot.Id||!Model.AdmitRetry(Revision,Sequence,Requester==GetOwner()&&Requester&&Requester->GetPawn()==Snapshot.Player))return false;
     const double At=GetWorld()->GetTimeSeconds();GetWorld()->GetSubsystem<UU02CollisionWorld>()->DrainAt(At);
-    ResetSubjects(At,true);Model.CommitRetry();Snapshot.AI=uint8(EMonsterState::Idle);bResetOnBarrier=false;Publish();return true;
+    ResetSubjects(At,true);CastChecked<AU03Monster>(Snapshot.Monster)->State->ResetServer();Model.CommitRetry();Snapshot.AI=uint8(EMonsterState::Idle);bResetOnBarrier=false;Publish();return true;
 }
 void AU03Encounter::ConfirmDefeat(AActor* Subject,double At)
 {
     if(!HasAuthority()||(Subject!=Snapshot.Player&&Subject!=Snapshot.Monster)||!Model.Defeat(Subject==Snapshot.Monster))return;
     Snapshot.AI=uint8(Snapshot.Monster->Vital->GetSnapshot().bDead?EMonsterState::Defeated:EMonsterState::Idle);
+    CastChecked<AU03Monster>(Snapshot.Monster)->State->SetServerState(EMonsterState(Snapshot.AI));
     for(auto* P:{Snapshot.Player.Get(),Snapshot.Monster.Get()})
     {GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(P->Combat,At,ECutoff::Return,false);StopAIHorizontal(P);}
     Publish();

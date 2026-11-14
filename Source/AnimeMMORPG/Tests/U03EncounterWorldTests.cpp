@@ -3,6 +3,7 @@
 #include "Tests/AutomationCommon.h"
 #include "Algo/Reverse.h"
 #include "U03/U03Encounter.h"
+#include "U03/U03MonsterStateComponent.h"
 #include "U03/U03TargetModel.h"
 #include "U01/U01PlayerController.h"
 #include "U02/U02CombatComponent.h"
@@ -88,6 +89,7 @@ bool FC2WorldRetry::RunTest(const FString&)
         TestTrue(TEXT("owned Retry"),W.Encounter->Retry(W.PC,Old.Id,1,2));
         TestEqual(TEXT("new revision"),W.Encounter->GetSnapshot().Revision,uint64(2));
         TestEqual(TEXT("Running published last"),W.Encounter->GetSnapshot().Result,uint8(EEncounterResult::Running));
+        TestEqual(TEXT("server FSM component reset in the same transaction"),CastChecked<AU03Monster>(W.Monster())->State->GetServerState(),EMonsterState::Idle);
         TestEqual(TEXT("playerHP"),W.Player->Vital->GetSnapshot().HP,1000);TestEqual(TEXT("monsterHP"),W.Monster()->Vital->GetSnapshot().HP,600);
         TestEqual(TEXT("shield cleared"),W.Player->Vital->GetSnapshot().Shield,0);
         TestTrue(TEXT("Retry preserves server AwaitingResume gate"),W.Player->GetU01Movement()->IsMotorLocked());
