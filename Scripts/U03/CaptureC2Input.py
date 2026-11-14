@@ -32,20 +32,29 @@ def resume():
  if state()['controlState']!=0:button('Resume')
  until(lambda:state()['controlState']==0)
 def retry():
- old=encounter()['revision'];button('Retry encounter');until(lambda:encounter()['revision']>old)
+ old=encounter()['revision'];m['events'].append(dict(retrySelectionBefore=target()));button('Retry encounter');until(lambda:encounter()['revision']>old)
  check('Retry publishes fresh Running state',encounter()['result']==0 and encounter()['monsterVital']['hp']==600 and combat()['energy']==100 and combat()['dodgeCharges']==2 and combat()['eReady']==0)
  check('Retry never auto-Resumes or attacks',state()['controlState']!=0 and combat()['action']==0)
+ until(lambda:not target()['selected']);check('New encounter revision clears selection without replacement',not target()['selected'])
 def approach():
  c.press('W',True)
  try:until(lambda:distance()<160,5)
  finally:c.press('W',False)
+def move_until(key,predicate,timeout=7):
+ c.press(key,True)
+ try:until(predicate,timeout)
+ finally:c.press(key,False)
 def winding():
  until(lambda:encounter()['monsterCombat']['phase']==1 and encounter()['monsterCombat']['serverSnapshotSeconds']<encounter()['monsterCombat']['start']+.40,5)
 def turn(yaw):
- for _ in range(5):
+ gain=1.
+ for _ in range(12):
   current=float(re.search(r'Y=([-0-9.]+)',state()['aimYawPitchDegrees']).group(1));delta=(yaw-current+180)%360-180
   if abs(delta)<1:return
-  sensitivity=json.loads(state()['settings'])['sensitivity'];c.guard();mouse(1,round(delta/sensitivity),0);time.sleep(.16)
+  dx=max(-4000,min(4000,round(delta/gain)));c.guard();mouse(1,dx,0);time.sleep(.2)
+  observed=float(re.search(r'Y=([-0-9.]+)',state()['aimYawPitchDegrees']).group(1));change=(observed-current+180)%360-180
+  if dx and 0<change/dx<10:gain=change/dx
+  m['events'].append(dict(mouseDx=dx,beforeYaw=current,afterYaw=observed,observedGain=gain))
  raise RuntimeError('Physical camera yaw did not converge')
 def wheel(delta):
  c.guard();left,top,_,_=c.bounds();u.SetCursorPos(left+650,top+420);emit(Input(type=0,payload=Payload(mouse=Mouse(data=delta&0xffffffff,flags=0x0800))));time.sleep(.15)
@@ -89,12 +98,12 @@ try:
    winding();old=encounter()['monsterCombat']['interruptSequence'];tap('E');until(lambda:encounter()['monsterCombat']['interruptSequence']>old,2)
    check('Real E Interrupts Monster startup without stun',encounter()['monsterCombat']['hardCC']==0);time.sleep(.55)
    until(lambda:not combat()['locked']);old=encounter()['monsterCombat']['interruptSequence'];tap('Q');until(lambda:combat()['definition']==3);time.sleep(.45);check('Real Q does not Interrupt Monster',encounter()['monsterCombat']['interruptSequence']==old)
-   until(lambda:not combat()['locked']);end=time.perf_counter()+12
+   until(lambda:not combat()['locked']);tap('Tab');check('Opponent selected before lethal damage',target()['selected']);end=time.perf_counter()+12
    while encounter()['result']==0 and time.perf_counter()<end:tap('LMB');time.sleep(.42)
-   until(lambda:encounter()['result']!=0);check('Player wins through physical attacks and server result',encounter()['result']==1);m['stages'].append(dict(stage='Won',metrics=state()))
+   until(lambda:encounter()['result']!=0);check('Player wins through physical attacks and server result',encounter()['result']==1);until(lambda:not target()['selected']);check('Target death clears information without replacement',not target()['selected']);m['stages'].append(dict(stage='Won',metrics=state()))
    c.press('W',True);c.press('Q',True);retry();button('Resume');time.sleep(.4)
    check('Held W/Q across Retry and Resume do not replay',not state()['gateW'] and combat()['action']==0 and combat()['energy']==100)
-   c.press('W',False);c.press('Q',False);c.press('W',True);time.sleep(.12);c.press('W',False);check('Physical release and repress rearms movement',state()['gateW'])
+   c.press('W',False);c.press('Q',False);c.press('W',True);time.sleep(.12);c.press('W',False);check('Physical release and repress rearms movement',state()['gateW']);tap('Tab');check('Living opponent selected before Lost and Retry',target()['selected'])
    until(lambda:encounter()['result']==2,22);check('Standing player loses by server decision',encounter()['result']==2);m['stages'].append(dict(stage='Lost',metrics=state()));retry()
    u.ShowWindow(c.hwnd,6);time.sleep(.3);c.focus();check('Focus return still requires Resume',state()['controlState']!=0)
   elif a.mode=='route':
@@ -125,10 +134,19 @@ try:
    turn(180);time.sleep(1.15);check('Offscreen alone retains selection and hides information',target()['selected'] and not target()['visible']);turn(0);until(lambda:target()['visible'])
    tap('Tab');rebind('Tab','T');tap('Tab');check('Old Target key no longer selects',not target()['selected']);tap('T');check('Rebound Target selects',target()['selected']);tap('T');rebind('T','Tab')
    tap('Tab');point=np.array([15500.,45.,78.15]);dist=lambda:np.linalg.norm(vec(state()['capsuleCenterWorldCm'])-point)
-   c.press('S',True);until(lambda:dist()>2900,7);check('Selected target retained below30m',target()['selected']);until(lambda:dist()>3020,2);c.press('S',False);until(lambda:not target()['selected']);check('Selection clears beyond30m',not target()['selected'])
-   c.press('W',True);until(lambda:dist()<2050,4);c.press('W',False);tap('Tab');check('Selection refuses beyond20m',not target()['selected'])
-   c.press('W',True);until(lambda:dist()<1950,2);c.press('W',False);tap('Tab');check('Selection accepts inside20m',target()['selected'])
+   c.press('S',True);c.press('A',True);until(lambda:dist()>2900,7);check('Selected target retained below30m',target()['selected']);until(lambda:dist()>3020,2);c.press('S',False);c.press('A',False);until(lambda:not target()['selected']);check('Selection clears beyond30m',not target()['selected'])
+   c.press('W',True);c.press('D',True);until(lambda:dist()<2050,4);c.press('W',False);c.press('D',False);tap('Tab');check('Selection refuses beyond20m',not target()['selected'])
+   c.press('W',True);c.press('D',True);until(lambda:dist()<1950,2);c.press('W',False);c.press('D',False);tap('Tab');check('Selection accepts inside20m',target()['selected'])
+   move_until('W',lambda:vec(state()['capsuleCenterWorldCm'])[0]>16200)
+   turn(180);move_until('A',lambda:vec(state()['capsuleCenterWorldCm'])[1]>260)
+   check('Occlusion hides information immediately before timeout',target()['selected'] and not target()['visible'])
+   move_until('D',lambda:vec(state()['capsuleCenterWorldCm'])[1]<50)
+   until(lambda:target()['visible']);check('Seeing the target again resets continuous occlusion',target()['selected'])
+   move_until('A',lambda:vec(state()['capsuleCenterWorldCm'])[1]>300)
+   until(lambda:not target()['visible']);time.sleep(.6);check('New occlusion receives its own one-second interval',target()['selected']);time.sleep(.5);until(lambda:not target()['selected']);check('Continuous wall occlusion clears without replacement',not target()['selected'])
   ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/'Final.png');m['completed']=True
+except Exception as error:
+ m['error']=repr(error);raise
 finally:
  stop.set()
  if worker:worker.join()

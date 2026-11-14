@@ -22,6 +22,12 @@ struct FU03C2Access
     static uint64 Watermark(AU01Character* C){return C->Combat->AdmissionWatermark;}
     static void Capture(UU02CollisionWorld* C,double At){C->Capture(At);}
     static void Control(AU01Character* C,bool Playing,U02::FLifeId Life){C->Combat->ServerControlPlaying_Implementation(Playing,Life.Pawn,Life.Generation);}
+    static void Identity( AU01Character* C,FGuid Id)
+    {
+        // Deterministic native fixture setup before the simultaneous-contact probe, never a product identity API.
+        auto* W=C->GetWorld()->GetSubsystem<UU02CollisionWorld>();W->MarkDead(C->Vital->GetLife());C->NetworkPawnId=Id;
+        auto* B=C->Combat.Get();B->Model=MakeUnique<FTimelineModel>(U02::FLifeId{Id,1},C->GetWorld()->GetTimeSeconds());B->Snapshot=FU02RepCombatSnapshot();B->QueuedIntents.Empty();B->QueuedAim.Empty();B->AdmissionWatermark=B->LastCommand=0;B->Publish(B->Model->Time(),true);W->RebaseResetSubject(C);
+    }
 };
 namespace {
 constexpr auto C2WorldFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
@@ -228,6 +234,26 @@ bool FC2WorldTracking::RunTest(const FString&)
         W.Player->SetActorLocation(FVector(0,-150,98.15));W.Collision->DrainAt(Start+.9);
         TestEqual(TEXT("recovery yaw locked"),W.Monster()->Combat->GetCombatSnapshot().AimYawDegrees,90.);
         TestEqual(TEXT("dedup remains single hit"),W.Player->Vital->GetSnapshot().HP,900);
+    }
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC2WorldSimultaneousLethal,"AnimeMMORPG.U03.C2.WorldSameTimestampLethalUsesResolverOrder",C2WorldFlags)
+bool FC2WorldSimultaneousLethal::RunTest(const FString&)
+{
+    for(bool PlayerFirst:{false,true})for(bool Reverse:{false,true})
+    {
+        FC2World W;FU03C2Access::Identity(W.Player,FGuid(PlayerFirst?1:2,0,0,1));FU03C2Access::Identity(W.Monster(),FGuid(PlayerFirst?2:1,0,0,1));
+        if(Reverse)FU03C2Access::Reverse(W.Collision);
+        FU03C2Access::HP(W.Player,1);FU03C2Access::HP(W.Monster(),1);
+        const double Start=W.GetTestWorld()->GetTimeSeconds();W.Collision->DrainAt(Start);
+        const double Contact=Start+.60,PlayerStart=Contact-.16;
+        TestEqual(TEXT("exact common contact timestamp without deadline epsilon"),PlayerStart+.16,Contact);
+        W.Collision->DrainAt(PlayerStart);W.Player->Combat->SubmitCombatIntent(ECommand::Attack,1,0,180);W.Collision->DrainAt(PlayerStart);W.Collision->DrainAt(Contact);
+        TestEqual(TEXT("first resolver source decides Won/Lost; no draw"),W.Encounter->GetSnapshot().Result,uint8(PlayerFirst?EEncounterResult::Won:EEncounterResult::Lost));
+        TestEqual(TEXT("lethal source invalidated before the next same-time event"),W.Collision->DamageResults.Num(),1);
+        if(W.Collision->DamageResults.Num()!=1)return false;
+        TestEqual(TEXT("actual hit timestamp"),W.Collision->DamageResults[0].Hit.TimestampSeconds,Contact);
+        TestEqual(TEXT("survivor cannot receive the cancelled counter-hit"),(PlayerFirst?W.Player:W.Monster())->Vital->GetSnapshot().HP,1);
     }
     return true;
 }
