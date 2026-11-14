@@ -21,6 +21,7 @@ struct FU03C2Access
     static FTimelineModel* Model(AU01Character* C){return C->Combat->Model.Get();}
     static uint64 Watermark(AU01Character* C){return C->Combat->AdmissionWatermark;}
     static void Capture(UU02CollisionWorld* C,double At){C->Capture(At);}
+    static void Control(AU01Character* C,bool Playing,U02::FLifeId Life){C->Combat->ServerControlPlaying_Implementation(Playing,Life.Pawn,Life.Generation);}
 };
 namespace {
 constexpr auto C2WorldFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
@@ -76,13 +77,17 @@ bool FC2WorldRetry::RunTest(const FString&)
         TestFalse(TEXT("unowned"),W.Encounter->Retry(Unowned,Old.Id,1,1));
         TestFalse(TEXT("wrong ID"),W.Encounter->Retry(W.PC,FGuid::NewGuid(),1,1));
         TestFalse(TEXT("stale revision"),W.Encounter->Retry(W.PC,Old.Id,0,1));
-        const uint64 Watermark=FU03C2Access::Watermark(W.Player);
+        const uint64 Watermark=FU03C2Access::Watermark(W.Player);const auto OldPlayerLife=W.Player->Vital->GetLife();
         TestTrue(TEXT("cooldown existed before Retry"),W.Player->Combat->GetCombatSnapshot().EReadyAt>W.GetTestWorld()->GetTimeSeconds());
         TestTrue(TEXT("owned Retry"),W.Encounter->Retry(W.PC,Old.Id,1,2));
         TestEqual(TEXT("new revision"),W.Encounter->GetSnapshot().Revision,uint64(2));
         TestEqual(TEXT("Running published last"),W.Encounter->GetSnapshot().Result,uint8(EEncounterResult::Running));
         TestEqual(TEXT("playerHP"),W.Player->Vital->GetSnapshot().HP,1000);TestEqual(TEXT("monsterHP"),W.Monster()->Vital->GetSnapshot().HP,600);
         TestEqual(TEXT("shield cleared"),W.Player->Vital->GetSnapshot().Shield,0);
+        TestTrue(TEXT("Retry preserves server AwaitingResume gate"),W.Player->GetU01Movement()->IsMotorLocked());
+        FU03C2Access::Control(W.Player,true,OldPlayerLife);W.Player->GetU01Movement()->UpdateFromCompressedFlags(0);
+        TestTrue(TEXT("old control packet and move flags cannot reopen new life"),W.Player->GetU01Movement()->IsMotorLocked());
+        FU03C2Access::Control(W.Player,true,W.Player->Vital->GetLife());TestFalse(TEXT("explicit new-life Resume unlocks"),W.Player->GetU01Movement()->IsMotorLocked());
         TestEqual(TEXT("new monster life"),W.Monster()->Vital->GetLife().Generation,Life.Generation+1);
         TestEqual(TEXT("watermark preserved"),FU03C2Access::Watermark(W.Player),Watermark);
         TestEqual(TEXT("energy"),W.Player->Combat->GetCombatSnapshot().Energy,100.);TestEqual(TEXT("charges"),W.Player->Combat->GetCombatSnapshot().DodgeCharges,2);

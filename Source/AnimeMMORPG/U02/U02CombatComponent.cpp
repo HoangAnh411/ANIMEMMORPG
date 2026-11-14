@@ -81,11 +81,13 @@ void UU02CombatComponent::ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint6
 void UU02CombatComponent::SetControlPlaying(bool Playing)
 {
     if(!Character())return;
-    if(Character()->HasAuthority())ServerControlPlaying_Implementation(Playing);else ServerControlPlaying(Playing);
+    if(Character()->HasAuthority())ServerControlPlaying_Implementation(Playing,Snapshot.PawnId,Snapshot.LifeGeneration);else ServerControlPlaying(Playing,Snapshot.PawnId,Snapshot.LifeGeneration);
 }
-void UU02CombatComponent::ServerControlPlaying_Implementation(bool Playing)
+void UU02CombatComponent::ServerControlPlaying_Implementation(bool Playing,FGuid Pawn,uint64 Life)
 {
+    if(!Model||Model->GetLife().Pawn!=Pawn||Model->GetLife().Generation!=Life)return;
     bAuthorityPlaying=Playing;
+    if(auto* E=AU03Encounter::ForSubject(Character()))if(E->GetSnapshot().Player==Character())Character()->GetU01Movement()->ApplyEncounterControlAuthority(!Playing);
     if(!Playing)DiscardPendingInputs();
 }
 void UU02CombatComponent::DiscardPendingInputs()

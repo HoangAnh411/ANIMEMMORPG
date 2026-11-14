@@ -23,6 +23,12 @@ void UU01CharacterMovement::SetControlLocked(bool bLocked)
 {
     SetMotorLock(EU01MotorLock::Control, bLocked);
 }
+void UU01CharacterMovement::ApplyEncounterControlAuthority(bool Locked)
+{
+    if(!CharacterOwner||!CharacterOwner->HasAuthority())return;
+    bEncounterControlLocked=Locked;
+    if(Locked){ConsumeInputVector();Velocity.X=Velocity.Y=0;Acceleration=FVector::ZeroVector;bSprintRequested=false;JumpWindow.ClearInput();CastChecked<AU01Character>(CharacterOwner)->ClearEngineJumpInput();}
+}
 
 void UU01CharacterMovement::SetMotorLock(EU01MotorLock Reason, bool bEnabled)
 {

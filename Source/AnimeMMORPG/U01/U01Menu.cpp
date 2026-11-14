@@ -1,5 +1,7 @@
 #include "U01Menu.h"
 #include "U03/U03Encounter.h"
+#include "U02/U02CombatComponent.h"
+#include "U02/U02VitalComponent.h"
 #include "Dom/JsonObject.h"
 #include "Blueprint/SlateBlueprintLibrary.h"
 #include "U01PlayerController.h"
@@ -49,7 +51,7 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
         Box->AddChildToVerticalBox(Result)->SetPadding(FMargin(8));
         return Result;
     };
-    Button(TEXT("Resume"))->OnClicked.AddDynamic(this, &UU01Menu::ResumeClicked);
+    ResumeButton=Button(TEXT("Resume"));ResumeButton->OnClicked.AddDynamic(this, &UU01Menu::ResumeClicked);
     EncounterResult=WidgetTree->ConstructWidget<UTextBlock>();Box->AddChildToVerticalBox(EncounterResult);
     RetryButton=Button(TEXT("Retry encounter"));RetryButton->OnClicked.AddDynamic(this,&UU01Menu::RetryClicked);
     Button(TEXT("Open regression stations (separate run)"))->OnClicked.AddDynamic(this,&UU01Menu::RegressionClicked);
@@ -120,6 +122,7 @@ void UU01Menu::NativeTick(const FGeometry& Geometry,float DeltaSeconds)
 {
     Super::NativeTick(Geometry,DeltaSeconds);RefreshSettings();UpdateFixtureStatus();
     auto* PC=Cast<AU01PlayerController>(GetOwningPlayer());auto* E=PC?AU03Encounter::ForSubject(PC->GetPawn()):nullptr;
+    if(ResumeButton){const auto* P=PC?Cast<AU01Character>(PC->GetPawn()):nullptr;ResumeButton->SetIsEnabled(!E||(E->GetSnapshot().Result==0&&P&&P->Combat->GetCombatSnapshot().EncounterRevision==E->GetSnapshot().Revision&&P->Vital->GetSnapshot().Generation==P->Combat->GetCombatSnapshot().LifeGeneration));}
     if(RetryButton){RetryButton->SetVisibility(E?ESlateVisibility::Visible:ESlateVisibility::Collapsed);RetryButton->SetIsEnabled(E&&!E->GetSnapshot().bClosed&&E->GetSnapshot().Result!=0);}
     if(EncounterResult)EncounterResult->SetText(FText::FromString(E?(E->GetSnapshot().Result==1?TEXT("Won. Retry to fight again, then choose Resume."):E->GetSnapshot().Result==2?TEXT("Lost. Retry to fight again, then choose Resume."):TEXT("Encounter running")):TEXT("")));
 }

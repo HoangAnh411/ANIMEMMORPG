@@ -28,7 +28,8 @@ public:
     void SetControlLocked(bool bLocked);
     void SetMotorLock(EU01MotorLock Reason, bool bEnabled);
     bool IsMotorLocked() const { return GetLockMask() != 0; }
-    uint8 GetLockMask() const { return LockMask | (bCombatAuthorityLocked ? uint8(EU01MotorLock::Combat) : 0); }
+    uint8 GetLockMask() const { return LockMask | (bCombatAuthorityLocked ? uint8(EU01MotorLock::Combat) : 0) | (bEncounterControlLocked?uint8(EU01MotorLock::Control):0); }
+    void ApplyEncounterControlAuthority(bool Locked);
     void ApplyCombatAuthority(bool bLocked, bool bYawLocked, double YawDegrees);
     void ApplyFeintAuthority(bool Locked) { bFeintAuthority=Locked;if(Locked){bSprintRequested=false;JumpWindow.ClearInput();} }
     void ApplyDefenseAuthority(bool Guard,double Slow) { bGuardAuthority=Guard;SlowAuthority=Slow;if(Guard)JumpWindow.ClearInput(); }
@@ -73,6 +74,7 @@ private:
     uint8 LockMask = 0;
     // Never restored from a saved move or client compressed flag.
     bool bCombatAuthorityLocked = false, bCombatYawLocked = false;
+    bool bEncounterControlLocked=false; // server-owned, never restored from compressed flags or saved moves
     double CombatYawDegrees = 0;
     bool bGuardAuthority=false, bFeintAuthority=false;
     double SlowAuthority=0;

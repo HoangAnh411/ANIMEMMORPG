@@ -148,6 +148,7 @@ void AU03Encounter::ResetSubjects(double At,bool Both)
     for(auto* P:Subjects)W->MarkDead(P->Vital->GetLife());
     for(auto* P:Subjects)
     {
+        if(P==Snapshot.Player){P->Combat->bAuthorityPlaying=false;P->GetU01Movement()->ApplyEncounterControlAuthority(true);}
         if(auto* AI=Cast<AAIController>(P->GetController()))AI->StopMovement();
         check(P->Combat->ResetEncounterCombat(At));P->GetU01Movement()->ResetEncounterMotor();
         if(Both)P->SetActorTransform(P==Snapshot.Player?PlayerSpawn:MonsterSpawn,false,nullptr,ETeleportType::TeleportPhysics);

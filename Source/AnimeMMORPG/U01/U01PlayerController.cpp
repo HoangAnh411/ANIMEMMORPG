@@ -453,6 +453,11 @@ void AU01PlayerController::ApplyPlayingInputMode()
 void AU01PlayerController::ResumePlaying()
 {
     if (!IsLocalPlayerController() || !IsGameWindowActive()) return;
+    if(auto* E=AU03Encounter::ForSubject(GetPawn()))
+    {
+        const auto* P=Cast<AU01Character>(GetPawn());
+        if(E->GetSnapshot().Result!=0||!P||P->Combat->GetCombatSnapshot().EncounterRevision!=E->GetSnapshot().Revision||P->Vital->GetSnapshot().Generation!=P->Combat->GetCombatSnapshot().LifeGeneration)return;
+    }
     if(!SaveSettings())return;
     CancelRebind();
     ReconcilePhysicalReleases();

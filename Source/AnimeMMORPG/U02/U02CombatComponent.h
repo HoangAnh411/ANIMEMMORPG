@@ -136,7 +136,7 @@ private:
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepCombatSnapshot Snapshot;
     UFUNCTION() void OnRep_Snapshot();
     UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life);
-    UFUNCTION(Server, Reliable) void ServerControlPlaying(bool bPlaying);
+    UFUNCTION(Server, Reliable) void ServerControlPlaying(bool bPlaying,FGuid Pawn,uint64 Life);
     UFUNCTION(Server, Unreliable) void ServerAim(double Yaw, FGuid Pawn, uint64 Life, uint64 Action);
     UFUNCTION(Server, Unreliable) void ServerGuardAim(double Yaw,FGuid Pawn,uint64 Life,uint64 Guard);
     TUniquePtr<AnimeMMORPG::U03::FTimelineModel> Model;
