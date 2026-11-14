@@ -6,6 +6,7 @@
 #include "NavMesh/NavMeshBoundsVolume.h"
 #include "NavigationSystem.h"
 #include "NavigationData.h"
+#include "NavigationPath.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
@@ -41,7 +42,17 @@ FString UU03AnimationEditor::BuildC2Lab()
             if(auto* Nav=UNavigationSystemV1::GetCurrent(W))Nav->OnNavigationBoundsUpdated(V);
         }
         if(auto* Nav=UNavigationSystemV1::GetCurrent(W))
-        {Nav->Build();for(TActorIterator<ANavigationData> Data(W);Data;++Data)Data->EnsureBuildCompletion();}
+        {
+            Nav->RemoveNavigationBuildLock(ENavigationBuildLock::NoUpdateInEditor|ENavigationBuildLock::InitialLock);
+            Nav->Build();int32 DataCount=0;for(TActorIterator<ANavigationData> Data(W);Data;++Data){Data->EnsureBuildCompletion();++DataCount;}
+            if(!DataCount)return TEXT("ERROR: no generated navigation data");
+            for(int Station=0;Station<4;++Station)
+            {
+                const FVector Base(15000,Station*5000,100);
+                auto* PathCheck=UNavigationSystemV1::FindPathToLocationSynchronously(W,Base+FVector(500,-100,0),Base+FVector(1200,800,0));
+                if(!PathCheck||!PathCheck->IsValid()||PathCheck->IsPartial()||PathCheck->PathPoints.Num()<2)return TEXT("ERROR: no complete path around C2 obstacle");
+            }
+        }
         else return TEXT("ERROR: missing lab navigation system");
         if(!UEditorLoadingAndSavingUtils::SaveMap(W,Path))return TEXT("ERROR: save ")+Map;
     }

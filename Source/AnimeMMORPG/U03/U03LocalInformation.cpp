@@ -76,3 +76,5 @@ void AU01PlayerController::RequestEncounterRetry()
 }
 void AU01PlayerController::ServerEncounterRetry_Implementation(FGuid Id,uint64 Revision,uint64 Sequence)
 {if(auto* E=AU03Encounter::ForSubject(GetPawn()))E->Retry(this,Id,Revision,Sequence);}
+void AU01PlayerController::OpenRegressionLab()
+{if(IsLocalPlayerController())ClientTravel(GetWorld()->GetOutermost()->GetName()+TEXT("?U03Regression=1"),TRAVEL_Absolute);}

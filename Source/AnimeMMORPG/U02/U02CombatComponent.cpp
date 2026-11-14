@@ -205,6 +205,7 @@ void UU02CombatComponent::Landed()
 {if(Model)GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(this,GetWorld()->GetTimeSeconds(),AnimeMMORPG::U03::ECutoff::LostGround,true);}
 bool UU02CombatComponent::ResetLabCombat()
 {
+    if(AU03Encounter::ForSubject(GetOwner()))return false;
 #if UE_BUILD_SHIPPING
     return false;
 #else
@@ -223,6 +224,7 @@ bool UU02CombatComponent::ResetEncounterCombat(double Now)
 {
     if(!Model||!Character()->HasAuthority()||Now<Model->Time())return false;
     auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->MarkDead(Model->GetLife());
+    for(const auto& I:QueuedIntents)if(I.Intent.Life==Model->GetLife()){AdmissionWatermark=FMath::Max(AdmissionWatermark,I.Intent.Sequence);LastCommand=FMath::Max(LastCommand,I.Intent.Sequence);}
     auto Life=Model->GetLife();++Life.Generation;if(!Model->ResetLife(Life,Now))return false;
     QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;Snapshot.DefenseEvent=0;Snapshot.DefenseResult=0;Snapshot.DefenseEventTime=0;Snapshot.ParryFeedbackSequence=0;Snapshot.ParryFeedbackTime=0;Snapshot.FeintLockEnd=0;Snapshot.FeintLastSuccess=-1;Snapshot.FeintSequence=0;Snapshot.FeintAction=0;Snapshot.InterruptSequence=0;Snapshot.InterruptedAction=0;Snapshot.InterruptTime=0;
     OwnerAdmission.PendingCommand=0;OwnerAdmission.PendingExpires=0;

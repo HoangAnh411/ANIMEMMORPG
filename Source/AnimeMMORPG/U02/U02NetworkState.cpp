@@ -65,6 +65,7 @@ void AU02NetworkState::EmitState()
 void AU02NetworkState::ProcessFixture()
 {
 #if !UE_BUILD_SHIPPING
+    for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)if(!E->GetSnapshot().bClosed)return; // Legacy fixture controller never runs alongside C2 gameplay.
     FString File,Command;if(!FParse::Value(FCommandLine::Get(),TEXT("U02FCommands="),File)||!FFileHelper::LoadFileToString(Command,*File)||Command==LastFixtureCommand)return;LastFixtureCommand=Command;
     TArray<FString> A;Command.ParseIntoArrayWS(A);if(A.Num()<2)return;const FString Mode=A[1];auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->DrainAt(GetWorld()->GetTimeSeconds());
     if(Mode.StartsWith(TEXT("b2-")))W->StartDefenseFixture(Mode.Mid(3));

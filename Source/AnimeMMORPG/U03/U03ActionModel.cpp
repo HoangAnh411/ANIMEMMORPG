@@ -182,7 +182,7 @@ bool FTimelineModel::ResetLife(U02::FLifeId NewLife,double T)
 bool FTimelineModel::CancelCurrent(ECutoff Reason, bool Valid)
 {
     if (!bResolvingEvent) return false;
-    const bool Lifecycle = Reason == ECutoff::Death || Reason == ECutoff::LostGround || Reason == ECutoff::HardCC;
+    const bool Lifecycle = Reason == ECutoff::Death || Reason == ECutoff::LostGround || Reason == ECutoff::HardCC || Reason == ECutoff::Return;
     if (Lifecycle)
     {
         if (Reason == ECutoff::Death){bDead = true;DefenseState.EndHard(Now);DefenseState.Slows.Empty();}

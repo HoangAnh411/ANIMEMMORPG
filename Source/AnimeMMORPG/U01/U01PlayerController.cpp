@@ -481,6 +481,14 @@ FString AU01PlayerController::GetMetricsJson() const
     if (!World || (World->WorldType != EWorldType::Game && World->WorldType != EWorldType::PIE) || ControlledCharacter->GetController() != this)
         return TEXT("{\"error\":\"No unambiguous owned Game/PIE U01 pawn\"}");
     auto Json = MakeShared<FJsonObject>();
+    if(auto* E=AU03Encounter::ForSubject(GetPawn()))
+    {
+        const auto S=E->GetSnapshot();auto C2=MakeShared<FJsonObject>();
+        C2->SetStringField(TEXT("id"),S.Id.ToString());C2->SetNumberField(TEXT("revision"),S.Revision);C2->SetNumberField(TEXT("result"),S.Result);C2->SetNumberField(TEXT("ai"),S.AI);C2->SetNumberField(TEXT("station"),S.Station);
+        C2->SetBoolField(TEXT("targetSelected"),InformationSubject.IsValid());C2->SetBoolField(TEXT("targetVisible"),bInformationVisible);C2->SetStringField(TEXT("target"),InformationPawn.ToString());C2->SetNumberField(TEXT("targetLife"),InformationLife);
+        if(S.Monster){C2->SetObjectField(TEXT("monsterCombat"),S.Monster->Combat->GetDiagnostics());C2->SetObjectField(TEXT("monsterVital"),S.Monster->Vital->GetDiagnostics());C2->SetStringField(TEXT("monsterPosition"),S.Monster->GetActorLocation().ToString());}
+        Json->SetObjectField(TEXT("encounter"),C2);
+    }
     FString SourceSHA;
     FParse::Value(FCommandLine::Get(), TEXT("U01SourceSHA="), SourceSHA);
     Json->SetStringField(TEXT("sourceSHA"), SourceSHA.IsEmpty() ? TEXT("UNSPECIFIED") : SourceSHA);

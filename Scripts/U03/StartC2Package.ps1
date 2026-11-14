@@ -13,7 +13,7 @@ New-Item -ItemType Directory -Force -Path $out | Out-Null
 . (Join-Path $root 'Scripts/U01/FReviewHost.ps1')
 . (Join-Path $root 'Scripts/U02/EnsureEditorMinimized.ps1')
 $windows=@(Get-U02OriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject'))
-Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject') | Out-Null
+
 ConvertTo-Json -InputObject $windows -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $out 'original-editor-windows.json')
 $log=Join-Path $out 'Game.log'
 $arguments=@('/Game/AnimeMMORPG/Maps/L_CharacterCombatLab','-windowed','-ResX=1280','-ResY=720','-WinX=0','-WinY=30','-nosplash','-U01Trace','-U02Trace',('-U01SourceSHA='+$sha),('-U02SourceSHA='+$sha),('-U02RunId='+(Split-Path $out -Leaf)),('-UserDir="'+$out+'"'),('-abslog="'+$log+'"'),'-ExecCmds="t.MaxFPS 60,t.IdleWhenNotForeground 0,r.ScreenPercentage 50,r.LumenScene.SurfaceCache.AtlasSize 2048,r.RenderTargetPoolMin 128,r.Streaming.PoolSize 256,r.Lumen.DiffuseIndirect.Allow 0,r.Lumen.Reflections.Allow 0,r.Shadow.Virtual.Enable 0,r.ShadowQuality 2"')
@@ -27,5 +27,6 @@ for($i=0;$i -lt 400;$i++){
  Start-Sleep -Milliseconds 500
 }
 if(!$ready){throw 'C2 package not ready; scoped process record retained'}
+Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject') | Out-Null
 ConvertTo-Json -InputObject @(Confirm-U02EditorMinimized $windows) -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $out 'editor-minimized-verified.json')
 Write-Output (Join-Path $out 'process.json')

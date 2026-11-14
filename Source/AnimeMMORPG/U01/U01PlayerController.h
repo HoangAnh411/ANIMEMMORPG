@@ -71,6 +71,7 @@ public:
     void RestoreControlDefaults();
     void OpenControls();
     UFUNCTION(BlueprintCallable) void RequestEncounterRetry();
+    UFUNCTION(BlueprintCallable) void OpenRegressionLab();
     UFUNCTION(Server,Reliable) void ServerEncounterRetry(FGuid Encounter,uint64 Revision,uint64 Sequence);
     void ToggleInformationTarget();
     bool InformationTarget(FVector2D& Screen,FString& Text) const;

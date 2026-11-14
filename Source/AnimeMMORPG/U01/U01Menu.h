@@ -18,6 +18,7 @@ private:
     UPROPERTY(Transient) TObjectPtr<class UTextBlock> EncounterResult;
     UPROPERTY(Transient) TObjectPtr<class UButton> RetryButton;
     UFUNCTION() void RetryClicked();
+    UFUNCTION() void RegressionClicked();
     UPROPERTY(Transient) TObjectPtr<class UWidgetSwitcher> Pages;
     UPROPERTY(Transient) TObjectPtr<class UTextBlock> SettingsStatus;
     UPROPERTY(Transient) TArray<TObjectPtr<class UTextBlock>> BindingLabels;

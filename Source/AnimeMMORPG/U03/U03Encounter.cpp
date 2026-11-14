@@ -11,9 +11,11 @@
 #include "EngineUtils.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/PlayerState.h"
+#include "GameFramework/GameSession.h"
 #include "UObject/ConstructorHelpers.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/Canvas.h"
+#include "Kismet/GameplayStatics.h"
 #include <cmath>
 using namespace AnimeMMORPG::U03;
 namespace {
@@ -44,9 +46,9 @@ void AU03Monster::Tick(float Dt)
 AU03Encounter::AU03Encounter(){bReplicates=true;bAlwaysRelevant=true;SetReplicateMovement(false);}
 void AU03Encounter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {Super::GetLifetimeReplicatedProps(OutLifetimeProps);DOREPLIFETIME(AU03Encounter,Snapshot);}
-void AU03Encounter::Initialize(AU01PlayerController* PC,AU01Character* P,const FTransform& PS,const FTransform& MS)
+void AU03Encounter::Initialize(AU01PlayerController* PC,AU01Character* P,const FTransform& PS,const FTransform& MS,int32 Station)
 {
-    check(HasAuthority());SetOwner(PC);PlayerSpawn=PS;MonsterSpawn=MS;Snapshot.Id=FGuid::NewGuid();Snapshot.Player=P;
+    check(HasAuthority());SetOwner(PC);PlayerSpawn=PS;MonsterSpawn=MS;Snapshot.Id=FGuid::NewGuid();Snapshot.Player=P;Snapshot.Station=Station;
     Snapshot.OwnerLabel=PC->PlayerState?PC->PlayerState->GetPlayerName():PC->GetName();
     FActorSpawnParameters Params;Params.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     Snapshot.Monster=GetWorld()->SpawnActor<AU03Monster>(AU03Monster::StaticClass(),MS,Params);
@@ -180,9 +182,19 @@ AU03EncounterGameMode::AU03EncounterGameMode()
 void AU03EncounterGameMode::RestartPlayer(AController* Controller)
 {
     Super::RestartPlayer(Controller);auto* PC=Cast<AU01PlayerController>(Controller);auto* P=PC?Cast<AU01Character>(PC->GetPawn()):nullptr;
-    if(!P||AU03Encounter::ForSubject(P))return;
-    const FVector Base(15000,NextStation++*5000,98.15);
-    auto* E=GetWorld()->SpawnActor<AU03Encounter>();E->Initialize(PC,P,FTransform(FRotator::ZeroRotator,Base),FTransform(FRotator(0,180,0),Base+FVector(500,0,0)));
+    if(!P||IsRegression()||AU03Encounter::ForSubject(P))return;
+    TSet<int32> Occupied;for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)if(!E->GetSnapshot().bClosed)Occupied.Add(E->GetSnapshot().Station);
+    int32 Station=0;while(Occupied.Contains(Station))++Station;
+    if(Station>=4){if(GameSession)GameSession->KickPlayer(PC,FText::FromString(TEXT("C2 lab has four encounter stations")));return;}
+    const FVector Base(15000,Station*5000,98.15);
+    auto* E=GetWorld()->SpawnActor<AU03Encounter>();E->Initialize(PC,P,FTransform(FRotator::ZeroRotator,Base),FTransform(FRotator(0,180,0),Base+FVector(500,0,0)),Station);
+}
+bool AU03EncounterGameMode::IsRegression() const {return UGameplayStatics::ParseOption(OptionsString,TEXT("U03Regression"))==TEXT("1");}
+void AU03EncounterGameMode::PreLogin(const FString& Options,const FString& Address,const FUniqueNetIdRepl& UniqueId,FString& ErrorMessage)
+{
+    Super::PreLogin(Options,Address,UniqueId,ErrorMessage);if(IsRegression()||!ErrorMessage.IsEmpty())return;
+    int32 Count=0;for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)if(!E->GetSnapshot().bClosed)++Count;
+    if(Count>=4)ErrorMessage=TEXT("C2 lab has four encounter stations");
 }
 void AU03EncounterGameMode::Logout(AController* Exiting)
 {

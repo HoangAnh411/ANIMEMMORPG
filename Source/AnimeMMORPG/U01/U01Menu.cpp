@@ -50,9 +50,10 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
     Button(TEXT("Resume"))->OnClicked.AddDynamic(this, &UU01Menu::ResumeClicked);
     EncounterResult=WidgetTree->ConstructWidget<UTextBlock>();Box->AddChildToVerticalBox(EncounterResult);
     RetryButton=Button(TEXT("Retry encounter"));RetryButton->OnClicked.AddDynamic(this,&UU01Menu::RetryClicked);
+    Button(TEXT("Open regression stations (separate run)"))->OnClicked.AddDynamic(this,&UU01Menu::RegressionClicked);
     Button(TEXT("Điều khiển / Controls"))->OnClicked.AddDynamic(this, &UU01Menu::ControlsClicked);
 #if !UE_BUILD_SHIPPING
-    if (const auto* PC = Cast<AU01PlayerController>(GetOwningPlayer()); PC && PC->HasTerrainFixtures())
+    if (const auto* PC = Cast<AU01PlayerController>(GetOwningPlayer()); PC && PC->HasTerrainFixtures()&&!AU03Encounter::ForSubject(PC->GetPawn()))
     {
     Text(TEXT("Lab fixtures (test tools, not respawn)"));
     FixtureStatus = WidgetTree->ConstructWidget<UTextBlock>();
@@ -121,6 +122,7 @@ void UU01Menu::NativeTick(const FGeometry& Geometry,float DeltaSeconds)
     if(EncounterResult)EncounterResult->SetText(FText::FromString(E?(E->GetSnapshot().Result==1?TEXT("Won - Retry starts a new encounter revision. Resume remains manual."):E->GetSnapshot().Result==2?TEXT("Lost - Retry starts a new encounter revision. Resume remains manual."):TEXT("Encounter running")):TEXT("")));
 }
 void UU01Menu::RetryClicked(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->RequestEncounterRetry();}
+void UU01Menu::RegressionClicked(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->OpenRegressionLab();}
 void UU01Menu::ShowMainMenu(){if(Pages)Pages->SetActiveWidgetIndex(0);}
 void UU01Menu::ShowControls(){if(Pages)Pages->SetActiveWidgetIndex(1);RefreshSettings();}
 void UU01Menu::RefreshSettings()

@@ -101,4 +101,38 @@ bool FC2TargetModel::RunTest(const FString&)
     TestFalse(TEXT("death"),R.Update(1.2,100,false,true,true));TestFalse(TEXT("new life"),R.Update(1.2,100,true,false,true));
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC2WorldIsolation,"AnimeMMORPG.U03.C2.WorldPairIsolationAndRetryNeighbor",C2WorldFlags)
+bool FC2WorldIsolation::RunTest(const FString&)
+{
+    FC2World W;
+    auto* P2=W.GetTestWorld()->SpawnActor<AU01Character>(FVector(150,95,98.15),FRotator(0,180,0));auto* PC2=W.GetTestWorld()->SpawnActor<AU01PlayerController>();PC2->Possess(P2);
+    auto* E2=W.GetTestWorld()->SpawnActor<AU03Encounter>();E2->Initialize(PC2,P2,FTransform(FRotator(0,180,0),FVector(150,95,98.15)),FTransform(FRotator::ZeroRotator,FVector(0,95,98.15)));
+    E2->GetSnapshot().Monster->GetU01Movement()->SetMovementMode(MOVE_Walking);
+    TestFalse(TEXT("cross-player damage forbidden"),AU03Encounter::CanDamage(W.Player,P2));
+    TestFalse(TEXT("other station monster forbidden"),AU03Encounter::CanDamage(W.Player,E2->GetSnapshot().Monster));
+    TestFalse(TEXT("monster cannot switch owner"),AU03Encounter::CanDamage(W.Monster(),P2));
+    FU03C2Access::HP(W.Monster(),1);W.Player->Combat->SubmitCombatIntent(ECommand::Attack,1,0,180);W.Run(.3);
+    TestEqual(TEXT("A wins"),W.Encounter->GetSnapshot().Result,uint8(EEncounterResult::Won));
+    const auto Before=E2->GetSnapshot();const auto Vital=P2->Vital->GetSnapshot();const auto Combat=P2->Combat->GetCombatSnapshot();
+    TestTrue(TEXT("RetryA"),W.Encounter->Retry(W.PC,W.Encounter->GetSnapshot().Id,1,1));
+    TestEqual(TEXT("B revision unchanged"),E2->GetSnapshot().Revision,Before.Revision);TestEqual(TEXT("B result unchanged"),E2->GetSnapshot().Result,Before.Result);
+    TestEqual(TEXT("B HP unchanged"),P2->Vital->GetSnapshot().HP,Vital.HP);TestEqual(TEXT("B life unchanged"),P2->Vital->GetSnapshot().Generation,Vital.Generation);
+    TestEqual(TEXT("B action unchanged"),P2->Combat->GetCombatSnapshot().ActionSequence,Combat.ActionSequence);
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC2WorldInterrupt,"AnimeMMORPG.U03.C2.WorldEInterruptQAndFreshAdmission",C2WorldFlags)
+bool FC2WorldInterrupt::RunTest(const FString&)
+{
+    for(auto Command:{ECommand::E,ECommand::Q})for(bool Reverse:{false,true})
+    {
+        FC2World W;if(Reverse)FU03C2Access::Reverse(W.Collision);
+        W.Player->Combat->SubmitCombatIntent(Command,1,0,180);W.Run(.4);
+        const auto S=W.Monster()->Combat->GetCombatSnapshot();
+        TestEqual(TEXT("E only Interrupts"),S.InterruptSequence,uint64(Command==ECommand::E?1:0));
+        TestEqual(TEXT("no stun penalty"),S.HardCC,uint8(0));
+        TestTrue(TEXT("monster keeps proper definition"),S.DefinitionId==uint8(EAction::Monster));
+        if(Command==ECommand::E)TestTrue(TEXT("fresh action admission after interruption"),S.ActionSequence>1);
+    }
+    return true;
+}
 #endif

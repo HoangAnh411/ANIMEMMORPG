@@ -22,6 +22,7 @@ struct FU03EncounterSnapshot
     UPROPERTY() TObjectPtr<AU01Character> Player;
     UPROPERTY() TObjectPtr<AU01Character> Monster;
     UPROPERTY() FString OwnerLabel;
+    UPROPERTY() int32 Station=0;
     UPROPERTY() bool bClosed=false;
 };
 
@@ -42,7 +43,7 @@ public:
     AU03Encounter();
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
     const FU03EncounterSnapshot& GetSnapshot() const {return Snapshot;}
-    void Initialize(AU01PlayerController* OwnerController,AU01Character* Player,const FTransform& PlayerSpawn,const FTransform& MonsterSpawn);
+    void Initialize(AU01PlayerController* OwnerController,AU01Character* Player,const FTransform& PlayerSpawn,const FTransform& MonsterSpawn,int32 Station=0);
     void Close(double At);
     bool Retry(AU01PlayerController* Requester,FGuid Id,uint64 Revision,uint64 Sequence);
     void ConfirmDefeat(AActor* Subject,double At);
@@ -73,9 +74,10 @@ class ANIMEMMORPG_API AU03EncounterGameMode : public AGameModeBase
 public:
     AU03EncounterGameMode();
     virtual void RestartPlayer(AController* Player) override;
+    virtual void PreLogin(const FString& Options,const FString& Address,const FUniqueNetIdRepl& UniqueId,FString& ErrorMessage) override;
     virtual void Logout(AController* Exiting) override;
 private:
-    int32 NextStation=0;
+    bool IsRegression() const;
 };
 
 UCLASS()
