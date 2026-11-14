@@ -73,6 +73,7 @@ public:
     UFUNCTION(BlueprintCallable) void RequestEncounterRetry();
     UFUNCTION(BlueprintCallable) void OpenRegressionLab();
     UFUNCTION(Server,Reliable) void ServerEncounterRetry(FGuid Encounter,uint64 Revision,uint64 Sequence);
+    UFUNCTION(Exec) void U03C2RetryClaim(const FString& Id,uint64 Revision,uint64 Sequence);
     void ToggleInformationTarget();
     bool InformationTarget(FVector2D& Screen,FString& Text) const;
 private:

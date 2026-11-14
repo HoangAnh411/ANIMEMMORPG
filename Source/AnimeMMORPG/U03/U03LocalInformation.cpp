@@ -8,6 +8,9 @@
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "SceneView.h"
+#include "Misc/CommandLine.h"
+#include "Misc/Parse.h"
+DEFINE_LOG_CATEGORY_STATIC(LogU03Retry,Log,All);
 namespace {
 FVector InformationPoint(AActor* A)
 {auto* C=Cast<AU01Character>(A);return A->GetActorLocation()+FVector(0,0,90-(C?C->GetCapsuleComponent()->GetScaledCapsuleHalfHeight():0));}
@@ -75,6 +78,18 @@ void AU01PlayerController::RequestEncounterRetry()
     const auto S=E->GetSnapshot();ServerEncounterRetry(S.Id,S.Revision,++RetrySequence);
 }
 void AU01PlayerController::ServerEncounterRetry_Implementation(FGuid Id,uint64 Revision,uint64 Sequence)
-{if(auto* E=AU03Encounter::ForSubject(GetPawn()))E->Retry(this,Id,Revision,Sequence);}
+{
+    auto* E=AU03Encounter::ForSubject(GetPawn());const bool Accepted=E&&E->Retry(this,Id,Revision,Sequence);
+    UE_LOG(LogU03Retry,Display,TEXT("U03C2_RETRY owner=%s claim=%s revision=%llu sequence=%llu accepted=%d current=%s currentRevision=%llu"),*GetPathName(),*Id.ToString(),Revision,Sequence,Accepted,E?*E->GetSnapshot().Id.ToString():TEXT("none"),E?E->GetSnapshot().Revision:0);
+}
+void AU01PlayerController::U03C2RetryClaim(const FString& Text,uint64 Revision,uint64 Sequence)
+{
+#if !UE_BUILD_SHIPPING
+    FGuid Id;
+    if(!FParse::Param(FCommandLine::Get(),TEXT("U02FProbe"))||!GetWorld()->GetMapName().EndsWith(TEXT("L_NetworkLab"))||!FGuid::Parse(Text,Id))return;
+    // Probe the product request through this controller's real owned RPC channel. No fixture reset path.
+    ServerEncounterRetry(Id,Revision,Sequence);
+#endif
+}
 void AU01PlayerController::OpenRegressionLab()
 {if(IsLocalPlayerController())ClientTravel(GetWorld()->GetOutermost()->GetName()+TEXT("?U03Regression=1"),TRAVEL_Absolute);}

@@ -41,7 +41,7 @@ FString UU03AnimationEditor::BuildC2Lab()
             auto* V=W->SpawnActor<ANavMeshBoundsVolume>(Base+FVector(0,0,300),FRotator::ZeroRotator);V->Tags.Add(TEXT("U03C2Authored"));
             auto* Builder=NewObject<UCubeBuilder>(V);Builder->X=4800;Builder->Y=4800;Builder->Z=1000;
             UActorFactory::CreateBrushForVolumeActor(V,Builder);
-            if(!V->Brush||!V->GetComponentsBoundingBox().IsValid)return TEXT("ERROR: navigation bounds brush");
+            if(!V->Brush||!V->GetComponentsBoundingBox(true).IsValid)return TEXT("ERROR: navigation bounds brush");
             if(auto* Nav=UNavigationSystemV1::GetCurrent(W))Nav->OnNavigationBoundsUpdated(V);
         }
         if(auto* Nav=UNavigationSystemV1::GetCurrent(W))
