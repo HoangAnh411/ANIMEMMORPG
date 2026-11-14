@@ -29,7 +29,7 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
     Border->SetContent(Size);
     Pages=WidgetTree->ConstructWidget<UWidgetSwitcher>();Size->SetContent(Pages);
     UVerticalBox* Box = WidgetTree->ConstructWidget<UVerticalBox>();
-    Pages->AddChild(Box);
+    auto* MainScroll=WidgetTree->ConstructWidget<UScrollBox>();MainScroll->AddChild(Box);Pages->AddChild(MainScroll);
     auto Text = [this, Box](const TCHAR* Content)
     {
         UTextBlock* Label = WidgetTree->ConstructWidget<UTextBlock>();
@@ -119,7 +119,7 @@ void UU01Menu::NativeTick(const FGeometry& Geometry,float DeltaSeconds)
     Super::NativeTick(Geometry,DeltaSeconds);RefreshSettings();UpdateFixtureStatus();
     auto* PC=Cast<AU01PlayerController>(GetOwningPlayer());auto* E=PC?AU03Encounter::ForSubject(PC->GetPawn()):nullptr;
     if(RetryButton){RetryButton->SetVisibility(E?ESlateVisibility::Visible:ESlateVisibility::Collapsed);RetryButton->SetIsEnabled(E&&!E->GetSnapshot().bClosed&&E->GetSnapshot().Result!=0);}
-    if(EncounterResult)EncounterResult->SetText(FText::FromString(E?(E->GetSnapshot().Result==1?TEXT("Won - Retry starts a new encounter revision. Resume remains manual."):E->GetSnapshot().Result==2?TEXT("Lost - Retry starts a new encounter revision. Resume remains manual."):TEXT("Encounter running")):TEXT("")));
+    if(EncounterResult)EncounterResult->SetText(FText::FromString(E?(E->GetSnapshot().Result==1?TEXT("Won. Retry to fight again, then choose Resume."):E->GetSnapshot().Result==2?TEXT("Lost. Retry to fight again, then choose Resume."):TEXT("Encounter running")):TEXT("")));
 }
 void UU01Menu::RetryClicked(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->RequestEncounterRetry();}
 void UU01Menu::RegressionClicked(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->OpenRegressionLab();}

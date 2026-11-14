@@ -22,6 +22,7 @@ FString UU03AnimationEditor::BuildC2Lab()
     {
         const FString Path=TEXT("/Game/AnimeMMORPG/Maps/")+Map;
         auto* W=UEditorLoadingAndSavingUtils::LoadMap(Path);if(!W)return TEXT("ERROR: load ")+Map;
+        FlushAsyncLoading();
         for(TActorIterator<AActor> A(W);A;++A)if(A->ActorHasTag(TEXT("U03C2Authored")))return TEXT("ERROR: C2 content already exists; no blind overwrite");
         W->GetWorldSettings()->DefaultGameMode=AU03EncounterGameMode::StaticClass();
         auto Box=[&](FVector Position,FVector Half)
@@ -43,7 +44,7 @@ FString UU03AnimationEditor::BuildC2Lab()
         }
         if(auto* Nav=UNavigationSystemV1::GetCurrent(W))
         {
-            Nav->RemoveNavigationBuildLock(ENavigationBuildLock::NoUpdateInEditor|ENavigationBuildLock::InitialLock);
+            Nav->RemoveNavigationBuildLock(ENavigationBuildLock::NoUpdateInEditor|ENavigationBuildLock::InitialLock|ENavigationBuildLock::AsyncLoadLock);
             Nav->Build();int32 DataCount=0;for(TActorIterator<ANavigationData> Data(W);Data;++Data){Data->EnsureBuildCompletion();++DataCount;}
             if(!DataCount)return TEXT("ERROR: no generated navigation data");
             for(int Station=0;Station<4;++Station)

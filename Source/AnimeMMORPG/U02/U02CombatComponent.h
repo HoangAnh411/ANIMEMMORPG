@@ -159,6 +159,7 @@ private:
     uint64 PresentedDefenseEvent=0,PresentedDefenseLife=0;
     UPROPERTY(Transient) TObjectPtr<class USoundWaveProcedural> ParryTone;
     uint64 LastSentCommand=0,LastSentLife=0;
+    uint64 LastAppliedLife=0;
     AnimeMMORPG::U02::EReject LastReject = AnimeMMORPG::U02::EReject::None;
     AnimeMMORPG::U02::FActiveSlice LastInterval;
     void HandleAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, double Now);

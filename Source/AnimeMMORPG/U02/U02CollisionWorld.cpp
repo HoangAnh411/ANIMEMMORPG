@@ -678,6 +678,7 @@ void UU02CollisionWorld::DrawVitalHUD()
     if(!GEngine)return;
     auto* PC=GetWorld()->GetFirstPlayerController();auto* Pawn=PC?Cast<AU01Character>(PC->GetPawn()):nullptr;
     if(!Pawn||!Pawn->IsLocallyControlled()||!Pawn->Vital)return;
+    if(AU03Encounter::ForSubject(Pawn))return; // C2 information is selected per LocalPlayer, never auto-targeted on hit.
     const auto V=Pawn->Vital->GetSnapshot();GEngine->AddOnScreenDebugMessage(290010,.15f,V.bDead?FColor::Red:FColor::White,
         FString::Printf(TEXT("HP %d/%d | shield %d | %s"),V.HP,V.MaxHP,V.Shield,V.bDead?TEXT("DEFEATED - lab reset only"):TEXT("Playing")));
     if(auto* Target=HUDTarget.Get())if(auto* Vital=Target->FindComponentByClass<UU02VitalComponent>())

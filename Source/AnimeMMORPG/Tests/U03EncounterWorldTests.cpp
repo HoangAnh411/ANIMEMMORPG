@@ -135,4 +135,21 @@ bool FC2WorldInterrupt::RunTest(const FString&)
     }
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC2WorldScheduledBoundary,"AnimeMMORPG.U03.C2.WorldScheduledDistanceAndReturnLatch",C2WorldFlags)
+bool FC2WorldScheduledBoundary::RunTest(const FString&)
+{
+    FC2World W;
+    TFunction<FVector(AActor*,double)> Path=[&](AActor* A,double T){return FVector(2000*T+(A==W.Player?150:0),0,2.15);};
+    TArray<U02::FTriangle> Environment;
+    const double Boundary=W.Encounter->NextBoundary(.6,1.,Path,Environment);
+    TestEqual(TEXT("exact leash trajectory root"),Boundary,.75);
+    const double After=W.Encounter->NextBoundary(.75,1.,Path,Environment);TestTrue(TEXT("strict exit is separately scheduled"),After>.75&&After<.750001);
+    // Observation-only callback test: no model mutation outside a real world barrier is counted.
+    auto O=FMonsterObservation{};O.SpawnDistance=1500;O.TargetDistance=150;O.bAction=true;
+    TestEqual(TEXT("15m inclusive"),DecideMonster(EMonsterState::Action,O).State,EMonsterState::Action);
+    O.SpawnDistance=1500.000001;
+    TestEqual(TEXT("exit chooses Return"),DecideMonster(EMonsterState::Action,O).State,EMonsterState::Return);
+    O.SpawnDistance=100;O.TargetDistance=100;TestEqual(TEXT("Return latches despite target"),DecideMonster(EMonsterState::Return,O).State,EMonsterState::Return);
+    return true;
+}
 #endif

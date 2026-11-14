@@ -273,7 +273,11 @@ void UU02CombatComponent::ApplyMotorSnapshot()
         if(Snapshot.bLocked)C->SetActorRotation(FRotator(0,Yaw,0));
     }
 }
-void UU02CombatComponent::OnRep_Snapshot(){ApplyMotorSnapshot();}
+void UU02CombatComponent::OnRep_Snapshot()
+{
+    if(LastAppliedLife&&LastAppliedLife!=Snapshot.LifeGeneration)if(auto* C=Character())C->GetU01Movement()->ResetEncounterMotor();
+    LastAppliedLife=Snapshot.LifeGeneration;ApplyMotorSnapshot();
+}
 void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponentTickFunction* Function)
 {
     Super::TickComponent(Dt,Type,Function);auto* C=Character();if(!C)return;const double Now=GetWorld()->GetTimeSeconds();
