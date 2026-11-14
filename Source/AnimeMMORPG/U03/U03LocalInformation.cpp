@@ -42,7 +42,7 @@ void AU01PlayerController::ToggleInformationTarget()
     {
         auto* A=*It;auto* V=A->FindComponentByClass<UU02VitalComponent>();
         if(!((E&&A==E->GetSnapshot().Monster)||A->ActorHasTag(TEXT("U03TabFixture")))||!V||V->GetSnapshot().bDead)continue;
-        const double Distance=FVector::DistSquared(GetPawn()->GetActorLocation(),A->GetActorLocation());if(Distance>2000.*2000.)continue;
+        const double Distance=FVector::DistSquared(GetPawn()->GetActorLocation(),A->GetActorLocation());if(!AnimeMMORPG::U03::WithinTargetSelectionRange(Distance))continue;
         FVector2D Screen,Center;if(!ProjectInformation(this,A,Screen,Center)||!InformationClear(this,A))continue;
         const FGuid Id=InformationId(A);if(!Id.IsValid())continue;
         AnimeMMORPG::U03::FTargetRank Rank{FVector2D::DistSquared(Screen,Center),Distance,Id.ToString(EGuidFormats::Digits)};

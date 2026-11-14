@@ -439,6 +439,7 @@ bool UU02CollisionWorld::ApplyLifecycle(UU02CombatComponent* C,double At,AnimeMM
         if(C->Model->Time()!=At)return false;
         const auto* A=C->Model->Current();const FActionId Id=A?A->Identity:FActionId{};
         const bool Accepted=Landing?C->Model->GroundedAtBarrier(true):C->Model->CancelAtBarrier(Reason);
+        LifecycleAudit.Add({C->Model->GetLife(),Reason,At,Accepted});if(LifecycleAudit.Num()>512)LifecycleAudit.RemoveAt(0,LifecycleAudit.Num()-512);
         if(Accepted&&!Landing)
         {
             if(Id.Sequence)Ledger.InvalidateAction(Id,At);

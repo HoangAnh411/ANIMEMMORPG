@@ -20,6 +20,7 @@ struct FU03C2Access
     static bool Stale(UU02CollisionWorld* C,U02::FHitCandidate H){return C->ResolveHit(H);}
     static FTimelineModel* Model(AU01Character* C){return C->Combat->Model.Get();}
     static uint64 Watermark(AU01Character* C){return C->Combat->AdmissionWatermark;}
+    static void Capture(UU02CollisionWorld* C,double At){C->Capture(At);}
 };
 namespace {
 constexpr auto C2WorldFlags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
@@ -100,7 +101,7 @@ bool FC2TargetModel::RunTest(const FString&)
 {
     FTargetRank A{1,100,TEXT("b")},B{2,1,TEXT("a")};TestTrue(TEXT("screen first"),A<B);B.ScreenDistance=1;TestTrue(TEXT("3D second"),B<A);B.WorldDistance=100;TestTrue(TEXT("stable subject third"),B<A);
     for(double Delta:{-.000001,0.,.000001})
-    {FTargetRetention R;TestEqual(TEXT("retention30m inclusive"),R.Update(0,3000+Delta,true,true,true),Delta<=0);R={};R.Update(4,100,true,true,false);TestEqual(TEXT("continuous1s half-open"),R.Update(5+Delta,100,true,true,false),Delta<0);}
+    {TestEqual(TEXT("selection20m inclusive"),WithinTargetSelectionRange(FMath::Square(2000+Delta)),Delta<=0);FTargetRetention R;TestEqual(TEXT("retention30m inclusive"),R.Update(0,3000+Delta,true,true,true),Delta<=0);R={};R.Update(4,100,true,true,false);TestEqual(TEXT("continuous1s half-open"),R.Update(5+Delta,100,true,true,false),Delta<0);}
     FTargetRetention R;R.Update(0,100,true,true,false);R.Update(.9,100,true,true,true);TestTrue(TEXT("visible resets occlusion"),R.Update(1.1,100,true,true,false));
     TestFalse(TEXT("death"),R.Update(1.2,100,false,true,true));TestFalse(TEXT("new life"),R.Update(1.2,100,true,false,true));
     return true;
@@ -179,6 +180,27 @@ bool FC2WorldReturn::RunTest(const FString&)
         TestEqual(TEXT("fullHP at reset"),W.Monster()->Vital->GetSnapshot().HP,600);
         W.Run(.2);TestEqual(TEXT("reset exactly once"),W.Monster()->Vital->GetLife().Generation,OldLife.Generation+1);
     }
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC2WorldLOS,"AnimeMMORPG.U03.C2.WorldMovingLOSLongShortAndCollectionOrder",C2WorldFlags)
+bool FC2WorldLOS::RunTest(const FString&)
+{
+    TArray<double> Cutoffs;
+    for(bool Short:{false,true})for(bool Reverse:{false,true})
+    {
+        FC2World W;if(Reverse)FU03C2Access::Reverse(W.Collision);
+        W.Monster()->SetActorLocation(FVector(300,0,98.15));W.Player->SetActorLocation(FVector(450,0,98.15));
+        auto* Wall=W.GetTestWorld()->SpawnActor<AActor>();auto* Shape=NewObject<UBoxComponent>(Wall);Wall->SetRootComponent(Shape);Shape->SetBoxExtent(FVector(10,100,140));Shape->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);Shape->SetCollisionResponseToAllChannels(ECR_Block);Shape->RegisterComponent();Wall->SetActorLocation(FVector(375,200,100));
+        const double Start=W.GetTestWorld()->GetTimeSeconds();FU03C2Access::Capture(W.Collision,Start);
+        const auto Life=W.Monster()->Vital->GetLife();
+        const int Steps=Short?20:1;
+        for(int I=1;I<=Steps;++I){W.Player->SetActorLocation(FVector(450,400.*I/Steps,98.15));W.Collision->DrainAt(Start+.5*I/Steps);}
+        const auto* Cut=W.Collision->LifecycleAudit.FindByPredicate([&](const auto& E){return E.Life==Life&&E.Reason==ECutoff::Return&&E.Accepted;});
+        TestNotNull(TEXT("moving feet+90 LOS schedules a real Return cutoff"),Cut);if(!Cut)return false;
+        Cutoffs.Add(Cut->At-Start);TestTrue(TEXT("cutoff occurs inside movement span"),Cut->At>Start&&Cut->At<Start+.5);
+        TestEqual(TEXT("startup hit suppressed"),W.Collision->DamageResults.Num(),0);TestEqual(TEXT("Return remains latched"),W.Encounter->GetSnapshot().AI,uint8(EMonsterState::Return));
+    }
+    for(double T:Cutoffs)TestTrue(TEXT("same physical LOS cutoff under collection reversal and partitioning"),FMath::Abs(T-Cutoffs[0])<1.e-10);
     return true;
 }
 #endif

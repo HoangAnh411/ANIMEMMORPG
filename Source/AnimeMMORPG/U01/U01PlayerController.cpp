@@ -481,6 +481,7 @@ FString AU01PlayerController::GetMetricsJson() const
     if (!World || (World->WorldType != EWorldType::Game && World->WorldType != EWorldType::PIE) || ControlledCharacter->GetController() != this)
         return TEXT("{\"error\":\"No unambiguous owned Game/PIE U01 pawn\"}");
     auto Json = MakeShared<FJsonObject>();
+    auto Information=MakeShared<FJsonObject>();Information->SetBoolField(TEXT("selected"),InformationSubject.IsValid());Information->SetBoolField(TEXT("visible"),bInformationVisible);Information->SetStringField(TEXT("subject"),InformationPawn.ToString());Information->SetNumberField(TEXT("life"),InformationLife);Information->SetNumberField(TEXT("x"),InformationScreen.X);Information->SetNumberField(TEXT("y"),InformationScreen.Y);Json->SetObjectField(TEXT("informationTarget"),Information);
     if(auto* E=AU03Encounter::ForSubject(GetPawn()))
     {
         const auto S=E->GetSnapshot();auto C2=MakeShared<FJsonObject>();

@@ -39,6 +39,8 @@ public:
     TArray<AnimeMMORPG::U02::FHitCandidate> Confirmed;
     struct FConfirmedDamage { AnimeMMORPG::U02::FHitCandidate Hit;AnimeMMORPG::U02::FDamageResult Result;double Roll=0; bool bInterrupted=false; uint64 InterruptedAction=0; };
     TArray<FConfirmedDamage> DamageResults;
+    struct FLifecycleAudit {AnimeMMORPG::U02::FLifeId Life;AnimeMMORPG::U03::ECutoff Reason;double At;bool Accepted;};
+    TArray<FLifecycleAudit> LifecycleAudit; // bounded diagnostics only; never applies gameplay state
     uint64 CritRolls=0;
     double FixtureCritRoll=-1; // native fixture only, -1 production server roll
     bool SetLabCritRoll(double Roll);

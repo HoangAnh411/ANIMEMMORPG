@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 namespace AnimeMMORPG::U03
 {
+inline bool WithinTargetSelectionRange(double SquaredDistanceCm) {return SquaredDistanceCm<=2000.*2000.;}
 struct FTargetRank
 {
     double ScreenDistance=0,WorldDistance=0;
