@@ -93,6 +93,7 @@ public:
     uint64 CommandWatermark() const { return Watermark; }
     const TOptional<FCombatIntent>& GetPending() const { return Pending; }
     bool UpdateAim(double T, double Yaw);
+    bool TrackMonsterAtBarrier(double Yaw); // final continuous startup sample at active entry, before endpoint contacts
     bool ResetLife(U02::FLifeId NewLife, double T);
     bool SpendResourceFixture(EAction Skill) { return !bBarrierOpen && !bAdvancing && (Skill==EAction::Q||Skill==EAction::E) && Resource.Spend(Definition(Skill),Now); }
     // Cooperative world barrier: arrive ALL subjects, resolve the sorted world group,

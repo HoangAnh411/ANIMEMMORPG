@@ -204,4 +204,26 @@ bool FC2WorldLOS::RunTest(const FString&)
     for(double T:Cutoffs)TestTrue(TEXT("same physical LOS cutoff under collection reversal and partitioning"),FMath::Abs(T-Cutoffs[0])<1.e-10);
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC2WorldTracking,"AnimeMMORPG.U03.C2.WorldStartupTrackingActiveLockAndGravity",C2WorldFlags)
+bool FC2WorldTracking::RunTest(const FString&)
+{
+    for(bool Short:{false,true})for(bool Reverse:{false,true})
+    {
+        FC2World W;if(Reverse)FU03C2Access::Reverse(W.Collision);
+        const double Start=W.GetTestWorld()->GetTimeSeconds();const int Steps=Short?36:1;
+        W.Monster()->GetU01Movement()->Velocity=FVector(100,100,-30);
+        for(int I=1;I<=Steps;++I)
+        {const double Alpha=double(I)/Steps;W.Player->SetActorLocation(FVector(150*(1-Alpha),150*Alpha,98.15));W.Collision->DrainAt(Start+.60*Alpha);}
+        TestEqual(TEXT("final startup sample tracks target at active entry"),W.Monster()->Combat->GetCombatSnapshot().AimYawDegrees,90.);
+        TestEqual(TEXT("new-yaw active entry geometry resolves once"),W.Player->Vital->GetSnapshot().HP,900);
+        TestEqual(TEXT("horizontal action stop"),W.Monster()->GetU01Movement()->Velocity.SizeSquared2D(),0.);
+        TestEqual(TEXT("AI stop preserves falling velocity"),W.Monster()->GetU01Movement()->Velocity.Z,-30.);
+        W.Player->SetActorLocation(FVector(150,0,98.15));W.Collision->DrainAt(Start+.65);
+        TestEqual(TEXT("active yaw locked"),W.Monster()->Combat->GetCombatSnapshot().AimYawDegrees,90.);
+        W.Player->SetActorLocation(FVector(0,-150,98.15));W.Collision->DrainAt(Start+.9);
+        TestEqual(TEXT("recovery yaw locked"),W.Monster()->Combat->GetCombatSnapshot().AimYawDegrees,90.);
+        TestEqual(TEXT("dedup remains single hit"),W.Player->Vital->GetSnapshot().HP,900);
+    }
+    return true;
+}
 #endif

@@ -173,6 +173,11 @@ bool FTimelineModel::UpdateAim(double T,double Yaw)
 { if(bBarrierOpen||bAdvancing||!FMath::IsFinite(Yaw)||T!=Now)return false;
   if(DefenseState.bGuard){DefenseState.Yaw=FRotator::NormalizeAxis(Yaw);return true;}
   if(!Action||!Action->Startup(T))return false; Action->Yaw=FRotator::NormalizeAxis(Yaw); return true; }
+bool FTimelineModel::TrackMonsterAtBarrier(double Yaw)
+{
+    if(!bBarrierOpen||!FMath::IsFinite(Yaw)||!Action||Action->GetDefinition().Id!=EAction::Monster||Now>=Action->Cutoff||Now>Action->Start+Action->GetDefinition().ActiveStart)return false;
+    Action->Yaw=FRotator::NormalizeAxis(Yaw);return true;
+}
 bool FTimelineModel::ResetLife(U02::FLifeId NewLife,double T)
 {
     if(bBarrierOpen||bAdvancing||T<Now||NewLife.Pawn!=Life.Pawn||NewLife.Generation<=Life.Generation)return false;

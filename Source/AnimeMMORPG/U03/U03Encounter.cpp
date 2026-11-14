@@ -21,6 +21,8 @@
 using namespace AnimeMMORPG::U03;
 namespace {
 FVector FeetOf(AActor* A){auto* C=Cast<AU01Character>(A);return A->GetActorLocation()-FVector(0,0,C?C->GetCapsuleComponent()->GetScaledCapsuleHalfHeight():0);}
+void StopAIHorizontal(AU01Character* C)
+{if(auto* AI=Cast<AAIController>(C->GetController())){const double Z=C->GetU01Movement()->Velocity.Z;AI->StopMovement();C->GetU01Movement()->Velocity.Z=Z;}}
 }
 AU03Monster::AU03Monster(const FObjectInitializer& I):Super(I)
 {
@@ -117,7 +119,13 @@ void AU03Encounter::BeforeContacts(double At,const TFunction<FVector(AActor*,dou
     if(O.bAction&&D.State==EMonsterState::Action)
     {
         const double Yaw=(Feet(Snapshot.Player,At)-Feet(M,At)).Rotation().Yaw;
-        if(M->Combat->Model->UpdateAim(At,Yaw)){M->Combat->StartupTurn.Retarget(At,Yaw);M->Combat->Publish(At,true);}
+        if(M->Combat->Model->TrackMonsterAtBarrier(Yaw))
+        {
+            const auto* A=M->Combat->Model->Current();
+            if(At==A->Start+A->GetDefinition().ActiveStart)M->Combat->StartupTurn.Begin(M->GetActorRotation().Yaw,Yaw,At,At);
+            else M->Combat->StartupTurn.Retarget(At,Yaw);
+            M->Combat->Publish(At,true);
+        }
     }
     LastDecision=At;Publish();
 }
@@ -129,7 +137,7 @@ void AU03Encounter::AfterBarrier(double At)
     const auto State=EMonsterState(Snapshot.AI);
     if(State==EMonsterState::Return){if(AI)AI->MoveToLocation(MonsterSpawn.GetLocation(),0,false,true,false,false,nullptr,false);return;}
     if(State==EMonsterState::Chase){if(AI)AI->MoveToLocation(Snapshot.Player->GetActorLocation(),0,false,true,false,false,nullptr,false);return;}
-    if(AI)AI->StopMovement();
+    StopAIHorizontal(M);
     if(State==EMonsterState::Action&&!M->Combat->Model->Current())
         M->Combat->SubmitMonsterIntent(++MonsterCommand,At,(Snapshot.Player->GetActorLocation()-M->GetActorLocation()).Rotation().Yaw);
 }
@@ -157,14 +165,14 @@ void AU03Encounter::ConfirmDefeat(AActor* Subject,double At)
     if(!HasAuthority()||(Subject!=Snapshot.Player&&Subject!=Snapshot.Monster)||!Model.Defeat(Subject==Snapshot.Monster))return;
     Snapshot.AI=uint8(Snapshot.Monster->Vital->GetSnapshot().bDead?EMonsterState::Defeated:EMonsterState::Idle);
     for(auto* P:{Snapshot.Player.Get(),Snapshot.Monster.Get()})
-    {GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(P->Combat,At,ECutoff::Return,false);if(auto* AI=Cast<AAIController>(P->GetController()))AI->StopMovement();}
+    {GetWorld()->GetSubsystem<UU02CollisionWorld>()->ApplyLifecycle(P->Combat,At,ECutoff::Return,false);StopAIHorizontal(P);}
     Publish();
 }
 void AU03Encounter::Close(double At)
 {
     if(!HasAuthority()||Model.bClosed)return;Model.bClosed=true;
     for(auto* P:{Snapshot.Player.Get(),Snapshot.Monster.Get()})if(P){GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(P->Vital->GetLife());if(auto* AI=Cast<AAIController>(P->GetController()))AI->StopMovement();}
-    Publish();if(Snapshot.Monster)Snapshot.Monster->Destroy();SetOwner(nullptr);
+    Publish();if(Snapshot.Monster){if(auto* AI=Cast<AAIController>(Snapshot.Monster->GetController()))AI->Destroy();Snapshot.Monster->Destroy();}SetOwner(nullptr);
 }
 void AU03Encounter::Publish()
 {

@@ -555,7 +555,19 @@ void UU02CollisionWorld::DrainAt(double Now)
             }
         };
         ApplyLifecycleGroup();
+        TMap<FActionId,double> EndpointYaws;
+        for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)if(const auto* A=C->Model->Current())EndpointYaws.Add(A->Identity,A->Yaw);
         for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)E->BeforeContacts(Stop,EncounterFeet);
+        // AI's final startup sample can change the newly active sword yaw. Re-collect
+        // this unconfirmed endpoint after that barrier event, never keep old-yaw candidates.
+        TSet<FActionId> ChangedYaw;
+        for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)if(const auto* A=C->Model->Current())if(const auto* Old=EndpointYaws.Find(A->Identity))if(*Old!=A->Yaw)ChangedYaw.Add(A->Identity);
+        if(!ChangedYaw.IsEmpty())
+        {
+            Candidates.RemoveAll([&](const auto& H){return ChangedYaw.Contains(H.Id.Action);});
+            TArray<FHitCandidate> Fresh;CollectCurrent(Stop,Fresh);for(const auto& H:Fresh)if(ChangedYaw.Contains(H.Id.Action))Candidates.Add(H);
+            Candidates.Sort(CandidateLess);
+        }
         // ALL models are at Stop and unfinalized. Each death/cutoff applies before the next
         // timestamp/source/event/hurtbox candidate. Callback-created endpoint events are re-collected.
         for(;;)
