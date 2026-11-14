@@ -21,7 +21,7 @@ def state(record,limit=4000000):
  return rows[-1]
 def states():return [state(r) for r in records]
 def button(c,label):
- until(lambda:label in c.metrics().get('menuButtons',{}));b=c.metrics()['menuButtons'][label];assert b['enabled'];c.click(round(b['x']),round(b['y']));time.sleep(.18)
+ until(lambda:label in c.metrics().get('menuButtons',{}) and c.metrics()['menuButtons'][label]['enabled']);b=c.metrics()['menuButtons'][label];assert b['enabled'];c.click(round(b['x']),round(b['y']));time.sleep(.18)
 def tap(c,key):c.press(key,True);time.sleep(.035);c.press(key,False);m['events'].append(dict(wall=time.perf_counter()-start,client=c.record['role'],key=key))
 def playing(c):
  c.focus()
@@ -86,7 +86,7 @@ try:
  old=c.metrics();m['stages'].append(dict(stage='BeforeDisconnect',metrics=old));c.finish()
  result=subprocess.run(['powershell','-NoProfile','-ExecutionPolicy','Bypass','-File',str(Path(__file__).with_name('ReconnectC2Client.ps1')),'-SessionPath',str(a.session.resolve())],capture_output=True,text=True,creationflags=subprocess.CREATE_NO_WINDOW)
  (a.out/'reconnect-launcher.out').write_text(result.stdout);(a.out/'reconnect-launcher.err').write_text(result.stderr);assert result.returncode==0
- records=json.loads((a.session/'processes.json').read_text(encoding='utf-8-sig'));clients[0]=C2NetworkClient(next(r for r in records if r['role']=='ClientA'));c=clients[0];c.focus();new=c.metrics()
+ records=json.loads((a.session/'processes.json').read_text(encoding='utf-8-sig'));m['reconnectProcesses']=records;clients[0]=C2NetworkClient(next(r for r in records if r['role']=='ClientA'));c=clients[0];c.focus();new=c.metrics()
  check('Reconnect gets new encounter and pawn identity',new['encounter']['id']!=old['encounter']['id'] and new['combat']['pawnId']!=old['combat']['pawnId'])
  check('Reconnect has fresh resources, cooldown and life',new['combat']['life']==1 and new['combat']['action']==0 and new['combat']['energy']==100 and new['combat']['eReady']==0 and new['combat']['dodgeCharges']==2)
  m['stages'].append(dict(stage='AfterReconnect',metrics=new));coherent('Reconnect fresh identity',new['encounter']['id'])

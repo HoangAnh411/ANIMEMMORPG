@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import ImageGrab
 from C2Client import C2Client,u,mouse
 from F60Input import Input,Payload,Mouse,emit
-p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--mode',choices=['inspect','combat','target'],default='combat');a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--mode',choices=['inspect','combat','target','route'],default='combat');a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
 c=C2Client(json.loads(a.record.read_text(encoding='utf-8-sig')));cv2.setNumThreads(1)
 m=dict(completed=False,mode=a.mode,checks=[],stages=[],events=[],process=c.record);stop=threading.Event();writer=None;worker=None;start=0;encoded=0;last=0;previous=None
 def state():return c.metrics()
@@ -24,7 +24,7 @@ def tap(key):
  else:c.press(key,True);time.sleep(.035);c.press(key,False)
  m['events'].append(dict(wall=time.perf_counter()-start,key=key))
 def button(label):
- until(lambda:any(label in k for k in state().get('menuButtons',{})))
+ until(lambda:any(label in k and v['enabled'] for k,v in state().get('menuButtons',{}).items()))
  names=[k for k in state()['menuButtons'] if label in k];assert len(names)==1,(label,names)
  v=state()['menuButtons'][names[0]];assert v['enabled'];c.click(round(v['x']),round(v['y']));time.sleep(.18)
  m['events'].append(dict(wall=time.perf_counter()-start,button=names[0],geometry=v))
@@ -77,7 +77,7 @@ try:
   if observed!='W':c.toggle_ime();c.ime=True;observed=c.probe_w()
   assert observed=='W'
   writer=cv2.VideoWriter(str(a.out/('Input-C2-'+a.mode+'.mp4')),cv2.VideoWriter_fourcc(*'mp4v'),30,(1280,720));assert writer.isOpened();start=time.perf_counter();worker=threading.Thread(target=record);worker.start()
-  if a.mode=='combat' and encounter()['result']:retry()
+  if a.mode in ('combat','route') and encounter()['result']:retry()
   resume();before=state();c.press('Tab',True);time.sleep(.45);c.press('Tab',False)
   check('Physical Target edge selects and hold never toggles',target()['selected'] and target()['visible'])
   check('Target leaves camera and facing alone',state()['aimYawPitchDegrees']==before['aimYawPitchDegrees'] and state()['bodyYawDegrees']==before['bodyYawDegrees'])
@@ -97,6 +97,29 @@ try:
    c.press('W',False);c.press('Q',False);c.press('W',True);time.sleep(.12);c.press('W',False);check('Physical release and repress rearms movement',state()['gateW'])
    until(lambda:encounter()['result']==2,22);check('Standing player loses by server decision',encounter()['result']==2);m['stages'].append(dict(stage='Lost',metrics=state()));retry()
    u.ShowWindow(c.hwnd,6);time.sleep(.3);c.focus();check('Focus return still requires Resume',state()['controlState']!=0)
+  elif a.mode=='route':
+   approach();winding();tap('E');until(lambda:encounter()['monsterVital']['hp']<600);until(lambda:not combat()['locked'])
+   oldlife=encounter()['monsterVital']['lifeGeneration'];path=[]
+   def sample():
+    v=state();e=v['encounter'];point=dict(time=v['worldSeconds'],position=vec(e['monsterPosition']).tolist(),life=e['monsterVital']['lifeGeneration'],ai=e['ai'],hp=e['monsterVital']['hp'])
+    if not path or point['time']>path[-1]['time']:path.append(point)
+   def measured(predicate):sample();return predicate()
+   def walk(key,predicate,timeout):
+    c.press(key,True)
+    try:until(lambda:measured(predicate),timeout)
+    finally:c.press(key,False)
+   walk('D',lambda:vec(state()['capsuleCenterWorldCm'])[1]>900,4)
+   walk('W',lambda:vec(state()['capsuleCenterWorldCm'])[0]>16200,4)
+   until(lambda:measured(lambda:vec(encounter()['monsterPosition'])[0]>16000),6)
+   walk('A',lambda:vec(state()['capsuleCenterWorldCm'])[1]<0,4)
+   walk('S',lambda:vec(state()['capsuleCenterWorldCm'])[0]<15400,4)
+   until(lambda:measured(lambda:encounter()['monsterVital']['lifeGeneration']>oldlife),8)
+   returns=[v for v in path if v['ai']==3 and v['life']==oldlife];check('Physical route causes server Return behind the obstacle',bool(returns))
+   check('Return cannot rechase before reset',all(v['ai']==3 for v in path if returns[0]['time']<=v['time'] and v['life']==oldlife))
+   check('Return completes inside50cm and heals',np.linalg.norm(vec(encounter()['monsterPosition'])-np.array([15500.,0.,98.15]))<=50 and encounter()['monsterVital']['hp']==600)
+   speeds=[np.linalg.norm(np.array(v['position'])-np.array(u['position']))/(v['time']-u['time']) for u,v in zip(path,path[1:]) if v['time']>u['time']]
+   check('Recorded chase/return stays continuous at300cm/s (0.2cm/s text-quantization allowance)',bool(speeds) and max(speeds)<=300.2)
+   life=encounter()['monsterVital']['lifeGeneration'];time.sleep(.6);check('Return reset occurs exactly once',encounter()['monsterVital']['lifeGeneration']==life);m['stages'].append(dict(stage='Navigation route',path=path,speeds=speeds,metrics=state()))
   else:
    tap('Tab');check('Coincident candidates use stable subject ID',target()['subject'].endswith('00000001'))
    turn(180);time.sleep(1.15);check('Offscreen alone retains selection and hides information',target()['selected'] and not target()['visible']);turn(0);until(lambda:target()['visible'])
