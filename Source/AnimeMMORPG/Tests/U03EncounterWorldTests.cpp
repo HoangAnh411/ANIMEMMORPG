@@ -152,4 +152,29 @@ bool FC2WorldScheduledBoundary::RunTest(const FString&)
     O.SpawnDistance=100;O.TargetDistance=100;TestEqual(TEXT("Return latches despite target"),DecideMonster(EMonsterState::Return,O).State,EMonsterState::Return);
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC2WorldReturn,"AnimeMMORPG.U03.C2.WorldReturnPhaseCutoffLatchAndOneReset",C2WorldFlags)
+bool FC2WorldReturn::RunTest(const FString&)
+{
+    // Fixture placement drives exact observations; authored navigation/physical return is a separate gate.
+    for(double Phase:{.2,.65,.9})for(bool Reverse:{false,true})
+    {
+        FC2World W;if(Reverse)FU03C2Access::Reverse(W.Collision);
+        W.Monster()->SetActorLocation(FVector(300,0,98.15));W.Player->SetActorLocation(FVector(450,0,98.15));
+        FU03C2Access::HP(W.Monster(),400);W.Run(Phase);
+        const int Hits=W.Collision->DamageResults.Num();const auto OldLife=W.Monster()->Vital->GetLife();
+        W.Player->SetActorLocation(FVector(1400,0,98.15));W.Run(.02);
+        TestEqual(TEXT("loss enters Return in every phase"),W.Encounter->GetSnapshot().AI,uint8(EMonsterState::Return));
+        TestFalse(TEXT("Return releases action lock"),W.Monster()->Combat->GetCombatSnapshot().bLocked);
+        TestEqual(TEXT("earlier confirmed hit retained, future suppressed"),W.Collision->DamageResults.Num(),Hits);
+        W.Player->SetActorLocation(FVector(450,0,98.15));W.Run(.02);
+        TestEqual(TEXT("no rechase before reset"),W.Encounter->GetSnapshot().AI,uint8(EMonsterState::Return));
+        TestEqual(TEXT("no early heal"),W.Monster()->Vital->GetSnapshot().HP,400);
+        TestEqual(TEXT("no early life"),W.Monster()->Vital->GetLife().Generation,OldLife.Generation);
+        W.Monster()->SetActorLocation(FVector(49,0,98.15));W.Run(.04);
+        TestEqual(TEXT("reset inside50cm"),W.Monster()->Vital->GetLife().Generation,OldLife.Generation+1);
+        TestEqual(TEXT("fullHP at reset"),W.Monster()->Vital->GetSnapshot().HP,600);
+        W.Run(.2);TestEqual(TEXT("reset exactly once"),W.Monster()->Vital->GetLife().Generation,OldLife.Generation+1);
+    }
+    return true;
+}
 #endif

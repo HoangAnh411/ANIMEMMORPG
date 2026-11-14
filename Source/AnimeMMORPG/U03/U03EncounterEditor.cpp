@@ -3,6 +3,7 @@
 #include "U03Encounter.h"
 #include "FileHelpers.h"
 #include "Builders/CubeBuilder.h"
+#include "ActorFactories/ActorFactory.h"
 #include "NavMesh/NavMeshBoundsVolume.h"
 #include "NavigationSystem.h"
 #include "NavigationData.h"
@@ -39,12 +40,14 @@ FString UU03AnimationEditor::BuildC2Lab()
             Box(Base+FVector(900,400,140),FVector(30,300,140));
             auto* V=W->SpawnActor<ANavMeshBoundsVolume>(Base+FVector(0,0,300),FRotator::ZeroRotator);V->Tags.Add(TEXT("U03C2Authored"));
             auto* Builder=NewObject<UCubeBuilder>(V);Builder->X=4800;Builder->Y=4800;Builder->Z=1000;
-            if(!Builder->Build(W,V))return TEXT("ERROR: navigation bounds brush");
+            UActorFactory::CreateBrushForVolumeActor(V,Builder);
+            if(!V->Brush||!V->GetComponentsBoundingBox().IsValid)return TEXT("ERROR: navigation bounds brush");
             if(auto* Nav=UNavigationSystemV1::GetCurrent(W))Nav->OnNavigationBoundsUpdated(V);
         }
         if(auto* Nav=UNavigationSystemV1::GetCurrent(W))
         {
             Nav->RemoveNavigationBuildLock(ENavigationBuildLock::NoUpdateInEditor|ENavigationBuildLock::InitialLock|ENavigationBuildLock::AsyncLoadLock);
+            Nav->GatherNavigationBounds();
             Nav->Build();int32 DataCount=0;for(TActorIterator<ANavigationData> Data(W);Data;++Data){Data->EnsureBuildCompletion();++DataCount;}
             if(!DataCount)return TEXT("ERROR: no generated navigation data");
             for(int Station=0;Station<4;++Station)
