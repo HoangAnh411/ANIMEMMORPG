@@ -1,4 +1,5 @@
 #include "U02CombatComponent.h"
+#include "U03/U03Encounter.h"
 #include <limits>
 #include "U02CollisionWorld.h"
 #include "U02VitalComponent.h"
@@ -116,7 +117,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
     Context.bPlaying=bAuthorityPlaying&&!(M->GetLockMask()&(uint8(EU01MotorLock::Control)|uint8(EU01MotorLock::Interacting)));
     if(const auto* PC=Cast<AU01PlayerController>(C->GetController()))Context.bPlaying&=PC->ControlState==EU01ControlState::Playing;
     Context.bGrounded=M->IsMovingOnGround();Context.bDead=C->Vital&&C->Vital->GetSnapshot().bDead;
-    Context.bDodgeEnabled=true;Context.bDefenseEnabled=true;
+    Context.bMonster=C->IsA<AU03Monster>();Context.bDodgeEnabled=!Context.bMonster;Context.bDefenseEnabled=!Context.bMonster;
     auto Commands=MoveTemp(QueuedIntents);QueuedIntents.Empty();
     Commands.Sort([](const auto& A,const auto& B){return A.Receive!=B.Receive?A.Receive<B.Receive:A.Intent.Sequence<B.Intent.Sequence;});
     TSet<uint64> Conflicts;
@@ -135,7 +136,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
             else
             {
                 AdmissionWatermark=I.Sequence;
-                if(I.Command==ECommand::Q||I.Command==ECommand::E||I.Command==ECommand::Attack||I.Command==ECommand::Dodge||I.Command==ECommand::Guard||I.Command==ECommand::GuardRelease||I.Command==ECommand::Escape)
+                if((Context.bMonster&&I.Command==ECommand::Monster)||I.Command==ECommand::Q||I.Command==ECommand::E||I.Command==ECommand::Attack||I.Command==ECommand::Dodge||I.Command==ECommand::Guard||I.Command==ECommand::GuardRelease||I.Command==ECommand::Escape)
                 {
                     int32 Group=ReceiveGroups.Find(Entry.Receive);
                     if(Group==INDEX_NONE){Group=ReceiveGroups.Add(Entry.Receive);Admissible.AddDefaulted();}
@@ -209,12 +210,24 @@ bool UU02CombatComponent::ResetLabCombat()
 #else
     if(!Model||!Character()->HasAuthority())return false;
     const double Now=FMath::Max(double(GetWorld()->GetTimeSeconds()),Model->Time());auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->DrainAt(Now);
+    return ResetEncounterCombat(Now);
+#endif
+}
+void UU02CombatComponent::SubmitMonsterIntent(uint64 Sequence,double At,double Yaw)
+{
+    if(!Character()||!Character()->HasAuthority()||!Character()->IsA<AU03Monster>())return;
+    ReceiveIntent(AnimeMMORPG::U03::ECommand::Monster,Sequence,At,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration);
+    ProcessQueuedIntents(At);
+}
+bool UU02CombatComponent::ResetEncounterCombat(double Now)
+{
+    if(!Model||!Character()->HasAuthority()||Now<Model->Time())return false;
+    auto* W=GetWorld()->GetSubsystem<UU02CollisionWorld>();W->MarkDead(Model->GetLife());
     auto Life=Model->GetLife();++Life.Generation;if(!Model->ResetLife(Life,Now))return false;
     QueuedIntents.Empty();QueuedAim.Empty();Snapshot.ActionSequence=0;Snapshot.Phase=uint8(EPhase::Idle);Snapshot.bLocked=false;Snapshot.DefenseEvent=0;Snapshot.DefenseResult=0;Snapshot.DefenseEventTime=0;Snapshot.ParryFeedbackSequence=0;Snapshot.ParryFeedbackTime=0;Snapshot.FeintLockEnd=0;Snapshot.FeintLastSuccess=-1;Snapshot.FeintSequence=0;Snapshot.FeintAction=0;Snapshot.InterruptSequence=0;Snapshot.InterruptedAction=0;Snapshot.InterruptTime=0;
     OwnerAdmission.PendingCommand=0;OwnerAdmission.PendingExpires=0;
     if(Character()->Vital)Character()->Vital->ResetLabCombat(Life.Generation);
     Publish(Now,true);W->RebaseResetSubject(Character());Trace(TEXT("Reset"),Now);return true;
-#endif
 }
 void UU02CombatComponent::Publish(double Now,bool Force)
 {

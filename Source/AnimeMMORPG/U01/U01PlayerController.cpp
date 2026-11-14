@@ -1,4 +1,5 @@
 #include "U01PlayerController.h"
+#include "U03/U03Encounter.h"
 #include "U01Character.h"
 #include "U01PhysicalInput.h"
 #include "U02/U02CombatComponent.h"
@@ -175,6 +176,7 @@ void AU01PlayerController::UpdateCameraManager(float DeltaSeconds)
 {
     Super::UpdateCameraManager(DeltaSeconds);
     if (!IsLocalPlayerController() || GetNetMode() == NM_DedicatedServer) return;
+    UpdateEncounterInformation();
     // Sample after PCM has resolved this frame's view, never its previous-frame cache.
     TraceElapsed += DeltaSeconds;
     if (bTrace && TraceElapsed >= (FParse::Param(FCommandLine::Get(),TEXT("U02Trace")) ? 1.f/60 : .2f))
@@ -257,6 +259,7 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
                 const AnimeMMORPG::U03::ECommand Commands[]={AnimeMMORPG::U03::ECommand::Attack,AnimeMMORPG::U03::ECommand::Guard,AnimeMMORPG::U03::ECommand::Dodge,AnimeMMORPG::U03::ECommand::Escape,AnimeMMORPG::U03::ECommand::Q,AnimeMMORPG::U03::ECommand::E,AnimeMMORPG::U03::ECommand::Target};
                 for(int32 I=Attack;I<=Target;++I)if(CanonicalKey(Key)==ControlKey(I))
                 {
+                    if(I==Target){ToggleInformationTarget();continue;}
                     const float ForwardInput=float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Forward))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Forward)))-float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Backward))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Backward)));
                     const float RightInput=float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Right))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Right)))-float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Left))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Left)));
                     C->Combat->SubmitCombatIntent(Commands[I-Attack],++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw,FVector2D(ForwardInput,RightInput));

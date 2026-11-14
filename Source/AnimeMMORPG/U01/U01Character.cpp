@@ -8,6 +8,7 @@
 #include "U02/U02CombatComponent.h"
 #include "U02/U02VitalComponent.h"
 #include "U02/U02HurtboxComponent.h"
+#include "U03/U03Encounter.h"
 
 void UU01CharacterMovement::BeginPlay()
 {
@@ -80,7 +81,7 @@ float UU01CharacterMovement::GetMaxSpeed() const
 #if !UE_BUILD_SHIPPING
     if(CharacterOwner&&CharacterOwner->GetLocalRole()==ROLE_AutonomousProxy&&ProbeSpeed>0)return ProbeSpeed;
 #endif
-    return IsMotorLocked() ? 0.f : float((bGuardAuthority?200.:(IsSprinting()?700.:500.))*(1.-SlowAuthority));
+    return IsMotorLocked() ? 0.f : float((CharacterOwner&&CharacterOwner->IsA<AU03Monster>()?300.:(bGuardAuthority?200.:(IsSprinting()?700.:500.)))*(1.-SlowAuthority));
 }
 
 void UU01CharacterMovement::PerformMovement(float DeltaSeconds)
@@ -156,6 +157,11 @@ bool UU01CharacterMovement::TryJump(double Now, float DeltaSeconds)
 void UU01CharacterMovement::ResetFixtureState()
 {
     if (auto* C=Cast<AU01Character>(CharacterOwner); C && C->Combat) C->Combat->ResetLabCombat();
+    ResetEncounterMotor();
+}
+void UU01CharacterMovement::ResetEncounterMotor()
+{
+    InvalidateDodgePath();
     LockMask &= static_cast<uint8>(EU01MotorLock::Control);
     // A failed/non-authority lab reset cannot bypass actual vital death.
     if(const auto* C=Cast<AU01Character>(CharacterOwner);C&&C->Vital&&C->Vital->GetSnapshot().bDead)

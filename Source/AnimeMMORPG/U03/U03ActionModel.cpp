@@ -42,7 +42,7 @@ bool FActionInstance::Cancel(ECutoff Reason,double T,bool Valid)
 {
     if(!FMath::IsFinite(T)||T<Start||T>=End()||T>=Cutoff) return false;
     if(Reason==ECutoff::Feint && Rules.Id!=EAction::Q)return false;
-    if(Reason==ECutoff::Interrupt && Rules.Id==EAction::Monster)return false;
+    if(Rules.Id==EAction::Monster && (Reason==ECutoff::Dodge||Reason==ECutoff::Guard))return false;
     if(Reason==ECutoff::Dodge||Reason==ECutoff::Guard||Reason==ECutoff::Interrupt||Reason==ECutoff::Feint)
         if(!Valid||!Startup(T)) return false;
     Cutoff=T; return true;
@@ -235,6 +235,14 @@ bool FTimelineModel::CancelUnopposed(ECutoff Reason, double T, bool Valid, TArra
 }
 EAdmission FTimelineModel::Admit(const FCombatIntent& I,const FAdmissionContext& C)
 {
+    if(C.bMonster)
+    {
+        if(I.Command!=ECommand::Monster)return EAdmission::Unsupported;
+        if(bDead||!bGrounded||!C.bPlaying||!C.bGrounded||C.bDead||C.bHardCC||DefenseState.Locked(Now))return EAdmission::Locked;
+        if(Action)return EAdmission::Busy;
+        ClearPending();GraceEnd=0;Start(EAction::Monster,Now,I.AimYaw);return EAdmission::Accepted;
+    }
+    if(I.Command==ECommand::Monster)return EAdmission::Unsupported;
     if(C.bDefenseEnabled && I.Command==ECommand::GuardRelease){DefenseState.ReleaseGuard();return EAdmission::Accepted;}
     if(C.bDefenseEnabled && I.Command==ECommand::Escape)
     {

@@ -1,4 +1,5 @@
 #include "U01Menu.h"
+#include "U03/U03Encounter.h"
 #include "U01PlayerController.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
@@ -47,6 +48,8 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
         return Result;
     };
     Button(TEXT("Resume"))->OnClicked.AddDynamic(this, &UU01Menu::ResumeClicked);
+    EncounterResult=WidgetTree->ConstructWidget<UTextBlock>();Box->AddChildToVerticalBox(EncounterResult);
+    RetryButton=Button(TEXT("Retry encounter"));RetryButton->OnClicked.AddDynamic(this,&UU01Menu::RetryClicked);
     Button(TEXT("Điều khiển / Controls"))->OnClicked.AddDynamic(this, &UU01Menu::ControlsClicked);
 #if !UE_BUILD_SHIPPING
     if (const auto* PC = Cast<AU01PlayerController>(GetOwningPlayer()); PC && PC->HasTerrainFixtures())
@@ -113,7 +116,11 @@ TSharedRef<SWidget> UU01Menu::RebuildWidget()
 void UU01Menu::NativeTick(const FGeometry& Geometry,float DeltaSeconds)
 {
     Super::NativeTick(Geometry,DeltaSeconds);RefreshSettings();UpdateFixtureStatus();
+    auto* PC=Cast<AU01PlayerController>(GetOwningPlayer());auto* E=PC?AU03Encounter::ForSubject(PC->GetPawn()):nullptr;
+    if(RetryButton){RetryButton->SetVisibility(E?ESlateVisibility::Visible:ESlateVisibility::Collapsed);RetryButton->SetIsEnabled(E&&!E->GetSnapshot().bClosed&&E->GetSnapshot().Result!=0);}
+    if(EncounterResult)EncounterResult->SetText(FText::FromString(E?(E->GetSnapshot().Result==1?TEXT("Won - Retry starts a new encounter revision. Resume remains manual."):E->GetSnapshot().Result==2?TEXT("Lost - Retry starts a new encounter revision. Resume remains manual."):TEXT("Encounter running")):TEXT("")));
 }
+void UU01Menu::RetryClicked(){if(auto* PC=Cast<AU01PlayerController>(GetOwningPlayer()))PC->RequestEncounterRetry();}
 void UU01Menu::ShowMainMenu(){if(Pages)Pages->SetActiveWidgetIndex(0);}
 void UU01Menu::ShowControls(){if(Pages)Pages->SetActiveWidgetIndex(1);RefreshSettings();}
 void UU01Menu::RefreshSettings()

@@ -1,4 +1,5 @@
 #include "U02CollisionWorld.h"
+#include "U03/U03Encounter.h"
 #include "U02NetworkState.h"
 #include "U02CombatComponent.h"
 #include "U02VitalComponent.h"
@@ -250,7 +251,9 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
     for(const auto& H:Hurts)
     {
         auto* Shape=H.Component.Get();if(!Shape||!Shape->IsQueryCollisionEnabled()||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
-        if(Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets && !DefenseEnemies.ContainsByPredicate([&](const FDefenseEnemy& E){return (E.Actor.Get()==P.Component->GetOwner()&&E.Target.Get()==Shape->GetOwner())||(E.Actor.Get()==Shape->GetOwner()&&E.Target.Get()==P.Component->GetOwner());}))continue;
+        const bool EncounterPair=AU03Encounter::ForSubject(P.Component->GetOwner())||AU03Encounter::ForSubject(Shape->GetOwner());
+        if(EncounterPair&&!AU03Encounter::CanDamage(P.Component->GetOwner(),Shape->GetOwner()))continue;
+        if(!EncounterPair&&Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets && !DefenseEnemies.ContainsByPredicate([&](const FDefenseEnemy& E){return (E.Actor.Get()==P.Component->GetOwner()&&E.Target.Get()==Shape->GetOwner())||(E.Actor.Get()==Shape->GetOwner()&&E.Target.Get()==P.Component->GetOwner());}))continue;
         if(H.AvailableFrom>P.Slice.EndSeconds)continue;
         const bool Continuous=Source->Previous.Life==Source->Current.Life&&Source->Previous.Epoch==Source->Current.Epoch
             &&H.Previous.Life==H.Current.Life&&H.Previous.Epoch==H.Current.Epoch&&H.Previous.Radius==H.Current.Radius;
@@ -326,6 +329,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     {
         const auto Snap=B->GetCombatSnapshot();if(FLifeId{Snap.PawnId,Snap.LifeGeneration}==C.Id.Action.Source)SourceVital=B->GetOwner()->FindComponentByClass<UU02VitalComponent>();
     }
+    if(TargetVital&&SourceVital&&(AU03Encounter::ForSubject(SourceVital->GetOwner())||AU03Encounter::ForSubject(TargetVital->GetOwner()))&&!AU03Encounter::CanDamage(SourceVital->GetOwner(),TargetVital->GetOwner()))return false;
     if(!TargetCurrent||!TargetVital||!SourceVital||!TargetVital->IsAlive(C.Id.Target)||!SourceVital->IsAlive(C.Id.Action.Source)
         ||!FMath::IsFinite(SourceVital->GetAttackFactor())||SourceVital->GetAttackFactor()<0||!Ledger.ResolveHit(C))return false;
     using namespace AnimeMMORPG::U03;
@@ -454,6 +458,17 @@ void UU02CollisionWorld::DrainAt(double Now)
     if(SimulationTime<0)
     {SimulationTime=Now;for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model)SimulationTime=FMath::Min(SimulationTime,C->Model->Time());}
     bool First=true;
+    TFunction<FVector(AActor*,double)> EncounterFeet=[&](AActor* A,double At)
+    {
+        for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->GetOwner()==A)
+        {
+            auto* Motor=C->Character()->GetU01Movement();
+            if(Motor->HasDodgePlan())return Motor->DodgePositionAt(At)-FVector(0,0,C->Character()->GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+            const double Alpha=CurrentTime>PreviousTime?FMath::Clamp((At-PreviousTime)/(CurrentTime-PreviousTime),0.,1.):1.;
+            return S.Previous.Life==S.Current.Life&&S.Previous.Epoch==S.Current.Epoch?FMath::Lerp(S.Previous.Position,S.Current.Position,Alpha):S.Current.Position;
+        }
+        return A->GetActorLocation();
+    };
     while(First||SimulationTime<Now)
     {
         First=false;double Boundary=Now;
@@ -501,6 +516,7 @@ void UU02CollisionWorld::DrainAt(double Now)
             FirstMotor->ClipDodgePath(Earliest.GetValue());SecondMotor->ClipDodgePath(Earliest.GetValue());
             if(Earliest.GetValue()>SimulationTime)Boundary=FMath::Min(Boundary,Earliest.GetValue());
         }
+        for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)Boundary=FMath::Min(Boundary,E->NextBoundary(SimulationTime,Boundary,EncounterFeet,Triangles));
         TArray<FHitCandidate> Candidates;CollectCurrent(Boundary,Candidates);
         const double Stop=Candidates.IsEmpty()?Boundary:FMath::Min(Boundary,Candidates[0].TimestampSeconds);
         for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Time()<=Stop)
@@ -526,6 +542,7 @@ void UU02CollisionWorld::DrainAt(double Now)
             }
         };
         ApplyLifecycleGroup();
+        for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)E->BeforeContacts(Stop,EncounterFeet);
         // ALL models are at Stop and unfinalized. Each death/cutoff applies before the next
         // timestamp/source/event/hurtbox candidate. Callback-created endpoint events are re-collected.
         for(;;)
@@ -542,6 +559,7 @@ void UU02CollisionWorld::DrainAt(double Now)
             FU03WorldCollector Collector;Collector.Emit=[this,C](const auto& I){EmitInterval(C,I);};
             check(C->Model->FinishBarrier(Collector));C->Publish(Stop);ObserveCombat(C);
         }
+        for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)E->AfterBarrier(Stop);
     }
     // New input is admitted only AFTER the complete old world barrier at Now.
     for(auto& S:Sources)if(auto* C=S.Component.Get())C->ProcessQueuedIntents(Now);

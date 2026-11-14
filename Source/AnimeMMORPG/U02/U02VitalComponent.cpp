@@ -1,4 +1,5 @@
 #include "U02VitalComponent.h"
+#include "U03/U03Encounter.h"
 #include "U02LabDummy.h"
 #include "U02CombatComponent.h"
 #include "U02CollisionWorld.h"
@@ -11,7 +12,7 @@ UU02VitalComponent::UU02VitalComponent() {SetIsReplicatedByDefault(true);}
 void UU02VitalComponent::BeginPlay()
 {
     Super::BeginPlay();if(!GetOwner()->HasAuthority())return;
-    State.MaxHP=State.HP=Cast<AU02LabDummy>(GetOwner())?600:1000;Publish(GetWorld()->GetTimeSeconds());
+    State.MaxHP=State.HP=(Cast<AU02LabDummy>(GetOwner())||Cast<AU03Monster>(GetOwner()))?600:1000;Publish(GetWorld()->GetTimeSeconds());
 }
 void UU02VitalComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {Super::GetLifetimeReplicatedProps(OutLifetimeProps);DOREPLIFETIME(UU02VitalComponent,Snapshot);}
@@ -33,6 +34,7 @@ FDamageResult UU02VitalComponent::ApplyResolved(const FHitCandidate& Hit,double 
         // Ledger invalidation happens synchronously BEFORE the next sorted event.
         GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(Hit.Id.Target);
         if(auto* C=Cast<AU01Character>(GetOwner()))C->Combat->HandleDefeat(Hit.TimestampSeconds);
+        if(auto* E=AU03Encounter::ForSubject(GetOwner()))E->ConfirmDefeat(GetOwner(),Hit.TimestampSeconds);
     }
     if(auto* C=Cast<AU01Character>(GetOwner()))if(R.Damage>0)C->GetU01Movement()->SetMotorLock(EU01MotorLock::Interacting,false);
     Publish(Hit.TimestampSeconds);return R;

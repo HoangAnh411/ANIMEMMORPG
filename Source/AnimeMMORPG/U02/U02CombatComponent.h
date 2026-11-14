@@ -111,6 +111,8 @@ public:
     uint64 GetLastCommand() const {return LastCommand;}
     bool CancelAction(AnimeMMORPG::U02::ECancel Reason);
     bool ResetLabCombat();
+    bool ResetEncounterCombat(double At);
+    void SubmitMonsterIntent(uint64 Sequence,double At,double Yaw);
     void LostGround();
     void HandleDefeat(double GameplayTime);
     const FU02RepCombatSnapshot& GetCombatSnapshot() const { return Snapshot; }
@@ -127,6 +129,7 @@ private:
     friend struct FU03B1Access;
     friend struct FU03B2Access;
     friend class UU02CollisionWorld;
+    friend class AU03Encounter;
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepCombatSnapshot Snapshot;
     UFUNCTION() void OnRep_Snapshot();
     UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life);

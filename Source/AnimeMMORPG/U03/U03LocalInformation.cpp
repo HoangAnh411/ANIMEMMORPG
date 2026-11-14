@@ -1,0 +1,78 @@
+#include "U01/U01PlayerController.h"
+#include "U03Encounter.h"
+#include "U02/U02VitalComponent.h"
+#include "U02/U02LabDummy.h"
+#include "Components/CapsuleComponent.h"
+#include "Engine/LocalPlayer.h"
+#include "Engine/GameViewportClient.h"
+#include "Engine/World.h"
+#include "EngineUtils.h"
+#include "SceneView.h"
+namespace {
+FVector InformationPoint(AActor* A)
+{auto* C=Cast<AU01Character>(A);return A->GetActorLocation()+FVector(0,0,90-(C?C->GetCapsuleComponent()->GetScaledCapsuleHalfHeight():0));}
+FGuid InformationId(AActor* A)
+{if(auto* C=Cast<AU01Character>(A))return C->NetworkPawnId;if(auto* D=Cast<AU02LabDummy>(A))return D->NetworkPawnId;return {};}
+bool ProjectInformation(const AU01PlayerController* PC,AActor* A,FVector2D& Screen,FVector2D& Center)
+{
+    auto* LP=PC->GetLocalPlayer();if(!LP||!LP->ViewportClient||!LP->ViewportClient->Viewport)return false;
+    FSceneViewProjectionData Data;if(!LP->GetProjectionData(LP->ViewportClient->Viewport,Data))return false;
+    const FIntRect Rect=Data.GetConstrainedViewRect();Center=FVector2D(Rect.Width(),Rect.Height())*.5;
+    if(!FSceneView::ProjectWorldToScreen(InformationPoint(A),Rect,Data.ComputeViewProjectionMatrix(),Screen))return false;
+    Screen-=FVector2D(Rect.Min.X,Rect.Min.Y);
+    return Screen.X>=0&&Screen.Y>=0&&Screen.X<Rect.Width()&&Screen.Y<Rect.Height();
+}
+bool InformationClear(AU01PlayerController* PC,AActor* A)
+{
+    FVector Camera;FRotator Rotation;PC->GetPlayerViewPoint(Camera,Rotation);FCollisionQueryParams Q(SCENE_QUERY_STAT(U03TabLOS),false);
+    for(TActorIterator<AActor> It(PC->GetWorld());It;++It)if(It->IsA<APawn>()||It->FindComponentByClass<UU02VitalComponent>())Q.AddIgnoredActor(*It);
+    return !PC->GetWorld()->LineTraceTestByChannel(Camera,InformationPoint(A),ECC_GameTraceChannel2,Q);
+}
+}
+void AU01PlayerController::ToggleInformationTarget()
+{
+    if(!IsLocalPlayerController())return;
+    if(InformationSubject.IsValid()){InformationSubject.Reset();bInformationVisible=false;TargetRetention={};return;}
+    auto* E=AU03Encounter::ForSubject(GetPawn());if(!GetPawn())return;
+    TOptional<AnimeMMORPG::U03::FTargetRank> Best;
+    for(TActorIterator<AActor> It(GetWorld());It;++It)
+    {
+        auto* A=*It;auto* V=A->FindComponentByClass<UU02VitalComponent>();
+        if(!((E&&A==E->GetSnapshot().Monster)||A->ActorHasTag(TEXT("U03TabFixture")))||!V||V->GetSnapshot().bDead)continue;
+        const double Distance=FVector::DistSquared(GetPawn()->GetActorLocation(),A->GetActorLocation());if(Distance>2000.*2000.)continue;
+        FVector2D Screen,Center;if(!ProjectInformation(this,A,Screen,Center)||!InformationClear(this,A))continue;
+        const FGuid Id=InformationId(A);if(!Id.IsValid())continue;
+        AnimeMMORPG::U03::FTargetRank Rank{FVector2D::DistSquared(Screen,Center),Distance,Id.ToString(EGuidFormats::Digits)};
+        if(Best.IsSet()&&!(Rank<Best.GetValue()))continue;
+        Best=Rank;InformationSubject=A;InformationPawn=Id;InformationLife=V->GetSnapshot().Generation;
+        InformationEncounter=E?E->GetSnapshot().Id:FGuid();InformationRevision=E?E->GetSnapshot().Revision:0;
+    }
+    TargetRetention={};UpdateEncounterInformation();
+}
+void AU01PlayerController::UpdateEncounterInformation()
+{
+    auto* E=AU03Encounter::ForSubject(GetPawn());
+    if(E&&!E->GetSnapshot().bClosed&&E->GetSnapshot().Result&&PresentedResultRevision!=E->GetSnapshot().Revision)
+    {PresentedResultRevision=E->GetSnapshot().Revision;LockControls(EU01ControlState::AwaitingResume,TEXT("EncounterResult"));}
+    bInformationVisible=false;auto* A=InformationSubject.Get();if(!A)return;
+    auto* V=A->FindComponentByClass<UU02VitalComponent>();const bool SameEncounter=E?E->GetSnapshot().Id==InformationEncounter&&E->GetSnapshot().Revision==InformationRevision:!InformationEncounter.IsValid();
+    const bool SameLife=V&&V->GetSnapshot().Generation==InformationLife&&InformationId(A)==InformationPawn;
+    const bool Clear=InformationClear(this,A);
+    if(!GetPawn()||!SameEncounter||!TargetRetention.Update(GetWorld()->GetTimeSeconds(),FVector::Distance(GetPawn()->GetActorLocation(),A->GetActorLocation()),V&&!V->GetSnapshot().bDead,SameLife,Clear))
+    {InformationSubject.Reset();TargetRetention={};return;}
+    FVector2D Center;bInformationVisible=Clear&&ProjectInformation(this,A,InformationScreen,Center);
+}
+bool AU01PlayerController::InformationTarget(FVector2D& Screen,FString& Text) const
+{
+    if(!bInformationVisible||!InformationSubject.IsValid())return false;
+    auto* V=InformationSubject->FindComponentByClass<UU02VitalComponent>();if(!V||V->GetSnapshot().bDead)return false;
+    Screen=InformationScreen;Text=FString::Printf(TEXT("TARGET HP %d/%d"),V->GetSnapshot().HP,V->GetSnapshot().MaxHP);return true;
+}
+void AU01PlayerController::RequestEncounterRetry()
+{
+    auto* E=AU03Encounter::ForSubject(GetPawn());if(!E)return;
+    QuarantineHeldKeys();LockControls(EU01ControlState::AwaitingResume,TEXT("Retry"));
+    const auto S=E->GetSnapshot();ServerEncounterRetry(S.Id,S.Revision,++RetrySequence);
+}
+void AU01PlayerController::ServerEncounterRetry_Implementation(FGuid Id,uint64 Revision,uint64 Sequence)
+{if(auto* E=AU03Encounter::ForSubject(GetPawn()))E->Retry(this,Id,Revision,Sequence);}

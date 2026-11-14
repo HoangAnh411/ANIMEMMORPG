@@ -48,6 +48,7 @@ public:
     bool HasBufferedJump(double Now) const { return JumpWindow.HasBuffer(Now); }
     double GetMotorTimeSeconds() const { return SimulationSeconds; }
     void ResetFixtureState();
+    void ResetEncounterMotor();
     // Authority-only swept walking preview. Deferred transforms/overlaps are reverted;
     // only CommitDodge moves the actor, at the world resolver's selected event time.
     void PlanDodge(double Begin,double End,FVector Direction,uint64 Life,uint64 Sequence,const TArray<AActor*>& BatchPawns={});

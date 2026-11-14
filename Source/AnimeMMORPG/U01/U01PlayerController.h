@@ -4,6 +4,7 @@
 #include "GameFramework/PlayerController.h"
 #include "U01ControlPolicy.h"
 #include "U01Settings.h"
+#include "U03/U03TargetModel.h"
 #include "U01PlayerController.generated.h"
 
 class UInputAction;
@@ -69,7 +70,18 @@ public:
     void ChangeRightShoulder(bool Value);
     void RestoreControlDefaults();
     void OpenControls();
+    UFUNCTION(BlueprintCallable) void RequestEncounterRetry();
+    UFUNCTION(Server,Reliable) void ServerEncounterRetry(FGuid Encounter,uint64 Revision,uint64 Sequence);
+    void ToggleInformationTarget();
+    bool InformationTarget(FVector2D& Screen,FString& Text) const;
 private:
+    TWeakObjectPtr<AActor> InformationSubject;
+    FGuid InformationEncounter,InformationPawn;
+    uint64 InformationLife=0,InformationRevision=0,RetrySequence=0,PresentedResultRevision=0;
+    AnimeMMORPG::U03::FTargetRetention TargetRetention;
+    bool bInformationVisible=false;
+    FVector2D InformationScreen=FVector2D::ZeroVector;
+    void UpdateEncounterInformation();
     UPROPERTY(Transient) TObjectPtr<UU01Menu> MenuWidget;
     UPROPERTY(Transient) TObjectPtr<UU01SettingsSubsystem> Settings;
     UPROPERTY(Transient) TObjectPtr<UInputMappingContext> LocalMapping;
