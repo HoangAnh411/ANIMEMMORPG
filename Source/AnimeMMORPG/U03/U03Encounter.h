@@ -53,6 +53,7 @@ public:
     void BeforeContacts(double At,const TFunction<FVector(AActor*,double)>& Feet);
     void AfterBarrier(double At);
 private:
+    friend struct FU03C2Access;
     UPROPERTY(Replicated) FU03EncounterSnapshot Snapshot;
     AnimeMMORPG::U03::FEncounterModel Model;
     FTransform PlayerSpawn,MonsterSpawn;

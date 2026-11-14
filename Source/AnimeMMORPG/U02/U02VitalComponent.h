@@ -34,6 +34,7 @@ public:
     void Refresh(double GameplayNow);
     TSharedRef<FJsonObject> GetDiagnostics() const;
 private:
+    friend struct FU03C2Access;
     friend struct FU03B1Access;
     friend struct FU03B2Access;
     friend struct FU02VitalTestAccess;

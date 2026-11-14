@@ -15,6 +15,8 @@ struct FU02RepCombatSnapshot
 {
     GENERATED_BODY()
     UPROPERTY() FGuid PawnId;
+    UPROPERTY() FGuid EncounterId;
+    UPROPERTY() uint64 EncounterRevision=0;
     UPROPERTY() uint64 LifeGeneration = 1;
     UPROPERTY() uint64 ActionSequence = 0;
     UPROPERTY() uint32 Revision = 0;
@@ -130,6 +132,7 @@ private:
     friend struct FU03B2Access;
     friend class UU02CollisionWorld;
     friend class AU03Encounter;
+    friend struct FU03C2Access;
     UPROPERTY(ReplicatedUsing=OnRep_Snapshot) FU02RepCombatSnapshot Snapshot;
     UFUNCTION() void OnRep_Snapshot();
     UFUNCTION(Server, Reliable) void ServerAttack(uint64 Sequence, double LocalInputSeconds, double Yaw, FGuid Pawn, uint64 Life);

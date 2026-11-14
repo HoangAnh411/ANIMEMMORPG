@@ -32,6 +32,7 @@ void AU03Monster::Tick(float Dt)
     const auto S=Combat->GetCombatSnapshot();const FVector F=FeetOf(this);
     const bool Startup=S.bLocked&&S.Phase==uint8(AnimeMMORPG::U02::EPhase::Startup);
     const bool Active=S.bLocked&&S.Phase==uint8(AnimeMMORPG::U02::EPhase::Active);
+    if(auto* Body=Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("MonsterBlockout"))))Body->SetRelativeRotation(FRotator(Startup?-30:Active?55:S.bLocked?15:0,0,0));
     if(S.bLocked)
     {
         const FRotator R(0,S.AimYawDegrees,0);const FVector Center=F+R.RotateVector(FVector(100,0,90));
@@ -163,7 +164,13 @@ void AU03Encounter::Close(double At)
     for(auto* P:{Snapshot.Player.Get(),Snapshot.Monster.Get()})if(P){GetWorld()->GetSubsystem<UU02CollisionWorld>()->MarkDead(P->Vital->GetLife());if(auto* AI=Cast<AAIController>(P->GetController()))AI->StopMovement();}
     Publish();if(Snapshot.Monster)Snapshot.Monster->Destroy();SetOwner(nullptr);
 }
-void AU03Encounter::Publish(){Snapshot.Revision=Model.Revision;Snapshot.Result=uint8(Model.Result);Snapshot.bClosed=Model.bClosed;ForceNetUpdate();}
+void AU03Encounter::Publish()
+{
+    Snapshot.Revision=Model.Revision;Snapshot.Result=uint8(Model.Result);Snapshot.bClosed=Model.bClosed;
+    for(auto* P:{Snapshot.Player.Get(),Snapshot.Monster.Get()})if(P)
+    {P->Combat->Snapshot.EncounterId=Snapshot.Id;P->Combat->Snapshot.EncounterRevision=Snapshot.Revision;P->ForceNetUpdate();}
+    ForceNetUpdate();
+}
 AU03EncounterGameMode::AU03EncounterGameMode()
 {
     HUDClass=AU03EncounterHUD::StaticClass();

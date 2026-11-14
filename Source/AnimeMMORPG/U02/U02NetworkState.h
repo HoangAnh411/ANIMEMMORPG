@@ -9,6 +9,8 @@ struct FU02ConfirmedResult
     GENERATED_BODY()
     UPROPERTY() uint64 Serial=0;
     UPROPERTY() FGuid Source;
+    UPROPERTY() FGuid EncounterId;
+    UPROPERTY() uint64 EncounterRevision=0;
     UPROPERTY() FGuid Target;
     UPROPERTY() uint64 SourceLife=0;
     UPROPERTY() uint64 Action=0;
