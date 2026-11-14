@@ -47,7 +47,7 @@ FString UU03AnimationEditor::BuildC2Lab()
         if(auto* Nav=UNavigationSystemV1::GetCurrent(W))
         {
             Nav->RemoveNavigationBuildLock(ENavigationBuildLock::NoUpdateInEditor|ENavigationBuildLock::InitialLock|ENavigationBuildLock::AsyncLoadLock);
-            Nav->GatherNavigationBounds();
+            Nav->Tick(0.f); // process the explicitly queued bounds updates before the synchronous build
             Nav->Build();int32 DataCount=0;for(TActorIterator<ANavigationData> Data(W);Data;++Data){Data->EnsureBuildCompletion();++DataCount;}
             if(!DataCount)return TEXT("ERROR: no generated navigation data");
             for(int Station=0;Station<4;++Station)

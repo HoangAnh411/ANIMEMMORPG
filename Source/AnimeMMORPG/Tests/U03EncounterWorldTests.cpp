@@ -65,6 +65,8 @@ bool FC2WorldRetry::RunTest(const FString&)
     for(bool Win:{true,false})
     {
         FC2World W;const auto Old=W.Encounter->GetSnapshot();const auto Life=W.Monster()->Vital->GetLife();
+        TestTrue(TEXT("populate real resource/CD state"),W.Collision->FixtureSpend(W.Player->Combat,EAction::E));
+        W.Player->Vital->AddFixtureShield(77,50,W.GetTestWorld()->GetTimeSeconds()+20,W.GetTestWorld()->GetTimeSeconds());
         FU03C2Access::HP(Win?W.Monster():W.Player,1);
         if(Win)W.Player->Combat->SubmitCombatIntent(ECommand::Attack,7,0,180);
         W.Run(.8);
@@ -74,10 +76,12 @@ bool FC2WorldRetry::RunTest(const FString&)
         TestFalse(TEXT("wrong ID"),W.Encounter->Retry(W.PC,FGuid::NewGuid(),1,1));
         TestFalse(TEXT("stale revision"),W.Encounter->Retry(W.PC,Old.Id,0,1));
         const uint64 Watermark=FU03C2Access::Watermark(W.Player);
+        TestTrue(TEXT("cooldown existed before Retry"),W.Player->Combat->GetCombatSnapshot().EReadyAt>W.GetTestWorld()->GetTimeSeconds());
         TestTrue(TEXT("owned Retry"),W.Encounter->Retry(W.PC,Old.Id,1,2));
         TestEqual(TEXT("new revision"),W.Encounter->GetSnapshot().Revision,uint64(2));
         TestEqual(TEXT("Running published last"),W.Encounter->GetSnapshot().Result,uint8(EEncounterResult::Running));
         TestEqual(TEXT("playerHP"),W.Player->Vital->GetSnapshot().HP,1000);TestEqual(TEXT("monsterHP"),W.Monster()->Vital->GetSnapshot().HP,600);
+        TestEqual(TEXT("shield cleared"),W.Player->Vital->GetSnapshot().Shield,0);
         TestEqual(TEXT("new monster life"),W.Monster()->Vital->GetLife().Generation,Life.Generation+1);
         TestEqual(TEXT("watermark preserved"),FU03C2Access::Watermark(W.Player),Watermark);
         TestEqual(TEXT("energy"),W.Player->Combat->GetCombatSnapshot().Energy,100.);TestEqual(TEXT("charges"),W.Player->Combat->GetCombatSnapshot().DodgeCharges,2);
