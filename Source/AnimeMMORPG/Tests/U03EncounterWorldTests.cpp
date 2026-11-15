@@ -259,4 +259,23 @@ bool FC2WorldSimultaneousLethal::RunTest(const FString&)
     }
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FC2WorldLogout,"AnimeMMORPG.U03.C2.WorldLogoutAfterUnpossessInvalidatesEncounter",C2WorldFlags)
+bool FC2WorldLogout::RunTest(const FString&)
+{
+    FC2World W;W.Run(.2);
+    auto* Monster=W.Monster();const auto Old=W.Encounter->GetSnapshot();
+    const auto MonsterLife=Monster->Vital->GetLife();
+    U02::FHitCandidate Stale;Stale.Id.Action={MonsterLife,1};Stale.Id.Target=W.Player->Vital->GetLife();Stale.TimestampSeconds=W.GetTestWorld()->GetTimeSeconds()+.5;
+    W.PC->UnPossess();TestNull(TEXT("disconnect can remove pawn before Logout"),W.PC->GetPawn());
+    auto* Mode=W.GetTestWorld()->SpawnActor<AU03EncounterGameMode>();Mode->Logout(W.PC);
+    TestTrue(TEXT("old encounter destroyed by owner even without pawn"),W.Encounter->IsActorBeingDestroyed());
+    TestTrue(TEXT("old monster destroyed"),Monster->IsActorBeingDestroyed());
+    TestTrue(TEXT("closed before destruction"),W.Encounter->GetSnapshot().bClosed);
+    TestNull(TEXT("old ownership revoked"),W.Encounter->GetOwner());
+    TestFalse(TEXT("closed old encounter rejects Retry"),W.Encounter->Retry(W.PC,Old.Id,Old.Revision,1));
+    TestFalse(TEXT("old pending source cannot damage after disconnect"),FU03C2Access::Stale(W.Collision,Stale));
+    const int32 HP=W.Player->Vital->GetSnapshot().HP;W.Run(.8);
+    TestEqual(TEXT("disconnected Monster emits no later hit"),W.Player->Vital->GetSnapshot().HP,HP);
+    return true;
+}
 #endif

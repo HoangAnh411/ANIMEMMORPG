@@ -223,7 +223,15 @@ void AU03EncounterGameMode::PreLogin(const FString& Options,const FString& Addre
 }
 void AU03EncounterGameMode::Logout(AController* Exiting)
 {
-    if(Exiting)if(auto* E=AU03Encounter::ForSubject(Exiting->GetPawn())){E->Close(GetWorld()->GetTimeSeconds());E->Destroy();}Super::Logout(Exiting);
+    // Unreal may already have unpossessed/destroyed the pawn during connection
+    // cleanup. Encounter ownership survives that step and is the logout key.
+    if(Exiting)
+    {
+        TArray<AU03Encounter*> Owned;
+        for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)if(E->GetOwner()==Exiting)Owned.Add(*E);
+        for(auto* E:Owned){E->Close(GetWorld()->GetTimeSeconds());E->Destroy();}
+    }
+    Super::Logout(Exiting);
 }
 void AU03EncounterHUD::DrawHUD()
 {
