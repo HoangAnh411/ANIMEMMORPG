@@ -381,7 +381,8 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
         {
             const uint64 Interrupted=TargetCombat->Model->Current()->Identity.Sequence;
             if(ApplyLifecycle(TargetCombat,C.TimestampSeconds,AnimeMMORPG::U03::ECutoff::Interrupt,false))
-            {DamageResults.Last().bInterrupted=true;DamageResults.Last().InterruptedAction=Interrupted;++TargetCombat->Snapshot.InterruptSequence;TargetCombat->Snapshot.InterruptedAction=Interrupted;TargetCombat->Snapshot.InterruptTime=C.TimestampSeconds;}
+            {DamageResults.Last().bInterrupted=true;DamageResults.Last().InterruptedAction=Interrupted;++TargetCombat->Snapshot.InterruptSequence;TargetCombat->Snapshot.InterruptedAction=Interrupted;TargetCombat->Snapshot.InterruptTime=C.TimestampSeconds;
+                for(TActorIterator<AU02NetworkState> N(GetWorld());N;++N)N->PresentAuthority(TargetCombat,Interrupted,C.TimestampSeconds,3);}
         }
     if(const auto* Fixture=DefenseFixtureHits.Find(C.Id.Action))
         if(TargetCombat && TargetCombat->Model && !Result.bDied && Defense==EDefense::Hit)
@@ -399,6 +400,8 @@ class FU03WorldCollector final : public AnimeMMORPG::U03::ITimelineResolver
 {
 public:
     TFunction<void(const AnimeMMORPG::U03::FActiveInterval&)> Emit;
+    TFunction<void(const AnimeMMORPG::U03::FActionInstance&,bool)> Completed;
+    void ObserveCompletion(const AnimeMMORPG::U03::FActionInstance& A,bool Natural) override {if(Completed)Completed(A,Natural);}
     TOptional<double> NextEvent(const AnimeMMORPG::U03::FTimelineModel&,double) override {return {};}
     void ResolveInterval(const AnimeMMORPG::U03::FActiveInterval& I) override {if(Emit)Emit(I);}
     void ResolveEvent(AnimeMMORPG::U03::FTimelineModel&,double) override {checkNoEntry();}
@@ -582,6 +585,12 @@ void UU02CollisionWorld::DrainAt(double Now)
         for(auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->Time()==Stop)
         {
             FU03WorldCollector Collector;Collector.Emit=[this,C](const auto& I){EmitInterval(C,I);};
+            Collector.Completed=[this,C](const auto& A,bool Natural)
+            {
+                // Output only, after final authority completion/cancellation.
+                if(!Natural||DamageResults.ContainsByPredicate([&](const FConfirmedDamage& R){return R.Hit.Id.Action==A.Identity;}))return;
+                for(TActorIterator<AU02NetworkState> N(GetWorld());N;++N)N->PresentAuthority(C,A.Identity.Sequence,A.End(),1);
+            };
             check(C->Model->FinishBarrier(Collector));C->Publish(Stop);ObserveCombat(C);
         }
         for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)E->AfterBarrier(Stop);

@@ -57,4 +57,20 @@ bool FU03DMigration::RunTest(const FString&)
     TestEqual(TEXT("Unsupported schema restores defaults"),Out.Keys[C::Forward],EKeys::W);
     return true;
 }
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03DDedup,"AnimeMMORPG.U03.D.FeedbackDedupAndLateAudio",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
+bool FU03DDedup::RunTest(const FString&)
+{
+    using namespace AnimeMMORPG::U03;uint64 Watermark=0;
+    TestTrue(TEXT("First identity consumed"),ConsumeFeedback(7,Watermark));
+    TestFalse(TEXT("Duplicate snapshot silent"),ConsumeFeedback(7,Watermark));
+    TestFalse(TEXT("Stale snapshot silent"),ConsumeFeedback(6,Watermark));
+    TestTrue(TEXT("New event accepted"),ConsumeFeedback(8,Watermark));
+    TestFalse(TEXT("Reconnect baseline is silent"),FreshFeedbackAudio(true,false,true,10,10.02));
+    TestTrue(TEXT("Fresh visible new event audible"),FreshFeedbackAudio(true,true,true,10,10.02));
+    TestFalse(TEXT("Late snapshot has visual remainder but no audio replay"),FreshFeedbackAudio(true,true,true,10,10.3));
+    TestTrue(TEXT("Late visual still inside event window"),FeedbackRemaining(10,10.3)>0);
+    TestFalse(TEXT("Future snapshot cannot sound"),FreshFeedbackAudio(true,true,true,10,9.9));
+    TestFalse(TEXT("Hidden proxy silent"),FreshFeedbackAudio(true,true,false,10,10.02));
+    return true;
+}
 #endif

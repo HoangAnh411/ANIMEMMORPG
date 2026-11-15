@@ -115,6 +115,7 @@ void FTimelineModel::CompleteCurrent(ITimelineResolver& Resolver)
         if (Cancelled || Now >= Action->End())
         {
             const bool Natural = !Cancelled;
+              Resolver.ObserveCompletion(*Action,Natural);
             const double End = Natural ? Action->End() : Action->Cutoff;
             GraceEnd = Natural && bGrounded && !bDead && D.Id <= EAction::Attack3 ? End + .15 : 0;
             Action.Reset();

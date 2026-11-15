@@ -88,4 +88,11 @@ class ANIMEMMORPG_API AU03EncounterHUD : public AHUD
     GENERATED_BODY()
 public:
     virtual void DrawHUD() override;
+private:
+    uint64 FeedbackSerial=0;
+    void DrawPresentation();
+    bool bFeedbackPrimed=false;
+    FGuid FeedbackEncounter;
+    uint64 FeedbackRevision=0;
+    UPROPERTY(Transient) TObjectPtr<class USoundWaveProcedural> FeedbackTone;
 };

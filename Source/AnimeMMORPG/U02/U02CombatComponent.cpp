@@ -1,4 +1,5 @@
 #include "U02CombatComponent.h"
+#include "U02NetworkState.h"
 #include "U03/U03Encounter.h"
 #include <limits>
 #include "U02CollisionWorld.h"
@@ -252,6 +253,13 @@ void UU02CombatComponent::Publish(double Now,bool Force)
     const auto& Defense=Model->Defense();Snapshot.bGuard=Defense.bGuard;Snapshot.GuardSequence=Defense.GuardSequence;Snapshot.GuardYaw=Defense.Yaw;Snapshot.Posture=Defense.Posture;
     Snapshot.bParryOpen=Defense.bParryOpen;Snapshot.ParryStart=Defense.ParryStart;Snapshot.ParryEnd=Defense.ParryEnd;Snapshot.ParryReadyAt=Defense.ParryReadyAt;
     Snapshot.HardCC=uint8(Defense.Hard);Snapshot.HardEnd=Defense.HardEnd;Snapshot.LockedBudget=Defense.LockedBudget;Snapshot.ImmuneEnd=Defense.ImmuneEnd;Snapshot.SlowFraction=Defense.Slow(Now);Snapshot.XReadyAt=Defense.XReadyAt;
+    if(Before.LifeGeneration==Snapshot.LifeGeneration)
+        for(TActorIterator<AU02NetworkState> N(GetWorld());N;++N)
+        {
+            if(Snapshot.FeintSequence>Before.FeintSequence)N->PresentAuthority(this,Snapshot.FeintAction,Snapshot.FeintLastSuccess,2);
+            if(Snapshot.HardCC==uint8(AnimeMMORPG::U03::EHardCC::GuardBreak)&&Before.HardCC!=Snapshot.HardCC)N->PresentAuthority(this,Snapshot.ActionSequence,Now,4);
+            if(Snapshot.XReadyAt>Before.XReadyAt)N->PresentAuthority(this,Snapshot.ActionSequence,Now,5);
+        }
     if(Defense.Locked(Now)){Snapshot.bLocked=true;Snapshot.bYawLocked=true;}
     if(Defense.bGuard)Snapshot.AimYawDegrees=Defense.Yaw;
     const auto& Pending=Model->GetPendingDodge().IsSet()?Model->GetPendingDodge():Model->GetPending();OwnerAdmission.PendingCommand=Pending.IsSet()?Pending->Sequence:0;OwnerAdmission.PendingExpires=Pending.IsSet()?Pending->Receive+.15:0;
@@ -295,7 +303,7 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
     if(Snapshot.ParryFeedbackSequence!=PresentedDefenseEvent)
     {
         PresentedDefenseEvent=Snapshot.ParryFeedbackSequence;
-        if(Snapshot.ParryFeedbackSequence&&FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&C->IsPlayerControlled()&&C->IsLocallyControlled())
+        if(!AU03Encounter::ForSubject(C)&&Snapshot.ParryFeedbackSequence&&FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&C->IsPlayerControlled()&&C->IsLocallyControlled())
         {
             ParryTone=NewObject<USoundWaveProcedural>(this);ParryTone->SetSampleRate(24000);ParryTone->NumChannels=1;ParryTone->Duration=.24f;
             TArray<int16> PCM;PCM.SetNumZeroed(5760);
@@ -303,6 +311,8 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
             ParryTone->QueueAudio(reinterpret_cast<const uint8*>(PCM.GetData()),PCM.Num()*sizeof(int16));UGameplayStatics::PlaySound2D(this,ParryTone);
         }
     }
+    if(FParse::Param(FCommandLine::Get(),TEXT("U03PresentationDebug")))
+    {
     if(Snapshot.FeintSequence&&FeedbackNow-Snapshot.FeintLastSuccess<1.2)DrawDebugString(GetWorld(),C->GetActorLocation()+FVector(0,0,120),TEXT("< FEINT >"),nullptr,FColor::White,0,true);
     if(Snapshot.InterruptSequence&&FeedbackNow-Snapshot.InterruptTime<1.2)DrawDebugString(GetWorld(),C->GetActorLocation()+FVector(0,0,145),TEXT("// INTERRUPTED //"),nullptr,FColor::White,0,true);
     if(Snapshot.bLocked&&(Snapshot.DefinitionId==3||Snapshot.DefinitionId==4))DrawDebugString(GetWorld(),C->GetActorLocation()+FVector(0,0,100),Snapshot.Phase==uint8(EPhase::Startup)?TEXT("< STARTUP >"):Snapshot.Phase==uint8(EPhase::Active)?TEXT("!! ACTIVE !!"):TEXT("... RECOVERY ..."),nullptr,FColor::White,0,true);
@@ -327,6 +337,7 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
         if(Snapshot.FeintSequence&&AuthorityNow-Snapshot.FeintLastSuccess<1.2)GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+230001,.15f,FColor::White,TEXT("< FEINT > walk / action lock 0.20s"));
         if(Snapshot.InterruptSequence&&AuthorityNow-Snapshot.InterruptTime<1.2)GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+230002,.15f,FColor::White,TEXT("// INTERRUPTED //"));
         if(Snapshot.DefenseEvent&&AuthorityNow-Snapshot.DefenseEventTime<1.2)GEngine->AddOnScreenDebugMessage(uint64(C->GetUniqueID())+220001,.15f,FColor::White,Snapshot.DefenseResult==2?TEXT("(( PARRY ))"):Snapshot.HardCC==5?TEXT("!! BREAK !!"):TEXT("[ BLOCK ]"));
+    }
     }
 }
 TSharedRef<FJsonObject> UU02CombatComponent::GetDiagnostics() const

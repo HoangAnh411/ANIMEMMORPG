@@ -26,6 +26,10 @@ public:
     UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> Attack3Montage;
     UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> QMontage;
     UPROPERTY(EditDefaultsOnly, Category="U03") TObjectPtr<UAnimMontage> EMontage;
+    // Dodge, guard, break, hard CC, X. Fixed-root presentation assets.
+    UPROPERTY(EditDefaultsOnly, Category="U03") TArray<TObjectPtr<UAnimMontage>> DefenseMontages;
+    UPROPERTY(Transient) TObjectPtr<UAnimMontage> DefenseMontage;
+    int32 DefensePose=-1;
     UPROPERTY(Transient) TObjectPtr<UAnimMontage> ActiveMontage;
     bool bAttackPresented=false;
     UPROPERTY(BlueprintReadOnly,Category="U02") float AttackBlendWeight=0;

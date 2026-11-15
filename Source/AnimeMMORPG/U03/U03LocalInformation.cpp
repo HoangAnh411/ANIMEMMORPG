@@ -84,7 +84,7 @@ bool AU01PlayerController::RecentHitInformation(FVector2D& Screen,FString& Text)
     const FU02ConfirmedResult* Latest=nullptr;
     for(TActorIterator<AU02NetworkState> It(GetWorld());It;++It)for(const auto& R:It->Results)
     {
-        if(R.Source!=S.PawnId||R.SourceLife!=S.LifeGeneration||R.EncounterId!=S.EncounterId||R.EncounterRevision!=S.EncounterRevision||!R.Action||R.Defense!=uint8(AnimeMMORPG::U03::EDefense::Hit))continue;
+        if(R.PresentationKind||R.Source!=S.PawnId||R.SourceLife!=S.LifeGeneration||R.EncounterId!=S.EncounterId||R.EncounterRevision!=S.EncounterRevision||!R.Action||R.Defense!=uint8(AnimeMMORPG::U03::EDefense::Hit))continue;
         if(AnimeMMORPG::U03::FeedbackRemaining(R.Timestamp,Now)<=0)continue;
         if(!Latest||R.Timestamp>Latest->Timestamp||(R.Timestamp==Latest->Timestamp&&R.Serial>Latest->Serial))Latest=&R;
     }

@@ -6,6 +6,7 @@
 #include "U02/U02CollisionWorld.h"
 #include "U02/U02CombatComponent.h"
 #include "U02/U02VitalComponent.h"
+#include "U02/U02NetworkState.h"
 #include "Components/BoxComponent.h"
 #include "AIController.h"
 #include "Engine/World.h"
@@ -205,6 +206,27 @@ bool FC1MultiTarget::RunTest(const FString&)
     const auto Hits=W.Collision->DamageResults.FilterByPredicate([&](const auto& D){return D.Hit.Id.Action.Source.Pawn==W.Source->NetworkPawnId;});
     TestEqual(TEXT("one contact on each distinct target"),Hits.Num(),2);
     for(const auto& D:Hits){TestTrue(TEXT("each target interrupted independently"),D.bInterrupted);TestEqual(TEXT("each target80"),D.Result.Damage,80);}
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03DMissAuthority,"AnimeMMORPG.U03.D.AuthorityCompletedMissContactCancel",B2WorldFlags)
+bool FU03DMissAuthority::RunTest(const FString&)
+{
+    for(double Step:{1./30,1./60,1./120,1.})for(int32 Mode=0;Mode<5;++Mode)
+    {
+        FB2World W;auto* N=W.GetTestWorld()->SpawnActor<AU02NetworkState>();
+        if(Mode==0||Mode==4){W.Target->SetActorLocation(FVector(1000,0,98));W.Collision->RebaseResetSubject(W.Target);}
+        W.Command(W.Source,ECommand::Attack,1,0,0);
+        if(Mode==2||Mode==3)W.Command(W.Target,ECommand::Guard,1,Mode==3?.10:0,180);
+        if(Mode==4)TestTrue(TEXT("Authority cancellation admitted"),W.Collision->ApplyLifecycle(W.Source->Combat,W.Start+.11,ECutoff::LostGround,false));
+        const double Begin=Mode==4?.11:Mode==3?.10:0.;
+        for(double T=Begin+Step;T<1.;T+=Step)W.Collision->DrainAt(W.Start+T);
+        W.End(1);
+        const auto& S=W.Source->Combat->GetCombatSnapshot();
+        const int32 Misses=N->PresentationEvents.FilterByPredicate([&](const auto& R){return R.PresentationKind==1&&R.Source==S.PawnId;}).Num();
+        TestEqual(TEXT("Only naturally completed no-contact action emits one miss"),Misses,Mode==0?1:0);
+        if(Mode>=1&&Mode<=3)TestEqual(TEXT("Hit/block/parry are confirmed contacts"),N->Results.Num(),1);
+        if(Mode==0&&Misses==1)TestEqual(TEXT("Miss timestamp is exact action end"),N->PresentationEvents.Last().Timestamp,W.Start+.4);
+    }
     return true;
 }
 #endif

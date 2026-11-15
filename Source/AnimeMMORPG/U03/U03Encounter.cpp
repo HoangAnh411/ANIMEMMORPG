@@ -19,6 +19,8 @@
 #include "DrawDebugHelpers.h"
 #include "Engine/Canvas.h"
 #include "Kismet/GameplayStatics.h"
+#include "Misc/CommandLine.h"
+#include "Misc/Parse.h"
 #include <cmath>
 using namespace AnimeMMORPG::U03;
 namespace {
@@ -41,7 +43,7 @@ void AU03Monster::Tick(float Dt)
     const bool Startup=S.bLocked&&S.Phase==uint8(AnimeMMORPG::U02::EPhase::Startup);
     const bool Active=S.bLocked&&S.Phase==uint8(AnimeMMORPG::U02::EPhase::Active);
     if(auto* Body=Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("MonsterBlockout"))))Body->SetRelativeRotation(FRotator(Startup?-30:Active?55:S.bLocked?15:0,0,0));
-    if(S.bLocked)
+    if(S.bLocked&&FParse::Param(FCommandLine::Get(),TEXT("U03PresentationDebug")))
     {
         const FRotator R(0,S.AimYawDegrees,0);const FVector Center=F+R.RotateVector(FVector(100,0,90));
         DrawDebugBox(GetWorld(),Center,FVector(100,60,90),R.Quaternion(),Active?FColor::Red:Startup?FColor::Yellow:FColor::Silver,false,0,0,Active?4:1);
@@ -237,6 +239,7 @@ void AU03EncounterGameMode::Logout(AController* Exiting)
 void AU03EncounterHUD::DrawHUD()
 {
     Super::DrawHUD();auto* PC=Cast<AU01PlayerController>(PlayerOwner);if(!PC)return;
+    DrawPresentation();
     FVector2D Screen;FString Text;
     if(PC->InformationTarget(Screen,Text))
     {

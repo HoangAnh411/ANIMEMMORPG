@@ -78,6 +78,7 @@ public:
     virtual TOptional<double> NextEvent(const FTimelineModel& Model, double Through) = 0;
     virtual void ResolveInterval(const FActiveInterval& Interval) = 0;
     virtual void ResolveEvent(FTimelineModel& Model, double At) = 0;
+    virtual void ObserveCompletion(const FActionInstance&,bool) {} // output-only presentation audit
 };
 class FTimelineModel
 {

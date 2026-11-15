@@ -29,7 +29,7 @@ TSharedRef<FJsonObject> ResultJson(const FU02ConfirmedResult& R){auto J=MakeShar
 }
 AU02NetworkState::AU02NetworkState(){bReplicates=true;bAlwaysRelevant=true;PrimaryActorTick.bCanEverTick=true;PrimaryActorTick.TickGroup=TG_PostPhysics;}
 void AU02NetworkState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{Super::GetLifetimeReplicatedProps(OutLifetimeProps);DOREPLIFETIME(AU02NetworkState,Results);DOREPLIFETIME(AU02NetworkState,CritMode);}
+{Super::GetLifetimeReplicatedProps(OutLifetimeProps);DOREPLIFETIME(AU02NetworkState,Results);DOREPLIFETIME(AU02NetworkState,PresentationEvents);DOREPLIFETIME(AU02NetworkState,CritMode);}
 void AU02NetworkState::Confirm(const UU02CollisionWorld::FConfirmedDamage& D)
 {
     if(!HasAuthority())return;FU02ConfirmedResult R;R.Serial=++NextSerial;R.Source=D.Hit.Id.Action.Source.Pawn;R.SourceLife=D.Hit.Id.Action.Source.Generation;R.Action=D.Hit.Id.Action.Sequence;R.Target=D.Hit.Id.Target.Pawn;R.TargetLife=D.Hit.Id.Target.Generation;R.Hurtbox=D.Hit.HurtboxId;R.Timestamp=D.Hit.TimestampSeconds;R.DefinitionId=D.Hit.DefinitionId;R.RawDamage=D.Hit.RawDamage;R.Damage=D.Result.Damage;R.Absorbed=D.Result.Absorbed;R.HP=D.Result.AfterHP;R.Crit=D.Result.bCrit;R.Death=D.Result.bDied;R.Defense=D.Result.Defense;R.Interrupted=D.bInterrupted;R.InterruptedAction=D.InterruptedAction;R.DefinitionVersion=D.Hit.DefinitionVersion;for(TActorIterator<AU03Encounter> E(GetWorld());E;++E)if(E->GetSnapshot().Player&&E->GetSnapshot().Monster&&(E->GetSnapshot().Player->NetworkPawnId==R.Source||E->GetSnapshot().Monster->NetworkPawnId==R.Source)){R.EncounterId=E->GetSnapshot().Id;R.EncounterRevision=E->GetSnapshot().Revision;break;}Results.Add(R);if(Results.Num()>64)Results.RemoveAt(0,Results.Num()-64);ForceNetUpdate();OnRep_Results();
@@ -38,13 +38,22 @@ void AU02NetworkState::OnRep_Results()
 {
     for(const auto& R:Results)if(R.Serial>LastSeenSerial){UE_LOG(LogU02Network,Display,TEXT("U02F_RESULT %s"),*Json(ResultJson(R)));LastSeenSerial=R.Serial;}
 }
+void AU02NetworkState::PresentAuthority(UU02CombatComponent* Subject,uint64 Action,double At,uint8 Kind)
+{
+    if(!HasAuthority()||!Subject||!Kind)return;
+    const auto& S=Subject->GetCombatSnapshot();FU02ConfirmedResult R;
+    R.Serial=++NextSerial;R.PresentationKind=Kind;R.Source=S.PawnId;R.SourceLife=S.LifeGeneration;
+    R.Target=S.PawnId;R.TargetLife=S.LifeGeneration;R.Action=Action;R.Timestamp=At;
+    R.EncounterId=S.EncounterId;R.EncounterRevision=S.EncounterRevision;
+    PresentationEvents.Add(R);if(PresentationEvents.Num()>64)PresentationEvents.RemoveAt(0,PresentationEvents.Num()-64);ForceNetUpdate();
+}
 void AU02NetworkState::Tick(float Dt)
 {
     Super::Tick(Dt);
     if(HasAuthority()){const double R=GetWorld()->GetSubsystem<UU02CollisionWorld>()->FixtureCritRoll;const int32 M=R<0?0:R<.05?2:1;if(M!=CritMode){CritMode=M;ForceNetUpdate();}}
     if(FParse::Param(FCommandLine::Get(),TEXT("U02FProbe")))
     {if(HasAuthority())ProcessFixture();ProbeElapsed+=Dt;if(ProbeElapsed>=.1f){ProbeElapsed=0;EmitState();}}
-    if(GetNetMode()!=NM_DedicatedServer&&GEngine)
+    if(GetNetMode()!=NM_DedicatedServer&&GEngine&&FParse::Param(FCommandLine::Get(),TEXT("U03PresentationDebug")))
     {
         AU01Character* Local=nullptr;for(TActorIterator<AU01Character> It(GetWorld());It;++It)if(It->IsPlayerControlled()&&It->IsLocallyControlled())Local=*It;
         if(Local){const auto V=Local->Vital->GetSnapshot();GEngine->AddOnScreenDebugMessage(290001,.2f,FColor::White,FString::Printf(TEXT("U02-F | HP %d/%d | shield %d | server confirmed %d | %s"),V.HP,V.MaxHP,V.Shield,Results.Num(),CritMode==0?TEXT("server crit5%"):CritMode==1?TEXT("FIXTURE CRIT OFF"):TEXT("FIXTURE CRIT FORCED")));}

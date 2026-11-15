@@ -1,6 +1,8 @@
 #include "U01AnimInstance.h"
 #include "U01Character.h"
 #include "U02/U02Presentation.h"
+#include "U02/U02NetworkState.h"
+#include "EngineUtils.h"
 #include "GameFramework/GameStateBase.h"
 #include "Engine/World.h"
 #include "Animation/AnimMontage.h"
@@ -53,6 +55,18 @@ void UU01AnimInstance::NativeUpdateAnimation(float Dt)
         if(Snapshot.DodgeSequence && ServerNow>=Snapshot.DodgeStart && ServerNow<Snapshot.DodgeMotionEnd)
         {PoseIndex=1;GroundSpeed=1200;LandingRemaining=0;} // Existing locomotion blockout only; no motor/root-motion authority.
         PresentCombat(Character->Combat->GetCombatSnapshot(),ServerNow);
+        const auto& S=Character->Combat->GetCombatSnapshot();int32 Pose=-1;
+        if(S.DodgeSequence&&ServerNow>=S.DodgeStart&&ServerNow<S.DodgeMotionEnd)Pose=0;
+        if(S.bGuard)Pose=1;
+        if(S.HardCC&&ServerNow<S.HardEnd)Pose=S.HardCC==5?2:3;
+        for(TActorIterator<AU02NetworkState> N(GetWorld());N;++N)for(const auto& R:N->PresentationEvents)
+            if(R.PresentationKind==5&&R.Source==S.PawnId&&R.SourceLife==S.LifeGeneration&&R.EncounterId==S.EncounterId&&R.EncounterRevision==S.EncounterRevision&&ServerNow>=R.Timestamp&&ServerNow<R.Timestamp+.25)Pose=4;
+        if(Pose!=DefensePose)
+        {
+            if(DefenseMontage)Montage_Stop(.04f,DefenseMontage);
+            DefensePose=Pose;DefenseMontage=DefenseMontages.IsValidIndex(Pose)?DefenseMontages[Pose]:nullptr;
+            if(DefenseMontage){Montage_Play(DefenseMontage,1.f,EMontagePlayReturnType::MontageLength,.5f,false);Montage_Pause(DefenseMontage);}
+        }
     }
 }
 

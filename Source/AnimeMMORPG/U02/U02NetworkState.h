@@ -8,6 +8,8 @@ struct FU02ConfirmedResult
 {
     GENERATED_BODY()
     UPROPERTY() uint64 Serial=0;
+    // 0 contact, 1 completed miss, 2 Feint, 3 Interrupt, 4 guard break, 5 X.
+    UPROPERTY() uint8 PresentationKind=0;
     UPROPERTY() FGuid Source;
     UPROPERTY() FGuid EncounterId;
     UPROPERTY() uint64 EncounterRevision=0;
@@ -39,8 +41,10 @@ public:
     virtual void Tick(float Dt) override;
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const override;
     void Confirm(const UU02CollisionWorld::FConfirmedDamage& Result);
+    void PresentAuthority(UU02CombatComponent* Subject,uint64 Action,double At,uint8 Kind);
     UPROPERTY(Replicated) int32 CritMode=0; // 0 production5%,1 fixture off,2 fixture forced
     UPROPERTY(ReplicatedUsing=OnRep_Results) TArray<FU02ConfirmedResult> Results;
+    UPROPERTY(Replicated) TArray<FU02ConfirmedResult> PresentationEvents;
 private:
     UFUNCTION() void OnRep_Results();
     uint64 NextSerial=0,LastSeenSerial=0;

@@ -39,6 +39,68 @@ TArray<FTransform> U03PoseLocal(UPoseAsset* Asset)
 }
 #endif
 
+FString UU03AnimationEditor::BuildDAssets()
+{
+#if WITH_EDITOR
+    FString Dir=FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());Dir.ReplaceInline(TEXT("\\"),TEXT("/"));
+    if(!Dir.Contains(TEXT("/Artifacts/U03/D/Source/")))return TEXT("ERROR: isolated D clone only");
+    const FString Root=U03Root+TEXT("/D");
+    if(FPackageName::DoesPackageExist(Root+TEXT("/AM_D_Dodge")))return TEXT("ERROR: refuses overwrite of D poses");
+    auto* BP=LoadObject<UAnimBlueprint>(nullptr,TEXT("/Game/AnimeMMORPG/U03/Animation/ABP_U03"));
+    auto* Skeleton=LoadObject<USkeleton>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/SK_U01"));
+    auto* Carry=LoadObject<UPoseAsset>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/PA_U01_RightCarry"));
+    auto* Grip=LoadObject<UPoseAsset>(nullptr,TEXT("/Game/AnimeMMORPG/U01/Animation/PA_U01_RightGrip"));
+    if(!BP||!Skeleton||!Carry||!Grip)return TEXT("ERROR: accepted carry/grip/graph missing");
+    const auto& Ref=Skeleton->GetReferenceSkeleton();auto Base=U03PoseLocal(Carry);const auto Fingers=U03PoseLocal(Grip);
+    for(int32 I=0;I<Ref.GetNum();++I){const FString N=Ref.GetBoneName(I).ToString();if(N.EndsWith(TEXT("_r"))&&(N.StartsWith(TEXT("thumb_"))||N.StartsWith(TEXT("index_"))||N.StartsWith(TEXT("middle_"))||N.StartsWith(TEXT("ring_"))||N.StartsWith(TEXT("pinky_"))))Base[I]=Fingers[I];}
+    Skeleton->RegisterSlotNode(TEXT("U03Defense"));Skeleton->SetSlotGroupName(TEXT("U03Defense"),TEXT("U03Presentation"));
+    auto* Defaults=CastChecked<UU01AnimInstance>(BP->GeneratedClass->GetDefaultObject());Defaults->DefenseMontages.Empty();
+    const TCHAR* Names[]={TEXT("Dodge"),TEXT("Guard"),TEXT("Break"),TEXT("HardCC"),TEXT("X")};
+    for(int32 Pose=0;Pose<5;++Pose)
+    {
+        auto Local=Base;
+        auto Rotate=[&](const TCHAR* N,FRotator R){const int32 I=Ref.FindBoneIndex(N);if(I!=INDEX_NONE)Local[I].SetRotation((Local[I].GetRotation()*R.Quaternion()).GetNormalized());};
+        // Original blockout keys derived from accepted carry. Root, hand grip and
+        // sword socket remain unchanged; limbs stay outside the torso silhouette.
+        const double Lean[]={-22.,0.,28.,38.,-12.};
+        Rotate(TEXT("spine_01"),FRotator(Lean[Pose]*.4,0,0));Rotate(TEXT("spine_02"),FRotator(Lean[Pose]*.6,0,0));
+        if(Pose==0){Rotate(TEXT("thigh_l"),FRotator(20,0,-12));Rotate(TEXT("thigh_r"),FRotator(-20,0,12));Rotate(TEXT("calf_l"),FRotator(-25,0,0));}
+        if(Pose==1){Rotate(TEXT("upperarm_r"),FRotator(-15,0,20));Rotate(TEXT("lowerarm_r"),FRotator(0,0,-20));Rotate(TEXT("upperarm_l"),FRotator(0,0,-55));Rotate(TEXT("lowerarm_l"),FRotator(0,0,-60));}
+        if(Pose==2){Rotate(TEXT("upperarm_l"),FRotator(0,0,-75));Rotate(TEXT("upperarm_r"),FRotator(0,0,35));Rotate(TEXT("head"),FRotator(20,0,0));}
+        if(Pose==3){Rotate(TEXT("thigh_l"),FRotator(18,0,-8));Rotate(TEXT("thigh_r"),FRotator(-18,0,8));Rotate(TEXT("head"),FRotator(30,0,0));}
+        if(Pose==4){Rotate(TEXT("upperarm_l"),FRotator(0,0,-110));Rotate(TEXT("lowerarm_l"),FRotator(0,0,-20));Rotate(TEXT("head"),FRotator(-12,0,0));}
+        const FString Name=FString::Printf(TEXT("A_D_%s"),Names[Pose]);
+        auto* A=NewObject<UAnimSequence>(CreatePackage(*(Root+TEXT("/")+Name)),*Name,RF_Public|RF_Standalone);
+        A->SetSkeleton(Skeleton);A->bEnableRootMotion=false;A->bForceRootLock=true;
+        auto& Controller=A->GetController();Controller.InitializeModel();Controller.OpenBracket(FText::FromString(TEXT("D original blockout poses")),false);
+        Controller.SetFrameRate(FFrameRate(30,1),false);Controller.SetNumberOfFrames(FFrameNumber(30),false);
+        for(int32 Bone=0;Bone<Ref.GetNum();++Bone)
+        {
+            TArray<FVector3f> P,S;TArray<FQuat4f> R;const FTransform T=Bone==0?Ref.GetRefBonePose()[0]:Local[Bone];
+            for(int32 K=0;K<=30;++K){P.Add(FVector3f(T.GetTranslation()));R.Add(FQuat4f(T.GetRotation()));S.Add(FVector3f(T.GetScale3D()));}
+            if(!Controller.AddBoneCurve(Ref.GetBoneName(Bone),false)||!Controller.SetBoneTrackKeys(Ref.GetBoneName(Bone),P,R,S,false))return TEXT("ERROR: pose tracks");
+        }
+        Controller.NotifyPopulated();Controller.CloseBracket(false);A->PostEditChange();
+        const FString MName=FString::Printf(TEXT("AM_D_%s"),Names[Pose]);auto* M=NewObject<UAnimMontage>(CreatePackage(*(Root+TEXT("/")+MName)),*MName,RF_Public|RF_Standalone);
+        M->SetSkeleton(Skeleton);M->SlotAnimTracks.SetNum(1);M->SlotAnimTracks[0].SlotName=TEXT("U03Defense");
+        FAnimSegment Segment;Segment.SetAnimReference(A);Segment.AnimEndTime=1;Segment.AnimPlayRate=1;Segment.LoopingCount=1;M->SlotAnimTracks[0].AnimTrack.AnimSegments.Add(Segment);M->SetCompositeLength(1);
+        M->BlendIn.SetBlendTime(.04f);M->BlendOut.SetBlendTime(.04f);M->PostEditChange();
+        FAssetRegistryModule::AssetCreated(A);FAssetRegistryModule::AssetCreated(M);if(!U03Save(A)||!U03Save(M))return TEXT("ERROR: save poses");Defaults->DefenseMontages.Add(M);
+    }
+    UAnimGraphNode_Root* RootNode=nullptr;UEdGraph* Graph=nullptr;
+    for(auto G:BP->FunctionGraphs)for(auto N:G->Nodes)if(auto* R=Cast<UAnimGraphNode_Root>(N)){RootNode=R;Graph=G;}
+    if(!RootNode||RootNode->FindPin(TEXT("Result"))->LinkedTo.Num()!=1)return TEXT("ERROR: root link");
+    auto* Input=RootNode->FindPin(TEXT("Result"));auto* Previous=Input->LinkedTo[0];Input->BreakAllPinLinks();
+    auto* Slot=NewObject<UAnimGraphNode_Slot>(Graph);Graph->AddNode(Slot,false,false);Slot->CreateNewGuid();Slot->Node.SlotName=TEXT("U03Defense");Slot->PostPlacedNewNode();Slot->AllocateDefaultPins();
+    if(!Graph->GetSchema()->TryCreateConnection(Previous,Slot->FindPin(TEXT("Source")))||!Graph->GetSchema()->TryCreateConnection(Slot->FindPin(TEXT("Pose")),Input))return TEXT("ERROR: D slot connection");
+    FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(BP);FKismetEditorUtilities::CompileBlueprint(BP);
+    if(BP->Status==BS_Error||!U03Save(BP)||!U03Save(Skeleton))return TEXT("ERROR: D graph compile/save");
+    return TEXT("SUCCESS: five fixed-root original defense poses; existing attack/grip/carry graph retained");
+#else
+    return TEXT("ERROR: editor only");
+#endif
+}
+
 FString UU03AnimationEditor::BuildA1Assets()
 {
 #if WITH_EDITOR
