@@ -97,9 +97,17 @@ try:
   tap('Tab');check('Second Target edge toggles off',not target()['selected'])
   if a.mode=='combat':
    winding();tap('Shift');until(lambda:combat()['dodgeCharges']==1);check('Physical dodge uses one charge',combat()['dodge']>0);time.sleep(.4);approach()
-   winding();old=combat()['parryFeedbackSequence'];deadline=encounter()['monsterCombat']['start']+.60
-   until(lambda:current_world_estimate()>=deadline-.11)
-   c.press('RMB',True);until(lambda:combat()['parryFeedbackSequence']>old,2);c.press('RMB',False);check('Physical parry resolves monster hit',combat()['hardCC']==0)
+   old=combat()['parryFeedbackSequence'];m['parryAttempts']=[]
+   for attempt in range(3):
+    winding();deadline=encounter()['monsterCombat']['start']+.60
+    until(lambda:current_world_estimate()>=deadline-.145)
+    c.press('RMB',True);end=time.perf_counter()+.45
+    while combat()['parryFeedbackSequence']==old and time.perf_counter()<end:time.sleep(.01)
+    sample=combat();m['parryAttempts'].append(dict(deadline=deadline,guardStart=sample['parryStart'],guardEnd=sample['parryEnd'],parry=sample['parryFeedbackSequence']>old))
+    c.press('RMB',False)
+    if sample['parryFeedbackSequence']>old:break
+    until(lambda:current_world_estimate()>=sample['parryReady'])
+   check('Physical parry resolves monster hit',combat()['parryFeedbackSequence']>old and combat()['hardCC']==0)
    winding();old=encounter()['monsterCombat']['interruptSequence'];tap('E');until(lambda:encounter()['monsterCombat']['interruptSequence']>old,2)
    check('Real E Interrupts Monster startup without stun',encounter()['monsterCombat']['hardCC']==0);time.sleep(.55)
    until(lambda:not combat()['locked']);old=encounter()['monsterCombat']['interruptSequence'];tap('Q');until(lambda:combat()['definition']==3);time.sleep(.45);check('Real Q does not Interrupt Monster',encounter()['monsterCombat']['interruptSequence']==old)

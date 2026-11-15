@@ -1,10 +1,12 @@
 """Output loopback only, around a guarded physical input/video run. Never opens a microphone."""
-import argparse,json,subprocess,threading,time,wave,hashlib,shutil
+import argparse,json,subprocess,threading,time,wave,hashlib,shutil,warnings
 from pathlib import Path
 import numpy as np
 import soundcard as sc
 p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--regression',action='store_true');a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
 stop=threading.Event();blocks=[];rate=48000;speaker=sc.default_speaker();loop=sc.get_microphone(speaker.name,include_loopback=True);assert loop.isloopback
+capture_warnings=[]
+warnings.showwarning=lambda message,category,filename,lineno,*args,**kwargs:capture_warnings.append(dict(utc=time.time(),category=category.__name__,message=str(message),file=filename,line=lineno))
 def capture():
  with loop.recorder(samplerate=rate,channels=2) as r:
   while not stop.is_set():blocks.append(r.record(numframes=4800))
@@ -26,6 +28,6 @@ finally:
   spectrum=np.abs(np.fft.rfft(mono[i:i+4096]*np.hanning(4096)));k=int(np.argmax(spectrum))
   if spectrum[k]>1:peaks.append(dict(time=i/rate,frequency=k*rate/4096,magnitude=float(spectrum[k])))
  first=[v for v in peaks if abs(v['frequency']-660)<20];second=[v for v in peaks if abs(v['frequency']-990)<20]
- result=dict(inputExitCode=code,loopback=loop.name,isLoopback=True,rate=rate,startedUTC=started,seconds=len(samples)/rate,peaks=peaks,parry660=bool(first),parry990After660=bool(first and second and first[0]['time']<second[-1]['time']))
+ result=dict(inputExitCode=code,loopback=loop.name,isLoopback=True,rate=rate,startedUTC=started,seconds=len(samples)/rate,peaks=peaks,parry660=bool(first),parry990After660=bool(first and second and first[0]['time']<second[-1]['time']),warnings=capture_warnings)
  (a.out/'audio.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
 raise SystemExit(code)
