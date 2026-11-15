@@ -6,6 +6,7 @@
 #include "U01/U01PlayerController.h"
 #include "GameFramework/GameStateBase.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/AudioComponent.h"
 #include "Engine/Canvas.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
@@ -17,6 +18,15 @@ void AU03EncounterHUD::DrawPresentation()
 {
     if(GetNetMode()==NM_DedicatedServer||!Canvas||!PlayerOwner||!PlayerOwner->GetLocalPlayer())return;
     const auto* Clock=GetWorld()->GetGameState();const double Now=Clock?Clock->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds();
+    FeedbackVoices.RemoveAll([&](const FFeedbackVoice& V)
+    {
+        if(!V.Audio.IsValid())return true;
+        auto* Subject=V.Subject.Get();const auto* Vital=Subject?Subject->FindComponentByClass<UU02VitalComponent>():nullptr;
+        const auto* E=AU03Encounter::ForSubject(Subject);
+        if(!Vital||!AnimeMMORPG::U03::SameFeedbackScope(Vital->GetSnapshot().Generation,V.Life,E?E->GetSnapshot().Id:FGuid(),V.Encounter,E?E->GetSnapshot().Revision:0,V.Revision))
+        {V.Audio->Stop();UE_LOG(LogU03Presentation,Display,TEXT("U03D_AUDIO_STOP life=%llu revision=%llu reason=scope_changed"),V.Life,V.Revision);return true;}
+        return false;
+    });
     auto ProjectPoint=[this](FVector P,FVector2D& Out){return PlayerOwner->ProjectWorldLocationToScreen(P,Out,true);};
     auto Line=[&](FVector A,FVector B,float Width)
     {FVector2D X,Y;if(ProjectPoint(A,X)&&ProjectPoint(B,Y))DrawLine(X.X,X.Y,Y.X,Y.Y,FLinearColor::White,Width);};
@@ -87,7 +97,8 @@ void AU03EncounterHUD::DrawPresentation()
             const double Envelope=FMath::Min(1.,Local/.005)*FMath::Max(0.,1.-Local/.12);
             PCM[I]=int16(6000*Envelope*FMath::Sin(2*PI*Hz*Local));
         }
-        FeedbackTone->QueueAudio(reinterpret_cast<const uint8*>(PCM.GetData()),PCM.Num()*sizeof(int16));UGameplayStatics::PlaySound2D(this,FeedbackTone);
+        FeedbackTone->QueueAudio(reinterpret_cast<const uint8*>(PCM.GetData()),PCM.Num()*sizeof(int16));
+        if(auto* Voice=UGameplayStatics::SpawnSound2D(this,FeedbackTone))FeedbackVoices.Add({Voice,Target,R.TargetLife,R.EncounterId,R.EncounterRevision});
     }
     bFeedbackPrimed=true;
 }

@@ -95,4 +95,13 @@ private:
     FGuid FeedbackEncounter;
     uint64 FeedbackRevision=0;
     UPROPERTY(Transient) TObjectPtr<class USoundWaveProcedural> FeedbackTone;
+    struct FFeedbackVoice
+    {
+        TWeakObjectPtr<class UAudioComponent> Audio;
+        TWeakObjectPtr<AActor> Subject;
+        uint64 Life=0;
+        FGuid Encounter;
+        uint64 Revision=0;
+    };
+    TArray<FFeedbackVoice> FeedbackVoices;
 };

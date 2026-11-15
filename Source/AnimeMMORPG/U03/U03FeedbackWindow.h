@@ -15,4 +15,6 @@ inline bool ConsumeFeedback(uint64 Serial,uint64& Watermark)
 {if(!Serial||Serial<=Watermark)return false;Watermark=Serial;return true;}
 inline bool FreshFeedbackAudio(bool New,bool Primed,bool Visible,double At,double Now)
 {return New&&Primed&&Visible&&FeedbackRemaining(At,Now)>0&&Now-At<=.15;}
+inline bool SameFeedbackScope(uint64 Life,uint64 ExpectedLife,FGuid Encounter,FGuid ExpectedEncounter,uint64 Revision,uint64 ExpectedRevision)
+{return Life==ExpectedLife&&Encounter==ExpectedEncounter&&Revision==ExpectedRevision;}
 }

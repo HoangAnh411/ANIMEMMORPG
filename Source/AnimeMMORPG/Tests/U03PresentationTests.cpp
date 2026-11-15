@@ -77,6 +77,11 @@ bool FU03DDedup::RunTest(const FString&)
     TestTrue(TEXT("Late visual still inside event window"),FeedbackRemaining(10,10.3)>0);
     TestFalse(TEXT("Future snapshot cannot sound"),FreshFeedbackAudio(true,true,true,10,9.9));
     TestFalse(TEXT("Hidden proxy silent"),FreshFeedbackAudio(true,true,false,10,10.02));
+    const FGuid Id(1,2,3,4),Other(5,6,7,8);
+    TestTrue(TEXT("Current voice scope retained"),SameFeedbackScope(1,1,Id,Id,2,2));
+    TestFalse(TEXT("Retry new life stops old voice"),SameFeedbackScope(2,1,Id,Id,2,2));
+    TestFalse(TEXT("Revision change stops old voice"),SameFeedbackScope(1,1,Id,Id,3,2));
+    TestFalse(TEXT("Reconnect identity stops old voice"),SameFeedbackScope(1,1,Other,Id,2,2));
     return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03DDefenseAssets,"AnimeMMORPG.U03.D.DefensePoseAssets",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
