@@ -76,6 +76,7 @@ public:
     UFUNCTION(Exec) void U03C2RetryClaim(const FString& Id,uint64 Revision,uint64 Sequence);
     void ToggleInformationTarget();
     bool InformationTarget(FVector2D& Screen,FString& Text) const;
+    bool RecentHitInformation(FVector2D& Screen,FString& Text) const;
 private:
     TWeakObjectPtr<AActor> InformationSubject;
     FGuid InformationEncounter,InformationPawn;

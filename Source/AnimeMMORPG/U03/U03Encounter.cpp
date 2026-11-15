@@ -14,6 +14,7 @@
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/PlayerState.h"
 #include "GameFramework/GameSession.h"
+#include "GameFramework/GameStateBase.h"
 #include "UObject/ConstructorHelpers.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/Canvas.h"
@@ -244,11 +245,22 @@ void AU03EncounterHUD::DrawHUD()
         DrawLine(Screen.X,Screen.Y-12,Screen.X,Screen.Y-5,FLinearColor::White,2);
         DrawText(Text,FLinearColor::White,Screen.X+16,Screen.Y-12,nullptr,1.);
     }
+    if(PC->RecentHitInformation(Screen,Text))DrawText(Text,FLinearColor::White,Screen.X+16,Screen.Y+12,nullptr,1.);
     if(auto* E=AU03Encounter::ForSubject(PC->GetPawn()))
     {
         const auto S=E->GetSnapshot();
-        DrawText(FString::Printf(TEXT("C2 | %s | %s"),*S.OwnerLabel,S.Result==1?TEXT("WON - Escape / Retry"):S.Result==2?TEXT("LOST - Escape / Retry"):TEXT("Running")),FLinearColor::White,20,20,nullptr,1.2);
+        DrawText(FString::Printf(TEXT("%s | separate owner encounter | %s"),*S.OwnerLabel,S.Result==1?TEXT("WON - Escape / Retry"):S.Result==2?TEXT("LOST - Escape / Retry"):TEXT("Running")),FLinearColor::White,20,20,nullptr,1.2);
         const auto* P=Cast<AU01Character>(PC->GetPawn());if(P)DrawText(FString::Printf(TEXT("HP %d/%d"),P->Vital->GetSnapshot().HP,P->Vital->GetSnapshot().MaxHP),FLinearColor::White,20,45,nullptr,1.2);
         DrawText(FString::Printf(TEXT("[%s] target information | dodge, parry or E during WINDUP"),*PC->GetPreferences().Keys[AnimeMMORPG::U01::Target].GetDisplayName().ToString()),FLinearColor::White,20,70);
+        if(P&&P->Combat)
+        {
+            const auto& C=P->Combat->GetCombatSnapshot();
+            const auto* Clock=GetWorld()->GetGameState();const double Now=Clock?Clock->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds();
+            auto Key=[PC](int32 I){return PC->GetPreferences().Keys[I].GetDisplayName().ToString();};
+            DrawText(FString::Printf(TEXT("Energy %.0f/100 | Posture %.0f/100 | [%s] Dodge %d/2 recharge %.1fs"),C.Energy,C.Posture,*Key(AnimeMMORPG::U01::Dodge),C.DodgeCharges,C.DodgeCharges<2?FMath::Max(0.,C.DodgeRestoreAt-Now):0.),FLinearColor::White,20,95);
+            DrawText(FString::Printf(TEXT("[%s] Q %.1fs | [%s] E %.1fs | [%s] X %.1fs"),*Key(AnimeMMORPG::U01::SkillQ),FMath::Max(0.,C.QReadyAt-Now),*Key(AnimeMMORPG::U01::SkillE),FMath::Max(0.,C.EReadyAt-Now),*Key(AnimeMMORPG::U01::EscapeCC),FMath::Max(0.,C.XReadyAt-Now)),FLinearColor::White,20,120);
+            const TCHAR* CC[]={TEXT("FREE"),TEXT("STUN"),TEXT("KNOCKDOWN"),TEXT("LAUNCH"),TEXT("GRAB"),TEXT("GUARD BREAK")};
+            DrawText(FString::Printf(TEXT("[%s] Attack | [%s] Guard | CC %s %.1fs | slow %.0f%%"),*Key(AnimeMMORPG::U01::Attack),*Key(AnimeMMORPG::U01::Guard),Now<C.HardEnd?CC[FMath::Min<int32>(C.HardCC,5)]:CC[0],FMath::Max(0.,C.HardEnd-Now),C.SlowFraction*100.),FLinearColor::White,20,145);
+        }
     }
 }

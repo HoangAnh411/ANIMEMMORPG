@@ -1,5 +1,8 @@
 #include "U01/U01PlayerController.h"
 #include "U03Encounter.h"
+#include "U03FeedbackWindow.h"
+#include "U02/U02NetworkState.h"
+#include "GameFramework/GameStateBase.h"
 #include "U02/U02VitalComponent.h"
 #include "U02/U02LabDummy.h"
 #include "Components/CapsuleComponent.h"
@@ -70,6 +73,26 @@ bool AU01PlayerController::InformationTarget(FVector2D& Screen,FString& Text) co
     if(!bInformationVisible||!InformationSubject.IsValid())return false;
     auto* V=InformationSubject->FindComponentByClass<UU02VitalComponent>();if(!V||V->GetSnapshot().bDead)return false;
     Screen=InformationScreen;Text=FString::Printf(TEXT("TARGET HP %d/%d"),V->GetSnapshot().HP,V->GetSnapshot().MaxHP);return true;
+}
+bool AU01PlayerController::RecentHitInformation(FVector2D& Screen,FString& Text) const
+{
+    if(!IsLocalPlayerController()||GetNetMode()==NM_DedicatedServer)return false;
+    const auto* P=Cast<AU01Character>(GetPawn());if(!P||!P->Combat)return false;
+    const auto& S=P->Combat->GetCombatSnapshot();const auto* E=AU03Encounter::ForSubject(GetPawn());
+    if(!E||E->GetSnapshot().bClosed||S.EncounterId!=E->GetSnapshot().Id||S.EncounterRevision!=E->GetSnapshot().Revision)return false;
+    const auto* Clock=GetWorld()->GetGameState();const double Now=Clock?Clock->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds();
+    const FU02ConfirmedResult* Latest=nullptr;
+    for(TActorIterator<AU02NetworkState> It(GetWorld());It;++It)for(const auto& R:It->Results)
+    {
+        if(R.Source!=S.PawnId||R.SourceLife!=S.LifeGeneration||R.EncounterId!=S.EncounterId||R.EncounterRevision!=S.EncounterRevision||!R.Action||R.Defense!=uint8(AnimeMMORPG::U03::EDefense::Hit))continue;
+        if(AnimeMMORPG::U03::FeedbackRemaining(R.Timestamp,Now)<=0)continue;
+        if(!Latest||R.Timestamp>Latest->Timestamp||(R.Timestamp==Latest->Timestamp&&R.Serial>Latest->Serial))Latest=&R;
+    }
+    if(!Latest)return false;
+    auto* A=E->GetSnapshot().Monster;if(!A||A->NetworkPawnId!=Latest->Target||A->Vital->GetSnapshot().Generation!=Latest->TargetLife)return false;
+    FVector2D Center;
+    if(!AnimeMMORPG::U03::RecentHitVisible(Latest->Timestamp,Now,true,ProjectInformation(this,A,Screen,Center),InformationClear(const_cast<AU01PlayerController*>(this),A)))return false;
+    const auto V=A->Vital->GetSnapshot();Text=FString::Printf(TEXT("HIT HP %d/%d"),V.HP,V.MaxHP);return true;
 }
 void AU01PlayerController::RequestEncounterRetry()
 {
