@@ -1,6 +1,8 @@
-# U03-C2 — READY_FOR_REVIEW
+# U03-C2 — ACCEPTED (technical)
 
-Đã triển khai encounter cận chiến, Tab thông tin và Retry do server quyết định. Nhánh `u03/c2-encounter`; main nền giữ nguyên `8d1d2c37bc6259a58dd110a63f4fc1d3963b058f`. Source tạo binary cuối: **`b43b15d7178fb5a7ca55cef667946d20fc1591d8`**. Các commit bàn giao sau đó chỉ đổi harness/tài liệu/bằng chứng, không đổi Source/Content/Config runtime. C2 chưa ACCEPTED, chưa merge và không khép U03.
+Đã triển khai encounter cận chiến, Tab thông tin và Retry do server quyết định. Người dùng ACCEPTED về kỹ thuật tại bàn giao **`b5eed4b6fd1043eb17f4e082a95ec2b225f97203`**, source tạo binary cuối **`b43b15d7178fb5a7ca55cef667946d20fc1591d8`**, và cho phép khép tài liệu, fast-forward/push main. Nhánh `u03/c2-encounter`, main nền `8d1d2c37bc6259a58dd110a63f4fc1d3963b058f`. [Hồ sơ nghiệm thu](ACCEPTANCE-C2.md) ghi phạm vi review và ủy quyền; lượt khép chỉ đổi tài liệu, không chạy lại build/tests. Không khép toàn U03.
+
+**Người dùng đã chơi thử C2 nhưng chưa xác nhận toàn bộ cảm giác/hình ảnh; presentation vẫn blockout.** Quái B không đánh A là đúng thiết kế encounter riêng: target/damage/kết quả/Retry cách ly, chưa phải khu quái chung. LatestReview/LatestSolo đã chuyển sang phiên chơi thử sau bàn giao; bằng chứng lịch sử công bố và manifest giữ nguyên. Các câu READY_FOR_REVIEW/chưa nghiệm thu bên dưới mô tả thời điểm bàn giao trước xác nhận này.
 
 Chạy [Play-U03-C2.cmd](../../Play-U03-C2.cmd), [Play-U03-C2-Network.cmd](../../Play-U03-C2-Network.cmd), dừng bằng [Stop-U03-C2.cmd](../../Stop-U03-C2.cmd). Làm theo [checklist chơi thử](../../Play-U03-C2-CHECKLIST.md). Launcher dùng một clone `Artifacts/U03/C2/Source`, package cuối `Runs/Package-20261115-120335/Archive/Windows`; không cần mở Play trong Editor gốc.
 
@@ -58,4 +60,4 @@ Live Coding đã trigger/poll đúng AGENTS, log cuối: `Live coding succeeded,
 
 `Audit/TIMINGS.json` tách command wall time build, package, Automation và physical capture, kể cả failed run có đủ timestamp. Các nhóm có chạy chồng nhau nên không cộng thành thời gian lao động; run thiếu timestamp kết thúc được giữ và loại khỏi phép tổng. Cửa sổ triển khai contracts→FSM:14/11 17:58:53–20:01:19 (+07), khoảng2h02, bao gồm các lượt build/test xen kẽ; không có đồng hồ đo active coding độc lập. Các cửa sổ sửa lỗi nav/causality/aim/Retry:14/11 18:16–18:56; Logout:15/11 khoảng11:57–12:00:22. Đây là cửa sổ truy vết commit, không phải ước lượng giờ người chính xác. Không tính khoảng nghỉ qua đêm là triển khai. Build cuối khoảng2 phút, Automation cuối khoảng1 phút, package cuối gồm chờ mutex và UAT1m26s; số đo chi tiết ở JSON. Tài liệu/harness bàn giao không làm chạy lại native build/tests.
 
-Điểm dừng: READY_FOR_REVIEW trên nhánh đã push và remote được kiểm cùng commit bàn giao. Main không merge; chỉ người dùng quyết định nghiệm thu cảm giác và ACCEPTED.
+Điểm dừng bàn giao trước review là READY_FOR_REVIEW. Người dùng nay đã ACCEPTED kỹ thuật và cho phép khép tài liệu, fast-forward/push main; dừng sau xác minh SHA remote. Cảm giác/hình ảnh chưa được xác nhận đầy đủ, chưa triển khai D và chưa khép toàn U03. Runtime/config/bằng chứng giữ nguyên, không chạy lại build/tests cho thay đổi tài liệu này.

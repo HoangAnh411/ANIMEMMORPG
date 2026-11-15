@@ -1,6 +1,6 @@
 # Chơi thử U03-C2
 
-Trạng thái READY_FOR_REVIEW; source runtime `b43b15d`, các cổng kỹ thuật và giới hạn ở [REPORT-C2](Docs/U03/REPORT-C2.md). Không xem nút Play trong Editor gốc là bản C2 đã xác minh.
+Trạng thái ACCEPTED về kỹ thuật tại `b5eed4b`; source runtime `b43b15d`, xem [hồ sơ nghiệm thu](Docs/U03/ACCEPTANCE-C2.md) và [REPORT-C2](Docs/U03/REPORT-C2.md). Người dùng đã chơi thử C2 nhưng chưa xác nhận toàn bộ cảm giác/hình ảnh; presentation vẫn blockout. Không xem nút Play trong Editor gốc là bản C2 đã xác minh.
 
 - Chạy `Play-U03-C2.cmd`. Tiếp cận quái, đọc WINDUP / STRIKE / RECOVER bằng tư thế, mũi tên và vùng kiếm.
 - Thử né, parry, Q và E: E trúng startup có thể Interrupt; Q không Interrupt. Đứng trong 2 m vẫn có thể đánh hụt.
@@ -11,3 +11,5 @@ Trạng thái READY_FOR_REVIEW; source runtime `b43b15d`, các cổng kỹ thu�
 - Dừng bằng `Stop-U03-C2.cmd` để chỉ dừng session C2 và khôi phục placement Editor. Trạm hồi quy cũ có lối vào session riêng trong menu.
 
 Ghi nhận cảm giác báo đòn, chase/return và vòng Retry. Assertions/video kỹ thuật không thay đánh giá này. B2/C1 vẫn chưa được người dùng chơi thử; C2 không khép toàn U03.
+
+Mỗi người có encounter riêng; quái B không đánh A là đúng thiết kế, chưa phải khu quái chung. LatestReview/LatestSolo có thể trỏ tới phiên chơi sau bàn giao; bằng chứng lịch sử công bố không đổi. Chưa triển khai D.

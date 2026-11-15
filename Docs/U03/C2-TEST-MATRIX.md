@@ -21,8 +21,10 @@ Written before runtime. Rows originally started **NOT RUN**; the final evidence 
 |Build/automation gate|Committed single clone Generate/Editor/Game; MCP TestRunner then actual logs; all U00–C1 plus C2, report every result/errors|PASS - Build-20261115-120024; MCPTests-20261115-120144:131 Success/0Failed (117 regression+14 C2)|
 |Package/smoke|Windows package from verified source/binary; Boot/CharacterCombatLab/NetworkLab three-map smoke|PASS - Package-20261115-120335; Smoke-20261115-120530:Boot/CharacterCombatLab/NetworkLab all3|
 |Launcher guards|Source/module/package hashes; wrong hash refusal; readiness then minimize and placement restore; scoped stop|PASS - LAUNCH-GUARDS.json:3 negative guards; actual PlayC2 solo and ReviewC2Network happy paths; ready/minimized/placement-restored records|
-|Feel|User evaluation of telegraph readability/chase/return/Retry; B2/C1 playtest status unchanged|PENDING USER REVIEW|
+|Feel|User evaluation of telegraph readability/chase/return/Retry; B2/C1 playtest status unchanged|USER PLAYTESTED C2; full feel/visual confirmation still pending; presentation remains blockout|
 
 Implementation order: AI/combat focused runs → encounter/Retry focused runs → Tab/UI focused runs → stable full gates. Fixes rerun affected gates; documentation-only changes do not rerun builds/tests. Record implementation/build/verification/fix time separately in REPORT-C2.
 
 Final entry point: [REPORT-C2](REPORT-C2.md), [manifest](Evidence/C2/MANIFEST.json), [per-test completion traces](Evidence/C2/TEST-TRACES.json). All named native tests use prefix `AnimeMMORPG.U03.C2.`. Each final gate path and published raw/video hash is listed in the manifest; older PASS runs remain superseded. No docs-only rebuild.
+
+User technical acceptance: delivery `b5eed4b`, verified source `b43b15d`; see [ACCEPTANCE-C2](ACCEPTANCE-C2.md). The user reviewed existing source/hashes/logs/captures without rerunning build/tests. Closure changes documentation only; historical manifest/evidence remain unchanged. LatestReview/LatestSolo now point to post-delivery play sessions, not replacement evidence. Fast-forward/push main is explicitly authorized; no D or overall U03 closure.
