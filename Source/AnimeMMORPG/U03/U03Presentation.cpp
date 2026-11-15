@@ -22,8 +22,9 @@ void AU03EncounterHUD::DrawPresentation()
     {
         if(!V.Audio.IsValid())return true;
         auto* Subject=V.Subject.Get();const auto* Vital=Subject?Subject->FindComponentByClass<UU02VitalComponent>():nullptr;
+        auto* Source=V.Source.Get();const auto* SourceVital=Source?Source->FindComponentByClass<UU02VitalComponent>():nullptr;
         const auto* E=AU03Encounter::ForSubject(Subject);
-        if(!Vital||!AnimeMMORPG::U03::SameFeedbackScope(Vital->GetSnapshot().Generation,V.Life,E?E->GetSnapshot().Id:FGuid(),V.Encounter,E?E->GetSnapshot().Revision:0,V.Revision))
+        if(!SourceVital||SourceVital->GetSnapshot().Generation!=V.SourceLife||!Vital||!AnimeMMORPG::U03::SameFeedbackScope(Vital->GetSnapshot().Generation,V.Life,E?E->GetSnapshot().Id:FGuid(),V.Encounter,E?E->GetSnapshot().Revision:0,V.Revision))
         {V.Audio->Stop();UE_LOG(LogU03Presentation,Display,TEXT("U03D_AUDIO_STOP life=%llu revision=%llu reason=scope_changed"),V.Life,V.Revision);return true;}
         return false;
     });
@@ -98,7 +99,7 @@ void AU03EncounterHUD::DrawPresentation()
             PCM[I]=int16(6000*Envelope*FMath::Sin(2*PI*Hz*Local));
         }
         FeedbackTone->QueueAudio(reinterpret_cast<const uint8*>(PCM.GetData()),PCM.Num()*sizeof(int16));
-        if(auto* Voice=UGameplayStatics::SpawnSound2D(this,FeedbackTone))FeedbackVoices.Add({Voice,Target,R.TargetLife,R.EncounterId,R.EncounterRevision});
+        if(auto* Voice=UGameplayStatics::SpawnSound2D(this,FeedbackTone))FeedbackVoices.Add({Voice,Target,Source,R.SourceLife,R.TargetLife,R.EncounterId,R.EncounterRevision});
     }
     bFeedbackPrimed=true;
 }

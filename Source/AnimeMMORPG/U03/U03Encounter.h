@@ -99,6 +99,8 @@ private:
     {
         TWeakObjectPtr<class UAudioComponent> Audio;
         TWeakObjectPtr<AActor> Subject;
+        TWeakObjectPtr<AActor> Source;
+        uint64 SourceLife=0;
         uint64 Life=0;
         FGuid Encounter;
         uint64 Revision=0;

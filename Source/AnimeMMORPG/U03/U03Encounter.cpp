@@ -5,6 +5,7 @@
 #include "U02/U02VitalComponent.h"
 #include "U02/U02CollisionWorld.h"
 #include "U02/U02LabDummy.h"
+#include "U02/U02Presentation.h"
 #include "AIController.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -40,10 +41,12 @@ void AU03Monster::Tick(float Dt)
 {
     Super::Tick(Dt);if(GetNetMode()==NM_DedicatedServer)return;
     const auto S=Combat->GetCombatSnapshot();const FVector F=FeetOf(this);
-    const bool Startup=S.bLocked&&S.Phase==uint8(AnimeMMORPG::U02::EPhase::Startup);
-    const bool Active=S.bLocked&&S.Phase==uint8(AnimeMMORPG::U02::EPhase::Active);
-    if(auto* Body=Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("MonsterBlockout"))))Body->SetRelativeRotation(FRotator(Startup?-30:Active?55:S.bLocked?15:0,0,0));
-    if(S.bLocked&&FParse::Param(FCommandLine::Get(),TEXT("U03PresentationDebug")))
+    const auto* Clock=GetWorld()->GetGameState();const double Now=Clock?Clock->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds();
+    const bool Present=AnimeMMORPG::U02::SamplePresentation(S,Now).bPlay;
+    const bool Startup=Present&&Now<S.StartSeconds+S.ActiveStart;
+    const bool Active=Present&&!Startup&&Now<S.StartSeconds+S.ActiveEnd;
+    if(auto* Body=Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("MonsterBlockout"))))Body->SetRelativeRotation(FRotator(Startup?-30:Active?55:Present?15:0,0,0));
+    if(Present&&FParse::Param(FCommandLine::Get(),TEXT("U03PresentationDebug")))
     {
         const FRotator R(0,S.AimYawDegrees,0);const FVector Center=F+R.RotateVector(FVector(100,0,90));
         DrawDebugBox(GetWorld(),Center,FVector(100,60,90),R.Quaternion(),Active?FColor::Red:Startup?FColor::Yellow:FColor::Silver,false,0,0,Active?4:1);
