@@ -1,6 +1,6 @@
 # U03-C2 — ACCEPTED (technical)
 
-Người dùng chấp nhận kỹ thuật C2 tại bàn giao `b5eed4b6fd1043eb17f4e082a95ec2b225f97203`, source kiểm chứng `b43b15d7178fb5a7ca55cef667946d20fc1591d8`. Qua review source và bằng chứng đã chạy, người dùng không thấy lỗi chặn khép C2 và cho phép AI khép hồ sơ, fast-forward/push main. Review này không chạy lại build/tests.
+Người dùng chấp nhận kỹ thuật C2 tại bàn giao `b5eed4b6fd1043eb17f4e082a95ec2b225f97203`, source kiểm chứng `b43b15d7178fb5a7ca55cef667946d20fc1591d8`. Reviewer AI đối chiếu source và bằng chứng kỹ thuật; người dùng chơi thử và cho phép AI khép hồ sơ, fast-forward/push main. Review này không chạy lại build/tests. Việc đối chiếu kỹ thuật không thay thế xác nhận cảm giác/hình ảnh của người dùng.
 
 **Người dùng đã chơi thử C2, nhưng chưa xác nhận toàn bộ cảm giác/hình ảnh; presentation vẫn blockout.** Đây không phải nghiệm thu toàn bộ telegraph/readability/chase/return/Retry hoặc hình ảnh sản phẩm. Trạng thái B2/C1 chưa được người dùng chơi thử vẫn giữ nguyên.
 

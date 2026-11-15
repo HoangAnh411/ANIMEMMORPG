@@ -1,6 +1,9 @@
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "U03/U03FeedbackWindow.h"
+#include "U01/U01Settings.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonSerializer.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03DFeedbackWindow,"AnimeMMORPG.U03.D.AbsoluteFeedbackWindow",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
 bool FU03DFeedbackWindow::RunTest(const FString&)
@@ -30,6 +33,28 @@ bool FU03DRecentHitVisibility::RunTest(const FString&)
     TestFalse(TEXT("Offscreen hides immediately"),RecentHitVisible(10,10.5,true,false,true));
     TestFalse(TEXT("Environment hides immediately"),RecentHitVisible(10,10.5,true,true,false));
     TestFalse(TEXT("Visibility cannot rearm expiry"),RecentHitVisible(10,11.2,true,true,true));
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03DMigration,"AnimeMMORPG.U03.D.LegacyConflictAndFutureSchema",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
+bool FU03DMigration::RunTest(const FString&)
+{
+    namespace C=AnimeMMORPG::U01;
+    C::FPreferences P,Out;P.Keys[C::Forward]=EKeys::H;
+    TSharedPtr<FJsonObject> J;FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(C::EncodePreferences(P)),J);
+    J->SetNumberField(TEXT("version"),1);const auto B=J->GetObjectField(TEXT("bindings"));
+    for(const TCHAR* Name:{TEXT("Attack"),TEXT("Guard"),TEXT("Dodge"),TEXT("EscapeCC"),TEXT("Q"),TEXT("E"),TEXT("Target")})B->RemoveField(Name);
+    B->SetStringField(TEXT("Jump"),TEXT("Q"));
+    FString Text;FJsonSerializer::Serialize(J.ToSharedRef(),TJsonWriterFactory<>::Create(&Text));
+    const FString Before=Text;
+    TestFalse(TEXT("New combat default conflicts with legacy binding: report recovery"),C::DecodePreferences(Text,Out).IsEmpty());
+    TestEqual(TEXT("Independent valid legacy binding preserved"),Out.Keys[C::Forward],EKeys::H);
+    TestEqual(TEXT("Conflict restores legacy jump"),Out.Keys[C::Jump],EKeys::SpaceBar);
+    TestEqual(TEXT("New Q default preserved"),Out.Keys[C::SkillQ],EKeys::Q);
+    TestEqual(TEXT("Decoder does not mutate input"),Text,Before);
+    for(int32 I=0;I<C::ControlCount;++I)TestTrue(TEXT("No conflict after v1 migration"),C::BindingError(Out,I,Out.Keys[I]).IsEmpty());
+    J->SetNumberField(TEXT("version"),99);Text.Empty();FJsonSerializer::Serialize(J.ToSharedRef(),TJsonWriterFactory<>::Create(&Text));
+    TestFalse(TEXT("Unsupported JSON schema reports fallback"),C::DecodePreferences(Text,Out).IsEmpty());
+    TestEqual(TEXT("Unsupported schema restores defaults"),Out.Keys[C::Forward],EKeys::W);
     return true;
 }
 #endif

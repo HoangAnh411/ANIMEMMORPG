@@ -41,6 +41,10 @@ Reuse UU01SettingsSubsystem, JSON v2 and SaveGame. Single keyboard/mouse binding
 
 Existing C2 manifest records 131 successful tests for its source, not a D result. Private `Config/DefaultEngine.ini`, `Docs/Maintenance/` and `Scripts/Maintenance/` existed at entry and must not be staged or changed. Preserve accepted artifacts and failed runs. Original Editor must not be saved/restarted/closed; minimize only after D clients ready. New reflection/header layout requires full UBT build and cold clone processes, not original Editor Play.
 
+Exact C2 network review profile read from StartC2Session.ps1: client windows 900x540 at (0,100)/(940,100), client cap60/server30, foreground idle disabled. Default screen percentage100. MemoryBudget review uses percentage50, Lumen atlas2048, RT pool minimum128 MiB, streaming pool256 MiB, Lumen diffuse/reflections disabled, virtual shadows disabled, shadow quality2. These are explicit review settings, not U04 acceptance. Preserve CMC smoothing and network/input settings.
+
+D.2 initial implementation: recent-hit HP reuses AU02NetworkState confirmed history (source/target life, action, serial, encounter/revision, timestamp), with camera projection/LOS from U03LocalInformation; does not mutate Tab. Encounter HUD now reads resource/cooldown/CC/binding values from snapshots. This does not yet complete feedback/audio/pose work. Migration tests already exist in U01SettingsTests and U03RuntimeTests (BindingFoundationAndV1Migration); do not rewrite existing migration without a failing case.
+
 ## Delivery boundary
 
 Commit source before final clone gates. Build/test/package in one D clone; rerun only affected gates after fixes. Retain failed/invalid evidence with source, engine/toolchain, process/world/owner/role and hashes. Final root launchers: Play-U03-D.cmd, Play-U03-D-Network.cmd, Stop-U03-D.cmd and Play-U03-D-CHECKLIST.md. REPORT-D.md, Evidence/D/MANIFEST.json, CLOSURE-D.md separate inherited/new evidence. Reviewer AI verifies technical evidence; user playtests feel and authorizes closure. Stop READY_FOR_REVIEW only after all required gates pass and branch push/remote verification. No ACCEPTED/merge/U03 closure.

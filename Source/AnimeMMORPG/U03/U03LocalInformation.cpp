@@ -28,7 +28,7 @@ bool ProjectInformation(const AU01PlayerController* PC,AActor* A,FVector2D& Scre
     Screen-=FVector2D(Rect.Min.X,Rect.Min.Y);
     return Screen.X>=0&&Screen.Y>=0&&Screen.X<Rect.Width()&&Screen.Y<Rect.Height();
 }
-bool InformationClear(AU01PlayerController* PC,AActor* A)
+bool InformationClear(const AU01PlayerController* PC,AActor* A)
 {
     FVector Camera;FRotator Rotation;PC->GetPlayerViewPoint(Camera,Rotation);FCollisionQueryParams Q(SCENE_QUERY_STAT(U03TabLOS),false);
     for(TActorIterator<AActor> It(PC->GetWorld());It;++It)if(It->IsA<APawn>()||It->FindComponentByClass<UU02VitalComponent>())Q.AddIgnoredActor(*It);
@@ -89,9 +89,9 @@ bool AU01PlayerController::RecentHitInformation(FVector2D& Screen,FString& Text)
         if(!Latest||R.Timestamp>Latest->Timestamp||(R.Timestamp==Latest->Timestamp&&R.Serial>Latest->Serial))Latest=&R;
     }
     if(!Latest)return false;
-    auto* A=E->GetSnapshot().Monster;if(!A||A->NetworkPawnId!=Latest->Target||A->Vital->GetSnapshot().Generation!=Latest->TargetLife)return false;
+    auto* A=E->GetSnapshot().Monster.Get();if(!A||A->NetworkPawnId!=Latest->Target||A->Vital->GetSnapshot().Generation!=Latest->TargetLife)return false;
     FVector2D Center;
-    if(!AnimeMMORPG::U03::RecentHitVisible(Latest->Timestamp,Now,true,ProjectInformation(this,A,Screen,Center),InformationClear(const_cast<AU01PlayerController*>(this),A)))return false;
+    if(!AnimeMMORPG::U03::RecentHitVisible(Latest->Timestamp,Now,true,ProjectInformation(this,A,Screen,Center),InformationClear(this,A)))return false;
     const auto V=A->Vital->GetSnapshot();Text=FString::Printf(TEXT("HIT HP %d/%d"),V.HP,V.MaxHP);return true;
 }
 void AU01PlayerController::RequestEncounterRetry()
