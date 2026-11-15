@@ -1,6 +1,6 @@
 # Chơi thử U03-C2
 
-Trạng thái đang triển khai; chỉ dùng launcher sau khi REPORT-C2 và manifest xác nhận đủ cổng kỹ thuật. Không xem nút Play trong Editor gốc là bản C2 đã xác minh.
+Trạng thái READY_FOR_REVIEW; source runtime `b43b15d`, các cổng kỹ thuật và giới hạn ở [REPORT-C2](Docs/U03/REPORT-C2.md). Không xem nút Play trong Editor gốc là bản C2 đã xác minh.
 
 - Chạy `Play-U03-C2.cmd`. Tiếp cận quái, đọc WINDUP / STRIKE / RECOVER bằng tư thế, mũi tên và vùng kiếm.
 - Thử né, parry, Q và E: E trúng startup có thể Interrupt; Q không Interrupt. Đứng trong 2 m vẫn có thể đánh hụt.

@@ -1,0 +1,16 @@
+{
+  "completed": true,
+  "files": 647,
+  "publishedBytes": 255094878,
+  "strictUTF8": true,
+  "allPublishedAndRawHashesMatch": true,
+  "privateTokenAbsent": true,
+  "nativeSource": "b43b15d7178fb5a7ca55cef667946d20fc1591d8",
+  "status": "READY_FOR_REVIEW",
+  "timingSeconds": {
+    "build": 1509.053242,
+    "package": 303.738154,
+    "automation": 397.633971,
+    "physical": 557.481194
+  }
+}
