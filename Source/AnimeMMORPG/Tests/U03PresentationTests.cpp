@@ -68,6 +68,9 @@ bool FU03DDedup::RunTest(const FString&)
     TestFalse(TEXT("Duplicate snapshot silent"),ConsumeFeedback(7,Watermark));
     TestFalse(TEXT("Stale snapshot silent"),ConsumeFeedback(6,Watermark));
     TestTrue(TEXT("New event accepted"),ConsumeFeedback(8,Watermark));
+    Watermark=20; // initial-only authority history watermark supplied on join
+    TestFalse(TEXT("Fresh-timestamp historical event on reconnect stays silent"),ConsumeFeedback(20,Watermark));
+    TestTrue(TEXT("First event after connection baseline is new"),ConsumeFeedback(21,Watermark));
     TestFalse(TEXT("Reconnect baseline is silent"),FreshFeedbackAudio(true,false,true,10,10.02));
     TestTrue(TEXT("Fresh visible new event audible"),FreshFeedbackAudio(true,true,true,10,10.02));
     TestFalse(TEXT("Late snapshot has visual remainder but no audio replay"),FreshFeedbackAudio(true,true,true,10,10.3));

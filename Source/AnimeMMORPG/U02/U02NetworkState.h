@@ -45,6 +45,8 @@ public:
     UPROPERTY(Replicated) int32 CritMode=0; // 0 production5%,1 fixture off,2 fixture forced
     UPROPERTY(ReplicatedUsing=OnRep_Results) TArray<FU02ConfirmedResult> Results;
     UPROPERTY(Replicated) TArray<FU02ConfirmedResult> PresentationEvents;
+    // Per-connection initial watermark. Joining/reconnecting never sounds history.
+    UPROPERTY(Replicated) uint64 InitialHistorySerial=0;
 private:
     UFUNCTION() void OnRep_Results();
     uint64 NextSerial=0,LastSeenSerial=0;

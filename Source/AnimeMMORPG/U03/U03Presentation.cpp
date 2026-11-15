@@ -43,7 +43,12 @@ void AU03EncounterHUD::DrawPresentation()
         }
     }
     TArray<FU02ConfirmedResult> Events;
-    for(TActorIterator<AU02NetworkState> N(GetWorld());N;++N){Events.Append(N->Results);Events.Append(N->PresentationEvents);}
+    for(TActorIterator<AU02NetworkState> N(GetWorld());N;++N)
+    {
+        if(!N->HasActorBegunPlay())continue;
+        if(!N->HasAuthority())FeedbackSerial=FMath::Max(FeedbackSerial,N->InitialHistorySerial);
+        Events.Append(N->Results);Events.Append(N->PresentationEvents);
+    }
     Events.Sort([](const auto& A,const auto& B){return A.Serial<B.Serial;});
     for(const auto& R:Events)
     {
