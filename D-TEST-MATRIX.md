@@ -15,8 +15,8 @@ Status: planned, no new D gate claimed. Inherited C2: 131 Success / 0 Failed at 
 | U03.05/.09 | Q/E/Feint/Interrupt, monster startup direction/box, authority cutoffs | Pending final regression |
 | U03.06 | Clip/pose/grip/readability, HUD actual bindings/resource/CC, independent recent-hit HP; no debug overlay dependency | Pending final inspection/video |
 | U03.07 | Won/Lost/Retry authority; release gate/AwaitingResume, owner isolation, no combat persistence | Pending final regression |
-| Full Automation | MCP TestRunner filter AnimeMMORPG; GetLogEntries completions; actual total and per-test status | Pending final source |
-| Build/assets | Editor + Game; Windows package; Blueprint compile/references; Boot/CharacterCombatLab/NetworkLab smoke | Pending final source |
+| Full Automation | MCP TestRunner filter AnimeMMORPG; GetLogEntries completions; actual total and per-test status | Initial HUD source5cc8574:134 Success/0 Failed; final D source pending |
+| Build/assets | Editor + Game; Windows package; Blueprint compile/references; Boot/CharacterCombatLab/NetworkLab smoke | Initial HUD source5cc8574 Editor/Game PASS; package/assets/smoke and final D pending |
 | Input/video | Combo,Q/E/Feint/Interrupt,dodge,guard/parry/break, labelled CC/X; win/loss/Retry; Tab/HP occlusion; rebind/save/load; held keys through menu/focus/Resume | Pending final source |
 | Loopback audio | Parry 660→990 sequence, distinct Feint/Interrupt; duplicate snapshots silent; event timestamp correlation | Pending final source |
 | Lifecycle | Five Boot→arena→Boot loops; Quit/reopen isolated settings | Pending final source |

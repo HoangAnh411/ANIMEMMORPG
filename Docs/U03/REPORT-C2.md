@@ -1,5 +1,7 @@
 # U03-C2 — ACCEPTED (technical)
 
+Đính chính vai trò tại lượt D: reviewer AI đối chiếu source và bằng chứng kỹ thuật; người dùng chơi thử và cho phép khép. Không quy việc kiểm hash, authority hoặc timing cho người dùng. Phần xác nhận cảm giác/hình ảnh vẫn tách biệt; bằng chứng lịch sử bên dưới giữ nguyên.
+
 Đã triển khai encounter cận chiến, Tab thông tin và Retry do server quyết định. Người dùng ACCEPTED về kỹ thuật tại bàn giao **`b5eed4b6fd1043eb17f4e082a95ec2b225f97203`**, source tạo binary cuối **`b43b15d7178fb5a7ca55cef667946d20fc1591d8`**, và cho phép khép tài liệu, fast-forward/push main. Nhánh `u03/c2-encounter`, main nền `8d1d2c37bc6259a58dd110a63f4fc1d3963b058f`. [Hồ sơ nghiệm thu](ACCEPTANCE-C2.md) ghi phạm vi review và ủy quyền; lượt khép chỉ đổi tài liệu, không chạy lại build/tests. Không khép toàn U03.
 
 **Người dùng đã chơi thử C2 nhưng chưa xác nhận toàn bộ cảm giác/hình ảnh; presentation vẫn blockout.** Quái B không đánh A là đúng thiết kế encounter riêng: target/damage/kết quả/Retry cách ly, chưa phải khu quái chung. LatestReview/LatestSolo đã chuyển sang phiên chơi thử sau bàn giao; bằng chứng lịch sử công bố và manifest giữ nguyên. Các câu READY_FOR_REVIEW/chưa nghiệm thu bên dưới mô tả thời điểm bàn giao trước xác nhận này.
