@@ -156,8 +156,6 @@ private:
     AnimeMMORPG::U02::FStartupTurn StartupTurn;
     double LastAimSend = -1;
     uint64 LastCommand = 0;
-    uint64 PresentedDefenseEvent=0,PresentedDefenseLife=0;
-    UPROPERTY(Transient) TObjectPtr<class USoundWaveProcedural> ParryTone;
     uint64 LastSentCommand=0,LastSentLife=0;
     uint64 LastAppliedLife=0;
     AnimeMMORPG::U02::EReject LastReject = AnimeMMORPG::U02::EReject::None;

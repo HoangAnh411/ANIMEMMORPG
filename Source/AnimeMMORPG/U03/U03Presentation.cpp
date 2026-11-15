@@ -2,6 +2,7 @@
 #include "U03FeedbackWindow.h"
 #include "U02/U02NetworkState.h"
 #include "U02/U02VitalComponent.h"
+#include "U02/U02LabDummy.h"
 #include "U01/U01PlayerController.h"
 #include "GameFramework/GameStateBase.h"
 #include "Components/CapsuleComponent.h"
@@ -47,14 +48,17 @@ void AU03EncounterHUD::DrawPresentation()
     for(const auto& R:Events)
     {
         const bool New=AnimeMMORPG::U03::ConsumeFeedback(R.Serial,FeedbackSerial);
-        AU01Character* Source=nullptr;AU01Character* Target=nullptr;
+        AU01Character* Source=nullptr;AActor* Target=nullptr;
         for(TActorIterator<AU01Character> P(GetWorld());P;++P)
         {
             if(P->NetworkPawnId==R.Source&&P->Vital->GetSnapshot().Generation==R.SourceLife)Source=*P;
             if(P->NetworkPawnId==R.Target&&P->Vital->GetSnapshot().Generation==R.TargetLife)Target=*P;
         }
+        for(TActorIterator<AU02LabDummy> D(GetWorld());D;++D)if(D->NetworkPawnId==R.Target&&D->Vital->GetSnapshot().Generation==R.TargetLife)Target=*D;
         auto* E=AU03Encounter::ForSubject(Source);
-        if(!Source||!Target||!E||E->GetSnapshot().bClosed||E->GetSnapshot().Id!=R.EncounterId||E->GetSnapshot().Revision!=R.EncounterRevision||AnimeMMORPG::U03::FeedbackRemaining(R.Timestamp,Now)<=0)continue;
+        if(!Source||!Target||AnimeMMORPG::U03::FeedbackRemaining(R.Timestamp,Now)<=0)continue;
+        if(R.EncounterId.IsValid()){if(!E||E->GetSnapshot().bClosed||E->GetSnapshot().Id!=R.EncounterId||E->GetSnapshot().Revision!=R.EncounterRevision)continue;}
+        else if(E)continue;
         const uint8 Kind=R.PresentationKind?R.PresentationKind+2:R.Defense; // hit0 block1 parry2 miss3 feint4 interrupt5 break6 X7
         const TCHAR* Labels[]={TEXT("+ HIT +"),TEXT("|== BLOCK ==|"),TEXT("( PARRY )"),TEXT("-- MISS --"),TEXT("< FEINT >"),TEXT("// INTERRUPT //"),TEXT("/ / BREAK / /"),TEXT("< X RELEASE >")};
         FVector2D Screen;const bool Visible=ProjectPoint(Target->GetActorLocation()+FVector(0,0,150),Screen)&&Screen.X>=0&&Screen.Y>=0&&Screen.X<Canvas->SizeX&&Screen.Y<Canvas->SizeY;

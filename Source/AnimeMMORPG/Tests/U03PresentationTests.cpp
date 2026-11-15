@@ -4,6 +4,9 @@
 #include "U01/U01Settings.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
+#include "U01/U01AnimInstance.h"
+#include "Animation/AnimMontage.h"
+#include "Animation/AnimSequence.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03DFeedbackWindow,"AnimeMMORPG.U03.D.AbsoluteFeedbackWindow",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
 bool FU03DFeedbackWindow::RunTest(const FString&)
@@ -71,6 +74,26 @@ bool FU03DDedup::RunTest(const FString&)
     TestTrue(TEXT("Late visual still inside event window"),FeedbackRemaining(10,10.3)>0);
     TestFalse(TEXT("Future snapshot cannot sound"),FreshFeedbackAudio(true,true,true,10,9.9));
     TestFalse(TEXT("Hidden proxy silent"),FreshFeedbackAudio(true,true,false,10,10.02));
+    return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03DDefenseAssets,"AnimeMMORPG.U03.D.DefensePoseAssets",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
+bool FU03DDefenseAssets::RunTest(const FString&)
+{
+    auto* C=LoadClass<UU01AnimInstance>(nullptr,TEXT("/Game/AnimeMMORPG/U03/Animation/ABP_U03.ABP_U03_C"));
+    if(!TestNotNull(TEXT("Existing U03 animation class"),C))return false;
+    const auto* Defaults=C->GetDefaultObject<UU01AnimInstance>();
+    if(!TestEqual(TEXT("Five serialized pose dependencies"),Defaults->DefenseMontages.Num(),5))return false;
+    for(const auto& M:Defaults->DefenseMontages)
+    {
+        if(!TestNotNull(TEXT("Pose montage"),M.Get()))return false;
+        TestEqual(TEXT("Separate presentation slot"),M->SlotAnimTracks[0].SlotName,FName(TEXT("U03Defense")));
+        TestEqual(TEXT("No gameplay notifies"),M->Notifies.Num(),0);
+        const auto* A=Cast<UAnimSequence>(M->SlotAnimTracks[0].AnimTrack.AnimSegments[0].GetAnimReference());
+        if(!TestNotNull(TEXT("Authored pose sequence"),A))return false;
+        TestFalse(TEXT("No root motion authority"),A->bEnableRootMotion);
+        TestEqual(TEXT("No notify dependency"),A->Notifies.Num(),0);
+        TestTrue(TEXT("Fixed root pose"),A->ExtractRootMotionFromRange(0,1,FAnimExtractContext()).GetTranslation().IsNearlyZero(.001));
+    }
     return true;
 }
 #endif

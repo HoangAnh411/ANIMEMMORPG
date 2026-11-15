@@ -299,18 +299,6 @@ void UU02CombatComponent::TickComponent(float Dt,ELevelTick Type,FActorComponent
     }
     if(!Model)ApplyMotorSnapshot();
     const auto* FeedbackClock=GetWorld()->GetGameState();const double FeedbackNow=FeedbackClock?FeedbackClock->GetServerWorldTimeSeconds():Now;
-    if(PresentedDefenseLife!=Snapshot.LifeGeneration){PresentedDefenseLife=Snapshot.LifeGeneration;PresentedDefenseEvent=0;}
-    if(Snapshot.ParryFeedbackSequence!=PresentedDefenseEvent)
-    {
-        PresentedDefenseEvent=Snapshot.ParryFeedbackSequence;
-        if(!AU03Encounter::ForSubject(C)&&Snapshot.ParryFeedbackSequence&&FeedbackNow-Snapshot.ParryFeedbackTime<1.2&&C->IsPlayerControlled()&&C->IsLocallyControlled())
-        {
-            ParryTone=NewObject<USoundWaveProcedural>(this);ParryTone->SetSampleRate(24000);ParryTone->NumChannels=1;ParryTone->Duration=.24f;
-            TArray<int16> PCM;PCM.SetNumZeroed(5760);
-            for(int I=0;I<PCM.Num();++I){const double T=I/24000.,Local=FMath::Fmod(T,.12);const double Envelope=FMath::Min(1.,Local/.005)*FMath::Max(0.,1.-Local/.12);PCM[I]=int16(6000.*Envelope*FMath::Sin(2.*PI*(T<.12?660.:990.)*Local));}
-            ParryTone->QueueAudio(reinterpret_cast<const uint8*>(PCM.GetData()),PCM.Num()*sizeof(int16));UGameplayStatics::PlaySound2D(this,ParryTone);
-        }
-    }
     if(FParse::Param(FCommandLine::Get(),TEXT("U03PresentationDebug")))
     {
     if(Snapshot.FeintSequence&&FeedbackNow-Snapshot.FeintLastSuccess<1.2)DrawDebugString(GetWorld(),C->GetActorLocation()+FVector(0,0,120),TEXT("< FEINT >"),nullptr,FColor::White,0,true);

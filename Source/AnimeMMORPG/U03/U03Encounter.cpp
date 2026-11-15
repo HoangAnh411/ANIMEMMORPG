@@ -252,7 +252,7 @@ void AU03EncounterHUD::DrawHUD()
     if(auto* E=AU03Encounter::ForSubject(PC->GetPawn()))
     {
         const auto S=E->GetSnapshot();
-        DrawText(FString::Printf(TEXT("%s | separate owner encounter | %s"),*S.OwnerLabel,S.Result==1?TEXT("WON - Escape / Retry"):S.Result==2?TEXT("LOST - Escape / Retry"):TEXT("Running")),FLinearColor::White,20,20,nullptr,1.2);
+        DrawText(FString::Printf(TEXT("STATION %c | %s | separate owner encounter | %s"),TCHAR('A'+S.Station),*S.OwnerLabel,S.Result==1?TEXT("WON - Escape / Retry"):S.Result==2?TEXT("LOST - Escape / Retry"):TEXT("Running")),FLinearColor::White,20,20,nullptr,1.2f);
         const auto* P=Cast<AU01Character>(PC->GetPawn());if(P)DrawText(FString::Printf(TEXT("HP %d/%d"),P->Vital->GetSnapshot().HP,P->Vital->GetSnapshot().MaxHP),FLinearColor::White,20,45,nullptr,1.2);
         DrawText(FString::Printf(TEXT("[%s] target information | dodge, parry or E during WINDUP"),*PC->GetPreferences().Keys[AnimeMMORPG::U01::Target].GetDisplayName().ToString()),FLinearColor::White,20,70);
         if(P&&P->Combat)

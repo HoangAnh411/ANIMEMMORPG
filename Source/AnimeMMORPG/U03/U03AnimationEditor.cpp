@@ -53,7 +53,7 @@ FString UU03AnimationEditor::BuildDAssets()
     if(!BP||!Skeleton||!Carry||!Grip)return TEXT("ERROR: accepted carry/grip/graph missing");
     const auto& Ref=Skeleton->GetReferenceSkeleton();auto Base=U03PoseLocal(Carry);const auto Fingers=U03PoseLocal(Grip);
     for(int32 I=0;I<Ref.GetNum();++I){const FString N=Ref.GetBoneName(I).ToString();if(N.EndsWith(TEXT("_r"))&&(N.StartsWith(TEXT("thumb_"))||N.StartsWith(TEXT("index_"))||N.StartsWith(TEXT("middle_"))||N.StartsWith(TEXT("ring_"))||N.StartsWith(TEXT("pinky_"))))Base[I]=Fingers[I];}
-    Skeleton->RegisterSlotNode(TEXT("U03Defense"));Skeleton->SetSlotGroupName(TEXT("U03Defense"),TEXT("U03Presentation"));
+    Skeleton->RegisterSlotNode(TEXT("U03Defense")); // default group; no accepted skeleton asset rewrite
     auto* Defaults=CastChecked<UU01AnimInstance>(BP->GeneratedClass->GetDefaultObject());Defaults->DefenseMontages.Empty();
     const TCHAR* Names[]={TEXT("Dodge"),TEXT("Guard"),TEXT("Break"),TEXT("HardCC"),TEXT("X")};
     for(int32 Pose=0;Pose<5;++Pose)
@@ -94,7 +94,7 @@ FString UU03AnimationEditor::BuildDAssets()
     auto* Slot=NewObject<UAnimGraphNode_Slot>(Graph);Graph->AddNode(Slot,false,false);Slot->CreateNewGuid();Slot->Node.SlotName=TEXT("U03Defense");Slot->PostPlacedNewNode();Slot->AllocateDefaultPins();
     if(!Graph->GetSchema()->TryCreateConnection(Previous,Slot->FindPin(TEXT("Source")))||!Graph->GetSchema()->TryCreateConnection(Slot->FindPin(TEXT("Pose")),Input))return TEXT("ERROR: D slot connection");
     FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(BP);FKismetEditorUtilities::CompileBlueprint(BP);
-    if(BP->Status==BS_Error||!U03Save(BP)||!U03Save(Skeleton))return TEXT("ERROR: D graph compile/save");
+    if(BP->Status==BS_Error||!U03Save(BP))return TEXT("ERROR: D graph compile/save");
     return TEXT("SUCCESS: five fixed-root original defense poses; existing attack/grip/carry graph retained");
 #else
     return TEXT("ERROR: editor only");
