@@ -28,6 +28,8 @@ for($i=0;$i -lt 400;$i++){
  Start-Sleep -Milliseconds 500
 }
 if(!$ready){throw 'C2 package not ready; scoped process record retained'}
-Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject') | Out-Null
+Copy-Item -LiteralPath (Join-Path $out 'original-editor-windows.json') -Destination (Join-Path $out 'editor-before-loading.json')
+$windows=@(Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject'))
+ConvertTo-Json -InputObject $windows -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $out 'original-editor-windows.json')
 ConvertTo-Json -InputObject @(Confirm-U02EditorMinimized $windows) -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $out 'editor-minimized-verified.json')
 Write-Output (Join-Path $out 'process.json')

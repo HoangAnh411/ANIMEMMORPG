@@ -7,6 +7,18 @@ if(!$path.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'Onl
 . (Join-Path $PSScriptRoot '../U01/FReviewHost.ps1')
 . (Join-Path $PSScriptRoot '../U02/EnsureEditorMinimized.ps1')
 $expected=Get-Content -Raw -Encoding UTF8 (Join-Path $path 'original-editor-windows.json') | ConvertFrom-Json
+$valid=@();$stale=@()
+foreach($record in $expected){
+ $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$record.pid)
+ [uint32]$owner=0;[FReviewHostNative]::GetWindowThreadProcessId([IntPtr][long]$record.hwnd,[ref]$owner) | Out-Null
+ if($live -and $live.CommandLine.Replace('/','\').IndexOf($record.project.Replace('/','\'),[StringComparison]::OrdinalIgnoreCase) -ge 0 -and $owner -eq $record.pid){$valid+=$record}else{$stale+=$record}
+}
+if($stale.Count){
+ @{status='STALE_IDENTITY_SKIPPED';utc=[DateTime]::UtcNow.ToString('o');stale=$stale;current=@(Get-U02OriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject'));note='No placement from a closed or replaced process/window is applied to a new Editor identity.'} | ConvertTo-Json -Depth 10 | Set-Content -Encoding UTF8 (Join-Path $path 'editor-placement-stale.json')
+ Write-Warning ('Skipped '+$stale.Count+' stale Editor window identities; current replacement windows were not modified.')
+}
+$expected=$valid
+if(!$expected.Count -and $stale.Count){return}
 for($attempt=0;$attempt -lt 4;$attempt++){
  Restore-FOriginalEditorWindows $expected
  Start-Sleep -Milliseconds 500

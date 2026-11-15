@@ -3,6 +3,8 @@ $ErrorActionPreference='Stop'
 $root=(Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $allowed=[IO.Path]::GetFullPath((Join-Path $root 'Artifacts/U03/C2/'))
 $packagePath=(Resolve-Path -LiteralPath $Package).Path
+$OutputRoot=[IO.Path]::GetFullPath($OutputRoot)
+if(!$OutputRoot.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'C2 smoke output only'}
 if(!$packagePath.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'C2 package only'}
 $exe=Join-Path $packagePath 'AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe'
 $sha=git -C (Join-Path $root 'Artifacts/U03/C2/Source') rev-parse HEAD

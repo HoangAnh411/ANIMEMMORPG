@@ -11,12 +11,15 @@ if(Get-NetUDPEndpoint -LocalPort $Port -ErrorAction SilentlyContinue){throw 'Net
 . (Join-Path $PSScriptRoot '../U02/EnsureEditorMinimized.ps1')
 $windows=@(Get-U02OriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject'))
 
+$didMinimize=$false
 try{
  $session=& (Join-Path $PSScriptRoot 'StartC2Session.ps1') -CloneProject $project -OutputRoot (Join-Path $root 'Artifacts/U03/C2') -MemoryBudget -ClientMaxFPS 60 -BufferedDiagnostics -Port $Port
  if(!$session -or !(Test-Path (Join-Path $session 'processes.json'))){throw 'C2 session not ready'}
  ConvertTo-Json -InputObject $windows -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $session 'original-editor-windows.json')
  . (Join-Path $PSScriptRoot '../U02/EnsureEditorMinimized.ps1')
- Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject') | Out-Null
+ Copy-Item -LiteralPath (Join-Path $session 'original-editor-windows.json') -Destination (Join-Path $session 'editor-before-loading.json')
+ $windows=@(Suspend-FOriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject'));$didMinimize=$true
+ ConvertTo-Json -InputObject $windows -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $session 'original-editor-windows.json')
  $observed=@(Confirm-U02EditorMinimized $windows)
  ConvertTo-Json -InputObject $observed -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $session 'editor-minimized-verified.json')
  $session | Set-Content -Encoding UTF8 (Join-Path $root 'Artifacts/U03/C2/LatestReview.txt')
@@ -28,6 +31,6 @@ try{
   try{& (Join-Path $PSScriptRoot 'StopC2Session.ps1') -SessionPath $session}
   catch{Write-Warning ('Session cleanup refused or failed: '+$_.Exception.Message)}
  }
- Restore-FOriginalEditorWindows $windows
+ if($didMinimize){Restore-FOriginalEditorWindows $windows}
  throw $launchFailure
 }

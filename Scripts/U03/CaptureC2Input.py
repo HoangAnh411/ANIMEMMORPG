@@ -2,6 +2,7 @@
 import argparse,json,time,threading,re,math,cv2,numpy as np
 from pathlib import Path
 from PIL import ImageGrab
+from datetime import datetime
 from C2Client import C2Client,u,mouse
 from F60Input import Input,Payload,Mouse,emit
 p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--mode',choices=['inspect','combat','target','route'],default='combat');a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
@@ -11,6 +12,9 @@ def state():return c.metrics()
 def encounter():return state()['encounter']
 def combat():return state()['combat']
 def target():return state()['informationTarget']
+def current_world_estimate():
+ v=state();utc=datetime.fromisoformat(v['utc'].replace('Z','+00:00')).timestamp()
+ return v['worldSeconds']+max(0,time.time()-utc)
 def vec(s):return np.array([float(v) for v in re.findall(r'[XYZ]=([-0-9.]+)',s)])
 def distance():return np.linalg.norm(vec(state()['capsuleCenterWorldCm'])-vec(encounter()['monsterPosition']))
 def check(name,ok):m['checks'].append(dict(check=name,result='PASS' if ok else 'FAIL',metrics=state()));assert ok,name
@@ -93,7 +97,8 @@ try:
   tap('Tab');check('Second Target edge toggles off',not target()['selected'])
   if a.mode=='combat':
    winding();tap('Shift');until(lambda:combat()['dodgeCharges']==1);check('Physical dodge uses one charge',combat()['dodge']>0);time.sleep(.4);approach()
-   winding();old=combat()['parryFeedbackSequence'];until(lambda:encounter()['monsterCombat']['serverSnapshotSeconds']>=encounter()['monsterCombat']['start']+.515)
+   winding();old=combat()['parryFeedbackSequence'];deadline=encounter()['monsterCombat']['start']+.60
+   until(lambda:current_world_estimate()>=deadline-.11)
    c.press('RMB',True);until(lambda:combat()['parryFeedbackSequence']>old,2);c.press('RMB',False);check('Physical parry resolves monster hit',combat()['hardCC']==0)
    winding();old=encounter()['monsterCombat']['interruptSequence'];tap('E');until(lambda:encounter()['monsterCombat']['interruptSequence']>old,2)
    check('Real E Interrupts Monster startup without stun',encounter()['monsterCombat']['hardCC']==0);time.sleep(.55)
@@ -146,7 +151,7 @@ try:
    until(lambda:not target()['visible']);time.sleep(.6);check('New occlusion receives its own one-second interval',target()['selected']);time.sleep(.5);until(lambda:not target()['selected']);check('Continuous wall occlusion clears without replacement',not target()['selected'])
   ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/'Final.png');m['completed']=True
 except Exception as error:
- m['error']=repr(error);raise
+ m['error']=repr(error);m['errorMetrics']=state();raise
 finally:
  stop.set()
  if worker:worker.join()

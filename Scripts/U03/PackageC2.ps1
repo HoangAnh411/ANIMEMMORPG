@@ -10,7 +10,7 @@ New-Item -ItemType Directory -Path $run | Out-Null
 $project=Join-Path $clone 'AnimeMMORPG.uproject'
 $exe='D:/Software/UE_5.8/Engine/Build/BatchFiles/RunUAT.bat'
 $archive=Join-Path $run 'Archive'
-$uat=@('BuildCookRun',('-project='+$project),'-noP4','-platform=Win64','-clientconfig=Development','-build','-cook','-stage','-pak','-archive',('-archivedirectory='+$archive),'-map=/Game/AnimeMMORPG/Maps/L_Boot+/Game/AnimeMMORPG/Maps/L_CharacterCombatLab+/Game/AnimeMMORPG/Maps/L_NetworkLab','-unattended','-utf8output','-nocompileeditor')
+$uat=@('BuildCookRun',('-project='+$project),'-noP4','-platform=Win64','-clientconfig=Development','-build','-cook','-stage','-pak','-archive',('-archivedirectory='+$archive),'-map=/Game/AnimeMMORPG/Maps/L_Boot+/Game/AnimeMMORPG/Maps/L_CharacterCombatLab+/Game/AnimeMMORPG/Maps/L_NetworkLab','-unattended','-utf8output','-nocompileeditor','-ubtargs=-WaitMutex')
 @{sourceSHA=$source;project=$project;executable=$exe;arguments=$uat;started=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json -Depth 7 | Set-Content -Encoding UTF8 (Join-Path $run 'Package.command.json')
 & $exe @uat *> (Join-Path $run 'Package.log')
 $code=$LASTEXITCODE
