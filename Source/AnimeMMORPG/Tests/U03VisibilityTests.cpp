@@ -20,7 +20,7 @@ bool FU03R1FutureClock::RunTest(const FString&)
     TestFalse(TEXT("A hidden eligible event is consumed silently"),FreshFeedbackAudio(ConsumeReadyFeedback(8,Serial,10.1,10.11),true,false,10.1,10.11));
     TestFalse(TEXT("Reveal cannot rearm that hidden event"),FreshFeedbackAudio(ConsumeReadyFeedback(8,Serial,10.1,10.12),true,true,10.1,10.12));
     TestFalse(TEXT("Late eligible history cannot sound"),FreshFeedbackAudio(ConsumeReadyFeedback(9,Serial,11,11.3),true,true,11,11.3));
-    TestEqual(TEXT("Late event retains only original remaining window"),FeedbackRemaining(11,11.3),.9,UE_SMALL_NUMBER);
+    TestTrue(TEXT("Late event retains only original remaining window"),FMath::IsNearlyEqual(FeedbackRemaining(11,11.3),.9,1.e-8));
     Serial=20;TestFalse(TEXT("Initial reconnect baseline remains silent even with future packet"),ConsumeReadyFeedback(20,Serial,12,12.01));
     return true;
 }
