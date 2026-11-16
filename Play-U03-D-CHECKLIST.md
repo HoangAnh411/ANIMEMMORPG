@@ -1,15 +1,13 @@
-# U03-D playtest
+# U03-D-R1 playtest
 
-Use **Play-U03-D.cmd** for solo or **Play-U03-D-Network.cmd** for two windows. A/B are separate owner stations: each monster belongs to that player's encounter. Choose Resume after a focus change. Stop with **Stop-U03-D.cmd**, which restores Editor placement. Original Editor Play is not the D build.
+Mở **Play-U03-D.cmd** (Solo) hoặc **Play-U03-D-Network.cmd** (hai cửa sổ). A/B là hai trạm encounter riêng, nên quái của A không chuyển sang B. Đổi focus thì chọn Resume. **Stop-U03-D.cmd** dừng đúng session và khôi phục placement Editor; Play trong Editor gốc không mặc định là D-R1.
 
-1. Can you read windup, strike, recovery and attack direction?
-2. Are hit, block, parry, miss, break, Feint and Interrupt distinguishable by shape/label and sound?
-3. Are dodge, guard, hard CC and X understandable? Check sword grip and obvious body penetration.
-4. Are HP, resources, cooldowns and current bindings readable? Recent-hit HP should disappear behind cover and offscreen; it does not turn Tab on.
-5. Do Won/Lost → Retry → Resume and switching between two windows feel stable? Retry A should leave B alone.
+1. Startup/active/recovery và hướng đòn có dễ đọc không?
+2. Hit/block/parry/hụt/break/Feint/Interrupt có phân biệt được bằng hình/âm không?
+3. Dodge/guard/CC/X có dễ hiểu; grip kiếm và tư thế có xuyên thân rõ rệt không?
+4. HUD/phím/cooldown có dễ đọc? Nhãn/phản hồi đối thủ và HP phải ẩn sau vật cản; phần telegraph bị che không hiện xuyên. HP vừa trúng không tự bật Tab.
+5. Won/Lost → Retry → Resume, đổi focus và hai cửa sổ có ổn không? Retry không đánh và không tự Resume.
 
-Escape → **Open regression stations (separate run)** enters the existing labelled fixture lab. Terrain stations and combat fixtures remain test tools, not product skills or resurrection. Return with **Back to Boot**. Controls → rebind/save/load uses the isolated play session's user directory.
+Escape → **Open regression stations (separate run)** vào trạm fixture có nhãn. **Back to Boot** trở về. Settings lưu riêng Solo/A/B dưới `Artifacts/U03/D/UserSettings`; reconnect giữ preferences, không giữ combat progress.
 
-Launcher preferences persist under `Artifacts/U03/D/UserSettings`: Solo and network A/B have separate folders. Reconnect keeps that window's preferences; combat restarts under a new authority encounter identity.
-
-AI verifies source/hash, authority, timing and technical gates. Your playtest evaluates feel/readability and authorizes closure separately. This remains mannequin/blockout art, not anime production animation or U04 graphics/performance acceptance.
+AI chịu trách nhiệm hash/authority/timing và các cổng kỹ thuật. Người dùng chơi thử cảm giác/hình ảnh và cho phép khép riêng. Hiện chỉ READY_FOR_REVIEW D-R1, chưa ACCEPTED/merge/khép U03/U04; art sản phẩm tiếp tục deferred.

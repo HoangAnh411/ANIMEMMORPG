@@ -14,6 +14,7 @@ param(
 )
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot '../U01/FReviewHost.ps1')
+. (Join-Path $PSScriptRoot 'PreserveDLauncherLogs.ps1')
 $project=(Resolve-Path -LiteralPath $CloneProject).Path
 if($project -notlike ("*\Artifacts\U03\"+$Stage+"\Source\*")){throw 'Isolated stage clone required'}
 & python (Join-Path $PSScriptRoot 'PrepareDCloneConfig.py') --root (Split-Path $project)
@@ -32,6 +33,7 @@ foreach($role in $roles){
  $settingsRoot=if($PersistSettings -and $role -ne 'Server'){Join-Path (Join-Path $PSScriptRoot '../../Artifacts/U03/D/UserSettings/Network') $role}else{$user}
  $settingsRoot=[IO.Path]::GetFullPath($settingsRoot)
  New-Item -ItemType Directory -Path $settingsRoot -Force | Out-Null
+ if($PersistSettings -and $role -ne 'Server'){Backup-U03DStableSdkLog $user $settingsRoot}
  $arguments=@(('"'+$project+'"'))
  if($role -eq 'Server'){$arguments+=@('/Game/AnimeMMORPG/Maps/L_NetworkLab','-server',('-port='+$Port),'-NullRHI','-nosound')}
  else{$arguments+=@(('127.0.0.1:'+$Port),'-game','-windowed','-ResX=900','-ResY=540',('-WinX='+$(if($role -eq 'ClientA'){0}else{940})),'-WinY=100')}
@@ -83,7 +85,7 @@ foreach($role in $roles){
  foreach($record in $records){
   $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$record.pid)
   if($live -and $live.Name -eq 'UnrealEditor.exe' -and $live.CommandLine.Contains($record.project) -and $live.CommandLine.Contains($record.userDir)){
-   try{Stop-Process -Id $record.pid}catch{Write-Warning ('Could not stop own failed-start process '+$record.pid)}
+   try{Stop-Process -Id $record.pid;Wait-Process -Id $record.pid -Timeout 10 -ErrorAction SilentlyContinue;Restore-U03DStableSdkLog $record}catch{Write-Warning ('Could not stop/restore own failed-start process '+$record.pid+': '+$_.Exception.Message)}
   }
  }
  throw $failure

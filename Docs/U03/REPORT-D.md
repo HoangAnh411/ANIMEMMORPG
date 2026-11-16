@@ -1,70 +1,46 @@
-# U03-D — READY_FOR_REVIEW
+# U03-D-R1 — READY_FOR_REVIEW
 
-Đã hoàn thiện trình bày/settings blockout và kiểm tích hợp U03.01–U03.09. **Chưa ACCEPTED, chưa merge main, chưa khép U03; chưa triển khai U04.** Reviewer AI đối chiếu kỹ thuật; người dùng chơi thử cảm giác/hình ảnh và cho phép khép là bước riêng.
+Sửa lượt D bị **NOT ACCEPTED tại f6d0f68** vì nhãn/khung/âm dùng phép chiếu camera mà chưa kiểm che khuất. Source runtime cuối **`0b255233df021f2cc148313e638d918d41a4a11e`**, nhánh `u03/d-integration`; main nền vẫn `bc3a9955a8c0ecc1cb7f0d43dce13300c9664ac9`. Chưa ACCEPTED, chưa merge, chưa khép U03, chưa U04. Reviewer AI đối chiếu kỹ thuật; người dùng chơi thử cảm giác/hình ảnh và cho phép khép là cổng riêng.
 
-Main nền `bc3a9955a8c0ecc1cb7f0d43dce13300c9664ac9`, nhánh `u03/d-integration`. Source runtime cuối **`9da1b43aa8ed49bd83226f76fe2b816db0d64f24`**. Các commit hồ sơ/harness sau source này không đổi `Source/` hoặc `Content/`; không chạy lại build/tests chỉ vì sửa báo cáo. [Manifest](../../Evidence/D/MANIFEST.json) giữ hash raw/published, binary, package index48 file, engine/toolchain, PID/world/owner/role và từng test. [Ma trận](../../D-TEST-MATRIX.md), [bao phủ U03](../../CLOSURE-D.md), [hợp đồng](../../D-CONTRACTS.md).
+## Sửa lỗi
 
-## Bản chơi
+Nhãn phase/guard/CC/dodge và phản hồi/audio tái dùng đúng projection/LOS C2: bỏ qua combat bodies, trace môi trường channel 2 từ camera của LocalPlayer tới information point và anchor nhãn. Đối thủ bị che hoặc ngoài màn hình không hiện nhãn/phản hồi, không tạo âm; voice đang phát dừng khi mất visibility hoặc đổi life/scope.
 
-[Solo](../../Play-U03-D.cmd), [hai cửa sổ](../../Play-U03-D-Network.cmd), [Stop](../../Stop-U03-D.cmd), [checklist](../../Play-U03-D-CHECKLIST.md). Package đã xác minh tại `Artifacts/U03/D/Runs/Package-20261115-221157/Archive/Windows`; dedicated Editor và client dùng một clone `Artifacts/U03/D/Source` đúng source/binary.
+Sword box và mũi tên chuyển khỏi Canvas sang primitive world trong module hiện có: normal world PDI, `SDPG_World`, depth bias 0, không debug PDI. GPU depth-test từng pixel nên phần cạnh bị tường che bị cắt ngay cả khi anchor quái vẫn thấy. Geometry giữ nguyên 200×120×180 cm và yaw từ snapshot; component không collision/nav, không dịch capsule hoặc quyết định hit. Dedicated server không tạo component này, audio hay UI.
 
-Launcher giữ guard source/module/engine/package/port và PID + executable + source + **log session duy nhất**. Chỉ minimize Editor gốc sau clients ready; Stop đúng session và khôi phục placement. Settings launcher lưu riêng, ổn định dưới `Artifacts/U03/D/UserSettings/Solo` và `Network/ClientA`, `Network/ClientB`; reconnect giữ thư mục preferences của A, nhưng nhận encounter/life mới. Không đóng/restart/save Editor gốc. Play trong Editor gốc không mặc định là D.
+Capture mới còn phát hiện history có thể tới trước ước lượng clock server của client: tiêu thụ serial trước timestamp làm mất âm fresh. R1 giữ event chưa tiêu thụ tới khi chính clock đó đạt timestamp; không đổi clock, timestamp, cửa sổ 1,2 giây hoặc ngưỡng âm 150 ms. Event đủ điều kiện nhưng bị che vẫn được tiêu thụ im lặng; hiện lại không phát lại âm. Snapshot trễ chỉ còn lifetime gốc. Giữ source/target/life/action/serial/encounter revision và reconnect baseline.
 
-## Thay đổi và ranh giới
+Không đổi model/timing/damage/admission/defense/dodge/motor/authority/Retry, clip/carry/grip, schema settings hoặc nội dung U04. Fixture R1 chỉ bật bằng `-U03R1VisibilityProbe`, dùng camera/tường riêng sau trạm và input/combat authority thật; launcher bình thường không bật fixture.
 
-Tái dùng UU01AnimInstance, U02 confirmed history, asset authoring U03 và encounter HUD. Giữ nguyên Attack1–3/Q/E, carry/grip, socket và skeleton đã nghiệm thu; thêm năm pose gốc cố định cho dodge/guard/break/hard CC/X, mười sequence/montage dưới `U03/Animation/D`. AnimBP thêm slot presentation. Asset test kiểm dependencies/root/no gameplay notify; clip và animation không dịch capsule hoặc quyết định hit.
+## Cổng trên source cuối
 
-Canvas trình bày windup/strike/recovery, hướng và sword box200×120×180cm đúng hình học hiện có; pose quái lấy server clock, không phát lại startup của snapshot muộn. Hit/block/parry/miss/break/Feint/Interrupt có nhãn/hình và tín hiệu riêng; parry giữ vòng tròn và biểu thức PCM hai nốt660→990Hz cũ. Tín hiệu mới là PCM tổng hợp blockout do project tạo, không mua/tải: hit440, block220, miss160, break110, X1320Hz, Feint chirp880 đi xuống, Interrupt330 đi lên. PCM24kHz mono16-bit/.24s; WAV bằng chứng là loopback48kHz stereo, không microphone. [Provenance/hash](../../Evidence/D/MANIFEST.json).
-
-Mỗi event gắn subject/life/action/event serial và encounter/revision. Visual hết tại timestamp authority+1,2s; snapshot lặp không kéo dài. Audio chỉ cho event mới, thấy được, tuổi≤150ms; initial-only watermark làm history trước connection im lặng. Voice đang phát dừng khi life nguồn/đích hoặc encounter scope đổi. Dedicated server không tạo audio/UI. Overlay chẩn đoán có cờ riêng `-U03PresentationDebug`; fixture cuối kiểm với on-screen debug messages tắt.
-
-Miss được quan sát từ **kết quả hoàn tất tự nhiên của authority timeline**, sau resolver; contact đã áp dụng gồm block/parry đều chặn miss. Cancel không thêm miss. Hook mới chỉ xuất dữ liệu, không sửa state/admission/damage/timing/motor. Các luật A0–C2, lethal cutoff, defense, dodge trajectory, authority, Retry và encounter riêng vẫn giữ nguyên. Không thêm shared monster zone, skill, balance, progression, prediction hoặc packaged Server.
-
-HUD đọc HP/energy/posture/dodge charges/recharge/Q-E-X cooldown/CC và binding thật; không dựng tám kỹ năng. HP vừa trúng đọc confirmed history, kiểm life/revision và cửa sổ1,2s; dùng cùng projection/environment camera LOS của C2, không thay Tab target. Video ghi HP hit khi Tab tắt; camera/occlusion được kiểm bằng target fixture và helper chung. Kết quả/Retry vẫn đọc authority; giữ AwaitingResume/release gate, click Retry không attack/Resume. A/B là trạm encounter riêng, không phải quái chung.
-
-Giữ UU01SettingsSubsystem, JSONv2 và SaveGame hiện có, không tăng schema hoặc lưu combat. Validation toàn bộ binding, conflict-closure v1/v2, file thiếu/hỏng/unsupported và no load-time rewrite có Native tests. Migration dùng slot UUID trong clone, không settings người dùng. Input thật kiểm rebind/save, giữ phím qua menu/focus/Resume/Retry; năm vòng Boot và Quit/reopen giữ preferences, không giữ HP/cooldown thành tiến trình.
-
-## Cổng source cuối
-
-|Cổng|Kết quả / run dưới `Artifacts/U03/D/Runs`|
+| Cổng | Kết quả mới R1 |
 |---|---|
-|Generate / Editor / Game|PASS exit0; `Build-20261115-220654`|
-|Full Automation MCP|**137 Success, 0 Failed**:131 định nghĩa nền chạy mới +6 D; `MCPTests-20261115-221026`; từng completion TestRunner/GetLogEntries được kiểm|
-|Windows package|BUILD SUCCESSFUL exit0; `Package-20261115-221157`|
-|Blueprint/references|16 Blueprint compile, không missing game reference; `Assets-20261115-221349`; audit không save asset|
-|Ba map smoke|PASS Boot/CharacterCombatLab/NetworkLab; `Smoke-20261115-221300`|
-|Combat input/video/audio|24 PASS; `FinalCombat-20261115-221500`; parry một cụm660 rồi một cụm990, không lặp history|
-|Route/Return|11 PASS; `FinalRoute-20261115-221600`|
-|Tab/visibility/rebind|15 PASS; `FinalTarget-20261116-120000`|
-|Fixture presentation|15 PASS; `FinalRegression-20261116-120100`; Feint/Interrupt, block/parry/break/CC/X, held inputs, rebind; đủ dải âm, debug messages tắt|
-|Boot / settings reopen|5 vòng; `FinalLifecycle-20261115-222100`, `FinalReopen-20261116-115900`; thêm kiểm ngay launcher ổn định ở `LauncherSave-20261116-121900`/`LauncherReopen-20261116-122000`, restore defaults bằng UI sau kiểm|
-|Dedicated + hai client/reconnect|26 PASS +41 đối chiếu độc lập; `LauncherNetwork-20261116-122200`; HP/resource/action/result/revision, owner/proxy, Retry A không đổi B, claims cũ/lặp/unowned, logout/reconnect/new identity|
-|Feedback audit|4 process; dedicated0 HUD event, client không lặp identity; audio freshness đúng; Native tests thêm late/future/initial-history/new-life scope. Không tuyên bố đã tiêm packet mạng tùy ý|
-|Launcher|3 guard mismatch PASS; mở trùng Solo và port bận đều từ chối; positive Solo/Network/Stop + placement restore; preferences A/B tách biệt, reconnect dùng lại preferences A|
+| Editor/Game và Windows package | PASS; package index 48 file |
+| Full Automation U00–U03 | **140 Success, 0 Failed**: 131 nền + 6 D + 3 R1; từng test trong manifest/log MCP |
+| Timing/model/world | Nằm trong full suite: bước 30/60/120 và update dài; không gọi đó là FPS render |
+| Blueprint/reference và smoke | 16 Blueprint compile, không thiếu dependency; Boot/CombatLab/NetworkLab 3/3 |
+| Hai client: tường/reveal/expiry/partial telegraph | 20 kiểm tra input/video/loopback, debug overlay và stat tắt; audit độc lập 17 kiểm |
+| Package Solo | Combat 24; Tab/LOS/rebind 15; fixture defense/CC/X/Feint/Interrupt/held-input 15; loopback parry 660→990 và tín hiệu tổng hợp |
+| Dedicated Editor + hai client/reconnect | 26 kiểm; 41 so sánh độc lập HP/action/resource/AI/result/revision; Retry A không đổi B |
+| Launcher/Stop | Guard hash package/module/source 3/3; runtime Solo/Network và scoped Stop/placement được ghi riêng |
 
-Native timing/model/world được kiểm tại bước30/60/120 và update dài, kể cả miss với hit/block/parry/cancel. Bộ hồi quy giữ dodge tường/StepUp/hai pawn, lethal cutoff, combat lock/focus. **Các bước model/world này không phải FPS render thực đo.**
+[0b25523: ảnh phần telegraph bị che](../../Evidence/D-R1/Runs/R1/Visibility-06/ClientA-partial-depth.png), [video R1](../../Evidence/D-R1/Runs/R1/Visibility-06/Visibility.mp4), [loopback R1](../../Evidence/D-R1/Runs/R1/Visibility-06/Output-Loopback.wav), [video mạng/reconnect](../../Evidence/D-R1/Runs/R1/Network-02/Network-D.mp4). Midpoint LOS trong diagnostics chỉ giúp chọn cảnh, **không thay cho depth test từng pixel**; source proxy và ảnh/video GPU là bằng chứng cắt phần che.
 
-## Profile review thực đo
+## Profile và bản chơi
 
-Mẫu frame/tick lấy chênh lệch timestamp monotonic mỗi game/render frame, trong đoạn authority có combat và đủ hai cặp subject; giữ toàn bộ raw frames, world dt và raw game/render/GPU stats riêng. Không suy GPU cost từ cap hoặc FPS từ bước model. [Profile](../../Evidence/D/Runs/Runs/LauncherNetwork-20261116-122200/profile.json.gz).
+Combat runtime đo bằng timestamp wall mỗi frame: Server PID 13552: 29.93 FPS, p99 40.28 ms; ClientA PID 19640: 59.85 FPS, p99 22.81 ms; ClientB PID 14032: 60.00 FPS, p99 20.60 ms; ClientA PID 2408: 59.42 FPS, p99 21.14 ms. Cap client60/server30; 900×540 mỗi client, internal 50%, Lumen atlas 2048, RT minimum 128 MiB, texture pool 256 MiB và render profile giản lược giữ đúng launcher C2/D. Không đổi cap, smoothing, input để che khựng. Đây là profile review, chưa nghiệm thu đồ họa/hiệu năng U04; video encode 30 FPS là thông số khác.
 
-|Process / PID|Cadence trung bình (Hz)|P99 frame/tick ms|Max ms trong mẫu|
-|---|---:|---:|---:|
-|Server / 18264|29.94|39.92|46.74|
-|Client A / 5488|59.88|21.69|115.34|
-|ClientB / 10932|60.00|20.25|21.90|
-|Client A reconnect / 6588|59.61|21.73|117.40|
+[Solo](../../Play-U03-D.cmd), [Network](../../Play-U03-D-Network.cmd), [Stop](../../Stop-U03-D.cmd), [checklist](../../Play-U03-D-CHECKLIST.md). Package: `Artifacts/U03/D/Runs/Package-20261116-140739/Archive/Windows`. Một clone D duy nhất `Artifacts/U03/D/Source` ghim source trên; manifest guard source/module/engine/package/port/PID/executable/log. Chỉ minimize Editor gốc sau clients ready, scoped Stop khôi phục placement; không save/restart/đóng Editor gốc. Play Editor gốc không mặc định là D. Preferences launcher vẫn ở thư mục user riêng của Solo/A/B; kiểm migration/rebind dùng slot cô lập, không sửa settings người dùng.
 
-Giữ đúng C2: client900×540, cap60/server30, foreground idle0, screen percentage50, Lumen atlas2048, RT pool128MiB, streaming pool256MiB, Lumen diffuse/reflections0, virtual shadows0, shadow quality2, DX12/SM6. Runtime smoothing mode2/location0,1s, net update100/min2 giữ nguyên. Source không đổi cap/smoothing/input để che khựng. Có spike frame như bảng; đây là **profile review giảm chất lượng trên cùng máy, không nghiệm thu graphics/performance U04 hoặc cam kết60FPS/1080p**. Cảm giác vẫn chờ người dùng chơi thử.
+## Bằng chứng, lượt lỗi và giới hạn
 
-## Dấu vết, lỗi giữ lại và giới hạn
+[Manifest R1](../../Evidence/D-R1/MANIFEST.json) giữ source/engine/toolchain/PID/world/owner/role, hash raw/published, binary/package, từng cổng và profile. [Warnings](../../Evidence/D-R1/WARNINGS.json), [matrix R1](../../D-R1-TEST-MATRIX.md), [bao phủ U03](../../CLOSURE-D.md). MSVC 14.51.36260/SDK 10.0.26100.0; engine build chính xác nằm trong manifest. Cảnh báo compiler không thuộc bản preferred, deprecation/fixture và loopback discontinuity được giữ; không khẳng định audio sample-exact.
 
-C2 131 tests/package/network/video ở manifest C2 là baseline kế thừa, không tính là lượt D mới. Checkpoint D ban đầu `5cc8574` và manifest cũ giữ tại `Evidence/D/Checkpoints/INITIAL-MANIFEST.json`. Report gốc `REPORT-D.md` chỉ còn pointer tới tài liệu này, tránh hai trạng thái.
+Giữ các lượt lỗi/không hợp lệ: compile fixture thiếu `OutLifetimeProps`; camera attach xoay theo pawn; strafe/quái đuổi làm sai cảnh partial; harness đòi log cho event đã tiêu thụ; combo bấm sớm hơn buffer; phát hiện mất âm future-history; overload assertion test. Manifest phân biệt chúng với cổng cuối. Không bỏ lỗi rồi gọi toàn đợt PASS.
 
-Giữ tất cả pre-final/failed/invalid runs: build đầu lỗi auto pointer/TObjectPtr (đã sửa `.Get()`); lượt build nhầm source cũ khi fast-forward bị untracked author script chặn; solo đầu thiếu history actor nên không audio (đã sửa khởi tạo); lần bấm parry ngoài cửa sổ ghi rõ guardStart/end và deadline, không đổi luật; fixture E đã Interrupt nhưng assertion dùng trace chưa xuất (harness đổi sang confirmed result); lỗi seal đường dẫn tương đối chỉ ở harness. Không đếm các lượt này vào cổng cuối. Sealer giữ raw hash, published hash, decode/round-trip và redaction; [warnings](../../Evidence/D/WARNINGS.json) giữ compiler14.51 mới hơn preferred14.50, engine deprecations, NoMesh của native fixtures, host SDK warnings và loopback warnings ở lượt cũ. Fixture loopback cuối không có discontinuity; bản thu không là nghiệm thu audio sản phẩm/latency.
+[Evidence D cũ](../../Evidence/D/MANIFEST.json) giữ nguyên: 534 raw + 534 published và 48 file package vẫn khớp hash. Trạng thái READY cũ là lịch sử của lượt bị từ chối, không là ACCEPTED. Clone DLL là output mutable đã được rebuild sang R1; hash DLL D cũ chỉ là tham chiếu lịch sử, không nói clone hiện còn chứa DLL cũ. Package, media, log và manifest D cũ không bị dọn/ghi đè. Năm vòng Boot/settings reopen và capture terrain D trước được kế thừa về bằng chứng; không giả ghi thành lượt R1. Tests timing/dodge wall/StepUp/two-pawn/lethal/combat lock được chạy mới trong full 140.
 
-Header/reflection đã qua full UBT/cold clone. Không dùng warning Live Coding05:03:56UTC của C2 làm kết quả D; yêu cầu Live Coding D trước đó không có completion mới. Source/engine/toolchain và PID được ghi theo từng run, không dùng Editor world làm bằng chứng pawn PIE. Không enable AllToolsets.
+Runtime Editor client đã ghi lại hai `AutoSDKInfo.json` trong thư mục preferences A/B dùng chung. R1 lưu bản mới riêng, phục hồi byte gốc từ bản published đúng hash; launcher nay backup/restore riêng SDK log và không sửa preferences. Guard live-process và Stop lặp đã kiểm. Lượt guard phục hồi ban đầu từ chối cũng được giữ trong hồ sơ.
 
-Config riêng vẫn SHA256 `412b42b66583f9b6e4ecdc63cd2423457bf0b1a3d192f5b0f18375ee801f8161`; Maintenance không chạm/stage. `.uproject` xuất hiện dirty ngoài phần D và được bảo toàn, không commit. Editor gốc đổi PID ngoài các lượt task trong khoảng gián đoạn; mỗi session chỉ minimize/restore HWND/PID hợp lệ của lượt đó. Không cộng các khoảng gián đoạn15→16/11 thành thời gian làm việc.
-
-Điểm dừng: **READY_FOR_REVIEW U03-D**. Người dùng chỉ cần chơi theo checklist để đánh giá readability, âm/hình, grip/pose, HUD/occlusion và cảm giác Retry/focus/hai cửa sổ. AI chịu trách nhiệm kiểm kỹ thuật/hash/authority/timing; chưa tự ACCEPTED, merge, khép U03 hoặc làm U04. Art sản phẩm tiếp tục deferred.
+Config riêng, `.uproject`, Maintenance và Editor gốc được bảo toàn; PID gốc11880 giữ nguyên thời điểm khởi chạy. Các commit hồ sơ/harness sau source trên không đổi `Source/Content`; không build/test lại chỉ vì sửa báo cáo. Mannequin/blockout và art/animation sản phẩm vẫn deferred. **Điểm dừng: READY_FOR_REVIEW D-R1.**

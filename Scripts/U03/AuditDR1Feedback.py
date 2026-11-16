@@ -21,16 +21,20 @@ for role in ['ClientA','ClientB']:
  check(role+' old serial stays absent across Retry',partial['encounter']['revision']>hidden['encounter']['revision'] and not any(e['serial']==serial for e in partial['presentation']['events']))
 pat=re.compile(r'U03D_FEEDBACK serial=(\d+) kind=(\d+) subject=(\w+) life=(\d+) action=(\d+) encounter=(\w+) revision=(\d+) at=([\d.]+) now=([\d.]+) audio=(\d+)')
 records=read(a.session/('all-processes.json' if (a.session/'all-processes.json').exists() else 'processes.json'));rows=[]
+network=read(a.out/'network.json');old=next(s['metrics'] for s in network['stages'] if s['stage']=='BeforeDisconnect');new=next(s['metrics'] for s in network['stages'] if s['stage']=='AfterReconnect')
 for process in records:
- seen=set();audible=0
+ seen=set();audible=0;oldScopeAudio=0
  with Path(process['log']).open(encoding='utf-8-sig') as f:
   for line in f:
    match=pat.search(line)
    if not match:continue
    serial,kind,subject,life,action,encounter,revision,at,now,sound=match.groups();identity=(serial,subject,life,action,encounter,revision)
    assert identity not in seen,(process['pid'],identity);seen.add(identity)
-   if sound=='1':assert -1.e-6<=float(now)-float(at)<=.150001;audible+=1
+   if sound=='1':
+    assert -1.e-6<=float(now)-float(at)<=.150001;audible+=1
+    if process['pid']==new['pid'] and encounter==old['encounter']['id']:oldScopeAudio+=1
  if process['role']=='Server':check('Dedicated server emits no HUD/audio feedback',not seen)
+ if process['pid']==new['pid']:check('Real reconnect never sounds feedback from the departed encounter',oldScopeAudio==0)
  rows.append(dict(role=process['role'],pid=process['pid'],events=len(seen),audible=audible,duplicateIdentities=0))
 with wave.open(str(a.visibility/'Output-Loopback.wav')) as w:x=np.frombuffer(w.readframes(w.getnframes()),'<i2').reshape(-1,2).mean(axis=1)/32768;rate=w.getframerate()
 bands={str(hz):[] for hz in [330,440]}

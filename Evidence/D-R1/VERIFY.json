@@ -1,0 +1,19 @@
+{
+  "completed": true,
+  "status": "READY_FOR_REVIEW",
+  "source": "0b255233df021f2cc148313e638d918d41a4a11e",
+  "manifestSHA256": "c3512d322ac3a30c58aa73b6e669bad932922eaef014f77450f9990545553603",
+  "rawVerified": 562,
+  "publishedVerified": 562,
+  "packageVerified": 48,
+  "protectedFiles": true,
+  "sourceContentUnchanged": true,
+  "docs": {
+    "Docs/U03/REPORT-D.md": "1e62e118c6ea70ec3d9de7525d467ff861c123a18c2d053b9c833e48b30253ef",
+    "REPORT-D.md": "2e491f5a44d9603e6b74ccc1e1f861fde91a87ca552671764517a3849ff15f32",
+    "CLOSURE-D.md": "1f23564b486ae950c6d9660b63b579e5a48b876fe1e524edd557de2bc035b1e4",
+    "D-R1-CONTRACTS.md": "9d489e9fc66916639c408c2f0ee26898e0931731561fa84d3da6322a0c8db911",
+    "D-R1-TEST-MATRIX.md": "d7c32265f41c0d3a869cadef586a632a5dc58d87449db27dc27c05c864b36762",
+    "Play-U03-D-CHECKLIST.md": "2cb08037c66c1a91fa71fe2e3849b9f92240378f57a85975a4784f2febb47e8a"
+  }
+}

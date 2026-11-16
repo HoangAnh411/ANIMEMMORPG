@@ -1,3 +1,5 @@
+> D-R1 supersedes presentation visibility/Canvas telegraph details and the old final-run status below. D at f6d0f68 was NOT ACCEPTED. This file retains the D baseline; current source/gates are [REPORT-D](Docs/U03/REPORT-D.md) and [R1 matrix](D-R1-TEST-MATRIX.md).
+
 # U03-D contracts
 
 Status: contract retained; final technical gates are READY_FOR_REVIEW in Docs/U03/REPORT-D.md. This contract is not acceptance.

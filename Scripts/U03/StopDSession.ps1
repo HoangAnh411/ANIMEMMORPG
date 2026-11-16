@@ -1,5 +1,6 @@
 param([Parameter(Mandatory=$true)][string]$SessionPath,[ValidateSet('D')][string]$Stage='D')
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'PreserveDLauncherLogs.ps1')
 $session=(Resolve-Path -LiteralPath $SessionPath).Path
 $allowed=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot ('../../Artifacts/U03/'+$Stage))).Path
 if(!$session.StartsWith($allowed+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Only isolated U03-D sessions may be stopped'}
@@ -16,6 +17,7 @@ foreach($record in $records){
  Wait-Process -Id $record.pid -Timeout 10 -ErrorAction SilentlyContinue
  Write-Output ('Stopped own '+$record.role+' PID '+$record.pid)
 }
+foreach($record in $records){Restore-U03DStableSdkLog $record}
 
 $editorFile=Join-Path $session 'original-editor-windows.json'
 if(Test-Path -LiteralPath $editorFile){
