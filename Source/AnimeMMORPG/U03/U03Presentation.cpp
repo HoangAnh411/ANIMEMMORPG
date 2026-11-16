@@ -24,6 +24,7 @@ void AU03EncounterHUD::DrawPresentation()
     if(GetNetMode()==NM_DedicatedServer||!Canvas||!PlayerOwner||!PlayerOwner->GetLocalPlayer())return;
     const auto* PC=Cast<AU01PlayerController>(PlayerOwner);if(!PC)return;
     const bool Probe=FParse::Param(FCommandLine::Get(),TEXT("U03R1VisibilityProbe"));
+    if(Probe)DrawText(TEXT("D-R1 VISIBILITY FIXTURE | real authority combat | world depth telegraph"),FLinearColor::White,20,Canvas->ClipY-25);
     TArray<TSharedPtr<FJsonValue>> ActorRows,EventRows;
     const auto* Clock=GetWorld()->GetGameState();const double Now=Clock?Clock->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds();
     FeedbackVoices.RemoveAll([&](const FFeedbackVoice& V)

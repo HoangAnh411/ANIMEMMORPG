@@ -1,7 +1,7 @@
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
-$manifestFile=Join-Path $root 'Evidence/D/MANIFEST.json'
-$csvFile=Join-Path $root 'Evidence/D/PACKAGE.csv'
+$manifestFile=Join-Path $root 'Evidence/D-R1/MANIFEST.json'
+$csvFile=Join-Path $root 'Evidence/D-R1/PACKAGE.csv'
 $manifestBytes=[IO.File]::ReadAllBytes($manifestFile)
 $csvBytes=[IO.File]::ReadAllBytes($csvFile)
 $checks=@()
@@ -30,5 +30,5 @@ try{
  [IO.File]::WriteAllBytes($manifestFile,$manifestBytes)
  [IO.File]::WriteAllBytes($csvFile,$csvBytes)
 }
-@{completed=$true;checks=$checks;manifestRestoredByteForByte=([Convert]::ToBase64String([IO.File]::ReadAllBytes($manifestFile)) -eq [Convert]::ToBase64String($manifestBytes));packageIndexRestoredByteForByte=([Convert]::ToBase64String([IO.File]::ReadAllBytes($csvFile)) -eq [Convert]::ToBase64String($csvBytes))} | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $root 'Artifacts/U03/D/Audit/LAUNCH-GUARDS.json')
+@{completed=$true;checks=$checks;manifestRestoredByteForByte=([Convert]::ToBase64String([IO.File]::ReadAllBytes($manifestFile)) -eq [Convert]::ToBase64String($manifestBytes));packageIndexRestoredByteForByte=([Convert]::ToBase64String([IO.File]::ReadAllBytes($csvFile)) -eq [Convert]::ToBase64String($csvBytes))} | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $root 'Artifacts/U03/D/R1/LAUNCH-GUARDS.json')
 Write-Output ('PASS '+$checks.Count+' launcher refusal guards; original manifest/index bytes restored')

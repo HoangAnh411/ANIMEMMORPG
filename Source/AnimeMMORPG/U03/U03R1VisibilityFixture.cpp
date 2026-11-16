@@ -33,6 +33,5 @@ void AU01PlayerController::ClientU03R1Camera_Implementation()
 {
     if(!FParse::Param(FCommandLine::Get(),TEXT("U03R1VisibilityProbe"))||!GetPawn())return;
     if(!R1Camera)R1Camera=GetWorld()->SpawnActor<ACameraActor>();
-    R1Camera->AttachToActor(GetPawn(),FAttachmentTransformRules::KeepRelativeTransform);
-    R1Camera->SetActorRelativeLocation(FVector(-600,0,120));R1Camera->SetActorRotation(FRotator(-9,0,0));SetViewTarget(R1Camera);
+    R1Camera->SetActorLocation(GetPawn()->GetActorLocation()+FVector(-600,0,120));R1Camera->SetActorRotation(FRotator(-9,0,0));SetViewTarget(R1Camera);
 }

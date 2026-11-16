@@ -1,5 +1,6 @@
 #include "U01PlayerController.h"
 #include "U03/U03Encounter.h"
+#include "Camera/CameraActor.h"
 #include "U01Character.h"
 #include "U01PhysicalInput.h"
 #include "U02/U02CombatComponent.h"
@@ -174,6 +175,8 @@ void AU01PlayerController::PlayerTick(float DeltaTime)
 
 void AU01PlayerController::UpdateCameraManager(float DeltaSeconds)
 {
+    if(R1Camera&&GetPawn()&&FParse::Param(FCommandLine::Get(),TEXT("U03R1VisibilityProbe")))
+    {R1Camera->SetActorLocation(GetPawn()->GetActorLocation()+FVector(-600,0,120));R1Camera->SetActorRotation(FRotator(-9,0,0));}
     Super::UpdateCameraManager(DeltaSeconds);
     if (!IsLocalPlayerController() || GetNetMode() == NM_DedicatedServer) return;
     UpdateEncounterInformation();

@@ -52,7 +52,7 @@ try:
   c.focus();observed=c.probe_w()
   if observed!='W':c.toggle_ime();c.ime=True;observed=c.probe_w()
   assert observed=='W'
-  c.console('DisableAllScreenMessages');c.console('U03R1Scene');playing(c)
+  c.console('stat unit');c.console('DisableAllScreenMessages');c.console('U03R1Scene');playing(c)
   until(lambda:actor(c) and not actor(c)['visible']);snap(c,c.record['role']+'-full-wall')
   check(c.record['role']+' environment hides opponent labels',not actor(c)['subjectClear'] and not actor(c)['visible'])
   until(lambda:c.metrics()['encounter']['monsterCombat']['phase']==1 and c.metrics()['encounter']['monsterCombat']['serverSnapshotSeconds']<c.metrics()['encounter']['monsterCombat']['start']+.15)

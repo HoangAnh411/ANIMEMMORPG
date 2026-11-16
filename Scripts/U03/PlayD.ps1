@@ -1,10 +1,10 @@
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
-$manifest=Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $root 'Evidence/D/MANIFEST.json') | ConvertFrom-Json
+$manifest=Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $root 'Evidence/D-R1/MANIFEST.json') | ConvertFrom-Json
 $package=(Resolve-Path -LiteralPath (Join-Path $root $manifest.packageRelativePath)).Path
 $allowed=[IO.Path]::GetFullPath((Join-Path $root 'Artifacts/U03/D/'))
 if(!$package.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'Unexpected package path'}
-foreach($entry in (Import-Csv -LiteralPath (Join-Path $root 'Evidence/D/PACKAGE.csv'))){
+foreach($entry in (Import-Csv -LiteralPath (Join-Path $root 'Evidence/D-R1/PACKAGE.csv'))){
  $file=[IO.Path]::GetFullPath((Join-Path $package $entry.path))
  if(!$file.StartsWith($package+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase) -or !(Test-Path -LiteralPath $file) -or (Get-FileHash -LiteralPath $file).Hash -ine $entry.sha256){throw ('Package hash mismatch: '+$entry.path)}
 }
