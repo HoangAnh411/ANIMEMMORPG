@@ -1,5 +1,7 @@
 # U03-D-R1 contracts
 
+**ACCEPTED về kỹ thuật D-R1 tại `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`**, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`. Người dùng cho phép khép hồ sơ D và fast-forward/push main. [Acceptance](Docs/U03/ACCEPTANCE-D-R1.md). Trạng thái READY_FOR_REVIEW/chưa ACCEPTED/không merge dưới đây là lịch sử bàn giao. Lượt khép chỉ sửa tài liệu, không chạy lại build/tests/game hoặc tác động Editor. **Chưa khép toàn U03/U04; playtest đọc đòn/âm/pose/HUD/điều khiển D còn chờ người dùng, art vẫn blockout.**
+
 Runtime source `0b255233df021f2cc148313e638d918d41a4a11e`. D at f6d0f68 was NOT ACCEPTED. R1 introduces no gameplay decision or authority/motor/damage change; 35 model/U02/motor/character/animation blobs match that baseline exactly, and remaining C++ edits are presentation or explicitly flagged capture fixtures.
 
 * C2 projection and environment query are shared unchanged with Tab/HP. Canvas subject cues and event audio require the subject information point and label anchor to be on screen and clear from the LocalPlayer camera. Combat bodies are excluded from the environment trace. This does not select a target or change Tab retention.

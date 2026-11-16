@@ -10,4 +10,4 @@ Mở **Play-U03-D.cmd** (Solo) hoặc **Play-U03-D-Network.cmd** (hai cửa sổ
 
 Escape → **Open regression stations (separate run)** vào trạm fixture có nhãn. **Back to Boot** trở về. Settings lưu riêng Solo/A/B dưới `Artifacts/U03/D/UserSettings`; reconnect giữ preferences, không giữ combat progress.
 
-AI chịu trách nhiệm hash/authority/timing và các cổng kỹ thuật. Người dùng chơi thử cảm giác/hình ảnh và cho phép khép riêng. Hiện chỉ READY_FOR_REVIEW D-R1, chưa ACCEPTED/merge/khép U03/U04; art sản phẩm tiếp tục deferred.
+AI chịu trách nhiệm hash/authority/timing và các cổng kỹ thuật. Người dùng chơi thử cảm giác/hình ảnh và cho phép khép riêng. D-R1 đã ACCEPTED về kỹ thuật tại a7737f9 và được phép khép hồ sơ D/fast-forward main. Người dùng vẫn cần chơi thử các mục trên; chưa khép toàn U03 hoặc bắt đầu U04. Art sản phẩm tiếp tục deferred.

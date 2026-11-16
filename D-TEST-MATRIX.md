@@ -1,5 +1,7 @@
 > D-R1 supersedes presentation visibility/Canvas telegraph details and the old final-run status below. D at f6d0f68 was NOT ACCEPTED. This file retains the D baseline; current source/gates are [REPORT-D](Docs/U03/REPORT-D.md) and [R1 matrix](D-R1-TEST-MATRIX.md).
 
+**ACCEPTED về kỹ thuật D-R1 tại `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`**, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`. Người dùng cho phép khép hồ sơ D và fast-forward/push main. [Acceptance](Docs/U03/ACCEPTANCE-D-R1.md). Trạng thái READY_FOR_REVIEW/chưa ACCEPTED/không merge dưới đây là lịch sử bàn giao. Lượt khép chỉ sửa tài liệu, không chạy lại build/tests/game hoặc tác động Editor. **Chưa khép toàn U03/U04; playtest đọc đòn/âm/pose/HUD/điều khiển D còn chờ người dùng, art vẫn blockout.**
+
 # U03-D — final test matrix
 
 READY_FOR_REVIEW; runtime source9da1b43. 137 Success/0 Failed từ MCP cold clone. Báo cáo chính: [Docs/U03/REPORT-D](Docs/U03/REPORT-D.md); tên từng test/completion, logs, PID/world/owner/role và hash ở [manifest](Evidence/D/MANIFEST.json). C2 historical results là kế thừa; không đếm làm D mới.

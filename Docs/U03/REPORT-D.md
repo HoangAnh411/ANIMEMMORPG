@@ -1,4 +1,6 @@
-# U03-D-R1 — READY_FOR_REVIEW
+# U03-D-R1 — ACCEPTED về kỹ thuật
+
+**ACCEPTED về kỹ thuật D-R1 tại `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`**, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`. Người dùng cho phép khép hồ sơ D và fast-forward/push main. [Acceptance](ACCEPTANCE-D-R1.md). Trạng thái READY_FOR_REVIEW/chưa ACCEPTED/không merge dưới đây là lịch sử bàn giao. Lượt khép chỉ sửa tài liệu, không chạy lại build/tests/game hoặc tác động Editor. **Chưa khép toàn U03/U04; playtest đọc đòn/âm/pose/HUD/điều khiển D còn chờ người dùng, art vẫn blockout.**
 
 Sửa lượt D bị **NOT ACCEPTED tại f6d0f68** vì nhãn/khung/âm dùng phép chiếu camera mà chưa kiểm che khuất. Source runtime cuối **`0b255233df021f2cc148313e638d918d41a4a11e`**, nhánh `u03/d-integration`; main nền vẫn `bc3a9955a8c0ecc1cb7f0d43dce13300c9664ac9`. Chưa ACCEPTED, chưa merge, chưa khép U03, chưa U04. Reviewer AI đối chiếu kỹ thuật; người dùng chơi thử cảm giác/hình ảnh và cho phép khép là cổng riêng.
 

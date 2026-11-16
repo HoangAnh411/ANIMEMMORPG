@@ -1,4 +1,6 @@
-# D-R1 final matrix — READY_FOR_REVIEW
+# D-R1 final matrix — ACCEPTED về kỹ thuật
+
+**ACCEPTED về kỹ thuật D-R1 tại `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`**, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`. Người dùng cho phép khép hồ sơ D và fast-forward/push main. [Acceptance](Docs/U03/ACCEPTANCE-D-R1.md). Trạng thái READY_FOR_REVIEW/chưa ACCEPTED/không merge dưới đây là lịch sử bàn giao. Lượt khép chỉ sửa tài liệu, không chạy lại build/tests/game hoặc tác động Editor. **Chưa khép toàn U03/U04; playtest đọc đòn/âm/pose/HUD/điều khiển D còn chờ người dùng, art vẫn blockout.**
 
 Source `0b255233df021f2cc148313e638d918d41a4a11e`. [Manifest](Evidence/D-R1/MANIFEST.json) là index hash/log/PID/world/role và từng gate. D ở f6d0f68 NOT ACCEPTED; không dùng cổng presentation D cũ để thay lượt R1.
 
