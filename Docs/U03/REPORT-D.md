@@ -1,5 +1,17 @@
 # U03-D-R1 — ACCEPTED về kỹ thuật
 
+## Trạng thái tổng hợp U03 hiện hành
+
+**U03 hoàn tất kỹ thuật; người dùng xác nhận chơi thử blockout tích hợp D ngày 2026-11-16**, đã ghi tại `3439fed`. U03.01–U03.09 hoàn thành theo nghiệm thu từng đợt và [ma trận CLOSURE-D](../../CLOSURE-D.md); [ROADMAP](../ROADMAP.md) đã đồng bộ. Reviewer AI đối chiếu source/hash/log, còn người dùng đánh giá cảm giác và hình ảnh blockout qua chơi thử.
+
+Mốc không đổi: nghiệm thu D-R1 `a7737f9`, source/binary kiểm chứng `0b25523`, khép kỹ thuật D `89358c5`, xác nhận chơi thử `3439fed`. Commit tài liệu không được gán cho binary. Xác nhận D tích hợp không suy ngược rằng người dùng đã chơi các package B2/C1 cũ. Art/animation sản phẩm, hiệu năng U04, mạng xấu U05 và Server đóng gói chưa được nghiệm thu.
+
+Hồ sơ tổng hợp đang chờ review cuối trước merge. Sau khi được review và giao khép vào main, bước tiếp theo là lập kế hoạch U04 theo ROADMAP; chưa triển khai U04. Lượt đồng bộ này chỉ sửa tài liệu, không sửa runtime/config/launcher/manifest/bằng chứng hoặc failed runs, không chạy lại build/tests/package và không tác động Editor.
+
+## Lịch sử hồ sơ đã review tại 3439fed
+
+Các đoạn dưới giữ nội dung đã review tại `3439fed`, gồm trạng thái trước khi đồng bộ tổng hợp U03. Chúng không thay thế trạng thái hiện hành ở trên; nguồn binary và bằng chứng vẫn giữ nguyên.
+
 **ACCEPTED về kỹ thuật D-R1 tại `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`**, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`, mốc khép kỹ thuật `89358c58704b194e8f00f5f504e7eeb150acafcc`. [Acceptance](ACCEPTANCE-D-R1.md). Reviewer AI đối chiếu source/hash/log; người dùng đánh giá cảm giác và hình ảnh blockout qua chơi thử. Trạng thái READY_FOR_REVIEW/chưa ACCEPTED/không merge trong phần bàn giao bên dưới là lịch sử, không thay thế các xác nhận hiện hành.
 
 **2026-11-16: người dùng đã chơi thử D-R1 và xác nhận ổn** trên bản launcher Solo/Network ghim source0b25523, package `Artifacts/U03/D/Runs/Package-20261116-140739/Archive/Windows`. Xác nhận bao phủ đọc đòn/tư thế, phân biệt phản hồi và âm, che khuất nhãn/HP/telegraph, HUD/phím/cooldown, Retry/focus/Resume và hai cửa sổ không có khựng/lỗi trình bày rõ rệt cản trở chơi thử. Không có mục hoãn hoặc lỗi chặn D được báo. D hoàn tất cổng kỹ thuật và chơi thử blockout; chưa nghiệm thu art/animation sản phẩm hoặc hiệu năng U04.

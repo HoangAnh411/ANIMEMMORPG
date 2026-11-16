@@ -114,13 +114,19 @@ Cổng: đúng active, không xuyên tường hoặc nhân hit, một đòn đư
 
 Phụ thuộc: U02. Bàn giao lần lượt A–D.
 
-- [ ] U03.01 A0/A1: ba đòn 60/70/90, buffer 0,15 giây, chuỗi 1,45 giây, quyền hủy/hướng.
-- [ ] U03.02 A0/A1: năng lượng/cooldown, ưu tiên lệnh/reset combo.
+**Trạng thái hiện hành: U03 hoàn tất kỹ thuật; người dùng xác nhận chơi thử blockout tích hợp D ngày 2026-11-16.** Các dấu hoàn thành U03.01–U03.09 áp dụng phạm vi kỹ thuật/blockout theo nghiệm thu từng đợt và [ma trận CLOSURE-D](../CLOSURE-D.md): [A0](U03/ACCEPTANCE-A0.md), [A1](U03/ACCEPTANCE-A1.md), [B1](U03/ACCEPTANCE-B1.md), [B2](U03/ACCEPTANCE-B2.md), [C1](U03/ACCEPTANCE-C1.md), [C2](U03/ACCEPTANCE-C2.md), [D-R1](U03/ACCEPTANCE-D-R1.md). Reviewer AI đối chiếu source/hash/log; người dùng đánh giá cảm giác và hình ảnh blockout qua chơi thử.
+
+Giữ đúng mốc D-R1: nghiệm thu kỹ thuật `a7737f9`, source/binary kiểm chứng `0b25523`, khép kỹ thuật D `89358c5`, ghi nhận chơi thử `3439fed`. Commit hồ sơ không phải nguồn binary. Xác nhận D tích hợp không suy ngược rằng người dùng đã chơi các package B2/C1 cũ. Art/animation sản phẩm, hiệu năng U04, mạng xấu U05 và Server đóng gói **chưa được nghiệm thu**; bước model/world 30/60/120 không thay FPS render thực.
+
+Hồ sơ tổng hợp đang chờ review cuối trên `u03/d-playtest-docs`, chưa merge. Sau khi hồ sơ được review và giao khép vào main, bước tiếp theo là **lập kế hoạch U04 theo ROADMAP**, chưa triển khai U04 trong lượt này. Các đoạn bàn giao A–D phía sau là lịch sử tại thời điểm ghi, không thay trạng thái hiện hành này.
+
+- [x] U03.01 A0/A1: ba đòn 60/70/90, buffer 0,15 giây, chuỗi 1,45 giây, quyền hủy/hướng.
+- [x] U03.02 A0/A1: năng lượng/cooldown, ưu tiên lệnh/reset combo.
 - [x] U03.03 B1: né hai lượt 3 m/0,25 giây, hồi tuần tự, chặn tường/người/vực, không i-frame.
-- [ ] U03.04 B2: đỡ/parry/thế đỡ/phá đỡ, CC/chống khóa/X tại timestamp hit.
-- [ ] U03.05 C1/C2: Q Feint/E Interrupt, quái báo đòn phát hiện 10 m/leash 15 m, Tab, thắng/thua/thử lại.
-- [ ] U03.06 D: animation/kiếm/VFX/âm/HUD, kết quả/rebind/save/load và sân thử.
-- [ ] U03.07 Retry reset sân thử, không thay hồi sinh sản phẩm; giữ trạm hồi quy U01.
+- [x] U03.04 B2: đỡ/parry/thế đỡ/phá đỡ, CC/chống khóa/X tại timestamp hit.
+- [x] U03.05 C1/C2: Q Feint/E Interrupt, quái báo đòn phát hiện 10 m/leash 15 m, Tab, thắng/thua/thử lại.
+- [x] U03.06 D: animation/kiếm/VFX/âm/HUD blockout kỹ thuật, kết quả/rebind/save/load và sân thử; không nghiệm thu art sản phẩm.
+- [x] U03.07 Retry reset sân thử, không thay hồi sinh sản phẩm; giữ trạm hồi quy U01.
 
 Cổng: luật Description được kiểm chứng trên Unreal (G02 A–E chỉ là tham chiếu lịch sử). Các đợt A–D giữ quyền quyết định trên server và chạy hồi quy hai client ở mạng cục bộ cho hành động vừa thêm; bàn giao log trạng thái/HP thống nhất. Chưa nghiệm thu hiệu năng đầy đủ hoặc mạng xấu U05.
 
@@ -377,8 +383,8 @@ Cuối mỗi phiên ghi việc hoàn thành, bằng chứng, lỗi mới và nhi
 
 Các nhiệm vụ này bổ sung vào giai đoạn hiện có, không chờ tới giai đoạn mới sau phát hành.
 
-- [ ] U03.08 Parry qua nút đỡ: cửa sổ 0,12 giây, khoảng cách mở 0,60 giây, một hit/cửa sổ; giữ nút thành đỡ thường, không tự phản đạn, gây choáng hoặc bất tử.
-- [ ] U03.09 Hạ tầng Feint/Interrupt bằng kỹ năng thử: Feint đúng startup, ưu tiên trước combo, khóa 0,20 giây và giới hạn 1 giây; Interrupt đúng hit/pha và không hoàn tài nguyên.
+- [x] U03.08 Parry qua nút đỡ: cửa sổ 0,12 giây, khoảng cách mở 0,60 giây, một hit/cửa sổ; giữ nút thành đỡ thường, không tự phản đạn, gây choáng hoặc bất tử.
+- [x] U03.09 Hạ tầng Feint/Interrupt bằng kỹ năng thử: Feint đúng startup, ưu tiên trước combo, khóa 0,20 giây và giới hạn 1 giây; Interrupt đúng hit/pha và không hoàn tài nguyên.
 - [ ] U05.09 Xác minh parry theo thời gian, hướng và thứ tự hit máy chủ; không nới cửa sổ theo ping. Thử RTT 0/60/120/200 ms, mất gói 0/1/3%, jitter và phản hồi dự đoán bị từ chối.
 - [ ] U06.08 Chốt đòn nghề có Feint, pha bị ngắt và kỹ năng khai thác parry. Kiếm Vũ thiên phản công, Hộ Ước bảo vệ; không tự cấp parry cho Cơ Xạ/Ấn Sư.
 
@@ -386,7 +392,9 @@ Cổng U03 bổ sung: thử parry tại 0, ngay trước/đúng 0,12 giây; mở
 
 Cổng U05 bổ sung: hai client đồng thuận kết quả parry/đỡ/trúng; không lợi dụng gửi lặp hoặc thời gian client để mở thêm cửa sổ. Cổng U06 bổ sung: phản công có điều kiện/đánh đổi rõ, không bảo đảm trúng và không tạo chuỗi hủy vô hạn.
 
-## U03 delivery gates approved 2026-11-07
+## Lịch sử bàn giao và nghiệm thu U03 — từ 2026-11-07
+
+Các giới hạn “chưa giao đợt sau”, “chưa chơi thử” và “chưa khép U03” dưới đây mô tả thời điểm từng đợt. Trạng thái tổng hợp hiện hành nằm tại mục U03 ở trên; không sửa ngược manifest, bằng chứng hoặc failed runs theo trạng thái tài liệu mới.
 
 Giữ ID U03.01–U03.09 và luật gameplay. Chia A–D thành A0 hợp đồng/model, A1 combo, B1 né/motor, B2 defense/CC/X, C1 Q/E, C2 encounter/Tab/Retry, D presentation/settings/integration. Mỗi đợt nhánh riêng từ main đã nghiệm thu đợt trước; build/test clone đã commit, báo cáo và dừng review. ACCEPTED không tự cho merge hoặc đợt sau. A0 không có gameplay mới nên không package/launcher; A1–D giữ cổng package/input thật/dedicated Editor+hai client. Chỉ A0 được giao. [Contracts](U03/CONTRACTS.md), [Tests](U03/TEST-MATRIX.md).
 
@@ -414,7 +422,7 @@ Giữ ID U03.01–U03.09 và luật gameplay. Chia A–D thành A0 hợp đồng
 **U03-C1 ACCEPTED (technical) tại bàn giao `db592ff99ea48042b48e404781ec6db728b66520`, native/content source `dbe10dab1cd6a9b14c28c732aba66f21d525ac69`.** Người dùng cho phép khép tài liệu sau sửa lỗi dấu checklist, commit/push nhánh và fast-forward/push main. [Hồ sơ nghiệm thu](U03/ACCEPTANCE-C1.md), [report](U03/REPORT-C1.md), [matrix](U03/C1-TEST-MATRIX.md). **Người dùng chưa chơi thử B2/C1; presentation vẫn blockout, chưa nghiệm thu feel/readability/art/âm sản phẩm.** Giữ nguyên runtime/config/bằng chứng và các kết quả đã ghi; không build/tests hoặc tác động Editor trong lượt khép. READY_FOR_REVIEW/không merge ở hồ sơ trước là lịch sử. Dừng sau xác minh SHA remote; chưa C2 hoặc khép U03 tổng thể.
 
 
-**U03-C2 ACCEPTED (technical)** at delivery `b5eed4b6fd1043eb17f4e082a95ec2b225f97203`, verified source `b43b15d7178fb5a7ca55cef667946d20fc1591d8`. The user reviewed source/hashes/all647 published files,131/131 Automation, Editor/Game/package/three-map smoke, combat24/Return11/Tab15/network26 and41 independent network comparisons, without rerunning builds/tests. Documentation closure and fast-forward/push main are explicitly authorized. [Acceptance](U03/ACCEPTANCE-C2.md), [report](U03/REPORT-C2.md), [matrix](U03/C2-TEST-MATRIX.md). **The user has playtested C2, but has not confirmed all feel/visuals; presentation remains blockout.** B2/C1 playtest status is unchanged. Monster B not attacking A is intentional owner-encounter isolation; C2 is not a shared monster area. LatestReview/LatestSolo now point to post-delivery play sessions; historical evidence/manifest and failed/invalid runs remain unchanged. Closure changes documentation only, with no runtime/config/scripts/evidence changes, build/test reruns or Editor interaction. Earlier no-C2/no-merge statements are historical. Stop after remote SHA verification; **no D and no overall U03 closure**.
+**U03-C2 ACCEPTED (technical)** at delivery `b5eed4b6fd1043eb17f4e082a95ec2b225f97203`, verified source `b43b15d7178fb5a7ca55cef667946d20fc1591d8`. The reviewer AI compared source/hash/log evidence and all647 published files,131/131 Automation, Editor/Game/package/three-map smoke, combat24/Return11/Tab15/network26 and41 independent network comparisons, without rerunning builds/tests. Documentation closure and fast-forward/push main are explicitly authorized. [Acceptance](U03/ACCEPTANCE-C2.md), [report](U03/REPORT-C2.md), [matrix](U03/C2-TEST-MATRIX.md). **The user has playtested C2, but has not confirmed all feel/visuals; presentation remains blockout.** B2/C1 playtest status is unchanged. Monster B not attacking A is intentional owner-encounter isolation; C2 is not a shared monster area. LatestReview/LatestSolo now point to post-delivery play sessions; historical evidence/manifest and failed/invalid runs remain unchanged. Closure changes documentation only, with no runtime/config/scripts/evidence changes, build/test reruns or Editor interaction. Earlier no-C2/no-merge statements are historical. Stop after remote SHA verification; **no D and no overall U03 closure**.
 
 
-**U03-D-R1 ACCEPTED về kỹ thuật tại bàn giao `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`.** Người dùng đối chiếu source/bằng chứng, không chạy lại build/tests/game: LOS nhãn/audio và depth-tested telegraph khắc phục lỗi D trước;562 raw/published, hai binary,48 package files khớp hash;140/140 Success, visibility20/audit17/network26/independent41 PASS. [Acceptance](U03/ACCEPTANCE-D-R1.md), [report](U03/REPORT-D.md), [coverage](../CLOSURE-D.md). Cho phép khép hồ sơ D và fast-forward/push main; chỉ sửa tài liệu, giữ riêng bằng chứng D bị từ chối và R1, không chạy lại tests hoặc tác động Editor/config/Maintenance. **Chưa khép toàn U03 hoặc bắt đầu U04. Người dùng vẫn cần chơi thử D để xác nhận đọc đòn/âm/pose/HUD/điều khiển; art/animation vẫn blockout, chưa phải hình ảnh sản phẩm.** Các câu chưa giao D trước đây là lịch sử. Dừng sau xác minh remote.
+**U03-D-R1 ACCEPTED về kỹ thuật tại bàn giao `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`.** Reviewer AI đối chiếu source/hash/log và bằng chứng, không chạy lại build/tests/game: LOS nhãn/audio và depth-tested telegraph khắc phục lỗi D trước;562 raw/published, hai binary,48 package files khớp hash;140/140 Success, visibility20/audit17/network26/independent41 PASS. [Acceptance](U03/ACCEPTANCE-D-R1.md), [report](U03/REPORT-D.md), [coverage](../CLOSURE-D.md). Cho phép khép hồ sơ D và fast-forward/push main; chỉ sửa tài liệu, giữ riêng bằng chứng D bị từ chối và R1, không chạy lại tests hoặc tác động Editor/config/Maintenance. **Chưa khép toàn U03 hoặc bắt đầu U04. Người dùng vẫn cần chơi thử D để xác nhận đọc đòn/âm/pose/HUD/điều khiển; art/animation vẫn blockout, chưa phải hình ảnh sản phẩm.** Các câu chưa giao D trước đây là lịch sử. Dừng sau xác minh remote.
