@@ -1,4 +1,5 @@
 #include "U03Encounter.h"
+#include "U03TelegraphComponent.h"
 #include "U03MonsterStateComponent.h"
 #include "U01/U01PlayerController.h"
 #include "U02/U02CombatComponent.h"
@@ -42,9 +43,14 @@ void AU03Monster::Tick(float Dt)
     Super::Tick(Dt);if(GetNetMode()==NM_DedicatedServer)return;
     const auto S=Combat->GetCombatSnapshot();const FVector F=FeetOf(this);
     const auto* Clock=GetWorld()->GetGameState();const double Now=Clock?Clock->GetServerWorldTimeSeconds():GetWorld()->GetTimeSeconds();
-    const bool Present=AnimeMMORPG::U02::SamplePresentation(S,Now).bPlay;
+    const auto* E=AU03Encounter::ForSubject(this);
+    const bool SameScope=Vital->GetSnapshot().Generation==S.LifeGeneration&&(E?E->GetSnapshot().Id==S.EncounterId&&E->GetSnapshot().Revision==S.EncounterRevision:!S.EncounterId.IsValid());
+    const bool Present=SameScope&&AnimeMMORPG::U02::SamplePresentation(S,Now).bPlay;
     const bool Startup=Present&&Now<S.StartSeconds+S.ActiveStart;
     const bool Active=Present&&!Startup&&Now<S.StartSeconds+S.ActiveEnd;
+    if(Present&&!Telegraph)
+    {Telegraph=NewObject<UU03TelegraphComponent>(this);Telegraph->RegisterComponentWithWorld(GetWorld());}
+    if(Telegraph)Telegraph->SetSegments(Present?UU03TelegraphComponent::SwordSegments(F,S.AimYawDegrees,Active?3.f:1.f):TArray<FU03TelegraphSegment>());
     if(auto* Body=Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("MonsterBlockout"))))Body->SetRelativeRotation(FRotator(Startup?-30:Active?55:Present?15:0,0,0));
     if(Present&&FParse::Param(FCommandLine::Get(),TEXT("U03PresentationDebug")))
     {

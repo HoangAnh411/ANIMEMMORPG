@@ -35,6 +35,7 @@ public:
     AU03Monster(const FObjectInitializer& Initializer);
     UPROPERTY(VisibleAnywhere,Category="U03|AI") TObjectPtr<UU03MonsterStateComponent> State;
     virtual void Tick(float Dt) override;
+    UPROPERTY(Transient) TObjectPtr<class UU03TelegraphComponent> Telegraph;
 };
 
 UCLASS()
@@ -88,7 +89,9 @@ class ANIMEMMORPG_API AU03EncounterHUD : public AHUD
     GENERATED_BODY()
 public:
     virtual void DrawHUD() override;
+    TSharedRef<class FJsonObject> GetPresentationDiagnostics() const;
 private:
+    TSharedPtr<class FJsonObject> PresentationDiagnostics;
     uint64 FeedbackSerial=0;
     void DrawPresentation();
     bool bFeedbackPrimed=false;

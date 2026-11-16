@@ -22,10 +22,10 @@ public class AnimeMMORPG : ModuleRules
 			"Slate"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "SlateCore", "ApplicationCore", "Json", "AnimGraphRuntime" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "SlateCore", "ApplicationCore", "Json", "AnimGraphRuntime", "RenderCore" });
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AnimGraph", "BlueprintGraph", "AssetTools", "AssetRegistry", "ControlRig", "RenderCore" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AnimGraph", "BlueprintGraph", "AssetTools", "AssetRegistry", "ControlRig" });
 		}
 		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{

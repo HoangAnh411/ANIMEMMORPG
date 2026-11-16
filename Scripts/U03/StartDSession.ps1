@@ -8,6 +8,7 @@ param(
  [ValidateSet(1,2)][int]$ClientCount=2,
  [switch]$BufferedDiagnostics,
  [switch]$PersistSettings,
+ [switch]$R1VisibilityProbe,
  [int]$Port=17913,
  [ValidateSet('D')][string]$Stage='D'
 )
@@ -36,6 +37,7 @@ foreach($role in $roles){
  else{$arguments+=@(('127.0.0.1:'+$Port),'-game','-windowed','-ResX=900','-ResY=540',('-WinX='+$(if($role -eq 'ClientA'){0}else{940})),'-WinY=100')}
  if($ReproducePython){if($role -ne 'Server'){$arguments+='-NullRHI'}}else{$arguments+='-DisablePython'}
  if($Diagnostics){$arguments+='-U01FPerf'}
+ if($R1VisibilityProbe){$arguments+='-U03R1VisibilityProbe'}
  if($BufferedDiagnostics){$arguments+=('-U01FPerfFile="'+(Join-Path $user 'Frames.jsonl')+'"')}
  $cap=if($role -eq 'Server'){30}else{$ClientMaxFPS}
  $commands='t.MaxFPS '+$cap+',t.IdleWhenNotForeground 0'

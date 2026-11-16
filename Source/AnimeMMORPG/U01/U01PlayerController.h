@@ -74,10 +74,16 @@ public:
     UFUNCTION(BlueprintCallable) void OpenRegressionLab();
     UFUNCTION(Server,Reliable) void ServerEncounterRetry(FGuid Encounter,uint64 Revision,uint64 Sequence);
     UFUNCTION(Exec) void U03C2RetryClaim(const FString& Id,uint64 Revision,uint64 Sequence);
+    UFUNCTION(Exec) void U03R1Scene();
+    UFUNCTION(Exec) void U03R1Partial();
+    UFUNCTION(Server,Reliable) void ServerU03R1Scene(bool Partial);
+    UFUNCTION(Client,Reliable) void ClientU03R1Camera();
     void ToggleInformationTarget();
     bool InformationTarget(FVector2D& Screen,FString& Text) const;
     bool RecentHitInformation(FVector2D& Screen,FString& Text) const;
 private:
+    UPROPERTY(Transient) TObjectPtr<class AU03R1VisibilityWall> R1Wall;
+    UPROPERTY(Transient) TObjectPtr<class ACameraActor> R1Camera;
     TWeakObjectPtr<AActor> InformationSubject;
     FGuid InformationEncounter,InformationPawn;
     uint64 InformationLife=0,InformationRevision=0,RetrySequence=0,PresentedResultRevision=0;

@@ -1,6 +1,7 @@
 #include "U01/U01PlayerController.h"
 #include "U03Encounter.h"
 #include "U03FeedbackWindow.h"
+#include "U03InformationVisibility.h"
 #include "U02/U02NetworkState.h"
 #include "GameFramework/GameStateBase.h"
 #include "U02/U02VitalComponent.h"
@@ -15,26 +16,10 @@
 #include "Misc/Parse.h"
 DEFINE_LOG_CATEGORY_STATIC(LogU03Retry,Log,All);
 namespace {
-FVector InformationPoint(AActor* A)
-{auto* C=Cast<AU01Character>(A);return A->GetActorLocation()+FVector(0,0,90-(C?C->GetCapsuleComponent()->GetScaledCapsuleHalfHeight():0));}
 FGuid InformationId(AActor* A)
 {if(auto* C=Cast<AU01Character>(A))return C->NetworkPawnId;if(auto* D=Cast<AU02LabDummy>(A))return D->NetworkPawnId;return {};}
-bool ProjectInformation(const AU01PlayerController* PC,AActor* A,FVector2D& Screen,FVector2D& Center)
-{
-    auto* LP=PC->GetLocalPlayer();if(!LP||!LP->ViewportClient||!LP->ViewportClient->Viewport)return false;
-    FSceneViewProjectionData Data;if(!LP->GetProjectionData(LP->ViewportClient->Viewport,Data))return false;
-    const FIntRect Rect=Data.GetConstrainedViewRect();Center=FVector2D(Rect.Width(),Rect.Height())*.5;
-    if(!FSceneView::ProjectWorldToScreen(InformationPoint(A),Rect,Data.ComputeViewProjectionMatrix(),Screen))return false;
-    Screen-=FVector2D(Rect.Min.X,Rect.Min.Y);
-    return Screen.X>=0&&Screen.Y>=0&&Screen.X<Rect.Width()&&Screen.Y<Rect.Height();
 }
-bool InformationClear(const AU01PlayerController* PC,AActor* A)
-{
-    FVector Camera;FRotator Rotation;PC->GetPlayerViewPoint(Camera,Rotation);FCollisionQueryParams Q(SCENE_QUERY_STAT(U03TabLOS),false);
-    for(TActorIterator<AActor> It(PC->GetWorld());It;++It)if(It->IsA<APawn>()||It->FindComponentByClass<UU02VitalComponent>())Q.AddIgnoredActor(*It);
-    return !PC->GetWorld()->LineTraceTestByChannel(Camera,InformationPoint(A),ECC_GameTraceChannel2,Q);
-}
-}
+using namespace AnimeMMORPG::U03;
 void AU01PlayerController::ToggleInformationTarget()
 {
     if(!IsLocalPlayerController())return;
