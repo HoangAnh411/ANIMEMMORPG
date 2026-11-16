@@ -2,7 +2,7 @@
 
 ## 1. Mục tiêu và hiện trạng
 
-Project chính: `D:\Data\AnimeMMORPG`; engine mục tiêu Unreal Engine 5.8.4. Thiết kế tại [Description.md](Description.md), lịch sử và lưu ý chuyển engine tại [UNITY_REFERENCE.md](UNITY_REFERENCE.md).
+Project chính: `D:\Data\AnimeMMORPG`; engine mục tiêu Unreal Engine 5.8.4. Thiết kế tại [Description.md](Description.md), khảo sát baseline Unreal tại [REPORT-A](U00/REPORT-A.md) và [ENVIRONMENT](U00/ENVIRONMENT.md). `UNITY_REFERENCE.md` là tên tham chiếu cũ không còn trong repo sau cleanup, không dùng làm bằng chứng nghiệm thu U03 hiện hành.
 
 Baseline khảo sát 2026-11-02: project Third Person C++ có ba variant Combat/Platforming/SideScrolling; EngineAssociation ghi 5.8. Lịch sử khảo sát lưu tại [REPORT-A](U00/REPORT-A.md) và [ENVIRONMENT](U00/ENVIRONMENT.md). Hiện U00 đã được người dùng nghiệm thu sau lượt F: clone GitHub/LFS, compile Editor/Game, 4/4 Automation tests trên binary đĩa, tool registration sau khởi động mới, package Windows và kiểm tra thủ công packaged game đủ 5 vòng, Thoát/mở lại đều đạt. Nguồn build `9d6a81b24c9dbf75ad8fcf4c47de78c72f95eb80`; UE 5.8.4 CL 58902052; UBT chọn MSVC 14.51.36260, SDK 10.0.26100.0. Xem [REPORT-F](U00/REPORT-F.md), [manifest](U00/F-MANIFEST.json) và [hash artifact](U00/F-ARTIFACTS.csv). Không kế thừa nghiệm thu Unity; U01-A đã nghiệm thu tại 4216ff874872f5d7112cc792b52d008937441f7c; B đã nghiệm thu trên package tại2e0e89f theo xác nhận người dùng; Editor gốc chưa xác nhận nạp code mới.
 
