@@ -18,8 +18,8 @@ void AU03R1VisibilityWall::Configure(FVector InOrigin,bool Partial){Origin=InOri
 void AU03R1VisibilityWall::Apply()
 {SetActorLocation(Origin+FVector(-200,bPartial?20:0,140));SetActorScale3D(FVector(.2,bPartial?.3:2,2.8));}
 void AU03R1VisibilityWall::Tick(float Dt){Super::Tick(Dt);if(HasAuthority()&&!IsValid(GetOwner()))Destroy();}
-void AU03R1VisibilityWall::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out) const
-{Super::GetLifetimeReplicatedProps(Out);DOREPLIFETIME(AU03R1VisibilityWall,Origin);DOREPLIFETIME(AU03R1VisibilityWall,bPartial);}
+void AU03R1VisibilityWall::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{Super::GetLifetimeReplicatedProps(OutLifetimeProps);DOREPLIFETIME(AU03R1VisibilityWall,Origin);DOREPLIFETIME(AU03R1VisibilityWall,bPartial);}
 void AU01PlayerController::U03R1Scene(){if(FParse::Param(FCommandLine::Get(),TEXT("U03R1VisibilityProbe")))ServerU03R1Scene(false);}
 void AU01PlayerController::U03R1Partial(){if(FParse::Param(FCommandLine::Get(),TEXT("U03R1VisibilityProbe")))ServerU03R1Scene(true);}
 void AU01PlayerController::ServerU03R1Scene_Implementation(bool Partial)
