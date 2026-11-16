@@ -1,6 +1,14 @@
 # U03-D-R1 — ACCEPTED về kỹ thuật
 
-**ACCEPTED về kỹ thuật D-R1 tại `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`**, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`. Người dùng cho phép khép hồ sơ D và fast-forward/push main. [Acceptance](ACCEPTANCE-D-R1.md). Trạng thái READY_FOR_REVIEW/chưa ACCEPTED/không merge dưới đây là lịch sử bàn giao. Lượt khép chỉ sửa tài liệu, không chạy lại build/tests/game hoặc tác động Editor. **Chưa khép toàn U03/U04; playtest đọc đòn/âm/pose/HUD/điều khiển D còn chờ người dùng, art vẫn blockout.**
+**ACCEPTED về kỹ thuật D-R1 tại `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`**, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`, mốc khép kỹ thuật `89358c58704b194e8f00f5f504e7eeb150acafcc`. [Acceptance](ACCEPTANCE-D-R1.md). Reviewer AI đối chiếu source/hash/log; người dùng đánh giá cảm giác và hình ảnh blockout qua chơi thử. Trạng thái READY_FOR_REVIEW/chưa ACCEPTED/không merge trong phần bàn giao bên dưới là lịch sử, không thay thế các xác nhận hiện hành.
+
+**2026-11-16: người dùng đã chơi thử D-R1 và xác nhận ổn** trên bản launcher Solo/Network ghim source0b25523, package `Artifacts/U03/D/Runs/Package-20261116-140739/Archive/Windows`. Xác nhận bao phủ đọc đòn/tư thế, phân biệt phản hồi và âm, che khuất nhãn/HP/telegraph, HUD/phím/cooldown, Retry/focus/Resume và hai cửa sổ không có khựng/lỗi trình bày rõ rệt cản trở chơi thử. Không có mục hoãn hoặc lỗi chặn D được báo. D hoàn tất cổng kỹ thuật và chơi thử blockout; chưa nghiệm thu art/animation sản phẩm hoặc hiệu năng U04.
+
+Nhánh tài liệu xác nhận cuối từ main89358c5 **chờ review hồ sơ, chưa merge**. Lượt này chỉ sửa acceptance/report/checklist, không đổi runtime/config/launcher/bằng chứng, không chạy lại build/tests/package hoặc tác động Editor. Chưa khép toàn U03 hoặc triển khai U04; ủy quyền fast-forward trước đây chỉ thuộc lần khép kỹ thuật89358c5.
+
+## Hồ sơ bàn giao kỹ thuật lịch sử
+
+Phần dưới giữ kết quả và điểm dừng tại thời điểm bàn giao D-R1; trạng thái hiện hành và xác nhận chơi thử nằm ở đầu báo cáo.
 
 Sửa lượt D bị **NOT ACCEPTED tại f6d0f68** vì nhãn/khung/âm dùng phép chiếu camera mà chưa kiểm che khuất. Source runtime cuối **`0b255233df021f2cc148313e638d918d41a4a11e`**, nhánh `u03/d-integration`; main nền vẫn `bc3a9955a8c0ecc1cb7f0d43dce13300c9664ac9`. Chưa ACCEPTED, chưa merge, chưa khép U03, chưa U04. Reviewer AI đối chiếu kỹ thuật; người dùng chơi thử cảm giác/hình ảnh và cho phép khép là cổng riêng.
 
