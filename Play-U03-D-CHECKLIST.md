@@ -10,4 +10,6 @@ Use **Play-U03-D.cmd** for solo or **Play-U03-D-Network.cmd** for two windows. A
 
 Escape → **Open regression stations (separate run)** enters the existing labelled fixture lab. Terrain stations and combat fixtures remain test tools, not product skills or resurrection. Return with **Back to Boot**. Controls → rebind/save/load uses the isolated play session's user directory.
 
+Launcher preferences persist under `Artifacts/U03/D/UserSettings`: Solo and network A/B have separate folders. Reconnect keeps that window's preferences; combat restarts under a new authority encounter identity.
+
 AI verifies source/hash, authority, timing and technical gates. Your playtest evaluates feel/readability and authorizes closure separately. This remains mannequin/blockout art, not anime production animation or U04 graphics/performance acceptance.

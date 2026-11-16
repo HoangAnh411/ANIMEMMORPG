@@ -7,6 +7,7 @@ param(
  [ValidateSet(30,60)][int]$ClientMaxFPS=60,
  [ValidateSet(1,2)][int]$ClientCount=2,
  [switch]$BufferedDiagnostics,
+ [switch]$PersistSettings,
  [int]$Port=17913,
  [ValidateSet('D')][string]$Stage='D'
 )
@@ -27,6 +28,9 @@ $roles=if($ClientCount -eq 1){@('Server','ClientA')}else{@('Server','ClientA','C
 foreach($role in $roles){
  $user=Join-Path $run $role;New-Item -ItemType Directory -Path $user | Out-Null
  $log=Join-Path $user ($role+'.log')
+ $settingsRoot=if($PersistSettings -and $role -ne 'Server'){Join-Path (Join-Path $PSScriptRoot '../../Artifacts/U03/D/UserSettings/Network') $role}else{$user}
+ $settingsRoot=[IO.Path]::GetFullPath($settingsRoot)
+ New-Item -ItemType Directory -Path $settingsRoot -Force | Out-Null
  $arguments=@(('"'+$project+'"'))
  if($role -eq 'Server'){$arguments+=@('/Game/AnimeMMORPG/Maps/L_NetworkLab','-server',('-port='+$Port),'-NullRHI','-nosound')}
  else{$arguments+=@(('127.0.0.1:'+$Port),'-game','-windowed','-ResX=900','-ResY=540',('-WinX='+$(if($role -eq 'ClientA'){0}else{940})),'-WinY=100')}
@@ -51,13 +55,13 @@ foreach($role in $roles){
   $commands+=',r.Lumen.DiffuseIndirect.Allow 0,r.Lumen.Reflections.Allow 0,r.Shadow.Virtual.Enable 0,r.ShadowQuality 2'
   Write-Host 'Focus review: simplified lighting/reflections/shadows for two clients; cap and networking unchanged.'
  }
- $arguments+=@(('-ExecCmds="'+$commands+'"'),'-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace','-U02FProbe','-U02Trace','-ModelContextProtocolStartServer',('-U02SourceSHA='+$sha),('-U02RunId='+(Split-Path $run -Leaf)),('-U02FCommands="'+(Join-Path $run 'command.txt')+'"'),('-U01SourceSHA='+$sha),('-UserDir="'+$user+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18610+$records.Count)))
+ $arguments+=@(('-ExecCmds="'+$commands+'"'),'-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace','-U02FProbe','-U02Trace','-ModelContextProtocolStartServer',('-U02SourceSHA='+$sha),('-U02RunId='+(Split-Path $run -Leaf)),('-U02FCommands="'+(Join-Path $run 'command.txt')+'"'),('-U01SourceSHA='+$sha),('-UserDir="'+$settingsRoot+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+(18610+$records.Count)))
  Write-Host ('Starting '+$role+'; log: '+$log)
  # Interactive review clients must be visible during loading, before readiness.
  # The dedicated background server continues to run hidden.
  $windowStyle=if($role -eq 'Server'){'Hidden'}else{'Normal'}
  $p=Start-Process -FilePath $exe -ArgumentList $arguments -WorkingDirectory (Split-Path $project) -WindowStyle $windowStyle -PassThru
- $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;moduleSHA256=(Get-FileHash (Join-Path (Split-Path $project) 'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll')).Hash;binarySHA256=(Get-FileHash $exe).Hash;userDir=$user;log=$log;utc=[DateTime]::UtcNow.ToString('o');requestedMaxFPS=$cap;clientCount=$ClientCount;windowSize=$(if($role -ne 'Server'){@(900,540)});internalResolutionPercent=$(if($role -ne 'Server'){if($MemoryBudget){50}else{100}});memoryProfile=($MemoryBudget.IsPresent -and $role -ne 'Server');bufferedDiagnostics=$BufferedDiagnostics.IsPresent}
+ $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;moduleSHA256=(Get-FileHash (Join-Path (Split-Path $project) 'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll')).Hash;binarySHA256=(Get-FileHash $exe).Hash;userDir=$settingsRoot;log=$log;utc=[DateTime]::UtcNow.ToString('o');requestedMaxFPS=$cap;clientCount=$ClientCount;windowSize=$(if($role -ne 'Server'){@(900,540)});internalResolutionPercent=$(if($role -ne 'Server'){if($MemoryBudget){50}else{100}});memoryProfile=($MemoryBudget.IsPresent -and $role -ne 'Server');bufferedDiagnostics=$BufferedDiagnostics.IsPresent}
  $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $user 'process.json')
  $records+=$r;$records | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $run 'processes.json')
  if($role -eq 'Server'){Set-FServerTimer $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $run 'server-timer.json')}

@@ -1,17 +1,17 @@
-# U03-D coverage — IN PROGRESS
+# U03-D — bao phủ READY_FOR_REVIEW
 
-Technical review and user feel confirmation are separate. This is not a closure approval. All final-source D.3 gates remain open until explicitly evidenced.
+Ma trận nghiệm thu kỹ thuật để reviewer AI kiểm; chưa ACCEPTED và chưa khép U03. Source runtime9da1b43; tất cả cổng cuối và manifest tại [REPORT-D](Docs/U03/REPORT-D.md). Baseline A0–C2 được kế thừa về triển khai, nhưng131 tests nền được chạy mới cùng6 tests D, tổng137/137. User feel/art vẫn là cổng riêng.
 
-| ID | Inherited implementation | New D scope so far | Remaining D verification |
-|---|---|---|---|
-| U03.01 | A0/A1 combo | Resource/binding HUD | Final model/world boundaries and physical combo video |
-| U03.02 | A0/A1 resource/admission | Energy and Q/E cooldown display | Final priority/resource regression |
-| U03.03 | B1 dodge/motor | Charges/recharge display | Poses; walls/StepUp/two pawns and physical video |
-| U03.04 | B2 defense/CC/X | Posture/CC/X display | Poses, feedback/audio, lethal cutoff/focus regression |
-| U03.05 | C1/C2 skills/monster/Tab | Independent visible recent-hit HP, owner-station explanation | Feedback, telegraph, real visibility/network/input gates |
-| U03.06 | Existing U01/U02/U03 assets/settings/HUD | Initial HUD and narrow expiry/visibility/migration tests | Presentation/audio/settings lifecycle, package, play launchers |
-| U03.07 | C2 authority Retry | No authority change | Won/Lost/Retry/release-gate and owner-isolation regression |
-| U03.08 | B2 parry | No authority change | Circle/two-note audio and defense regression |
-| U03.09 | C1 Feint/Interrupt | Q/E cooldown display | Distinct labels/sounds, timestamp/dedup/network regression |
+|ID|Nền giữ nguyên|Bằng chứng D mới / trạng thái|
+|---|---|---|
+|U03.01|Combo A0/A1|PASS coverage: Full137: timing/priority + combat combo video; clip1–3 giữ nguyên|
+|U03.02|Resource/cooldown|PASS coverage: Full137 + HUD energy/Q/E, rebind persistence|
+|U03.03|Dodge B1|PASS coverage: Native wall/StepUp/two-pawn + physical dodge/pose; không animation authority|
+|U03.04|Defense/CC/X B2|PASS coverage: Full137 +15 fixture checks/audio/pose/held-input|
+|U03.05|Skills/monster/Tab C1/C2|PASS coverage: Route11, target15, combat24, network26+independent41|
+|U03.06|Presentation/settings D|PASS coverage: Canvas/history/scoped audio, ten pose assets, BP16/package/smoke, save/reopen|
+|U03.07|Authority Retry C2|PASS coverage: Won/Lost/Retry release gate + owner isolation/reconnect; không product resurrection|
+|U03.08|Parry B2|PASS coverage: Native boundaries + real parry ring/660→990 loopback, no repeat|
+|U03.09|Feint/Interrupt C1|PASS coverage: Native boundaries + physical labelled fixture/confirmed result + distinct chirps|
 
-See REPORT-D.md and D-TEST-MATRIX.md. No overall U03 closure or product art acceptance.
+“PASS coverage” không là ACCEPTED từng hạng mục hoặc cho phép merge. Không mở shared monsters/skills/balance/progression/prediction/packaged Server/U04. Profile review không là nghiệm thu graphics/performance. [Manifest](Evidence/D/MANIFEST.json), [matrix](D-TEST-MATRIX.md), [checklist](Play-U03-D-CHECKLIST.md).

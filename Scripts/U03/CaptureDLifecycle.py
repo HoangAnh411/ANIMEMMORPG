@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import ImageGrab
 from DClient import DClient,u
 from F60Input import Input,Payload,Mouse,emit
-p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--reopen',action='store_true');a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--reopen',action='store_true');p.add_argument('--settings-only',action='store_true');p.add_argument('--restore-defaults',action='store_true');a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
 c=DClient(json.loads(a.record.read_text(encoding='utf-8-sig')));m=dict(completed=False,process=c.record,cycles=[],checks=[]);stop=threading.Event();writer=None;worker=None;encoded=0;start=time.perf_counter();cv2.setNumThreads(1)
 def state():return c.metrics()
 def until(f,timeout=15):
@@ -43,13 +43,21 @@ try:
   v=state();settings=json.loads(v['settings']);assert settings['bindings']['Target']=='T',settings
   assert v['encounter']['monsterVital']['hp']==600 and v['combat']['energy']==100 and v['combat']['qReady']==0 and v['combat']['eReady']==0
   m['checks'].append(dict(check='Quit/reopen retains binding without combat progress',result='PASS',metrics=v))
+  if a.restore_defaults:
+   if state()['controlState']==0:tap('Escape');time.sleep(.15)
+   button('/ Controls')
+   for _ in range(15):
+    if any('mặc định' in k for k in state().get('menuButtons',{})):break
+    wheel()
+   button('mặc định');button('Save');button('menu');m['defaultsRestoredByUI']=True
  else:
-  boot();ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/'Boot.png')
-  for i in range(5):
-   lab();v=state()
-   if v['controlState']!=0:button('Resume')
-   time.sleep(.15);boot();m['cycles'].append(dict(index=i+1,ownedLab=v,bootLogVerified=True));ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/f'Boot-{i+1}.png')
-  lab()
+  if not a.settings_only:
+   boot();ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/'Boot.png')
+   for i in range(5):
+    lab();v=state()
+    if v['controlState']!=0:button('Resume')
+    time.sleep(.15);boot();m['cycles'].append(dict(index=i+1,ownedLab=v,bootLogVerified=True));ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/f'Boot-{i+1}.png')
+   lab()
   if state()['controlState']==0:tap('Escape');time.sleep(.2)
   button('/ Controls')
   for _ in range(15):

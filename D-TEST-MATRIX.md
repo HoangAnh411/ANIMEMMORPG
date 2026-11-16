@@ -1,27 +1,20 @@
-# U03-D test matrix
+# U03-D — final test matrix
 
-Status: planned, no new D gate claimed. Inherited C2: 131 Success / 0 Failed at source b43b15d; see Docs/U03/Evidence/C2/MANIFEST.json. Documentation-only main base does not constitute a D run.
+READY_FOR_REVIEW; runtime source9da1b43. 137 Success/0 Failed từ MCP cold clone. Báo cáo chính: [Docs/U03/REPORT-D](Docs/U03/REPORT-D.md); tên từng test/completion, logs, PID/world/owner/role và hash ở [manifest](Evidence/D/MANIFEST.json). C2 historical results là kế thừa; không đếm làm D mới.
 
-| Gate | Coverage / method | D status |
+|Cổng|Tầng bằng chứng|Kết quả|
 |---|---|---|
-| D.1 | Trace Description/ROADMAP U03.01–09, source, asset inventory, frozen gameplay contracts | Initial audit recorded; exhaustive audit pending |
-| Feedback | Timestamp expiry at/exactly after 1.2s; duplicate/stale/late/future packets; new subject/life/encounter revision; reconnect; audio dedup | Pending implementation/tests |
-| Authority miss | Completed with no contact; hit/block/parry suppress miss; cancellation suppresses miss; long update crosses completion | Pending audit/tests |
-| Visibility | LocalPlayer projection, viewport boundary/offscreen, environment occlusion, immediate hide, life/revision invalidation; no Tab mutation | Pending tests/input video |
-| Settings | Single key/mouse, duplicate/canonical modifier/wheel/chord/reserved; v1/v2 conflict closure; missing/truncated/corrupt/unsupported; load preserves bytes; isolated save/reopen | Existing coverage to audit, D pending |
-| U03.01/.02 | Combo timing/priority/resource/cooldown; model/world updates 30/60/120 and long steps | Pending final regression |
-| U03.03 | Dodge charges/trajectory, wall/StepUp/two pawns; no animation capsule motion | Pending final regression |
-| U03.04/.08 | Guard/parry/break/hard CC/X, lethal cutoff and focus/control lock | Pending final regression |
-| U03.05/.09 | Q/E/Feint/Interrupt, monster startup direction/box, authority cutoffs | Pending final regression |
-| U03.06 | Clip/pose/grip/readability, HUD actual bindings/resource/CC, independent recent-hit HP; no debug overlay dependency | Pending final inspection/video |
-| U03.07 | Won/Lost/Retry authority; release gate/AwaitingResume, owner isolation, no combat persistence | Pending final regression |
-| Full Automation | MCP TestRunner filter AnimeMMORPG; GetLogEntries completions; actual total and per-test status | Initial HUD source5cc8574:134 Success/0 Failed; final D source pending |
-| Build/assets | Editor + Game; Windows package; Blueprint compile/references; Boot/CharacterCombatLab/NetworkLab smoke | Initial HUD source5cc8574 Editor/Game PASS; package/assets/smoke and final D pending |
-| Input/video | Combo,Q/E/Feint/Interrupt,dodge,guard/parry/break, labelled CC/X; win/loss/Retry; Tab/HP occlusion; rebind/save/load; held keys through menu/focus/Resume | Pending final source |
-| Loopback audio | Parry 660→990 sequence, distinct Feint/Interrupt; duplicate snapshots silent; event timestamp correlation | Pending final source |
-| Lifecycle | Five Boot→arena→Boot loops; Quit/reopen isolated settings | Pending final source |
-| Network | Dedicated Editor + two clients: identity/owner/proxy, HP/resource/result agreement, Retry A leaves B, stale/duplicate/late data, disconnect/reconnect | Pending final source |
-| Profile | Exact inherited resolution/pool/render, client60/server30 with runtime combat; measured render FPS distinct from model steps; no cap/smoothing/input workaround | Pending profile audit and final measurement |
-| Delivery | One clone, guarded launchers/hash/port/process, placement restoration, manifest all retained failures/warnings, commit/push/remote SHA | Pending |
+|Expiry/dedup/scope|D AbsoluteFeedbackWindow, FeedbackDedupAndLateAudio; Native new-life/montage/C2 reset + live feedback audit/reconnect|PASS; 1,2s absolute, old/future/history không replay; voice scope nguồn/đích|
+|Miss|AuthorityCompletedMissContactCancel, world30/60/120/long update|PASS: natural miss only; hit/block/parry/cancel không thêm miss|
+|Visibility|D RecentHitVisibility predicate + shared C2 projection/LOS; target input15 + combat no-auto-Tab hit HP frame|PASS compositional coverage; không tuyên bố packet injection|
+|Settings|U01 BindingValidation/PartialRecovery/SaveAndFailure/LocalMappingIsolation, A1 v1 migration, D LegacyConflictAndFutureSchema|PASS; slot UUID, no user migration/no load rewrite|
+|Pose/assets|D DefensePoseAssets + existing attack/animation tests + BP16/ref audit/video|PASS; fixed root/no gameplay notify; mannequin/blockout|
+|Build/package/smoke|Editor/Game/UAT +3 map processes|PASS final source|
+|Input/audio|Combat24, fixture15, route11, target15; loopback parry single660→990 group + distinct signal bands|PASS; debug messages off in fixture, failed runs retained|
+|Lifecycle/settings launcher|5 Boot loops, Quit/reopen; actual PlayD stable path save/reopen; defaults restored by UI|PASS|
+|Network|Dedicated Editor +2 clients and reconnect,26 checks +41 independent comparisons|PASS; owner/proxy, HP/resource/result, Retry isolation/stale claims|
+|Profile|Monotonic raw frame intervals during authority combat; cap60/server30, C2 quality/smoothing preserved|Measured; numeric results/limits in report; not U04 acceptance|
+|Launch/Stop|Source/module/engine/package guards, occupied port/concurrent Solo refusal, unique session log identity and placement restore|PASS; Solo/A/B preferences separate and persistent|
+|U03.01–09 regression|Full137 includes timing/model/world30/60/120 and long updates, wall/StepUp/two-pawn dodge, lethal cutoff, lock/focus|PASS; model rates are not render FPS|
 
-AI owns technical verification; user checklist covers readability, distinct audiovisual feedback, poses/grip, HUD/occlusion and Retry/focus/two-window feel only. Product art and U04 graphics/performance acceptance remain deferred.
+User checklist is limited to readability, feedback/poses/grip, HUD/occlusion, Retry/focus/two-window feel. Technical verification belongs to AI. Not ACCEPTED, no main merge/U03 closure/U04.

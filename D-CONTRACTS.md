@@ -1,6 +1,6 @@
 # U03-D contracts
 
-Status: D.1 audit in progress. This file is a contract, not evidence of passing gates.
+Status: contract retained; final technical gates are READY_FOR_REVIEW in Docs/U03/REPORT-D.md. This contract is not acceptance.
 Base: `bc3a9955a8c0ecc1cb7f0d43dce13300c9664ac9`; branch `u03/d-integration`.
 
 ## Scope and invariants
@@ -48,3 +48,11 @@ D.2 initial implementation: recent-hit HP reuses AU02NetworkState confirmed hist
 ## Delivery boundary
 
 Commit source before final clone gates. Build/test/package in one D clone; rerun only affected gates after fixes. Retain failed/invalid evidence with source, engine/toolchain, process/world/owner/role and hashes. Final root launchers: Play-U03-D.cmd, Play-U03-D-Network.cmd, Stop-U03-D.cmd and Play-U03-D-CHECKLIST.md. REPORT-D.md, Evidence/D/MANIFEST.json, CLOSURE-D.md separate inherited/new evidence. Reviewer AI verifies technical evidence; user playtests feel and authorizes closure. Stop READY_FOR_REVIEW only after all required gates pass and branch push/remote verification. No ACCEPTED/merge/U03 closure.
+
+## Final D implementation notes
+
+Final runtime9da1b43; report/manifest distinguish inherited C2/checkpoint from final D runs. No new gameplay decision. Completion observer is output-only, after authority determines natural/cancelled outcome; block/parry contacts suppress miss. Presentation inputs remain confirmed snapshots/history, server clock and LocalPlayer projection/LOS.
+
+Visual lifetime is timestamp+1.2s. Audio freshness150ms is a presentation gate, not combat/input timing; initial-only history watermark is per connection. Active voices bind both source/target lives and encounter scope and stop on scope change. Existing parry PCM expression reused; new signals are original synthetic blockout. Defense assets keep fixed root/carry/grip and do not rewrite accepted skeleton. Full UBT/cold processes verify reflection/header changes.
+
+Launcher user preferences persist in separate Solo/Network-A/Network-B folders; logs stay unique per session for PID identity. Reconnect keeps preferences and gets fresh combat ownership. No migration against user settings, no combat save, no original Editor save/restart/close. Final files stop READY_FOR_REVIEW; user feel confirmation and closure permission remain separate.

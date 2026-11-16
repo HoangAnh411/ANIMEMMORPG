@@ -8,7 +8,7 @@ foreach($kind in @('Review','Solo')){
   $records=Get-Content -Raw -Encoding UTF8 -LiteralPath $recordFile | ConvertFrom-Json
   $live=@(foreach($b2Record in $records){
    $b2Process=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$b2Record.pid)
-   if($b2Process -and $b2Process.ExecutablePath -ieq $b2Record.executable -and $b2Process.CommandLine.Contains($b2Record.userDir) -and $b2Process.CommandLine.Contains('-U02SourceSHA='+$b2Record.sourceSHA)){$b2Record}
+   if($b2Process -and $b2Process.ExecutablePath -ieq $b2Record.executable -and $b2Process.CommandLine.Contains($b2Record.userDir) -and $b2Process.CommandLine.Contains($b2Record.log) -and $b2Process.CommandLine.Contains('-U02SourceSHA='+$b2Record.sourceSHA)){$b2Record}
   })
   # A completed old solo review must not overwrite a later network placement restore.
   if(!$live.Count -and (Test-Path (Join-Path $session 'editor-restored-verified.json'))){continue}

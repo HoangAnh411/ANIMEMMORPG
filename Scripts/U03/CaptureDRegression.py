@@ -59,6 +59,7 @@ try:
  c.focus();observed=c.probe_w()
  if observed!='W':c.toggle_ime();c.ime=True;assert c.probe_w()=='W'
  writer=cv2.VideoWriter(str(a.out/'Regression-D.mp4'),cv2.VideoWriter_fourcc(*'mp4v'),30,(1280,720));assert writer.isOpened();worker=threading.Thread(target=record);worker.start();resume()
+ console('DisableAllScreenMessages');m['onScreenDebugMessagesDisabled']=True
  check('Regression run has no product encounter',not state().get('encounter'))
  reset();tap('Q');until(lambda:b()['definition']==3 and b()['phase']==1);tap('Q');until(lambda:b()['feintSequence']==1);snap('Feint');check('Physical Q edge Feints without refund',b()['energy']==80);time.sleep(1.3)
  reset();tap('LMB');until(lambda:b()['phase']==1);until(lambda:b()['phase']==3);tap('LMB');until(lambda:b()['definition']==1);until(lambda:b()['phase']==3);tap('LMB');until(lambda:b()['definition']==2);time.sleep(.65);snap('ComboMiss')
@@ -68,8 +69,8 @@ try:
  for label,kind in [('stun',1),('knockdown',2),('launch',3),('grab',4)]:
   reset();fixture(label);until(lambda:b()['hardCC']==kind);snap('CC-'+label);tap('X');until(lambda:b()['hardCC']==0);check('X clears labelled '+label,b()['xReady']>state()['worldSeconds']);console('U03B2Fixture off')
  reset();wall=fixture('target-q');until(lambda:time.time()>=wall+.90);tap('E');until(lambda:b()['definition']==4);cast=b()['start'];time.sleep(.5);snap('Interrupt')
- events=[json.loads(x.split('U02B_EVENT ',1)[1]) for x in c.log.read_text(encoding='utf-8-sig').splitlines() if 'U02B_EVENT {' in x]
- check('Real E Interrupts fixture startup',any(x['pawnId']!=b()['pawnId'] and x['interruptTime']>=cast and x['interruptedAction']>0 for x in events));console('U03B2Fixture off')
+ events=[json.loads(x.split('U02F_RESULT ',1)[1]) for x in c.log.read_text(encoding='utf-8-sig').splitlines() if 'U02F_RESULT {' in x]
+ check('Real E Interrupts fixture startup',any(x['source']==b()['pawnId'] and x['timestamp']>=cast and x['interrupted'] and x['interruptedAction']>0 for x in events));console('U03B2Fixture off')
  reset();c.press('RMB',True);until(lambda:b()['guard']);tap('Escape');time.sleep(.2);resume();check('Held guard does not rearm through menu',not b()['guard']);c.press('RMB',False)
  c.press('Q',True);until(lambda:b()['definition']==3);tap('Escape');time.sleep(.2);resume();time.sleep(.9);check('Held Q does not replay through Resume',b()['action']==1 and b()['feintSequence']==0);c.press('Q',False)
  c.guard();u.ShowWindow(c.hwnd,6);time.sleep(.4);c.focus();check('Focus loss requires explicit Resume',state()['controlState']!=0);resume()

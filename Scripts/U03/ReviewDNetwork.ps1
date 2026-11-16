@@ -13,7 +13,7 @@ $windows=@(Get-U02OriginalEditorWindows (Join-Path $root 'AnimeMMORPG.uproject')
 
 $didMinimize=$false
 try{
- $session=& (Join-Path $PSScriptRoot 'StartDSession.ps1') -CloneProject $project -OutputRoot (Join-Path $root 'Artifacts/U03/D') -MemoryBudget -ClientMaxFPS 60 -BufferedDiagnostics -Port $Port
+ $session=& (Join-Path $PSScriptRoot 'StartDSession.ps1') -CloneProject $project -OutputRoot (Join-Path $root 'Artifacts/U03/D') -MemoryBudget -PersistSettings -ClientMaxFPS 60 -BufferedDiagnostics -Port $Port
  if(!$session -or !(Test-Path (Join-Path $session 'processes.json'))){throw 'D session not ready'}
  ConvertTo-Json -InputObject $windows -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $session 'original-editor-windows.json')
  . (Join-Path $PSScriptRoot '../U02/EnsureEditorMinimized.ps1')

@@ -8,7 +8,7 @@ $records=Get-Content -Raw -Encoding UTF8 -LiteralPath $file | ConvertFrom-Json
 foreach($record in $records){
  $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$record.pid)
  if(!$live){continue}
- if($live.Name -ne 'UnrealEditor.exe' -or [IO.Path]::GetFullPath($live.ExecutablePath) -ine [IO.Path]::GetFullPath($record.executable) -or (Get-FileHash -LiteralPath $record.executable).Hash -ine $record.binarySHA256 -or !$live.CommandLine.Contains($record.project) -or !$live.CommandLine.Contains($record.userDir)){throw ('PID identity mismatch; not stopping '+$record.pid)}
+ if($live.Name -ne 'UnrealEditor.exe' -or [IO.Path]::GetFullPath($live.ExecutablePath) -ine [IO.Path]::GetFullPath($record.executable) -or (Get-FileHash -LiteralPath $record.executable).Hash -ine $record.binarySHA256 -or !$live.CommandLine.Contains($record.project) -or !$live.CommandLine.Contains($record.userDir) -or !$live.CommandLine.Contains($record.log)){throw ('PID identity mismatch; not stopping '+$record.pid)}
  if(!$live.CommandLine.Contains('-U02SourceSHA='+$record.sourceSHA)){throw 'Session source identity mismatch'}
  $module=Join-Path (Split-Path $record.project) 'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll'
  if((Get-FileHash -LiteralPath $module).Hash -ine $record.moduleSHA256){throw 'Session module identity mismatch'}
