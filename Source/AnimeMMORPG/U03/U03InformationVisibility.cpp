@@ -1,5 +1,6 @@
 #include "U03InformationVisibility.h"
 #include "U01/U01PlayerController.h"
+#include "U01/U01Character.h"
 #include "U02/U02VitalComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/LocalPlayer.h"

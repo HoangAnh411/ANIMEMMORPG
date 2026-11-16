@@ -62,7 +62,12 @@ try:
  console('DisableAllScreenMessages');m['onScreenDebugMessagesDisabled']=True
  check('Regression run has no product encounter',not state().get('encounter'))
  reset();tap('Q');until(lambda:b()['definition']==3 and b()['phase']==1);tap('Q');until(lambda:b()['feintSequence']==1);snap('Feint');check('Physical Q edge Feints without refund',b()['energy']==80);time.sleep(1.3)
- reset();tap('LMB');until(lambda:b()['phase']==1);until(lambda:b()['phase']==3);tap('LMB');until(lambda:b()['definition']==1);until(lambda:b()['phase']==3);tap('LMB');until(lambda:b()['definition']==2);time.sleep(.65);snap('ComboMiss')
+ reset();tap('LMB');until(lambda:b()['phase']==1)
+ # Press inside the existing 150ms authority buffer; early recovery is longer
+ # than that buffer and cannot reliably chain. Do not change gameplay timing.
+ for definition in [1,2]:
+  until(lambda:b()['serverSnapshotSeconds']>=b()['end']-.10);tap('LMB');until(lambda:b()['definition']==definition)
+ time.sleep(.65);snap('ComboMiss')
  reset();tap('Shift');until(lambda:b()['dodge']>0);snap('Dodge');time.sleep(.4)
  reset();wall=fixture('block');until(lambda:time.time()>=wall+1.10);c.press('RMB',True);until(lambda:b()['defenseResult']==2);snap('Parry');until(lambda:b()['defenseResult']==1);snap('Block');check('Parry then held block confirmed',b()['posture']==75);c.press('RMB',False);console('U03B2Fixture off')
  reset();fixture('unparryable');c.press('RMB',True);until(lambda:b()['hardCC']==5,8);snap('Break');check('Guard breaks after four blocks',b()['posture']==0 and not b()['guard']);tap('X');until(lambda:b()['hardCC']==0);snap('X');check('X clears break and restores posture',b()['posture']==100);c.press('RMB',False);console('U03B2Fixture off')
