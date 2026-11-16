@@ -13,6 +13,11 @@ inline bool RecentHitVisible(double EventTime,double ServerNow,bool SameIdentity
 {return SameIdentity&&OnScreen&&Clear&&FeedbackRemaining(EventTime,ServerNow)>0;}
 inline bool ConsumeFeedback(uint64 Serial,uint64& Watermark)
 {if(!Serial||Serial<=Watermark)return false;Watermark=Serial;return true;}
+// A history packet can arrive just ahead of the local estimate of server time.
+// Do not retire its identity before that clock permits presentation. This never
+// changes the authority timestamp, expiry or the 150ms fresh-audio allowance.
+inline bool ConsumeReadyFeedback(uint64 Serial,uint64& Watermark,double At,double Now)
+{return FMath::IsFinite(At)&&FMath::IsFinite(Now)&&Now>=At&&ConsumeFeedback(Serial,Watermark);}
 inline bool FreshFeedbackAudio(bool New,bool Primed,bool Visible,double At,double Now)
 {return New&&Primed&&Visible&&FeedbackRemaining(At,Now)>0&&Now-At<=.15;}
 inline bool SameFeedbackScope(uint64 Life,uint64 ExpectedLife,FGuid Encounter,FGuid ExpectedEncounter,uint64 Revision,uint64 ExpectedRevision)

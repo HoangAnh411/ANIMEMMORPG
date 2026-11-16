@@ -8,6 +8,22 @@
 #include "Components/BoxComponent.h"
 #include "Engine/World.h"
 using namespace AnimeMMORPG::U03;
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03R1FutureClock,"AnimeMMORPG.U03.DR1.FutureHistoryClockEligibility",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
+bool FU03R1FutureClock::RunTest(const FString&)
+{
+    uint64 Serial=0;
+    TestFalse(TEXT("An ahead-of-clock packet does not retire identity"),ConsumeReadyFeedback(7,Serial,10,9.99));
+    TestEqual(TEXT("No premature watermark advancement"),Serial,uint64(0));
+    TestEqual(TEXT("Future packet cannot display"),FeedbackRemaining(10,9.99),0.);
+    TestTrue(TEXT("Same event is fresh when official server clock catches up"),FreshFeedbackAudio(ConsumeReadyFeedback(7,Serial,10,10.01),true,true,10,10.01));
+    TestFalse(TEXT("Duplicate cannot replay sound"),FreshFeedbackAudio(ConsumeReadyFeedback(7,Serial,10,10.02),true,true,10,10.02));
+    TestFalse(TEXT("A hidden eligible event is consumed silently"),FreshFeedbackAudio(ConsumeReadyFeedback(8,Serial,10.1,10.11),true,false,10.1,10.11));
+    TestFalse(TEXT("Reveal cannot rearm that hidden event"),FreshFeedbackAudio(ConsumeReadyFeedback(8,Serial,10.1,10.12),true,true,10.1,10.12));
+    TestFalse(TEXT("Late eligible history cannot sound"),FreshFeedbackAudio(ConsumeReadyFeedback(9,Serial,11,11.3),true,true,11,11.3));
+    TestEqual(TEXT("Late event retains only original remaining window"),FeedbackRemaining(11,11.3),.9,UE_SMALL_NUMBER);
+    Serial=20;TestFalse(TEXT("Initial reconnect baseline remains silent even with future packet"),ConsumeReadyFeedback(20,Serial,12,12.01));
+    return true;
+}
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU03R1WorldVisibility,"AnimeMMORPG.U03.DR1.EnvironmentOcclusionAndFeedback",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
 bool FU03R1WorldVisibility::RunTest(const FString&)
 {

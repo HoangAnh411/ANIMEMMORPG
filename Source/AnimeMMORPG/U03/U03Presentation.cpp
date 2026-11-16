@@ -78,7 +78,7 @@ void AU03EncounterHUD::DrawPresentation()
     Events.Sort([](const auto& A,const auto& B){return A.Serial<B.Serial;});
     for(const auto& R:Events)
     {
-        const bool New=AnimeMMORPG::U03::ConsumeFeedback(R.Serial,FeedbackSerial);
+        const bool New=AnimeMMORPG::U03::ConsumeReadyFeedback(R.Serial,FeedbackSerial,R.Timestamp,Now);
         AU01Character* Source=nullptr;AActor* Target=nullptr;
         for(TActorIterator<AU01Character> P(GetWorld());P;++P)
         {
