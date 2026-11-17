@@ -25,9 +25,9 @@ try{
  Tool 'EditorToolset.LogsToolset' 'GetLogCategories' @{filter='LiveCoding'}|ConvertTo-Json -Depth 12|Set-Content (Join-Path $Run 'categories.json')
  & python (Join-Path $PSScriptRoot 'PrepareA.py') --root $clone
  if($LASTEXITCODE -ne 0){throw 'Clone config normalization failed'}
- git -C $clone fetch origin u04/a-windows-regression *> (Join-Path $Run 'fetch.log')
+ git -C $clone fetch --quiet origin u04/a-windows-regression *> (Join-Path $Run 'fetch.log')
  if($LASTEXITCODE -ne 0){throw 'Clone fetch failed'}
- git -C $clone checkout --detach $FinalSourceSHA *> (Join-Path $Run 'checkout.log')
+ git -C $clone checkout --quiet --detach $FinalSourceSHA *> (Join-Path $Run 'checkout.log')
  if($LASTEXITCODE -ne 0){throw 'Clone checkout failed'}
  Tool 'test_runner.toolsets.test_runner.TestRunnerTools' 'live_coding_compile' @{}|ConvertTo-Json -Depth 12|Set-Content (Join-Path $Run 'trigger.json')
  for($i=0;$i -lt 60;$i++){
