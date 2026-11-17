@@ -1,6 +1,6 @@
 # U04-A test matrix
 
-Final status: READY_FOR_REVIEW. Selected new runs and per-gate results are recorded in [A-RESULTS.json](A-RESULTS.json); invalid runs are explicitly excluded. Exact inherited assertion literals: [A-ASSERTIONS.json](A-ASSERTIONS.json); expected test names: [A-EXPECTED-TESTS.json](A-EXPECTED-TESTS.json). Dynamic network stage comparisons also cover each saved authority/proxy stage, not just literal assertions.
+Current status: **ACCEPTED về kỹ thuật at handoff `50b738506f210a9c3de94c091826c7c8c2f6d49a`**, built source/binary `b35ef63c7e9ffdfbb4088544350317a8f958723c`; [acceptance](ACCEPTANCE-A.md). No gate was rerun for documentation closure. Selected execution runs and per-gate results remain unchanged in [A-RESULTS.json](A-RESULTS.json), whose READY_FOR_REVIEW state is historical; invalid runs are explicitly excluded. Exact assertion literals: [A-ASSERTIONS.json](A-ASSERTIONS.json); expected test names: [A-EXPECTED-TESTS.json](A-EXPECTED-TESTS.json). Dynamic network stage comparisons also cover each saved authority/proxy stage, not just literal assertions.
 
 | Gate | Cases and required evidence | Harness |
 |---|---|---|

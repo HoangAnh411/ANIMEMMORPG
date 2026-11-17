@@ -1,6 +1,6 @@
-# U04-A — READY_FOR_REVIEW
+# U04-A — ACCEPTED về kỹ thuật
 
-Independent reviewer acceptance is pending. U04-A has not been merged; U04-B/C/D have not started.
+Independent reviewer technically **ACCEPTED U04-A at `50b738506f210a9c3de94c091826c7c8c2f6d49a`**, with no blocking findings in scope. The user authorized documentation closure and fast-forward/push of main on 2026-11-17, followed only by a detailed U04-B plan for review. [Acceptance](ACCEPTANCE-A.md). Built source/binary remains **b35ef63c7e9ffdfbb4088544350317a8f958723c**; closure/merge commits are documentation identities, not binary source. No builds/tests/game were rerun for closure. Earlier READY_FOR_REVIEW/no-merge wording below records the original handoff; manifests, results and failed/invalid evidence remain unchanged. Packaged Server, U04-B FPS correctness, product performance and U04-D soak are not accepted; U04-B/C/D implementation has not started.
 
 U03 dossier was accepted at b2199687 and closed at **25a048d9a6744a991040dbaa7698f10bcda448f6**, pushed to the dossier branch and fast-forwarded/pushed to main with remote SHA verified. U04 branch `u04/a-windows-regression` starts from that exact main. Historical U03 identities remain: binary/source0b25523, technical acceptancea7737f9, technical closure89358c5, user playtest3439fed. Documentation commits are never assigned to those binaries.
 

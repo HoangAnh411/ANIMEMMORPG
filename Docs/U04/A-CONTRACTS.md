@@ -1,6 +1,6 @@
 # U04-A contract
 
-Status: READY_FOR_REVIEW; new execution results and limitations are in REPORT-A.md and A-RESULTS.json. Main baseline is `25a048d9a6744a991040dbaa7698f10bcda448f6`, verified local/remote after U03 dossier acceptance at b2199687. Historical preflight: Artifacts/U04/A/Runs/Preflight-20261117-113150. Current start: Artifacts/U04/A/Runs/Start-20261117-113551.
+Current status: **ACCEPTED về kỹ thuật at handoff `50b738506f210a9c3de94c091826c7c8c2f6d49a`**; [acceptance](ACCEPTANCE-A.md). Built source/binary remains `b35ef63c7e9ffdfbb4088544350317a8f958723c`. Execution results and limitations in REPORT-A.md and the historical A-RESULTS.json are preserved without reruns. Main baseline is `25a048d9a6744a991040dbaa7698f10bcda448f6`, verified local/remote after U03 dossier acceptance at b2199687. Historical preflight: Artifacts/U04/A/Runs/Preflight-20261117-113150. Execution start snapshot: Artifacts/U04/A/Runs/Start-20261117-113551. The remaining contract describes the executed A scope and original handoff requirements.
 
 Scope: U04.01-02 with U04.06 evidence rules, Windows integration under active gameplay, dedicated Editor server and two active clients. No gameplay/API/settings schema change, prediction, bad network, packaged Server acceptance, performance optimization or U04-B/C/D. A gameplay defect stops its affected gate for independent fix review.
 
