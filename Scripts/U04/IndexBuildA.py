@@ -14,4 +14,10 @@ for step in ['Generate','Editor','Game','Package']:assert json.loads((a.build/(s
 package=a.build/'Archive/Windows';exe=package/'AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe';engine=Path('D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe')
 receipts=[dict(path=str(f),sha256=sha(f),content=json.loads(f.read_text(encoding='utf-8-sig'))) for f in (a.clone/'Binaries/Win64').glob('*.target')]
 m=dict(sourceSHA=a.source,utc=datetime.now(timezone.utc).isoformat(),clone=str(a.clone.resolve()),build=str(a.build.resolve()),engineExecutable=str(engine),engineSHA256=sha(engine),moduleSHA256=sha(a.clone/'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll'),gameSHA256=sha(exe),receipts=receipts,package=[dict(path=f.relative_to(package).as_posix(),bytes=f.stat().st_size,sha256=sha(f)) for f in sorted(package.rglob('*')) if f.is_file()])
+m['builtGameSHA256']=sha(a.clone/'Binaries/Win64/AnimeMMORPG.exe')
+assert m['builtGameSHA256']==m['gameSHA256'], 'Staged Game differs from built Game'
+m['engineCommandletSHA256']=sha(engine.with_name('UnrealEditor-Cmd.exe'))
+m['engineVersion']=json.loads((engine.parents[2]/'Build/Build.version').read_text())
+m['gitTree']=subprocess.check_output(['git','-C',str(a.clone),'ls-tree','-r','HEAD','Source','Content','Config','Plugins','AnimeMMORPG.uproject'],text=True)
+m['buildEvidence']=[dict(path=f.name,sha256=sha(f)) for f in sorted(a.build.glob('*')) if f.is_file()]
 out=a.build/'BUILD-IDENTITY.json';assert not out.exists();out.write_text(json.dumps(m,indent=2),encoding='utf-8');print(out)
