@@ -6,7 +6,7 @@ from DClient import DClient,u
 p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
 c=DClient(json.loads(a.record.read_text(encoding='utf-8-sig')));cv2.setNumThreads(1)
 m={'completed':False,'checks':[],'stages':[],'events':[],'process':c.record};writer=None;worker=None;stop=threading.Event();start=0;encoded=0;last=0;previous=None
-def check(n,v):m['checks'].append({'check':n,'result':'PASS' if v else 'FAIL'});assert v,n
+def check(n,v):m['checks'].append({'check':n,'result':'PASS' if v else 'FAIL','metrics':c.metrics()});assert v,n
 def vector(s):return np.array([float(x) for x in re.findall(r'[XYZ]=([-0-9.]+)',s)])
 def record():
  global encoded,last,previous
@@ -23,7 +23,10 @@ def until(f,t=3):
  while not f():
   if time.perf_counter()>end:raise RuntimeError('Physical condition timeout')
   time.sleep(.006)
-def tap(key):c.press(key,True);wait(.035);c.press(key,False);m['events'].append({'wall':time.perf_counter()-start,'key':key})
+def tap(key):
+ if key=='LMB':c.attack(True);wait(.035);c.attack(False)
+ else:c.press(key,True);wait(.035);c.press(key,False)
+ m['events'].append({'wall':time.perf_counter()-start,'key':key})
 def console(text):c.console(text);m['events'].append({'wall':time.perf_counter()-start,'fixture':text});wait(.35)
 def reset(place='Runway'):
  console('U01FixtureReset '+place);wait(.3)
