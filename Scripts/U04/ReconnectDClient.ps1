@@ -12,7 +12,7 @@ $newUser=Join-Path $session ('ClientA-Reconnect-'+(Get-Date -Format 'HHmmss'));N
 $log=Join-Path $newUser 'ClientA.log'
 $argsNew=@($old.arguments | ForEach-Object {if($_ -like '-UserDir=*'){'-UserDir="'+$old.userDir+'"'}elseif($_ -like '-U01FPerfFile=*'){'-U01FPerfFile="'+(Join-Path $newUser 'Frames.jsonl')+'"'}elseif($_ -like '-abslog=*'){'-abslog="'+$log+'"'}elseif($_ -like '-ModelContextProtocolPort=*'){('-ModelContextProtocolPort='+([int](($old.arguments | Where-Object {$_ -like '-ModelContextProtocolPort=*'}) -split '=')[1]+10))}else{$_}})
 $p=Start-Process -FilePath $old.executable -ArgumentList $argsNew -WorkingDirectory (Split-Path $old.project) -WindowStyle Normal -PassThru
-$new=$old.PSObject.Copy();$new.pid=$p.Id;$new.userDir=$old.userDir;$new.log=$log;$new.arguments=$argsNew;$new.utc=[DateTime]::UtcNow.ToString('o')
+$new=$old.PSObject.Copy();$new.pid=$p.Id;$new.creationUTC=(Get-CimInstance Win32_Process -Filter ('ProcessId='+$p.Id)).CreationDate.ToUniversalTime().ToString('o');$new.userDir=$old.userDir;$new.log=$log;$new.arguments=$argsNew;$new.utc=[DateTime]::UtcNow.ToString('o')
 $allFile=Join-Path $session 'all-processes.json';$all=$records;if(Test-Path $allFile){$all=Get-Content -Raw -Encoding UTF8 $allFile | ConvertFrom-Json}
 @($all)+@($new) | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 $allFile
 $new | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $newUser 'process.json')

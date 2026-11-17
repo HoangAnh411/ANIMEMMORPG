@@ -70,7 +70,8 @@ void UU01NetworkProbe::Tick(float Dt)
 {
     // Opt-in diagnosis only: sample every game frame, before the normal 5 Hz
     // collector. UTC and monotonic timestamps share the host clock on localhost.
-    if(Enabled&&(FParse::Param(FCommandLine::Get(),TEXT("U01FPerf"))||!FrameFile.IsEmpty()))
+    // U04-A diagnostics can observe existing gameplay without enabling probe fixtures.
+    if((Enabled&&(FParse::Param(FCommandLine::Get(),TEXT("U01FPerf"))||!FrameFile.IsEmpty()))||FParse::Param(FCommandLine::Get(),TEXT("U04AReadOnlyFrames")))
     {
         auto* World=GetWorld();auto D=MakeShared<FJsonObject>();
         D->SetStringField(TEXT("utc"),FDateTime::UtcNow().ToIso8601());
@@ -78,7 +79,7 @@ void UU01NetworkProbe::Tick(float Dt)
         D->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());D->SetNumberField(TEXT("netMode"),int32(World->GetNetMode()));
         D->SetBoolField(TEXT("focus"),FApp::HasFocus());D->SetNumberField(TEXT("frame"),double(GFrameCounter));
         auto CV=[&](const TCHAR* Name){const auto* V=IConsoleManager::Get().FindConsoleVariable(Name);D->SetNumberField(Name,V?V->GetFloat():-999);};
-        for(const auto* Name:{TEXT("t.MaxFPS"),TEXT("t.IdleWhenNotForeground"),TEXT("r.VSync"),TEXT("r.ScreenPercentage"),TEXT("net.UseAdaptiveNetUpdateFrequency"),TEXT("r.LumenScene.SurfaceCache.AtlasSize"),TEXT("r.RenderTargetPoolMin"),TEXT("r.Streaming.PoolSize")})CV(Name);
+        for(const auto* Name:{TEXT("t.MaxFPS"),TEXT("t.IdleWhenNotForeground"),TEXT("r.VSync"),TEXT("r.ScreenPercentage"),TEXT("net.UseAdaptiveNetUpdateFrequency"),TEXT("r.LumenScene.SurfaceCache.AtlasSize"),TEXT("r.RenderTargetPoolMin"),TEXT("r.Streaming.PoolSize"),TEXT("r.Lumen.DiffuseIndirect.Allow"),TEXT("r.Lumen.Reflections.Allow"),TEXT("r.Shadow.Virtual.Enable"),TEXT("r.ShadowQuality")})CV(Name);
         if(const auto* View=World->GetGameViewport())if(const auto* Unit=View->GetStatUnitData())
         {
             // Last-drawn-frame raw stat-unit timings; never infer GPU work from capped wall time.

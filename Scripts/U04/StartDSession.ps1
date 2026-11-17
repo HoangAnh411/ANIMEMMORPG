@@ -71,13 +71,14 @@ foreach($role in $roles){
   $commands+=',r.Lumen.DiffuseIndirect.Allow 0,r.Lumen.Reflections.Allow 0,r.Shadow.Virtual.Enable 0,r.ShadowQuality 2'
   Write-Host 'Focus review: simplified lighting/reflections/shadows for two clients; cap and networking unchanged.'
  }
+ $arguments+='-U04AReadOnlyFrames'
  $arguments+=@(('-ExecCmds="'+$commands+'"'),'-NoLiveCoding','-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False','-nop4','-nosplash','-U01FProbe','-U01Trace','-U02FProbe','-U02Trace','-ModelContextProtocolStartServer',('-U02SourceSHA='+$sha),('-U02RunId='+(Split-Path $run -Leaf)),('-U02FCommands="'+(Join-Path $run 'command.txt')+'"'),('-U01SourceSHA='+$sha),('-UserDir="'+$settingsRoot+'"'),('-abslog="'+$log+'"'),('-ModelContextProtocolPort='+($McpPort+$records.Count)))
  Write-Host ('Starting '+$role+'; log: '+$log)
  # Interactive review clients must be visible during loading, before readiness.
  # The dedicated background server continues to run hidden.
  $windowStyle=if($role -eq 'Server'){'Hidden'}else{'Normal'}
  $p=Start-Process -FilePath $exe -ArgumentList $arguments -WorkingDirectory (Split-Path $project) -WindowStyle $windowStyle -PassThru
- $r=[pscustomobject]@{role=$role;pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;moduleSHA256=(Get-FileHash (Join-Path (Split-Path $project) 'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll')).Hash;binarySHA256=(Get-FileHash $exe).Hash;userDir=$settingsRoot;log=$log;utc=[DateTime]::UtcNow.ToString('o');requestedMaxFPS=$cap;clientCount=$ClientCount;windowSize=$(if($role -ne 'Server'){@(900,540)});internalResolutionPercent=$(if($role -ne 'Server'){if($MemoryBudget){50}else{100}});memoryProfile=($MemoryBudget.IsPresent -and $role -ne 'Server');bufferedDiagnostics=$BufferedDiagnostics.IsPresent}
+ $r=[pscustomobject]@{role=$role;creationUTC=(Get-CimInstance Win32_Process -Filter ('ProcessId='+$p.Id)).CreationDate.ToUniversalTime().ToString('o');pid=$p.Id;project=$project;executable=$exe;arguments=$arguments;sourceSHA=$sha;moduleSHA256=(Get-FileHash (Join-Path (Split-Path $project) 'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll')).Hash;binarySHA256=(Get-FileHash $exe).Hash;userDir=$settingsRoot;log=$log;utc=[DateTime]::UtcNow.ToString('o');requestedMaxFPS=$cap;clientCount=$ClientCount;windowSize=$(if($role -ne 'Server'){@(900,540)});internalResolutionPercent=$(if($role -ne 'Server'){if($MemoryBudget){50}else{100}});memoryProfile=($MemoryBudget.IsPresent -and $role -ne 'Server');bufferedDiagnostics=$BufferedDiagnostics.IsPresent}
  $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $user 'process.json')
  $records+=$r;$records | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $run 'processes.json')
  if($role -eq 'Server'){Set-FServerTimer $r | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $run 'server-timer.json')}

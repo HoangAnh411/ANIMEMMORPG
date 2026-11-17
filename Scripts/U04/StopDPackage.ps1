@@ -7,6 +7,7 @@ if(!$sessionPath.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){thr
 $record=Get-Content -Raw -LiteralPath (Join-Path $sessionPath 'process.json') | ConvertFrom-Json
 $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$record.pid)
 if($live){
+ if($record.creationUTC -and $live.CreationDate.ToUniversalTime().ToString('o') -ne $record.creationUTC){throw 'Process creation identity mismatch; refusing Stop'}
  if($record.role -ne 'U03PackageD' -or $live.ExecutablePath -ine $record.executable -or !$live.CommandLine.Contains($record.userDir) -or !$live.CommandLine.Contains($record.log) -or (Get-FileHash -LiteralPath $record.executable).Hash -ne $record.binarySHA256){throw 'Package identity changed; refusing Stop'}
  if(!$live.CommandLine.Contains('-U02SourceSHA='+$record.sourceSHA) -or $record.project -ine (Join-Path $root 'Artifacts/U04/A/Source/AnimeMMORPG.uproject')){throw 'Package project/source identity mismatch'}
  Stop-Process -Id $record.pid

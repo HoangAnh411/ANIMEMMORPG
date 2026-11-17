@@ -18,6 +18,8 @@
 #include "Components/HorizontalBoxSlot.h"
 #include "Components/SizeBox.h"
 #include "Components/ScrollBox.h"
+#include "Misc/CommandLine.h"
+#include "Misc/Parse.h"
 
 TSharedRef<SWidget> UU01Menu::RebuildWidget()
 {
@@ -140,6 +142,19 @@ TSharedRef<FJsonObject> UU01Menu::GetButtonDiagnostics() const
         if(!Active||!B->IsVisible()||G.GetLocalSize().IsNearlyZero()||Center.X<Min.X||Center.X>Max.X||Center.Y<Min.Y||Center.Y>Max.Y)continue;
         FVector2D Pixel,Viewport;USlateBlueprintLibrary::AbsoluteToViewport(this,Center,Pixel,Viewport);
         auto P=MakeShared<FJsonObject>();P->SetNumberField(TEXT("x"),Pixel.X);P->SetNumberField(TEXT("y"),Pixel.Y);P->SetBoolField(TEXT("enabled"),B->GetIsEnabled());J->SetObjectField(Label->GetText().ToString(),P);
+    }
+    if(FParse::Param(FCommandLine::Get(),TEXT("U04AReadOnlyFrames")))
+    {
+        auto Observe=[&](const TCHAR* Name,UWidget* W)
+        {
+            if(!W||!W->IsVisible())return;
+            bool Active=false;for(auto* Parent=W->GetParent();Parent;Parent=Parent->GetParent())if(Parent==Pages->GetActiveWidget()){Active=true;break;}
+            const auto G=W->GetCachedGeometry();const auto Center=G.LocalToAbsolute(G.GetLocalSize()*.5);
+            if(!Active||G.GetLocalSize().IsNearlyZero()||Center.X<Min.X||Center.X>Max.X||Center.Y<Min.Y||Center.Y>Max.Y)return;
+            FVector2D Pixel,Viewport;USlateBlueprintLibrary::AbsoluteToViewport(this,Center,Pixel,Viewport);
+            auto P=MakeShared<FJsonObject>();P->SetNumberField(TEXT("x"),Pixel.X);P->SetNumberField(TEXT("y"),Pixel.Y);P->SetNumberField(TEXT("width"),G.GetLocalSize().X);P->SetBoolField(TEXT("enabled"),W->GetIsEnabled());J->SetObjectField(Name,P);
+        };
+        Observe(TEXT("U04Sensitivity"),Sensitivity);Observe(TEXT("U04RightShoulder"),RightShoulder);Observe(TEXT("U04InvertY"),InvertY);
     }
     return J;
 }

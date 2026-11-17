@@ -9,6 +9,7 @@ $records=Get-Content -Raw -Encoding UTF8 -LiteralPath $file | ConvertFrom-Json
 foreach($record in $records){
  $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$record.pid)
  if(!$live){continue}
+ if($record.creationUTC -and $live.CreationDate.ToUniversalTime().ToString('o') -ne $record.creationUTC){throw 'Process creation identity mismatch; refusing Stop'}
  if($live.Name -ne 'UnrealEditor.exe' -or [IO.Path]::GetFullPath($live.ExecutablePath) -ine [IO.Path]::GetFullPath($record.executable) -or (Get-FileHash -LiteralPath $record.executable).Hash -ine $record.binarySHA256 -or !$live.CommandLine.Contains($record.project) -or !$live.CommandLine.Contains($record.userDir) -or !$live.CommandLine.Contains($record.log)){throw ('PID identity mismatch; not stopping '+$record.pid)}
  if(!$live.CommandLine.Contains('-U02SourceSHA='+$record.sourceSHA)){throw 'Session source identity mismatch'}
  $module=Join-Path (Split-Path $record.project) 'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll'

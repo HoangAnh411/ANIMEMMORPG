@@ -81,4 +81,6 @@ $success=@($lines | Where-Object {$_ -match 'Test Completed. Result=\{Success\}'
 foreach($name in $expected){if(@($success | Where-Object {$_ -match [regex]::Escape('Path={'+$name+'}')}).Count -ne 1){throw ('Missing success '+$name+'; '+$out)}}
 if(!$done -or $success.Count -ne $expected.Count -or (($lines -join "`n") -notmatch ([regex]::Escape([string]$expected.Count)+' tests performed'))){throw ('Incomplete tests: '+$out)}
 @{sourceSHA=$sourceSHA;executed=$success.Count;failed=0;tests=$expected;method='MCP TestRunner trigger and GetLogEntries completion, cold full-build clone';utc=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $out 'result.json')
+& python (Join-Path $PSScriptRoot 'VerifyAutomationA.py') --run $out
+if($LASTEXITCODE -ne 0){throw 'Exact test name comparison failed'}
 Write-Output ('PASS '+$success.Count+' completed U03-D Automation tests: '+$out)
