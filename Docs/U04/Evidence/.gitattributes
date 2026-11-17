@@ -1,1 +1,2 @@
-* -text
+# Preserve raw evidence bytes, including original CRLF and whitespace.
+* -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
