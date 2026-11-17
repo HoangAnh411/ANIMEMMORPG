@@ -25,11 +25,19 @@ try:
   m['samples'].append(dict(role=r['role'],samples=samples))
   try:
    c.focus()
+   observed=c.probe_w()
+   if observed!='W':c.toggle_ime();c.ime=True;observed=c.probe_w()
+   assert observed=='W', 'Windows input method did not deliver W'
+   if c.metrics().get('encounter',{}).get('result',0):
+    old=c.metrics()['encounter']['revision'];b=c.metrics()['menuButtons']['Retry encounter'];c.click(round(b['x']),round(b['y']))
+    end=time.perf_counter()+6
+    while c.metrics()['encounter']['revision']==old:
+     assert time.perf_counter()<end;time.sleep(.03)
    if c.metrics()['controlState']!=0:
     b=c.metrics()['menuButtons']['Resume'];c.click(round(b['x']),round(b['y']));time.sleep(.25)
    before=c.metrics();c.press('W',True);time.sleep(.35);after=c.metrics();c.press('W',False)
-   assert before['pawn']==after['pawn'] and before['capsuleCenterWorldCm']!=after['capsuleCenterWorldCm']
    m['inputs'].append(dict(role=r['role'],input='physical W down/up',before=before,after=after,result='PASS'))
+   assert before['pawn']==after['pawn'] and before['capsuleCenterWorldCm']!=after['capsuleCenterWorldCm']
    c.press('Escape',True);time.sleep(.04);c.press('Escape',False)
   finally:c.finish()
  m['completed']=True
