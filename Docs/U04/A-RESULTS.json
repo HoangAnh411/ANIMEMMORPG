@@ -519,5 +519,12 @@
       "assertions": 20,
       "results": "Artifacts/U04/A/Runs/Visibility-Capture-20261117-1232/Capture/visibility.json"
     }
+  ],
+  "publicationFailures": [
+    {
+      "run": "Publication-Invalid-1242",
+      "status": "INVALID_PUBLICATION_ONLY",
+      "reason": "Relative output was not resolved; partial publication kept; valid new immutable publication Review-20261117-1244"
+    }
   ]
 }
