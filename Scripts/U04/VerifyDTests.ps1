@@ -60,6 +60,9 @@ foreach($toolset in @('test_runner.toolsets.test_runner.TestRunnerTools','Editor
  $r=Rpc 'tools/call' @{name='describe_toolset';arguments=@{toolset_name=$toolset}}
  $r.data | ConvertTo-Json -Depth 15 | Set-Content (Join-Path $out (($toolset.Split('.')[-1])+'.schema.json'))
 }
+$loaded=@(Get-Process -Id $p.Id -Module | Where-Object {$_.ModuleName -like '*AnimeMMORPG*'} | Select-Object ModuleName,FileName)
+$loaded | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $out 'loaded-modules.json')
+if(@($loaded | Where-Object {[IO.Path]::GetFullPath($_.FileName) -ieq [IO.Path]::GetFullPath($module)}).Count -ne 1){throw 'Cold automation Editor loaded unexpected native module'}
 Tool 'AutomationTestToolset.AutomationTestToolset' 'DiscoverTests' @{bForceRediscover=$false} | ConvertTo-Json -Depth 15 | Set-Content (Join-Path $out 'discovery.json')
 $discovered=Tool 'AutomationTestToolset.AutomationTestToolset' 'ListTests' @{nameFilter=$Filter;tagFilter='';limit=1000}
 $discovered | ConvertTo-Json -Depth 20 | Set-Content (Join-Path $out 'discovered-tests.json')

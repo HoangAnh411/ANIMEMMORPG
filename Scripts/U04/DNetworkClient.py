@@ -31,7 +31,7 @@ class DNetworkClient(Client):
         else:self.held.discard(name)
     def __init__(self, record):
         from IdentityProcessA import verify
-        verify(record)
+        self.processIdentity=verify(record)
         self.record=record; self.pid=record['pid']; self.log=Path(record['log']); self.ime=False; self.held=set(); self.mouse_held=False
         exe=Path(record['executable']).resolve()
         assert record['role'] in ('ClientA','ClientB') and exe.name=='UnrealEditor.exe' and Path(record['project']).is_relative_to(ROOT/'Artifacts/U04/A/Source')

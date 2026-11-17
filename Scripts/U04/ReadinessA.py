@@ -22,7 +22,7 @@ try:
   for _ in range(4):samples.append(c.metrics());time.sleep(.35)
   assert all(y['worldSeconds']>x['worldSeconds'] for x,y in zip(samples,samples[1:]))
   assert len({v['pawn'] for v in samples})==1 and all(v['pawn'] and v['controller']==v['owner'] and v['locallyControlled'] and v['localPlayers']==1 for v in samples)
-  m['samples'].append(dict(role=r['role'],samples=samples))
+  m['samples'].append(dict(role=r['role'],processIdentity=c.processIdentity,samples=samples))
   try:
    c.focus()
    observed=c.probe_w()
