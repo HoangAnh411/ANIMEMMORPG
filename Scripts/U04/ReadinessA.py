@@ -3,20 +3,28 @@ import argparse,json,time,hashlib,subprocess
 from pathlib import Path
 from DClient import DClient
 from DNetworkClient import DNetworkClient
+from IdentityProcessA import verify
 p=argparse.ArgumentParser();p.add_argument('--session',type=Path,required=True);p.add_argument('--network',action='store_true');a=p.parse_args()
 out=a.session/'READINESS.json';assert not out.exists()
 records=json.loads((a.session/('processes.json' if a.network else 'process.json')).read_text(encoding='utf-8-sig'))
 if not a.network:records=[records]
-m=dict(completed=False,processes=records,samples=[],inputs=[])
+m=dict(completed=False,processes=records,samples=[],inputs=[],ticks=[])
 try:
  for r in records:
+  frame_rows=[]
+  for line in (Path(r['log']).parent/'Frames.jsonl').read_text(encoding='utf-8-sig').splitlines():
+   try:frame_rows.append(json.loads(line))
+   except json.JSONDecodeError:pass
+  ticks=frame_rows[-4:];assert len(ticks)==4 and all(v['pid']==r['pid'] for v in ticks)
+  assert all(y['frame']>x['frame'] and y['wall']>x['wall'] for x,y in zip(ticks,ticks[1:]))
+  m['ticks'].append(dict(role=r['role'],samples=ticks))
   if r['role']=='Server':
    rows=[]
    for line in Path(r['log']).read_text(encoding='utf-8-sig').splitlines():
     if 'U02F_STATE {' in line:rows.append(json.loads(line.split('U02F_STATE ',1)[1]))
    selected=rows[-4:];assert len(selected)==4
    assert all(v['pid']==r['pid'] and v['sourceSHA']==r['sourceSHA'] and v['netMode']==1 and v['worldType']==1 and v['localPlayers']==0 and 'L_NetworkLab' in v['world'] for v in selected)
-   assert all(y['time']>x['time'] for x,y in zip(selected,selected[1:]));m['samples'].append(dict(role='Server',samples=selected));continue
+   assert all(y['time']>x['time'] for x,y in zip(selected,selected[1:]));m['samples'].append(dict(role='Server',processIdentity=verify(r),samples=selected));continue
   c=(DNetworkClient if a.network else DClient)(r)
   samples=[]
   for _ in range(4):samples.append(c.metrics());time.sleep(.35)
