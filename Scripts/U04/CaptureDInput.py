@@ -90,7 +90,11 @@ try:
   if observed!='W':c.toggle_ime();c.ime=True;observed=c.probe_w()
   assert observed=='W'
   writer=cv2.VideoWriter(str(a.out/('Input-D-'+a.mode+'.mp4')),cv2.VideoWriter_fourcc(*'mp4v'),30,(1280,720));assert writer.isOpened();start=time.perf_counter();worker=threading.Thread(target=record);worker.start()
-  if a.mode in ('combat','route') and encounter()['result']:retry()
+  if a.mode in ('combat','route'):
+   # Gameplay continues in the menu. Setup may have consumed most of this life;
+   # start measured cases at a fresh product Retry rather than racing terminal UI.
+   if combat()['vital']['hp']<1000 and not encounter()['result']:until(lambda:encounter()['result']!=0,22)
+   if encounter()['result']:retry()
   resume();before=state();c.press('Tab',True);time.sleep(.45);c.press('Tab',False)
   check('Physical Target edge selects and hold never toggles',target()['selected'] and target()['visible'])
   check('Target leaves camera and facing alone',state()['aimYawPitchDegrees']==before['aimYawPitchDegrees'] and state()['bodyYawDegrees']==before['bodyYawDegrees'])

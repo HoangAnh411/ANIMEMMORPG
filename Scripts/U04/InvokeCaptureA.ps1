@@ -6,8 +6,11 @@ New-Item -ItemType Directory -Path $run | Out-Null
 $scriptPath=Join-Path $PSScriptRoot $Script
 $argsA=@('-X','utf8',$scriptPath)+$CaptureArguments+@('--out',(Join-Path $run 'Capture'))
 @{utc=[DateTime]::UtcNow.ToString('o');toolCommit=(git -C (Join-Path $PSScriptRoot '../..') rev-parse HEAD);executable=(Get-Command python).Source;arguments=$argsA;harness=@(Get-ChildItem $PSScriptRoot -File | Get-FileHash -Algorithm SHA256 | Select-Object Path,Hash)} | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $run 'command.json')
-& python @argsA *> (Join-Path $run 'capture.log')
-$code=$LASTEXITCODE
+try{
+ $ErrorActionPreference='Continue'
+ & python @argsA *> (Join-Path $run 'capture.log')
+ $code=$LASTEXITCODE
+}finally{$ErrorActionPreference='Stop'}
 @{exitCode=$code;completedUTC=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json | Set-Content (Join-Path $run 'result.json')
 if($code -ne 0){throw ('Capture failed: '+$run)}
 Write-Output $run
