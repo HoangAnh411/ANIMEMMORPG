@@ -55,7 +55,7 @@ Final integrity rehashes the entire final package/module/engine, verifies unchan
 
 Contracts: [A-CONTRACTS](A-CONTRACTS.md); matrix: [A-TEST-MATRIX](A-TEST-MATRIX.md); names: [A-EXPECTED-TESTS](A-EXPECTED-TESTS.json); assertion inventory: [A-ASSERTIONS](A-ASSERTIONS.json). Raw evidence: `Artifacts/U04/A/Runs`; raw final package: `Build-Final-20261117-1148/Archive/Windows`. Published evidence/manifest: `Docs/U04/Evidence/A/Review-20261117-1244/MANIFEST.json`, with raw/published SHA256 associations and retained invalid runs. Use `python Scripts/U04/VerifyEvidenceA.py <manifest>` (or `--published-only` on another checkout). Package bytes remain in isolated Artifacts; full file hash index is published.
 
-Branch is to be committed/pushed and remote SHA verified for handoff; exact final commit/remote attestation is provided separately to avoid a self-referential manifest hash. Stop at **READY_FOR_REVIEW**. Independent reviewer decides ACCEPTED/NOT ACCEPTED; no U04 merge or U04-B implementation is authorized here.
+The handoff branch is committed/pushed and its remote SHA is verified. Exact final commit/remote attestation is provided separately in the handoff response and under Artifacts/U04/A to avoid a self-referential manifest hash. Stop at **READY_FOR_REVIEW**. Independent reviewer decides ACCEPTED/NOT ACCEPTED; no U04 merge or U04-B implementation is authorized here.
 
 Publication note: the first seal attempt used an unresolved relative output path and stopped before producing a manifest. Its partial `Review-20261117-1242` directory and `Publication-Invalid-1242` raw diagnostic are retained. The valid immutable seal is `Review-20261117-1244`; its file index includes that publication failure. This did not invalidate native/gameplay gates.
 
