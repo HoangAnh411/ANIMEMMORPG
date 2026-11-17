@@ -4,7 +4,7 @@
 
 U03 hoàn tất kỹ thuật; người dùng đã xác nhận chơi thử blockout tích hợp D ngày **2026-11-16**, ghi tại `3439fed`, với phạm vi checklist dưới đây. Reviewer AI đối chiếu source/hash/log; người dùng đánh giá cảm giác và hình ảnh blockout. Mốc giữ nguyên: D-R1 `a7737f9`, source/binary `0b25523`, khép kỹ thuật D `89358c5`; commit hồ sơ không phải nguồn binary.
 
-Không suy ngược rằng người dùng đã chơi các package B2/C1 cũ. Art/animation sản phẩm, hiệu năng U04, mạng xấu U05 và Server đóng gói chưa được nghiệm thu. [Hồ sơ tổng hợp](CLOSURE-D.md) và [ROADMAP](Docs/ROADMAP.md) đang chờ review cuối trước merge; sau khi được review và giao khép mới lập kế hoạch U04, chưa triển khai U04.
+Không suy ngược rằng người dùng đã chơi các package B2/C1 cũ. Art/animation sản phẩm, hiệu năng U04, mạng xấu U05 và Server đóng gói chưa được nghiệm thu. [Hồ sơ tổng hợp](CLOSURE-D.md) và [ROADMAP](Docs/ROADMAP.md) **ACCEPTED** theo reviewer tại `b2199687dba33f5348a723506169dd1cfc8628a6`, không có lỗi chặn. Ngày 2026-11-17, người dùng giao khép hồ sơ, fast-forward/push main và tiếp tục U04-A từ main mới đã xác minh. Bước khép chỉ sửa tài liệu, không build/tests/game hoặc tác động Editor.
 
 ## Checklist và xác nhận lịch sử đã ghi tại 3439fed
 

@@ -6,11 +6,11 @@
 
 Giữ nguyên D-R1 `a7737f9`, source/binary `0b25523`, khép kỹ thuật D `89358c5`; commit xác nhận chơi thử `3439fed` và các commit hồ sơ sau đó không phải nguồn binary. Xác nhận D tích hợp không suy ngược rằng người dùng đã chơi package B2/C1 cũ. Art/animation sản phẩm, hiệu năng U04, mạng xấu U05 và Server đóng gói chưa được nghiệm thu.
 
-Hồ sơ tổng hợp đang chờ review cuối trên nhánh tài liệu, chưa merge. Chỉ sau khi được review và giao khép vào main mới lập kế hoạch U04 theo ROADMAP; chưa triển khai U04. Manifest, bằng chứng và failed runs giữ nguyên; lượt này chỉ đồng bộ tài liệu, không chạy lại build/tests/package hoặc tác động Editor.
+Hồ sơ U03 **ACCEPTED** theo reviewer tại `b2199687dba33f5348a723506169dd1cfc8628a6`, không có lỗi chặn. Ngày 2026-11-17, người dùng giao khép hồ sơ, fast-forward/push main và tiếp tục U04-A từ main mới đã xác minh. Manifest, bằng chứng và failed runs giữ nguyên; bước khép chỉ sửa tài liệu, không chạy lại build/tests/game hoặc tác động Editor. Commit hồ sơ không phải nguồn binary.
 
 ## Lịch sử nghiệm thu và xác nhận đã ghi tại 3439fed
 
-Phần dưới giữ nội dung đã review tại `3439fed`; các câu “chưa khép toàn U03” mô tả tình trạng hồ sơ ở thời điểm đó. Trạng thái kỹ thuật tổng hợp hiện hành nằm ở trên; việc merge hồ sơ tổng hợp vẫn chờ review cuối.
+Phần dưới giữ nội dung đã review tại `3439fed`; các câu “chưa khép toàn U03” mô tả tình trạng hồ sơ ở thời điểm đó. Trạng thái tổng hợp hiện hành nằm ở trên; reviewer đã ACCEPTED hồ sơ tại b2199687 và người dùng giao khép/merge ngày 2026-11-17.
 
 Người dùng chấp nhận kỹ thuật tại bàn giao `a7737f9a99bfe8a8637bcf86d09c4f190add7e16`, source kiểm chứng `0b255233df021f2cc148313e638d918d41a4a11e`. Lỗi chặn presentation của D tại `f6d0f68` đã được xử lý. Người dùng cho phép AI khép hồ sơ D và fast-forward/push main từ nền `bc3a9955a8c0ecc1cb7f0d43dce13300c9664ac9`.
 

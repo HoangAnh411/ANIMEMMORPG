@@ -6,7 +6,7 @@
 
 Mốc không đổi: nghiệm thu D-R1 `a7737f9`, source/binary kiểm chứng `0b25523`, khép kỹ thuật D `89358c5`, xác nhận chơi thử `3439fed`. Commit tài liệu không được gán cho binary. Xác nhận D tích hợp không suy ngược rằng người dùng đã chơi các package B2/C1 cũ. Art/animation sản phẩm, hiệu năng U04, mạng xấu U05 và Server đóng gói chưa được nghiệm thu.
 
-Hồ sơ tổng hợp đang chờ review cuối trước merge. Sau khi được review và giao khép vào main, bước tiếp theo là lập kế hoạch U04 theo ROADMAP; chưa triển khai U04. Lượt đồng bộ này chỉ sửa tài liệu, không sửa runtime/config/launcher/manifest/bằng chứng hoặc failed runs, không chạy lại build/tests/package và không tác động Editor.
+Hồ sơ U03 **ACCEPTED** theo reviewer tại `b2199687dba33f5348a723506169dd1cfc8628a6`, không có lỗi chặn. Ngày 2026-11-17, người dùng giao khép hồ sơ, fast-forward/push main và tiếp tục U04-A từ main mới đã xác minh. Bước khép chỉ sửa tài liệu, không chạy lại build/tests/game hoặc tác động Editor; runtime/config/launcher/manifest/bằng chứng và failed runs giữ nguyên. Commit hồ sơ không phải nguồn binary.
 
 ## Lịch sử hồ sơ đã review tại 3439fed
 

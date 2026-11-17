@@ -118,7 +118,7 @@ Phụ thuộc: U02. Bàn giao lần lượt A–D.
 
 Giữ đúng mốc D-R1: nghiệm thu kỹ thuật `a7737f9`, source/binary kiểm chứng `0b25523`, khép kỹ thuật D `89358c5`, ghi nhận chơi thử `3439fed`. Commit hồ sơ không phải nguồn binary. Xác nhận D tích hợp không suy ngược rằng người dùng đã chơi các package B2/C1 cũ. Art/animation sản phẩm, hiệu năng U04, mạng xấu U05 và Server đóng gói **chưa được nghiệm thu**; bước model/world 30/60/120 không thay FPS render thực.
 
-Hồ sơ tổng hợp đang chờ review cuối trên `u03/d-playtest-docs`, chưa merge. Sau khi hồ sơ được review và giao khép vào main, bước tiếp theo là **lập kế hoạch U04 theo ROADMAP**, chưa triển khai U04 trong lượt này. Các đoạn bàn giao A–D phía sau là lịch sử tại thời điểm ghi, không thay trạng thái hiện hành này.
+Hồ sơ U03 **ACCEPTED** theo reviewer tại `b2199687dba33f5348a723506169dd1cfc8628a6`, không có lỗi chặn. Ngày 2026-11-17, người dùng giao khép hồ sơ, fast-forward/push main và tiếp tục **U04-A** từ main mới đã xác minh; không triển khai U04-B/C/D. Bước khép chỉ sửa tài liệu, không build/tests/game hoặc tác động Editor. Các đoạn bàn giao A–D phía sau là lịch sử; source/binary `0b25523`, nghiệm thu kỹ thuật `a7737f9`, khép kỹ thuật D `89358c5`, xác nhận chơi thử `3439fed` giữ nguyên. Commit hồ sơ không phải nguồn binary.
 
 - [x] U03.01 A0/A1: ba đòn 60/70/90, buffer 0,15 giây, chuỗi 1,45 giây, quyền hủy/hướng.
 - [x] U03.02 A0/A1: năng lượng/cooldown, ưu tiên lệnh/reset combo.

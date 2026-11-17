@@ -8,7 +8,7 @@ Giữ nghiệm thu D-R1 `a7737f9`, source/binary kiểm chứng `0b25523` và m�
 
 Xác nhận tích hợp D không chứng minh người dùng đã chơi các package B2/C1 cũ; các ghi nhận lịch sử về những bản đó giữ nguyên. Art/animation sản phẩm, hiệu năng U04, mạng xấu U05 và Server đóng gói chưa được nghiệm thu. Các số test/capture bên dưới là kết quả đã có, không phải lượt chạy mới khi đồng bộ hồ sơ.
 
-Hồ sơ tổng hợp chờ review cuối trước merge vào main. Sau khi được review và giao khép, bước tiếp theo là lập kế hoạch U04 theo ROADMAP; **chưa triển khai U04**. Manifest, bằng chứng D bị từ chối/R1 và mọi failed runs giữ nguyên; không sửa runtime/config, không build/tests/package hoặc tác động Editor.
+Hồ sơ U03 **ACCEPTED** theo reviewer tại `b2199687dba33f5348a723506169dd1cfc8628a6`, không có lỗi chặn. Ngày 2026-11-17, người dùng giao khép hồ sơ, fast-forward/push main và tiếp tục U04-A từ main mới đã xác minh. Bước khép chỉ sửa tài liệu, không build/tests/game hoặc tác động Editor; manifest, bằng chứng và mọi failed runs giữ nguyên. Commit hồ sơ không phải nguồn binary.
 
 ## Lịch sử bàn giao D-R1 và ma trận bao phủ
 
