@@ -1,8 +1,9 @@
 """Publish immutable review evidence with explicit raw/published SHA256 associations."""
-import argparse,json,hashlib,gzip,re,shutil
+import argparse,json,hashlib,gzip,re,shutil,subprocess,sys
 from pathlib import Path
 from datetime import datetime,timezone
 p=argparse.ArgumentParser();p.add_argument('--gates',type=Path,required=True);p.add_argument('--publish',type=Path,required=True);a=p.parse_args();root=Path(__file__).resolve().parents[2]
+a.publish=a.publish.resolve()
 def sha(f):
  h=hashlib.sha256()
  with f.open('rb') as s:
@@ -35,4 +36,6 @@ for rel in ['Scripts/U01/F60Input.py','Scripts/U01/FReviewHost.ps1','Scripts/U02
  f=root/rel;dest=a.publish/'SharedHarness'/f.name;dest.parent.mkdir(exist_ok=True);shutil.copyfile(f,dest)
  records.append(dict(raw=rel,rawSHA256=sha(f),published=dest.relative_to(root).as_posix(),publishedSHA256=sha(dest),transformation='identity'))
 manifest=dict(schema=1,status='READY_FOR_REVIEW',createdUTC=datetime.now(timezone.utc).isoformat(),sourceSHA=gates['sourceSHA'],mainBaseline=gates['mainBaseline'],gates=gates,files=records,warnings=['Packaged Server not passed; installed engine has no advertised Win64 Server platform/receipt and project has no Server target.','Review resolution/internal50% and measured intervals describe this host only; no U04-B or product60FPS/1080p acceptance.','All failed/invalid/intermediate/historical runs are retained and explicitly excluded from passing gates.','Automation actual schema exposes no XML export; raw log and exact expected/discovered/executed JSON are provided.'])
+manifest['publisherCommit']=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()
+manifest['publisherCommand']=sys.argv
 out=a.publish/'MANIFEST.json';out.write_text(json.dumps(manifest,indent=2),encoding='utf-8');print(out,sha(out))
