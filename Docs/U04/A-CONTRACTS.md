@@ -1,6 +1,6 @@
 # U04-A contract
 
-Status: IMPLEMENTING; no U04 gate has passed yet. Main baseline is `25a048d9a6744a991040dbaa7698f10bcda448f6`, verified local/remote after U03 dossier acceptance at b2199687. Historical preflight: Artifacts/U04/A/Runs/Preflight-20261117-113150. Current start: Artifacts/U04/A/Runs/Start-20261117-113551.
+Status: READY_FOR_REVIEW; new execution results and limitations are in REPORT-A.md and A-RESULTS.json. Main baseline is `25a048d9a6744a991040dbaa7698f10bcda448f6`, verified local/remote after U03 dossier acceptance at b2199687. Historical preflight: Artifacts/U04/A/Runs/Preflight-20261117-113150. Current start: Artifacts/U04/A/Runs/Start-20261117-113551.
 
 Scope: U04.01-02 with U04.06 evidence rules, Windows integration under active gameplay, dedicated Editor server and two active clients. No gameplay/API/settings schema change, prediction, bad network, packaged Server acceptance, performance optimization or U04-B/C/D. A gameplay defect stops its affected gate for independent fix review.
 

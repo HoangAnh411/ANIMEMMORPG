@@ -172,6 +172,86 @@
     "assertion": "Old encounter identity cannot reset reconnect"
   },
   {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Actual Resume enters Playing"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Held Shift does not repeat"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Buffered second start exactly .60"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Two charges consumed"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "No charge cannot buffer"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "No third action"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Sequential first charge"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Next restore is original start+4"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Sequential full charges"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Physical startup cancellation admits dodge"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Cancelled sword presentation stops"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Dodge does not replay jump"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Menu locks control"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Menu preserves accepted dodge movement"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Menu Resume"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Actual focus loss requires Resume"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Focus preserves accepted dodge"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Focus Resume"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Physical wall sweep clips distance"
+  },
+  {
+    "harness": "CaptureDodgeA.py",
+    "assertion": "Recording thread survives intentional focus gap"
+  },
+  {
     "harness": "CaptureDRegression.py",
     "assertion": "Regression run has no product encounter"
   },
@@ -229,7 +309,11 @@
   },
   {
     "harness": "CaptureMovementA.py",
-    "assertion": "Combat lock preserves falling gravity"
+    "assertion": "Physical jump enters falling mode"
+  },
+  {
+    "harness": "CaptureMovementA.py",
+    "assertion": "Combat lock from incoming CC during physical jump preserves gravity"
   },
   {
     "harness": "CaptureMovementA.py",
@@ -269,7 +353,7 @@
   },
   {
     "harness": "CaptureMovementA.py",
-    "assertion": "Camera sweep resolves obstruction without extending through wall"
+    "assertion": "Physical camera turn toward corridor wall produces safe sweep retraction"
   },
   {
     "harness": "CaptureMovementA.py",
@@ -285,7 +369,7 @@
   },
   {
     "harness": "CaptureSettingsA.py",
-    "assertion": "Conflicting Forward=S rejected without swapping bindings"
+    "assertion": "Conflicting Backward=W rejected without swapping bindings"
   },
   {
     "harness": "CaptureSettingsA.py",

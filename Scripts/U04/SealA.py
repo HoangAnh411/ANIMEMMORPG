@@ -29,7 +29,7 @@ for f in sorted((root/'Artifacts/U04/A/Runs').rglob('*')):
     clean=re.sub(r'(?i)(SecurityToken\s*[=:]\s*|AUTH_PASSWORD=)([^\s";]+)',r'\1[REDACTED]',text)
     if clean!=text:data=clean.encode(enc);transform='redact-secrets'
    except UnicodeDecodeError:pass
-  dest=dest.with_name(dest.name+'.gz');dest.write_bytes(gzip.compress(data,compresslevel=9,mtime=0));transform+=';gzip'
+  dest=dest.with_name(dest.name+'.gz');dest.write_bytes(gzip.compress(data,compresslevel=6,mtime=0));transform+=';gzip'
  records.append(dict(raw=f.relative_to(root).as_posix(),rawSHA256=raw,rawBytes=f.stat().st_size,published=dest.relative_to(root).as_posix(),publishedSHA256=sha(dest),publishedBytes=dest.stat().st_size,transformation=transform))
 for rel in ['Scripts/U01/F60Input.py','Scripts/U01/FReviewHost.ps1','Scripts/U02/EnsureEditorMinimized.ps1']:
  f=root/rel;dest=a.publish/'SharedHarness'/f.name;dest.parent.mkdir(exist_ok=True);shutil.copyfile(f,dest)

@@ -1,0 +1,523 @@
+{
+  "status": "READY_FOR_REVIEW",
+  "completed": true,
+  "mainBaseline": "25a048d9a6744a991040dbaa7698f10bcda448f6",
+  "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+  "toolsCommitBeforePublication": "80d145870433a673a15be60e97d44046778c010d",
+  "build": "Artifacts/U04/A/Runs/Build-Final-20261117-1148/BUILD-IDENTITY.json",
+  "automation": {
+    "run": "Automation-LoadedModule-20261117-1213",
+    "expected": 140,
+    "discovered": 140,
+    "executed": 140,
+    "failed": 0
+  },
+  "smoke": [
+    {
+      "passed": true,
+      "map": "L_Boot",
+      "exitCode": 0,
+      "pid": 3384,
+      "loaded": true,
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "log": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\A\\Runs\\Smoke-20261117-1151\\L_Boot\\Game.log"
+    },
+    {
+      "passed": true,
+      "map": "L_CharacterCombatLab",
+      "exitCode": 0,
+      "pid": 12948,
+      "loaded": true,
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "log": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\A\\Runs\\Smoke-20261117-1151\\L_CharacterCombatLab\\Game.log"
+    },
+    {
+      "passed": true,
+      "map": "L_NetworkLab",
+      "exitCode": 0,
+      "pid": 9912,
+      "loaded": true,
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "log": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\A\\Runs\\Smoke-20261117-1151\\L_NetworkLab\\Game.log"
+    }
+  ],
+  "independentNetworkComparisons": 41,
+  "reconnectFeedback": {
+    "completed": true,
+    "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+    "oldEncounter": "D18268814BAF92AA5A8A0CB403A022B0",
+    "newEncounter": "E5E024324A1D2BCADAABF1895D93FFF7",
+    "retainedOldResults": 40,
+    "newProcessPID": 15900,
+    "oldEncounterFeedback": [],
+    "newProcessFeedback": [
+      "[2026.11.17-05.30.58:019][ 92]LogU03Presentation: Display: U03D_FEEDBACK serial=86 kind=0 subject=C05C60F34F320377EBB67D889065BB61 life=1 action=1 encounter=E5E024324A1D2BCADAABF1895D93FFF7 revision=1 at=133.704314826 now=133.708055265 audio=1",
+      "[2026.11.17-05.30.59:540][177]LogU03Presentation: Display: U03D_FEEDBACK serial=87 kind=0 subject=C05C60F34F320377EBB67D889065BB61 life=1 action=2 encounter=E5E024324A1D2BCADAABF1895D93FFF7 revision=1 at=135.204314826 now=135.231529806 audio=1",
+      "[2026.11.17-05.31.01:041][267]LogU03Presentation: Display: U03D_FEEDBACK serial=88 kind=0 subject=C05C60F34F320377EBB67D889065BB61 life=1 action=3 encounter=E5E024324A1D2BCADAABF1895D93FFF7 revision=1 at=136.704314826 now=136.732563607 audio=1",
+      "[2026.11.17-05.31.02:542][357]LogU03Presentation: Display: U03D_FEEDBACK serial=89 kind=0 subject=C05C60F34F320377EBB67D889065BB61 life=1 action=4 encounter=E5E024324A1D2BCADAABF1895D93FFF7 revision=1 at=138.204314826 now=138.234814707 audio=1"
+    ],
+    "method": "Fresh reconnect process sees historical replicated results but never requests feedback/audio for the old encounter"
+  },
+  "launchGuards": [
+    {
+      "message": "Source mismatch",
+      "result": "PASS",
+      "check": "Wrong source"
+    },
+    {
+      "message": "Editor module hash mismatch",
+      "result": "PASS",
+      "check": "Wrong Editor module"
+    },
+    {
+      "message": "Package content mismatch",
+      "result": "PASS",
+      "check": "Wrong package content"
+    },
+    {
+      "message": "Port occupied",
+      "result": "PASS",
+      "check": "Occupied network port"
+    },
+    {
+      "message": "Immutable session exists",
+      "result": "PASS",
+      "check": "Conflicting session output"
+    }
+  ],
+  "stopGuard": {
+    "message": "Package project/source identity mismatch",
+    "editorPID": 6676,
+    "utc": "2026-11-17T05:01:02.1006465Z",
+    "editorCreation": "/Date(1794889426617)/",
+    "completed": true,
+    "gameCreation": "/Date(1794891637692)/",
+    "result": "PASS",
+    "check": "Wrong-source Stop refuses live game and preserves original Editor",
+    "gamePID": 18092
+  },
+  "settingsConflict": {
+    "message": "Settings directory session conflict",
+    "check": "Live concurrent settings scope refused synchronously before owner teardown",
+    "settings": "D:/Data/AnimeMMORPG/Artifacts/U04/A/Settings/Visibility-1232",
+    "tool": "Scripts/U04/StartDSession.ps1",
+    "mcpPort": 19450,
+    "completed": true,
+    "port": 19440,
+    "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+    "utc": "2026-11-17T05:32:36.5506738Z",
+    "result": "PASS",
+    "owners": [
+      {
+        "ProcessId": 7004,
+        "CreationDate": "/Date(1794893513379)/"
+      },
+      {
+        "ProcessId": 3856,
+        "CreationDate": "/Date(1794893523418)/"
+      },
+      {
+        "ProcessId": 9116,
+        "CreationDate": "/Date(1794893538535)/"
+      }
+    ]
+  },
+  "integrity": "Artifacts/U04/A/Runs/Final-Integrity-20261117-1235/result.json",
+  "catalog": [
+    {
+      "run": "Automation-20261117-1151",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Automation-LoadedModule-20261117-1213",
+      "status": "SELECTED_AUTOMATION_PASS",
+      "reason": "Exact names plus actually loaded clone DLL."
+    },
+    {
+      "run": "Build-20261117-1144",
+      "status": "SUPERSEDED_BUILD",
+      "reason": "Earlier source before diagnostic changes."
+    },
+    {
+      "run": "Build-Final-20261117-1148",
+      "status": "SELECTED_BUILD_PASS",
+      "reason": "Final binary source b35ef63."
+    },
+    {
+      "run": "Conflict-ExpectedRefusal-1216",
+      "status": "INVALID",
+      "reason": "INVALID negative-test setup: owner was alive at initial check but network harness stopped it during clone/hash preflight. No active owner remained at conflict guard, so launcher started correctly. All owned processes stopped. No conflict PASS claimed.\n"
+    },
+    {
+      "run": "ConflictingSettings-ShouldNotLaunch-1214",
+      "status": "INVALID",
+      "reason": "INVALID negative-test setup; no live settings owner existed. Owned process stopped and original placement restored.\n"
+    },
+    {
+      "run": "Final-Integrity-20261117-1235",
+      "status": "SELECTED_CHECK_PASS",
+      "reason": "Explicit result.json/package-check.json."
+    },
+    {
+      "run": "Guards-20261117-1152",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Guards-Final-20261117-1235",
+      "status": "SELECTED_CHECK_PASS",
+      "reason": "Explicit result.json/package-check.json."
+    },
+    {
+      "run": "LiveCoding-20261117-1147",
+      "status": "INVALID",
+      "reason": "INVALID harness: PowerShell treated git fetch informational stderr as terminating NativeCommandError before source checkout/Live Coding trigger. Original Editor unchanged. Retry uses quiet git; full final build still required.\n"
+    },
+    {
+      "run": "LiveCoding-20261117-1148",
+      "status": "DIAGNOSTIC_SUCCESS",
+      "reason": "Live coding succeeded; never acceptance binary."
+    },
+    {
+      "run": "Network-20261117-1214",
+      "status": "INVALID",
+      "reason": "INVALID readiness harness: PowerShell ConvertTo-Json emitted a single loaded module as an object; verifier assumed a list. Server/client startup and frame logs retained; no acceptance capture started. Normalize singleton module records; runtime unchanged.\n"
+    },
+    {
+      "run": "Network-20261117-1216",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Network-20261117-1219",
+      "status": "INVALID",
+      "reason": "INVALID readiness precondition: ClientB reached terminal Lost between result check and Resume click (saved before/after hp0, result2, controlState2); no gameplay input could be admitted. ClientA readiness passed. Harness now waits for terminal and uses fresh Retry when setup has consumed HP; checks enabled Resume and Playing before input. Runtime unchanged.\n"
+    },
+    {
+      "run": "Network-20261117-1221",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Network-20261117-1225",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Network-20261117-1230",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Network-Capture-20261117-1216",
+      "status": "INVALID",
+      "reason": "INVALID reconnect readiness harness: verifier queried module list before freshly spawned Editor had loaded project DLL; empty module object caused KeyError. Previous action/HP/resource/Retry assertions and raw media retained, but whole network gate must rerun. Verifier now waits boundedly for actual module load without injecting input.\n"
+    },
+    {
+      "run": "Network-Capture-20261117-1221",
+      "status": "INVALID",
+      "reason": "INVALID reconnect harness: server Logout preceded client OS teardown; CIM returned an exiting process with unavailable executable path, so GetFullPath failed before spawning reconnect. No wrong process stopped. Reconnector now waits for OS exit, verifies creation identity and preserves reused PIDs. Full network rerun required; runtime unchanged.\n"
+    },
+    {
+      "run": "Network-Capture-20261117-1225",
+      "status": "INVALID",
+      "reason": "INVALID reconnect harness: stale/unavailable CIM path persisted despite Wait-Process; old client raw log had clean LogExit and subsequent native process queries found no old process. Reconnector now uses native process liveness after explicit product Quit and performs no Stop on old PID. All preceding assertions retained; full gate rerun required.\n"
+    },
+    {
+      "run": "Network-Capture-20261117-1230",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Preflight-20261117-113150",
+      "status": "HISTORICAL_BLOCKED_PREFLIGHT",
+      "reason": "Before authorized U03 dossier merge; not a U04 execution gate."
+    },
+    {
+      "run": "ServerSurvey-20261117-1147",
+      "status": "LIMITATION",
+      "reason": "Packaged Server is not passed."
+    },
+    {
+      "run": "Settings-ExpectedRefusal-1232",
+      "status": "SELECTED_CHECK_PASS",
+      "reason": "Explicit result.json/package-check.json."
+    },
+    {
+      "run": "SettingsConflict-20261117-1214",
+      "status": "INVALID",
+      "reason": "INVALID negative-test setup: network processes had already been stopped after readiness harness error, so settings scope was no longer in use. Launcher correctly started an isolated package; that owned package was stopped. No conflict PASS claimed.\n"
+    },
+    {
+      "run": "SettingsConflict-20261117-1216",
+      "status": "INVALID",
+      "reason": "INVALID negative-test setup: owner session stopped during probe preflight. See Conflict-ExpectedRefusal-1216/INVALID.txt. No settings-conflict PASS claimed for this run."
+    },
+    {
+      "run": "Smoke-20261117-1151",
+      "status": "SELECTED_SMOKE_PASS",
+      "reason": "Three headless maps only."
+    },
+    {
+      "run": "Solo-Combat-20261117-1152",
+      "status": "INVALID",
+      "reason": "INVALID readiness harness: native PhysicalPress key=None at 04:52:30.627Z; Windows input method was not probed before W. No capture started. Harness now uses inherited safe-menu W probe/IME handling; source unchanged.\n"
+    },
+    {
+      "run": "Solo-Combat-20261117-1154",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Solo-Combat-20261117-1156",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Combat-Capture-20261117-1154",
+      "status": "INVALID",
+      "reason": "INVALID capture setup: initial player HP50 at world14.516s; monster completed lethal damage during Resume setup, before first assertion. Retained input.json/video/log. Harness now awaits terminal and uses real Retry for a fresh life before measured cases; no gameplay change.\n"
+    },
+    {
+      "run": "Solo-Combat-Capture-20261117-1156",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Defense-Capture-20261117-1157",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Dodge-Capture-20261117-1205",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Movement-20261117-1200",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Solo-Movement-20261117-1202",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Solo-Movement-20261117-1204",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Solo-Movement-20261117-1205",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Movement-Capture-20261117-1157",
+      "status": "INVALID",
+      "reason": "INVALID harness: newly added gravity case used keyboard tap(LMB), emitted native PhysicalPress key=None at04:58:20.493Z, so no combat action was admitted. Gravity samples still advanced but combat-lock precondition was absent. Fixed to use inherited guarded mouse attack API; runtime unchanged.\n"
+    },
+    {
+      "run": "Solo-Movement-Capture-20261117-1200",
+      "status": "INVALID",
+      "reason": "INVALID test precondition: current combat source explicitly requires grounded admission; physical airborne attack correctly rejected (U02B_EVENT action0). The requirement is now tested with existing incoming Launch CC, which legitimately locks combat while airborne. No runtime change.\n"
+    },
+    {
+      "run": "Solo-Movement-Capture-20261117-1202",
+      "status": "INVALID",
+      "reason": "INVALID harness precondition: existing fixture explicitly logs launchImpulse=NONE, so applying Launch status while grounded does not make the pawn airborne. No runtime defect: fixture behavior matches source. New case physically jumps just before scheduled incoming CC and verifies actual airborne lock samples.\n"
+    },
+    {
+      "run": "Solo-Movement-Capture-20261117-1204",
+      "status": "INVALID",
+      "reason": "INVALID camera test precondition: pawn collided with corridor side wall but view yaw remained0, so desired camera arm remained parallel to the wall with no obstruction (cameraHit=false, distance352.881). Harness now physically turns yaw90 before asserting sweep retraction; all previous24 assertions in this run passed. Runtime unchanged.\n"
+    },
+    {
+      "run": "Solo-Movement-Capture-20261117-1205",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Regression-20261117-1157",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-route-20261117-1207",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-route-Capture-20261117-1207",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Settings-Reopen-20261117-1212",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Settings-Reopen-Capture-20261117-1212",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Settings-Save-20261117-1209",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "Solo-Settings-Save-20261117-1212",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-Settings-Save-Capture-20261117-1209",
+      "status": "INVALID",
+      "reason": "INVALID movement precondition in settings case: Forward rebound H was accepted by native input but pawn faced the solid opposing capsule at close range, producing zero velocity. Rebind/release checks passed. New case rebinds Backward and measures movement into open space; runtime unchanged.\n"
+    },
+    {
+      "run": "Solo-Settings-Save-Capture-20261117-1212",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-target-20261117-1207",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Solo-target-Capture-20261117-1207",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Start-20261117-113551",
+      "status": "AUXILIARY_OR_SUPERSEDED",
+      "reason": "Not counted as a final gate. Related invalid captures/initial snapshots remain available."
+    },
+    {
+      "run": "StopGuard-20261117-1200",
+      "status": "INVALID",
+      "reason": "INVALID Stop test setup: target game had already exited when negative Stop ran, so no live-process refusal was exercised. Missing placement record error is retained; no process killed.\n"
+    },
+    {
+      "run": "StopGuard-20261117-1202",
+      "status": "SELECTED_CHECK_PASS",
+      "reason": "Explicit result.json/package-check.json."
+    },
+    {
+      "run": "U03-Preservation-20261117-1206",
+      "status": "SELECTED_CHECK_PASS",
+      "reason": "Explicit result.json/package-check.json."
+    },
+    {
+      "run": "Visibility-20261117-1232",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    },
+    {
+      "run": "Visibility-Capture-20261117-1232",
+      "status": "SELECTED_PASS",
+      "reason": "Selected gate result or parent readiness/process evidence; individual capture assertions are listed separately."
+    }
+  ],
+  "packagedServer": "NOT_PASSED",
+  "performance": "DESCRIPTION_ONLY_NOT_U04_B",
+  "reviewerAcceptance": "PENDING",
+  "cases": [
+    {
+      "case": "Solo combat",
+      "run": "Solo-Combat-Capture-20261117-1156",
+      "session": "Solo-Combat-20261117-1156",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 24,
+      "results": "Artifacts/U04/A/Runs/Solo-Combat-Capture-20261117-1156/Capture/input.json"
+    },
+    {
+      "case": "Defense/Feint/CC/focus",
+      "run": "Solo-Defense-Capture-20261117-1157",
+      "session": "Solo-Regression-20261117-1157",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 15,
+      "results": "Artifacts/U04/A/Runs/Solo-Defense-Capture-20261117-1157/Capture/regression.json"
+    },
+    {
+      "case": "Movement/camera/gravity/focus",
+      "run": "Solo-Movement-Capture-20261117-1205",
+      "session": "Solo-Movement-20261117-1205",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 26,
+      "results": "Artifacts/U04/A/Runs/Solo-Movement-Capture-20261117-1205/Capture/input.json"
+    },
+    {
+      "case": "Dodge/startup cancel/charges",
+      "run": "Solo-Dodge-Capture-20261117-1205",
+      "session": "Solo-Movement-20261117-1205",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 38,
+      "results": "Artifacts/U04/A/Runs/Solo-Dodge-Capture-20261117-1205/Capture/input.json"
+    },
+    {
+      "case": "Target/occlusion",
+      "run": "Solo-target-Capture-20261117-1207",
+      "session": "Solo-target-20261117-1207",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 15,
+      "results": "Artifacts/U04/A/Runs/Solo-target-Capture-20261117-1207/Capture/input.json"
+    },
+    {
+      "case": "Encounter route/return",
+      "run": "Solo-route-Capture-20261117-1207",
+      "session": "Solo-route-20261117-1207",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 11,
+      "results": "Artifacts/U04/A/Runs/Solo-route-Capture-20261117-1207/Capture/input.json"
+    },
+    {
+      "case": "Settings Save/Quit",
+      "run": "Solo-Settings-Save-Capture-20261117-1212",
+      "session": "Solo-Settings-Save-20261117-1212",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 5,
+      "results": "Artifacts/U04/A/Runs/Solo-Settings-Save-Capture-20261117-1212/Capture/settings.json"
+    },
+    {
+      "case": "Settings cold reopen/Quit",
+      "run": "Solo-Settings-Reopen-Capture-20261117-1212",
+      "session": "Solo-Settings-Reopen-20261117-1212",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 2,
+      "results": "Artifacts/U04/A/Runs/Solo-Settings-Reopen-Capture-20261117-1212/Capture/settings.json"
+    },
+    {
+      "case": "Dedicated Editor + two clients/reconnect",
+      "run": "Network-Capture-20261117-1230",
+      "session": "Network-20261117-1230",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 26,
+      "results": "Artifacts/U04/A/Runs/Network-Capture-20261117-1230/Capture/network.json"
+    },
+    {
+      "case": "Two-client visibility/audio",
+      "run": "Visibility-Capture-20261117-1232",
+      "session": "Visibility-20261117-1232",
+      "sourceSHA": "b35ef63c7e9ffdfbb4088544350317a8f958723c",
+      "result": "PASS",
+      "assertions": 20,
+      "results": "Artifacts/U04/A/Runs/Visibility-Capture-20261117-1232/Capture/visibility.json"
+    }
+  ]
+}
