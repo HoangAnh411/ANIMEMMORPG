@@ -1,0 +1,230 @@
+[
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Retry publishes fresh Running state"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Retry never auto-Resumes or attacks"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "New encounter revision clears selection without replacement"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Physical Target edge selects and hold never toggles"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Target leaves camera and facing alone"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Second Target edge toggles off"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Physical dodge uses one charge"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Physical parry resolves monster hit"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Real E Interrupts Monster startup without stun"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Real Q does not Interrupt Monster"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Opponent selected before lethal damage"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Player wins through physical attacks and server result"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Target death clears information without replacement"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Held W/Q across Retry and Resume do not replay"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Physical release and repress rearms movement"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Living opponent selected before Lost and Retry"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Standing player loses by server decision"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Focus return still requires Resume"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Physical route causes server Return behind the obstacle"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Return cannot rechase before reset"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Return completes inside50cm and heals"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Recorded chase/return stays continuous at300cm/s (0.2cm/s text-quantization allowance)"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Return reset occurs exactly once"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Coincident candidates use stable subject ID"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Offscreen alone retains selection and hides information"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Old Target key no longer selects"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Rebound Target selects"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Selected target retained below30m"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Selection clears beyond30m"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Selection refuses beyond20m"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Selection accepts inside20m"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Occlusion hides information immediately before timeout"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Seeing the target again resets continuous occlusion"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "New occlusion receives its own one-second interval"
+  },
+  {
+    "harness": "CaptureDInput.py",
+    "assertion": "Continuous wall occlusion clears without replacement"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Regression run has no product encounter"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Physical Q edge Feints without refund"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Parry then held block confirmed"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Guard breaks after four blocks"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "X clears break and restores posture"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Real E Interrupts fixture startup"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Held guard does not rearm through menu"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Held Q does not replay through Resume"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Focus loss requires explicit Resume"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Guard rebound through UI"
+  },
+  {
+    "harness": "CaptureDRegression.py",
+    "assertion": "Old guard binding inactive"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Two separate owner encounters"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Retry A leaves B terminal/revision/HP/life/action unchanged"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Retry leaves A AwaitingResume"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Server Logout removes old encounter before reconnect"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Reconnect gets new encounter and pawn identity"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Reconnect has fresh resources, cooldown and life"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Server first reconnect snapshot has full HP at a fresh life"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Old encounter identity cannot reset reconnect"
+  },
+  {
+    "harness": "VerifyDNetworkSamples.py",
+    "assertion": "RetryA leaves B identity/life/HP/result/revision stable"
+  },
+  {
+    "harness": "VerifyDNetworkSamples.py",
+    "assertion": "Reconnect is a new encounter/pawn rather than restored combat"
+  },
+  {
+    "harness": "VerifyDNetworkSamples.py",
+    "assertion": "Saved protocol probes include actual server rejections"
+  }
+]

@@ -1,0 +1,21 @@
+# U04-A contract
+
+Status: IMPLEMENTING; no U04 gate has passed yet. Main baseline is `25a048d9a6744a991040dbaa7698f10bcda448f6`, verified local/remote after U03 dossier acceptance at b2199687. Historical preflight: Artifacts/U04/A/Runs/Preflight-20261117-113150. Current start: Artifacts/U04/A/Runs/Start-20261117-113551.
+
+Scope: U04.01-02 with U04.06 evidence rules, Windows integration under active gameplay, dedicated Editor server and two active clients. No gameplay/API/settings schema change, prediction, bad network, packaged Server acceptance, performance optimization or U04-B/C/D. A gameplay defect stops its affected gate for independent fix review.
+
+Source/tool commit must precede final clone build. Build identity comes from clean clone HEAD, full build logs/receipts, artifact SHA256 and executable/module/process identity; command-line SHA alone is metadata. Later runtime changes invalidate dependent gates. Harness corrections are committed and affected gates rerun. Failed/invalid evidence is immutable and retained.
+
+Separate clone: Artifacts/U04/A/Source. Run directories: Artifacts/U04/A/Runs/<unique-run-id>; never overwrite a run. Each launch accepts source SHA, output, run ID, settings directory and applicable ports. Settings live only under Artifacts/U04/A. Original .uproject, config, Maintenance and Editor are protected. No cleanup/save/restart of original Editor; minimize only after runtime readiness, restore placement on stop.
+
+UE 5.8.4 CL58902052 at D:/Software/UE_5.8. Toolchain/SDK are determined by actual UBT output and receipts. Full Generate/Development Editor/Development Game/three-map Windows cook-package from clean committed clone. No Live Coding binary acceptance. Existing targets are Game and Editor; installed-build Server capability must be recorded before U05, without adding a Server target or downloading another engine.
+
+Host: i7-11800H 8C/16T, 33312056 KiB visible RAM, RTX3050Ti Laptop 4096MiB driver621.24, Windows11 Pro10.0.26300. Start process inventory records competing working sets/CPU counters. Free D: 165895614464 bytes measured before implementation. Existing clone 6653431668 bytes, U03 package run1089278064, D-R1 evidence362136974, repository Git1948411356. Reserve25GiB for clone/build/package/evidence plus temporary build headroom; no removal is authorized.
+
+Automation expected names are extracted from source in A-EXPECTED-TESTS.json (currently140), compared to fresh discovery and exact completed names from cold clone MCP TestRunner. Zero/missing/duplicate/failed/timeout/stale log is not PASS. Discover real toolsets/schemas before calls. Export XML only if actual schema supports it; otherwise preserve raw logs and JSON name/result table with format limitation recorded.
+
+Readiness before capture: exact executable/module/package hash and process identity; Game world/map/netmode; possessed pawn/controller/owner/local player; multiple monotonically advancing world/tick samples; actual guarded Windows input changes that pawn. NullRHI is load smoke only. Dedicated authority must have no local players; clients must have their own possessed local pawn, distinct process, matching source/artifacts.
+
+Review profiles: Solo1280x720/internal50%; Network900x540/internal50%, client cap60/server30. Inherited pool/renderer overrides: Lumen atlas2048, render target pool minimum128MiB, streaming pool256MiB, Lumen indirect/reflections off, virtual shadows off, shadow quality2, idle-when-background0. Read actual cvars and collect frame intervals. Caps are not measured FPS; no60FPS/1080p claim. No input delay/network smoothing changes.
+
+Evidence links raw and published artifacts with SHA256, source/tool/build/process identities, UTC/commands/profile/map/player/tick, assertions and media. Historical U03 results are reference only. Final status can be READY_FOR_REVIEW only when all required new gates pass; independent reviewer decides acceptance. Commit/push U04 branch and verify remote SHA; no merge or U04-B.
