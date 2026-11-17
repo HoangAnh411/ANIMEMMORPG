@@ -2,7 +2,7 @@
 import argparse,json,time,threading,math,re,cv2,numpy as np
 from pathlib import Path
 from PIL import ImageGrab
-from DClient import DClient,u
+from DClient import DClient,u,mouse
 p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
 c=DClient(json.loads(a.record.read_text(encoding='utf-8-sig')));cv2.setNumThreads(1)
 m={'completed':False,'checks':[],'stages':[],'events':[],'process':c.record};writer=None;worker=None;stop=threading.Event();start=0;encoded=0;last=0;previous=None
@@ -68,7 +68,13 @@ try:
   if place=='Slope46':check('Physical steep slope stops',position[2]<158 and distance<295)
   if place=='Corridor120':check('Physical corridor wall holds capsule',position[1]<13519)
   if place=='Corridor120':
-   check('Camera sweep resolves obstruction without extending through wall',v['cameraHit'] and v['cameraPivotDistanceCm']<400)
+   gain=1.
+   for _ in range(12):
+    yaw=float(re.search(r'Y=([-0-9.]+)',c.metrics()['aimYawPitchDegrees'])[1]);delta=(90-yaw+180)%360-180
+    if abs(delta)<1:break
+    dx=max(-4000,min(4000,round(delta/gain)));c.guard();mouse(1,dx,0);wait(.2);observed=float(re.search(r'Y=([-0-9.]+)',c.metrics()['aimYawPitchDegrees'])[1]);change=(observed-yaw+180)%360-180
+    if dx and 0<change/dx<10:gain=change/dx
+   wait(.25);v=c.metrics();check('Physical camera turn toward corridor wall produces safe sweep retraction',v['cameraHit'] and v['cameraPivotDistanceCm']<350)
   m['stages'].append({'stage':place,'before':before,'after':v,'distanceCm':float(distance)});ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/(place+'.png'))
  check('Recording thread complete',worker.is_alive());m['completed']=True
 except Exception as e:m['error']=repr(e);m['errorMetrics']=c.metrics();raise
