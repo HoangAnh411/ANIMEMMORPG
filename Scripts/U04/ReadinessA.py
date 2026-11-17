@@ -35,8 +35,9 @@ try:
      assert time.perf_counter()<end;time.sleep(.03)
    if c.metrics()['controlState']!=0:
     b=c.metrics()['menuButtons']['Resume'];c.click(round(b['x']),round(b['y']));time.sleep(.25)
-   before=c.metrics();c.press('W',True);time.sleep(.35);after=c.metrics();c.press('W',False)
-   m['inputs'].append(dict(role=r['role'],input='physical W down/up',before=before,after=after,result='PASS'))
+   forward=json.loads(c.metrics()['settings'])['bindings']['Forward']
+   before=c.metrics();c.press(forward,True);time.sleep(.35);after=c.metrics();c.press(forward,False)
+   m['inputs'].append(dict(role=r['role'],input='physical '+forward+' down/up',before=before,after=after,result='PASS' if before['capsuleCenterWorldCm']!=after['capsuleCenterWorldCm'] else 'FAIL'))
    assert before['pawn']==after['pawn'] and before['capsuleCenterWorldCm']!=after['capsuleCenterWorldCm']
    c.press('Escape',True);time.sleep(.04);c.press('Escape',False)
   finally:c.finish()
