@@ -45,6 +45,12 @@ try:
   check('Cold reopen restores exact saved key sensitivity and shoulder preferences',prefs()==expected)
   check('Cold reopen does not restore combat progress',state()['combat']['energy']==100 and state()['combat']['action']==0 and state()['combat']['eReady']==0 and state()['encounter']['monsterVital']['hp']==600)
  else:
+  if state().get('encounter') and state()['combat']['vital']['hp']<1000:
+   end=time.perf_counter()+22
+   while not state()['encounter']['result']:
+    assert time.perf_counter()<end;time.sleep(.03)
+   button('Retry encounter')
+   until(lambda:state()['combat']['vital']['hp']==1000)
   controls();original=prefs();button('W');until(lambda:state()['pendingRebind']==0);tap('S')
   check('Conflicting Forward=S rejected without swapping bindings',prefs()==original)
   tap('Escape');button('W');until(lambda:state()['pendingRebind']==0);c.press('H',True);until(lambda:prefs()['bindings']['Forward']=='H');main();button('Resume');time.sleep(.3)

@@ -26,6 +26,8 @@ def button(c,label):
 def tap(c,key):c.press(key,True);time.sleep(.035);c.press(key,False);m['events'].append(dict(wall=time.perf_counter()-start,client=c.record['role'],key=key))
 def playing(c):
  c.focus()
+ if c.metrics()['combat']['vital']['hp']<1000 and not c.metrics()['encounter']['result']:
+  until(lambda:c.metrics()['encounter']['result']!=0,22)
  if c.metrics()['encounter']['result']:
   rev=c.metrics()['encounter']['revision'];button(c,'Retry encounter');until(lambda:c.metrics()['encounter']['revision']>rev)
  if c.metrics()['controlState']!=0:button(c,'Resume')
