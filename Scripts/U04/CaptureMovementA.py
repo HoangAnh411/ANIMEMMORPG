@@ -45,7 +45,7 @@ try:
  reset();c.press('W',True);wait(.4);walk=c.metrics();c.press('Ctrl',True);wait(.4);sprint=c.metrics();check('Physical walk and sprint use existing500/700 speeds',walk['maxSpeedCmPerSec']==500 and not walk['sprinting'] and sprint['maxSpeedCmPerSec']==700 and sprint['sprinting']);c.press('Ctrl',False);c.press('W',False)
  old=c.metrics()['shoulderOffsetCm'];tap('V');wait(.3);check('Physical shoulder swaps camera side',old*c.metrics()['shoulderOffsetCm']<0);tap('V');wait(.3)
  reset();tap('Space');until(lambda:c.metrics()['movementMode']==3);jump=c.metrics();check('Physical jump enters falling mode',jump['jumpCount']>0);wait(1)
- reset();console('U03B2Fixture launch');until(lambda:c.metrics()['combat']['hardCC']==3 and c.metrics()['movementMode']==3,6);before=c.metrics();wait(.10);locked=c.metrics();m['stages'].append(dict(stage='IncomingLaunchGravity',before=before,locked=locked));check('Combat lock during incoming launch preserves gravity',locked['combat']['locked'] and locked['movementMode']==3 and locked['gravityCmPerSec2']<0 and vector(locked['velocityCmPerSec'])[2]<vector(before['velocityCmPerSec'])[2]);console('U03B2Fixture off');reset()
+ reset();console('U03B2Fixture stun');marker=[l for l in c.log.read_text(encoding='utf-8-sig').splitlines() if 'U03B2_FIXTURE label=stun start=' in l][-1];fixture_start=float(re.search(r'start=([0-9.]+)',marker)[1]);until(lambda:c.metrics()['worldSeconds']>=fixture_start+1.08);tap('Space');until(lambda:c.metrics()['combat']['hardCC']==1 and c.metrics()['movementMode']==3,6);before=c.metrics();wait(.10);locked=c.metrics();m['stages'].append(dict(stage='IncomingCCGravity',before=before,locked=locked));check('Combat lock from incoming CC during physical jump preserves gravity',locked['combat']['locked'] and locked['movementMode']==3 and locked['gravityCmPerSec2']<0 and vector(locked['velocityCmPerSec'])[2]<vector(before['velocityCmPerSec'])[2]);console('U03B2Fixture off');reset()
  c.press('W',True);wait(.15);tap('Escape');wait(.15);v=c.metrics();b=v['menuButtons']['Resume'];c.click(round(b['x']),round(b['y']));wait(.3);check('Held W through Escape and Resume remains quarantined',not c.metrics()['gateW']);c.press('W',False);c.press('W',True);wait(.1);check('Release and repress rearms W after Escape',c.metrics()['gateW']);c.press('W',False)
  c.press('W',True);wait(.1)
  # Only the game owns input at this point. Alt-Tab releases focus; no input is sent to the newly focused window.
@@ -71,6 +71,7 @@ try:
    check('Camera sweep resolves obstruction without extending through wall',v['cameraHit'] and v['cameraPivotDistanceCm']<400)
   m['stages'].append({'stage':place,'before':before,'after':v,'distanceCm':float(distance)});ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(a.out/(place+'.png'))
  check('Recording thread complete',worker.is_alive());m['completed']=True
+except Exception as e:m['error']=repr(e);m['errorMetrics']=c.metrics();raise
 finally:
  stop.set()
  if worker:worker.join()
