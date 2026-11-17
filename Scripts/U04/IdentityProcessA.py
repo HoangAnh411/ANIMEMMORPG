@@ -8,7 +8,9 @@ def verify(record):
  assert str(record['userDir']).replace('\\','/').lower() in cmd and str(record['log']).replace('\\','/').lower() in cmd
  assert '-u02sourcesha='+record['sourceSHA'].lower() in cmd
  if record.get('creationUTC'):assert live['creationUTC']==record['creationUTC']
+ modules=live.get('modules',[])
+ if isinstance(modules,dict):modules=[modules]
  if record['role'] in ('ClientA','ClientB','Server'):
   expected=Path(record['project']).parent/'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll'
-  assert any(Path(v['FileName']).resolve()==expected.resolve() for v in live['modules']), 'Loaded native module differs from clone artifact'
- return dict(executable=live['ExecutablePath'],creationUTC=live['creationUTC'],modules=live['modules'])
+  assert any(Path(v['FileName']).resolve()==expected.resolve() for v in modules), 'Loaded native module differs from clone artifact'
+ return dict(executable=live['ExecutablePath'],creationUTC=live['creationUTC'],modules=modules)
