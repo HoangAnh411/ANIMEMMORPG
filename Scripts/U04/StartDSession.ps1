@@ -36,6 +36,10 @@ $exe='D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe'
 $run=Join-Path $OutputRoot $RunId
 if(Test-Path $run){throw 'Immutable session exists'}
 New-Item -ItemType Directory -Path $run | Out-Null
+
+$settingsKeyA=[IO.Path]::GetFullPath($SettingsDirectory).Replace('\','/').ToLowerInvariant()
+$usingSettingsA=@(Get-CimInstance Win32_Process | Where-Object {$_.Name -in @('UnrealEditor.exe','AnimeMMORPG.exe') -and $_.CommandLine -and $_.CommandLine.Replace('\','/').ToLowerInvariant().Contains($settingsKeyA)})
+if($usingSettingsA.Count){throw 'Settings directory session conflict'}
 $records=@()
 try{
 $roles=if($ClientCount -eq 1){@('Server','ClientA')}else{@('Server','ClientA','ClientB')}

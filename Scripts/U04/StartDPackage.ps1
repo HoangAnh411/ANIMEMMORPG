@@ -24,6 +24,10 @@ $log=Join-Path $out 'Game.log'
 $mapURL='/Game/AnimeMMORPG/Maps/L_CharacterCombatLab'+$(if($TargetFixture){'?U03TabFixture=1'}elseif($Regression){'?U03Regression=1'}else{''})
 $userRoot=if($SettingsDirectory){[IO.Path]::GetFullPath($SettingsDirectory)}else{$out}
 if(!$userRoot.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'D settings isolation required'}
+
+$settingsKeyA=[IO.Path]::GetFullPath($userRoot).Replace('\','/').ToLowerInvariant()
+$usingSettingsA=@(Get-CimInstance Win32_Process | Where-Object {$_.Name -in @('UnrealEditor.exe','AnimeMMORPG.exe') -and $_.CommandLine -and $_.CommandLine.Replace('\','/').ToLowerInvariant().Contains($settingsKeyA)})
+if($usingSettingsA.Count){throw 'Settings directory session conflict'}
 New-Item -ItemType Directory -Path $userRoot -Force | Out-Null
 $arguments=@('-U04AReadOnlyFrames',('-U01FPerfFile="'+(Join-Path $out 'Frames.jsonl')+'"'),$mapURL,'-windowed','-ResX=1280','-ResY=720','-WinX=0','-WinY=30','-nosplash','-U01Trace','-U02Trace',('-U01SourceSHA='+$sha),('-U02SourceSHA='+$sha),('-U02RunId='+(Split-Path $out -Leaf)),('-UserDir="'+$userRoot+'"'),('-abslog="'+$log+'"'),'-ExecCmds="t.MaxFPS 60,t.IdleWhenNotForeground 0,r.ScreenPercentage 50,r.LumenScene.SurfaceCache.AtlasSize 2048,r.RenderTargetPoolMin 128,r.Streaming.PoolSize 256,r.Lumen.DiffuseIndirect.Allow 0,r.Lumen.Reflections.Allow 0,r.Shadow.Virtual.Enable 0,r.ShadowQuality 2"')
 # This is the interactive Windows input/capture target, so it needs a visible game window.
