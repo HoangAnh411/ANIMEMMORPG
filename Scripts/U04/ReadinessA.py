@@ -36,13 +36,20 @@ try:
    observed=c.probe_w()
    if observed!='W':c.toggle_ime();c.ime=True;observed=c.probe_w()
    assert observed=='W', 'Windows input method did not deliver W'
+   if c.metrics().get('encounter') and c.metrics()['combat']['vital']['hp']<1000 and not c.metrics()['encounter']['result']:
+    end=time.perf_counter()+22
+    while not c.metrics()['encounter']['result']:
+     assert time.perf_counter()<end;time.sleep(.03)
    if c.metrics().get('encounter',{}).get('result',0):
     old=c.metrics()['encounter']['revision'];b=c.metrics()['menuButtons']['Retry encounter'];c.click(round(b['x']),round(b['y']))
     end=time.perf_counter()+6
     while c.metrics()['encounter']['revision']==old:
      assert time.perf_counter()<end;time.sleep(.03)
    if c.metrics()['controlState']!=0:
-    b=c.metrics()['menuButtons']['Resume'];c.click(round(b['x']),round(b['y']));time.sleep(.25)
+    b=c.metrics()['menuButtons']['Resume'];assert b['enabled'];c.click(round(b['x']),round(b['y']))
+    end=time.perf_counter()+4
+    while c.metrics()['controlState']!=0:
+     assert time.perf_counter()<end;time.sleep(.03)
    forward=json.loads(c.metrics()['settings'])['bindings']['Forward']
    before=c.metrics();c.press(forward,True);time.sleep(.35);after=c.metrics();c.press(forward,False)
    m['inputs'].append(dict(role=r['role'],input='physical '+forward+' down/up',before=before,after=after,result='PASS' if before['capsuleCenterWorldCm']!=after['capsuleCenterWorldCm'] else 'FAIL'))
