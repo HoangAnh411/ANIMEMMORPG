@@ -140,6 +140,38 @@
     "assertion": "Continuous wall occlusion clears without replacement"
   },
   {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Two separate owner encounters"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Retry A leaves B terminal/revision/HP/life/action unchanged"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Retry leaves A AwaitingResume"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Server Logout removes old encounter before reconnect"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Reconnect gets new encounter and pawn identity"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Reconnect has fresh resources, cooldown and life"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Server first reconnect snapshot has full HP at a fresh life"
+  },
+  {
+    "harness": "CaptureDNetwork.py",
+    "assertion": "Old encounter identity cannot reset reconnect"
+  },
+  {
     "harness": "CaptureDRegression.py",
     "assertion": "Regression run has no product encounter"
   },
@@ -184,36 +216,92 @@
     "assertion": "Old guard binding inactive"
   },
   {
-    "harness": "CaptureDNetwork.py",
-    "assertion": "Two separate owner encounters"
+    "harness": "CaptureMovementA.py",
+    "assertion": "Actual Resume enters Playing"
   },
   {
-    "harness": "CaptureDNetwork.py",
-    "assertion": "Retry A leaves B terminal/revision/HP/life/action unchanged"
+    "harness": "CaptureMovementA.py",
+    "assertion": "Physical walk and sprint use existing500/700 speeds"
   },
   {
-    "harness": "CaptureDNetwork.py",
-    "assertion": "Retry leaves A AwaitingResume"
+    "harness": "CaptureMovementA.py",
+    "assertion": "Physical shoulder swaps camera side"
   },
   {
-    "harness": "CaptureDNetwork.py",
-    "assertion": "Server Logout removes old encounter before reconnect"
+    "harness": "CaptureMovementA.py",
+    "assertion": "Combat lock preserves falling gravity"
   },
   {
-    "harness": "CaptureDNetwork.py",
-    "assertion": "Reconnect gets new encounter and pawn identity"
+    "harness": "CaptureMovementA.py",
+    "assertion": "Held W through Escape and Resume remains quarantined"
   },
   {
-    "harness": "CaptureDNetwork.py",
-    "assertion": "Reconnect has fresh resources, cooldown and life"
+    "harness": "CaptureMovementA.py",
+    "assertion": "Release and repress rearms W after Escape"
   },
   {
-    "harness": "CaptureDNetwork.py",
-    "assertion": "Server first reconnect snapshot has full HP at a fresh life"
+    "harness": "CaptureMovementA.py",
+    "assertion": "AltTab keeps controls awaiting Resume"
   },
   {
-    "harness": "CaptureDNetwork.py",
-    "assertion": "Old encounter identity cannot reset reconnect"
+    "harness": "CaptureMovementA.py",
+    "assertion": "Held W through AltTab and Resume does not replay"
+  },
+  {
+    "harness": "CaptureMovementA.py",
+    "assertion": "Physical cliff cannot be crossed"
+  },
+  {
+    "harness": "CaptureMovementA.py",
+    "assertion": "Physical walkable slope climbs"
+  },
+  {
+    "harness": "CaptureMovementA.py",
+    "assertion": "Physical step40 climbs"
+  },
+  {
+    "harness": "CaptureMovementA.py",
+    "assertion": "Physical steep slope stops"
+  },
+  {
+    "harness": "CaptureMovementA.py",
+    "assertion": "Physical corridor wall holds capsule"
+  },
+  {
+    "harness": "CaptureMovementA.py",
+    "assertion": "Camera sweep resolves obstruction without extending through wall"
+  },
+  {
+    "harness": "CaptureMovementA.py",
+    "assertion": "Recording thread complete"
+  },
+  {
+    "harness": "CaptureSettingsA.py",
+    "assertion": "Cold reopen restores exact saved key sensitivity and shoulder preferences"
+  },
+  {
+    "harness": "CaptureSettingsA.py",
+    "assertion": "Cold reopen does not restore combat progress"
+  },
+  {
+    "harness": "CaptureSettingsA.py",
+    "assertion": "Conflicting Forward=S rejected without swapping bindings"
+  },
+  {
+    "harness": "CaptureSettingsA.py",
+    "assertion": "Held newly rebound movement key cannot move through Resume"
+  },
+  {
+    "harness": "CaptureSettingsA.py",
+    "assertion": "Release and repress of rebound key moves owned pawn"
+  },
+  {
+    "harness": "CaptureSettingsA.py",
+    "assertion": "Physical slider changes sensitivity"
+  },
+  {
+    "harness": "CaptureSettingsA.py",
+    "assertion": "Physical checkbox changes default shoulder"
   },
   {
     "harness": "VerifyDNetworkSamples.py",

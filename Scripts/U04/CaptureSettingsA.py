@@ -1,5 +1,5 @@
 """Physical settings conflict/rebind/slider/shoulder and Save/Quit/reopen integration."""
-import argparse,json,time,threading,cv2,numpy as np
+import argparse,json,time,threading,re,cv2,numpy as np
 from pathlib import Path
 from PIL import ImageGrab
 from DClient import DClient,u
@@ -48,7 +48,7 @@ try:
   controls();original=prefs();button('W');until(lambda:state()['pendingRebind']==0);tap('S')
   check('Conflicting Forward=S rejected without swapping bindings',prefs()==original)
   tap('Escape');button('W');until(lambda:state()['pendingRebind']==0);c.press('H',True);until(lambda:prefs()['bindings']['Forward']=='H');main();button('Resume');time.sleep(.3)
-  check('Held newly rebound movement key cannot move through Resume',not state()['gateW'] and np.linalg.norm([float(v.split('=')[1]) for v in state()['velocityCmPerSec'].split()])<1)
+  check('Held newly rebound movement key cannot move through Resume',not state()['gateW'] and np.linalg.norm([float(v) for v in re.findall(r'[XYZ]=([-0-9.]+)',state()['velocityCmPerSec'])])<1)
   c.press('H',False);c.press('H',True);time.sleep(.2);check('Release and repress of rebound key moves owned pawn',state()['velocityCmPerSec']!='X=0.000 Y=0.000 Z=0.000');c.press('H',False)
   controls();find('U04Sensitivity');before=prefs();b=state()['menuButtons']['U04Sensitivity'];c.click(round(b['x']+b['width']*.2),round(b['y']));time.sleep(.25);check('Physical slider changes sensitivity',prefs()['sensitivity']!=before['sensitivity'])
   find('U04RightShoulder');button('U04RightShoulder');check('Physical checkbox changes default shoulder',prefs()['rightShoulder']!=before['rightShoulder']);main()
