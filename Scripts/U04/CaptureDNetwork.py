@@ -6,6 +6,7 @@ from DNetworkClient import DNetworkClient
 p=argparse.ArgumentParser();p.add_argument('--session',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
 records=json.loads((a.session/'processes.json').read_text(encoding='utf-8-sig'));clients=[DNetworkClient(next(r for r in records if r['role']==role)) for role in ['ClientA','ClientB']]
 m=dict(completed=False,processes=records,inputScheduling='Sequential physical Windows input; not simultaneous human input',checks=[],stages=[],events=[]);stop=threading.Event();encoded=0;last=0;previous=None;start=time.perf_counter();cv2.setNumThreads(1)
+m['loadedClientModules']=[c.processIdentity for c in clients]
 writer=cv2.VideoWriter(str(a.out/'Network-D.mp4'),cv2.VideoWriter_fourcc(*'mp4v'),30,(1800,540));assert writer.isOpened()
 def until(f,timeout=7):
  end=time.perf_counter()+timeout
@@ -108,7 +109,7 @@ try:
  check('Server Logout removes old encounter before reconnect',True)
  result=subprocess.run(['powershell','-NoProfile','-ExecutionPolicy','Bypass','-File',str(Path(__file__).with_name('ReconnectDClient.ps1')),'-SessionPath',str(a.session.resolve())],capture_output=True,text=True,creationflags=subprocess.CREATE_NO_WINDOW)
  (a.out/'reconnect-launcher.out').write_text(result.stdout);(a.out/'reconnect-launcher.err').write_text(result.stderr);assert result.returncode==0
- records=json.loads((a.session/'processes.json').read_text(encoding='utf-8-sig'));m['reconnectProcesses']=records;clients[0]=DNetworkClient(next(r for r in records if r['role']=='ClientA'));c=clients[0];c.focus();new=c.metrics()
+ records=json.loads((a.session/'processes.json').read_text(encoding='utf-8-sig'));m['reconnectProcesses']=records;clients[0]=DNetworkClient(next(r for r in records if r['role']=='ClientA'));c=clients[0];m['reconnectLoadedModule']=c.processIdentity;c.focus();new=c.metrics()
  observed=c.probe_w()
  if observed!='W':c.toggle_ime();c.ime=True;observed=c.probe_w()
  assert observed=='W'
