@@ -1,0 +1,63 @@
+import os
+"""Fresh gameplay readiness and physical owned-pawn input, before acceptance capture."""
+import argparse,json,time,hashlib,subprocess
+from pathlib import Path
+from RegressionClientB import RegressionClientB
+from NetworkClientB import NetworkClientB
+from IdentityProcessA import verify
+p=argparse.ArgumentParser();p.add_argument('--session',type=Path,required=True);p.add_argument('--network',action='store_true');a=p.parse_args()
+out=a.session/'READINESS.json';assert not out.exists()
+records=json.loads((a.session/('processes.json' if a.network else 'process.json')).read_text(encoding='utf-8-sig'))
+if not a.network:records=[records]
+m=dict(completed=False,processes=records,samples=[],inputs=[],ticks=[])
+try:
+ for r in records:
+  frame_rows=[]
+  for line in (Path(r['log']).parent/'Frames.jsonl').read_text(encoding='utf-8-sig').splitlines():
+   try:frame_rows.append(json.loads(line))
+   except json.JSONDecodeError:pass
+  ticks=frame_rows[-4:];assert len(ticks)==4 and all(v['pid']==r['pid'] for v in ticks)
+  assert all(y['frame']>x['frame'] and y['wall']>x['wall'] for x,y in zip(ticks,ticks[1:]))
+  m['ticks'].append(dict(role=r['role'],samples=ticks))
+  if r['role']=='Server':
+   rows=[]
+   for line in Path(r['log']).read_text(encoding='utf-8-sig').splitlines():
+    if 'U02F_STATE {' in line:rows.append(json.loads(line.split('U02F_STATE ',1)[1]))
+   selected=rows[-4:];assert len(selected)==4
+   assert all(v['pid']==r['pid'] and v['sourceSHA']==r['sourceSHA'] and v['netMode']==1 and v['worldType']==1 and v['localPlayers']==0 and 'L_NetworkLab' in v['world'] for v in selected)
+   assert all(y['time']>x['time'] for x,y in zip(selected,selected[1:]));m['samples'].append(dict(role='Server',processIdentity=verify(r),samples=selected));continue
+  c=(NetworkClientB if a.network else RegressionClientB)(r)
+  samples=[]
+  for _ in range(4):samples.append(c.metrics());time.sleep(.35)
+  assert all(y['worldSeconds']>x['worldSeconds'] for x,y in zip(samples,samples[1:]))
+  assert len({v['pawn'] for v in samples})==1 and all(v['pawn'] and v['controller']==v['owner'] and v['locallyControlled'] and v['localPlayers']==1 for v in samples)
+  m['samples'].append(dict(role=r['role'],processIdentity=c.processIdentity,samples=samples))
+  try:
+   c.focus()
+   observed=c.probe_w()
+   if observed!='W':c.toggle_ime();c.ime=True;observed=c.probe_w()
+   assert observed=='W', 'Windows input method did not deliver W'
+   if c.metrics().get('encounter') and c.metrics()['combat']['vital']['hp']<1000 and not c.metrics()['encounter']['result']:
+    end=time.perf_counter()+22
+    while not c.metrics()['encounter']['result']:
+     assert time.perf_counter()<end;time.sleep(.03)
+   if c.metrics().get('encounter',{}).get('result',0):
+    old=c.metrics()['encounter']['revision'];b=c.metrics()['menuButtons']['Retry encounter'];c.click(round(b['x']),round(b['y']))
+    end=time.perf_counter()+6
+    while c.metrics()['encounter']['revision']==old:
+     assert time.perf_counter()<end;time.sleep(.03)
+   if c.metrics()['controlState']!=0:
+    b=c.metrics()['menuButtons']['Resume'];assert b['enabled'];c.click(round(b['x']),round(b['y']))
+    end=time.perf_counter()+4
+    while c.metrics()['controlState']!=0:
+     assert time.perf_counter()<end;time.sleep(.03)
+   forward=json.loads(c.metrics()['settings'])['bindings']['Forward']
+   before=c.metrics();c.press(forward,True);time.sleep(.35);after=c.metrics();c.press(forward,False)
+   m['inputs'].append(dict(role=r['role'],input='physical '+forward+' down/up',before=before,after=after,result='PASS' if before['capsuleCenterWorldCm']!=after['capsuleCenterWorldCm'] else 'FAIL'))
+   assert before['pawn']==after['pawn'] and before['capsuleCenterWorldCm']!=after['capsuleCenterWorldCm']
+   c.press('Escape',True);time.sleep(.04);c.press('Escape',False)
+  finally:c.finish()
+ m['completed']=True
+except Exception as e:m['error']=repr(e);raise
+finally:out.write_text(json.dumps(m,indent=2),encoding='utf-8')
+print('PASS readiness',out)

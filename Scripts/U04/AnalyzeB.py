@@ -4,7 +4,7 @@ Percentiles use linear interpolation at rank (n-1)*p (numpy default convention).
 Boundary interpolation uses alpha=(boundary-left.worldTime)/(right.worldTime-left.worldTime).
 All quantities are centimeters and seconds. No instantaneous-FPS averaging.
 """
-import argparse, bisect, hashlib, json, math
+import argparse, bisect, hashlib, json, math, re
 from pathlib import Path
 
 VERSION = 'u04b-1'
@@ -26,6 +26,7 @@ def cadence(rows, target):
     if any(b['frame']!=a['frame']+1 for a,b in zip(rows,rows[1:])):reasons.append('missing/duplicate frame')
     if any(b['worldTime']<=a['worldTime'] for a,b in zip(rows,rows[1:])):reasons.append('nonmonotonic world time')
     for k in ('pid','world','pawn','reset','source'):
+        if any(k not in r or r[k] is None for r in rows):reasons.append(k+' missing')
         if len({json.dumps(r.get(k),sort_keys=True) for r in rows})!=1:reasons.append(k+' changed')
     if not all(r.get('focus') for r in rows):reasons.append('focus lost')
     for r in rows:
@@ -54,6 +55,65 @@ def interpolate(rows, at):
                 wall=a['wall']+(b['wall']-a['wall'])*alpha)
 
 def distance(a,b):return math.hypot(b[0]-a[0],b[1]-a[1])
+
+def vector(text):return [float(v) for v in re.findall(r'[XYZ]=([-+0-9.eE]+)',text)]
+
+def dodge(raw,rows,direction):
+    commits=[r for r in raw if r['kind']=='dodgeCommit' and r['trajectoryEnd']]
+    if not commits:raise ValueError('no observed trajectory-end commit')
+    end=commits[0];c=end['combat'];start=c['dodgeStart'];stop=c['dodgeMotionEnd'];origin=vector(c['dodgeOrigin'])
+    heading=vector(c['dodgeDirection']);expected={'forward':[1,0],'back':[ -1,0],'left':[0,-1],'right':[0,1]}[direction]
+    actual=distance(origin,end['position']);reasons=[]
+    if abs(actual-300)>5:reasons.append('dodge distance')
+    if abs(stop-start-.25)>1e-6:reasons.append('trajectory duration')
+    if abs(c['dodgeLockEnd']-start-.35)>1e-6:reasons.append('release gate deadline')
+    if len(heading)!=3 or any(abs(x-y)>.0001 for x,y in zip(heading[:2],expected)):reasons.append('wrong locked direction')
+    observed=[r for r in rows if start<=r['worldTime']<=c['dodgeLockEnd']]
+    if not observed:raise ValueError('no dodge observation samples')
+    if any(r['combat']['dodgeDirection']!=c['dodgeDirection'] for r in observed):reasons.append('direction changed')
+    if any(r['mode']!=1 for r in observed):reasons.append('left ground before release')
+    if any(r['kind']=='ActionStarted' and r['gameplaySeconds']<c['dodgeLockEnd'] and r['gameplaySeconds']>=start for r in raw):reasons.append('attack before release')
+    before=[r for r in rows if r['worldTime']<start]
+    if not before:raise ValueError('no stationary admission precondition')
+    if math.hypot(*before[-1]['velocity'][:2])>.01:raise ValueError('not stationary before admission')
+    a=interpolate(rows,start);b=interpolate(rows,c['dodgeLockEnd'])
+    return dict(pass_=not reasons,reasons=reasons,distanceCm=actual,errorCm=actual-300,
+                authorityStart=start,authorityMotionEnd=stop,authorityLockEnd=c['dodgeLockEnd'],
+                origin=origin,endCommit=end,firstFrame=a['left']['frame'],lastFrame=b['right']['frame'])
+
+def combo(raw,rows):
+    actions=[r for r in raw if r['kind']=='ActionStarted']
+    if not actions:raise ValueError('no action starts')
+    first=actions[0];last=actions[-1];s=first['start'];e=last['end'];reasons=[]
+    receives=[r for r in raw if r['kind']=='Received' and r['commandType']==6]
+    admissions=[r for r in raw if r['kind'] in ('Admitted','Rejected')]
+    if len(receives)!=3:raise ValueError('not exactly three authority input receipts')
+    # A received edge outside the preceding action buffer cannot certify continuous combo gameplay.
+    for i,receive in enumerate(receives[1:]):
+        deadline=s+(.4 if i==0 else .85)
+        matches=[r for r in admissions if re.search(r'command='+str(int(receive['command']))+r'\b',r['detail'])]
+        if len(matches)!=1:raise ValueError('missing/unmatched authority admission')
+        at=matches[0]['gameplaySeconds']
+        if not deadline-.15<at<deadline:raise ValueError('authority input outside buffer')
+        if matches[0]['kind']=='Rejected':reasons.append('valid buffered input rejected')
+    if len(actions)!=3 or [r['definition'] for r in actions]!=[0,1,2]:reasons.append('not exactly combo123 actions')
+    if len({r['actionId'] for r in actions})!=3:reasons.append('duplicate action')
+    if any(r['lifeId']!=first['lifeId'] for r in actions):reasons.append('source life changed')
+    if abs(e-s-1.45)>1e-6:reasons.append('authoritative timeline differs from1.45s')
+    if any(abs(a['end']-b['start'])>1e-6 for a,b in zip(actions,actions[1:])):reasons.append('noncontinuous actions')
+    completed=[r for r in raw if r['kind']=='ActionCompleted']
+    if len(completed)!=3 or any(not r['natural'] for r in completed):reasons.append('missing/unnatural authority completion')
+    if completed and abs(completed[-1]['at']-s-1.45)>1e-6:reasons.append('actual completion timeline')
+    before=[r for r in rows if r['worldTime']<s];after=[r for r in rows if r['worldTime']>=e]
+    if not before or not after:raise ValueError('combo bounds not observed')
+    b=before[-1];a=after[0]
+    if a['combat']['locked']:reasons.append('action still locked at observed end')
+    hits=[h for h in a['hits'] if s<=h['time']<=e]
+    reasons+=hit_checks(hits,b['pawn'],first['life'],b['target'],b['targetLife'],[x['action'] for x in actions],b['targetVital']['hp'],a['targetVital']['hp'])
+    if any(r['combat']['fixtureCritRoll']!=.5 for r in rows if s<=r['worldTime']<=e):reasons.append('crit-off fixture changed')
+    return dict(pass_=not reasons,reasons=reasons,actions=actions,hits=hits,authorityDuration=e-s,
+                hpBefore=b['targetVital']['hp'],hpAfter=a['targetVital']['hp'],
+                observationLag=a['worldTime']-e,firstFrame=b['frame'],lastFrame=a['frame'])
 
 def movement(rows, sprint=False):
     speed=700 if sprint else 500;stable=None;start=None
@@ -91,9 +151,12 @@ def analyze(path,target,case):
     raw=[json.loads(x) for x in path.read_text(encoding='utf-8-sig').splitlines()]
     rows=[r for r in raw if r['kind']=='frame'];result={'version':VERSION,'rawSHA256':hashlib.sha256(path.read_bytes()).hexdigest(),'case':case,'target':target,'status':'INVALID'}
     if not raw or raw[0]['kind']!='begin' or raw[-1]['kind']!='end':result['reason']='capture not closed';return result
-    if any(r['kind']=='reset' for r in raw):result['reason']='reset during capture';return result
-    if case in ('walk','sprint'):
-        try:g=movement(rows,case=='sprint')
+    if any(r['kind'].lower()=='reset' for r in raw):result['reason']='reset during capture';return result
+    if case in ('walk','sprint','combo','forward','back','left','right'):
+        try:
+            if case in ('walk','sprint'):g=movement(rows,case=='sprint')
+            elif case=='combo':g=combo(raw,rows)
+            else:g=dodge(raw,rows,case)
         except (ValueError,KeyError,ZeroDivisionError) as e:result['reason']=str(e);return result
         selected=[r for r in rows if g['firstFrame']<=r['frame']<=g['lastFrame']]
         result['gameplay']=g;result['cadence']=cadence(selected,target)

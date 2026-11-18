@@ -119,6 +119,7 @@ bool Enabled(const UWorld* W)
 void Event(UWorld* W,const TCHAR* Kind,TSharedRef<FJsonObject> J)
 {
     auto* F=Captures.Find(W);if(!F||!(*F)->Recording)return;auto& C=**F;
+    J->SetNumberField(TEXT("wall"),FPlatformTime::Seconds());J->SetNumberField(TEXT("frame"),double(GFrameCounter));J->SetNumberField(TEXT("observedWorld"),W->GetTimeSeconds());
     J->SetStringField(TEXT("kind"),Kind);J->SetStringField(TEXT("trial"),C.Trial);C.Buffer.Add(J);
 }
 void BeginWorld(UWorld& W)

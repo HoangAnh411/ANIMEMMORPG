@@ -79,6 +79,8 @@ void UU02CombatComponent::ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint6
     if(!Model||!Character()||!Character()->HasAuthority())return;
     if(QueuedIntents.Num()>=64){++RejectedCount;return;}
     QueuedIntents.Add({{Sequence,{Pawn,Life},Command,0,Yaw,Direction},Local,GetWorld()->GetTimeSeconds()});
+    if(U04B::Enabled(GetWorld()))
+    {auto J=GetDiagnostics();J->SetNumberField(TEXT("command"),double(Sequence));J->SetNumberField(TEXT("commandType"),uint8(Command));J->SetNumberField(TEXT("localInput"),Local);J->SetNumberField(TEXT("receive"),GetWorld()->GetTimeSeconds());J->SetStringField(TEXT("receivedPosition"),Character()->GetActorLocation().ToString());U04B::Event(GetWorld(),TEXT("Received"),J);}
 }
 void UU02CombatComponent::SetControlPlaying(bool Playing)
 {

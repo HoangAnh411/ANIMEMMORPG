@@ -1,4 +1,5 @@
 #include "U02CollisionWorld.h"
+#include "U04/U04BFPSFixture.h"
 #include "U03/U03Encounter.h"
 #include "U02NetworkState.h"
 #include "U02CombatComponent.h"
@@ -588,6 +589,8 @@ void UU02CollisionWorld::DrainAt(double Now)
             Collector.Completed=[this,C](const auto& A,bool Natural)
             {
                 // Output only, after final authority completion/cancellation.
+                if(U04B::Enabled(GetWorld()))
+                {auto J=C->GetDiagnostics();J->SetNumberField(TEXT("action"),double(A.Identity.Sequence));J->SetNumberField(TEXT("start"),A.Start);J->SetNumberField(TEXT("end"),A.End());J->SetNumberField(TEXT("at"),Natural?A.End():A.Cutoff);J->SetBoolField(TEXT("natural"),Natural);U04B::Event(GetWorld(),TEXT("ActionCompleted"),J);}
                 if(!Natural||DamageResults.ContainsByPredicate([&](const FConfirmedDamage& R){return R.Hit.Id.Action==A.Identity;}))return;
                 for(TActorIterator<AU02NetworkState> N(GetWorld());N;++N)N->PresentAuthority(C,A.Identity.Sequence,A.End(),1);
             };
