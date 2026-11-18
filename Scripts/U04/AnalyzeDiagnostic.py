@@ -49,11 +49,11 @@ def timing_result(raw):
                 clocks='Core OnBeginFrame before rate limiting; UWorld::Tick start after rate limiting; post-actor collector entry; legacy post-collector wall. All real game-thread events, not scanout.')
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--session',type=Path,required=True);p.add_argument('--mode',choices=['input','timing'],required=True);a=p.parse_args()
-    ledger=json.loads((a.session/'Diagnostic/LEDGER.json').read_text(encoding='utf-8'));assert ledger['completed']
+    p=argparse.ArgumentParser();p.add_argument('--session',type=Path,required=True);p.add_argument('--mode',choices=['input','timing'],required=True);p.add_argument('--allow-partial',action='store_true');a=p.parse_args()
+    ledger=json.loads((a.session/'Diagnostic/LEDGER.json').read_text(encoding='utf-8'));assert ledger['completed'] or a.allow_partial
     out=a.session/'Diagnostic/ANALYSIS.json';assert not out.exists();results=[]
     for item in ledger['windows']:
         path=Path(item['raw']);raw=[json.loads(line) for line in path.read_text(encoding='utf-8-sig').splitlines()]
         assert raw[0]['kind']=='begin' and raw[-1]['kind']=='end' and not any(r['kind'].lower()=='reset' for r in raw)
         result=(input_result if a.mode=='input' else timing_result)(raw);results.append(dict(**item,rawSHA256=hashlib.sha256(path.read_bytes()).hexdigest(),result=result))
-    out.write_text(json.dumps(dict(status='DIAGNOSTIC_ONLY',acceptance=False,mode=a.mode,analyzerSHA256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),windows=results),indent=2),encoding='utf-8');print(out)
+    out.write_text(json.dumps(dict(status='DIAGNOSTIC_ONLY',acceptance=False,mode=a.mode,captureCompleted=ledger['completed'],captureError=ledger.get('error'),analyzerSHA256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),windows=results),indent=2),encoding='utf-8');print(out)
