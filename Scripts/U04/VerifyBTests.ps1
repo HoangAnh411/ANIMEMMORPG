@@ -67,7 +67,7 @@ $loaded=@(Get-Process -Id $p.Id -Module | Where-Object {$_.ModuleName -like '*An
 $loaded | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $out 'loaded-modules.json')
 if(@($loaded | Where-Object {[IO.Path]::GetFullPath($_.FileName) -ieq [IO.Path]::GetFullPath($module)}).Count -ne 1){throw 'Cold automation Editor loaded unexpected native module'}
 Tool 'AutomationTestToolset.AutomationTestToolset' 'DiscoverTests' @{bForceRediscover=$false} | ConvertTo-Json -Depth 15 | Set-Content (Join-Path $out 'discovery.json')
-$discovered=Tool 'AutomationTestToolset.AutomationTestToolset' 'ListTests' @{nameFilter=$Filter;tagFilter='';limit=1000}
+$discovered=Tool 'AutomationTestToolset.AutomationTestToolset' 'ListTests' @{nameFilter=$Filter;tagFilter='';limit=200}
 $discovered | ConvertTo-Json -Depth 20 | Set-Content (Join-Path $out 'discovered-tests.json')
 $expected | ConvertTo-Json | Set-Content (Join-Path $out 'expected-tests.json')
 Tool 'test_runner.toolsets.test_runner.TestRunnerTools' 'run_automation_tests' @{filter=$Filter} |

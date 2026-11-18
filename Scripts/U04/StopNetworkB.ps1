@@ -1,6 +1,6 @@
 param([Parameter(Mandatory=$true)][string]$SessionPath,[ValidateSet('B')][string]$Stage='B')
 $ErrorActionPreference='Stop'
-. (Join-Path $PSScriptRoot 'PreserveDLauncherLogs.ps1')
+. (Join-Path $PSScriptRoot 'PreserveLauncherLogsB.ps1')
 $session=(Resolve-Path -LiteralPath $SessionPath).Path
 $allowed=(Resolve-Path -LiteralPath (Join-Path $env:U04B_WORKSPACE_ROOT 'Artifacts/U04/B')).Path
 if(!$session.StartsWith($allowed+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Only isolated U03-D sessions may be stopped'}

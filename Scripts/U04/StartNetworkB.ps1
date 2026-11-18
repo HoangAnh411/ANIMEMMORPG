@@ -19,7 +19,7 @@ param(
 )
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot '../U01/FReviewHost.ps1')
-. (Join-Path $PSScriptRoot 'PreserveDLauncherLogs.ps1')
+. (Join-Path $PSScriptRoot 'PreserveLauncherLogsB.ps1')
 $project=(Resolve-Path -LiteralPath $CloneProject).Path
 if($project -notlike '*\Artifacts\U04\B\Source\*'){throw 'Isolated stage clone required'}
 & python (Join-Path $PSScriptRoot 'PrepareB.py') --root (Split-Path $project)
