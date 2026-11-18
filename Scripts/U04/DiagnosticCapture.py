@@ -7,10 +7,10 @@ from PIL import ImageGrab
 from BClient import BClient,u,Input,Payload,Key,VK
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--record',required=True,type=Path);p.add_argument('--mode',choices=['input','timing'],required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--record',required=True,type=Path);p.add_argument('--mode',choices=['input','timing'],required=True);p.add_argument('--offset',type=int,default=0);a=p.parse_args()
     record=json.loads(a.record.read_text(encoding='utf-8-sig'));session=a.record.parent;out=session/'Diagnostic';out.mkdir(exist_ok=False)
     c=BClient(record);cv2.setNumThreads(1);events=[];stop=threading.Event();worker=None;writer=None
-    ledger=dict(status='DIAGNOSTIC_ONLY',acceptance=False,completed=False,mode=a.mode,process=record,windows=[])
+    ledger=dict(status='DIAGNOSTIC_ONLY',acceptance=False,completed=False,mode=a.mode,inventoryOffset=a.offset,process=record,windows=[])
     def clock():return dict(wall=time.perf_counter()+16777216.,utc=datetime.now(timezone.utc).isoformat())
     def wait(duration,poll=.005):
         end=time.perf_counter()+duration
@@ -56,7 +56,7 @@ def main():
             inventory=[(f'{variant}-{i}',variant) for i in range(1,5) for variant in ['legacy','batch','previous']]
         else:
             order=['passive','poll','video','video','passive','poll','poll','video','passive'];inventory=[(f'{mode}-{i+1}',mode) for i,mode in enumerate(order)]
-        for trial,mode in inventory:
+        for trial,mode in inventory[a.offset:]:
             directory=out/trial;directory.mkdir();events=[];command('U04B prepare'+(' combo' if a.mode=='timing' else ''));wait(.8)
             (directory/'SETUP.json').write_text(json.dumps(c.metrics(),indent=2),encoding='utf-8')
             ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(directory/'Setup.png')
@@ -84,7 +84,8 @@ def main():
             (out/'LEDGER.json').write_text(json.dumps(ledger,indent=2),encoding='utf-8');print(trial,'RECORDED_DIAGNOSTIC_ONLY',flush=True)
         ledger['completed']=True
     except Exception as e:
-        ledger.update(error=repr(e),traceback=traceback.format_exc());end_video()
+        foreground=u.GetForegroundWindow();pid=ctypes.c_ulong();u.GetWindowThreadProcessId(foreground,ctypes.byref(pid))
+        ledger.update(error=repr(e),traceback=traceback.format_exc(),foregroundAtCatch=dict(hwnd=int(foreground),pid=pid.value,ownedWindow=foreground==c.hwnd));end_video()
         try:c.guard();c.console('U04B end')
         except Exception as close_error:ledger['flushError']=repr(close_error)
         raise
