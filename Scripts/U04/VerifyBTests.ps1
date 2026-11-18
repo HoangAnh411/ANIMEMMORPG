@@ -18,7 +18,8 @@ if(@(& git -C $sourceRoot status --porcelain --untracked-files=no).Count){throw 
 if(![IO.Path]::GetFullPath($OutputRoot).StartsWith([IO.Path]::GetFullPath($IsolationRoot)+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Output outside isolation'}
 $out=Join-Path $OutputRoot $RunId
 if(Test-Path $out){throw 'Immutable run exists'}
-if(@(git -C $sourceRoot diff $SourceSHA -- Source Content Config Plugins AnimeMMORPG.uproject).Count){throw 'Runtime source mismatch'}
+. (Join-Path $PSScriptRoot 'AssertRuntimeB.ps1')
+Assert-BRuntime $sourceRoot $SourceSHA
 if(Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue){throw 'MCP port occupied'}
 New-Item -ItemType Directory -Path $out | Out-Null
 $sourceSHA=$SourceSHA

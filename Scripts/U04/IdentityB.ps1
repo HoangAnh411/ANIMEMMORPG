@@ -3,7 +3,8 @@ function Assert-BIdentity([string]$Clone,[string]$SourceSHA,[string]$Manifest,[s
  foreach($path in @($Clone,$Output,$Settings,$Manifest)){
   if(!$path -or ![IO.Path]::GetFullPath($path).StartsWith($root+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'U04 path isolation required'}
  }
- if(@(git -C $Clone diff $SourceSHA -- Source Content Config Plugins AnimeMMORPG.uproject).Count){throw 'Runtime inputs differ from built source'}
+ . (Join-Path $PSScriptRoot 'AssertRuntimeB.ps1')
+ Assert-BRuntime $Clone $SourceSHA
  if(@(git -C $Clone status --porcelain --untracked-files=no).Count){throw 'Clone dirty'}
  $m=Get-Content -Raw -Encoding UTF8 $Manifest | ConvertFrom-Json
  if($m.sourceSHA -ne $SourceSHA){throw 'Manifest source mismatch'}
