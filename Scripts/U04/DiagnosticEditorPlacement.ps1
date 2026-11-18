@@ -18,9 +18,14 @@ if($Mode -eq 'Minimize'){
  ConvertTo-Json -InputObject @(Confirm-U02EditorMinimized $before) -Depth 9 | Set-Content -Encoding UTF8 (Join-Path $path 'editor-minimized.json')
 }else{
  $before=Get-Content -Raw $file | ConvertFrom-Json
- Restore-FOriginalEditorWindows $before;Start-Sleep -Milliseconds 500
+ if(Test-Path (Join-Path $path 'editor-restored.json')){throw 'Immutable restore observation exists'}
+ Restore-FOriginalEditorWindows $before
+ for($settle=0;$settle -lt 4;$settle++){
+ Start-Sleep -Milliseconds 500
  $after=@(Get-U02OriginalEditorWindows $OriginalProject);$ok=$true
  foreach($b in $before){$a=@($after | Where-Object {$_.pid -eq $b.pid -and $_.hwnd -eq $b.hwnd});if($a.Count -ne 1){$ok=$false;continue};if($a[0].placement.Show -ne $b.placement.Show){$ok=$false};foreach($edge in @('Left','Top','Right','Bottom')){if($a[0].placement.Normal.$edge -ne $b.placement.Normal.$edge){$ok=$false}}}
- @{completed=$ok;windows=$after} | ConvertTo-Json -Depth 10 | Set-Content -Encoding UTF8 (Join-Path $path 'editor-restored.json')
+ if($ok){break}
+ }
+ @{completed=$ok;settleChecks=($settle+1);windows=$after} | ConvertTo-Json -Depth 10 | Set-Content -Encoding UTF8 (Join-Path $path 'editor-restored.json')
  if(!$ok){throw 'Original window placement mismatch'}
 }
