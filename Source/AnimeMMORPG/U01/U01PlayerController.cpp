@@ -699,5 +699,5 @@ TSharedRef<FJsonObject> AU01PlayerController::GetU04InputDiagnostic() const
         const FKey Binding=ControlKey(Action);auto K=MakeShared<FJsonObject>();K->SetNumberField(TEXT("bindingAction"),Action);K->SetStringField(TEXT("binding"),Binding.ToString());K->SetBoolField(TEXT("engineHeld"),IsInputKeyDown(Binding));K->SetBoolField(TEXT("gateAllows"),ReleaseGate.Allows(Binding));K->SetBoolField(TEXT("gatePressed"),ReleaseGate.IsPressedForDiagnostic(Binding));
         bool Observed=false,OSHeld=false;for(FKey Physical:AnimeMMORPG::U01::PhysicalKeys(Binding)){Observed|=ObservedKeys.Contains(Physical);OSHeld|=PhysicalDown(Physical);}K->SetBoolField(TEXT("observedPhysical"),Observed);K->SetBoolField(TEXT("osHeld"),OSHeld);Values.Add(MakeShared<FJsonValueObject>(K));
     }
-    J->SetArrayField(TEXT("keys"),Values);if(const auto* P=GetPawn()){J->SetStringField(TEXT("pawn"),P->GetPathName());J->SetStringField(TEXT("velocity"),P->GetVelocity().ToString());}return J;
+    J->SetArrayField(TEXT("keys"),Values);if(const APawn* P=GetPawn()){J->SetStringField(TEXT("pawn"),P->GetPathName());J->SetStringField(TEXT("velocity"),P->GetVelocity().ToString());}return J;
 }
