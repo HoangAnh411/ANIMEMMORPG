@@ -34,7 +34,7 @@ def timing_result(raw):
     allframes=[r for r in raw if r['kind']=='frame'];start=allframes[0]['worldTime']+2.5;end=start+15
     rows=[r for r in allframes if start<=r['worldTime']<=end]
     assert rows and all(b['frame']==a['frame']+1 for a,b in zip(rows,rows[1:])), 'missing frames'
-    assert all(r['frameBeginCounter']==r['frame'] for r in rows), 'begin/actor frame alignment mismatch'
+    assert all(r['frameBeginCounter']==r['worldBeginCounter']==r['frame'] for r in rows), 'begin/actor frame alignment mismatch'
     assert all((r.get('width'),r.get('height'))==(1280,720) for r in rows), 'viewport changed'
     for name in ['source','pid','world','pawn','reset']:
         assert all(name in r for r in rows) and len({r[name] for r in rows})==1, name+' changed/missing'
@@ -43,10 +43,10 @@ def timing_result(raw):
     entry=[r['sampleEntryWall'] for r in rows];wall=[r['wall'] for r in rows];cost=[w-e for w,e in zip(wall,entry)]
     residual=[(wall[i]-wall[i-1])-(entry[i]-entry[i-1])-(cost[i]-cost[i-1]) for i in range(1,len(rows))]
     return dict(status='DIAGNOSTIC_ONLY',acceptance=False,worldStart=start,worldEnd=end,selectedFrames=len(rows),
-                begin=stats([r['frameBeginWall'] for r in rows]),entry=stats(entry),oldWall=stats(wall),
+                begin=stats([r['frameBeginWall'] for r in rows]),worldBegin=stats([r['worldBeginWall'] for r in rows]),entry=stats(entry),oldWall=stats(wall),
                 collectorCostSeconds=dict(p50=percentile(cost,.5),p95=percentile(cost,.95),max=max(cost)),
                 costDifferenceIdentityMaxResidual=max(abs(r) for r in residual),
-                clocks='Core OnBeginFrame before rate limiting; post-actor collector entry; legacy post-collector wall. All real game-thread events, not scanout.')
+                clocks='Core OnBeginFrame before rate limiting; UWorld::Tick start after rate limiting; post-actor collector entry; legacy post-collector wall. All real game-thread events, not scanout.')
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--session',type=Path,required=True);p.add_argument('--mode',choices=['input','timing'],required=True);a=p.parse_args()

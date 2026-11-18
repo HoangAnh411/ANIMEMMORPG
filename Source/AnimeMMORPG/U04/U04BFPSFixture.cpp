@@ -33,9 +33,9 @@ struct FCapture
 {
     TWeakObjectPtr<UWorld> World;
     TWeakObjectPtr<AU02LabDummy> Target;
-    FDelegateHandle Tick, BeginFrame;
-    double FrameBeginWall=0;
-    uint64 FrameBeginCounter=0, EventSerial=0;
+    FDelegateHandle Tick, BeginFrame, WorldBegin;
+    double FrameBeginWall=0, WorldBeginWall=0;
+    uint64 FrameBeginCounter=0, WorldBeginCounter=0, EventSerial=0;
     TArray<TSharedRef<FJsonObject>> Buffer;
     FString Trial, Directory;
     bool Recording=false;
@@ -55,6 +55,8 @@ TSharedRef<FJsonObject> Base(UWorld* W,const TCHAR* Kind)
     J->SetStringField(TEXT("world"),W->GetPathName());J->SetNumberField(TEXT("worldType"),int32(W->WorldType));
     J->SetNumberField(TEXT("netMode"),int32(W->GetNetMode()));return J;
 }
+void WorldBegin(UWorld* W,ELevelTick Type,float Dt)
+{if(auto* C=Captures.Find(W))if(TimingDiagnosticEnabled(W)){(*C)->WorldBeginWall=FPlatformTime::Seconds();(*C)->WorldBeginCounter=GFrameCounter;}}
 void FrameBegin()
 {const double At=FPlatformTime::Seconds();for(auto& Pair:Captures)if(TimingDiagnosticEnabled(Pair.Key)){Pair.Value->FrameBeginWall=At;Pair.Value->FrameBeginCounter=GFrameCounter;}}
 void Sample(UWorld* W,ELevelTick Type,float Dt)
@@ -89,7 +91,7 @@ void Sample(UWorld* W,ELevelTick Type,float Dt)
         H->SetBoolField(TEXT("crit"),R.Result.bCrit);H->SetNumberField(TEXT("absorbed"),R.Result.Absorbed);H->SetNumberField(TEXT("defense"),R.Result.Defense);H->SetNumberField(TEXT("roll"),R.Roll);
         Hits.Add(MakeShared<FJsonValueObject>(H));
     }J->SetArrayField(TEXT("hits"),Hits);
-    if(TimingDiagnosticEnabled(W)){J->SetNumberField(TEXT("sampleEntryWall"),SampleEntry);J->SetNumberField(TEXT("frameBeginWall"),C.FrameBeginWall);J->SetNumberField(TEXT("frameBeginCounter"),double(C.FrameBeginCounter));J->SetNumberField(TEXT("collectorExitWall"),FPlatformTime::Seconds());}
+    if(TimingDiagnosticEnabled(W)){J->SetNumberField(TEXT("worldBeginWall"),C.WorldBeginWall);J->SetNumberField(TEXT("worldBeginCounter"),double(C.WorldBeginCounter));J->SetNumberField(TEXT("sampleEntryWall"),SampleEntry);J->SetNumberField(TEXT("frameBeginWall"),C.FrameBeginWall);J->SetNumberField(TEXT("frameBeginCounter"),double(C.FrameBeginCounter));J->SetNumberField(TEXT("collectorExitWall"),FPlatformTime::Seconds());}
     Event(W,TEXT("frame"),J);
 }
 void Command(const TArray<FString>& A,UWorld* W)
@@ -141,11 +143,11 @@ void BeginWorld(UWorld& W)
     auto* Floor=W.SpawnActor<AStaticMeshActor>(FVector(0,20000,-50),FRotator::ZeroRotator);
     auto* Mesh=Floor->GetStaticMeshComponent();Mesh->SetMobility(EComponentMobility::Movable);Mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
     Floor->SetActorScale3D(FVector(300,30,1));Mesh->SetCollisionProfileName(TEXT("BlockAll"));
-    if(TimingDiagnosticEnabled(&W))C->BeginFrame=FCoreDelegates::OnBeginFrame.AddStatic(&FrameBegin);
+    if(TimingDiagnosticEnabled(&W)){C->BeginFrame=FCoreDelegates::OnBeginFrame.AddStatic(&FrameBegin);C->WorldBegin=FWorldDelegates::OnWorldTickStart.AddStatic(&WorldBegin);}
     C->Tick=FWorldDelegates::OnWorldPostActorTick.AddStatic(&Sample);Captures.Add(&W,MoveTemp(C));
 }
 void EndWorld(UWorld* W)
-{if(auto* F=Captures.Find(W)){FWorldDelegates::OnWorldPostActorTick.Remove((*F)->Tick);FCoreDelegates::OnBeginFrame.Remove((*F)->BeginFrame);Captures.Remove(W);}}
+{if(auto* F=Captures.Find(W)){FWorldDelegates::OnWorldPostActorTick.Remove((*F)->Tick);FCoreDelegates::OnBeginFrame.Remove((*F)->BeginFrame);FWorldDelegates::OnWorldTickStart.Remove((*F)->WorldBegin);Captures.Remove(W);}}
 void DodgeCommit(AU01Character* P,double At,bool End)
 {
     if(!P||!Enabled(P->GetWorld()))return;auto J=Base(P->GetWorld(),TEXT("dodgeCommit"));

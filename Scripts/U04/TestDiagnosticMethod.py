@@ -25,7 +25,7 @@ class Method(unittest.TestCase):
         rows=[]
         for i in range(2161):
             entry=100+i/120;cost=.0002+(i%2)*.001
-            rows.append(dict(kind='frame',frame=i,frameBeginCounter=i,frameBeginWall=entry-.002,sampleEntryWall=entry,wall=entry+cost,worldTime=i/120,focus=True,dilation=1,fixed=False,useFixedFrameRate=False,cvars={**PROFILE,'t.MaxFPS':120},combat={'action':0},hits=[],width=1280,height=720,source='sha',pid=1,world='Lab',pawn='P',reset=0))
+            rows.append(dict(kind='frame',frame=i,frameBeginCounter=i,worldBeginCounter=i,frameBeginWall=entry-.002,worldBeginWall=entry-.001,sampleEntryWall=entry,wall=entry+cost,worldTime=i/120,focus=True,dilation=1,fixed=False,useFixedFrameRate=False,cvars={**PROFILE,'t.MaxFPS':120},combat={'action':0},hits=[],width=1280,height=720,source='sha',pid=1,world='Lab',pawn='P',reset=0))
         r=timing_result(rows);self.assertLess(r['costDifferenceIdentityMaxResidual'],1e-12);self.assertEqual(r['entry']['within10Percent'],1);self.assertLess(r['oldWall']['within10Percent'],.95);self.assertFalse(r['acceptance'])
         rows[400]['frameBeginCounter']+=1
         with self.assertRaises(AssertionError):timing_result(rows)
