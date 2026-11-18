@@ -1,6 +1,7 @@
 """Synthetic method verification only; never counts as binary gameplay evidence."""
-import copy, unittest
-from AnalyzeB import PROFILE,cadence,percentile,interpolate,hit_checks,combo,dodge,movement
+import copy, unittest, tempfile, json
+from pathlib import Path
+from AnalyzeB import PROFILE,cadence,percentile,interpolate,hit_checks,combo,dodge,movement,analyze
 
 def frames(fps=120,n=1201):
     return [dict(wall=i/fps,worldTime=i/fps,frame=i,pid=4,world='GameLab',pawn='P',source='sha',reset=0,
@@ -9,6 +10,14 @@ def frames(fps=120,n=1201):
                  position=[500*i/fps,0,98]) for i in range(n)]
 
 class Method(unittest.TestCase):
+    def test_invalid_focus_keeps_observed_gameplay_failure(self):
+        rows=frames(n=1500)
+        for r in rows:r.update(kind='frame',mode=1,velocity=[500,0,0],position=[450*r['worldTime'],0,98])
+        rows[400]['focus']=False
+        with tempfile.TemporaryDirectory(prefix='u04b-method-') as directory:
+            p=Path(directory)/'synthetic.jsonl';p.write_text('\n'.join(json.dumps(r) for r in [{'kind':'begin'}]+rows+[{'kind':'end'}]),encoding='utf-8')
+            result=analyze(p,120,'walk')
+        self.assertEqual(result['status'],'INVALID');self.assertFalse(result['gameplay']['pass_'])
     def test_movement_window(self):
         a=frames(n=1500)
         for r in a:r.update(mode=1,velocity=[500,0,0])
@@ -20,13 +29,16 @@ class Method(unittest.TestCase):
         for r in rows:
             r.update(pawn='P',target='T',targetLife=2,hits=[h for h in hits if h['time']<=r['worldTime']],combat={'fixtureCritRoll':.5,'locked':.5<=r['worldTime']<1.95})
             r['targetVital']={'hp':600-sum(h['damage'] for h in r['hits'])}
-        receives=[dict(kind='Received',commandType=6,command=i+1) for i in range(3)]
+        receives=[dict(kind='Received',commandType=6,command=i+1,receive=t) for i,t in enumerate([.5,.82,1.27])]
         admissions=[dict(kind='Admitted',detail=f'command={i+1}',gameplaySeconds=t) for i,t in enumerate([.5,.82,1.27])]
         completed=[dict(kind='ActionCompleted',at=e,natural=True) for e in ends]
         raw=actions+receives+admissions+completed
         self.assertTrue(combo(raw,rows)['pass_'])
         completed[-1]['at']+=.000002;self.assertFalse(combo(raw,rows)['pass_']);completed[-1]['at']-=.000002
         admissions[1]['gameplaySeconds']=.7
+        self.assertFalse(combo(raw,rows)['pass_']) # valid receipt, late/early processing is gameplay FAIL
+        self.assertFalse(combo(receives+admissions,rows)['pass_']) # valid edges cannot become INVALID merely because no action started
+        receives[1]['receive']=.7
         with self.assertRaisesRegex(ValueError,'outside buffer'):combo(raw,rows)
     def test_dodge_commit_position(self):
         rows=frames(n=160);c=dict(dodgeStart=.5,dodgeMotionEnd=.75,dodgeLockEnd=.85,dodgeOrigin='X=0 Y=0 Z=98',dodgeDirection='X=1 Y=0 Z=0')

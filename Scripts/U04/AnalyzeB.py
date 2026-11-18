@@ -83,18 +83,27 @@ def dodge(raw,rows,direction):
 
 def combo(raw,rows):
     actions=[r for r in raw if r['kind']=='ActionStarted']
-    if not actions:raise ValueError('no action starts')
-    first=actions[0];last=actions[-1];s=first['start'];e=last['end'];reasons=[]
     receives=[r for r in raw if r['kind']=='Received' and r['commandType']==6]
     admissions=[r for r in raw if r['kind'] in ('Admitted','Rejected')]
     if len(receives)!=3:raise ValueError('not exactly three authority input receipts')
+    if not actions:
+        first_admission=[r for r in admissions if re.search(r'command='+str(int(receives[0]['command']))+r'\b',r['detail'])]
+        start=first_admission[0]['gameplaySeconds'] if first_admission else receives[0]['receive']
+        for i,receive in enumerate(receives[1:]):
+            deadline=start+(.4 if i==0 else .85)
+            if not deadline-.15<receive['receive']<deadline:raise ValueError('authority input outside buffer')
+        return dict(pass_=False,reasons=['valid received combo inputs produced no action'],actions=[],hits=[],
+                    firstFrame=rows[0]['frame'],lastFrame=rows[-1]['frame'])
+    first=actions[0];last=actions[-1];s=first['start'];e=last['end'];reasons=[]
     # A received edge outside the preceding action buffer cannot certify continuous combo gameplay.
     for i,receive in enumerate(receives[1:]):
         deadline=s+(.4 if i==0 else .85)
         matches=[r for r in admissions if re.search(r'command='+str(int(receive['command']))+r'\b',r['detail'])]
-        if len(matches)!=1:raise ValueError('missing/unmatched authority admission')
+        if not deadline-.15<receive['receive']<deadline:raise ValueError('authority input outside buffer')
+        if len(matches)!=1:
+            reasons.append('valid received input missing authority admission');continue
         at=matches[0]['gameplaySeconds']
-        if not deadline-.15<at<deadline:raise ValueError('authority input outside buffer')
+        if not deadline-.15<at<deadline:reasons.append('valid received input processed outside buffer')
         if matches[0]['kind']=='Rejected':reasons.append('valid buffered input rejected')
     if len(actions)!=3 or [r['definition'] for r in actions]!=[0,1,2]:reasons.append('not exactly combo123 actions')
     if len({r['actionId'] for r in actions})!=3:reasons.append('duplicate action')
@@ -104,11 +113,12 @@ def combo(raw,rows):
     completed=[r for r in raw if r['kind']=='ActionCompleted']
     if len(completed)!=3 or any(not r['natural'] for r in completed):reasons.append('missing/unnatural authority completion')
     if completed and abs(completed[-1]['at']-s-1.45)>1e-6:reasons.append('actual completion timeline')
-    before=[r for r in rows if r['worldTime']<s];after=[r for r in rows if r['worldTime']>=e]
+    expected_end=s+1.45
+    before=[r for r in rows if r['worldTime']<s];after=[r for r in rows if r['worldTime']>=expected_end]
     if not before or not after:raise ValueError('combo bounds not observed')
     b=before[-1];a=after[0]
     if a['combat']['locked']:reasons.append('action still locked at observed end')
-    hits=[h for h in a['hits'] if s<=h['time']<=e]
+    hits=[h for h in a['hits'] if s<=h['time']<=expected_end]
     reasons+=hit_checks(hits,b['pawn'],first['life'],b['target'],b['targetLife'],[x['action'] for x in actions],b['targetVital']['hp'],a['targetVital']['hp'])
     if any(r['combat']['fixtureCritRoll']!=.5 for r in rows if s<=r['worldTime']<=e):reasons.append('crit-off fixture changed')
     return dict(pass_=not reasons,reasons=reasons,actions=actions,hits=hits,authorityDuration=e-s,
@@ -160,7 +170,9 @@ def analyze(path,target,case):
         except (ValueError,KeyError,ZeroDivisionError) as e:result['reason']=str(e);return result
         selected=[r for r in rows if g['firstFrame']<=r['frame']<=g['lastFrame']]
         result['gameplay']=g;result['cadence']=cadence(selected,target)
-        result['status']='FAIL' if not g['pass_'] else ('PASS' if result['cadence'].get('pass_') else 'INVALID')
+        cadence_only={'mean FPS outside 5%','fewer than 95% intervals within 10%','frame exceeds two periods'}
+        structural=[reason for reason in result['cadence']['reasons'] if reason not in cadence_only]
+        result['status']='INVALID' if structural else ('FAIL' if not g['pass_'] else ('PASS' if result['cadence'].get('pass_') else 'INVALID'))
     else:result['reason']='case analyzer not implemented; never accepted'
     return result
 
