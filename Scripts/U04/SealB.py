@@ -28,6 +28,7 @@ for f in sorted((isolation/'Runs').rglob('*')):
         dest=dest.with_name(dest.name+'.gz');dest.write_bytes(gzip.compress(data,compresslevel=6,mtime=0));transform+=';gzip'
     records.append(dict(raw=rel.as_posix(),rawSHA256=sha(f),rawBytes=f.stat().st_size,published=dest.relative_to(root).as_posix(),publishedSHA256=sha(dest),publishedBytes=dest.stat().st_size,transformation=transform))
 m=dict(schema=1,status=gates['status'],createdUTC=datetime.now(timezone.utc).isoformat(),rawRoot=str(isolation/'Runs'),
+       gatesRawPath=str(a.gates.resolve()),gatesRawSHA256=sha(a.gates),
        sourceSHA=gates['sourceSHA'],mainBaseline='18804bfa32b14471df1ffa4bd7aeaed6cd80074c',gates=gates,files=records,
        publisherCommit=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip(),
        warnings=['Game-thread rendered frame sampling is not scanout measurement.','Video30FPS does not establish game120FPS.','All failed/invalid attempts are retained; incomplete gates are not PASS.','No acceptance, merge, U04-C/D, adverse network or packaged Server claim.'])

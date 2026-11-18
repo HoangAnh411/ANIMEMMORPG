@@ -2,6 +2,7 @@
 import csv,hashlib,json,shutil,subprocess
 from pathlib import Path
 root=Path(__file__).resolve().parents[2];isolation=root.parent;runs=isolation/'Runs';docs=root/'Docs/U04'
+assert not (isolation/'FINAL-GATES.json').exists(), 'Immutable final gates already exist'
 def read(p):return json.loads(p.read_text(encoding='utf-8-sig'))
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 source='a1e536a79a60a4409e9a6cf64661008f1618e66f'

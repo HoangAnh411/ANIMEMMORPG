@@ -8,6 +8,7 @@ def sha(f):
     with f.open('rb') as s:
         for chunk in iter(lambda:s.read(8388608),b''):h.update(chunk)
     return h.hexdigest()
+if not a.published_only:assert sha(Path(m['gatesRawPath']))==m['gatesRawSHA256'], 'Raw final gates changed'
 for r in m['files']:
     f=root/r['published'];assert sha(f)==r['publishedSHA256'],f
     if not a.published_only:

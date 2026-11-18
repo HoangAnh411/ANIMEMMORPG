@@ -1,19 +1,17 @@
-# U04-B matrix
+# U04-B executed matrix
 
-All gates are pending; this file is a requirement inventory, not an execution result.
+Status: **INCOMPLETE; not READY_FOR_REVIEW**. Source a1e536a79a60a4409e9a6cf64661008f1618e66f. All38 attempts retained:31 PASS,6 INVALID,1 FAIL. [Every trial](B-TRIALS.csv), [assertions/index](B-RESULTS.json), [report](REPORT-B.md).
 
-| Gate | Per FPS 30 / 60 / 120 | Maximum attempts |
-|---|---|---|
-| Walk | 3 valid, 5000 +/-50 cm /10 world seconds | 5 per FPS |
-| Sprint | 3 valid, 7000 +/-50 cm /10 world seconds | 5 per FPS |
-| Forward dodge | 3 valid, 300 +/-5 cm | 5 per FPS |
-| Backward dodge | 3 valid, 300 +/-5 cm | 5 per FPS |
-| Left dodge | 3 valid, 300 +/-5 cm | 5 per FPS |
-| Right dodge | 3 valid, 300 +/-5 cm | 5 per FPS |
-| Combo123 | 5 valid, 60/70/90, total220, timeline1.45 s | 7 per FPS |
+| Case | Required per FPS | 30 FPS | 60 FPS | 120 FPS |
+|---|---:|---|---|---|
+| Walk5000 +/-50 cm /10 world s | 3 | 3 PASS /3 attempts | 3 PASS /3 | 3 PASS /4;1 cadence INVALID |
+| Sprint7000 +/-50 cm /10 world s | 3 | 3 PASS /3 | 3 PASS /3 | 3 PASS /4;1 cadence INVALID |
+| Forward dodge300 +/-5 cm | 3 | first attempt FAIL direction; gate stopped | not run: related gate stopped | not run: related gate stopped |
+| Back/left/right dodge, each | 3 each | not run: related gate stopped | not run: related gate stopped | not run: related gate stopped |
+| Combo123 /220 damage /1.45 s | 5 | 5 PASS /5 | 5 PASS /5 | 3 PASS /7;4 cadence INVALID; insufficient evidence |
 
-Each selected gameplay window must independently satisfy the cadence, continuity, focus, identity and configuration contract. Preserve nonqualifying gameplay as supplemental evidence.
+No cap/quality/timestep workaround or additional attempt beyond the budget. Dodge related gates stop at the unresolved direction reproduction; no runtime fix was made. The legacy40 ms preparation dodge regression is supplemental and does not fill the B stationary-admission matrix.
 
-Method tests: cap120/actual60, missing counter, duplicate timestamp, long frame, FPS/percentiles, boundary interpolation, duplicate hit, wrong life/action, crit, unexplained HP delta, cvar/reset/focus/source changes.
+Full Automation140/140, exact expected/discovered/executed names; three-map packaged load smoke3/3; normal fixture-off4 checks; combat24, defense15, legacy dodge38, movement/focus26, dedicated Editor+two clients26 checks;41 independent network comparisons and reconnect history/feedback check. All pass on the final binary. Network remains client60/server30.
 
-Final regression: exact-name full Automation; all three maps; fixture-off normal launch; focused combat/dodge/focus; dedicated Editor + two clients with inherited A profile. All pending.
+Before capture:8 synthetic method groups pass. Final receipt/structural-invalidity audit:9 groups pass, all38 original decisions/numeric results recompute unchanged. Method tests are not binary gameplay evidence. Preservation4392 hashes and original Editor creation/window state pass.
