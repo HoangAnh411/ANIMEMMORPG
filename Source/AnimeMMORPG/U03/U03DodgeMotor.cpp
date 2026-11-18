@@ -1,3 +1,4 @@
+#include "U04/U04BFPSFixture.h"
 #include "U01/U01Character.h"
 #include "U02/U02CombatComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -116,4 +117,5 @@ void UU01CharacterMovement::CommitDodge(double At)
     if(At==PlanEnd&&PlanClip>=PlanEnd)CurrentFloor=PlanFloor;
     if(bDodgeLostGround)SetMovementMode(MOVE_Falling);
     Velocity.X=Velocity.Y=0;PlanCommitted=At;
+    U04B::DodgeCommit(CastChecked<AU01Character>(CharacterOwner),At,At==PlanEnd);
 }
