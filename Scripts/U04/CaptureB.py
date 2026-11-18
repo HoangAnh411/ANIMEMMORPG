@@ -71,6 +71,7 @@ def main():
             for attempt in range(1,limit+1):
                 trial=f"fps{record['targetFPS']}-{case}-{attempt}";trialout=out/trial;trialout.mkdir()
                 events=[];console('U04B prepare'+(' combo' if case=='combo' else ''));wait(.8)
+                (trialout/'FixtureState.json').write_text(json.dumps(c.metrics(),indent=2),encoding='utf-8')
                 ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(trialout/'Fixture.png')
                 console('U04B begin '+trial);wait(.4);movie(trialout/'Video.mp4',trial)
                 if case in ('walk','sprint'):
@@ -101,6 +102,9 @@ def main():
             ledger.setdefault('counts',{})[case]={'passed':passed,'required':need,'attempts':attempt}
         ledger['completed']=True
     except Exception as e:
+        end_movie()
+        try:c.guard();c.console('U04B end')
+        except Exception as flush_error:ledger['flushError']=repr(flush_error)
         ledger['error']=repr(e);ledger['traceback']=traceback.format_exc();raise
     finally:
         end_movie();c.finish();ledger['remainingEvents']=events

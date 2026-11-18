@@ -11,6 +11,7 @@ $m=Get-Content -Raw -Encoding UTF8 $Manifest | ConvertFrom-Json
 $clone=(Resolve-Path -LiteralPath (Join-Path $isolation 'Source')).Path
 if($m.clone -ine $clone){throw 'Build clone mismatch'}
 if(@(git -C $clone diff $m.sourceSHA -- Source Content Config Plugins AnimeMMORPG.uproject).Count){throw 'Runtime inputs changed from built source'}
+if(@(git -C $clone status --porcelain --untracked-files=all -- Source Content Config Plugins AnimeMMORPG.uproject).Count){throw 'Dirty or untracked runtime inputs'}
 $package=Join-Path $m.build 'Archive/Windows'
 if(![IO.Path]::GetFullPath($package).StartsWith($isolation+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Package outside isolation'}
 $out=Join-Path $isolation ('Runs/'+$RunId)

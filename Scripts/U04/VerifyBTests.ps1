@@ -11,7 +11,7 @@ param(
 )
 $ErrorActionPreference='Stop'
 $project=(Resolve-Path -LiteralPath $CloneProject).Path
-$original=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../../AnimeMMORPG.uproject')).Path
+$original=(Resolve-Path -LiteralPath (Join-Path $env:U04B_WORKSPACE_ROOT 'AnimeMMORPG.uproject')).Path
 if($project -ieq $original -or (Split-Path $project) -ine [IO.Path]::GetFullPath((Join-Path $IsolationRoot 'Source'))) { throw 'Requires isolated U03-D source clone' }
 $sourceRoot=Split-Path $project
 if(@(& git -C $sourceRoot status --porcelain --untracked-files=no).Count){throw 'Clone tracked tree must be clean'}
