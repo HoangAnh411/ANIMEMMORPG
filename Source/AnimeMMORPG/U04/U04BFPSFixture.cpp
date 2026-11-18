@@ -48,6 +48,7 @@ TSharedRef<FJsonObject> Base(UWorld* W,const TCHAR* Kind)
     auto J=MakeShared<FJsonObject>();J->SetStringField(TEXT("kind"),Kind);
     J->SetNumberField(TEXT("wall"),FPlatformTime::Seconds());J->SetNumberField(TEXT("worldTime"),W->GetTimeSeconds());
     J->SetNumberField(TEXT("frame"),double(GFrameCounter));J->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());
+    FString Source;FParse::Value(FCommandLine::Get(),TEXT("U02SourceSHA="),Source);J->SetStringField(TEXT("source"),Source);
     J->SetStringField(TEXT("world"),W->GetPathName());J->SetNumberField(TEXT("worldType"),int32(W->WorldType));
     J->SetNumberField(TEXT("netMode"),int32(W->GetNetMode()));return J;
 }

@@ -1,5 +1,5 @@
-#include "U04/U04BFPSFixture.h"
 #include "U02CombatComponent.h"
+#include "U04/U04BFPSFixture.h"
 #include "U02NetworkState.h"
 #include "U03/U03Encounter.h"
 #include <limits>
