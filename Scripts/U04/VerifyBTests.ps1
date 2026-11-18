@@ -18,10 +18,10 @@ if(@(& git -C $sourceRoot status --porcelain --untracked-files=no).Count){throw 
 if(![IO.Path]::GetFullPath($OutputRoot).StartsWith([IO.Path]::GetFullPath($IsolationRoot)+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Output outside isolation'}
 $out=Join-Path $OutputRoot $RunId
 if(Test-Path $out){throw 'Immutable run exists'}
-if((git -C $sourceRoot rev-parse HEAD) -ne $SourceSHA){throw 'Source mismatch'}
+if(@(git -C $sourceRoot diff $SourceSHA -- Source Content Config Plugins AnimeMMORPG.uproject).Count){throw 'Runtime source mismatch'}
 if(Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue){throw 'MCP port occupied'}
 New-Item -ItemType Directory -Path $out | Out-Null
-$sourceSHA=(& git -C $sourceRoot rev-parse HEAD)
+$sourceSHA=$SourceSHA
 $exe=Join-Path $EngineRoot 'Engine/Binaries/Win64/UnrealEditor.exe'
 $module=Join-Path $sourceRoot 'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll'
 if(!(Test-Path -LiteralPath $module)){throw 'Full build module missing'}

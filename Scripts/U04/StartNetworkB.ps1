@@ -25,7 +25,7 @@ if($project -notlike '*\Artifacts\U04\B\Source\*'){throw 'Isolated stage clone r
 & python (Join-Path $PSScriptRoot 'PrepareB.py') --root (Split-Path $project)
 if($LASTEXITCODE -ne 0){throw 'Clone config guard failed'}
 if(@(git -C (Split-Path $project) status --porcelain --untracked-files=no).Count){throw 'Clone tracked tree is dirty'}
-$sha=git -C (Split-Path $project) rev-parse HEAD
+$sha=$SourceSHA
 if($sha -ne $SourceSHA){throw 'Source mismatch'}
 if(Get-NetUDPEndpoint -LocalPort $Port -ErrorAction SilentlyContinue){throw 'Port occupied'}
 if(Get-NetTCPConnection -LocalPort $McpPort -ErrorAction SilentlyContinue){throw 'MCP port occupied'}

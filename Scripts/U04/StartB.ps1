@@ -25,7 +25,8 @@ New-Item -ItemType Directory -Path $settings | Out-Null
 $raw=Join-Path $out 'Raw';New-Item -ItemType Directory -Path $raw | Out-Null
 $log=Join-Path $out 'Game.log'
 $cmds='t.MaxFPS '+$FPS+',t.IdleWhenNotForeground 0,r.VSync 0,r.ScreenPercentage 50,r.LumenScene.SurfaceCache.AtlasSize 2048,r.RenderTargetPoolMin 128,r.Streaming.PoolSize 256,r.Lumen.DiffuseIndirect.Allow 0,r.Lumen.Reflections.Allow 0,r.Shadow.Virtual.Enable 0,r.ShadowQuality 2'
-$arguments=@('/Game/AnimeMMORPG/Maps/L_CharacterCombatLab','-windowed','-ResX=1280','-ResY=720','-WinX=0','-WinY=30','-nosplash','-NoLiveCoding','-U01Trace',('-U01SourceSHA='+$m.sourceSHA),('-U02SourceSHA='+$m.sourceSHA),('-U02RunId='+$RunId),('-UserDir="'+$settings+'"'),('-abslog="'+$log+'"'),('-ExecCmds="'+$cmds+'"'))
+$map='/Game/AnimeMMORPG/Maps/L_CharacterCombatLab'+$(if($Fixture){'?U03Regression=1'}else{''})
+$arguments=@($map,'-windowed','-ResX=1280','-ResY=720','-WinX=0','-WinY=30','-nosplash','-NoLiveCoding','-U01Trace',('-U01SourceSHA='+$m.sourceSHA),('-U02SourceSHA='+$m.sourceSHA),('-U02RunId='+$RunId),('-UserDir="'+$settings+'"'),('-abslog="'+$log+'"'),('-ExecCmds="'+$cmds+'"'))
 if($Fixture){$arguments+=@('-U04BFPSFixture',('-U04BOutput="'+$raw+'"'))}
 $p=Start-Process -FilePath $exe -ArgumentList $arguments -WorkingDirectory $package -WindowStyle Normal -PassThru
 $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+$p.Id)

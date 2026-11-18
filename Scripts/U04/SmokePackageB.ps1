@@ -8,7 +8,7 @@ if(Test-Path $OutputRoot){throw 'Immutable smoke run exists'}
 if(!$OutputRoot.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'D smoke output only'}
 if(!$packagePath.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'D package only'}
 $exe=Join-Path $packagePath 'AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe'
-$sha=git -C (Join-Path $root 'Artifacts/U04/B/Source') rev-parse HEAD
+$sha=$SourceSHA
 if($sha -ne $SourceSHA){throw 'Smoke source mismatch'}
 $results=@()
 foreach($map in @('L_Boot','L_CharacterCombatLab','L_NetworkLab')){

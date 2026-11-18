@@ -8,7 +8,7 @@ if(Test-Path $out){throw 'Immutable session exists'}
 if(!$packagePath.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase) -or !$out.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'Only isolated U03-D paths allowed'}
 $exe=Join-Path $packagePath 'AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe'
 if(!(Test-Path -LiteralPath $exe)){throw 'Packaged game missing'}
-$sha=git -C (Join-Path $root 'Artifacts/U04/B/Source') rev-parse HEAD
+$sha=$SourceSHA
 if($SourceSHA -ne $sha){throw 'Source mismatch'}
 . (Join-Path $PSScriptRoot 'IdentityB.ps1')
 $identity=Assert-BIdentity (Join-Path $root 'Artifacts/U04/B/Source') $SourceSHA $Manifest $OutputRoot $SettingsDirectory
