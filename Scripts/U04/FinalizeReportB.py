@@ -12,7 +12,7 @@ integrity=read(runs/'Final-Integrity-20261118/FILES.json');host=read(runs/'Final
 automation=read(runs/'Automation-20261118/NAME-RESULTS.json');assert automation['completed'] and len(automation['results'])==140
 smoke=read(runs/'Smoke-20261118/results.json');assert len(smoke)==3 and all(r['passed'] for r in smoke)
 regressions=[]
-for name,file,expected in [('Combat-Capture-20261118','input.json',24),('Defense-Capture-20261118','input.json',15),('Dodge-Regression-Capture-20261118','input.json',38),('Movement-Regression-Capture-20261118','input.json',26),('Network-Capture-20261118','network.json',26)]:
+for name,file,expected in [('Combat-Capture-20261118','input.json',24),('Defense-Capture-20261118','regression.json',15),('Dodge-Regression-Capture-20261118','input.json',38),('Movement-Regression-Capture-20261118','input.json',26),('Network-Capture-20261118','network.json',26)]:
     m=read(runs/name/'Capture'/file);assert m['completed'] and len(m['checks'])==expected and all(x['result']=='PASS' for x in m['checks'])
     regressions.append(dict(run=name,checks=expected,path=str((runs/name/'Capture'/file).resolve())))
 rows=summary['trials'];assert len(rows)==38
