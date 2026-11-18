@@ -80,7 +80,7 @@ void UU02CombatComponent::ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint6
     if(QueuedIntents.Num()>=64){++RejectedCount;return;}
     QueuedIntents.Add({{Sequence,{Pawn,Life},Command,0,Yaw,Direction},Local,GetWorld()->GetTimeSeconds()});
     if(U04B::Enabled(GetWorld()))
-    {auto J=GetDiagnostics();J->SetNumberField(TEXT("command"),double(Sequence));J->SetNumberField(TEXT("commandType"),uint8(Command));J->SetNumberField(TEXT("localInput"),Local);J->SetNumberField(TEXT("receive"),GetWorld()->GetTimeSeconds());J->SetStringField(TEXT("receivedPosition"),Character()->GetActorLocation().ToString());U04B::Event(GetWorld(),TEXT("Received"),J);}
+    {auto J=GetDiagnostics();J->SetNumberField(TEXT("command"),double(Sequence));J->SetNumberField(TEXT("commandType"),uint8(Command));J->SetNumberField(TEXT("localInput"),Local);J->SetNumberField(TEXT("receive"),GetWorld()->GetTimeSeconds());J->SetStringField(TEXT("receivedPosition"),Character()->GetActorLocation().ToString());if(U04B::InputDiagnosticEnabled(GetWorld())){J->SetNumberField(TEXT("intentX"),Direction.X);J->SetNumberField(TEXT("intentY"),Direction.Y);J->SetNumberField(TEXT("intentYaw"),Yaw);J->SetStringField(TEXT("receiveVelocity"),Character()->GetVelocity().ToString());}U04B::Event(GetWorld(),TEXT("Received"),J);}
 }
 void UU02CombatComponent::SetControlPlaying(bool Playing)
 {
@@ -160,6 +160,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
     }
     const uint64 BeforeDodge=Model->Dodge().Sequence;
     const uint64 BeforeFeint=Model->Feint().Sequence;
+    const FVector U04AdmissionVelocity=C->GetVelocity(); // output-only observation before SubmitBatch
     FU03NoEvents ResolvedBarrier;TArray<FAdmissionResult> Results;
     for(auto& Group:Admissible)Results.Append(Model->SubmitBatch(MoveTemp(Group),Context,ResolvedBarrier));
     if((BeforeFeint!=Model->Feint().Sequence||BeforeDodge!=Model->Dodge().Sequence||(!Model->Current()&&Model->Defense().bGuard)) && Snapshot.ActionSequence)
@@ -170,6 +171,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
         const bool Success=R.Result==EAdmission::Accepted||R.Result==EAdmission::Queued||R.Result==EAdmission::Replaced;
         if(Success){++AcceptedCount;if(R.Result==EAdmission::Queued)++QueuedCount;if(R.Result==EAdmission::Replaced)++ReplacedCount;LastReject=EReject::None;}
         else {++RejectedCount;LastReject=R.Result==EAdmission::Stale?EReject::StaleCommand:!Context.bPlaying?EReject::NotPlaying:!Context.bGrounded?EReject::Airborne:Context.bDead?EReject::Defeated:EReject::Busy;}
+        if(U04B::InputDiagnosticEnabled(GetWorld())){auto J=GetDiagnostics();J->SetNumberField(TEXT("command"),double(R.Sequence));J->SetNumberField(TEXT("admissionResult"),uint8(R.Result));J->SetNumberField(TEXT("at"),Now);J->SetStringField(TEXT("velocityBeforeBatch"),U04AdmissionVelocity.ToString());J->SetStringField(TEXT("velocityAfterBatch"),C->GetVelocity().ToString());J->SetStringField(TEXT("modelDirection"),Model->Dodge().Direction.ToString());J->SetNumberField(TEXT("modelDodgeStart"),Model->Dodge().Start);U04B::Event(GetWorld(),TEXT("AuthorityAdmission"),J);}
         Trace(Success?TEXT("Admitted"):TEXT("Rejected"),Now,FString::Printf(TEXT("command=%llu admission=%u accept=%.17g"),R.Sequence,uint8(R.Result),Now));
     }
     Publish(Now);

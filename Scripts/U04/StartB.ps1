@@ -3,7 +3,9 @@ param(
  [Parameter(Mandatory=$true)][string]$Manifest,
  [Parameter(Mandatory=$true)][string]$RunId,
  [ValidateSet(30,60,120)][int]$FPS=30,
- [switch]$Fixture
+ [switch]$Fixture,
+ [switch]$InputDiagnostic,
+ [switch]$TimingDiagnostic
 )
 $ErrorActionPreference='Stop'
 $isolation=(Resolve-Path -LiteralPath $IsolationRoot).Path
@@ -30,6 +32,8 @@ $cmds='t.MaxFPS '+$FPS+',t.IdleWhenNotForeground 0,r.VSync 0,r.ScreenPercentage 
 $map='/Game/AnimeMMORPG/Maps/L_CharacterCombatLab'+$(if($Fixture){'?U03Regression=1'}else{''})
 $arguments=@($map,'-windowed','-ResX=1280','-ResY=720','-WinX=0','-WinY=30','-nosplash','-NoLiveCoding','-U01Trace',('-U01SourceSHA='+$m.sourceSHA),('-U02SourceSHA='+$m.sourceSHA),('-U02RunId='+$RunId),('-UserDir="'+$settings+'"'),('-abslog="'+$log+'"'),('-ExecCmds="'+$cmds+'"'))
 if($Fixture){$arguments+=@('-U04BFPSFixture',('-U04BOutput="'+$raw+'"'))}
+if($InputDiagnostic){$arguments+='-U04BInputDiagnostic'}
+if($TimingDiagnostic){$arguments+='-U04BDiagnosticTiming'}
 $p=Start-Process -FilePath $exe -ArgumentList $arguments -WorkingDirectory $package -WindowStyle Normal -PassThru
 $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+$p.Id)
 @{role='U04BPackage';pid=$p.Id;creationUTC=$live.CreationDate.ToUniversalTime().ToString('o');executable=$exe;binarySHA256=$m.gameSHA256;sourceSHA=$m.sourceSHA;toolSHA=(git -C $clone rev-parse HEAD);isolationRoot=$isolation;buildManifest=[IO.Path]::GetFullPath($Manifest);buildManifestSHA256=(Get-FileHash $Manifest).Hash;userDir=$settings;log=$log;arguments=$arguments;targetFPS=$FPS;fixture=[bool]$Fixture;startedUTC=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $out 'process.json')

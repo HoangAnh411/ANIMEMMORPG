@@ -1,0 +1,17 @@
+# Separate B input/capture diagnostic
+
+Status: IN_PROGRESS, DIAGNOSTIC_ONLY. Parent B branch remains3f1867ec41768cc836a198c8d865df6de6990c18 and INCOMPLETE. Baseline main18804bfa. Preserve every old B assertion, report, package and sealed file. New clone Artifacts/U04/B-Diagnostic/Source; new runs Artifacts/U04/B-Diagnostic/Runs; branch u04/b-input-capture-diagnostic.
+
+No gameplay correction, acceptance batch, threshold change, renderer optimization, U04-C/D, adverse networking or packaged Server. No additional combo120 attacks. Repros never count towards the dodge matrix. Source changes are output-only opt-in key/gate/intent/admission observations and timing points. No input queue, direction selection, admission, deadline, motor, collision or damage semantics change.
+
+Input observation flags: -U04BFPSFixture -U04BInputDiagnostic. Record physical edge order and frame, exact product IsInputKeyDown state, separately observed/OS key state, release-gate pressed/allowed, exact direction already computed for SubmitCombatIntent, received direction, admission pre-batch velocity and model direction. Post-actor samples record held-state/velocity. No synchronous detailed per-frame output: buffer and flush after each repro.
+
+Planned fixed repro inventory at30 FPS: four legacy consecutive W/Shift attempts, four single SendInput-batch W/Shift attempts, four previous-frame-held attempts. Each holds/release after35ms for Shift; the previous-frame case prepares W for at least two observed frame opportunities. Cohort membership is established from raw native observations, never from sleep or two accepted edges. Report admission velocity; nonzero velocity is not silently accepted as the stationary dodge contract. Keep all12 repros regardless of outcome, no selection of good runs.
+
+Timing flag -U04BDiagnosticTiming additionally records FCoreDelegates::OnBeginFrame (before engine rate-limit handling), entry to OnWorldPostActorTick collector and collector exit/old wall stamp, with matching frame IDs. These are real rendered game-thread timestamps, not scanout. Preserve old B labels; no retroactive qualification from new clocks. Synthetic arithmetic checks and re-evaluation of retained B raw samples precede new captures.
+
+Capture-effect control:9 neutral, no-action15-world-second windows at120 FPS, three each of passive50ms focus guard/no-video,5ms guard/no-video,5ms guard/original30FPS bitmap/video worker. Fixed Latin-square order passive/poll/video, video/passive/poll, poll/video/passive. Source, scene, profile, clocks and total sample window remain constant; capture setup/flush outside the window. No combo attacks and no claim these idle controls reproduce combo cost. Report all windows, intervals and collector cost without PASS acceptance labels.
+
+Original profile1280x720/internal50%, atlas2048, RT minimum128MiB, streaming256MiB, Lumen indirect/reflections0, virtual shadows0, shadow quality2, idle0, VSync0. Cap30 for input repro,120 for neutral controls. No quality/timestep/dilation/smoothing/input changes. Warmup at least30s and cap settling at least10s; input Windows only under owned-process/focus guards.
+
+Commit before full Editor/Game/three-map package build usingUE5.8.4 CL58902052, capture actual UBT toolchain, use cold processes. New plain-header APIs require full build/reload; original Editor is preserved. Run final-source full Automation via isolated MCP, and verify baseline B seal plus original/historical preservation. Handoff diagnostic report/raw evidence on the separate branch; no B/main merge or closure.

@@ -35,6 +35,7 @@ public:
     void Up(FKey Key) { Pressed.Remove(Key); Blocked.Remove(Key); }
     void Lock() { Blocked.Append(Pressed); }
     bool Allows(FKey Key) const { return !Blocked.Contains(Key); }
+    bool IsPressedForDiagnostic(FKey Key) const { return Pressed.Contains(Key); }
 private:
     TSet<FKey> Pressed;
     TSet<FKey> Blocked;

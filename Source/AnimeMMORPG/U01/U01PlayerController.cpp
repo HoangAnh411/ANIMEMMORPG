@@ -1,4 +1,5 @@
 #include "U01PlayerController.h"
+#include "U04/U04BFPSFixture.h"
 #include "U03/U03Encounter.h"
 #include "Camera/CameraActor.h"
 #include "U01Character.h"
@@ -251,6 +252,7 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
         const bool bFixtureBlocked = MotorPawn &&
             (MotorPawn->GetU01Movement()->GetLockMask() & (uint8(EU01MotorLock::Control)|uint8(EU01MotorLock::Interacting)|uint8(EU01MotorLock::Defeated))) && IsMotorKey(Key);
         ReleaseGate.Down(Key, ControlState != EU01ControlState::Playing || bFixtureBlocked || bConsoleInput);
+        if(U04B::InputDiagnosticEnabled(GetWorld())){auto J=GetU04InputDiagnostic();J->SetStringField(TEXT("key"),Key.ToString());J->SetBoolField(TEXT("down"),true);J->SetBoolField(TEXT("newEdge"),bNewPhysicalEdge);J->SetBoolField(TEXT("console"),bConsoleInput);U04B::Event(GetWorld(),TEXT("PhysicalEdge"),J);}
         UE_LOG(LogU01Control, Display, TEXT("PhysicalPress key=%s state=%d accepted=%d reason=%s"),
             *Key.ToString(), int32(ControlState), IsMotorKey(Key) ? Accepts(Key) : (ControlState == EU01ControlState::Playing && ReleaseGate.Allows(Key)),
             ControlState != EU01ControlState::Playing ? TEXT("ControlLocked") : bFixtureBlocked ? TEXT("MotorFixtureLocked") : (ReleaseGate.Allows(Key) ? TEXT("Ready") : TEXT("AwaitingPhysicalRelease")));
@@ -265,6 +267,7 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
                     if(I==Target){ToggleInformationTarget();continue;}
                     const float ForwardInput=float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Forward))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Forward)))-float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Backward))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Backward)));
                     const float RightInput=float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Right))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Right)))-float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Left))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Left)));
+                    if(U04B::InputDiagnosticEnabled(GetWorld())){auto J=GetU04InputDiagnostic();J->SetNumberField(TEXT("command"),double(CombatCommandSequence+1));J->SetNumberField(TEXT("commandType"),uint8(Commands[I-Attack]));J->SetNumberField(TEXT("sentX"),ForwardInput);J->SetNumberField(TEXT("sentY"),RightInput);U04B::Event(GetWorld(),TEXT("IntentDirection"),J);}
                     C->Combat->SubmitCombatIntent(Commands[I-Attack],++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw,FVector2D(ForwardInput,RightInput));
                 }
             }
@@ -275,6 +278,7 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
             if(auto* C=Cast<AU01Character>(GetPawn());C&&C->Combat)
                 C->Combat->SubmitCombatIntent(AnimeMMORPG::U03::ECommand::GuardRelease,++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw);
         ReleaseGate.Up(Key);ObservedKeys.Remove(Key);
+        if(U04B::InputDiagnosticEnabled(GetWorld())){auto J=GetU04InputDiagnostic();J->SetStringField(TEXT("key"),Key.ToString());J->SetBoolField(TEXT("down"),false);J->SetBoolField(TEXT("console"),bConsoleInput);U04B::Event(GetWorld(),TEXT("PhysicalEdge"),J);}
         if (AnimeMMORPG::U01::CanonicalKey(Key)==ControlKey(AnimeMMORPG::U01::Jump)) if (auto* ControlledCharacter = Cast<AU01Character>(GetPawn())) ControlledCharacter->StopJumping();
         UE_LOG(LogU01Control, Display, TEXT("PhysicalRelease/Rearm key=%s"), *Key.ToString());
     }
@@ -683,4 +687,17 @@ void AU01PlayerController::U01Metrics()
     const FString Path = Directory / (TEXT("Metrics-") + RunId + TEXT(".json"));
     if (!FFileHelper::SaveStringToFile(Json, *Path)) UE_LOG(LogU01Control, Error, TEXT("Metrics write failed: %s"), *Path);
     UE_LOG(LogU01Control, Display, TEXT("Metrics %s"), *Json);
+}
+
+TSharedRef<FJsonObject> AU01PlayerController::GetU04InputDiagnostic() const
+{
+    auto J=MakeShared<FJsonObject>();J->SetNumberField(TEXT("controlState"),int32(ControlState));J->SetBoolField(TEXT("motorLocked"),bMotorLocked);J->SetBoolField(TEXT("windowActive"),IsGameWindowActive());
+    J->SetStringField(TEXT("controller"),GetPathName());J->SetNumberField(TEXT("yaw"),GetControlRotation().Yaw);
+    TArray<TSharedPtr<FJsonValue>> Values;
+    for(int32 Action:{int32(AnimeMMORPG::U01::Forward),int32(AnimeMMORPG::U01::Backward),int32(AnimeMMORPG::U01::Left),int32(AnimeMMORPG::U01::Right),int32(AnimeMMORPG::U01::Dodge)})
+    {
+        const FKey Binding=ControlKey(Action);auto K=MakeShared<FJsonObject>();K->SetNumberField(TEXT("bindingAction"),Action);K->SetStringField(TEXT("binding"),Binding.ToString());K->SetBoolField(TEXT("engineHeld"),IsInputKeyDown(Binding));K->SetBoolField(TEXT("gateAllows"),ReleaseGate.Allows(Binding));K->SetBoolField(TEXT("gatePressed"),ReleaseGate.IsPressedForDiagnostic(Binding));
+        bool Observed=false,OSHeld=false;for(FKey Physical:AnimeMMORPG::U01::PhysicalKeys(Binding)){Observed|=ObservedKeys.Contains(Physical);OSHeld|=PhysicalDown(Physical);}K->SetBoolField(TEXT("observedPhysical"),Observed);K->SetBoolField(TEXT("osHeld"),OSHeld);Values.Add(MakeShared<FJsonValueObject>(K));
+    }
+    J->SetArrayField(TEXT("keys"),Values);if(const auto* P=GetPawn()){J->SetStringField(TEXT("pawn"),P->GetPathName());J->SetStringField(TEXT("velocity"),P->GetVelocity().ToString());}return J;
 }

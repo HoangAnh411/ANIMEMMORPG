@@ -7,6 +7,7 @@
 #include "U03/U03TargetModel.h"
 #include "U01PlayerController.generated.h"
 
+class FJsonObject;
 class UInputAction;
 class UInputMappingContext;
 class UU01Menu;
@@ -57,6 +58,7 @@ public:
     FString GetFixtureStatus() const;
     bool HasTerrainFixtures() const;
     FString GetMetricsJson() const;
+    TSharedRef<FJsonObject> GetU04InputDiagnostic() const; // opt-in read-only observer, no input mutation
     bool ObservePhysicalKey(FKey Key, bool bDown, bool bChord=false);
     bool IsGameWindowActive() const;
     const AnimeMMORPG::U01::FPreferences& GetPreferences() const;

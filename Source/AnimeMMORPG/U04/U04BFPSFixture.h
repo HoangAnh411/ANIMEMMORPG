@@ -7,6 +7,8 @@ class FJsonObject;
 namespace U04B
 {
 bool Enabled(const UWorld* World);
+bool InputDiagnosticEnabled(const UWorld* World);
+bool TimingDiagnosticEnabled(const UWorld* World);
 void BeginWorld(UWorld& World);
 void EndWorld(UWorld* World);
 void Event(UWorld* World, const TCHAR* Kind, TSharedRef<FJsonObject> Data);
