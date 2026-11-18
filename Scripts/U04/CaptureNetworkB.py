@@ -108,7 +108,7 @@ try:
  until(lambda:not any(e['id']==old['encounter']['id'] for e in state(server)['encounters']),15)
  m['stages'].append(dict(stage='AfterDisconnect server state',state=state(server)))
  check('Server Logout removes old encounter before reconnect',True)
- result=subprocess.run(['powershell','-NoProfile','-ExecutionPolicy','Bypass','-File',str(Path(__file__).with_name('ReconnectRegressionClientB.ps1')),'-SessionPath',str(a.session.resolve())],capture_output=True,text=True,creationflags=subprocess.CREATE_NO_WINDOW)
+ result=subprocess.run(['powershell','-NoProfile','-ExecutionPolicy','Bypass','-File',str(Path(__file__).with_name('ReconnectClientB.ps1')),'-SessionPath',str(a.session.resolve())],capture_output=True,text=True,creationflags=subprocess.CREATE_NO_WINDOW)
  (a.out/'reconnect-launcher.out').write_text(result.stdout);(a.out/'reconnect-launcher.err').write_text(result.stderr);assert result.returncode==0
  records=json.loads((a.session/'processes.json').read_text(encoding='utf-8-sig'));m['reconnectProcesses']=records;clients[0]=NetworkClientB(next(r for r in records if r['role']=='ClientA'));c=clients[0];m['reconnectLoadedModule']=c.processIdentity;c.focus();new=c.metrics()
  observed=c.probe_w()
