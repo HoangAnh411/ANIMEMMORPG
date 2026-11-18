@@ -2,7 +2,8 @@
 import argparse,json,hashlib,subprocess
 from pathlib import Path
 from datetime import datetime,timezone
-p=argparse.ArgumentParser();p.add_argument('--clone',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--source',required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--clone',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--source',required=True);p.add_argument('--out',type=Path);a=p.parse_args()
+assert len(a.source)==40 and all(c in '0123456789abcdef' for c in a.source), 'Full source SHA required'
 def sha(f):
  h=hashlib.sha256()
  with f.open('rb') as s:
@@ -20,4 +21,4 @@ m['engineCommandletSHA256']=sha(engine.with_name('UnrealEditor-Cmd.exe'))
 m['engineVersion']=json.loads((engine.parents[2]/'Build/Build.version').read_text())
 m['gitTree']=subprocess.check_output(['git','-C',str(a.clone),'ls-tree','-r','HEAD','Source','Content','Config','Plugins','AnimeMMORPG.uproject'],text=True)
 m['buildEvidence']=[dict(path=f.name,sha256=sha(f)) for f in sorted(a.build.glob('*')) if f.is_file()]
-out=a.build/'BUILD-IDENTITY.json';assert not out.exists();out.write_text(json.dumps(m,indent=2),encoding='utf-8');print(out)
+out=a.out or a.build/'BUILD-IDENTITY.json';assert not out.exists();out.write_text(json.dumps(m,indent=2),encoding='utf-8');print(out)

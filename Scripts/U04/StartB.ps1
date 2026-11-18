@@ -8,6 +8,7 @@ param(
 $ErrorActionPreference='Stop'
 $isolation=(Resolve-Path -LiteralPath $IsolationRoot).Path
 $m=Get-Content -Raw -Encoding UTF8 $Manifest | ConvertFrom-Json
+if($m.sourceSHA -notmatch '^[0-9a-f]{40}$'){throw 'Full source SHA required'}
 $clone=(Resolve-Path -LiteralPath (Join-Path $isolation 'Source')).Path
 if($m.clone -ine $clone){throw 'Build clone mismatch'}
 if(@(git -C $clone diff $m.sourceSHA -- Source Content Config Plugins AnimeMMORPG.uproject).Count){throw 'Runtime inputs changed from built source'}
