@@ -1,6 +1,6 @@
 # Separate B input/capture diagnostic
 
-Status: IN_PROGRESS, DIAGNOSTIC_ONLY. Parent B branch remains3f1867ec41768cc836a198c8d865df6de6990c18 and INCOMPLETE. Baseline main18804bfa. Preserve every old B assertion, report, package and sealed file. New clone Artifacts/U04/B-Diagnostic/Source; new runs Artifacts/U04/B-Diagnostic/Runs; branch u04/b-input-capture-diagnostic.
+Status: diagnostic execution complete, DIAGNOSTIC_ONLY; B remains INCOMPLETE. Parent B branch remains3f1867ec41768cc836a198c8d865df6de6990c18 and INCOMPLETE. Baseline main18804bfa. Preserve every old B assertion, report, package and sealed file. New clone Artifacts/U04/B-Diagnostic/Source; new runs Artifacts/U04/B-Diagnostic/Runs; branch u04/b-input-capture-diagnostic.
 
 No gameplay correction, acceptance batch, threshold change, renderer optimization, U04-C/D, adverse networking or packaged Server. No additional combo120 attacks. Repros never count towards the dodge matrix. Source changes are output-only opt-in key/gate/intent/admission observations and timing points. No input queue, direction selection, admission, deadline, motor, collision or damage semantics change.
 

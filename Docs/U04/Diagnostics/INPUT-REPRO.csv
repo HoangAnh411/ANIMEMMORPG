@@ -1,0 +1,13 @@
+trial,sameFrame,engineHeld,observed,osHeld,gateAllows,sentX,sentY,receivedX,receivedY,modelX,admissionCmPerSec,previousHeldObserved,rawSHA256,raw
+legacy-1,True,False,True,True,True,0,0,0,0,-1.0,0.0,False,c77bbb35036c62a4a1b9eb0f5010ae5c62d7c18a09384ecc27050d01522235d6,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-20261118\Raw\legacy-1.jsonl
+batch-1,True,False,True,True,True,0,0,0,0,-1.0,0.0,False,9831a150b02e98978beb50592e570217676cd6a1ed9c3d24518035679d6d2bdf,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-20261118\Raw\batch-1.jsonl
+previous-1,False,True,True,True,True,1,0,1,0,1.0,273.067,True,9426797d9c5d2708dd3f93446c8a6f47f0acd2cb9d36e08728d67c7f0abbb34b,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\previous-1.jsonl
+legacy-2,True,False,True,True,True,0,0,0,0,-1.0,0.0,False,43ad142101bddf4e7f99375e14f6c60c9e6170d50586fbef18894cb69f184bcc,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\legacy-2.jsonl
+batch-2,True,False,True,True,True,0,0,0,0,-1.0,0.0,False,7458ba37b46f4377e7ae5b365bd7a110662d5b94ab057b9e4e54e137c4866e86,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\batch-2.jsonl
+previous-2,False,True,True,True,True,1,0,1,0,1.0,204.8,True,126a2db81ad44b192f35ed26a5c36ba3db2b8beef00004cb90d0e33fe3063e4e,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\previous-2.jsonl
+legacy-3,True,False,True,True,True,0,0,0,0,-1.0,0.0,False,4ff90ae3e5d2caf697a137b435507c624f7db1c6b4f89ebdfdb49bdb061be009,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\legacy-3.jsonl
+batch-3,True,False,True,True,True,0,0,0,0,-1.0,0.0,False,cf8834af3823a07050d1c3498269fe99631b90d1aaa1bcd29344cffadf8cfeae,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\batch-3.jsonl
+previous-3,False,True,True,True,True,1,0,1,0,1.0,204.8,True,ff1c78ce69be8d7bbb021b8f3c800449676cb2e61bc54c4a1207ff7d352ebef7,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\previous-3.jsonl
+legacy-4,True,False,True,True,True,0,0,0,0,-1.0,0.0,False,f0bc0cce28efb2294cddd3c30041828212c84227312f51b13ad00167189b3d9b,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\legacy-4.jsonl
+batch-4,True,False,True,True,True,0,0,0,0,-1.0,0.0,False,42abe19d54a57a25060807907920277a303891e0972674f04089fd6790ff50d2,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\batch-4.jsonl
+previous-4,False,True,True,True,True,1,0,1,0,1.0,204.8,True,75947351184ca0ecd2ab4320f5431ad315503476eb8ca13844f927070ebd28b4,D:\Data\AnimeMMORPG\Artifacts\U04\B-Diagnostic\Runs\Input-30-R2-20261118\Raw\previous-4.jsonl
