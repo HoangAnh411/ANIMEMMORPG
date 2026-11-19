@@ -1,0 +1,166 @@
+{
+  "schema": 1,
+  "status": "R1A_TOOL_ONLY_REVIEW_PENDING",
+  "BStatus": "INCOMPLETE",
+  "acceptance": false,
+  "R1bStarted": false,
+  "rawRoot": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1a\\ToolReview-v3-Final-20261119",
+  "gatesRawPath": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1a\\TOOL-REVIEW-v3-GATES.json",
+  "gatesRawSHA256": "54b7f971e4a01de670db3598da0906939e180a3a78a8d0551c73d389ed1df41e",
+  "sourceSHA": "8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4",
+  "toolSHA": "6be6108fbf30e8f0872e33c9d6928efe7a832852",
+  "legacyManifest": "Docs/U04/R1a/Evidence/Review-20261119/MANIFEST.json",
+  "legacyManifestSHA256": "dd45d73d734d6855923264681316e2110bc7f006abd342347fcdc3d6fcd75e9b",
+  "summary": {
+    "completed": true,
+    "phase": "R1A_TOOL_ONLY_REVIEW_PENDING",
+    "BStatus": "INCOMPLETE",
+    "R1bStarted": false,
+    "acceptance": false,
+    "baseline": "e9a8264a0f94863001e13af319f7fcf0c379e314",
+    "nativeSource": "8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4",
+    "nativeInputsUnchanged": true,
+    "legacyManifestSHA256": "dd45d73d734d6855923264681316e2110bc7f006abd342347fcdc3d6fcd75e9b",
+    "legacyEvidenceAssociations": 450,
+    "syntheticGroups": 19,
+    "csvComparisons": [
+      {
+        "historical": "Docs/U04/R1a/REPRO-MATRIX.csv",
+        "recomputed": "REPRO-RESULTS.csv",
+        "sha256": "8f1d0b4b5b20de751bd0c0f0f9872345b1b27a67c9f7da4a5e114ee7973e8465",
+        "byteIdentical": true
+      },
+      {
+        "historical": "Docs/U04/R1a/COLLECTOR-MATRIX.csv",
+        "recomputed": "IDLE-RESULTS.csv",
+        "sha256": "d5230995a3c94d09a85b23ae9374a44de781a46147961eecd3f2bae057cfe3b8",
+        "byteIdentical": true
+      }
+    ],
+    "historicalReproGameplay": 24,
+    "historicalIdleCadence": 9,
+    "historicalReproCadencePassed": 2,
+    "historicalReproCadenceInvalid": 22,
+    "historicalReclassified": 0,
+    "additionalChainAudit": {
+      "CHAIN_PASS": 6,
+      "INVALID": 18
+    },
+    "newGameplayRuns": 0,
+    "newNativeBuilds": 0,
+    "analyzerVersion": "u04r1-entry-3",
+    "tools": [
+      {
+        "path": "Scripts\\U04\\ReviewDodgeAnalyzerR1.py",
+        "sha256": "212b29d9ce3e5f800f87bb546b06e0e695b212f84308cf8b8cd609bf8f25442c"
+      },
+      {
+        "path": "Scripts\\U04\\AnalyzeR1.py",
+        "sha256": "92d206d4d8e4431d73986fa8038a88bc310bb13e36cb4c4f88140ad35abbb435"
+      },
+      {
+        "path": "Scripts\\U04\\TestAnalyzeR1.py",
+        "sha256": "28fc4f14bf980ef4f0f6c63b0b3c18513b820b9b798b8633a0639d66d46c2d5f"
+      },
+      {
+        "path": "Scripts\\U04\\RecomputeR1a.py",
+        "sha256": "88f74b2f67f45bc374df7678036f978e3d16506ca2f9b325df7860ddb21828e1"
+      },
+      {
+        "path": "Scripts\\U04\\AnalyzeR1a.py",
+        "sha256": "b3f7f9b2d43184fdd0badfe90748a24ecea7d4caa94241aef7edd03b686b7ad7"
+      }
+    ]
+  },
+  "createdUTC": "2026-11-19T06:38:06.127088+00:00",
+  "files": [
+    {
+      "raw": "ADDITIONAL-CHAIN-AUDIT.json",
+      "rawSHA256": "1dce1df5e4c0220d729fc988052fe03692fcfcf7295634279d63977ef773ffe6",
+      "rawBytes": 8975,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/ADDITIONAL-CHAIN-AUDIT.json.gz",
+      "publishedSHA256": "5695d0d2c0df6e4c12311a8cf754e2eefc19972e630347c5be1c9a31bb99a583",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "LEGACY-SEAL.log",
+      "rawSHA256": "220b03799d69637a150efd57882fdd27912d7f5afa348197f5a1f2d2ede1acf8",
+      "rawBytes": 32,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/LEGACY-SEAL.log.gz",
+      "publishedSHA256": "04049858c205ad1be44cb8d2515ad5d503be009f6d3d6a86f9f5580290c0c458",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "RECOMPUTE.log",
+      "rawSHA256": "8a17a0711eb289e55a0e336ff1da84ca5d59159cd14a7a9e957eb6f1ea50ef3c",
+      "rawBytes": 118,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/RECOMPUTE.log.gz",
+      "publishedSHA256": "88032c0719b7a514ac4f6cffccbff652fd4db82318fc65744b87f46c79d0a7f4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/IDLE-RESULTS.csv",
+      "rawSHA256": "d5230995a3c94d09a85b23ae9374a44de781a46147961eecd3f2bae057cfe3b8",
+      "rawBytes": 4219,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/Recomputed/IDLE-RESULTS.csv.gz",
+      "publishedSHA256": "0073586efc3169a4cabbe55d56503b5f26271df9fb543b2dcb4095792d6bd7f0",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/IDLE-RESULTS.json",
+      "rawSHA256": "b44c6b92217657393dc6c1897779a3130c1670611e6dcbfea57d5e529d50ef23",
+      "rawBytes": 331352,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/Recomputed/IDLE-RESULTS.json.gz",
+      "publishedSHA256": "2081cea9f3dc005adef8fc736bb42f3ae0dc379f75654818d530e2421ac8405e",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/REPRO-RESULTS.csv",
+      "rawSHA256": "8f1d0b4b5b20de751bd0c0f0f9872345b1b27a67c9f7da4a5e114ee7973e8465",
+      "rawBytes": 9509,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/Recomputed/REPRO-RESULTS.csv.gz",
+      "publishedSHA256": "3cfa618798bbfea1dff736b78471d2ece938dbf1a5dd2690d854383c6f7c7673",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/REPRO-RESULTS.json",
+      "rawSHA256": "a3819fa77d9d4fd7531d4093d63d8fe60cd27fe59e76a405373ce4894a335bd7",
+      "rawBytes": 908376,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/Recomputed/REPRO-RESULTS.json.gz",
+      "publishedSHA256": "aa89bb6011b145fa5c2e1199d1adea845fb6c3a3aeabc4c76ec0a534828dec59",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/SUMMARY.json",
+      "rawSHA256": "33386378396107604ac97194bce3237124d4cb3dd4130057e4b646e6e6d5ead1",
+      "rawBytes": 1574100,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/Recomputed/SUMMARY.json.gz",
+      "publishedSHA256": "8f8d44c17501233f2c26a4c495cddd0d9707392a18102921ec736c9113c00e7b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "SUMMARY.json",
+      "rawSHA256": "e84285ae3a0de6b38bfb4e4344da6423708c9b47a734b6331255cc39cdc42209",
+      "rawBytes": 2040,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/SUMMARY.json.gz",
+      "publishedSHA256": "f6db67d3b61c7fb6c224212b28e37eb4ac6705a642d877b09ddb9cc7146b9312",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "SYNTHETIC.log",
+      "rawSHA256": "273c14a6b9e04bd24532b10cd7919a7175b6f45d8ad1bd1b893528d06d5441e6",
+      "rawBytes": 1926,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/SYNTHETIC.log.gz",
+      "publishedSHA256": "dabff857593a0956487b0fe44c3bebdbbfc5142be19e133f1baa2afd45fe5ddd",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "TOOL-DIFF.patch",
+      "rawSHA256": "d28d4668eea005755a49d4f70c0041b3d8f9c58fedeb6771509988ba0960191d",
+      "rawBytes": 24456,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-20261119/Data/TOOL-DIFF.patch.gz",
+      "publishedSHA256": "b0c15b927da4d38f876e791a1b303e7a39ead4399299daf27990758b4d303427",
+      "transformation": "identity;gzip"
+    }
+  ]
+}
