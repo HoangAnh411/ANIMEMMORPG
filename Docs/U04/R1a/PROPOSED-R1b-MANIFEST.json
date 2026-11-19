@@ -150,5 +150,14 @@
     "Insufficient valid attempts => INCOMPLETE, no extra selection attempts",
     "Any native change requires review again and invalidates dependent gates",
     "No ACCEPTED or merge without reviewer"
-  ]
+  ],
+  "runtimeFlags": [
+    "-U04BFPSFixture",
+    "-U04BInputDiagnostic",
+    "-U04BDiagnosticTiming"
+  ],
+  "analyzerCandidate": "Scripts/U04/AnalyzeR1.py",
+  "analyzerCandidateVersion": "u04r1-entry-2",
+  "dodgeOrigin": "authority Received.receivedPosition; cadence brackets authority receipt through release gate",
+  "binaryCandidateSHA256": "915887c83acfe0d1668e1b4947807e31217452bd783f185f9f3bc63f67772e25"
 }

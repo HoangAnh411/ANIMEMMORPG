@@ -23,6 +23,17 @@ if($Mode -eq 'Minimize'){
  for($settle=0;$settle -lt 4;$settle++){
  Start-Sleep -Milliseconds 500
  $after=@(Get-U02OriginalEditorWindows $OriginalProject);$ok=$true
+ # SetWindowPlacement alone can leave an owned floating Editor window iconic.
+ # Restore only a mismatched, still-owned HWND; then reapply its exact snapshot.
+ foreach($b in $before){
+  $a=@($after | Where-Object {$_.pid -eq $b.pid -and $_.hwnd -eq $b.hwnd})
+  if($a.Count -eq 1 -and $a[0].placement.Show -eq 2 -and $b.placement.Show -ne 2){
+   [uint32]$owner=0;[FReviewHostNative]::GetWindowThreadProcessId([IntPtr][long]$b.hwnd,[ref]$owner) | Out-Null
+   if($owner -ne $b.pid){throw 'Original HWND owner changed; refusing restore'}
+   [FReviewHostNative]::ShowWindow([IntPtr][long]$b.hwnd,9) | Out-Null
+   Restore-FOriginalEditorWindows @($b)
+  }
+ }
  foreach($b in $before){$a=@($after | Where-Object {$_.pid -eq $b.pid -and $_.hwnd -eq $b.hwnd});if($a.Count -ne 1){$ok=$false;continue};if($a[0].placement.Show -ne $b.placement.Show){$ok=$false};foreach($edge in @('Left','Top','Right','Bottom')){if($a[0].placement.Normal.$edge -ne $b.placement.Normal.$edge){$ok=$false}}}
  if($ok){break}
  }

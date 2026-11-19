@@ -7,7 +7,7 @@ All quantities are centimeters and seconds. No instantaneous-FPS averaging.
 import argparse, bisect, hashlib, json, math, re
 from pathlib import Path
 
-VERSION = 'u04r1-entry-1'
+VERSION = 'u04r1-entry-2'
 PROFILE = {'t.IdleWhenNotForeground': 0, 'r.VSync': 0, 'r.ScreenPercentage': 50,
            'r.LumenScene.SurfaceCache.AtlasSize': 2048, 'r.RenderTargetPoolMin': 128,
            'r.Streaming.PoolSize': 256, 'r.Lumen.DiffuseIndirect.Allow': 0,
@@ -62,7 +62,11 @@ def vector(text):return [float(v) for v in re.findall(r'[XYZ]=([-+0-9.eE]+)',tex
 def dodge(raw,rows,direction):
     commits=[r for r in raw if r['kind']=='dodgeCommit' and r['trajectoryEnd']]
     if not commits:raise ValueError('no observed trajectory-end commit')
-    end=commits[0];c=end['combat'];start=c['dodgeStart'];stop=c['dodgeMotionEnd'];origin=vector(c['dodgeOrigin'])
+    end=commits[0];c=end['combat'];start=c['dodgeStart'];stop=c['dodgeMotionEnd']
+    receipts=[r for r in raw if r['kind']=='Received' and r.get('commandType')==1]
+    if len(receipts)!=1:raise ValueError('not exactly one authority dodge receipt')
+    receipt=receipts[0];origin=vector(receipt['receivedPosition'])
+    if len(origin)!=3:raise ValueError('authority receipt position missing')
     heading=vector(c['dodgeDirection']);expected={'forward':[1,0],'back':[ -1,0],'left':[0,-1],'right':[0,1]}[direction]
     actual=distance(origin,end['position']);reasons=[]
     if abs(actual-300)>5:reasons.append('dodge distance')
@@ -77,9 +81,10 @@ def dodge(raw,rows,direction):
     before=[r for r in rows if r['worldTime']<start]
     if not before:raise ValueError('no stationary admission precondition')
     if math.hypot(*before[-1]['velocity'][:2])>.01:raise ValueError('not stationary before admission')
-    a=interpolate(rows,start);b=interpolate(rows,c['dodgeLockEnd'])
+    a=interpolate(rows,receipt['receive']);b=interpolate(rows,c['dodgeLockEnd'])
     return dict(pass_=not reasons,reasons=reasons,distanceCm=actual,errorCm=actual-300,
-                authorityStart=start,authorityMotionEnd=stop,authorityLockEnd=c['dodgeLockEnd'],
+                authorityReceive=receipt['receive'],authorityStart=start,authorityMotionEnd=stop,authorityLockEnd=c['dodgeLockEnd'],
+                modelOrigin=vector(c['dodgeOrigin']),originRule='authority receipt position, never model velocity/configuration',
                 origin=origin,endCommit=end,firstFrame=a['left']['frame'],lastFrame=b['right']['frame'])
 
 def combo(raw,rows):

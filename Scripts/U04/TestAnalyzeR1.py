@@ -10,6 +10,9 @@ def frames(fps=120,n=1201):
                  position=[500*i/fps,0,98]) for i in range(n)]
 
 class Method(unittest.TestCase):
+    def test_fps_is_count_over_total_not_instantaneous_mean(self):
+        a=frames(n=3);a[0]['sampleEntryWall']=0;a[1]['sampleEntryWall']=1/120;a[2]['sampleEntryWall']=3/120
+        self.assertAlmostEqual(cadence(a,120)['fps'],80)
     def test_exact_cadence_thresholds(self):
         def with_intervals(intervals):
             a=frames(n=len(intervals)+1);at=0
@@ -72,8 +75,14 @@ class Method(unittest.TestCase):
         rows=frames(n=160);c=dict(dodgeStart=.5,dodgeMotionEnd=.75,dodgeLockEnd=.85,dodgeOrigin='X=0 Y=0 Z=98',dodgeDirection='X=1 Y=0 Z=0')
         for r in rows:r.update(mode=1,velocity=[0,0,0],combat=c)
         commit=dict(kind='dodgeCommit',trajectoryEnd=True,position=[300,0,98],combat=c)
-        self.assertTrue(dodge([commit],rows,'forward')['pass_'])
-        commit['position'][0]=294.9;self.assertFalse(dodge([commit],rows,'forward')['pass_'])
+        receipt=dict(kind='Received',commandType=1,command=4,receive=.48,receivedPosition='X=0 Y=0 Z=98')
+        self.assertTrue(dodge([receipt,commit],rows,'forward')['pass_'])
+        self.assertEqual(dodge([receipt,commit],rows,'forward')['firstFrame'],57)
+        receipt['receivedPosition']='X=12 Y=0 Z=98'
+        self.assertFalse(dodge([receipt,commit],rows,'forward')['pass_'])
+        receipt['receivedPosition']='X=0 Y=0 Z=98'
+        commit['position'][0]=294.9;self.assertFalse(dodge([receipt,commit],rows,'forward')['pass_'])
+        with self.assertRaisesRegex(ValueError,'authority dodge receipt'):dodge([commit],rows,'forward')
     def test_cadence_and_cap(self):
         a=frames();self.assertTrue(cadence(a,120)['pass_']);self.assertAlmostEqual(cadence(a,120)['fps'],120)
         self.assertFalse(cadence(frames(60),120)['pass_'])

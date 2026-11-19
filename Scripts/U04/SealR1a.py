@@ -22,7 +22,7 @@ for f in sorted((isolation/'Runs').rglob('*')):
     else:
         data=f.read_bytes();enc='utf-16' if data[:2] in (b'\xff\xfe',b'\xfe\xff') else 'utf-8-sig'
         try:
-            text=data.decode(enc);clean=re.sub(r'(?i)(SecurityToken\s*[=:]\s*|AUTH_PASSWORD=)([^\s";]+)',r'\1[REDACTED]',text)
+            text=data.decode(enc);clean=re.sub(r'(?i)(SecurityToken\s*[=:]\s*|(?:AUTH_PASSWORD|AUTH_LOGIN|epicusername|epicuserid|epicsandboxid)=)([^\s";]+)',r'\1[REDACTED]',text)
             if clean!=text:data=clean.encode(enc);transform='redact-secrets'
         except UnicodeDecodeError:pass
         dest=dest.with_name(dest.name+'.gz');dest.write_bytes(gzip.compress(data,compresslevel=6,mtime=0));transform+=';gzip'

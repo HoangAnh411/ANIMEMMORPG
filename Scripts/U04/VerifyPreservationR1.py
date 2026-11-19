@@ -13,6 +13,9 @@ def check(f,expected,group):
 def load(f):return json.loads(f.read_text(encoding='utf-8-sig'))
 pref=load(root/'Artifacts/U04/B-R1a/Runs/Preflight-20261119/PRIVATE-HASHES.json')
 for r in pref:check(Path(r['path']),r['sha256'],'original preflight files')
+fresh={str(Path(r['path'])).lower() for r in pref}
+for r in load(root/'Artifacts/U04/B/Runs/Preflight-20261118/PRESERVED-FILES.json'):
+    if str(Path(r['path'])).lower() not in fresh:check(Path(r['path']),r['sha256'],'historically protected workspace/launcher files')
 for manifest in [root/'Docs/U04/Evidence/A/Review-20261117-1244/MANIFEST.json',root/'Evidence/D/MANIFEST.json',root/'Evidence/D-R1/MANIFEST.json']:
     for r in load(manifest)['files']:
         check(root/r['raw'],r['rawSHA256'],manifest.parent.name+' raw')

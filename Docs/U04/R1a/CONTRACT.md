@@ -13,3 +13,9 @@ Repro inventory, in order 30,60,120: two qualified runs each ordered W-down/Shif
 Method controls: three idle 15-world-second windows per FPS without video, plus one separate illustrative video. Full cold-clone Automation (140 baseline + new tests), three-map smoke, combat/dodge/focus/settings regression and dedicated Editor/server30 + two rendered clients60. Build Editor/Game/package from committed native source UE5.8.4 CL58902052, record actual UBT compiler/SDK.
 
 Handoff status concerns R1a only. Reviewer must accept source and method before assigning R1b. No all-B READY_FOR_REVIEW, ACCEPTED, merge, C or D.
+
+Idle window selection, implemented before capture: first native frame worldTime +1.5 through +16.5 seconds, with both bracketing frames retained. Python schedules approximately18 seconds of acquisition; it never defines measured duration. Repro gameplay verdict tests edge/snapshot behavior; whole-buffer cadence is reported independently, including console preparation/termination frames. A repro gameplay PASS is never a cadence/acceptance PASS.
+
+The120 idle-1 postprocessing read raced the native writer. Its complete original buffer is retained and analyzed using the same declared boundaries; the aborted ledger is immutable. Resume is restricted to never-started idle2/3 after verifying completed repro inventory and existing earlier buffers. File-close waiting occurs after end, outside measurement. No replacement capture is permitted.
+
+Final method candidate u04r1-entry-2 also measures Dodge displacement from authority Received.receivedPosition and brackets cadence from receipt through release gate. Synthetic tests cover differing model/receipt origins and missing receipt. This correction does not change cadence formulas or R1a repro/idle results and is not applied to old B evidence. No R1b gameplay batch has run.
