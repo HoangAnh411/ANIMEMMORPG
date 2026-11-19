@@ -8,16 +8,16 @@
 #include "Engine/Engine.h"
 #include "U03/U03ActionModel.h"
 
-using namespace AnimeMMORPG::U01;
 struct FU04R1InputAccess
 {
  static void Edge(AU01PlayerController* PC,FKey K,bool Down,bool Locked=false)
  {if(Down){PC->ObservedKeys.Add(K);PC->ReleaseGate.Down(K,Locked);}else{PC->ObservedKeys.Remove(K);PC->ReleaseGate.Up(K);}}
- static FVector2D Snapshot(AU01PlayerController* PC,const FPreferences& P)
- {return ObservedDodgeDirection(PC->ObservedKeys,PC->ReleaseGate,P);}
+ static FVector2D Snapshot(AU01PlayerController* PC,const AnimeMMORPG::U01::FPreferences& P)
+ {return AnimeMMORPG::U01::ObservedDodgeDirection(PC->ObservedKeys,PC->ReleaseGate,P);}
 };
 namespace
 {
+using namespace AnimeMMORPG::U01;
 constexpr auto U04R1Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
 struct FAdapter
 {
@@ -30,7 +30,6 @@ struct FAdapter
  }
  FVector2D Snapshot() const{return ObservedDodgeDirection(Observed,Gate,Preferences);}
 };
-}
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Edges,"AnimeMMORPG.U04.R1.Input.EdgeOrder",U04R1Flags)
 bool FU04R1Edges::RunTest(const FString&)
 {
@@ -63,7 +62,7 @@ bool FU04R1Axes::RunTest(const FString&)
  FAdapter A;A.Edge(EKeys::W,true);A.Edge(EKeys::S,true);A.Edge(EKeys::A,true);A.Edge(EKeys::D,true);
  TestEqual(TEXT("opposing axes cancel"),A.Snapshot(),FVector2D::ZeroVector);
  A.Edge(EKeys::S,false);A.Edge(EKeys::A,false);TestEqual(TEXT("release opponents"),A.Snapshot(),FVector2D(1,1));
- FAdapter B;B.Preferences.Keys[Forward]=EKeys::H;B.Preferences.Keys[Right]=EKeys::LeftControl;B.Preferences.Keys[Dodge]=EKeys::J;
+ FAdapter B;B.Preferences.Keys[AnimeMMORPG::U01::Forward]=EKeys::H;B.Preferences.Keys[Right]=EKeys::LeftControl;B.Preferences.Keys[Dodge]=EKeys::J;
  B.Edge(EKeys::W,true);TestEqual(TEXT("old binding excluded"),B.Snapshot(),FVector2D::ZeroVector);
  B.Edge(EKeys::H,true);B.Edge(EKeys::LeftControl,true);B.Edge(EKeys::RightControl,true);B.Edge(EKeys::J,true);
  TestEqual(TEXT("rebound keys and alias counted once"),B.Sent.Last(),FVector2D(1,1));
@@ -100,5 +99,6 @@ bool FU04R1Players::RunTest(const FString&)
  TestEqual(TEXT("B unaffected"),FU04R1InputAccess::Snapshot(B,P),FVector2D(-1,0));
  TestTrue(TEXT("distinct actual local players"),A->GetLocalPlayer()==LA&&B->GetLocalPlayer()==LB&&LA!=LB);
  return true;
+}
 }
 #endif
