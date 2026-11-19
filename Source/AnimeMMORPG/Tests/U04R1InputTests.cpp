@@ -46,11 +46,11 @@ bool FU04R1Edges::RunTest(const FString&)
  U02::FLifeId Life{FGuid(1,2,3,4),1};U03::FTimelineModel Model{Life};U03::FAdmissionContext Context;Context.bDodgeEnabled=true;
  TArray<U03::FActiveInterval> Out;
  Model.SubmitBatchUnopposed({{1,Life,U03::ECommand::Dodge,0,0,B.Sent[0]}},Context,Out);
- TestEqual(TEXT("zero direction retains backward model fallback"),Model.R1Controls::Dodge().Direction,FVector(-1,0,0));
+ TestEqual(TEXT("zero direction retains backward model fallback"),Model.Dodge().Direction,FVector(-1,0,0));
  FU04R1Adapter D;D.Edge(EKeys::W,true);D.Edge(EKeys::D,true);D.Edge(EKeys::LeftShift,true);
  U03::FTimelineModel Diagonal{Life};Diagonal.SubmitBatchUnopposed({{1,Life,U03::ECommand::Dodge,0,0,D.Sent[0]}},Context,Out);
  D.Edge(EKeys::W,false);D.Edge(EKeys::S,true);
- TestTrue(TEXT("model normalizes frozen diagonal"),Diagonal.R1Controls::Dodge().Direction.Equals(FVector(1,1,0).GetSafeNormal(),1.e-12));
+ TestTrue(TEXT("model normalizes frozen diagonal"),Diagonal.Dodge().Direction.Equals(FVector(1,1,0).GetSafeNormal(),1.e-12));
  return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Axes,"AnimeMMORPG.U04.R1.Input.BindingsAxesAliases",U04R1Flags)
