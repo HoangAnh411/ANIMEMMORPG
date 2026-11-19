@@ -7,9 +7,20 @@ from AnalyzeR1a import load, repro, idle, write_result
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True)
-    p.add_argument('--mode',choices=['numeric','video'],default='numeric');a=p.parse_args()
+    p.add_argument('--mode',choices=['numeric','video'],default='numeric')
+    p.add_argument('--resume-idle-index',type=int,choices=[2,3]);a=p.parse_args()
     record=json.loads(a.record.read_text(encoding='utf-8-sig'));session=a.record.parent
-    out=session/('R1a-'+a.mode);out.mkdir(exist_ok=False);c=BClient(record)
+    if a.resume_idle_index:
+        assert a.mode=='numeric'
+        previous=json.loads((session/'R1a-numeric/LEDGER.json').read_text(encoding='utf-8'))
+        assert not previous['completed'] and 'PermissionError' in previous.get('error',''),'only closed-buffer read recovery is supported'
+        for case in ('w-shift','shift-w','w-up-shift','previous'):
+            trials=[t for t in previous['trials'] if t.get('case')==case]
+            assert len(trials)<=4 and sum(t['status']=='PASS' for t in trials)==2 and not any(t['status']=='FAIL' for t in trials)
+        for index in range(1,a.resume_idle_index):assert (session/'Raw'/f"fps{record['targetFPS']}-idle-{index}.jsonl").exists()
+        for index in range(a.resume_idle_index,4):assert not (session/'Raw'/f"fps{record['targetFPS']}-idle-{index}.jsonl").exists(),'cannot replace an existing control'
+    suffix=('-resume-idle'+str(a.resume_idle_index)) if a.resume_idle_index else ''
+    out=session/('R1a-'+a.mode+suffix);out.mkdir(exist_ok=False);c=BClient(record)
     events=[];ledger=dict(completed=False,acceptance=False,phase='R1a',mode=a.mode,process=record,
                           guardPeriodSeconds=.05,primaryClock='sampleEntryWall',trials=[])
     def clock():return dict(qpc=time.perf_counter(),nativeWall=time.perf_counter()+16777216.,utc=datetime.now(timezone.utc).isoformat())
@@ -25,6 +36,15 @@ def main():
         from PIL import ImageGrab
         ImageGrab.grab(bbox=c.bounds(),all_screens=True).save(path)
     def save():write_result(out/'LEDGER.json',ledger)
+    def closed_raw(path):
+        deadline=time.perf_counter()+30
+        while True:
+            try:
+                rows=load(path)
+                if rows and rows[-1]['kind']=='end':return rows
+            except (PermissionError,FileNotFoundError,json.JSONDecodeError):pass
+            assert time.perf_counter()<deadline,'native closed-buffer timeout'
+            events.append(dict(flushReadRetry=True,at=clock()));wait(.05)
     def batch(edges):
         values=[]
         for key,down in edges:
@@ -40,15 +60,16 @@ def main():
         assert seen=='W'
         if c.metrics()['controlState']!=0:
             b=c.metrics()['menuButtons']['Resume'];c.click(round(b['x']),round(b['y']));wait(.5)
-        command('U04B prepare');wait(.8);command('U04B begin r1a-readiness');wait(.35)
+        readiness_trial='r1a-readiness'+suffix
+        command('U04B prepare');wait(.8);command('U04B begin '+readiness_trial);wait(.35)
         before=c.metrics();press('W',True);wait(.35);press('W',False);wait(.35);after=c.metrics();command('U04B end')
         assert before['pawn']==after['pawn'] and before['capsuleCenterWorldCm']!=after['capsuleCenterWorldCm']
-        frames=[r for r in load(session/'Raw/r1a-readiness.jsonl') if r['kind']=='frame']
+        frames=[r for r in closed_raw(session/'Raw'/(readiness_trial+'.jsonl')) if r['kind']=='frame']
         assert len(frames)>4 and all(b['frame']==x['frame']+1 and b['sampleEntryWall']>x['sampleEntryWall'] for x,b in zip(frames,frames[1:]))
         ready=dict(completed=True,processIdentity=c.processIdentity,before=before,after=after,frames=frames)
         write_result(out/'READINESS.json',ready)
         # Required placement tool reads a session-local readiness. No Editor mutation before it.
-        write_result(session/'READINESS.json',ready)
+        if not (session/'READINESS.json').exists():write_result(session/'READINESS.json',ready)
         wait(30)
         if a.mode=='video':
             trial=f"fps{record['targetFPS']}-illustration";directory=out/trial;directory.mkdir()
@@ -69,7 +90,7 @@ def main():
             command('U04B end');photo(directory/'After.png')
             ledger['trials'].append(dict(trial=trial,purpose='ILLUSTRATION_ONLY',acceptance=False,encodedFrames=encoded))
         else:
-            for case in ('w-shift','shift-w','w-up-shift','previous'):
+            for case in (() if a.resume_idle_index else ('w-shift','shift-w','w-up-shift','previous')):
                 qualified=0
                 for attempt in range(1,5):
                     trial=f"fps{record['targetFPS']}-{case}-{attempt}";directory=out/trial;directory.mkdir();events=[]
@@ -83,7 +104,7 @@ def main():
                     if 'W' in c.held:press('W',False)
                     wait(.8);command('U04B end');photo(directory/'After.png')
                     raw=session/'Raw'/(trial+'.jsonl')
-                    try:result=repro(load(raw),case,record['targetFPS'])
+                    try:result=repro(closed_raw(raw),case,record['targetFPS'])
                     except (AssertionError,ValueError,KeyError,StopIteration) as error:
                         result=dict(status='INVALID',acceptance=False,purpose='REPRO_ONLY',preconditionReasons=[repr(error)],gameplayReasons=[])
                     write_result(directory/'INPUT.json',dict(events=events));write_result(directory/'ASSERTIONS.json',result)
@@ -94,12 +115,12 @@ def main():
                     if result['status']=='PASS':qualified+=1
                     if qualified==2:break
                 if qualified<2:ledger.setdefault('incompleteCases',[]).append(case)
-            for index in range(1,4):
+            for index in range(a.resume_idle_index or 1,4):
                 trial=f"fps{record['targetFPS']}-idle-{index}";directory=out/trial;directory.mkdir();events=[]
                 command('U04B prepare');wait(.8);photo(directory/'Before.png');command('U04B begin '+trial)
                 # Sleep schedules capture length only. Native world samples define exact 15s and bracketing frames.
                 wait(18);command('U04B end');photo(directory/'After.png')
-                raw=session/'Raw'/(trial+'.jsonl');result=idle(load(raw),record['targetFPS'])
+                raw=session/'Raw'/(trial+'.jsonl');result=idle(closed_raw(raw),record['targetFPS'])
                 write_result(directory/'INPUT.json',dict(events=events));write_result(directory/'ASSERTIONS.json',result)
                 ledger['trials'].append(dict(trial=trial,status=result['status'],purpose='METHOD_ONLY',raw=str(raw),rawSHA256=hashlib.sha256(raw.read_bytes()).hexdigest(),assertions=str(directory/'ASSERTIONS.json')));save()
                 print(trial,result['status'],result['primary']['fps'],result['primary']['within10Percent'],flush=True)
