@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "status": "R1A_TOOL_ONLY_REVIEW_PENDING",
+  "BStatus": "INCOMPLETE",
+  "acceptance": false,
+  "R1bStarted": false,
+  "rawRoot": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1a\\ToolReview-v4-Final-20261119",
+  "gatesRawPath": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1a\\TOOL-REVIEW-v4-GATES.json",
+  "gatesRawSHA256": "b57e1a7ad4d39c6ce23c3f650ecfe63d90e4fff1d73851c8466f443fabe64fd5",
+  "sourceSHA": "8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4",
+  "toolSHA": "08ddd49e6e59cc73da0a2611750e91d2d0d560ad",
+  "legacyManifest": "Docs/U04/R1a/Evidence/Review-20261119/MANIFEST.json",
+  "legacyManifestSHA256": "dd45d73d734d6855923264681316e2110bc7f006abd342347fcdc3d6fcd75e9b",
+  "previousToolManifest": "Docs/U04/R1a/Evidence/ToolReview-20261119/MANIFEST.json",
+  "previousToolManifestSHA256": "4ba3b8bb279badc7dee301d2ed1ea95aed3cf1208d35c536d92c8862bae814d7",
+  "summary": {
+    "completed": true,
+    "phase": "R1A_TOOL_ONLY_REVIEW_PENDING",
+    "BStatus": "INCOMPLETE",
+    "R1bStarted": false,
+    "acceptance": false,
+    "baseline": "2b93a0f8f4f70fa69c248d8b7acacea1e2e23bdb",
+    "nativeSource": "8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4",
+    "nativeInputsUnchanged": true,
+    "legacyManifestSHA256": "dd45d73d734d6855923264681316e2110bc7f006abd342347fcdc3d6fcd75e9b",
+    "legacyEvidenceAssociations": 450,
+    "previousToolManifestSHA256": "4ba3b8bb279badc7dee301d2ed1ea95aed3cf1208d35c536d92c8862bae814d7",
+    "previousToolAssociations": 11,
+    "syntheticGroups": 24,
+    "classificationProbes": 8,
+    "csvComparisons": [
+      {
+        "historical": "Docs/U04/R1a/REPRO-MATRIX.csv",
+        "recomputed": "REPRO-RESULTS.csv",
+        "sha256": "8f1d0b4b5b20de751bd0c0f0f9872345b1b27a67c9f7da4a5e114ee7973e8465",
+        "byteIdentical": true
+      },
+      {
+        "historical": "Docs/U04/R1a/COLLECTOR-MATRIX.csv",
+        "recomputed": "IDLE-RESULTS.csv",
+        "sha256": "d5230995a3c94d09a85b23ae9374a44de781a46147961eecd3f2bae057cfe3b8",
+        "byteIdentical": true
+      }
+    ],
+    "historicalReproGameplay": 24,
+    "historicalIdleCadence": 9,
+    "historicalReproCadencePassed": 2,
+    "historicalReproCadenceInvalid": 22,
+    "historicalReclassified": 0,
+    "additionalChainAudit": {
+      "CHAIN_PASS": 6,
+      "INVALID": 18
+    },
+    "newGameplayRuns": 0,
+    "newNativeBuilds": 0,
+    "analyzerVersion": "u04r1-entry-4",
+    "tools": [
+      {
+        "path": "Scripts\\U04\\ReviewDodgeAnalyzerR1.py",
+        "sha256": "f3e2018bb721dc1fc6774c87bacf981cd1b38c9decc57fd5956cb3f035b4af0c"
+      },
+      {
+        "path": "Scripts\\U04\\AnalyzeR1.py",
+        "sha256": "f792caa7ca850abf333b502083d67d7c806fea159bb90d406b2cd87973cf8cd0"
+      },
+      {
+        "path": "Scripts\\U04\\TestAnalyzeR1.py",
+        "sha256": "ef6af1665fbcedf80458c1975e7919732c5e973176b1f6cd0bacbda0fe5712d0"
+      },
+      {
+        "path": "Scripts\\U04\\RecomputeR1a.py",
+        "sha256": "88f74b2f67f45bc374df7678036f978e3d16506ca2f9b325df7860ddb21828e1"
+      },
+      {
+        "path": "Scripts\\U04\\AnalyzeR1a.py",
+        "sha256": "b3f7f9b2d43184fdd0badfe90748a24ecea7d4caa94241aef7edd03b686b7ad7"
+      }
+    ]
+  },
+  "createdUTC": "2026-11-19T07:18:14.863289+00:00",
+  "files": [
+    {
+      "raw": "ADDITIONAL-CHAIN-AUDIT.json",
+      "rawSHA256": "1dce1df5e4c0220d729fc988052fe03692fcfcf7295634279d63977ef773ffe6",
+      "rawBytes": 8975,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/ADDITIONAL-CHAIN-AUDIT.json.gz",
+      "publishedSHA256": "5695d0d2c0df6e4c12311a8cf754e2eefc19972e630347c5be1c9a31bb99a583",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "CLASSIFICATION-PROBES.json",
+      "rawSHA256": "04e451d169886ad0f19efe7b522cf84c68f854225e8419ba1be4cc8ffcee72f7",
+      "rawBytes": 2091597,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/CLASSIFICATION-PROBES.json.gz",
+      "publishedSHA256": "978969ad42f8bc73d942c298249ac108bae994401797da2bdc69cd12995199c4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "LEGACY-SEAL.log",
+      "rawSHA256": "220b03799d69637a150efd57882fdd27912d7f5afa348197f5a1f2d2ede1acf8",
+      "rawBytes": 32,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/LEGACY-SEAL.log.gz",
+      "publishedSHA256": "04049858c205ad1be44cb8d2515ad5d503be009f6d3d6a86f9f5580290c0c458",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "PREVIOUS-TOOL-SEAL.log",
+      "rawSHA256": "0299bb92e39815c4683a5db12665ba8c24498cb8f039c374b60a2300807d0ae7",
+      "rawBytes": 31,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/PREVIOUS-TOOL-SEAL.log.gz",
+      "publishedSHA256": "46f2020526b983ee3f0ffba22973f15291aba346d5c39c95b65698e079d4488e",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "RECOMPUTE.log",
+      "rawSHA256": "8a17a0711eb289e55a0e336ff1da84ca5d59159cd14a7a9e957eb6f1ea50ef3c",
+      "rawBytes": 118,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/RECOMPUTE.log.gz",
+      "publishedSHA256": "88032c0719b7a514ac4f6cffccbff652fd4db82318fc65744b87f46c79d0a7f4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/IDLE-RESULTS.csv",
+      "rawSHA256": "d5230995a3c94d09a85b23ae9374a44de781a46147961eecd3f2bae057cfe3b8",
+      "rawBytes": 4219,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/Recomputed/IDLE-RESULTS.csv.gz",
+      "publishedSHA256": "0073586efc3169a4cabbe55d56503b5f26271df9fb543b2dcb4095792d6bd7f0",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/IDLE-RESULTS.json",
+      "rawSHA256": "b44c6b92217657393dc6c1897779a3130c1670611e6dcbfea57d5e529d50ef23",
+      "rawBytes": 331352,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/Recomputed/IDLE-RESULTS.json.gz",
+      "publishedSHA256": "2081cea9f3dc005adef8fc736bb42f3ae0dc379f75654818d530e2421ac8405e",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/REPRO-RESULTS.csv",
+      "rawSHA256": "8f1d0b4b5b20de751bd0c0f0f9872345b1b27a67c9f7da4a5e114ee7973e8465",
+      "rawBytes": 9509,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/Recomputed/REPRO-RESULTS.csv.gz",
+      "publishedSHA256": "3cfa618798bbfea1dff736b78471d2ece938dbf1a5dd2690d854383c6f7c7673",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/REPRO-RESULTS.json",
+      "rawSHA256": "a3819fa77d9d4fd7531d4093d63d8fe60cd27fe59e76a405373ce4894a335bd7",
+      "rawBytes": 908376,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/Recomputed/REPRO-RESULTS.json.gz",
+      "publishedSHA256": "aa89bb6011b145fa5c2e1199d1adea845fb6c3a3aeabc4c76ec0a534828dec59",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Recomputed/SUMMARY.json",
+      "rawSHA256": "c3269a3fbe47ec21b518744b08e27f03936597c964a140894e1a85e48752c90b",
+      "rawBytes": 1574100,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/Recomputed/SUMMARY.json.gz",
+      "publishedSHA256": "b171bdc8187b678b9d033b239438e188ec60981b3a49a00f4b00211a7c617fd1",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "SUMMARY.json",
+      "rawSHA256": "ad0cb321706b0ff51640d009d6810e5123d318118a5e7c5e782f06d88d1060f9",
+      "rawBytes": 2206,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/SUMMARY.json.gz",
+      "publishedSHA256": "63acbdb41c5180ac86705518aca6b435eb8e926602bce78d23556a6644e1c681",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "SYNTHETIC.log",
+      "rawSHA256": "12f847727b8ff99cb1e8296d65e6658da15322fc62f62a22a55f0f54577efad9",
+      "rawBytes": 2628,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/SYNTHETIC.log.gz",
+      "publishedSHA256": "3e02b512cd70b2f9a42dc06ee0e129b214ca3fbc79856e12c00fc91afa1c99fe",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "TOOL-DIFF.patch",
+      "rawSHA256": "46628eaf3936cc4d624eae1b7c45a0e30bfdc2a39a4d97c5f0239bf1282a6df2",
+      "rawBytes": 24162,
+      "published": "Docs/U04/R1a/Evidence/ToolReview-v4-20261119/Data/TOOL-DIFF.patch.gz",
+      "publishedSHA256": "d25e8b86f8c874c438145fc426279928cdf673094def46db847bfaf4bb321297",
+      "transformation": "identity;gzip"
+    }
+  ]
+}
