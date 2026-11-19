@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "phase": "R1b",
+  "status": "PROPOSED_NOT_AUTHORIZED",
+  "requires": "Reviewer acceptance of R1a source/method and explicit R1b assignment",
+  "nativeSourceCandidate": "8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4",
+  "oldResultsReusable": false,
+  "primaryClock": "sampleEntryWall",
+  "comparisonClocks": [
+    "worldBeginWall",
+    "frameBeginWall",
+    "collectorExitWall",
+    "wall"
+  ],
+  "measurement": "rendered package game-thread cadence; not GPU present/scanout",
+  "capsInOrder": [
+    30,
+    60,
+    120
+  ],
+  "warmupLaunchSeconds": 30,
+  "capSettleSeconds": 10,
+  "profile": {
+    "viewport": [
+      1280,
+      720
+    ],
+    "internalPercent": 50,
+    "atlas": 2048,
+    "rtPoolMiB": 128,
+    "streamingPoolMiB": 256,
+    "lumenIndirect": 0,
+    "lumenReflections": 0,
+    "virtualShadows": 0,
+    "shadowQuality": 2,
+    "backgroundIdle": 0,
+    "vsync": 0,
+    "dilation": 1,
+    "fixedTimeStep": false,
+    "fixedFrameRate": false,
+    "smoothing": "unchanged"
+  },
+  "cadence": {
+    "meanFPSPercent": 5,
+    "minimumIntervalsInBand": 0.95,
+    "periodBandPercent": 10,
+    "maximumPeriods": 2,
+    "boundaries": "include left bracketing start and right bracketing end; no dropped frames"
+  },
+  "numericCapture": {
+    "guardSeconds": 0.05,
+    "mediaDuringWindow": false,
+    "pictures": "before and after only",
+    "flush": "after window",
+    "nativeFocus": "each frame"
+  },
+  "illustrations": {
+    "separateRuns": true,
+    "casesPerFPS": [
+      "walk",
+      "sprint",
+      "forward",
+      "back",
+      "left",
+      "right",
+      "combo"
+    ],
+    "videoRole": "illustrative only; never simultaneous numeric evidence"
+  },
+  "cases": [
+    {
+      "case": "walk",
+      "need": 3,
+      "attemptLimit": 5,
+      "distanceCm": 5000,
+      "toleranceCm": 50,
+      "worldSeconds": 10,
+      "stableSpeedBeforeSeconds": 0.5
+    },
+    {
+      "case": "sprint",
+      "need": 3,
+      "attemptLimit": 5,
+      "distanceCm": 7000,
+      "toleranceCm": 50,
+      "worldSeconds": 10,
+      "stableSpeedBeforeSeconds": 0.5
+    },
+    {
+      "case": "forward",
+      "need": 3,
+      "attemptLimit": 5,
+      "distanceCm": 300,
+      "toleranceCm": 5,
+      "trajectorySeconds": 0.25,
+      "releaseGateSeconds": 0.35,
+      "prebatchSpeedMaxCmS": 0.01,
+      "direction": "ordered observed edge before dodge"
+    },
+    {
+      "case": "back",
+      "need": 3,
+      "attemptLimit": 5,
+      "distanceCm": 300,
+      "toleranceCm": 5,
+      "trajectorySeconds": 0.25,
+      "releaseGateSeconds": 0.35,
+      "prebatchSpeedMaxCmS": 0.01,
+      "direction": "ordered observed edge before dodge"
+    },
+    {
+      "case": "left",
+      "need": 3,
+      "attemptLimit": 5,
+      "distanceCm": 300,
+      "toleranceCm": 5,
+      "trajectorySeconds": 0.25,
+      "releaseGateSeconds": 0.35,
+      "prebatchSpeedMaxCmS": 0.01,
+      "direction": "ordered observed edge before dodge"
+    },
+    {
+      "case": "right",
+      "need": 3,
+      "attemptLimit": 5,
+      "distanceCm": 300,
+      "toleranceCm": 5,
+      "trajectorySeconds": 0.25,
+      "releaseGateSeconds": 0.35,
+      "prebatchSpeedMaxCmS": 0.01,
+      "direction": "ordered observed edge before dodge"
+    },
+    {
+      "case": "combo",
+      "need": 5,
+      "attemptLimit": 7,
+      "hits": [
+        60,
+        70,
+        90
+      ],
+      "totalDamage": 220,
+      "crit": false,
+      "authorityTimelineSeconds": 1.45,
+      "toleranceSeconds": 1e-06
+    }
+  ],
+  "stopRules": [
+    "Gameplay FAIL stops affected gate and preserves repro",
+    "Insufficient valid attempts => INCOMPLETE, no extra selection attempts",
+    "Any native change requires review again and invalidates dependent gates",
+    "No ACCEPTED or merge without reviewer"
+  ]
+}
