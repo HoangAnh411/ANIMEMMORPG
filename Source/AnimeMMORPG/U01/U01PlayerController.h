@@ -84,6 +84,7 @@ public:
     bool InformationTarget(FVector2D& Screen,FString& Text) const;
     bool RecentHitInformation(FVector2D& Screen,FString& Text) const;
 private:
+    friend struct FU04R1InputAccess;
     UPROPERTY(Transient) TObjectPtr<class AU03R1VisibilityWall> R1Wall;
     UPROPERTY(Transient) TObjectPtr<class ACameraActor> R1Camera;
     TWeakObjectPtr<AActor> InformationSubject;

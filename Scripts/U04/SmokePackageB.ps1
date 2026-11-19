@@ -1,7 +1,7 @@
 param([Parameter(Mandatory=$true)][string]$Package,[Parameter(Mandatory=$true)][string]$OutputRoot,[Parameter(Mandatory=$true)][string]$SourceSHA,[Parameter(Mandatory=$true)][string]$RunId,[Parameter(Mandatory=$true)][string]$SettingsDirectory)
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path $env:U04B_WORKSPACE_ROOT).Path
-$allowed=[IO.Path]::GetFullPath((Join-Path $root 'Artifacts/U04/B/'))
+$allowed=[IO.Path]::GetFullPath((Join-Path $root 'Artifacts/U04/B-R1a/'))
 $packagePath=(Resolve-Path -LiteralPath $Package).Path
 $OutputRoot=[IO.Path]::GetFullPath((Join-Path $OutputRoot $RunId))
 if(Test-Path $OutputRoot){throw 'Immutable smoke run exists'}

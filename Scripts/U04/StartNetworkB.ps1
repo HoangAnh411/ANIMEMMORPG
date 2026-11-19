@@ -21,7 +21,7 @@ $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot '../U01/FReviewHost.ps1')
 . (Join-Path $PSScriptRoot 'PreserveLauncherLogsB.ps1')
 $project=(Resolve-Path -LiteralPath $CloneProject).Path
-if($project -notlike '*\Artifacts\U04\B\Source\*'){throw 'Isolated stage clone required'}
+if($project -notlike '*\Artifacts\U04\B-R1a\Source\*'){throw 'Isolated stage clone required'}
 & python (Join-Path $PSScriptRoot 'PrepareB.py') --root (Split-Path $project)
 if($LASTEXITCODE -ne 0){throw 'Clone config guard failed'}
 if(@(git -C (Split-Path $project) status --porcelain --untracked-files=no).Count){throw 'Clone tracked tree is dirty'}
@@ -50,7 +50,7 @@ foreach($role in $roles){
  $settingsRoot=[IO.Path]::GetFullPath($settingsRoot)
  New-Item -ItemType Directory -Path $settingsRoot -Force | Out-Null
  if($PersistSettings -and $role -ne 'Server'){Backup-U03DStableSdkLog $user $settingsRoot}
- $arguments=@(('"'+$project+'"'))
+ $arguments=@(('"'+$project+'"'),'-U04R1InputTrace')
  if($role -eq 'Server'){$arguments+=@('/Game/AnimeMMORPG/Maps/L_NetworkLab','-server',('-port='+$Port),'-NullRHI','-nosound')}
  else{$arguments+=@(('127.0.0.1:'+$Port),'-game','-windowed','-ResX=900','-ResY=540',('-WinX='+$(if($role -eq 'ClientA'){0}else{940})),'-WinY=100')}
  if($ReproducePython){if($role -ne 'Server'){$arguments+='-NullRHI'}}else{$arguments+='-DisablePython'}

@@ -35,7 +35,7 @@ class NetworkClientB(Client):
         self.processIdentity=verify(record)
         self.record=record; self.pid=record['pid']; self.log=Path(record['log']); self.ime=False; self.held=set(); self.mouse_held=False
         exe=Path(record['executable']).resolve()
-        assert record['role'] in ('ClientA','ClientB') and exe.name=='UnrealEditor.exe' and Path(record['project']).is_relative_to(ROOT/'Artifacts/U04/B/Source')
+        assert record['role'] in ('ClientA','ClientB') and exe.name=='UnrealEditor.exe' and Path(record['project']).is_relative_to(ROOT/'Artifacts/U04/B-R1a/Source')
         command=subprocess.check_output(['powershell','-NoProfile','-Command',f'(Get-CimInstance Win32_Process -Filter "ProcessId={self.pid}").CommandLine'],text=True,creationflags=subprocess.CREATE_NO_WINDOW).replace(chr(92),'/')
         assert record['project'].replace(chr(92),'/').lower() in command.lower() and '-game' in command and '-server' not in command
         module=Path(record['project']).parent/'Binaries/Win64/UnrealEditor-AnimeMMORPG.dll';assert hashlib.sha256(module.read_bytes()).hexdigest().upper()==record['moduleSHA256'].upper()

@@ -2,7 +2,7 @@ param([ValidateSet('Minimize','Restore')][string]$Mode,[Parameter(Mandatory=$tru
 $ErrorActionPreference='Stop'
 $path=(Resolve-Path $Session).Path;$isolation=(Resolve-Path $IsolationRoot).Path
 if(!$path.StartsWith($isolation+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Session outside diagnostic isolation'}
-$pref=Get-Content -Raw (Join-Path $isolation 'Runs/Preflight-20261118/PREFLIGHT.json') | ConvertFrom-Json
+$pref=Get-Content -Raw (Join-Path $isolation 'Runs/Preflight-20261119/PREFLIGHT.json') | ConvertFrom-Json
 foreach($expected in $pref.editor){
  $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$expected.ProcessId)
  if(!$live -or $live.ExecutablePath -ine $expected.ExecutablePath -or $live.CreationDate.ToUniversalTime().ToString('o') -ne $expected.creationUTC){throw 'Original Editor creation identity changed; no placement action'}

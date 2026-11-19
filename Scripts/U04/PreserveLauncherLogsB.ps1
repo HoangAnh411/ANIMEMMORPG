@@ -13,7 +13,7 @@ function Restore-U03DStableSdkLog($Record){
  $metaFile=Join-Path $sessionUser 'autosdk-preservation.json'
  if(!(Test-Path -LiteralPath $metaFile)){return}
  $meta=Get-Content -LiteralPath $metaFile -Raw -Encoding UTF8 | ConvertFrom-Json
- $allowed=[IO.Path]::GetFullPath((Join-Path $env:U04B_WORKSPACE_ROOT 'Artifacts/U04/B/'))
+ $allowed=[IO.Path]::GetFullPath((Join-Path $env:U04B_WORKSPACE_ROOT 'Artifacts/U04/B-R1a/'))
  $userDir=[IO.Path]::GetFullPath($Record.userDir)
  if(!$userDir.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase) -or $userDir -ine $meta.userDir){throw 'SDK log restore user-directory identity mismatch'}
  $others=@(Get-CimInstance Win32_Process -Filter "Name='UnrealEditor.exe'" | Where-Object {$_.CommandLine -and $_.CommandLine.Contains($userDir) -and (Get-Process -Id $_.ProcessId -ErrorAction SilentlyContinue)})

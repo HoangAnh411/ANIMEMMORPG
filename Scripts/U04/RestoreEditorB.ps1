@@ -2,7 +2,7 @@ param([Parameter(Mandatory=$true)][string]$Session)
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path $env:U04B_WORKSPACE_ROOT).Path
 $path=(Resolve-Path -LiteralPath $Session).Path
-$allowed=[IO.Path]::GetFullPath((Join-Path $root 'Artifacts/U04/B/'))
+$allowed=[IO.Path]::GetFullPath((Join-Path $root 'Artifacts/U04/B-R1a/'))
 if(!$path.StartsWith($allowed,[StringComparison]::OrdinalIgnoreCase)){throw 'Only D placement records'}
 . (Join-Path $PSScriptRoot '../U01/FReviewHost.ps1')
 . (Join-Path $PSScriptRoot '../U02/EnsureEditorMinimized.ps1')

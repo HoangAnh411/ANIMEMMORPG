@@ -1,5 +1,5 @@
 function Assert-BIdentity([string]$Clone,[string]$SourceSHA,[string]$Manifest,[string]$Output,[string]$Settings){
- $root=[IO.Path]::GetFullPath((Join-Path $env:U04B_WORKSPACE_ROOT 'Artifacts/U04/B'))
+ $root=[IO.Path]::GetFullPath((Join-Path $env:U04B_WORKSPACE_ROOT 'Artifacts/U04/B-R1a'))
  foreach($path in @($Clone,$Output,$Settings,$Manifest)){
   if(!$path -or ![IO.Path]::GetFullPath($path).StartsWith($root+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'U04 path isolation required'}
  }

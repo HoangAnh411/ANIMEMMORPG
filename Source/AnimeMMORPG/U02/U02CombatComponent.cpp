@@ -29,6 +29,25 @@ using namespace AnimeMMORPG::U02;
 
 namespace
 {
+// Edge-only network diagnostics. No schema/state mutation; excluded from Solo
+// numeric capture. Synchronous edge logs are reported as network trace overhead.
+void R1DirectionTrace(AU01Character* C,const TCHAR* Event,uint64 Sequence,
+    FGuid Pawn,uint64 Life,FVector2D Direction,int32 Admission=-1)
+{
+#if !UE_BUILD_SHIPPING
+    if(!C||C->GetWorld()->GetNetMode()==NM_Standalone||!FParse::Param(FCommandLine::Get(),TEXT("U04R1InputTrace")))return;
+    auto J=MakeShared<FJsonObject>();FString Source;FParse::Value(FCommandLine::Get(),TEXT("U02SourceSHA="),Source);
+    J->SetStringField(TEXT("source"),Source);J->SetStringField(TEXT("event"),Event);
+    J->SetStringField(TEXT("pawn"),Pawn.ToString());J->SetNumberField(TEXT("life"),double(Life));
+    J->SetNumberField(TEXT("command"),double(Sequence));J->SetNumberField(TEXT("x"),Direction.X);J->SetNumberField(TEXT("y"),Direction.Y);
+    J->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());J->SetStringField(TEXT("world"),C->GetWorld()->GetPathName());
+    J->SetNumberField(TEXT("frame"),double(GFrameCounter));J->SetNumberField(TEXT("wall"),FPlatformTime::Seconds());
+    J->SetNumberField(TEXT("worldTime"),C->GetWorld()->GetTimeSeconds());J->SetBoolField(TEXT("authority"),C->HasAuthority());
+    J->SetNumberField(TEXT("admission"),Admission);
+    FString Text;FJsonSerializer::Serialize(J,TJsonWriterFactory<TCHAR,TCondensedJsonPrintPolicy<TCHAR>>::Create(&Text));
+    UE_LOG(LogU02Combat,Display,TEXT("U04R1_INPUT %s"),*Text);
+#endif
+}
 class FU03NoEvents final : public AnimeMMORPG::U03::ITimelineResolver
 {
 public:
@@ -67,6 +86,7 @@ void UU02CombatComponent::SubmitAttackIntent(uint64 Sequence,double Local,double
 void UU02CombatComponent::SubmitCombatIntent(AnimeMMORPG::U03::ECommand Command,uint64 Sequence,double Local,double Yaw,FVector2D Direction)
 {
     if(!Character())return;
+    if(Command==AnimeMMORPG::U03::ECommand::Dodge)R1DirectionTrace(Character(),TEXT("Sent"),Sequence,Snapshot.PawnId,Snapshot.LifeGeneration,Direction);
     if(Character()->HasAuthority())ReceiveIntent(Command,Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Direction);
     else {LastSentCommand=Sequence;LastSentLife=Snapshot.LifeGeneration;ServerCombat(uint8(Command),Sequence,Local,Yaw,Snapshot.PawnId,Snapshot.LifeGeneration,Direction);}
 }
@@ -79,6 +99,7 @@ void UU02CombatComponent::ReceiveIntent(AnimeMMORPG::U03::ECommand Command,uint6
     if(!Model||!Character()||!Character()->HasAuthority())return;
     if(QueuedIntents.Num()>=64){++RejectedCount;return;}
     QueuedIntents.Add({{Sequence,{Pawn,Life},Command,0,Yaw,Direction},Local,GetWorld()->GetTimeSeconds()});
+    if(Command==AnimeMMORPG::U03::ECommand::Dodge)R1DirectionTrace(Character(),TEXT("Received"),Sequence,Pawn,Life,Direction);
     if(U04B::Enabled(GetWorld()))
     {auto J=GetDiagnostics();J->SetNumberField(TEXT("command"),double(Sequence));J->SetNumberField(TEXT("commandType"),uint8(Command));J->SetNumberField(TEXT("localInput"),Local);J->SetNumberField(TEXT("receive"),GetWorld()->GetTimeSeconds());J->SetStringField(TEXT("receivedPosition"),Character()->GetActorLocation().ToString());if(U04B::InputDiagnosticEnabled(GetWorld())){J->SetNumberField(TEXT("intentX"),Direction.X);J->SetNumberField(TEXT("intentY"),Direction.Y);J->SetNumberField(TEXT("intentYaw"),Yaw);J->SetStringField(TEXT("receiveVelocity"),Character()->GetVelocity().ToString());}U04B::Event(GetWorld(),TEXT("Received"),J);}
 }
@@ -167,6 +188,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
     {Snapshot.Phase=uint8(EPhase::Cancelled);Snapshot.ServerSeconds=Now;GetWorld()->GetSubsystem<UU02CollisionWorld>()->ObserveCombat(this);}
     for(const auto& R:Results)
     {
+        if(Model->Dodge().Sequence==R.Sequence)R1DirectionTrace(C,TEXT("AuthorityAdmission"),R.Sequence,Model->GetLife().Pawn,Model->GetLife().Generation,FVector2D(Model->Dodge().Direction.X,Model->Dodge().Direction.Y),uint8(R.Result));
         OwnerAdmission.Command=R.Sequence;OwnerAdmission.Admission=uint8(R.Result);++OwnerAdmission.Revision;
         const bool Success=R.Result==EAdmission::Accepted||R.Result==EAdmission::Queued||R.Result==EAdmission::Replaced;
         if(Success){++AcceptedCount;if(R.Result==EAdmission::Queued)++QueuedCount;if(R.Result==EAdmission::Replaced)++ReplacedCount;LastReject=EReject::None;}

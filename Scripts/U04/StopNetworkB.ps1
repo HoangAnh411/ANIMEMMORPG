@@ -2,7 +2,7 @@ param([Parameter(Mandatory=$true)][string]$SessionPath,[ValidateSet('B')][string
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'PreserveLauncherLogsB.ps1')
 $session=(Resolve-Path -LiteralPath $SessionPath).Path
-$allowed=(Resolve-Path -LiteralPath (Join-Path $env:U04B_WORKSPACE_ROOT 'Artifacts/U04/B')).Path
+$allowed=(Resolve-Path -LiteralPath (Join-Path $env:U04B_WORKSPACE_ROOT 'Artifacts/U04/B-R1a')).Path
 if(!$session.StartsWith($allowed+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Only isolated U03-D sessions may be stopped'}
 $file=if(Test-Path (Join-Path $session 'all-processes.json')){Join-Path $session 'all-processes.json'}else{Join-Path $session 'processes.json'}
 $records=Get-Content -Raw -Encoding UTF8 -LiteralPath $file | ConvertFrom-Json

@@ -56,14 +56,16 @@ TSharedRef<FJsonObject> Base(UWorld* W,const TCHAR* Kind)
     J->SetNumberField(TEXT("netMode"),int32(W->GetNetMode()));return J;
 }
 void WorldBegin(UWorld* W,ELevelTick Type,float Dt)
-{if(auto* C=Captures.Find(W))if(TimingDiagnosticEnabled(W)){(*C)->WorldBeginWall=FPlatformTime::Seconds();(*C)->WorldBeginCounter=GFrameCounter;}}
+{if(auto* C=Captures.Find(W))if(Enabled(W)){(*C)->WorldBeginWall=FPlatformTime::Seconds();(*C)->WorldBeginCounter=GFrameCounter;}}
 void FrameBegin()
-{const double At=FPlatformTime::Seconds();for(auto& Pair:Captures)if(TimingDiagnosticEnabled(Pair.Key)){Pair.Value->FrameBeginWall=At;Pair.Value->FrameBeginCounter=GFrameCounter;}}
+{const double At=FPlatformTime::Seconds();for(auto& Pair:Captures)if(Enabled(Pair.Key)){Pair.Value->FrameBeginWall=At;Pair.Value->FrameBeginCounter=GFrameCounter;}}
 void Sample(UWorld* W,ELevelTick Type,float Dt)
 {
     const double SampleEntry=FPlatformTime::Seconds();
     auto* F=Captures.Find(W);if(!F||!(*F)->Recording||Type==LEVELTICK_ViewportsOnly)return;
-    auto& C=**F;auto J=Base(W,TEXT("frame"));J->SetNumberField(TEXT("dt"),Dt);
+    auto& C=**F;auto J=Base(W,TEXT("frame"));
+    // Primary cadence clock: captured once before collection. Event only stamps wall.
+    J->SetNumberField(TEXT("sampleEntryWall"),SampleEntry);J->SetNumberField(TEXT("dt"),Dt);
     J->SetBoolField(TEXT("focus"),FApp::HasFocus());J->SetNumberField(TEXT("reset"),double(C.Reset));
     J->SetNumberField(TEXT("dilation"),W->GetWorldSettings()->GetEffectiveTimeDilation());
     J->SetBoolField(TEXT("fixed"),FApp::UseFixedTimeStep());J->SetNumberField(TEXT("fixedDelta"),FApp::GetFixedDeltaTime());
@@ -91,8 +93,9 @@ void Sample(UWorld* W,ELevelTick Type,float Dt)
         H->SetBoolField(TEXT("crit"),R.Result.bCrit);H->SetNumberField(TEXT("absorbed"),R.Result.Absorbed);H->SetNumberField(TEXT("defense"),R.Result.Defense);H->SetNumberField(TEXT("roll"),R.Roll);
         Hits.Add(MakeShared<FJsonValueObject>(H));
     }J->SetArrayField(TEXT("hits"),Hits);
-    if(TimingDiagnosticEnabled(W)){J->SetNumberField(TEXT("worldBeginWall"),C.WorldBeginWall);J->SetNumberField(TEXT("worldBeginCounter"),double(C.WorldBeginCounter));J->SetNumberField(TEXT("sampleEntryWall"),SampleEntry);J->SetNumberField(TEXT("frameBeginWall"),C.FrameBeginWall);J->SetNumberField(TEXT("frameBeginCounter"),double(C.FrameBeginCounter));J->SetNumberField(TEXT("collectorExitWall"),FPlatformTime::Seconds());}
+    if(Enabled(W)){J->SetNumberField(TEXT("worldBeginWall"),C.WorldBeginWall);J->SetNumberField(TEXT("worldBeginCounter"),double(C.WorldBeginCounter));J->SetNumberField(TEXT("frameBeginWall"),C.FrameBeginWall);J->SetNumberField(TEXT("frameBeginCounter"),double(C.FrameBeginCounter));}
     Event(W,TEXT("frame"),J);
+    J->SetNumberField(TEXT("collectorExitWall"),FPlatformTime::Seconds());
 }
 void Command(const TArray<FString>& A,UWorld* W)
 {
@@ -143,7 +146,7 @@ void BeginWorld(UWorld& W)
     auto* Floor=W.SpawnActor<AStaticMeshActor>(FVector(0,20000,-50),FRotator::ZeroRotator);
     auto* Mesh=Floor->GetStaticMeshComponent();Mesh->SetMobility(EComponentMobility::Movable);Mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
     Floor->SetActorScale3D(FVector(300,30,1));Mesh->SetCollisionProfileName(TEXT("BlockAll"));
-    if(TimingDiagnosticEnabled(&W)){C->BeginFrame=FCoreDelegates::OnBeginFrame.AddStatic(&FrameBegin);C->WorldBegin=FWorldDelegates::OnWorldTickStart.AddStatic(&WorldBegin);}
+    if(Enabled(&W)){C->BeginFrame=FCoreDelegates::OnBeginFrame.AddStatic(&FrameBegin);C->WorldBegin=FWorldDelegates::OnWorldTickStart.AddStatic(&WorldBegin);}
     C->Tick=FWorldDelegates::OnWorldPostActorTick.AddStatic(&Sample);Captures.Add(&W,MoveTemp(C));
 }
 void EndWorld(UWorld* W)

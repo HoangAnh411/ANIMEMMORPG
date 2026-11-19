@@ -2,7 +2,7 @@ param([Parameter(Mandatory=$true)][string]$SessionPath)
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path $env:U04B_WORKSPACE_ROOT).Path
 $session=(Resolve-Path $SessionPath).Path
-$allowed=(Resolve-Path (Join-Path $root 'Artifacts/U04/B')).Path
+$allowed=(Resolve-Path (Join-Path $root 'Artifacts/U04/B-R1a')).Path
 if(!$session.StartsWith($allowed+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Only D session reconnect'}
 $records=Get-Content -Raw -Encoding UTF8 (Join-Path $session 'processes.json') | ConvertFrom-Json
 $old=$records | Where-Object role -eq ClientA

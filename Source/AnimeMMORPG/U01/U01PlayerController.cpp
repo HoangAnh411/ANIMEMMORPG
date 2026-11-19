@@ -4,6 +4,7 @@
 #include "Camera/CameraActor.h"
 #include "U01Character.h"
 #include "U01PhysicalInput.h"
+#include "U01DodgeInput.h"
 #include "U02/U02CombatComponent.h"
 #include "U01AnimInstance.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -223,7 +224,7 @@ void AU01PlayerController::ReconcilePhysicalReleases()
 bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
 {
     if (!IsGameWindowActive()) return false; // Another window's releases never re-arm gameplay.
-    const bool bNewPhysicalEdge = bDown && !ObservedKeys.Contains(Key);
+    const bool bNewPhysicalEdge = AnimeMMORPG::U01::IsNewObservedPress(ObservedKeys,Key,bDown);
     const auto* LP=GetLocalPlayer();
     const bool bConsoleInput=LP&&LP->ViewportClient&&LP->ViewportClient->ViewportConsole&&LP->ViewportClient->ViewportConsole->ConsoleActive();
     if(PendingRebind!=INDEX_NONE)
@@ -265,8 +266,9 @@ bool AU01PlayerController::ObservePhysicalKey(FKey Key, bool bDown,bool bChord)
                 for(int32 I=Attack;I<=Target;++I)if(CanonicalKey(Key)==ControlKey(I))
                 {
                     if(I==Target){ToggleInformationTarget();continue;}
-                    const float ForwardInput=float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Forward))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Forward)))-float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Backward))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Backward)));
-                    const float RightInput=float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Right))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Right)))-float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Left))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Left)));
+                    const FVector2D DodgeDirection=I==Dodge?ObservedDodgeDirection(ObservedKeys,ReleaseGate,GetPreferences()):FVector2D::ZeroVector;
+                    const float ForwardInput=I==Dodge?DodgeDirection.X:float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Forward))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Forward)))-float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Backward))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Backward)));
+                    const float RightInput=I==Dodge?DodgeDirection.Y:float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Right))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Right)))-float(IsInputKeyDown(ControlKey(AnimeMMORPG::U01::Left))&&ReleaseGate.Allows(ControlKey(AnimeMMORPG::U01::Left)));
                     if(U04B::InputDiagnosticEnabled(GetWorld())){auto J=GetU04InputDiagnostic();J->SetNumberField(TEXT("command"),double(CombatCommandSequence+1));J->SetNumberField(TEXT("commandType"),uint8(Commands[I-Attack]));J->SetNumberField(TEXT("sentX"),ForwardInput);J->SetNumberField(TEXT("sentY"),RightInput);U04B::Event(GetWorld(),TEXT("IntentDirection"),J);}
                     C->Combat->SubmitCombatIntent(Commands[I-Attack],++CombatCommandSequence,GetWorld()->GetTimeSeconds(),GetControlRotation().Yaw,FVector2D(ForwardInput,RightInput));
                 }

@@ -35,7 +35,7 @@ class RegressionClientB(Client):
         self.processIdentity=verify(record)
         self.record=record; self.pid=record['pid']; self.log=Path(record['log']); self.ime=False; self.held=set(); self.mouse_held=False
         exe=Path(record['executable']).resolve()
-        assert record['role']=='U03PackageD' and exe.is_relative_to(ROOT/'Artifacts/U04/B') and exe.name=='AnimeMMORPG.exe'
+        assert record['role']=='U03PackageD' and exe.is_relative_to(ROOT/'Artifacts/U04/B-R1a') and exe.name=='AnimeMMORPG.exe'
         actual=subprocess.check_output(['powershell','-NoProfile','-Command',f'(Get-CimInstance Win32_Process -Filter "ProcessId={self.pid}").ExecutablePath'],text=True,creationflags=subprocess.CREATE_NO_WINDOW).strip()
         assert Path(actual).resolve()==exe and hashlib.sha256(exe.read_bytes()).hexdigest().upper()==record['binarySHA256'].upper()
         found=[]
