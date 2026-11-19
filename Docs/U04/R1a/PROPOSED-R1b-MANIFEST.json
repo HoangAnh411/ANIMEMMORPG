@@ -157,10 +157,11 @@
     "-U04BDiagnosticTiming"
   ],
   "analyzerCandidate": "Scripts/U04/AnalyzeR1.py",
-  "analyzerCandidateVersion": "u04r1-entry-3",
+  "analyzerCandidateVersion": "u04r1-entry-4",
   "dodgeOrigin": "authority Received.receivedPosition; cadence brackets authority receipt through release gate",
   "binaryCandidateSHA256": "915887c83acfe0d1668e1b4947807e31217452bd783f185f9f3bc63f67772e25",
   "methodReviewStatus": "REVIEW_PENDING",
   "dodgeAdmissionStandingRule": "AuthorityAdmission.velocityBeforeBatch horizontal norm <=0.01cm/s; missing/malformed => INVALID; no previous-frame fallback",
-  "dodgeCorrelationRule": "eligible observed edges -> intent -> receipt -> command-correlated authority admission -> single-command pawn/life/trajectory identity; valid input with wrong snapshot/model => FAIL"
+  "dodgeCorrelationRule": "eligible observed edges -> intent -> receipt -> command-correlated authority admission -> single-command pawn/life/trajectory identity; valid input with wrong snapshot/model => FAIL",
+  "dodgeClassificationRule": "Validate input/preconditions/correlation through admission first; non-Accepted => FAIL without trajectory. Accepted missing terminal: FAIL only with closed loss-free coverage and explicit noncompletion state; missing/ambiguous telemetry => INVALID."
 }

@@ -12,7 +12,9 @@ def frames(fps=120,n=1201):
 def dodge_fixture():
     c=dict(pawnId='P',life=1,lifeId='P:1',commandId='4',dodge=1,dodgeStart=.5,dodgeMotionEnd=.75,dodgeLockEnd=.85,dodgeOrigin='X=0 Y=0 Z=98',dodgeDirection='X=1 Y=0 Z=0')
     rows=frames(n=160)
-    for r in rows:r.update(kind='frame',pawnPath='PawnPath',controller='PC',mode=1,velocity=[0,0,0],combat=copy.deepcopy(c))
+    for r in rows:
+        r.update(kind='frame',pawnPath='PawnPath',controller='PC',mode=1,velocity=[0,0,0],combat=copy.deepcopy(c))
+        r['combat']['locked']=.5<=r['worldTime']<.85
     def keys(shift=False):
         return [dict(bindingAction=i,binding=k,observedPhysical=(i==0 or i==10 and shift),gateAllows=True) for i,k in [(0,'W'),(1,'S'),(2,'A'),(3,'D'),(10,'LeftShift')]]
     common=dict(pawn='PawnPath',controller='PC',controlState=0,windowActive=True,motorLocked=False,console=False,frame=57)
@@ -33,6 +35,68 @@ def dodge_verdict(raw):
         return analyze(p,120,'forward')
 
 class Method(unittest.TestCase):
+    def test_authority_rejection_without_trajectory_is_fail(self):
+        for admission_result in list(range(1,10))+[3.0]:
+            raw,_=dodge_fixture();raw=[r for r in raw if r['kind']!='dodgeCommit']
+            admission=next(r for r in raw if r['kind']=='AuthorityAdmission')
+            admission['admissionResult']=admission_result
+            # Rejection need not expose a new model/trajectory state.
+            del admission['modelDirection'];del admission['modelDodgeStart']
+            # Capture closes immediately after admission; no release-horizon wait.
+            raw=[r for r in raw if r['worldTime']<=.5 or r['kind']=='end']
+            result=dodge_verdict(raw)
+            self.assertEqual(result['status'],'FAIL',result)
+            self.assertEqual(result['gameplay']['failureEstablishedAt'],'authority admission')
+            self.assertIsNone(result['gameplay']['correlation']['end'])
+    def test_rejection_missing_or_ambiguous_admission_data_stays_invalid(self):
+        for malformed in [None,True,'3',3.5,100,float('nan')]:
+            raw,_=dodge_fixture();next(r for r in raw if r['kind']=='AuthorityAdmission')['admissionResult']=malformed
+            self.assertEqual(dodge_verdict(raw)['status'],'INVALID',str(malformed))
+        for mutation in ['missing-admission','duplicate-admission','wrong-life','missing-velocity','missing-snapshot','missing-end','missing-prefix-frame']:
+            raw,_=dodge_fixture();raw=[r for r in raw if r['kind']!='dodgeCommit']
+            admission=next(r for r in raw if r['kind']=='AuthorityAdmission');admission['admissionResult']=3
+            if mutation=='missing-admission':raw.remove(admission)
+            elif mutation=='duplicate-admission':raw.insert(raw.index(admission),copy.deepcopy(admission))
+            elif mutation=='wrong-life':admission.update(life=2,lifeId='P:2')
+            elif mutation=='missing-velocity':del admission['velocityBeforeBatch']
+            elif mutation=='missing-snapshot':del next(r for r in raw if r['kind']=='IntentDirection')['sentX']
+            elif mutation=='missing-end':raw=[r for r in raw if r['kind']!='end']
+            else:raw=[r for r in raw if not(r['kind']=='frame' and r['frame']==30)]
+            self.assertEqual(dodge_verdict(raw)['status'],'INVALID',mutation)
+    def test_accepted_unfinished_action_in_complete_capture_is_fail(self):
+        for state in ['still-locked','never-started']:
+            raw,_=dodge_fixture();raw=[r for r in raw if r['kind']!='dodgeCommit']
+            for r in raw:
+                if r['kind']=='frame' and r['worldTime']>=.5:
+                    if state=='still-locked':r['combat']['locked']=True
+                    else:r['combat'].update(dodge=0,dodgeStart=0,dodgeMotionEnd=0,dodgeLockEnd=0,locked=False)
+            # Simulate no event emitted, rather than deleting telemetry with a gap.
+            for i,r in enumerate(raw):r['diagnosticSerial']=i+1
+            result=dodge_verdict(raw)
+            self.assertEqual(result['status'],'FAIL',result)
+            self.assertEqual(result['gameplay']['failureEstablishedAt'],'completion observation')
+    def test_missing_completion_data_is_not_gameplay_noncompletion(self):
+        for mutation in ['short-capture','terminal-event-lost','missing-frame','missing-lock-state','unlocked-without-terminal','ambiguous-terminal']:
+            raw,_=dodge_fixture()
+            if mutation=='ambiguous-terminal':
+                terminal=next(r for r in raw if r['kind']=='dodgeCommit');raw.insert(raw.index(terminal),copy.deepcopy(terminal))
+            else:
+                raw=[r for r in raw if r['kind']!='dodgeCommit']
+                if mutation!='terminal-event-lost':
+                    for i,r in enumerate(raw):r['diagnosticSerial']=i+1
+                if mutation=='short-capture':raw=[r for r in raw if r['worldTime']<.7 or r['kind']=='end']
+                elif mutation=='missing-frame':raw=[r for r in raw if not(r['kind']=='frame' and r['frame']==90)]
+                elif mutation=='missing-lock-state':
+                    for r in raw:
+                        if r['kind']=='frame':r['combat'].pop('locked',None)
+                if mutation not in ('unlocked-without-terminal','missing-lock-state'):
+                    for r in raw:
+                        if r['kind']=='frame' and r['worldTime']>=.5:r['combat']['locked']=True
+            self.assertEqual(dodge_verdict(raw)['status'],'INVALID',mutation)
+    def test_wrong_model_without_trajectory_is_still_fail(self):
+        raw,_=dodge_fixture();raw=[r for r in raw if r['kind']!='dodgeCommit']
+        next(r for r in raw if r['kind']=='AuthorityAdmission')['modelDirection']='X=-1 Y=0 Z=0'
+        self.assertEqual(dodge_verdict(raw)['status'],'FAIL')
     def test_admission_velocity_is_authoritative(self):
         raw,rows=dodge_fixture();self.assertEqual(dodge_verdict(raw)['status'],'PASS')
         admission=next(r for r in raw if r['kind']=='AuthorityAdmission')

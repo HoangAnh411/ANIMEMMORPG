@@ -7,7 +7,7 @@ All quantities are centimeters and seconds. No instantaneous-FPS averaging.
 import argparse, bisect, hashlib, json, math, re
 from pathlib import Path
 
-VERSION = 'u04r1-entry-3'
+VERSION = 'u04r1-entry-4'
 PROFILE = {'t.IdleWhenNotForeground': 0, 'r.VSync': 0, 'r.ScreenPercentage': 50,
            'r.LumenScene.SurfaceCache.AtlasSize': 2048, 'r.RenderTargetPoolMin': 128,
            'r.Streaming.PoolSize': 256, 'r.Lumen.DiffuseIndirect.Allow': 0,
@@ -81,6 +81,18 @@ def dodge_chain(raw,rows,direction):
         need(bool(pawn) and isinstance(life,(int,float)) and math.isfinite(life) and life>0 and int(life)==life,'invalid pawn/life correlation')
         need(j['lifeId']==f'{pawn}:{int(life)}','inconsistent lifeId correlation')
         return pawn,life
+    def valid_frames(samples):
+        need(len(samples)>=2,'insufficient native observation samples')
+        quality=cadence(samples,samples[0]['cvars']['t.MaxFPS'])
+        timing_only={'mean FPS outside 5%','fewer than 95% intervals within 10%','frame exceeds two periods'}
+        structural=[r for r in quality['reasons'] if r not in timing_only]
+        need(not structural,'invalid observation data: '+', '.join(structural))
+    def serial_prefix(last):
+        prefix=raw[:next(i for i,r in enumerate(raw) if r is last)+1]
+        serials=[r['diagnosticSerial'] for r in prefix]
+        need(all(b==a+1 for a,b in zip(serials,serials[1:])),'missing/duplicate/reordered diagnostic serial before evidence boundary')
+    need(raw and raw[0]['kind']=='begin' and raw[-1]['kind']=='end','capture not closed')
+    need(sum(r['kind']=='begin' for r in raw)==1 and sum(r['kind']=='end' for r in raw)==1,'ambiguous capture envelope')
     intent=one([r for r in raw if r['kind']=='IntentDirection' and r.get('commandType')==1],'not exactly one Dodge intent')
     need(intent['controlState']==0 and intent['windowActive'] and not intent['motorLocked'],'Dodge intent not in eligible playing state')
     receipt=one([r for r in raw if r['kind']=='Received' and r.get('commandType')==1],'not exactly one authority dodge receipt')
@@ -99,8 +111,12 @@ def dodge_chain(raw,rows,direction):
     velocity=vec(admission['velocityBeforeBatch'],'invalid authority admission velocityBeforeBatch')
     need(math.hypot(*velocity[:2])<=.01,'not stationary at authority admission (velocityBeforeBatch)')
     # EventSerial establishes controller dispatch order, not OS key state or frame equality.
-    serials=[r['diagnosticSerial'] for r in raw]
-    need(all(b>a for a,b in zip(serials,serials[1:])),'missing/duplicate/reordered diagnostic serial')
+    serial_prefix(admission)
+    at=admission['at'];receive_at=receipt['receive']
+    need(all(isinstance(t,(int,float)) and math.isfinite(t) for t in (at,receive_at)) and at>=receive_at,'invalid receipt/admission time')
+    admission_rows=[r for r in rows if r['worldTime']<=at]
+    valid_frames(admission_rows)
+    need(admission_rows[0]['worldTime']<=receive_at<=admission_rows[-1]['worldTime'],'receipt lacks native observation coverage')
     keys={int(k['bindingAction']):k for k in intent['keys']}
     need(all(i in keys for i in (0,1,2,3,10)),'missing binding snapshot')
     aliases={'LeftShift':('LeftShift','RightShift'),'RightShift':('LeftShift','RightShift'),
@@ -139,8 +155,60 @@ def dodge_chain(raw,rows,direction):
     expected={'forward':[1,0],'back':[-1,0],'left':[0,-1],'right':[0,1]}[direction]
     need(snapshot==expected,'requested direction not validly held before Dodge edge')
     need(intent['diagnosticSerial']<receipt['diagnosticSerial']<admission['diagnosticSerial'],'intent/receipt/admission order correlation')
+    # Establish semantic failures at admission BEFORE asking whether any motor
+    # trajectory exists. Rejection is direct evidence, not missing telemetry.
+    failures=[]
+    sent=[intent['sentX'],intent['sentY']];received=[receipt['intentX'],receipt['intentY']]
+    need(all(isinstance(x,(int,float)) and math.isfinite(x) for x in sent+received),'invalid direction snapshot data')
+    if sent!=snapshot:failures.append('valid edges produced wrong sent snapshot')
+    if received!=sent:failures.append('receipt changed sent direction snapshot')
+    yaw=receipt['intentYaw'];need(isinstance(yaw,(int,float)) and math.isfinite(yaw),'invalid intent yaw')
+    need(intent['yaw']==yaw,'intent/receipt yaw correlation')
+    a=math.radians(yaw);x,y=snapshot;world=[x*math.cos(a)-y*math.sin(a),x*math.sin(a)+y*math.cos(a),0]
+    result=admission['admissionResult']
+    need(isinstance(result,(int,float)) and not isinstance(result,bool) and math.isfinite(result) and int(result)==result and 0<=result<=9,'unknown/malformed authority admission result')
+    result=int(result)
+    if result!=0:failures.append(f'valid Dodge not accepted by authority (admissionResult={result})')
+    else:
+        model=vec(admission['modelDirection'],'missing admission model direction')
+        if any(abs(x-y)>.0001 for x,y in zip(model,world)):failures.append('valid snapshot produced wrong authority model direction')
+    base=dict(command=command,pawnId=ident[0],life=ident[1],singleCommandTrial=True,
+              intent=intent,receipt=receipt,admission=admission,snapshot=snapshot,expectedWorldDirection=world,
+              admissionVelocity=velocity,directionEdges=direction_edges,dodgeEdge=edge,reasons=failures)
+    if failures:
+        return dict(base,outcome='ADMISSION_FAILURE',failureEstablishedAt='authority admission',
+                    end=None,trajectorySequence=None,firstFrame=admission_rows[0]['frame'],lastFrame=admission_rows[-1]['frame'],
+                    observationScope='validated evidence through admission; cadence diagnostic only, never acceptance')
     ends=[r for r in raw if r['kind']=='dodgeCommit' and r['trajectoryEnd']]
-    end=one(ends,'missing/ambiguous trajectory-end commit');c=end['combat']
+    need(len(ends)<=1,'ambiguous trajectory-end commit')
+    if not ends:
+        # Missing terminal data is not automatically gameplay failure. Require
+        # a closed, loss-free native stream through the contractual release
+        # deadline PLUS the next sampled frame (observation allowance).
+        deadline=at+.35
+        index=bisect.bisect_left([r['worldTime'] for r in rows],deadline)
+        need(index+1<len(rows),'capture too short to observe accepted Dodge completion')
+        confirmation=rows[index+1];covered=rows[:index+2]
+        valid_frames(covered);serial_prefix(confirmation)
+        end_time=raw[-1].get('worldTime',raw[-1].get('observedWorld'))
+        need(isinstance(end_time,(int,float)) and math.isfinite(end_time) and end_time>=confirmation['worldTime'],'capture end precedes completion observation')
+        state=confirmation['combat']
+        need(identity(state)==ident and int(state['commandId'])==command,'completion observation identity/command correlation')
+        need(isinstance(state['locked'],bool),'completion lock state missing/malformed')
+        sequence=state['dodge'];need(sequence in (receipt['dodge'],receipt['dodge']+1),'ambiguous completion trajectory sequence')
+        if sequence==receipt['dodge']:
+            failures.append('accepted Dodge produced no observed trajectory in complete capture')
+        else:
+            need(state['dodgeStart']==admission['modelDodgeStart']==at,'completion observation start correlation')
+            if state['locked']:failures.append('accepted Dodge still locked beyond release deadline and observation frame')
+        # Unlocked state without terminal commit could be a missing diagnostic
+        # event. Do not infer the endpoint/duration from a late frame sample.
+        need(bool(failures),'terminal commit missing but frame state does not prove gameplay noncompletion')
+        return dict(base,outcome='INCOMPLETE_ACTION',failureEstablishedAt='completion observation',
+                    end=None,trajectorySequence=sequence,completionDeadline=deadline,confirmationFrame=confirmation,
+                    firstFrame=covered[0]['frame'],lastFrame=covered[-1]['frame'],
+                    observationScope='closed loss-free capture through release deadline and next native sample')
+    end=ends[0];c=end['combat']
     need(len(end['position'])==3 and all(isinstance(x,(int,float)) and math.isfinite(x) for x in end['position']),'invalid trajectory-end position')
     need(identity(c)==ident,'trajectory pawn/life correlation')
     need(all(end[k]==rows[0][k] for k in ('pid','source','world')),'trajectory process/source/world correlation')
@@ -152,25 +220,17 @@ def dodge_chain(raw,rows,direction):
     for commit in [r for r in raw if r['kind']=='dodgeCommit']:
         state=commit['combat']
         need(identity(state)==ident and int(state['commandId'])==command and state['dodge']==c['dodge'] and state['dodgeStart']==c['dodgeStart'],'trajectory commit identity changed')
-    failures=[]
-    sent=[intent['sentX'],intent['sentY']];received=[receipt['intentX'],receipt['intentY']]
-    need(all(isinstance(x,(int,float)) and math.isfinite(x) for x in sent+received),'invalid direction snapshot data')
-    if sent!=snapshot:failures.append('valid edges produced wrong sent snapshot')
-    if received!=sent:failures.append('receipt changed sent direction snapshot')
-    if admission['admissionResult']!=0:failures.append('valid Dodge rejected by authority')
-    yaw=receipt['intentYaw'];need(isinstance(yaw,(int,float)) and math.isfinite(yaw),'invalid intent yaw')
-    need(intent['yaw']==yaw,'intent/receipt yaw correlation')
-    a=math.radians(yaw);x,y=snapshot;world=[x*math.cos(a)-y*math.sin(a),x*math.sin(a)+y*math.cos(a),0]
-    model=vec(admission['modelDirection'],'missing admission model direction')
-    if any(abs(x-y)>.0001 for x,y in zip(model,world)):failures.append('valid snapshot produced wrong authority model direction')
-    return dict(command=command,pawnId=ident[0],life=ident[1],trajectorySequence=c['dodge'],singleCommandTrial=True,
+    return dict(base,outcome='TERMINAL_TRAJECTORY',trajectorySequence=c['dodge'],
                 receivedOrigin=vec(receipt['receivedPosition'],'invalid authority receipt position'),
                 trajectoryHeading=vec(c['dodgeDirection'],'invalid trajectory direction'),
-                intent=intent,receipt=receipt,admission=admission,end=end,snapshot=snapshot,
-                expectedWorldDirection=world,admissionVelocity=velocity,directionEdges=direction_edges,dodgeEdge=edge,reasons=failures)
+                end=end)
 
 def dodge(raw,rows,direction):
     chain=dodge_chain(raw,rows,direction)
+    if chain['end'] is None:
+        return dict(pass_=False,reasons=chain['reasons'],correlation=chain,
+                    failureEstablishedAt=chain['failureEstablishedAt'],firstFrame=chain['firstFrame'],lastFrame=chain['lastFrame'],
+                    observationScope=chain['observationScope'])
     end=chain['end'];receipt=chain['receipt'];c=end['combat'];start=c['dodgeStart'];stop=c['dodgeMotionEnd'];origin=chain['receivedOrigin']
     heading=chain['trajectoryHeading'];expected=chain['expectedWorldDirection']
     actual=distance(origin,end['position']);reasons=list(chain['reasons'])
