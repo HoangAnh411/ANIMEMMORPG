@@ -18,7 +18,7 @@ struct FU04R1InputAccess
 };
 namespace
 {
-constexpr auto Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
+constexpr auto U04R1Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
 struct FAdapter
 {
  TSet<FKey> Observed;FReleaseGate Gate;FPreferences Preferences;TArray<FVector2D> Sent;
@@ -31,7 +31,7 @@ struct FAdapter
  FVector2D Snapshot() const{return ObservedDodgeDirection(Observed,Gate,Preferences);}
 };
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Edges,"AnimeMMORPG.U04.R1.Input.EdgeOrder",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Edges,"AnimeMMORPG.U04.R1.Input.EdgeOrder",U04R1Flags)
 bool FU04R1Edges::RunTest(const FString&)
 {
  FAdapter A;A.Edge(EKeys::W,true);A.Edge(EKeys::LeftShift,true);
@@ -54,7 +54,7 @@ bool FU04R1Edges::RunTest(const FString&)
  TestTrue(TEXT("model normalizes frozen diagonal"),Diagonal.Dodge().Direction.Equals(FVector(1,1,0).GetSafeNormal(),1.e-12));
  return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Axes,"AnimeMMORPG.U04.R1.Input.BindingsAxesAliases",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Axes,"AnimeMMORPG.U04.R1.Input.BindingsAxesAliases",U04R1Flags)
 bool FU04R1Axes::RunTest(const FString&)
 {
  const FKey Keys[]={EKeys::W,EKeys::S,EKeys::A,EKeys::D};
@@ -72,7 +72,7 @@ bool FU04R1Axes::RunTest(const FString&)
  B.Edge(EKeys::RightControl,true);TestEqual(TEXT("unblocked alias independent"),B.Snapshot(),FVector2D(1,1));
  return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Quarantine,"AnimeMMORPG.U04.R1.Input.QuarantineLifecycle",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Quarantine,"AnimeMMORPG.U04.R1.Input.QuarantineLifecycle",U04R1Flags)
 bool FU04R1Quarantine::RunTest(const FString&)
 {
  for(const TCHAR* Transition:{TEXT("menu"),TEXT("focus loss"),TEXT("rebind"),TEXT("Retry"),TEXT("Resume")})
@@ -86,7 +86,7 @@ bool FU04R1Quarantine::RunTest(const FString&)
  }
  return true;
 }
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Players,"AnimeMMORPG.U04.R1.Input.LocalPlayerIsolation",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Players,"AnimeMMORPG.U04.R1.Input.LocalPlayerIsolation",U04R1Flags)
 bool FU04R1Players::RunTest(const FString&)
 {
  FTestWorldWrapper W;W.CreateTestWorld(EWorldType::Game);
