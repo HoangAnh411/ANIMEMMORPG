@@ -1,4 +1,4 @@
-"""U04-R1 v1: PRIMARY=sampleEntryWall, no clock substitution. fail-closed analysis of unfiltered rendered game-thread samples.
+"""U04-R1 candidate: PRIMARY=sampleEntryWall, no clock substitution. Fail-closed analysis of unfiltered rendered game-thread samples.
 
 Percentiles use linear interpolation at rank (n-1)*p (numpy default convention).
 Boundary interpolation uses alpha=(boundary-left.worldTime)/(right.worldTime-left.worldTime).
@@ -7,7 +7,7 @@ All quantities are centimeters and seconds. No instantaneous-FPS averaging.
 import argparse, bisect, hashlib, json, math, re
 from pathlib import Path
 
-VERSION = 'u04r1-entry-2'
+VERSION = 'u04r1-entry-3'
 PROFILE = {'t.IdleWhenNotForeground': 0, 'r.VSync': 0, 'r.ScreenPercentage': 50,
            'r.LumenScene.SurfaceCache.AtlasSize': 2048, 'r.RenderTargetPoolMin': 128,
            'r.Streaming.PoolSize': 256, 'r.Lumen.DiffuseIndirect.Allow': 0,
@@ -59,33 +59,135 @@ def distance(a,b):return math.hypot(b[0]-a[0],b[1]-a[1])
 
 def vector(text):return [float(v) for v in re.findall(r'[XYZ]=([-+0-9.eE]+)',text)]
 
+def dodge_chain(raw,rows,direction):
+    """Single-Dodge trial correlation. Missing/ambiguous evidence is INVALID.
+
+    Receipt.command is the received command. Receipt.commandId is a stale
+    published snapshot and MUST NOT be used as the receipt's command identity.
+    Intent/edge pawn paths are bridged to GUID/life by native frame samples.
+    """
+    def need(condition,reason):
+        if not condition:raise ValueError(reason)
+    def one(items,reason):
+        need(len(items)==1,reason);return items[0]
+    def vec(text,reason):
+        need(isinstance(text,str),reason)
+        number=r'([-+0-9.eE]+)'
+        match=re.fullmatch(r'\s*X='+number+r'\s+Y='+number+r'\s+Z='+number+r'\s*',text)
+        need(match is not None,reason)
+        v=[float(x) for x in match.groups()];need(all(math.isfinite(x) for x in v),reason);return v
+    def identity(j):
+        pawn,life=j['pawnId'],j['life']
+        need(bool(pawn) and isinstance(life,(int,float)) and math.isfinite(life) and life>0 and int(life)==life,'invalid pawn/life correlation')
+        need(j['lifeId']==f'{pawn}:{int(life)}','inconsistent lifeId correlation')
+        return pawn,life
+    intent=one([r for r in raw if r['kind']=='IntentDirection' and r.get('commandType')==1],'not exactly one Dodge intent')
+    need(intent['controlState']==0 and intent['windowActive'] and not intent['motorLocked'],'Dodge intent not in eligible playing state')
+    receipt=one([r for r in raw if r['kind']=='Received' and r.get('commandType')==1],'not exactly one authority dodge receipt')
+    command=intent['command'];need(command==receipt['command'],'intent/receipt command correlation')
+    need(isinstance(command,(int,float)) and math.isfinite(command) and command>0 and int(command)==command,'invalid Dodge command')
+    # Trajectory.commandId is the last processed command snapshot. It is a
+    # usable cross-check only under this explicitly enforced single-command trial.
+    need(all(r['command']==command for r in raw if r['kind']=='Received'),'additional command in single-Dodge trial')
+    admission=one([r for r in raw if r['kind']=='AuthorityAdmission' and r.get('command')==command],'missing/ambiguous command-correlated authority admission')
+    ident=identity(receipt);need(identity(admission)==ident,'receipt/admission pawn/life correlation')
+    need(int(admission['commandId'])==command,'admission commandId correlation')
+    mapped=[r for r in rows if r.get('pawnPath')==intent['pawn']]
+    need(bool(mapped),'intent pawn path has no native GUID/life bridge')
+    need(all(r['pawn']==ident[0] and identity(r['combat'])==ident and r['controller']==intent['controller'] for r in mapped),'intent/frame pawn/life/controller correlation')
+    need(len(mapped)==len(rows),'pawn path changed/missing in trial')
+    velocity=vec(admission['velocityBeforeBatch'],'invalid authority admission velocityBeforeBatch')
+    need(math.hypot(*velocity[:2])<=.01,'not stationary at authority admission (velocityBeforeBatch)')
+    # EventSerial establishes controller dispatch order, not OS key state or frame equality.
+    serials=[r['diagnosticSerial'] for r in raw]
+    need(all(b>a for a,b in zip(serials,serials[1:])),'missing/duplicate/reordered diagnostic serial')
+    keys={int(k['bindingAction']):k for k in intent['keys']}
+    need(all(i in keys for i in (0,1,2,3,10)),'missing binding snapshot')
+    aliases={'LeftShift':('LeftShift','RightShift'),'RightShift':('LeftShift','RightShift'),
+             'LeftControl':('LeftControl','RightControl'),'RightControl':('LeftControl','RightControl')}
+    def physical(binding):return aliases.get(binding,(binding,))
+    edges=[r for r in raw if r['kind']=='PhysicalEdge' and r['diagnosticSerial']<intent['diagnosticSerial']]
+    need(bool(edges),'missing pre-intent physical edges')
+    edge=edges[-1];dodge_key=keys[10]['binding']
+    need(edge['key'] in physical(dodge_key) and edge['down'] and edge['newEdge'],'missing new Dodge press before intent')
+    need(edge['pawn']==intent['pawn'] and edge['controller']==intent['controller'],'Dodge edge pawn/controller correlation')
+    need(edge['frame']==intent['frame'],'Dodge snapshot not at dispatch frame')
+    need(edge['key']==dodge_key,'physical modifier alias gate not individually observable')
+    def eligible(e,action):
+        snapshot=one([k for k in e['keys'] if k['bindingAction']==action],'missing edge binding/gate snapshot')
+        need(snapshot['binding']==keys[action]['binding'],'binding changed before Dodge')
+        return (e['controlState']==0 and e['windowActive'] and not e['motorLocked'] and not e.get('console',False)
+                and snapshot['gateAllows'] and snapshot['observedPhysical'])
+    need(eligible(edge,10) and keys[10]['gateAllows'] and keys[10]['observedPhysical'],'Dodge press quarantined/not eligible')
+    held={};direction_edges=[]
+    for e in edges[:-1]:
+        if e['key'] not in {p for i in range(4) for p in physical(keys[i]['binding'])}:continue
+        need(e['pawn']==intent['pawn'] and e['controller']==intent['controller'],'direction edge pawn/controller correlation')
+        if not e['down']:held.pop(e['key'],None);continue
+        if not e['newEdge']:continue
+        actions=[i for i in range(4) if e['key'] in physical(keys[i]['binding'])]
+        need(all(e['key']==keys[i]['binding'] for i in actions),'direction alias gate not individually observable')
+        held[e['key']]=e
+        direction_edges.append(e)
+    active=[]
+    for i in range(4):
+        k=keys[i];pressed=bool(k['observedPhysical'] and k['gateAllows'])
+        proof=held.get(k['binding'])
+        if pressed:need(proof is not None and eligible(proof,i),'held direction lacks eligible pre-Dodge press')
+        active.append(pressed and proof is not None)
+    snapshot=[int(active[0])-int(active[1]),int(active[3])-int(active[2])]
+    expected={'forward':[1,0],'back':[-1,0],'left':[0,-1],'right':[0,1]}[direction]
+    need(snapshot==expected,'requested direction not validly held before Dodge edge')
+    need(intent['diagnosticSerial']<receipt['diagnosticSerial']<admission['diagnosticSerial'],'intent/receipt/admission order correlation')
+    ends=[r for r in raw if r['kind']=='dodgeCommit' and r['trajectoryEnd']]
+    end=one(ends,'missing/ambiguous trajectory-end commit');c=end['combat']
+    need(len(end['position'])==3 and all(isinstance(x,(int,float)) and math.isfinite(x) for x in end['position']),'invalid trajectory-end position')
+    need(identity(c)==ident,'trajectory pawn/life correlation')
+    need(all(end[k]==rows[0][k] for k in ('pid','source','world')),'trajectory process/source/world correlation')
+    need(int(c['commandId'])==command,'trajectory command correlation')
+    need(c['dodge']==receipt['dodge']+1,'trajectory sequence correlation')
+    need(c['dodgeStart']==admission['modelDodgeStart']==admission['at'],'admission/trajectory start correlation')
+    need(end['at']==c['dodgeMotionEnd'],'trajectory-end deadline correlation')
+    need(admission['diagnosticSerial']<end['diagnosticSerial'],'admission/trajectory event order')
+    for commit in [r for r in raw if r['kind']=='dodgeCommit']:
+        state=commit['combat']
+        need(identity(state)==ident and int(state['commandId'])==command and state['dodge']==c['dodge'] and state['dodgeStart']==c['dodgeStart'],'trajectory commit identity changed')
+    failures=[]
+    sent=[intent['sentX'],intent['sentY']];received=[receipt['intentX'],receipt['intentY']]
+    need(all(isinstance(x,(int,float)) and math.isfinite(x) for x in sent+received),'invalid direction snapshot data')
+    if sent!=snapshot:failures.append('valid edges produced wrong sent snapshot')
+    if received!=sent:failures.append('receipt changed sent direction snapshot')
+    if admission['admissionResult']!=0:failures.append('valid Dodge rejected by authority')
+    yaw=receipt['intentYaw'];need(isinstance(yaw,(int,float)) and math.isfinite(yaw),'invalid intent yaw')
+    need(intent['yaw']==yaw,'intent/receipt yaw correlation')
+    a=math.radians(yaw);x,y=snapshot;world=[x*math.cos(a)-y*math.sin(a),x*math.sin(a)+y*math.cos(a),0]
+    model=vec(admission['modelDirection'],'missing admission model direction')
+    if any(abs(x-y)>.0001 for x,y in zip(model,world)):failures.append('valid snapshot produced wrong authority model direction')
+    return dict(command=command,pawnId=ident[0],life=ident[1],trajectorySequence=c['dodge'],singleCommandTrial=True,
+                receivedOrigin=vec(receipt['receivedPosition'],'invalid authority receipt position'),
+                trajectoryHeading=vec(c['dodgeDirection'],'invalid trajectory direction'),
+                intent=intent,receipt=receipt,admission=admission,end=end,snapshot=snapshot,
+                expectedWorldDirection=world,admissionVelocity=velocity,directionEdges=direction_edges,dodgeEdge=edge,reasons=failures)
+
 def dodge(raw,rows,direction):
-    commits=[r for r in raw if r['kind']=='dodgeCommit' and r['trajectoryEnd']]
-    if not commits:raise ValueError('no observed trajectory-end commit')
-    end=commits[0];c=end['combat'];start=c['dodgeStart'];stop=c['dodgeMotionEnd']
-    receipts=[r for r in raw if r['kind']=='Received' and r.get('commandType')==1]
-    if len(receipts)!=1:raise ValueError('not exactly one authority dodge receipt')
-    receipt=receipts[0];origin=vector(receipt['receivedPosition'])
-    if len(origin)!=3:raise ValueError('authority receipt position missing')
-    heading=vector(c['dodgeDirection']);expected={'forward':[1,0],'back':[ -1,0],'left':[0,-1],'right':[0,1]}[direction]
-    actual=distance(origin,end['position']);reasons=[]
+    chain=dodge_chain(raw,rows,direction)
+    end=chain['end'];receipt=chain['receipt'];c=end['combat'];start=c['dodgeStart'];stop=c['dodgeMotionEnd'];origin=chain['receivedOrigin']
+    heading=chain['trajectoryHeading'];expected=chain['expectedWorldDirection']
+    actual=distance(origin,end['position']);reasons=list(chain['reasons'])
     if abs(actual-300)>5:reasons.append('dodge distance')
     if abs(stop-start-.25)>1e-6:reasons.append('trajectory duration')
     if abs(c['dodgeLockEnd']-start-.35)>1e-6:reasons.append('release gate deadline')
-    if len(heading)!=3 or any(abs(x-y)>.0001 for x,y in zip(heading[:2],expected)):reasons.append('wrong locked direction')
+    if len(heading)!=3 or any(abs(x-y)>.0001 for x,y in zip(heading,expected)):reasons.append('wrong locked direction')
     observed=[r for r in rows if start<=r['worldTime']<=c['dodgeLockEnd']]
     if not observed:raise ValueError('no dodge observation samples')
     if any(r['combat']['dodgeDirection']!=c['dodgeDirection'] for r in observed):reasons.append('direction changed')
     if any(r['mode']!=1 for r in observed):reasons.append('left ground before release')
     if any(r['kind']=='ActionStarted' and r['gameplaySeconds']<c['dodgeLockEnd'] and r['gameplaySeconds']>=start for r in raw):reasons.append('attack before release')
-    before=[r for r in rows if r['worldTime']<start]
-    if not before:raise ValueError('no stationary admission precondition')
-    if math.hypot(*before[-1]['velocity'][:2])>.01:raise ValueError('not stationary before admission')
     a=interpolate(rows,receipt['receive']);b=interpolate(rows,c['dodgeLockEnd'])
     return dict(pass_=not reasons,reasons=reasons,distanceCm=actual,errorCm=actual-300,
                 authorityReceive=receipt['receive'],authorityStart=start,authorityMotionEnd=stop,authorityLockEnd=c['dodgeLockEnd'],
                 modelOrigin=vector(c['dodgeOrigin']),originRule='authority receipt position, never model velocity/configuration',
-                origin=origin,endCommit=end,firstFrame=a['left']['frame'],lastFrame=b['right']['frame'])
+                correlation=chain,origin=origin,endCommit=end,firstFrame=a['left']['frame'],lastFrame=b['right']['frame'])
 
 def combo(raw,rows):
     actions=[r for r in raw if r['kind']=='ActionStarted']
@@ -173,7 +275,7 @@ def analyze(path,target,case):
             if case in ('walk','sprint'):g=movement(rows,case=='sprint')
             elif case=='combo':g=combo(raw,rows)
             else:g=dodge(raw,rows,case)
-        except (ValueError,KeyError,ZeroDivisionError) as e:result['reason']=str(e);return result
+        except (ValueError,KeyError,TypeError,OverflowError,ZeroDivisionError) as e:result['reason']=str(e);return result
         selected=[r for r in rows if g['firstFrame']<=r['frame']<=g['lastFrame']]
         result['gameplay']=g;result['cadence']=cadence(selected,target)
         cadence_only={'mean FPS outside 5%','fewer than 95% intervals within 10%','frame exceeds two periods'}
