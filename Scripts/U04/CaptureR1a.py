@@ -73,6 +73,7 @@ def main():
                 qualified=0
                 for attempt in range(1,5):
                     trial=f"fps{record['targetFPS']}-{case}-{attempt}";directory=out/trial;directory.mkdir();events=[]
+                    ledger['activeTrial']=dict(trial=trial,case=case,attempt=attempt,status='IN_PROGRESS');save()
                     command('U04B prepare');wait(.8);write_result(directory/'SETUP.json',c.metrics());photo(directory/'Before.png')
                     command('U04B begin '+trial);wait(.6)
                     if case=='previous':press('W',True);wait(.12);batch([('Shift',True)])
@@ -81,9 +82,13 @@ def main():
                     if 'Shift' in c.held:press('Shift',False)
                     if 'W' in c.held:press('W',False)
                     wait(.8);command('U04B end');photo(directory/'After.png')
-                    raw=session/'Raw'/(trial+'.jsonl');result=repro(load(raw),case,record['targetFPS'])
+                    raw=session/'Raw'/(trial+'.jsonl')
+                    try:result=repro(load(raw),case,record['targetFPS'])
+                    except (AssertionError,ValueError,KeyError,StopIteration) as error:
+                        result=dict(status='INVALID',acceptance=False,purpose='REPRO_ONLY',preconditionReasons=[repr(error)],gameplayReasons=[])
                     write_result(directory/'INPUT.json',dict(events=events));write_result(directory/'ASSERTIONS.json',result)
                     ledger['trials'].append(dict(trial=trial,case=case,attempt=attempt,status=result['status'],raw=str(raw),rawSHA256=hashlib.sha256(raw.read_bytes()).hexdigest(),assertions=str(directory/'ASSERTIONS.json')));save()
+                    ledger.pop('activeTrial',None)
                     print(trial,result['status'],result['preconditionReasons'],result.get('gameplayReasons'),flush=True)
                     if result['status']=='FAIL':raise RuntimeError('Valid-precondition gameplay FAIL: '+trial)
                     if result['status']=='PASS':qualified+=1
@@ -105,6 +110,10 @@ def main():
         except Exception as close:ledger['flushError']=repr(close)
         raise
     finally:
-        c.finish();ledger['remainingEvents']=events;save()
+        c.finish();ledger['remainingEvents']=events
+        if ledger.get('activeTrial'):
+            active=ledger['activeTrial'];active.update(status='INVALID',reason=ledger.get('error','aborted capture'))
+            write_result(out/active['trial']/'ABORTED-INPUT.json',dict(events=events,trial=active))
+        save()
 
 if __name__=='__main__':main()

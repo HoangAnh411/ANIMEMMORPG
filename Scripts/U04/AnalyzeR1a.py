@@ -10,6 +10,9 @@ def check_raw(raw):
     assert not any(r['kind']=='reset' for r in raw),'reset in window'
     rows=[r for r in raw if r['kind']=='frame']
     assert rows and all(r['worldType']==1 and r['netMode']==0 for r in rows),'not Solo Game world'
+    assert all(r['frameBeginCounter']==r['worldBeginCounter']==r['frame'] for r in rows),'clock frame alignment'
+    assert all(r['frameBeginWall']<=r['worldBeginWall']<=r['sampleEntryWall']<=r['collectorExitWall'] for r in rows),'clock phase ordering'
+    assert all(b['frame']==a['frame']+1 and b['sampleEntryWall']>a['sampleEntryWall'] for a,b in zip(rows,rows[1:])),'frame/clock discontinuity'
     return rows
 def idle(raw,fps):
     rows=check_raw(raw);start=rows[0]['worldTime']+1.5;end=start+15
@@ -38,6 +41,8 @@ def repro(raw,case,fps):
     if sequence[:len(expected)]!=expected:reasons.append('edge sequence precondition')
     prefix=edges[:len(expected)]
     if len(prefix)<len(expected):reasons.append('missing physical edge')
+    shift_edge=next((r for r in prefix if r['key']=='LeftShift' and r['down']),None)
+    if shift_edge and not any(k['bindingAction']==10 and k['gateAllows'] for k in shift_edge['keys']):reasons.append('dodge quarantined')
     same=bool(prefix) and len({r['frame'] for r in prefix})==1
     if case!='previous' and not same:reasons.append('same-frame precondition')
     intents=[r for r in raw if r['kind']=='IntentDirection' and r['commandType']==1]

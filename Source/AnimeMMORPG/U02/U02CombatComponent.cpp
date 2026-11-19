@@ -188,7 +188,7 @@ void UU02CombatComponent::ProcessQueuedIntents(double Now)
     {Snapshot.Phase=uint8(EPhase::Cancelled);Snapshot.ServerSeconds=Now;GetWorld()->GetSubsystem<UU02CollisionWorld>()->ObserveCombat(this);}
     for(const auto& R:Results)
     {
-        if(Model->Dodge().Sequence==R.Sequence)R1DirectionTrace(C,TEXT("AuthorityAdmission"),R.Sequence,Model->GetLife().Pawn,Model->GetLife().Generation,FVector2D(Model->Dodge().Direction.X,Model->Dodge().Direction.Y),uint8(R.Result));
+        if(GetWorld()->GetNetMode()!=NM_Standalone&&FParse::Param(FCommandLine::Get(),TEXT("U04R1InputTrace"))&&Commands.ContainsByPredicate([&](const auto& Entry){return Entry.Intent.Sequence==R.Sequence&&Entry.Intent.Command==ECommand::Dodge;}))R1DirectionTrace(C,TEXT("AuthorityAdmission"),R.Sequence,Model->GetLife().Pawn,Model->GetLife().Generation,FVector2D(Model->Dodge().Direction.X,Model->Dodge().Direction.Y),uint8(R.Result));
         OwnerAdmission.Command=R.Sequence;OwnerAdmission.Admission=uint8(R.Result);++OwnerAdmission.Revision;
         const bool Success=R.Result==EAdmission::Accepted||R.Result==EAdmission::Queued||R.Result==EAdmission::Replaced;
         if(Success){++AcceptedCount;if(R.Result==EAdmission::Queued)++QueuedCount;if(R.Result==EAdmission::Replaced)++ReplacedCount;LastReject=EReject::None;}
