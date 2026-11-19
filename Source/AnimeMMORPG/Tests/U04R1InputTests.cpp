@@ -17,40 +17,40 @@ struct FU04R1InputAccess
 };
 namespace
 {
-using namespace AnimeMMORPG::U01;
+namespace R1Controls=AnimeMMORPG::U01;
 constexpr auto U04R1Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
-struct FAdapter
+struct FU04R1Adapter
 {
- TSet<FKey> Observed;FReleaseGate Gate;FPreferences Preferences;TArray<FVector2D> Sent;
+ TSet<FKey> Observed;R1Controls::FReleaseGate Gate;R1Controls::FPreferences Preferences;TArray<FVector2D> Sent;
  void Edge(FKey K,bool Down,bool Locked=false)
  {
-  const bool New=IsNewObservedPress(Observed,K,Down);
+  const bool New=R1Controls::IsNewObservedPress(Observed,K,Down);
   if(Down){Observed.Add(K);Gate.Down(K,Locked);}else{Observed.Remove(K);Gate.Up(K);}
-  if(New&&!Locked&&Gate.Allows(K)&&CanonicalKey(K)==Preferences.Keys[Dodge])Sent.Add(Snapshot());
+  if(New&&!Locked&&Gate.Allows(K)&&R1Controls::CanonicalKey(K)==Preferences.Keys[R1Controls::Dodge])Sent.Add(Snapshot());
  }
- FVector2D Snapshot() const{return ObservedDodgeDirection(Observed,Gate,Preferences);}
+ FVector2D Snapshot() const{return R1Controls::ObservedDodgeDirection(Observed,Gate,Preferences);}
 };
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Edges,"AnimeMMORPG.U04.R1.Input.EdgeOrder",U04R1Flags)
 bool FU04R1Edges::RunTest(const FString&)
 {
- FAdapter A;A.Edge(EKeys::W,true);A.Edge(EKeys::LeftShift,true);
+ FU04R1Adapter A;A.Edge(EKeys::W,true);A.Edge(EKeys::LeftShift,true);
  TestEqual(TEXT("W then dodge, same dispatch frame"),A.Sent.Last(),FVector2D(1,0));
  A.Edge(EKeys::LeftShift,true);TestEqual(TEXT("repeat has no action"),A.Sent.Num(),1);
  A.Edge(EKeys::W,false);A.Edge(EKeys::D,true);
  TestEqual(TEXT("sent snapshot immutable"),A.Sent[0],FVector2D(1,0));
- FAdapter B;B.Edge(EKeys::LeftShift,true);B.Edge(EKeys::W,true);
+ FU04R1Adapter B;B.Edge(EKeys::LeftShift,true);B.Edge(EKeys::W,true);
  TestEqual(TEXT("dodge then W"),B.Sent[0],FVector2D::ZeroVector);
- FAdapter C;C.Edge(EKeys::W,true);C.Edge(EKeys::W,false);C.Edge(EKeys::LeftShift,true);
+ FU04R1Adapter C;C.Edge(EKeys::W,true);C.Edge(EKeys::W,false);C.Edge(EKeys::LeftShift,true);
  TestEqual(TEXT("W released before dodge"),C.Sent[0],FVector2D::ZeroVector);
  using namespace AnimeMMORPG;
  U02::FLifeId Life{FGuid(1,2,3,4),1};U03::FTimelineModel Model{Life};U03::FAdmissionContext Context;Context.bDodgeEnabled=true;
  TArray<U03::FActiveInterval> Out;
  Model.SubmitBatchUnopposed({{1,Life,U03::ECommand::Dodge,0,0,B.Sent[0]}},Context,Out);
- TestEqual(TEXT("zero direction retains backward model fallback"),Model.Dodge().Direction,FVector(-1,0,0));
- FAdapter D;D.Edge(EKeys::W,true);D.Edge(EKeys::D,true);D.Edge(EKeys::LeftShift,true);
+ TestEqual(TEXT("zero direction retains backward model fallback"),Model.R1Controls::Dodge().Direction,FVector(-1,0,0));
+ FU04R1Adapter D;D.Edge(EKeys::W,true);D.Edge(EKeys::D,true);D.Edge(EKeys::LeftShift,true);
  U03::FTimelineModel Diagonal{Life};Diagonal.SubmitBatchUnopposed({{1,Life,U03::ECommand::Dodge,0,0,D.Sent[0]}},Context,Out);
  D.Edge(EKeys::W,false);D.Edge(EKeys::S,true);
- TestTrue(TEXT("model normalizes frozen diagonal"),Diagonal.Dodge().Direction.Equals(FVector(1,1,0).GetSafeNormal(),1.e-12));
+ TestTrue(TEXT("model normalizes frozen diagonal"),Diagonal.R1Controls::Dodge().Direction.Equals(FVector(1,1,0).GetSafeNormal(),1.e-12));
  return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FU04R1Axes,"AnimeMMORPG.U04.R1.Input.BindingsAxesAliases",U04R1Flags)
@@ -58,11 +58,11 @@ bool FU04R1Axes::RunTest(const FString&)
 {
  const FKey Keys[]={EKeys::W,EKeys::S,EKeys::A,EKeys::D};
  const FVector2D Expected[]={FVector2D(1,0),FVector2D(-1,0),FVector2D(0,-1),FVector2D(0,1)};
- for(int32 I=0;I<4;++I){FAdapter A;A.Edge(Keys[I],true);TestEqual(TEXT("cardinal"),A.Snapshot(),Expected[I]);}
- FAdapter A;A.Edge(EKeys::W,true);A.Edge(EKeys::S,true);A.Edge(EKeys::A,true);A.Edge(EKeys::D,true);
+ for(int32 I=0;I<4;++I){FU04R1Adapter A;A.Edge(Keys[I],true);TestEqual(TEXT("cardinal"),A.Snapshot(),Expected[I]);}
+ FU04R1Adapter A;A.Edge(EKeys::W,true);A.Edge(EKeys::S,true);A.Edge(EKeys::A,true);A.Edge(EKeys::D,true);
  TestEqual(TEXT("opposing axes cancel"),A.Snapshot(),FVector2D::ZeroVector);
  A.Edge(EKeys::S,false);A.Edge(EKeys::A,false);TestEqual(TEXT("release opponents"),A.Snapshot(),FVector2D(1,1));
- FAdapter B;B.Preferences.Keys[AnimeMMORPG::U01::Forward]=EKeys::H;B.Preferences.Keys[Right]=EKeys::LeftControl;B.Preferences.Keys[Dodge]=EKeys::J;
+ FU04R1Adapter B;B.Preferences.Keys[AnimeMMORPG::U01::Forward]=EKeys::H;B.Preferences.Keys[R1Controls::Right]=EKeys::LeftControl;B.Preferences.Keys[R1Controls::Dodge]=EKeys::J;
  B.Edge(EKeys::W,true);TestEqual(TEXT("old binding excluded"),B.Snapshot(),FVector2D::ZeroVector);
  B.Edge(EKeys::H,true);B.Edge(EKeys::LeftControl,true);B.Edge(EKeys::RightControl,true);B.Edge(EKeys::J,true);
  TestEqual(TEXT("rebound keys and alias counted once"),B.Sent.Last(),FVector2D(1,1));
@@ -76,11 +76,11 @@ bool FU04R1Quarantine::RunTest(const FString&)
 {
  for(const TCHAR* Transition:{TEXT("menu"),TEXT("focus loss"),TEXT("rebind"),TEXT("Retry"),TEXT("Resume")})
  {
-  FAdapter A;A.Edge(EKeys::W,true);A.Edge(EKeys::LeftShift,true);A.Gate.Lock();A.Edge(EKeys::LeftShift,true);
+  FU04R1Adapter A;A.Edge(EKeys::W,true);A.Edge(EKeys::LeftShift,true);A.Gate.Lock();A.Edge(EKeys::LeftShift,true);
   TestEqual(Transition,A.Snapshot(),FVector2D::ZeroVector);TestEqual(TEXT("held dodge not repeated"),A.Sent.Num(),1);
   A.Edge(EKeys::LeftShift,false);A.Edge(EKeys::LeftShift,true);TestEqual(TEXT("direction still quarantined"),A.Sent.Last(),FVector2D::ZeroVector);
   A.Edge(EKeys::W,false);A.Edge(EKeys::W,true);TestEqual(TEXT("physical release rearms direction"),A.Snapshot(),FVector2D(1,0));
-  FAdapter EnterLocked;EnterLocked.Edge(EKeys::W,true,true);EnterLocked.Edge(EKeys::LeftShift,true,true);
+  FU04R1Adapter EnterLocked;EnterLocked.Edge(EKeys::W,true,true);EnterLocked.Edge(EKeys::LeftShift,true,true);
   TestEqual(TEXT("press during lock excluded"),EnterLocked.Snapshot(),FVector2D::ZeroVector);TestEqual(TEXT("no action during lock"),EnterLocked.Sent.Num(),0);
  }
  return true;
@@ -91,7 +91,7 @@ bool FU04R1Players::RunTest(const FString&)
  FTestWorldWrapper W;W.CreateTestWorld(EWorldType::Game);
  auto* A=W.GetTestWorld()->SpawnActor<AU01PlayerController>();auto* B=W.GetTestWorld()->SpawnActor<AU01PlayerController>();
  auto* LA=NewObject<ULocalPlayer>(GEngine);auto* LB=NewObject<ULocalPlayer>(GEngine);A->SetPlayer(LA);B->SetPlayer(LB);
- FPreferences P;FU04R1InputAccess::Edge(A,EKeys::W,true);
+ R1Controls::FPreferences P;FU04R1InputAccess::Edge(A,EKeys::W,true);
  TestEqual(TEXT("A observed key"),FU04R1InputAccess::Snapshot(A,P),FVector2D(1,0));
  TestEqual(TEXT("B has no A edge"),FU04R1InputAccess::Snapshot(B,P),FVector2D::ZeroVector);
  FU04R1InputAccess::Edge(B,EKeys::S,true);FU04R1InputAccess::Edge(A,EKeys::W,true,true);
