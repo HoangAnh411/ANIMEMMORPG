@@ -10,6 +10,19 @@ def frames(fps=120,n=1201):
                  position=[500*i/fps,0,98]) for i in range(n)]
 
 class Method(unittest.TestCase):
+    def test_exact_cadence_thresholds(self):
+        def with_intervals(intervals):
+            a=frames(n=len(intervals)+1);at=0
+            for i,r in enumerate(a):
+                r['sampleEntryWall']=at
+                if i<len(intervals):at+=intervals[i]
+            return a
+        period=1/120
+        self.assertTrue(cadence(with_intervals([period]*95+[period*1.11]*5),120)['pass_'])
+        self.assertIn('fewer than 95% intervals within 10%',cadence(with_intervals([period]*94+[period*1.11]*6),120)['reasons'])
+        # Put the doubled interval first to avoid accumulated binary rounding at equality.
+        self.assertTrue(cadence(with_intervals([period*2]+[period]*99),120)['pass_'])
+        self.assertIn('frame exceeds two periods',cadence(with_intervals([period*2+1e-8]+[period]*99),120)['reasons'])
     def test_entry_immutable_and_no_clock_fallback(self):
         a=frames()
         for i,r in enumerate(a):r['wall']+=i*.001
