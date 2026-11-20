@@ -12,13 +12,23 @@ def sha(path):
 def read(path):return json.loads(Path(path).read_text(encoding='utf-8-sig'))
 def write(path,data):Path(path).write_text(json.dumps(data,indent=2),encoding='utf-8')
 def frozen(path):
-    m=read(path);assert m['batchId']=='R1b-20261120-01' and m['status']=='FROZEN'
+    m=read(path);assert m['batchId']=='R1b-20261120-C1' and m['status']=='FROZEN'
     assert m['nativeSource']=='8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4'
     assert m['analyzerVersion']=='u04r1-entry-4'
     assert ROOT==Path(m['clone']).resolve()
     for r in m['frozenFiles']:assert sha(ROOT/r['path'])==r['sha256'],('Frozen tool changed',r['path'])
     assert not subprocess.check_output(['git','-C',str(ROOT),'diff',m['nativeSource'],'--','Source','Content','Config','Plugins','AnimeMMORPG.uproject'])
     assert not subprocess.check_output(['git','-C',str(ROOT),'status','--porcelain','--untracked-files=all','--','Source','Content','Config','Plugins','AnimeMMORPG.uproject'])
+    i=m['inheritance'];assert sha(i['manifest'])==i['manifestSHA256'] and sha(i['ledger'])==i['ledgerSHA256'] and sha(i['evidenceManifest'])==i['evidenceManifestSHA256']
+    old=read(i['manifest']);ledger=read(i['ledger']);assert ledger['halted'] and ledger['completedCaps']==[30]
+    assert len(i['trials'])==23 and ledger['trials']==i['trials']
+    assert all(t['status']=='PASS' and t['fps']==30 for t in i['trials'])
+    for key in ('nativeSource','analyzerVersion','analyzerSHA256','profile','cases','cadence','windows'):
+        assert m[key]==old[key],('Continuation changed accepted policy',key)
+    for f in old['frozenFiles']:assert sha(Path(old['clone'])/f['path'])==f['sha256']
+    for t in i['trials']:
+        assert sha(t['raw'])==t['rawSHA256']
+        assert sha(Path(old['clone'])/t['assertions'])==t['assertionsSHA256']
     return m
 def reused_package(m):
     index=read(m['buildIdentity']);assert sha(m['buildIdentity'])==m['buildIdentitySHA256']

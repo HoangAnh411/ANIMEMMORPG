@@ -9,7 +9,7 @@ from R1bSession import Session
 def main():
     p=argparse.ArgumentParser();p.add_argument('--record',type=Path,required=True);a=p.parse_args();record=read(a.record);m=frozen(record['batchManifest'])
     ledger=read(Path(m['isolationRoot'])/'Runs/BATCH-LEDGER.json')
-    assert record['purpose']=='ILLUSTRATIVE' and ledger['completedCaps']==[30,60,120] and not ledger['halted']
+    assert record['purpose']=='ILLUSTRATIVE' and ledger['completedCaps']==m['fpsOrder'] and not ledger['halted']
     out=a.record.parent/'Illustrative';out.mkdir();s=Session(record);report=dict(completed=False,acceptance=False,trials=[],process=record)
     cv2.setNumThreads(1)
     try:

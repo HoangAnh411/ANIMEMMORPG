@@ -1,10 +1,14 @@
-param([Parameter(Mandatory=$true)][string]$Manifest,[Parameter(Mandatory=$true)][string]$RunId,[Parameter(Mandatory=$true)][ValidateSet(30,60,120)][int]$FPS,[ValidateSet('NUMERIC','ILLUSTRATIVE')][string]$Purpose='NUMERIC')
+param([Parameter(Mandatory=$true)][string]$Manifest,[Parameter(Mandatory=$true)][string]$RunId,[Parameter(Mandatory=$true)][ValidateSet(30,60,120)][int]$FPS,[ValidateSet('NUMERIC','ILLUSTRATIVE')][string]$Purpose='NUMERIC',[Parameter(Mandatory=$true)][string]$StopProof)
 $ErrorActionPreference='Stop'
 $m=Get-Content -Raw -Encoding UTF8 $Manifest | ConvertFrom-Json
 $isolation=(Resolve-Path $m.isolationRoot).Path
 $out=Join-Path $isolation ('Runs/'+$RunId)
 if(Test-Path $out){throw 'Immutable R1b run already exists'}
-if(@(Get-CimInstance Win32_Process | Where-Object {$_.Name -eq 'AnimeMMORPG.exe' -and $_.CommandLine -and $_.CommandLine.Replace('\','/').Contains($isolation.Replace('\','/'))}).Count){throw 'Another R1b package process is active'}
+. (Join-Path $PSScriptRoot 'R1bLifecyclePolicy.ps1')
+$proof=Get-Content -Raw -Encoding UTF8 $StopProof | ConvertFrom-Json
+if(!$proof.completed -or !$proof.oldProcessExited -or !$proof.nextStartAllowed -or (Get-FileHash -LiteralPath $proof.record).Hash -ine $proof.recordSHA256){throw 'Missing/invalid immutable previous stop proof'}
+if(Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$proof.pid)){throw 'Previous PID exists/reused; refusing next Start'}
+if(@(Get-R1bSessions).Count){throw 'Another R1b package process is active'}
 New-Item -ItemType Directory -Path $out | Out-Null
 & python (Join-Path $PSScriptRoot 'R1bContract.py') --manifest $Manifest --out (Join-Path $out 'IDENTITY-GUARD.json')
 if($LASTEXITCODE -ne 0){throw 'Frozen contract/package guard failed; no process started'}
@@ -16,5 +20,5 @@ $argsA=@('/Game/AnimeMMORPG/Maps/L_CharacterCombatLab?U03Regression=1','-windowe
 # Visible window is the explicitly requested interactive Windows-input target.
 $p=Start-Process -FilePath $exe -ArgumentList $argsA -WorkingDirectory $package -WindowStyle Normal -PassThru
 $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+$p.Id)
-@{role='U04R1bPackage';purpose=$Purpose;pid=$p.Id;creationUTC=$live.CreationDate.ToUniversalTime().ToString('o');executable=$exe;binarySHA256=$m.gameSHA256;sourceSHA=$m.nativeSource;toolSHA=$m.toolCommit;repositoryHEAD=(git -C $m.clone rev-parse HEAD);isolationRoot=$isolation;packageRoot=$package;batchManifest=[IO.Path]::GetFullPath($Manifest);batchManifestSHA256=(Get-FileHash $Manifest).Hash;buildManifest=$m.buildIdentity;buildManifestSHA256=$m.buildIdentitySHA256;moduleSHA256=$m.moduleSHA256;engineSHA256=$m.engineSHA256;userDir=$user;log=$log;arguments=$argsA;targetFPS=$FPS;fixture=$true;startedUTC=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json -Depth 10 | Set-Content -Encoding UTF8 (Join-Path $out 'process.json')
+@{stopProof=[IO.Path]::GetFullPath($StopProof);stopProofSHA256=(Get-FileHash -LiteralPath $StopProof).Hash;role='U04R1bPackage';purpose=$Purpose;pid=$p.Id;creationUTC=$live.CreationDate.ToUniversalTime().ToString('o');executable=$exe;binarySHA256=$m.gameSHA256;sourceSHA=$m.nativeSource;toolSHA=$m.toolCommit;repositoryHEAD=(git -C $m.clone rev-parse HEAD);isolationRoot=$isolation;packageRoot=$package;batchManifest=[IO.Path]::GetFullPath($Manifest);batchManifestSHA256=(Get-FileHash $Manifest).Hash;buildManifest=$m.buildIdentity;buildManifestSHA256=$m.buildIdentitySHA256;moduleSHA256=$m.moduleSHA256;engineSHA256=$m.engineSHA256;userDir=$user;log=$log;arguments=$argsA;targetFPS=$FPS;fixture=$true;startedUTC=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json -Depth 10 | Set-Content -Encoding UTF8 (Join-Path $out 'process.json')
 Write-Output (Join-Path $out 'process.json')

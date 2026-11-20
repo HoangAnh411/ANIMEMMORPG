@@ -23,7 +23,7 @@ def main():
             if case in ledger['stoppedCases']:continue
             need,limit=m['cases'][case]['required'],m['cases'][case]['limit'];passed=0
             for attempt in range(1,limit+1):
-                trial=f"r1b-fps{record['targetFPS']}-{case}-{attempt}";folder=out/trial;folder.mkdir();s.events=[]
+                trial=f"c1-r1b-fps{record['targetFPS']}-{case}-{attempt}";folder=out/trial;folder.mkdir();s.events=[]
                 # Setup errors stop the batch; they never cause unbounded retries.
                 setup=s.setup(case);write(folder/'SETUP.json',setup);s.photo(folder/'Before.png')
                 active=dict(trial=trial,case=case,fps=record['targetFPS'],attempt=attempt,status='WINDOW_START_RESERVED',counted=True,beginInvocation=clock())
