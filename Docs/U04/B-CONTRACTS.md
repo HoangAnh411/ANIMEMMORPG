@@ -1,5 +1,7 @@
 # U04-B contract
 
+**U04-B technically ACCEPTED at `251335895394c5ddb260d875a05d26462fbd1d70`; closure/merge authorized2026-11-20. [Acceptance B](ACCEPTANCE-B.md) defines current scope; [continuation contract](R1b/Continuation/CONTRACT.md) and analyzer entry-4 govern final evidence. The original contract and INCOMPLETE status below remain historical.**
+
 Status: INCOMPLETE; not READY_FOR_REVIEW. Results in REPORT-B.md. Baseline main local/remote 18804bfa32b14471df1ffa4bd7aeaed6cd80074c. Independent review is required; no merge or acceptance is delegated.
 
 Implement U04.03 using real rendered Solo game-thread wall frame intervals at 30, 60, 120 FPS in that order. Caps and synthetic/model tests are never gameplay evidence. Mean FPS = interval count / sum(intervals); mean within 5%, at least 95% intervals within 10% of target period, no interval exceeding two periods. Missing frames, duplicate/nonmonotonic timestamps or lost focus invalidate a trial. Report P50/P95/P99/max and histogram. This is not scanout latency.

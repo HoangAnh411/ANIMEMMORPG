@@ -134,14 +134,14 @@ Cổng: luật Description được kiểm chứng trên Unreal (G02 A–E chỉ
 
 Phụ thuộc: U03.
 
-**Trạng thái hiện hành: U04-A ACCEPTED về kỹ thuật tại `50b738506f210a9c3de94c091826c7c8c2f6d49a`**, source/binary `b35ef63c7e9ffdfbb4088544350317a8f958723c`, không có lỗi chặn trong phạm vi review. [Acceptance A](U04/ACCEPTANCE-A.md), [report](U04/REPORT-A.md), [matrix](U04/A-TEST-MATRIX.md). Người dùng giao khép hồ sơ và fast-forward/push main ngày 2026-11-17; sau khi xác minh main mới chỉ khảo sát/lập kế hoạch chi tiết B để reviewer duyệt, **chưa triển khai U04-B/C/D**. Commit khép hồ sơ không phải nguồn binary. Giữ nguyên bằng chứng, failed/invalid runs và trạng thái bàn giao lịch sử; không chạy lại build/tests/game hoặc tác động Editor trong lượt khép. Không nghiệm thu Server đóng gói, FPS 30/60/120, hiệu năng sản phẩm hay soak D; số đo frame A chỉ mô tả điều kiện review.
+**Trạng thái hiện hành: U04-A và U04-B ACCEPTED về kỹ thuật.** A được nghiệm thu tại `50b738506f210a9c3de94c091826c7c8c2f6d49a`, binary `b35ef63c7e9ffdfbb4088544350317a8f958723c`; [Acceptance A](U04/ACCEPTANCE-A.md). B được reviewer chấp nhận tại **`251335895394c5ddb260d875a05d26462fbd1d70`**, native/binary **`8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4`**, analyzer entry-4; [Acceptance B](U04/ACCEPTANCE-B.md), [report tổng hợp](U04/R1b/Continuation/REPORT.md), [matrix69 PASS](U04/R1b/Continuation/MATRIX.csv). Đủ21 ô FPS thực30/60/120 theo profile Solo1280×720/internal50 và cadence game-thread collector entry;21 video minh họa riêng. Người dùng giao khép tài liệu, merge/push và xác minh main ngày2026-11-20. Commit khép không phải source binary mới; không chạy lại build/tests/game hoặc tác động Editor. Giữ nguyên mọi batch halted/FAIL/INVALID và evidence lịch sử. Không chứng nhận1080p/60FPS sản phẩm, GPU present/scanout, Server đóng gói, profiling C hoặc soak D. **C/D chưa triển khai; reviewer sẽ khảo sát và lập kế hoạch C.**
 
 - [x] U04.01 Hồi quy luật/tích hợp/camera/input dưới tải trong phạm vi A đã nghiệm thu, giữ mọi lượt fail.
 - [x] U04.02 Build đúng nguồn/hash; input Windows, xác nhận đúng map/player/tick trước đo trong phạm vi A đã nghiệm thu.
-- [ ] U04.03 FPS thực 30/60/120: đi/sprint 50/70 m trong 10 giây mô phỏng sau tăng tốc (±0,5 m), né 3 m ±0,05 m; combo 1,45 giây/220 damage với fixture riêng tắt crit.
+- [x] U04.03 FPS thực 30/60/120: đi/sprint 50/70 m trong 10 giây mô phỏng sau tăng tốc (±0,5 m), né 3 m ±0,05 m; combo 1,45 giây/220 damage với fixture riêng tắt crit — ACCEPTED trong profile/cadence B đã review.
 - [ ] U04.04 Profiler CPU/GPU/cấp phát, 1/10/40 mục tiêu × 1/3 hurtbox, kiểm chứng counter, tách warmup/debug.
 - [ ] U04.05 Combat thực ≥10 phút, 10 Retry, 5 vòng map, Alt-Tab giữ input, Quit/mở lại settings, nghe/xem trực tiếp.
-- [ ] U04.06 XML/log/CSV/profile/video/checksum, phân biệt phương pháp, giữ dữ liệu người dùng — đã áp dụng/nghiệm thu cho A; tiếp tục bắt buộc với B/C/D, chưa khép toàn U04.
+- [ ] U04.06 XML/log/CSV/profile/video/checksum, phân biệt phương pháp, giữ dữ liệu người dùng — đã áp dụng/nghiệm thu cho A/B; tiếp tục bắt buộc với C/D, chưa khép toàn U04.
 
 Bàn giao theo thứ tự: A — U04.01–02 xác minh binary/hồi quy; B — U04.03 tính đúng ở các FPS; C — U04.04 profiling và sửa điểm nghẽn; D — U04.05 soak/input/vòng map. U04.06 áp dụng mỗi đợt, giữ cả lượt fail. Benchmark 40 mục tiêu/hurtbox đo truy vấn combat, không chứng minh tải 40 người chơi/server. Ghi cấu hình máy và FPS đo thực; không đạt FPS yêu cầu thì báo thiếu bằng chứng, không thay bằng giá trị cap.
 

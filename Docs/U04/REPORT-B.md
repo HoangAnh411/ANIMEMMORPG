@@ -1,5 +1,7 @@
 # U04-B handoff — INCOMPLETE
 
+**Current status: U04-B technically ACCEPTED at `251335895394c5ddb260d875a05d26462fbd1d70`. The user authorized documentation closure and merge/push on2026-11-20. [Acceptance B](ACCEPTANCE-B.md), [combined report](R1b/Continuation/REPORT.md). The INCOMPLETE batch below is historical; all FAIL/INVALID verdicts and evidence remain unchanged. Native/binary remains8cbcb6a6, analyzer entry-4. No build/gameplay/Automation rerun for closure; C/D remain unstarted.**
+
 **Not READY_FOR_REVIEW; U04.03 is not passed and U04 is not closed.** Two unresolved gates remain: the directional dodge reproduction and insufficient120 FPS combo cadence evidence. Reviewer decides the follow-up. No acceptance, merge, runtime repair or U04-C/D work was performed.
 
 Baseline main local/remote18804bfa32b14471df1ffa4bd7aeaed6cd80074c. Branch `u04/b-fps-correctness`, isolated clone `Artifacts/U04/B/Source`, runs `Artifacts/U04/B/Runs`. Original main remains at baseline with its exact initial private/untracked status. U04-A closure/source attribution is unchanged.

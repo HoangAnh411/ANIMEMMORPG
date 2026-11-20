@@ -1,5 +1,7 @@
 # U04-B executed matrix
 
+**U04.03 technically ACCEPTED at `251335895394c5ddb260d875a05d26462fbd1d70`: [69 PASS/21 cells](R1b/Continuation/MATRIX.csv), [per-trial provenance](R1b/Continuation/TRIALS.csv), [Acceptance B](ACCEPTANCE-B.md). The38-trial matrix below preserves the original B batch; its verdicts are unchanged and do not contribute to R1b acceptance.**
+
 Status: **INCOMPLETE; not READY_FOR_REVIEW**. Source a1e536a79a60a4409e9a6cf64661008f1618e66f. All38 attempts retained:31 PASS,6 INVALID,1 FAIL. [Every trial](B-TRIALS.csv), [assertions/index](B-RESULTS.json), [report](REPORT-B.md).
 
 | Case | Required per FPS | 30 FPS | 60 FPS | 120 FPS |
