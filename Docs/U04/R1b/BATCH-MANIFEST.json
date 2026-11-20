@@ -1,0 +1,186 @@
+{
+  "batchId": "R1b-20261120-01",
+  "status": "FROZEN",
+  "base": "f158ce1c4c05c88c8afd590c5172b6134ca54b2c",
+  "nativeSource": "8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4",
+  "toolCommit": "7bc81afb62c3040ab523b13d695a5483fac45c77",
+  "clone": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Source",
+  "isolationRoot": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b",
+  "packageRoot": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1a\\Runs\\Build-R5-20261119\\Archive\\Windows",
+  "buildIdentity": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1a\\Runs\\Build-R5-20261119\\BUILD-IDENTITY.json",
+  "buildIdentitySHA256": "36a9aa975853f30238a370fbc6252390c39a578223d8f1908b4c7b46dccdce4d",
+  "gameSHA256": "915887c83acfe0d1668e1b4947807e31217452bd783f185f9f3bc63f67772e25",
+  "moduleSHA256": "0e43d13c82f49791e2e9ee522697f200c7f7d9ab6efbe392c44c2300aac01d37",
+  "engineSHA256": "a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143",
+  "analyzerVersion": "u04r1-entry-4",
+  "analyzerSHA256": "f792caa7ca850abf333b502083d67d7c806fea159bb90d406b2cd87973cf8cd0",
+  "acceptedAnalyzerGitBytesSHA256": "4dc9b55f75eb2ff64f413faca8679a009f8c58cf6ebaad718f83f52d5b378473",
+  "frozenFiles": [
+    {
+      "path": "Scripts/U01/F60Input.py",
+      "sha256": "d00cbf2f2f66435fb597a7c3f083160825ea479a36ca34fb7be6f532f0d6f127"
+    },
+    {
+      "path": "Scripts/U01/FReviewHost.ps1",
+      "sha256": "fcd8310059b243fcec65723728bdd6565f27bd0169f0c76852b1b5fdd473707c"
+    },
+    {
+      "path": "Scripts/U02/EnsureEditorMinimized.ps1",
+      "sha256": "667e0e58be2d2ff2bb770e82ebb1b921b57e93c171f5fa0c6085754dd79ec69b"
+    },
+    {
+      "path": "Scripts/U04/AnalyzeR1.py",
+      "sha256": "f792caa7ca850abf333b502083d67d7c806fea159bb90d406b2cd87973cf8cd0"
+    },
+    {
+      "path": "Scripts/U04/CaptureNumericR1b.py",
+      "sha256": "8b3da2f3058ceb1d62c14b81480df0c6cfe3b9cd808669a3cb460f8073db82bb"
+    },
+    {
+      "path": "Scripts/U04/CaptureVideoR1b.py",
+      "sha256": "133e7855ab9b33b26070f2473cd060903145afbbd4c181a82f8de50448c83121"
+    },
+    {
+      "path": "Scripts/U04/IdentityProcessA.py",
+      "sha256": "d4ff944c53faa78edefa71428060acd484372c80ab85eb4fb09b02b0b696ff47"
+    },
+    {
+      "path": "Scripts/U04/InvokeR1b.ps1",
+      "sha256": "e43c09d41d6760245dad2447b02b61eb576f3ea1cbd7df945623282cbb434f54"
+    },
+    {
+      "path": "Scripts/U04/R1bClient.py",
+      "sha256": "d247c22d910ea0e2ed354e86a3970f17ca7febede11250db130fcdf602ece28a"
+    },
+    {
+      "path": "Scripts/U04/R1bContract.py",
+      "sha256": "73cc749fa665ce8bbb98de2e2a2f9ac0c5db670ce703b6851248e455d182eead"
+    },
+    {
+      "path": "Scripts/U04/R1bPlacement.ps1",
+      "sha256": "a6a1ea25038a139fe6f3fb5fed5e1792f95f84a210788387d671e7e291733ba5"
+    },
+    {
+      "path": "Scripts/U04/R1bPreflight.py",
+      "sha256": "e83017fcfa6c2b1f08613cab5fdbd8512faa3a46c211a9ce19b54139c1223406"
+    },
+    {
+      "path": "Scripts/U04/R1bSession.py",
+      "sha256": "31fc26789faf8dc2f2dba5d2d9e991a815e51563b81d007f3111d6b0f2d75aba"
+    },
+    {
+      "path": "Scripts/U04/StartR1b.ps1",
+      "sha256": "ef049164c7bce44875aba9baa80304a5c3fa520e84737ef0537d08ed17429772"
+    },
+    {
+      "path": "Scripts/U04/StopR1b.ps1",
+      "sha256": "e04cc8c89b217b42aea1afdb5f7d76912af934b95594c862f4d9bee94c9d50c4"
+    },
+    {
+      "path": "Scripts/U04/TestHarnessR1b.py",
+      "sha256": "6ceffb2b20030583e6ff458639ad50a2c9ce3ebd06970bf26a1fa9e2af2e1115"
+    }
+  ],
+  "expectedSmoothing": false,
+  "fpsOrder": [
+    30,
+    60,
+    120
+  ],
+  "caseOrder": [
+    "walk",
+    "sprint",
+    "forward",
+    "back",
+    "left",
+    "right",
+    "combo"
+  ],
+  "cases": {
+    "walk": {
+      "required": 3,
+      "limit": 5
+    },
+    "sprint": {
+      "required": 3,
+      "limit": 5
+    },
+    "forward": {
+      "required": 3,
+      "limit": 5
+    },
+    "back": {
+      "required": 3,
+      "limit": 5
+    },
+    "left": {
+      "required": 3,
+      "limit": 5
+    },
+    "right": {
+      "required": 3,
+      "limit": 5
+    },
+    "combo": {
+      "required": 5,
+      "limit": 7
+    }
+  },
+  "profile": {
+    "viewport": [
+      1280,
+      720
+    ],
+    "internalPercentage": 50,
+    "vsync": 0,
+    "backgroundIdle": 0,
+    "lumenAtlas": 2048,
+    "renderTargetMinimumMiB": 128,
+    "streamingMiB": 256,
+    "lumenIndirect": 0,
+    "lumenReflections": 0,
+    "virtualShadow": 0,
+    "shadowQuality": 2,
+    "dilation": 1,
+    "fixedTime": false,
+    "fixedFrame": false,
+    "smoothing": false
+  },
+  "primaryClock": "sampleEntryWall",
+  "cadence": {
+    "meanFraction": 0.05,
+    "inBandPeriodFraction": 0.1,
+    "minimumInBandFraction": 0.95,
+    "maximumPeriods": 2
+  },
+  "windows": "unchanged AnalyzeR1.py entry-4, original receipt/release and bracketing rules",
+  "numericMedia": false,
+  "guardMilliseconds": 50,
+  "warmupAfterReadinessSeconds": 30,
+  "capStableMinimumSeconds": 10,
+  "illustrative": {
+    "afterAllNumeric": true,
+    "casesPerFPS": 7,
+    "videoFPS": 30,
+    "label": "ILLUSTRATIVE ONLY",
+    "skipStoppedGameplay": true
+  },
+  "policy": {
+    "reservedBeginCounts": true,
+    "setupError": "halt; no retries",
+    "toolError": "halt for reviewer; no edits or replacement batch",
+    "gameplayFail": "stop related case across later caps and media",
+    "focusRecoveryMaximumPerProcess": 1,
+    "focusLoss": "INVALID unless observed gameplay FAIL; release and flush only"
+  },
+  "inherited": {
+    "automation": "144/144",
+    "nativeRegression": "accepted R1a handoff f158ce1c; Docs/U04/R1a/REPORT.md",
+    "oldTrialsCounted": 0
+  },
+  "preflight": {
+    "protected": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Preflight-20261120\\PROTECTED.json",
+    "protectedSHA256": "7dc3f800feec491bca3ee736540dbae174d3b00e688008f25a5e8b1079e86176",
+    "hostBefore": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Preflight-20261120\\HOST-BEFORE.json"
+  }
+}
