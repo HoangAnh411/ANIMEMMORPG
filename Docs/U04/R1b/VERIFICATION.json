@@ -1,0 +1,24 @@
+{
+  "status": "INCOMPLETE",
+  "evidenceManifestSHA256": "7e20e62a742ad2f37e937840e3ff11cd61a5f250d27159f32e7dd4ba6b69aa2f",
+  "rawPublishedAssociationsVerified": 190,
+  "publishedOnlyVerified": 190,
+  "recomputedVerdictsMatched": 23,
+  "protectedHashesUnchanged": 34248,
+  "analyzerVersion": "u04r1-entry-4",
+  "nativeSourceUnchanged": true,
+  "mainUnchanged": "18804bfa32b14471df1ffa4bd7aeaed6cd80074c",
+  "R1aUnchanged": "f158ce1c4c05c88c8afd590c5172b6134ca54b2c",
+  "mediaIllustrations": 0,
+  "requiredMediaIllustrations": 21,
+  "reviewerReplay": [
+    "python Scripts/U04/VerifyEvidenceB.py Docs/U04/R1b/Evidence/Review-20261120/MANIFEST.json",
+    "python Scripts/U04/RecomputeR1b.py --manifest Docs/U04/R1b/BATCH-MANIFEST.json --out <new-output-directory>",
+    "On a separate host: verify published-only, decompress raw jsonl without transformations, run unchanged AnalyzeR1.py raw --fps 30 --case case --out new.json; manifest maps every raw/published SHA256."
+  ],
+  "warnings": [
+    "WINDOWPLACEMENT.Min cache differs; HWND identity, Show and Normal rectangles restored.",
+    "14 startup warnings retained in runtime warnings JSON.",
+    "No60/120 process or measurement; no media phase; no complete B readiness."
+  ]
+}
