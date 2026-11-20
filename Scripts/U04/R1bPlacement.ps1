@@ -1,0 +1,42 @@
+param([ValidateSet('Minimize','Restore')][string]$Mode,[Parameter(Mandatory=$true)][string]$Session,[Parameter(Mandatory=$true)][string]$IsolationRoot,[Parameter(Mandatory=$true)][string]$OriginalProject)
+$ErrorActionPreference='Stop'
+$path=(Resolve-Path $Session).Path;$isolation=(Resolve-Path $IsolationRoot).Path
+if(!$path.StartsWith($isolation+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Session outside R1b isolation'}
+$pref=Get-Content -Raw (Join-Path $isolation 'Runs/Preflight-20261120/HOST-BEFORE.json') | ConvertFrom-Json
+foreach($expected in $pref.editors){
+ $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+[int]$expected.pid)
+ if(!$live -or $live.ExecutablePath -ine $expected.exe -or $live.CreationDate.ToUniversalTime().ToString('o') -ne $expected.creationUTC){throw 'Original Editor creation identity changed; no placement action'}
+}
+. (Join-Path $PSScriptRoot '../U01/FReviewHost.ps1')
+. (Join-Path $PSScriptRoot '../U02/EnsureEditorMinimized.ps1')
+$file=Join-Path $path 'original-editor-windows.json'
+if($Mode -eq 'Minimize'){
+ $ready=Get-Content -Raw (Join-Path $path 'READINESS.json') | ConvertFrom-Json
+ if(!$ready.completed -or (Test-Path $file)){throw 'Fresh readiness/placement record required'}
+ $before=@(Suspend-FOriginalEditorWindows $OriginalProject)
+ ConvertTo-Json -InputObject $before -Depth 9 | Set-Content -Encoding UTF8 $file
+ ConvertTo-Json -InputObject @(Confirm-U02EditorMinimized $before) -Depth 9 | Set-Content -Encoding UTF8 (Join-Path $path 'editor-minimized.json')
+}else{
+ $before=Get-Content -Raw $file | ConvertFrom-Json
+ if(Test-Path (Join-Path $path 'editor-restored.json')){throw 'Immutable restore observation exists'}
+ Restore-FOriginalEditorWindows $before
+ for($settle=0;$settle -lt 4;$settle++){
+ Start-Sleep -Milliseconds 500
+ $after=@(Get-U02OriginalEditorWindows $OriginalProject);$ok=$true
+ # SetWindowPlacement alone can leave an owned floating Editor window iconic.
+ # Restore only a mismatched, still-owned HWND; then reapply its exact snapshot.
+ foreach($b in $before){
+  $a=@($after | Where-Object {$_.pid -eq $b.pid -and $_.hwnd -eq $b.hwnd})
+  if($a.Count -eq 1 -and $a[0].placement.Show -eq 2 -and $b.placement.Show -ne 2){
+   [uint32]$owner=0;[FReviewHostNative]::GetWindowThreadProcessId([IntPtr][long]$b.hwnd,[ref]$owner) | Out-Null
+   if($owner -ne $b.pid){throw 'Original HWND owner changed; refusing restore'}
+   [FReviewHostNative]::ShowWindow([IntPtr][long]$b.hwnd,9) | Out-Null
+   Restore-FOriginalEditorWindows @($b)
+  }
+ }
+ foreach($b in $before){$a=@($after | Where-Object {$_.pid -eq $b.pid -and $_.hwnd -eq $b.hwnd});if($a.Count -ne 1){$ok=$false;continue};if($a[0].placement.Show -ne $b.placement.Show){$ok=$false};foreach($edge in @('Left','Top','Right','Bottom')){if($a[0].placement.Normal.$edge -ne $b.placement.Normal.$edge){$ok=$false}}}
+ if($ok){break}
+ }
+ @{completed=$ok;settleChecks=($settle+1);windows=$after} | ConvertTo-Json -Depth 10 | Set-Content -Encoding UTF8 (Join-Path $path 'editor-restored.json')
+ if(!$ok){throw 'Original window placement mismatch'}
+}
