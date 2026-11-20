@@ -1,0 +1,741 @@
+{
+  "batchId": "R1b-20261120-C1",
+  "status": "FROZEN",
+  "base": "e1ba0d6cc2d1d8c6acdc4f329c82c68eba5e4b24",
+  "nativeSource": "8cbcb6a6d6dfc4e29bff8731a6aaab187f887cb4",
+  "toolCommit": "a201b850c9f90a07703a64116d2afe4bf6e322ab",
+  "clone": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b-C1\\Source",
+  "isolationRoot": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b-C1",
+  "packageRoot": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1a\\Runs\\Build-R5-20261119\\Archive\\Windows",
+  "buildIdentity": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1a\\Runs\\Build-R5-20261119\\BUILD-IDENTITY.json",
+  "buildIdentitySHA256": "36a9aa975853f30238a370fbc6252390c39a578223d8f1908b4c7b46dccdce4d",
+  "gameSHA256": "915887c83acfe0d1668e1b4947807e31217452bd783f185f9f3bc63f67772e25",
+  "moduleSHA256": "0e43d13c82f49791e2e9ee522697f200c7f7d9ab6efbe392c44c2300aac01d37",
+  "engineSHA256": "a423ab94410aa4f4cc34d99a2af75240c5d0e376a33d903a3e819fecf1177143",
+  "analyzerVersion": "u04r1-entry-4",
+  "analyzerSHA256": "f792caa7ca850abf333b502083d67d7c806fea159bb90d406b2cd87973cf8cd0",
+  "acceptedAnalyzerGitBytesSHA256": "4dc9b55f75eb2ff64f413faca8679a009f8c58cf6ebaad718f83f52d5b378473",
+  "frozenFiles": [
+    {
+      "path": "Scripts/U01/F60Input.py",
+      "sha256": "d00cbf2f2f66435fb597a7c3f083160825ea479a36ca34fb7be6f532f0d6f127"
+    },
+    {
+      "path": "Scripts/U01/FReviewHost.ps1",
+      "sha256": "fcd8310059b243fcec65723728bdd6565f27bd0169f0c76852b1b5fdd473707c"
+    },
+    {
+      "path": "Scripts/U02/EnsureEditorMinimized.ps1",
+      "sha256": "667e0e58be2d2ff2bb770e82ebb1b921b57e93c171f5fa0c6085754dd79ec69b"
+    },
+    {
+      "path": "Scripts/U04/AnalyzeR1.py",
+      "sha256": "f792caa7ca850abf333b502083d67d7c806fea159bb90d406b2cd87973cf8cd0"
+    },
+    {
+      "path": "Scripts/U04/CaptureNumericR1b.py",
+      "sha256": "456fced8cb693e98cb166449f142e8c91b6409976f33eb0939f78e2b78bd2c8a"
+    },
+    {
+      "path": "Scripts/U04/CaptureVideoR1b.py",
+      "sha256": "7c46707a05a65b71b400b1c2908fcffb577913099c8d28310d054a67f9811f5b"
+    },
+    {
+      "path": "Scripts/U04/IdentityProcessA.py",
+      "sha256": "d4ff944c53faa78edefa71428060acd484372c80ab85eb4fb09b02b0b696ff47"
+    },
+    {
+      "path": "Scripts/U04/InvokeR1b.ps1",
+      "sha256": "e98b6eeff7742673b93c22998e8cdef06e7e5fb02644593de57e980ac21d34a6"
+    },
+    {
+      "path": "Scripts/U04/R1bClient.py",
+      "sha256": "d247c22d910ea0e2ed354e86a3970f17ca7febede11250db130fcdf602ece28a"
+    },
+    {
+      "path": "Scripts/U04/R1bContract.py",
+      "sha256": "c74e16466f83c56427c6293c01f04b226ad9f8fc25b502a9feda9907c999544d"
+    },
+    {
+      "path": "Scripts/U04/R1bLifecyclePolicy.ps1",
+      "sha256": "91f7622dd05983b7d659eca835647b9a38dc9eca95f0de9a6dbd70d0330055b0"
+    },
+    {
+      "path": "Scripts/U04/R1bPlacement.ps1",
+      "sha256": "a6a1ea25038a139fe6f3fb5fed5e1792f95f84a210788387d671e7e291733ba5"
+    },
+    {
+      "path": "Scripts/U04/R1bPreflight.py",
+      "sha256": "cded08fa980439e554cef410a34320b7ef60317e59757940d653e3574b0ecb28"
+    },
+    {
+      "path": "Scripts/U04/R1bSession.py",
+      "sha256": "c94b0ba889e0cd0950f3ca06858b2749690995e7de7e768b4cbfe916b3cc7500"
+    },
+    {
+      "path": "Scripts/U04/StartR1b.ps1",
+      "sha256": "2db8f2f116ded6eac87717336a689a31b07bfe60b88133cc89ae14b6df28bb94"
+    },
+    {
+      "path": "Scripts/U04/StopR1b.ps1",
+      "sha256": "050a182a61409745ddc63f21fd40d5b0e4f059f991b674648fa28e4a511829e2"
+    },
+    {
+      "path": "Scripts/U04/TestHarnessR1b.py",
+      "sha256": "38edf5260c27c8b7c689152a6664d005e5e66f767b78645e0f1f9dc608c791d7"
+    },
+    {
+      "path": "Scripts/U04/TestLifecycleR1b.ps1",
+      "sha256": "664f85b84d55e947f537d2cbaa9b295e7f4fbb2648e66df4cc8c9b6f7ef3c77a"
+    }
+  ],
+  "expectedSmoothing": false,
+  "fpsOrder": [
+    60,
+    120
+  ],
+  "caseOrder": [
+    "walk",
+    "sprint",
+    "forward",
+    "back",
+    "left",
+    "right",
+    "combo"
+  ],
+  "cases": {
+    "walk": {
+      "required": 3,
+      "limit": 5
+    },
+    "sprint": {
+      "required": 3,
+      "limit": 5
+    },
+    "forward": {
+      "required": 3,
+      "limit": 5
+    },
+    "back": {
+      "required": 3,
+      "limit": 5
+    },
+    "left": {
+      "required": 3,
+      "limit": 5
+    },
+    "right": {
+      "required": 3,
+      "limit": 5
+    },
+    "combo": {
+      "required": 5,
+      "limit": 7
+    }
+  },
+  "profile": {
+    "viewport": [
+      1280,
+      720
+    ],
+    "internalPercentage": 50,
+    "vsync": 0,
+    "backgroundIdle": 0,
+    "lumenAtlas": 2048,
+    "renderTargetMinimumMiB": 128,
+    "streamingMiB": 256,
+    "lumenIndirect": 0,
+    "lumenReflections": 0,
+    "virtualShadow": 0,
+    "shadowQuality": 2,
+    "dilation": 1,
+    "fixedTime": false,
+    "fixedFrame": false,
+    "smoothing": false
+  },
+  "primaryClock": "sampleEntryWall",
+  "cadence": {
+    "meanFraction": 0.05,
+    "inBandPeriodFraction": 0.1,
+    "minimumInBandFraction": 0.95,
+    "maximumPeriods": 2
+  },
+  "windows": "unchanged AnalyzeR1.py entry-4, original receipt/release and bracketing rules",
+  "numericMedia": false,
+  "guardMilliseconds": 50,
+  "warmupAfterReadinessSeconds": 30,
+  "capStableMinimumSeconds": 10,
+  "illustrative": {
+    "afterAllNumeric": true,
+    "casesPerFPS": 7,
+    "videoFPS": 30,
+    "label": "ILLUSTRATIVE ONLY",
+    "skipStoppedGameplay": true
+  },
+  "policy": {
+    "reservedBeginCounts": true,
+    "setupError": "halt; no retries",
+    "toolError": "halt for reviewer; no edits or replacement batch",
+    "gameplayFail": "stop related case across later caps and media",
+    "focusRecoveryMaximumPerProcess": 1,
+    "focusLoss": "INVALID unless observed gameplay FAIL; release and flush only"
+  },
+  "inherited": {
+    "automation": "144/144",
+    "nativeRegression": "accepted R1a handoff f158ce1c; Docs/U04/R1a/REPORT.md",
+    "oldTrialsCounted": 0
+  },
+  "preflight": {
+    "protected": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b-C1\\Runs\\Preflight-20261120\\PROTECTED.json",
+    "hostBefore": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b-C1\\Runs\\Preflight-20261120\\HOST-BEFORE.json"
+  },
+  "inheritance": {
+    "manifest": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Source\\Docs\\U04\\R1b\\BATCH-MANIFEST.json",
+    "manifestSHA256": "2668ba4aff505a5094ec887811a1995803a98c1ddc44dea255318d35fb820cba",
+    "ledger": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\BATCH-LEDGER.json",
+    "ledgerSHA256": "46bdd285f600db97ccc172596b170490feaf20cc11851c8364fef611524bbc08",
+    "evidenceManifest": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Source\\Docs\\U04\\R1b\\Evidence\\Review-20261120\\MANIFEST.json",
+    "evidenceManifestSHA256": "7e20e62a742ad2f37e937840e3ff11cd61a5f250d27159f32e7dd4ba6b69aa2f",
+    "trials": [
+      {
+        "trial": "r1b-fps30-walk-1",
+        "case": "walk",
+        "fps": 30,
+        "attempt": 1,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16173.4412832,
+          "nativeWall": 16793389.441284,
+          "utc": "2026-11-20T04:42:38.735875+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-walk-1.jsonl",
+        "rawSHA256": "b39b98e92fcc00efea989d9cec716bc7b36e069283d06db6e2e1c04e35c8982d",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-walk-1\\ASSERTIONS.json",
+        "assertionsSHA256": "bd2295be89e37525ef47d60885847e431da4ffb03201d8582d4e00ddf6a5b5b8",
+        "ended": {
+          "qpcSeconds": 16189.0207441,
+          "nativeWall": 16793405.0207448,
+          "utc": "2026-11-20T04:42:54.315334+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-walk-2",
+        "case": "walk",
+        "fps": 30,
+        "attempt": 2,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16190.9818905,
+          "nativeWall": 16793406.9818909,
+          "utc": "2026-11-20T04:42:56.276477+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-walk-2.jsonl",
+        "rawSHA256": "a1308866874e197a0807767ebe136afeae5aebddeb83e984c427e887d1ea8f85",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-walk-2\\ASSERTIONS.json",
+        "assertionsSHA256": "3a338729a52fee6a6b96ac567a855d368aa98aa1fcbfe6345c9a1b8ece8d66dd",
+        "ended": {
+          "qpcSeconds": 16206.5178074,
+          "nativeWall": 16793422.517809,
+          "utc": "2026-11-20T04:43:11.812398+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-walk-3",
+        "case": "walk",
+        "fps": 30,
+        "attempt": 3,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16208.4531275,
+          "nativeWall": 16793424.4531281,
+          "utc": "2026-11-20T04:43:13.747716+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-walk-3.jsonl",
+        "rawSHA256": "acee66a9fcc1c454f1bb34f0c285353dc80cfa746da889a78368dd05ee2ed51b",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-walk-3\\ASSERTIONS.json",
+        "assertionsSHA256": "be0570eecb32f6323ca22d88c43a3e68b67bdd13856ed17fd501ff72a3a2b03e",
+        "ended": {
+          "qpcSeconds": 16224.0093396,
+          "nativeWall": 16793440.0093399,
+          "utc": "2026-11-20T04:43:29.303930+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-sprint-1",
+        "case": "sprint",
+        "fps": 30,
+        "attempt": 1,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16225.945334,
+          "nativeWall": 16793441.9453345,
+          "utc": "2026-11-20T04:43:31.239921+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-sprint-1.jsonl",
+        "rawSHA256": "ab2f87ec65980d6b1af9a6f91c66828d35597671960238e00f1ffa5536b4b92f",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-sprint-1\\ASSERTIONS.json",
+        "assertionsSHA256": "8068938e167d18dd66da1c91a8cdb56f30cba061e93edbd4604397e27b98aa9b",
+        "ended": {
+          "qpcSeconds": 16241.5452081,
+          "nativeWall": 16793457.5452094,
+          "utc": "2026-11-20T04:43:46.839797+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-sprint-2",
+        "case": "sprint",
+        "fps": 30,
+        "attempt": 2,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16243.4925749,
+          "nativeWall": 16793459.4925757,
+          "utc": "2026-11-20T04:43:48.787163+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-sprint-2.jsonl",
+        "rawSHA256": "8eb564c8724c7b252dd10f2d6aed1db9442b7d5698a00e3bea2e51c9720368b9",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-sprint-2\\ASSERTIONS.json",
+        "assertionsSHA256": "79e7bf0989077a312029b45a864a9ab5510a2d70e4d865162ba1431a0d8574f4",
+        "ended": {
+          "qpcSeconds": 16259.0796993,
+          "nativeWall": 16793475.0797003,
+          "utc": "2026-11-20T04:44:04.374292+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-sprint-3",
+        "case": "sprint",
+        "fps": 30,
+        "attempt": 3,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16261.0053892,
+          "nativeWall": 16793477.0053897,
+          "utc": "2026-11-20T04:44:06.299977+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-sprint-3.jsonl",
+        "rawSHA256": "2fba9365ef06e08f0d22c7c3b37f84fd9ce794471117121aaf86f298f40a5864",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-sprint-3\\ASSERTIONS.json",
+        "assertionsSHA256": "4067c73c12e851b5f7cde443f5f17f21e21a3a985eea7519bc35f382cc9901c5",
+        "ended": {
+          "qpcSeconds": 16276.593492,
+          "nativeWall": 16793492.5934923,
+          "utc": "2026-11-20T04:44:21.888080+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-forward-1",
+        "case": "forward",
+        "fps": 30,
+        "attempt": 1,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16278.5339327,
+          "nativeWall": 16793494.5339333,
+          "utc": "2026-11-20T04:44:23.828521+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-forward-1.jsonl",
+        "rawSHA256": "fd5ce49da0bf5255dd76f5763df1aa7c57f34e6e3096952b378daa7b212a70aa",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-forward-1\\ASSERTIONS.json",
+        "assertionsSHA256": "37483c15063236fec4f7ad1da85247df18ca08480baaf90ce8e07530cf0905d7",
+        "ended": {
+          "qpcSeconds": 16282.2546313,
+          "nativeWall": 16793498.254632,
+          "utc": "2026-11-20T04:44:27.549236+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-forward-2",
+        "case": "forward",
+        "fps": 30,
+        "attempt": 2,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16284.1788067,
+          "nativeWall": 16793500.1788073,
+          "utc": "2026-11-20T04:44:29.473395+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-forward-2.jsonl",
+        "rawSHA256": "06459d499f6b16b5cba9598ba428cd65bcde11ccca279a2e574de37defd59b5d",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-forward-2\\ASSERTIONS.json",
+        "assertionsSHA256": "f3721342f439ad3fd87b4ac2688f100bd84f133265f59abe990f7483e4530ce2",
+        "ended": {
+          "qpcSeconds": 16287.9041791,
+          "nativeWall": 16793503.9041805,
+          "utc": "2026-11-20T04:44:33.198771+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-forward-3",
+        "case": "forward",
+        "fps": 30,
+        "attempt": 3,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16289.8382944,
+          "nativeWall": 16793505.8382949,
+          "utc": "2026-11-20T04:44:35.132882+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-forward-3.jsonl",
+        "rawSHA256": "a02351c5188944c5788871ff2ad59ae2e98612fc57ab01a09d1f2861ee7c4d66",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-forward-3\\ASSERTIONS.json",
+        "assertionsSHA256": "956773a3c763ee932ec5ee240b67f3fc1091190889d2823484f4b0ad1e0a576c",
+        "ended": {
+          "qpcSeconds": 16293.5943521,
+          "nativeWall": 16793509.5943527,
+          "utc": "2026-11-20T04:44:38.888944+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-back-1",
+        "case": "back",
+        "fps": 30,
+        "attempt": 1,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16295.5103202,
+          "nativeWall": 16793511.5103207,
+          "utc": "2026-11-20T04:44:40.804908+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-back-1.jsonl",
+        "rawSHA256": "43cc00d51bea1d12579c55ebb2cb3805fb96f3af3102be1e03c82a220a6f8dcf",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-back-1\\ASSERTIONS.json",
+        "assertionsSHA256": "7de8bc52452fabb7e4de11fe10ee8659525dd286d45921a0c638b35ff3c4d0d1",
+        "ended": {
+          "qpcSeconds": 16299.1506115,
+          "nativeWall": 16793515.1506121,
+          "utc": "2026-11-20T04:44:44.445200+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-back-2",
+        "case": "back",
+        "fps": 30,
+        "attempt": 2,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16301.0863877,
+          "nativeWall": 16793517.0863882,
+          "utc": "2026-11-20T04:44:46.380976+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-back-2.jsonl",
+        "rawSHA256": "3b3c1e641a91c98df8a24d8e3cebbe515e790bf2997135a0b5d8f3b372a44492",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-back-2\\ASSERTIONS.json",
+        "assertionsSHA256": "0c5eddda2cad83770135cfaf431dbb2a5c89eb1fedfacfa963ad0fc65073e334",
+        "ended": {
+          "qpcSeconds": 16304.7309222,
+          "nativeWall": 16793520.7309231,
+          "utc": "2026-11-20T04:44:50.025515+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-back-3",
+        "case": "back",
+        "fps": 30,
+        "attempt": 3,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16306.6526943,
+          "nativeWall": 16793522.6526947,
+          "utc": "2026-11-20T04:44:51.947282+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-back-3.jsonl",
+        "rawSHA256": "0468be8f7ab08d2b38ac31de7b8a9d5c6ea0649643f8954164664cb3d2593d2e",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-back-3\\ASSERTIONS.json",
+        "assertionsSHA256": "5404ad764f8b96480ec7e7cee45c410257942a65eda13bdf4454d738566a1de9",
+        "ended": {
+          "qpcSeconds": 16310.2964916,
+          "nativeWall": 16793526.2964926,
+          "utc": "2026-11-20T04:44:55.591080+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-left-1",
+        "case": "left",
+        "fps": 30,
+        "attempt": 1,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16312.2131471,
+          "nativeWall": 16793528.2131488,
+          "utc": "2026-11-20T04:44:57.507741+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-left-1.jsonl",
+        "rawSHA256": "3288ac36c6ac27b8dd3d9570665b46c356a3cf871734bfdbe355258d4a955b78",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-left-1\\ASSERTIONS.json",
+        "assertionsSHA256": "e7ecc5c763552d07da06e6e356ee117cedf2a1d482f5b1aef42d5c9e072dcacf",
+        "ended": {
+          "qpcSeconds": 16315.8645289,
+          "nativeWall": 16793531.8645311,
+          "utc": "2026-11-20T04:45:01.159123+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-left-2",
+        "case": "left",
+        "fps": 30,
+        "attempt": 2,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16317.7941433,
+          "nativeWall": 16793533.7941438,
+          "utc": "2026-11-20T04:45:03.088732+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-left-2.jsonl",
+        "rawSHA256": "4135e8db01a2fdf3e773897c4f7e8e7f764ca9bfb443dffc33e0dde3aaa7d5ab",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-left-2\\ASSERTIONS.json",
+        "assertionsSHA256": "1150f3b89c47ee9c1097055f2be0239c83fca0e73c3f42bd4b00644cf074815f",
+        "ended": {
+          "qpcSeconds": 16321.4625373,
+          "nativeWall": 16793537.4625385,
+          "utc": "2026-11-20T04:45:06.757130+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-left-3",
+        "case": "left",
+        "fps": 30,
+        "attempt": 3,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16323.3947449,
+          "nativeWall": 16793539.3947458,
+          "utc": "2026-11-20T04:45:08.689334+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-left-3.jsonl",
+        "rawSHA256": "eb6bcaefdd51f227ecb1d80871c7126c0ef0d6561afd7dedb47e8e0f2535a9ed",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-left-3\\ASSERTIONS.json",
+        "assertionsSHA256": "1d3699342bac469c642fda14513fa6ff6c44623256d44c275a10d3300f40f99a",
+        "ended": {
+          "qpcSeconds": 16327.0641391,
+          "nativeWall": 16793543.0641407,
+          "utc": "2026-11-20T04:45:12.358730+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-right-1",
+        "case": "right",
+        "fps": 30,
+        "attempt": 1,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16329.0227646,
+          "nativeWall": 16793545.022765,
+          "utc": "2026-11-20T04:45:14.317352+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-right-1.jsonl",
+        "rawSHA256": "f93e6cdb6dbdbb0108db3f78963874c6b3d235e87caab2e265bb24427470d5ce",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-right-1\\ASSERTIONS.json",
+        "assertionsSHA256": "13f0697ee5b05abb07352e78588f7554ff7f43033144043b2e08376ac09dbad3",
+        "ended": {
+          "qpcSeconds": 16332.7065951,
+          "nativeWall": 16793548.706596,
+          "utc": "2026-11-20T04:45:18.001184+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-right-2",
+        "case": "right",
+        "fps": 30,
+        "attempt": 2,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16334.6354142,
+          "nativeWall": 16793550.6354147,
+          "utc": "2026-11-20T04:45:19.930002+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-right-2.jsonl",
+        "rawSHA256": "87179790af401f837c524513e29f61e1abcd99e2c9db43179edf641f7b565947",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-right-2\\ASSERTIONS.json",
+        "assertionsSHA256": "1b2ce547de88a407d56da792e5c393bb1767e09597bf1c5e247baa49c4dd28fb",
+        "ended": {
+          "qpcSeconds": 16338.3165256,
+          "nativeWall": 16793554.3165263,
+          "utc": "2026-11-20T04:45:23.611114+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-right-3",
+        "case": "right",
+        "fps": 30,
+        "attempt": 3,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16340.2598967,
+          "nativeWall": 16793556.2598971,
+          "utc": "2026-11-20T04:45:25.554485+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-right-3.jsonl",
+        "rawSHA256": "f203e6dcb2f98e5e38afe8c14d1c266ab0f2b97641e80df0027f6dea6ee9e2ed",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-right-3\\ASSERTIONS.json",
+        "assertionsSHA256": "d5e7df0a0a597fb6c8b79cb7a5ef6d771c4001e223b8d187d16e9e28d0fb3f74",
+        "ended": {
+          "qpcSeconds": 16343.9451485,
+          "nativeWall": 16793559.9451491,
+          "utc": "2026-11-20T04:45:29.239737+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-combo-1",
+        "case": "combo",
+        "fps": 30,
+        "attempt": 1,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16346.0084255,
+          "nativeWall": 16793562.008426,
+          "utc": "2026-11-20T04:45:31.303012+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-combo-1.jsonl",
+        "rawSHA256": "22d2b8fb9fac5d44d2ebbe2fd95ee0e7cefe27e4572c7d1406b8e9e1d5edeb9d",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-combo-1\\ASSERTIONS.json",
+        "assertionsSHA256": "aa71b947a86105269ed78132c0be07fd54d53f8355601d4df46f700171ed6dc8",
+        "ended": {
+          "qpcSeconds": 16350.7881927,
+          "nativeWall": 16793566.7881931,
+          "utc": "2026-11-20T04:45:36.082782+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-combo-2",
+        "case": "combo",
+        "fps": 30,
+        "attempt": 2,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16352.8490602,
+          "nativeWall": 16793568.8490608,
+          "utc": "2026-11-20T04:45:38.143648+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-combo-2.jsonl",
+        "rawSHA256": "10b0a230ac5c9d91f9a43f7a679087544dac37f2604fd687ae2331ce88bc7d13",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-combo-2\\ASSERTIONS.json",
+        "assertionsSHA256": "edcd12612fa5b148105d1014d34b5a900a669cb2901c2f7a10a94a89c2cf24f0",
+        "ended": {
+          "qpcSeconds": 16357.6451363,
+          "nativeWall": 16793573.6451372,
+          "utc": "2026-11-20T04:45:42.939728+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-combo-3",
+        "case": "combo",
+        "fps": 30,
+        "attempt": 3,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16359.7090723,
+          "nativeWall": 16793575.7090729,
+          "utc": "2026-11-20T04:45:45.003661+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-combo-3.jsonl",
+        "rawSHA256": "25bb644e7713f6194d4a39493354677360758b073236c2d084561baefaa4139d",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-combo-3\\ASSERTIONS.json",
+        "assertionsSHA256": "01b13f7b700fea36ed70ea0999d40da9b784e6490da918776afa9f3070034fb6",
+        "ended": {
+          "qpcSeconds": 16364.5011517,
+          "nativeWall": 16793580.5011521,
+          "utc": "2026-11-20T04:45:49.795740+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-combo-4",
+        "case": "combo",
+        "fps": 30,
+        "attempt": 4,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16366.583474,
+          "nativeWall": 16793582.5834746,
+          "utc": "2026-11-20T04:45:51.878062+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-combo-4.jsonl",
+        "rawSHA256": "d58be8b17f34182b1558103d96d54ad0ff7abcb808ab8f724eeb5d05aa6a2b31",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-combo-4\\ASSERTIONS.json",
+        "assertionsSHA256": "8b88963e898f9ac46b0bebd5722905f427b9defbee9980b75ef1e8a7040defac",
+        "ended": {
+          "qpcSeconds": 16371.3758303,
+          "nativeWall": 16793587.375831,
+          "utc": "2026-11-20T04:45:56.670420+00:00"
+        }
+      },
+      {
+        "trial": "r1b-fps30-combo-5",
+        "case": "combo",
+        "fps": 30,
+        "attempt": 5,
+        "status": "PASS",
+        "counted": true,
+        "beginInvocation": {
+          "qpcSeconds": 16373.451375,
+          "nativeWall": 16793589.4513755,
+          "utc": "2026-11-20T04:45:58.745963+00:00"
+        },
+        "analyzerStatus": "PASS",
+        "raw": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\B-R1b\\Runs\\Numeric-fps30-20261120\\Raw\\r1b-fps30-combo-5.jsonl",
+        "rawSHA256": "28798e6012cd725155f646c78615864675083eb7a76da943fd42c4aa88f7b16a",
+        "assertions": "..\\Runs\\Numeric-fps30-20261120\\Numeric\\r1b-fps30-combo-5\\ASSERTIONS.json",
+        "assertionsSHA256": "ead01e979734befe7d86b4c20b3b790371c389465848c7947744086160410156",
+        "ended": {
+          "qpcSeconds": 16378.2598465,
+          "nativeWall": 16793594.2598481,
+          "utc": "2026-11-20T04:46:03.554439+00:00"
+        }
+      }
+    ],
+    "requiredPassCount": 23
+  },
+  "trialPrefix": "c1-r1b",
+  "lifecycle": {
+    "timeoutSeconds": 30,
+    "pollMilliseconds": 250,
+    "stopRequestsMaximum": 1,
+    "mandatoryStopProof": true,
+    "pidReuse": "halt; never touch reused process",
+    "otherSession": "halt; no Start retry"
+  }
+}
