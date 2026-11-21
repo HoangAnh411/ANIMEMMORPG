@@ -1,0 +1,537 @@
+{
+  "status": "OFFLINE_CHECKS_PASS_AWAITING_REVIEW",
+  "runtimeReadiness": "NOT_RUN_NOT_AUTHORIZED",
+  "nativeCommit": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+  "nativeTrackedDiffEmpty": true,
+  "nativeUntrackedInputs": [],
+  "historicalHarnessAndGatesUnchanged": true,
+  "originalHead": "18804bfa32b14471df1ffa4bd7aeaed6cd80074c",
+  "originalStatus": [
+    " M AnimeMMORPG.uproject",
+    " M Config/DefaultEngine.ini",
+    "?? Docs/Maintenance/",
+    "?? Scripts/Maintenance/"
+  ],
+  "originalDefaultEngineSHA256": "412b42b66583f9b6e4ecdc63cd2423457bf0b1a3d192f5b0f18375ee801f8161",
+  "historicalInvalidFilesVerified": [
+    {
+      "path": "Method-Timing-01/capture.utrace",
+      "sha256": "1b4f26721fe6a079985da4a1bf810fa9055ea80f419e1db81f99c687df2d5854"
+    },
+    {
+      "path": "Method-Timing-01/command.json",
+      "sha256": "20e161d144b400070b03d932da25729cdb40e285520f644e074d03da9a296e43"
+    },
+    {
+      "path": "Method-Timing-01/Game.log",
+      "sha256": "48947f142c114da091d120ac91a7bf0272a7263e4cea5fe23588567d1af01c31"
+    },
+    {
+      "path": "Method-Timing-01/INVALID.json",
+      "sha256": "23f8f1e830135aa37b3cb19a4ff378dbfe40f1d8fd16ad544e60b5d06ab667ae"
+    },
+    {
+      "path": "Method-Timing-01/postmortem.json",
+      "sha256": "248bd568885f69170e9d067e68bfa23f530a338e1b14c0ad6f6dce34871cbb75"
+    },
+    {
+      "path": "Method-Timing-01/recovery-identity.json",
+      "sha256": "ce6082452f336d13e86eb4b6c200050be126dedb95dc7242cd8fff195966e50f"
+    },
+    {
+      "path": "Method-Timing-01/StartupExports/commands.txt",
+      "sha256": "288d6e2fbd1bcf57f0b218c44bba52357a2617f59044163f036fbbaa637f2bf9"
+    },
+    {
+      "path": "Method-Timing-01/StartupExports/exit.json",
+      "sha256": "47b8b6b49d4695fe6e036bd916538aff4f46773e212ca0d429db80f3963e2cfe"
+    },
+    {
+      "path": "Method-Timing-01/StartupExports/Insights.log",
+      "sha256": "8564d3aa302dbc845b627424ddd37342fe25403241fa870eb26ae1654e59d310"
+    },
+    {
+      "path": "Method-Timing-01/StartupExports/process.json",
+      "sha256": "1cc971d988ae2cab21d64603ac70c9928e4c7ac6edc9d8cd02e4ec6189eca20f"
+    },
+    {
+      "path": "Method-Timing-01/StartupExports/threads.csv",
+      "sha256": "85402067c818c9e9bc83231c13c63d4cebc8029e0ddd55a234957096a18edbbd"
+    },
+    {
+      "path": "Method-Timing-01/StartupExports/timers.csv",
+      "sha256": "a88535aa9d186ce01bd4b5620cea153912b8ae36b35bfeab602c4ca870486946"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/capture.utrace",
+      "sha256": "c8d329d0d56ef3d1395db8224f6a4119eb12a26e3676b25f7f93cde65f3f5a29"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/command.json",
+      "sha256": "a1d9d42442790f8b48fa63e3d5f377126aa76464e5f2e7a559206eac040c092d"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/Game.log",
+      "sha256": "b18dee11064f3faf0f8a308437201f6b9b3bbb0b7b38384d0b888a38bbb80443"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/INVALID.json",
+      "sha256": "d192d50b3bf5a3d381bae0aec92b3218a055b6a9f57526ce11d5e336558fcf21"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/postmortem.json",
+      "sha256": "248bd568885f69170e9d067e68bfa23f530a338e1b14c0ad6f6dce34871cbb75"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/process.json",
+      "sha256": "919c2057d6351933c083c75d2b823e5407e3d7f096b9b1daab6fd515aca3152b"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/StartupExports/commands.txt",
+      "sha256": "84e1003a8c711a8fdab47d9128fbd69135ba12c146e9713c2b5dd1584568b7c3"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/StartupExports/exit.json",
+      "sha256": "47b8b6b49d4695fe6e036bd916538aff4f46773e212ca0d429db80f3963e2cfe"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/StartupExports/gpu-events.csv",
+      "sha256": "e0d82fd461da5e7c55753647b9f0282b034cb17d9e7a322f1102d5f83576c96c"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/StartupExports/Insights.log",
+      "sha256": "fa1063fc384b01bbd37b553e1e074bed7c60810c228858591096664851166f54"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/StartupExports/process.json",
+      "sha256": "57a414d34838fff84f5148364d4c51b79ac67be72c6e06340a4e0adef3ab76bd"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/StartupExports/threads.csv",
+      "sha256": "b092184c1ff586279a6fa9a0097466fc988706720d85978ff0f9d7b77e23d658"
+    },
+    {
+      "path": "Method-Timing-01-Replacement/StartupExports/timers.csv",
+      "sha256": "3490789cb98384b47ce01f60961c8836c03dbef7a1ecbf99323e325d5966fa87"
+    }
+  ],
+  "toolSnapshot": [
+    {
+      "path": "Scripts\\U04\\C1Run.py",
+      "rawSHA256": "e36c391f216137647def4dd0313447d1463cc40876f8510955e45b2f7318805a",
+      "lfNormalizedSHA256": "2228bc47afac83dec974d739d68642a0400a7179e28d8d445da5b901f077d7bb"
+    },
+    {
+      "path": "Scripts\\U04\\C1Identity.py",
+      "rawSHA256": "75101f2b1ee17b1f61acb6193ef1c855d9e398878fe1cda649c3463ddeb76a99",
+      "lfNormalizedSHA256": "75101f2b1ee17b1f61acb6193ef1c855d9e398878fe1cda649c3463ddeb76a99"
+    },
+    {
+      "path": "Scripts\\U04\\C1Readiness.py",
+      "rawSHA256": "e5ce7d1ca338d112b96215cfb9d6d8d9a264ee18d59020a2a585f26edd6849bb",
+      "lfNormalizedSHA256": "e5ce7d1ca338d112b96215cfb9d6d8d9a264ee18d59020a2a585f26edd6849bb"
+    },
+    {
+      "path": "Scripts\\U04\\C1Win32.py",
+      "rawSHA256": "665257e5b37b9640ec5fd868e5d4afc76fb5f1e530a434767dc00ca841326633",
+      "lfNormalizedSHA256": "665257e5b37b9640ec5fd868e5d4afc76fb5f1e530a434767dc00ca841326633"
+    },
+    {
+      "path": "Scripts\\U04\\C1Offline.py",
+      "rawSHA256": "376e9632f51d461652b5db0d56602b69d96695e7c57246b62102746c0b73b25a",
+      "lfNormalizedSHA256": "376e9632f51d461652b5db0d56602b69d96695e7c57246b62102746c0b73b25a"
+    }
+  ],
+  "offlineTests": 86,
+  "offlineFailures": 0,
+  "offlineErrors": 0,
+  "inputAccounting": [
+    {
+      "case": "replay_playing",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_menu",
+      "fakeSendInputCalls": 100,
+      "acknowledged": 100,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_partial_then_complete",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_ime_current_none",
+      "fakeSendInputCalls": 128,
+      "acknowledged": 128,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_focus_denied",
+      "fakeSendInputCalls": 0,
+      "acknowledged": 0,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_ambiguous",
+      "fakeSendInputCalls": 0,
+      "acknowledged": 0,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_no_window",
+      "fakeSendInputCalls": 0,
+      "acknowledged": 0,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_menu_missing",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_menu_disabled",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_menu_outside",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_menu_rounded_outside",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_menu_other_point",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_menu_point_changed",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_menu_no_transition",
+      "fakeSendInputCalls": 50,
+      "acknowledged": 50,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_wrong_pid",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_wrong_world",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_wrong_net",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_wrong_source",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_missing_session",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_wrong_owner",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_session_changed",
+      "fakeSendInputCalls": 48,
+      "acknowledged": 48,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_pawn_changed",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_world_time_still",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_not_active",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_not_playing",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_stale_metrics",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_partial_metrics",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_malformed_metrics",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_log_truncated",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_stale_w",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_old_none",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_w_rejected",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_no_motion",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_z_only",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_reverse_motion",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_lateral_motion",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_ime_fails",
+      "fakeSendInputCalls": 128,
+      "acknowledged": 128,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_short_send",
+      "fakeSendInputCalls": 1,
+      "acknowledged": 0,
+      "shortSendAttempts": 1,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_cleanup_identity_changed",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "replay_exit_timeout",
+      "fakeSendInputCalls": 74,
+      "acknowledged": 74,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "guard_after_down_hwnd_invalid",
+      "fakeSendInputCalls": 1,
+      "acknowledged": 1,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "guard_after_down_hwnd_pid_mismatch",
+      "fakeSendInputCalls": 1,
+      "acknowledged": 1,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "guard_after_down_process_creation_mismatch",
+      "fakeSendInputCalls": 1,
+      "acknowledged": 1,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "guard_after_down_foreground_hwnd_mismatch",
+      "fakeSendInputCalls": 1,
+      "acknowledged": 1,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "guard_after_down_foreground_pid_mismatch",
+      "fakeSendInputCalls": 1,
+      "acknowledged": 1,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "guard_after_down_window_information_error",
+      "fakeSendInputCalls": 1,
+      "acknowledged": 1,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "loss_mid_console_down",
+      "fakeSendInputCalls": 9,
+      "acknowledged": 9,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "loss_between_mouse_down_up",
+      "fakeSendInputCalls": 25,
+      "acknowledged": 25,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "loss_between_w_down_up",
+      "fakeSendInputCalls": 49,
+      "acknowledged": 49,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "loss_during_ime",
+      "fakeSendInputCalls": 75,
+      "acknowledged": 75,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "client_origin_changed",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "actual_cursor_moved_before_click",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "win32_information_exception",
+      "fakeSendInputCalls": 0,
+      "acknowledged": 0,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    },
+    {
+      "case": "preexisting_partial_metrics_not_accepted",
+      "fakeSendInputCalls": 24,
+      "acknowledged": 24,
+      "shortSendAttempts": 0,
+      "eventsAfterFault": 0
+    }
+  ],
+  "liveGameLaunches": 0,
+  "liveInputCalls": 0,
+  "editorOperations": 0,
+  "unrealBuilds": 0,
+  "unrealTestRuns": 0,
+  "timingRuns": 0,
+  "memoryRuns": 0,
+  "overheadPairs": 0,
+  "finalSuite": "Readiness-Offline-05"
+}
