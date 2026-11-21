@@ -7,7 +7,8 @@ from pathlib import Path
 from datetime import datetime,timezone
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'Scripts/U01'))
-from F60Input import Client,u,w,k,key,mouse
+from F60Input import Client,u,w,k,key,mouse,VK
+VK.update({"Alt":0xa4})
 from IdentityProcessA import verify
 
 def sha(p):
@@ -72,7 +73,9 @@ def main():
     args=[str(exe),'/Game/AnimeMMORPG/Maps/L_CharacterCombatLab?U03Regression=1','-windowed','-ResX=1280','-ResY=720','-WinX=0','-WinY=30','-nosplash','-NoLiveCoding','-U04C1Profile',f'-U04C1Output={raw}',f'-U02SourceSHA={index["sourceSHA"]}',f'-U02RunId={a.id}',f'-UserDir={user}',f'-abslog={log}',f'-ExecCmds={profile}']
     if a.trace!='off':args += [f'-trace={"cpu,gpu,frame,bookmark,counters" if a.trace=="timing" else "memory,bookmark"}',f'-tracefile={out/"capture.utrace"}','-statnamedevents']
     write(out/'command.json',dict(arguments=args,workload=vars(a)|{'build':str(a.build)},utc=datetime.now(timezone.utc).isoformat()))
-    proc=subprocess.Popen(args,cwd=exe.parent,creationflags=subprocess.CREATE_NO_WINDOW)
+    # UE parses its raw Windows command line: quote values after '=' explicitly.
+    command=' '.join(('"'+v+'"') if i==0 else (v.split('=',1)[0]+'="'+v.split('=',1)[1]+'"') if '=' in v else v for i,v in enumerate(args))
+    proc=subprocess.Popen(command,cwd=exe.parent,creationflags=subprocess.CREATE_NO_WINDOW)
     r=dict(role='U04C1Package',pid=proc.pid,executable=str(exe),sourceSHA=index['sourceSHA'],binarySHA256=index['gameSHA256'],userDir=str(user),log=str(log),arguments=args)
     client=None
     try:
