@@ -74,7 +74,7 @@ def main():
     if a.trace!='off':args += [f'-trace={"cpu,gpu,frame,bookmark,counters" if a.trace=="timing" else "memory,bookmark"}',f'-tracefile={out/"capture.utrace"}','-statnamedevents']
     write(out/'command.json',dict(arguments=args,workload=vars(a)|{'build':str(a.build)},utc=datetime.now(timezone.utc).isoformat()))
     # UE parses its raw Windows command line: quote values after '=' explicitly.
-    command=' '.join(('"'+v+'"') if i==0 else (v.split('=',1)[0]+'="'+v.split('=',1)[1]+'"') if '=' in v else v for i,v in enumerate(args))
+    command=' '.join(('"'+v+'"') if i==0 else (v.split('=',1)[0]+'="'+v.split('=',1)[1]+'"') if '=' in v and ' ' in v else v for i,v in enumerate(args))
     proc=subprocess.Popen(command,cwd=exe.parent,creationflags=subprocess.CREATE_NO_WINDOW)
     r=dict(role='U04C1Package',pid=proc.pid,executable=str(exe),sourceSHA=index['sourceSHA'],binarySHA256=index['gameSHA256'],userDir=str(user),log=str(log),arguments=args)
     client=None
