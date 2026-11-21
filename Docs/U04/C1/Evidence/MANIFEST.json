@@ -1,0 +1,811 @@
+{
+  "schema": 1,
+  "status": "INCOMPLETE",
+  "utc": "2026-11-21T05:50:40.819165+00:00",
+  "mainBaseline": "e66670fbba7f39644b0571b703bb3341ac7c0108",
+  "sourceSHA": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+  "publisherCommit": "7e2b052ceac015dd8c86ae2e96462a8d2503c7d1",
+  "rawRoot": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\Runs",
+  "gates": {
+    "status": "INCOMPLETE",
+    "sourceSHA": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+    "mainBaseline": "e66670fbba7f39644b0571b703bb3341ac7c0108",
+    "methodology": "HALTED_READINESS_FAILURE",
+    "counterCorrectness": "NOT_RUN",
+    "timingMatrix": {
+      "valid": 0,
+      "required": 36
+    },
+    "memoryMatrix": {
+      "valid": 0,
+      "required": 12
+    },
+    "overheadPairs": {
+      "valid": 0,
+      "required": 3
+    },
+    "gpu": {
+      "startupTraceReadable": true,
+      "startupEvents": 14692,
+      "measurementWindowValid": false
+    },
+    "memoryCallstacks": "NOT_VERIFIED",
+    "traceCapacityForecast": "NOT_RUN_NO_VALID_PILOT",
+    "fullBuild": "PASS_BUILD_03",
+    "automation": {
+      "status": "PASS",
+      "expected": 144,
+      "discovered": 144,
+      "executed": 144,
+      "passed": 144,
+      "failed": 0
+    },
+    "mapSmoke": {
+      "status": "PASS",
+      "maps": 3
+    },
+    "normalLauncherRuntime": "NOT_RUN_STATIC_FLAGS_AND_SMOKE_ONLY",
+    "combatDodgeFocusRuntime": "NOT_RUN_READINESS_FAILURE",
+    "dedicatedEditorTwoClients": "NOT_RUN",
+    "illustrationMedia": "NOT_RUN",
+    "preservation": "PASS_ORIGINAL_HEAD_STATUS_114_HASHES_EDITOR_IDENTITY",
+    "u0404Complete": false,
+    "optimizationImplemented": false,
+    "mergePerformed": false
+  },
+  "files": [
+    {
+      "raw": "Automation-01/AutomationTestToolset.schema.json",
+      "rawSHA256": "53d0424df661504ed5ffc243c7b17d1574581f2b7b317cc8d60f483adde890f1",
+      "rawBytes": 5943,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/AutomationTestToolset.schema.json.gz",
+      "publishedSHA256": "ea98e7c95f9cb89bd6adbf5224e8066d36d1ea72acb1812e9de30b3f5123587f",
+      "publishedBytes": 1700,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/discovered-tests.json",
+      "rawSHA256": "4d1ce31e4bef2bb2fbcb4412c5f82e6af64db50b362c77fd6d3a3e917bc3cfde",
+      "rawBytes": 9996,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/discovered-tests.json.gz",
+      "publishedSHA256": "d6d0335b7904be811b47c482cdb287442c3509908b332a32e1b452910062c59e",
+      "publishedBytes": 2324,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/discovery.json",
+      "rawSHA256": "a0367467e2dc3fc7a7eda1f8fc7b483ac86455077c989850129809ddd511231b",
+      "rawBytes": 222,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/discovery.json.gz",
+      "publishedSHA256": "e80aca4be6f44bf9fd99c0894651f6490428e8a987d4f3c3e260daf965cf6f1a",
+      "publishedBytes": 121,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/Editor.log",
+      "rawSHA256": "95ca1b0148bf610208b12fd8137997a995a9c606892a3ca5a5f20e54860a4097",
+      "rawBytes": 7001785,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/Editor.log.gz",
+      "publishedSHA256": "926cb863da367f3fb4bd76919047c8710ac97e411877e296fb5bfa40b3c8d5a1",
+      "publishedBytes": 213321,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/expected-tests.json",
+      "rawSHA256": "31df3c017e21c9ab378d5bab0dd4e2734b7786aa1df093446ad07aceb055b1e2",
+      "rawBytes": 7981,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/expected-tests.json.gz",
+      "publishedSHA256": "17e7d6a9a1a1e9598336f96d4519722a94ff6b380c20e10f46b03f1e48c8c67a",
+      "publishedBytes": 2195,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/Generated-DefaultEngine.private.ini",
+      "rawSHA256": "163c41672fb1f08eb6fac851fbd5be9d7ef2a6d6f871a91bb2446ac973c59672",
+      "rawBytes": 10146,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/Generated-DefaultEngine.private.ini.gz",
+      "publishedSHA256": "bae77a2fb7414e344473471fb6e49814e5ff786497d27a23374a899cc8c70e47",
+      "publishedBytes": 3309,
+      "transformation": "redact-secrets;gzip"
+    },
+    {
+      "raw": "Automation-01/loaded-modules.json",
+      "rawSHA256": "c02650afecfdd9036d58f6abd5b8c7c716d365f12ce8a8eec2cb1c1cc25d4622",
+      "rawBytes": 175,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/loaded-modules.json.gz",
+      "publishedSHA256": "b45facc1351e4ae0f24a5718845baa3298fdf1bfedfeefd5267feda9d6a45e5c",
+      "publishedBytes": 139,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/LogsToolset.schema.json",
+      "rawSHA256": "817e1d2cda35985245e221f864dc40e4144f00d4017aa69459930fe6c5655bb7",
+      "rawBytes": 3126,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/LogsToolset.schema.json.gz",
+      "publishedSHA256": "66f9ae2a2bafc0bec0629000c7ecf09c7f62f85ab09c4577c04a3ad4008c7e84",
+      "publishedBytes": 794,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/mcp-results.json",
+      "rawSHA256": "0d9ddb760aca1875353df95dd5a0d865679bd97dbcc373c65c8faa4d09b21893",
+      "rawBytes": 41879,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/mcp-results.json.gz",
+      "publishedSHA256": "150423879ac6a5afefe003e6b016186896241b3a91f56f31c22d162b3e51282c",
+      "publishedBytes": 5233,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/NAME-RESULTS.json",
+      "rawSHA256": "662ef4a9536d8d18614149a9f7fc746b4078d4dc28654870361989c223eeaeae",
+      "rawBytes": 31725,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/NAME-RESULTS.json.gz",
+      "publishedSHA256": "87b89fd1318a324a85d7b6386de434794f994ccf5c313f8a567765c5b8d2f8f6",
+      "publishedBytes": 3583,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/process.json",
+      "rawSHA256": "c05cd89d2dc6f490a845271006e194c870288e4e6239c36baae8db371f6fbf41",
+      "rawBytes": 1404,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/process.json.gz",
+      "publishedSHA256": "9b1f75bf6c25efc301572e0964bae3cf82ff1a56d691b328dc74e12d547f25dd",
+      "publishedBytes": 675,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/result.json",
+      "rawSHA256": "23af5baffde770325a8b5692a8402ded46eaf73716cbcf2c8a1512d58c950855",
+      "rawBytes": 10275,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/result.json.gz",
+      "publishedSHA256": "1ee996cd364492fa03c1414ea7ea8920969127f9b0945b2a6f8be68adef44a4c",
+      "publishedBytes": 2417,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/TestRunnerTools.schema.json",
+      "rawSHA256": "6fdf1c99219a765b31458831007ce8cb5529ce5fed1181cfecc7ad81136b8a77",
+      "rawBytes": 4536,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/TestRunnerTools.schema.json.gz",
+      "publishedSHA256": "76be28579ed5b94bd30550bf85528bbf3b9102b181728c33f2d0f1add819fe6f",
+      "publishedBytes": 1116,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/toolsets.json",
+      "rawSHA256": "819d1129a8d0bad4f2188cc6eca4757918c833ce4fee8475e9a3e31df50097ed",
+      "rawBytes": 3776,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/toolsets.json.gz",
+      "publishedSHA256": "ca06afe3c2ff4370c0e19530e21e5d8dfd88b5dda82d092f81f10f88e356bb18",
+      "publishedBytes": 1320,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Automation-01/trigger.json",
+      "rawSHA256": "022eed9cc58333cd5017a80fd3450e25a3e5cb47b758bff8ca7cc0725210445d",
+      "rawBytes": 242,
+      "published": "Docs/U04/C1/Evidence/Runs/Automation-01/trigger.json.gz",
+      "publishedSHA256": "637a500349977908acc8db706107d6217cb7b7f0ae31e70f68daef7f228e88b0",
+      "publishedBytes": 147,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-01/clone-before.txt",
+      "rawSHA256": "8f0392754ed61ca86532eef047a5ee71291be09bf9e905066f4c681fcf24bdde",
+      "rawBytes": 96,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-01/clone-before.txt.gz",
+      "publishedSHA256": "134e8fcf6aa3b945fa4fd90f122942bf09b29de945121c61dd01e5f28f6fafce",
+      "publishedBytes": 104,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-01/Editor.command.json",
+      "rawSHA256": "5afea10adc879a84bda6dfc861b0b268e15908aa11a99a81f7b09ad6dbaf3e4a",
+      "rawBytes": 1012,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-01/Editor.command.json.gz",
+      "publishedSHA256": "57667f1db2939f19332dde6c47e04b2f93fcba3210c9d0ccaa60564691ffe35c",
+      "publishedBytes": 449,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-01/Editor.log",
+      "rawSHA256": "166663b07fbfe9b70a38f5859d50cd0c1e28817c243670db840bf07eb02c99c6",
+      "rawBytes": 67362,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-01/Editor.log.gz",
+      "publishedSHA256": "d5b0dc9a840ce3c1015684835999f8858c5892c2d0858466bd384c92e234517f",
+      "publishedBytes": 6906,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-01/Editor.result.json",
+      "rawSHA256": "d1188d1f40a8e022fce004d868051923aade2431574f82cd19d4326b3ddd9f3a",
+      "rawBytes": 80,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-01/Editor.result.json.gz",
+      "publishedSHA256": "db007aa3deb1cd4820bcb0e10c7a09bdbc80848840565d2dc788d2afb6d506d6",
+      "publishedBytes": 90,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-01/Generate.command.json",
+      "rawSHA256": "23a6b5643ce363f2ae418da0247d869043f0970d5ba41ff2990e8e09784b0536",
+      "rawBytes": 921,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-01/Generate.command.json.gz",
+      "publishedSHA256": "9fbd8ca1012ca8fbdf9146ba54da270e4b41372f73961b820633ea8b6dae6e3b",
+      "publishedBytes": 414,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-01/Generate.log",
+      "rawSHA256": "406fb7103ebb93015beca9b3d37663153cf2ec463f75d19b9bb026d3546bd56c",
+      "rawBytes": 7204,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-01/Generate.log.gz",
+      "publishedSHA256": "d178959ea6965dc628913775ed6f5aee9ed264d89d021f6ec7c03de9eb311524",
+      "publishedBytes": 1083,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-01/Generate.result.json",
+      "rawSHA256": "4d3dcf5ef6bc1db7e771d962d34a11293b18e6380890e935468e9edcbeb9aa66",
+      "rawBytes": 80,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-01/Generate.result.json.gz",
+      "publishedSHA256": "1cc31fa5a949958d3ad2c28a5616bf31bd19fba914faaf4f511f59f5c3160dd3",
+      "publishedBytes": 90,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-02/clone-before.txt",
+      "rawSHA256": "c79897acf842c9a41dae33f5bf376d17bda5f77a0c1a798a5d6dff6d44f075df",
+      "rawBytes": 96,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-02/clone-before.txt.gz",
+      "publishedSHA256": "57b7756264ae0ba019c94a424d585c3a19b724405e393ae78ae6b97d445df2d5",
+      "publishedBytes": 104,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-02/Editor.command.json",
+      "rawSHA256": "7af35caa6a4549b6df67d0e878fdc363edaf7f725c890fa0da20d9fe8ea57a1f",
+      "rawBytes": 1012,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-02/Editor.command.json.gz",
+      "publishedSHA256": "73bda202811743aa549a78d4766e31f817bd516a177769c2bc50186d9f2c0ff6",
+      "publishedBytes": 447,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-02/Editor.log",
+      "rawSHA256": "2f736f67430d01a0de8faa339115b214fb2f68c5bd61a77253c2b672ebcda9ab",
+      "rawBytes": 56424,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-02/Editor.log.gz",
+      "publishedSHA256": "102f9e88d557a382bbe2289d21bc0d8af1476a296a187eb7b65f6554e834246c",
+      "publishedBytes": 5896,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-02/Editor.result.json",
+      "rawSHA256": "9d744c68a551e1e6628a5845ff695468d5f62fc0b9c0cc810892ae4f3412a683",
+      "rawBytes": 80,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-02/Editor.result.json.gz",
+      "publishedSHA256": "230719c7b82bc96803d67acb6f41a719355ae02ccc1757c1ec6351f26e76c71f",
+      "publishedBytes": 90,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-02/Generate.command.json",
+      "rawSHA256": "2563e538e93d4c9ac22de65203a7a8ee74b5ecdc8de17a72a705b4edae26f1f9",
+      "rawBytes": 921,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-02/Generate.command.json.gz",
+      "publishedSHA256": "7ceaa0f2df75e68a7170ecc671d63401292342edc5f8b3fcadd1b42a477a64ce",
+      "publishedBytes": 414,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-02/Generate.log",
+      "rawSHA256": "aeb4288a57be2787731001687f930be4bd0b9ce7a45e9a64779e60966778971b",
+      "rawBytes": 8776,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-02/Generate.log.gz",
+      "publishedSHA256": "6083875cc4289f6a50066f96746c0a533e00103c42c167c2889acf78c595aa03",
+      "publishedBytes": 1095,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-02/Generate.result.json",
+      "rawSHA256": "f4133a230837e3f3c4ada4fa64284ca4fe8fe528775f9ff16dc8c6acdaf4604c",
+      "rawBytes": 80,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-02/Generate.result.json.gz",
+      "publishedSHA256": "b9863c06a658086dfc22201b55bbe7b032555f270c52a84efb54a6acf3e1df28",
+      "publishedBytes": 90,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/BUILD-IDENTITY.json",
+      "rawSHA256": "f20627285f851e76e5066f022cc51f4a7aacad85d3a46c1260a064834d090213",
+      "rawBytes": 1503849,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/BUILD-IDENTITY.json.gz",
+      "publishedSHA256": "f2b4b6d0cb73414bbb5e47b3ef2960fbe5d16efe1e62c0a8830ecdaee26cb49a",
+      "publishedBytes": 113145,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/clone-before.txt",
+      "rawSHA256": "ee5d6d5e441097282dfe35f1d11332cc73675489510fcfa8da038e4062141d27",
+      "rawBytes": 96,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/clone-before.txt.gz",
+      "publishedSHA256": "12ac5160d8e97f5d0de6925f62cede83f56b306b7d92cc36393b6f1167b9b3db",
+      "publishedBytes": 105,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Editor.command.json",
+      "rawSHA256": "4515e51119d4e2c31531d6bf1f5dafe59992e5eb6a732ebc55e719237d494b17",
+      "rawBytes": 1012,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Editor.command.json.gz",
+      "publishedSHA256": "089570666a9f66fa088a52921837bcf0f89f90e02c55f07c27cc28e3aa2edacc",
+      "publishedBytes": 448,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Editor.log",
+      "rawSHA256": "c767363d679d70c1364e876f727c77e9dbf623d70097ca3306155313ecbb7110",
+      "rawBytes": 15478,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Editor.log.gz",
+      "publishedSHA256": "29e4991261b6a17d01a462527bed443a56138b882982336a62343345bfc4d8d0",
+      "publishedBytes": 2632,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Editor.result.json",
+      "rawSHA256": "dc5d682477a0a83b495695eba2d521584bdbcc1cdd405fe73aa611490b4629f3",
+      "rawBytes": 80,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Editor.result.json.gz",
+      "publishedSHA256": "69a9e2d0d17327916c185a65432de02228344f4cbee67ccb23561321681e5586",
+      "publishedBytes": 89,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Game.command.json",
+      "rawSHA256": "fd3c8ac278284872ac568affdc55ae7c82dd7dd3f39a02a915851b7c888ebb6a",
+      "rawBytes": 1006,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Game.command.json.gz",
+      "publishedSHA256": "6dfb7ba212f338f876491a370c7ada91dd90e17913c2910c695242129e04cee6",
+      "publishedBytes": 443,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Game.log",
+      "rawSHA256": "fadecefaeeea250fa875959efaeb299094a63c0e930c7d429520b9d28a476a41",
+      "rawBytes": 37156,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Game.log.gz",
+      "publishedSHA256": "7a874b5a571ed46830a53f3f03be36130fe31ab511be4dd058183e92fd5de683",
+      "publishedBytes": 4375,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Game.result.json",
+      "rawSHA256": "c1d82dc71f91bd1668fb0a6d1ae49b3ae138d434b57b718be69d45aa16df492b",
+      "rawBytes": 80,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Game.result.json.gz",
+      "publishedSHA256": "e016dc138384002f6faa57561b37594673886d575a71e83d579cb8a9afbb6221",
+      "publishedBytes": 90,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Generate.command.json",
+      "rawSHA256": "c55f200b159cd52dbf4aa7165898f0a6ee99920f2f11740d16bac2c861c31432",
+      "rawBytes": 921,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Generate.command.json.gz",
+      "publishedSHA256": "ed9763bfded64c17b567fe6414fdc32aef7b5329d41409b2d9f0fd17cd8bbff7",
+      "publishedBytes": 415,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Generate.log",
+      "rawSHA256": "f0cdb132d436fccf3f9e05336522b652d82e71055ce19841e1616a7740d73909",
+      "rawBytes": 8776,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Generate.log.gz",
+      "publishedSHA256": "e6696feff8007f679ab751e90985285d50ab766552994395a22b8cc7b4785a89",
+      "publishedBytes": 1095,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Generate.result.json",
+      "rawSHA256": "b705bcab5fb1ffcffb7ae8abf43a1bf385cbcd347ac646adc515bd3ff218ce15",
+      "rawBytes": 80,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Generate.result.json.gz",
+      "publishedSHA256": "8103701eede0fe6e10dc3961826946fdc865f7edd2101fe4799899a1fbe4841e",
+      "publishedBytes": 90,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Generated-DefaultEngine.private.ini",
+      "rawSHA256": "ed5da3af15068fa56cf646fd80db6d32d62391e65e7ad9acd8b2b9b995b14582",
+      "rawBytes": 10146,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Generated-DefaultEngine.private.ini.gz",
+      "publishedSHA256": "bae77a2fb7414e344473471fb6e49814e5ff786497d27a23374a899cc8c70e47",
+      "publishedBytes": 3309,
+      "transformation": "redact-secrets;gzip"
+    },
+    {
+      "raw": "Build-03/Package.command.json",
+      "rawSHA256": "f8930cee8d25b5cc06cf97e20c4ec9be1389dc40dcbdcadf4dbabe42e5cfd65c",
+      "rawBytes": 1562,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Package.command.json.gz",
+      "publishedSHA256": "ba31abe5790a1a227aafc52d6017bc05a91018354b1deb068980868ded16b296",
+      "publishedBytes": 611,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Package.log",
+      "rawSHA256": "9469075fb429d6ae718cc995effa89d95ea56ce88a10a268c11010009394f71b",
+      "rawBytes": 150430,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Package.log.gz",
+      "publishedSHA256": "cc3e0517b597b8212788b11faedf077d2210e7e522b25dcd88a0723b8b34fae5",
+      "publishedBytes": 18811,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Package.result.json",
+      "rawSHA256": "682a41b1054dcd11333e153fcc628c83f3eaea074b664b3e7a3075e0d3db3723",
+      "rawBytes": 80,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Package.result.json.gz",
+      "publishedSHA256": "f691ff989c6803abf1cab7accd2edd7bdbc8faba68017263475b43fdd3e5de4e",
+      "publishedBytes": 90,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Symbols-Receipts/AnimeMMORPG.target",
+      "rawSHA256": "5f298a2745cea5a530a1807e4529e390aefbdd47bd5a8b79f233b4aa31825f76",
+      "rawBytes": 114081,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Symbols-Receipts/AnimeMMORPG.target.gz",
+      "publishedSHA256": "dd65a790e8e307003d1afbb40000d932af68e37e5d9571f94cc0b5dcdafda2ed",
+      "publishedBytes": 10012,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Symbols-Receipts/AnimeMMORPGEditor.target",
+      "rawSHA256": "38076da371ab10e000a19e75fa4b27dcc94aa7418614af5bc9785ba336d4d791",
+      "rawBytes": 950491,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Symbols-Receipts/AnimeMMORPGEditor.target.gz",
+      "publishedSHA256": "0c8c251bf480243a4a2057c5040733639a48081a271c5026ad5e38df142f1bf7",
+      "publishedBytes": 53295,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Build-03/Symbols-Receipts/symbols.json",
+      "rawSHA256": "58ca9907d4f2be09bbfbec61415c80feccf3cb1b538fe755aa56fc3993ea9bf1",
+      "rawBytes": 893,
+      "published": "Docs/U04/C1/Evidence/Runs/Build-03/Symbols-Receipts/symbols.json.gz",
+      "publishedSHA256": "383153452934d6ea5238f860164687b8085c709420fa1866f69636b0a6a7413b",
+      "publishedBytes": 370,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/capture.utrace",
+      "rawSHA256": "1b4f26721fe6a079985da4a1bf810fa9055ea80f419e1db81f99c687df2d5854",
+      "rawBytes": 69228036,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/capture.utrace.gz",
+      "publishedSHA256": "287b05fbc5429f430b3179a3fe0df74fcc5b7a8c624779d5174f309427ee0994",
+      "publishedBytes": 52054794,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/command.json",
+      "rawSHA256": "20e161d144b400070b03d932da25729cdb40e285520f644e074d03da9a296e43",
+      "rawBytes": 1559,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/command.json.gz",
+      "publishedSHA256": "e3254f7d8f1d185dd7fa7e2a5b6afce9e925c70a2b55a46c932e490291337e60",
+      "publishedBytes": 716,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/Game.log",
+      "rawSHA256": "48947f142c114da091d120ac91a7bf0272a7263e4cea5fe23588567d1af01c31",
+      "rawBytes": 114023,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/Game.log.gz",
+      "publishedSHA256": "3ebbc7ac182c65a432151a900af6461d72c67981195f7bc3e4f434b1118aeed6",
+      "publishedBytes": 21756,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/INVALID.json",
+      "rawSHA256": "23f8f1e830135aa37b3cb19a4ff378dbfe40f1d8fd16ad544e60b5d06ab667ae",
+      "rawBytes": 533,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/INVALID.json.gz",
+      "publishedSHA256": "2809e9481715b626b8041b8aade3f8f8d27769652991faaff111d023b57ea2f8",
+      "publishedBytes": 304,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/postmortem.json",
+      "rawSHA256": "248bd568885f69170e9d067e68bfa23f530a338e1b14c0ad6f6dce34871cbb75",
+      "rawBytes": 168,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/postmortem.json.gz",
+      "publishedSHA256": "b454b481e231ff3e792828a0d3bd089c33122eff8187fd6ab537c4c18811175c",
+      "publishedBytes": 144,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/recovery-identity.json",
+      "rawSHA256": "ce6082452f336d13e86eb4b6c200050be126dedb95dc7242cd8fff195966e50f",
+      "rawBytes": 1412,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/recovery-identity.json.gz",
+      "publishedSHA256": "9e1ae41623c6012b0f5ed964cb5b2d69437c212667fe4b162f474f7a99ef9b52",
+      "publishedBytes": 702,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/StartupExports/commands.txt",
+      "rawSHA256": "288d6e2fbd1bcf57f0b218c44bba52357a2617f59044163f036fbbaa637f2bf9",
+      "rawBytes": 230,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/StartupExports/commands.txt.gz",
+      "publishedSHA256": "db82d108631d09b059faab3e0350b3f5af689cc24d1cbd0770ee074a76761e2c",
+      "publishedBytes": 138,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/StartupExports/exit.json",
+      "rawSHA256": "47b8b6b49d4695fe6e036bd916538aff4f46773e212ca0d429db80f3963e2cfe",
+      "rawBytes": 15,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/StartupExports/exit.json.gz",
+      "publishedSHA256": "85157050e6270d5d31b83d42ead1d3fe214bcb6832c9dc474ee0b0c5e1fd0d0d",
+      "publishedBytes": 35,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/StartupExports/Insights.log",
+      "rawSHA256": "8564d3aa302dbc845b627424ddd37342fe25403241fa870eb26ae1654e59d310",
+      "rawBytes": 40224,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/StartupExports/Insights.log.gz",
+      "publishedSHA256": "bb400e03486273491ec776f6db9fe4563702a0ea715fcdbd774d9d5f40929356",
+      "publishedBytes": 6955,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/StartupExports/process.json",
+      "rawSHA256": "1cc971d988ae2cab21d64603ac70c9928e4c7ac6edc9d8cd02e4ec6189eca20f",
+      "rawBytes": 455,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/StartupExports/process.json.gz",
+      "publishedSHA256": "c157aeefb6303f1fd433fa0ed9537b334e7030618405aa98c72e7db961b1bcaf",
+      "publishedBytes": 270,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/StartupExports/threads.csv",
+      "rawSHA256": "85402067c818c9e9bc83231c13c63d4cebc8029e0ddd55a234957096a18edbbd",
+      "rawBytes": 2214,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/StartupExports/threads.csv.gz",
+      "publishedSHA256": "867915f4979dc2941b9eaea449920904cfcb97d8af8b7bacf88c0ec224fd3549",
+      "publishedBytes": 751,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01/StartupExports/timers.csv",
+      "rawSHA256": "a88535aa9d186ce01bd4b5620cea153912b8ae36b35bfeab602c4ca870486946",
+      "rawBytes": 565601,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01/StartupExports/timers.csv.gz",
+      "publishedSHA256": "455e6bc16b723de6858eac9d2bf4abee9300f87a03515ecea9bb0ee51a7a8ee7",
+      "publishedBytes": 66353,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/capture.utrace",
+      "rawSHA256": "c8d329d0d56ef3d1395db8224f6a4119eb12a26e3676b25f7f93cde65f3f5a29",
+      "rawBytes": 6031357,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/capture.utrace.gz",
+      "publishedSHA256": "baa2953f5cef8f1abf7c07370b8aa175f761a3cdc12840cafe95b1e66c767f85",
+      "publishedBytes": 4375945,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/command.json",
+      "rawSHA256": "a1d9d42442790f8b48fa63e3d5f377126aa76464e5f2e7a559206eac040c092d",
+      "rawBytes": 1631,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/command.json.gz",
+      "publishedSHA256": "ade96be7ab5ec58de003ecf47efcb92f4e77167cd370a4f8d857ba2292fc3fd6",
+      "publishedBytes": 722,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/Game.log",
+      "rawSHA256": "b18dee11064f3faf0f8a308437201f6b9b3bbb0b7b38384d0b888a38bbb80443",
+      "rawBytes": 114128,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/Game.log.gz",
+      "publishedSHA256": "7614a2bd4dab8ece6baf161dd31e4965e5f3a9fe983050992b3c8e402c4dd588",
+      "publishedBytes": 21699,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/INVALID.json",
+      "rawSHA256": "d192d50b3bf5a3d381bae0aec92b3218a055b6a9f57526ce11d5e336558fcf21",
+      "rawBytes": 1452,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/INVALID.json.gz",
+      "publishedSHA256": "e96997a9d126efb39d400e7be44866a2b4dde610c18fb264703b1015693e2bf1",
+      "publishedBytes": 477,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/postmortem.json",
+      "rawSHA256": "248bd568885f69170e9d067e68bfa23f530a338e1b14c0ad6f6dce34871cbb75",
+      "rawBytes": 168,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/postmortem.json.gz",
+      "publishedSHA256": "b454b481e231ff3e792828a0d3bd089c33122eff8187fd6ab537c4c18811175c",
+      "publishedBytes": 144,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/process.json",
+      "rawSHA256": "919c2057d6351933c083c75d2b823e5407e3d7f096b9b1daab6fd515aca3152b",
+      "rawBytes": 1848,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/process.json.gz",
+      "publishedSHA256": "e7e932818079e9bec09fdaa9455c6838930a962d36e94ffe1bce59840d0e2b65",
+      "publishedBytes": 748,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/StartupExports/commands.txt",
+      "rawSHA256": "84e1003a8c711a8fdab47d9128fbd69135ba12c146e9713c2b5dd1584568b7c3",
+      "rawBytes": 415,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/StartupExports/commands.txt.gz",
+      "publishedSHA256": "c3888280c2a278c3d598b52b320ce507d5374ff2b27d87f0543e940f9afee328",
+      "publishedBytes": 184,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/StartupExports/exit.json",
+      "rawSHA256": "47b8b6b49d4695fe6e036bd916538aff4f46773e212ca0d429db80f3963e2cfe",
+      "rawBytes": 15,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/StartupExports/exit.json.gz",
+      "publishedSHA256": "85157050e6270d5d31b83d42ead1d3fe214bcb6832c9dc474ee0b0c5e1fd0d0d",
+      "publishedBytes": 35,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/StartupExports/gpu-events.csv",
+      "rawSHA256": "e0d82fd461da5e7c55753647b9f0282b034cb17d9e7a322f1102d5f83576c96c",
+      "rawBytes": 1145324,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/StartupExports/gpu-events.csv.gz",
+      "publishedSHA256": "dea9619ad8de32820e5b4f5f09eb42abf4ab154c2621aee27964a5c439eb6ee9",
+      "publishedBytes": 168679,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/StartupExports/Insights.log",
+      "rawSHA256": "fa1063fc384b01bbd37b553e1e074bed7c60810c228858591096664851166f54",
+      "rawBytes": 36508,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/StartupExports/Insights.log.gz",
+      "publishedSHA256": "be1e006676394055d6dd7f9bfc8c73f864eb8fb69cb62f5992574a59b26fc7c3",
+      "publishedBytes": 6508,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/StartupExports/process.json",
+      "rawSHA256": "57a414d34838fff84f5148364d4c51b79ac67be72c6e06340a4e0adef3ab76bd",
+      "rawBytes": 491,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/StartupExports/process.json.gz",
+      "publishedSHA256": "a0bbf37307e2e0246d985c785c9b2c9a2e1e513f4468368657ee3d990f070dde",
+      "publishedBytes": 277,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/StartupExports/threads.csv",
+      "rawSHA256": "b092184c1ff586279a6fa9a0097466fc988706720d85978ff0f9d7b77e23d658",
+      "rawBytes": 2074,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/StartupExports/threads.csv.gz",
+      "publishedSHA256": "bfb32ad5f3e3ea5415bd352a4f88d70a3f0c8cf2d401476a9601a8a2f9ca36c2",
+      "publishedBytes": 725,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Method-Timing-01-Replacement/StartupExports/timers.csv",
+      "rawSHA256": "3490789cb98384b47ce01f60961c8836c03dbef7a1ecbf99323e325d5966fa87",
+      "rawBytes": 567899,
+      "published": "Docs/U04/C1/Evidence/Runs/Method-Timing-01-Replacement/StartupExports/timers.csv.gz",
+      "publishedSHA256": "e88bdb7db9f53f7a508b4b912fb08ecd5d269e33aac3a1498f5c2501c159ce9f",
+      "publishedBytes": 66937,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Preflight-01/Generated-FileOpenOrder/CookerOpenOrder.log",
+      "rawSHA256": "324048226e32e009aa6c5222b5781f6cdb6cbf8cc6ec70e878cc191922ec56ba",
+      "rawBytes": 397,
+      "published": "Docs/U04/C1/Evidence/Runs/Preflight-01/Generated-FileOpenOrder/CookerOpenOrder.log.gz",
+      "publishedSHA256": "ebcfccd025c0fe0ad695a09332a50e005db09c6eeb95d201ba7fbf233c278c80",
+      "publishedBytes": 135,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Preflight-01/Generated-FileOpenOrder/EditorOpenOrder.log",
+      "rawSHA256": "488702fc8bb965bd0c2126d1ff497f1364ef8c195463d26c33a31af0a4b62aec",
+      "rawBytes": 3587889,
+      "published": "Docs/U04/C1/Evidence/Runs/Preflight-01/Generated-FileOpenOrder/EditorOpenOrder.log.gz",
+      "publishedSHA256": "d518fc2d5b6dfec59804f8b5d1c36b5a1748f46de699d1cd84b99e2610559231",
+      "publishedBytes": 588078,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Preflight-01/host.json",
+      "rawSHA256": "ece670f215c0587d04ca248de21c1a2e610d86c125d60b9a6ac5dfea55d5ae1f",
+      "rawBytes": 24883,
+      "published": "Docs/U04/C1/Evidence/Runs/Preflight-01/host.json.gz",
+      "publishedSHA256": "2755161a73bfdc0958b49430aa68b209e47d021f0d642f3aba908c8cc54d387d",
+      "publishedBytes": 6595,
+      "transformation": "redact-secrets;gzip"
+    },
+    {
+      "raw": "Preflight-01/preservation-after.json",
+      "rawSHA256": "2e515a8039c8117865333ee736695692ee7f9b75b2c2aeafdc776a6a505ec056",
+      "rawBytes": 33385,
+      "published": "Docs/U04/C1/Evidence/Runs/Preflight-01/preservation-after.json.gz",
+      "publishedSHA256": "de1ab23b47aead00ad617598acc25aaa77b7f1d557a3f72a8bdcc02c50d608d6",
+      "publishedBytes": 6597,
+      "transformation": "redact-secrets;gzip"
+    },
+    {
+      "raw": "Smoke-01/L_Boot/Game.log",
+      "rawSHA256": "445ce20c2a2f87a407871464a49a1af2834f3759c5f4a97df135b1af0dc683c7",
+      "rawBytes": 82389,
+      "published": "Docs/U04/C1/Evidence/Runs/Smoke-01/L_Boot/Game.log.gz",
+      "publishedSHA256": "ecb88801082f5bf9dda9cb07383bd1c6ac82df983eeb4e4217f8ca2969a78d2f",
+      "publishedBytes": 16395,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Smoke-01/L_Boot/process.json",
+      "rawSHA256": "8555a35893805ea8aa304402f928238da9ca4b94449730ba79dc08d212d175b2",
+      "rawBytes": 1110,
+      "published": "Docs/U04/C1/Evidence/Runs/Smoke-01/L_Boot/process.json.gz",
+      "publishedSHA256": "588aee42c38d6eb5a9397a07046336b64363d80d3ffd122d5f60559b85f991f6",
+      "publishedBytes": 463,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Smoke-01/L_CharacterCombatLab/Game.log",
+      "rawSHA256": "cc7c19b0a5a5a0d277fd1f19b8e3896033af860f2395badd90693253484d2dfc",
+      "rawBytes": 601257,
+      "published": "Docs/U04/C1/Evidence/Runs/Smoke-01/L_CharacterCombatLab/Game.log.gz",
+      "publishedSHA256": "5020e28ac9ed739d61c71751912dccaf830e555ed38c52e606db02ac69cd91f1",
+      "publishedBytes": 40936,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Smoke-01/L_CharacterCombatLab/process.json",
+      "rawSHA256": "89e4ff1e552c57b98258cfd06979cc3821e2db7e4ff0b50473616872dda578a2",
+      "rawBytes": 1167,
+      "published": "Docs/U04/C1/Evidence/Runs/Smoke-01/L_CharacterCombatLab/process.json.gz",
+      "publishedSHA256": "73d97ca994c09206d88d4fd67996f524628e716d870f7d316ced957f25fa90ca",
+      "publishedBytes": 476,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Smoke-01/L_NetworkLab/Game.log",
+      "rawSHA256": "f5d0108a7336778e0d217e2b359b1b919ee3a9cc2302f717902ea37707d3bd31",
+      "rawBytes": 580367,
+      "published": "Docs/U04/C1/Evidence/Runs/Smoke-01/L_NetworkLab/Game.log.gz",
+      "publishedSHA256": "1a87e2262cf3b1f55e453df35829f72979d6dc64414010f07064887971875d3c",
+      "publishedBytes": 40382,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Smoke-01/L_NetworkLab/process.json",
+      "rawSHA256": "6dbb991db02901a928b1749f70a862ac19cc5c71badf79b4e4e843e7ebe73e83",
+      "rawBytes": 1135,
+      "published": "Docs/U04/C1/Evidence/Runs/Smoke-01/L_NetworkLab/process.json.gz",
+      "publishedSHA256": "dd570e8ede7c062e7ee7a76774e73c93ea5e17ed7926444be7b83ed61556653a",
+      "publishedBytes": 470,
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Smoke-01/results.json",
+      "rawSHA256": "8439e1e6ce7c3df5141626f80ce823a3be0938b9c19c0c079e8316a9f819d075",
+      "rawBytes": 962,
+      "published": "Docs/U04/C1/Evidence/Runs/Smoke-01/results.json.gz",
+      "publishedSHA256": "6c898abc1d41c96b4f4d0f737a727d8e944b9e3bc6816cd835a1f9e147729cec",
+      "publishedBytes": 279,
+      "transformation": "identity;gzip"
+    }
+  ],
+  "excluded": [
+    "Archive package binaries and PDB: retained locally, indexed in BUILD-IDENTITY and symbols.json",
+    "User/Settings: private local process data"
+  ],
+  "baselineTimingRuns": 0,
+  "baselineMemoryRuns": 0
+}

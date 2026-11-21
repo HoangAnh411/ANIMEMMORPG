@@ -1,0 +1,14 @@
+{
+  "status": "INCOMPLETE",
+  "evidenceFilesVerified": 83,
+  "identityGzipDecompressionVerified": true,
+  "packageFilesVerified": 48,
+  "moduleVerified": true,
+  "nativeRuntimeDiffFromBuiltCommit": false,
+  "protectedOriginalHashesVerified": 114,
+  "automationExpectedDiscoveredExecutedPassed": 144,
+  "mapSmokesPassed": 3,
+  "bothInvalidStartupTracesOpenedWithInsightsExit0": true,
+  "validTiming": 0,
+  "validMemory": 0
+}
