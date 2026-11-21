@@ -83,7 +83,7 @@ def main():
             def stop_launched(self,timeout):
                 calls['stop']+=1;events.append('stop_original_handle')
                 if stage=='stop_timeout':raise RuntimeError('owned_exit_timeout')
-                return dict(pid=r['pid'],creationTicks=r['creationTicks'],wait='fake-signaled',handleSource='original_Popen')
+                return dict(pid=r['pid'],creationTicks=r['creationTicks'],wait='fake-signaled',handleSource='original_Popen',identityVerifiedAtStop=True)
             def close_owned(self):calls['close']+=1;events.append('close_original_handle');self.owned=False
         backend=FakeBackend()
         def writer(path,value):

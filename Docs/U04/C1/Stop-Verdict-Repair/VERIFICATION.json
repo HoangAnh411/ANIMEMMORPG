@@ -1,0 +1,23 @@
+{
+  "status": "TOOLING_REVIEW_PENDING",
+  "c1Status": "INCOMPLETE",
+  "newReplayPassed": 7,
+  "identityPassed": 18,
+  "regressionPassed": 86,
+  "previousIdentityEvidenceFilesVerified": 550,
+  "nativeInputsUnchangedFrom": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+  "nativeUntrackedInputs": [],
+  "gatesAndPreviousReportsUnchanged": true,
+  "normalStopExplicitTrue": true,
+  "unverifiedStopKeepsExitProofAndMarksBothVerdictsInvalid": true,
+  "missingOrNonBooleanTrueRejected": true,
+  "liveWindowsChildProcesses": 0,
+  "gameReadinessRuns": 0,
+  "editorOperations": 0,
+  "inputCalls": 0,
+  "unrealBuilds": 0,
+  "unrealTests": 0,
+  "timingRuns": 0,
+  "memoryRuns": 0,
+  "overheadPairs": 0
+}

@@ -127,7 +127,7 @@ class FakeBackend:
         self.verify_owned(r)
         self.stopped+=1
         if self.mode=='exit_timeout':raise RuntimeError('owned_exit_timeout')
-        return dict(pid=r['pid'],creationUTC=r['creationUTC'],exitCode=0,wait='fake-signaled')
+        return dict(pid=r['pid'],creationUTC=r['creationUTC'],exitCode=0,wait='fake-signaled',identityVerifiedAtStop=True)
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--out',type=Path,required=True);args=parser.parse_args()

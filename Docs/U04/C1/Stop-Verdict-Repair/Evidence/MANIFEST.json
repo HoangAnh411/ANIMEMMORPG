@@ -1,0 +1,1355 @@
+{
+  "status": "TOOLING_REVIEW_PENDING",
+  "baseCommit": "c9e5a6cc28ac081e26772f2da59d9e9c4fa5c41d",
+  "rawRoot": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\Runs",
+  "toolSnapshot": [
+    {
+      "path": "Scripts/U04/C1Run.py",
+      "rawSHA256": "0b8ceaf4359100f32c9a08202c829358e34c11d13d89593f3d19f05dd4f42d2d",
+      "lfNormalizedSHA256": "350f7d63c168b01aea2bcf9288982e26159d07a63db8148533d7f643880c91c3"
+    },
+    {
+      "path": "Scripts/U04/C1Win32.py",
+      "rawSHA256": "7d8e7efeed250d4d089ba073cc548b400530ca50a58e807bcb51a4d3f4e7e32f",
+      "lfNormalizedSHA256": "38723333cb6e31355c7af45506eb88f8084d4d39945ec7ba1b079d6fe3697b09"
+    },
+    {
+      "path": "Scripts/U04/C1Offline.py",
+      "rawSHA256": "7ff16159e9d1ede989237f793fb139d0ce2bbc1ac119b3b908b5eb962af201d8",
+      "lfNormalizedSHA256": "b5e2085ee1b891db26d046d623741c1499a62bd1d37860e6d4f92ec693f1bde7"
+    },
+    {
+      "path": "Scripts/U04/C1IdentityChecks.py",
+      "rawSHA256": "c22225b1de4419dbd73133f2b959f512c123d7b6174d22dcf85abbf875cd7bd6",
+      "lfNormalizedSHA256": "c22225b1de4419dbd73133f2b959f512c123d7b6174d22dcf85abbf875cd7bd6"
+    },
+    {
+      "path": "Scripts/U04/C1StopVerdictChecks.py",
+      "rawSHA256": "a48196616b09a4af80e9086e6bbbba98f34c35de34800411b1f427ec235dd1b6",
+      "lfNormalizedSHA256": "a48196616b09a4af80e9086e6bbbba98f34c35de34800411b1f427ec235dd1b6"
+    },
+    {
+      "path": "Scripts/U04/C1Identity.py",
+      "rawSHA256": "95488b249d87ba800cbbfd50df57a77368aace46960506ca4bdc243fb8641f29",
+      "lfNormalizedSHA256": "95488b249d87ba800cbbfd50df57a77368aace46960506ca4bdc243fb8641f29"
+    },
+    {
+      "path": "Scripts/U04/C1Readiness.py",
+      "rawSHA256": "48760b871171ac50f0f9a3047f0153ad8775b52cdb809993510ff2527d3888c0",
+      "lfNormalizedSHA256": "4d7031e997bfd2e04e0169bddaac2ea7ac7e8e6c74d2c76c7800085e5ed18168"
+    }
+  ],
+  "files": [
+    {
+      "raw": "Stop-Verdict-Offline-01/cases.csv",
+      "rawBytes": 282,
+      "rawSHA256": "351e374a9932ebc71eb489dbd2537b9a4e880fdccefaf2c4f6293ffe0f668b4d",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/cases.csv.gz",
+      "publishedBytes": 143,
+      "publishedSHA256": "effd0ab934d57588e4f67ccb7f9f67880e798a97ec6feb8de55d3323bf4dee2b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/false_flag/command.json",
+      "rawBytes": 1230,
+      "rawSHA256": "3933ad802152ed62abf3e7b262125bbf9f5c3750b4addf08d231dec4f8a8265c",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/false_flag/command.json.gz",
+      "publishedBytes": 595,
+      "publishedSHA256": "5e74f82ef45e66c3eb069f84f2bb3b8e87ceb1feed01893121cc513810c5602b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/false_flag/final.json",
+      "rawBytes": 574,
+      "rawSHA256": "683c91d61d5fc52f3ba145eda54169476ba4e4253948d06c33307905e7eb0780",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/false_flag/final.json.gz",
+      "publishedBytes": 379,
+      "publishedSHA256": "9d19f84c95ead99e0c66477a236367620a0a22d866c89d4b7d159953322336c4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/false_flag/journal.jsonl",
+      "rawBytes": 1831,
+      "rawSHA256": "f09ef2a5e3a4fbb1fd6a17fe69114f255da5abd5baf11c6d3ba8576224b17b2f",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/false_flag/journal.jsonl.gz",
+      "publishedBytes": 501,
+      "publishedSHA256": "91d3bb7fff09077c887fc00e7351136119d6b93dd47f6d8fa4eb4e4f381def7b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/false_flag/process.json",
+      "rawBytes": 1802,
+      "rawSHA256": "2b4afb948a837668efb4bc3386f5c5bd7e51b29080502a5fa7006e7cd4072589",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/false_flag/process.json.gz",
+      "publishedBytes": 732,
+      "publishedSHA256": "cd663255bbcd7bb165a9fd6978bde770948e9bfa8c3be53e9e27d950323d9a1a",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/false_flag/protected-after.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/false_flag/protected-after.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/false_flag/protected-before.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/false_flag/protected-before.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/false_flag/result.json",
+      "rawBytes": 574,
+      "rawSHA256": "683c91d61d5fc52f3ba145eda54169476ba4e4253948d06c33307905e7eb0780",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/false_flag/result.json.gz",
+      "publishedBytes": 379,
+      "publishedSHA256": "9d19f84c95ead99e0c66477a236367620a0a22d866c89d4b7d159953322336c4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/missing_flag/command.json",
+      "rawBytes": 1238,
+      "rawSHA256": "dcf68076022c4e6520f88eab3650d95ca533f0f8e48fb80292194d9c8a14072b",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/missing_flag/command.json.gz",
+      "publishedBytes": 597,
+      "publishedSHA256": "9390e126c81cb595010d80108fe377e3fa82adf901fc8ae5c1cd4ab49121c661",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/missing_flag/final.json",
+      "rawBytes": 536,
+      "rawSHA256": "02f7a7c67b42ac1b1eec1f9518bd5043aee581aa9a180f6053d0099fa0486b8b",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/missing_flag/final.json.gz",
+      "publishedBytes": 361,
+      "publishedSHA256": "89b20ab4c206f66a3409f991c0aacfbc0fbb6de1b67d1ff72a9fb66993b33fd6",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/missing_flag/journal.jsonl",
+      "rawBytes": 1798,
+      "rawSHA256": "d707c181722d81349a9d0f0cf5c35750caecf425dba786669b0987c9b8e01950",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/missing_flag/journal.jsonl.gz",
+      "publishedBytes": 486,
+      "publishedSHA256": "aae7ea4421a0460c18b5236c07369ec9ab916fb2a745cf5611560d3678f1659e",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/missing_flag/process.json",
+      "rawBytes": 1816,
+      "rawSHA256": "b3ad143084e4209d14a3527a0730c2f9235681d9ac7c29d6869e51478b9170b5",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/missing_flag/process.json.gz",
+      "publishedBytes": 737,
+      "publishedSHA256": "fe33a65c0d0bd105f54771696dfb9701b41aa7360d7d24b72a0fdc3aa1209fcf",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/missing_flag/protected-after.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/missing_flag/protected-after.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/missing_flag/protected-before.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/missing_flag/protected-before.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/missing_flag/result.json",
+      "rawBytes": 536,
+      "rawSHA256": "02f7a7c67b42ac1b1eec1f9518bd5043aee581aa9a180f6053d0099fa0486b8b",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/missing_flag/result.json.gz",
+      "publishedBytes": 361,
+      "publishedSHA256": "89b20ab4c206f66a3409f991c0aacfbc0fbb6de1b67d1ff72a9fb66993b33fd6",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/normal/command.json",
+      "rawBytes": 1214,
+      "rawSHA256": "21c9249db47545bba360b9932ebdaca4946e06ef210cf879f1182dc7f84bf12f",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/normal/command.json.gz",
+      "publishedBytes": 592,
+      "publishedSHA256": "17bc1de9c205c344c501987701162e13dc27946efae9eb4ab1d0b56351138722",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/normal/final.json",
+      "rawBytes": 513,
+      "rawSHA256": "7091406ddf1cffd6495985ec03935cf7f4c7ea618bfe12fb956c55acd9aa4e48",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/normal/final.json.gz",
+      "publishedBytes": 346,
+      "publishedSHA256": "c59db4d13f0e890b998ab42b2230e78b5b1464cb3895193a8c70031f6f9a7c8c",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/normal/journal.jsonl",
+      "rawBytes": 1830,
+      "rawSHA256": "a1140c5f77daf34cb8f4039f20931549b5600c6de258dfdd7c5599810f6b0976",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/normal/journal.jsonl.gz",
+      "publishedBytes": 498,
+      "publishedSHA256": "6ae3eb84901017f0b6cb18bb1780959e55805947172638c46dab9371a7a752d8",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/normal/process.json",
+      "rawBytes": 1774,
+      "rawSHA256": "779312e16bafdc47fc4c96ef48131327398b327cd5fa0eadc438ed74fe63674f",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/normal/process.json.gz",
+      "publishedBytes": 729,
+      "publishedSHA256": "f43107244c7ce4691268f69fa7ffc3d2ea2c718c216e947770d498f2d1b7d1b3",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/normal/protected-after.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/normal/protected-after.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/normal/protected-before.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/normal/protected-before.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/normal/result.json",
+      "rawBytes": 513,
+      "rawSHA256": "7091406ddf1cffd6495985ec03935cf7f4c7ea618bfe12fb956c55acd9aa4e48",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/normal/result.json.gz",
+      "publishedBytes": 346,
+      "publishedSHA256": "c59db4d13f0e890b998ab42b2230e78b5b1464cb3895193a8c70031f6f9a7c8c",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/null_flag/command.json",
+      "rawBytes": 1226,
+      "rawSHA256": "441e4ec9d7872c6f4906a44c891a341ac498b363c2f30903674cfd74cfb77e24",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/null_flag/command.json.gz",
+      "publishedBytes": 594,
+      "publishedSHA256": "8b6b564182caacc74cca6549baa708052f56a63376f59d6bb82751d080c0dfa0",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/null_flag/final.json",
+      "rawBytes": 573,
+      "rawSHA256": "080ea2b75df9d4318325278f3b73d76189e785c156c40657f3755efaa6bd2131",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/null_flag/final.json.gz",
+      "publishedBytes": 376,
+      "publishedSHA256": "324e0a4b5e9e5c6a4724aa047c3eb47a34156eaba4545cd703ab150b3046af36",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/null_flag/journal.jsonl",
+      "rawBytes": 1830,
+      "rawSHA256": "8533ec4529c73f110723f1ca73ab3aa2a1b1f85c8a089dc0dd70b5dfe6f6d505",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/null_flag/journal.jsonl.gz",
+      "publishedBytes": 497,
+      "publishedSHA256": "d781b547cc3a60c0413a80c9ceb46b1cc8573fa472596b21df6f23e0e6411bd5",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/null_flag/process.json",
+      "rawBytes": 1795,
+      "rawSHA256": "cd98fda7bbfd857023675afea1a5d402bddc0097b4572a14b0072c2f898e1fe7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/null_flag/process.json.gz",
+      "publishedBytes": 732,
+      "publishedSHA256": "af657b4a4badd1e40c9665e595f80b62cbac9a9b05b10451c40836b39dde9698",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/null_flag/protected-after.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/null_flag/protected-after.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/null_flag/protected-before.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/null_flag/protected-before.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/null_flag/result.json",
+      "rawBytes": 573,
+      "rawSHA256": "080ea2b75df9d4318325278f3b73d76189e785c156c40657f3755efaa6bd2131",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/null_flag/result.json.gz",
+      "publishedBytes": 376,
+      "publishedSHA256": "324e0a4b5e9e5c6a4724aa047c3eb47a34156eaba4545cd703ab150b3046af36",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/numeric_flag/command.json",
+      "rawBytes": 1238,
+      "rawSHA256": "ac1ccf91cbbd15b050c8e5fde249f25365dbf1f3c402b163d5a12c5c1ba7cc2d",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/numeric_flag/command.json.gz",
+      "publishedBytes": 596,
+      "publishedSHA256": "3d8ad3eb9f122548b19e43ee0832abb408d7a8a5a65359a0f6d7a3ff70d83b1d",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/numeric_flag/final.json",
+      "rawBytes": 570,
+      "rawSHA256": "7d3e9e99ad6d97ac2e1094f6616a9f037e3b5aa5d15d6b3cd9bc0971e88c5b07",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/numeric_flag/final.json.gz",
+      "publishedBytes": 374,
+      "publishedSHA256": "cd50b85f01584075f2d8adb0d06cebe904197c1733405b4e0a345687199131af",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/numeric_flag/journal.jsonl",
+      "rawBytes": 1827,
+      "rawSHA256": "bdfa8438382c11479b974a50f9da0987de4539dcac2b90df0a51a6e01514dcf9",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/numeric_flag/journal.jsonl.gz",
+      "publishedBytes": 499,
+      "publishedSHA256": "801c5547b80f7b8a05b39ce72d2e3bf366e369f00a87d74c932846c3e0082f60",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/numeric_flag/process.json",
+      "rawBytes": 1816,
+      "rawSHA256": "34324c4fb958a88d80c1d3b332c8de1149ec4c66ec2d00af12652451e434c30c",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/numeric_flag/process.json.gz",
+      "publishedBytes": 735,
+      "publishedSHA256": "c4c2cb6528a6f00313cc9ae867eaea8fcabb0edb3bff962ab915280600c41a51",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/numeric_flag/protected-after.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/numeric_flag/protected-after.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/numeric_flag/protected-before.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/numeric_flag/protected-before.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/numeric_flag/result.json",
+      "rawBytes": 570,
+      "rawSHA256": "7d3e9e99ad6d97ac2e1094f6616a9f037e3b5aa5d15d6b3cd9bc0971e88c5b07",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/numeric_flag/result.json.gz",
+      "publishedBytes": 374,
+      "publishedSHA256": "cd50b85f01584075f2d8adb0d06cebe904197c1733405b4e0a345687199131af",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/results.json",
+      "rawBytes": 14019,
+      "rawSHA256": "b0aeabde4d62079303d38bad6822a7eb9d3735574c179b17823124acd23b1da5",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/results.json.gz",
+      "publishedBytes": 930,
+      "publishedSHA256": "9e90b06dff3d25ef1a0458a1b678c201b27d726077c9d0797db38989586694f1",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/stop_oserror/command.json",
+      "rawBytes": 1238,
+      "rawSHA256": "46bbc0eb2b2135fd120f4a5550e56fdaa492000c7ca2d335a9849df67d6bf923",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/stop_oserror/command.json.gz",
+      "publishedBytes": 595,
+      "publishedSHA256": "159bb0b53603138194ee85296ce5f6636d4026a1b3427d201c09b1fbff19cc30",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/stop_oserror/final.json",
+      "rawBytes": 601,
+      "rawSHA256": "26cb481c7bdfe86a3ea5cb5533bce8d8a40d133ed9256b89ac6909f451ef1de2",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/stop_oserror/final.json.gz",
+      "publishedBytes": 396,
+      "publishedSHA256": "be5829e113381bb8870ff4599d7576a7759bab3d200d61c29272c03119b26bec",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/stop_oserror/journal.jsonl",
+      "rawBytes": 1858,
+      "rawSHA256": "b14d5a721454c4d5f2c0197d1cc2f6aabd40975057a077d6a7b0ed64aac39313",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/stop_oserror/journal.jsonl.gz",
+      "publishedBytes": 550,
+      "publishedSHA256": "000bdd3e202029138957ff94f867b2b1ea7bde9eabb10685172e56d9a58313cd",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/stop_oserror/process.json",
+      "rawBytes": 1816,
+      "rawSHA256": "c2f9f2e34145c56a2825240104b4185fe2ca0c763053d5765bcd408b1edccd10",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/stop_oserror/process.json.gz",
+      "publishedBytes": 735,
+      "publishedSHA256": "1395559636fdb2bcfb5b6805c3ef97a84c2b84b4dfaa7723c3f044dac990c7d4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/stop_oserror/protected-after.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/stop_oserror/protected-after.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/stop_oserror/protected-before.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/stop_oserror/protected-before.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/stop_oserror/result.json",
+      "rawBytes": 601,
+      "rawSHA256": "26cb481c7bdfe86a3ea5cb5533bce8d8a40d133ed9256b89ac6909f451ef1de2",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/stop_oserror/result.json.gz",
+      "publishedBytes": 396,
+      "publishedSHA256": "be5829e113381bb8870ff4599d7576a7759bab3d200d61c29272c03119b26bec",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/string_flag/command.json",
+      "rawBytes": 1234,
+      "rawSHA256": "4f17fe41745041f8c91c256d5b758d3cd8c502f27a9892b5a1f97609d43bf345",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/string_flag/command.json.gz",
+      "publishedBytes": 595,
+      "publishedSHA256": "90d251aa317213970f414e08b9f02b3273dabcadd720ad6a524032607197da3a",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/string_flag/final.json",
+      "rawBytes": 575,
+      "rawSHA256": "d9827b92893fb26d7957ad41b0e01fa54df74049e16f1e5542dc5547504a48de",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/string_flag/final.json.gz",
+      "publishedBytes": 378,
+      "publishedSHA256": "dff82e171354b7725a05b9f941882f6f5ae567cc45918bde8c06ff0271739764",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/string_flag/journal.jsonl",
+      "rawBytes": 1832,
+      "rawSHA256": "f8e372088003220d03bb88724276affa98a791972c6e7145589b1366ad6daa05",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/string_flag/journal.jsonl.gz",
+      "publishedBytes": 502,
+      "publishedSHA256": "24e37f6a7207652f21082753190cf42c29b0a960b415859e0fb3014bd382f810",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/string_flag/process.json",
+      "rawBytes": 1809,
+      "rawSHA256": "60ac9bf424cd71a3bf02b7fb9c5c56566367ffb1fa12955debae2389b69e892e",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/string_flag/process.json.gz",
+      "publishedBytes": 734,
+      "publishedSHA256": "c5f2f0df4fa940f90ac610a62077a5fa7d9678b6964be658897eed22764bcf3b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/string_flag/protected-after.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/string_flag/protected-after.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/string_flag/protected-before.json",
+      "rawBytes": 183,
+      "rawSHA256": "bb461b3bc49da04ccdd6e1da788c460566193c3e46401a960ac5a76eb3d563c7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/string_flag/protected-before.json.gz",
+      "publishedBytes": 170,
+      "publishedSHA256": "836ec563998316d692dcfa46f70ab372368060c134acc10d4f1732eccb75937b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/string_flag/result.json",
+      "rawBytes": 575,
+      "rawSHA256": "d9827b92893fb26d7957ad41b0e01fa54df74049e16f1e5542dc5547504a48de",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/string_flag/result.json.gz",
+      "publishedBytes": 378,
+      "publishedSHA256": "dff82e171354b7725a05b9f941882f6f5ae567cc45918bde8c06ff0271739764",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Offline-01/transcript.txt",
+      "rawBytes": 427,
+      "rawSHA256": "3dfc5bb906398fb580e5f03860a95e920552b0f8e6b93d49c9f8f9eea4a1be72",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Offline-01/transcript.txt.gz",
+      "publishedBytes": 144,
+      "publishedSHA256": "1eaa36ce6b5b759dd83036b8180e14a05fc9ad0a23b6032ab1d817d30e094e5b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/capture_identity/result.json",
+      "rawBytes": 305,
+      "rawSHA256": "8c0dedae4902acf7b49325843d4bdde358c48952e0ff79ed728a0da92ab81a62",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/capture_identity/result.json.gz",
+      "publishedBytes": 233,
+      "publishedSHA256": "01252d916ea11591291621c773319079590e78cf03d70f69aa63a50ffd8f031b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/cases.csv",
+      "rawBytes": 1002,
+      "rawSHA256": "a1919663fe2e79e3461e4c4c4fd57e271857215aea1c7bb0dbc483673948b0f2",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/cases.csv.gz",
+      "publishedBytes": 336,
+      "publishedSHA256": "fe07d95af7d42008ee03ebaefc1209795f0ddf39723f26b6ac97cf898dc9c480",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/journal_first_write/journal.jsonl",
+      "rawBytes": 0,
+      "rawSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/journal_first_write/journal.jsonl.gz",
+      "publishedBytes": 20,
+      "publishedSHA256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/journal_first_write/process.json",
+      "rawBytes": 1353,
+      "rawSHA256": "280ded1e79c7ff720109c02ddb2164ff588e4eda91ce2e9ce297dab38e2cd203",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/journal_first_write/process.json.gz",
+      "publishedBytes": 622,
+      "publishedSHA256": "acdd6a0110e39975204aba8cf340372e3e694c86bd675d30273503192928aafb",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/journal_first_write/result.json",
+      "rawBytes": 367,
+      "rawSHA256": "b03028f87f348d1e82b16a6f691622e50f92d657e6af0c5f23c3c13917739892",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/journal_first_write/result.json.gz",
+      "publishedBytes": 257,
+      "publishedSHA256": "73da1692943667002b03c0eb4b1a64fb22c64f95366d64b1c17d59a3eed56535",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/journal_open/process.json",
+      "rawBytes": 1353,
+      "rawSHA256": "280ded1e79c7ff720109c02ddb2164ff588e4eda91ce2e9ce297dab38e2cd203",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/journal_open/process.json.gz",
+      "publishedBytes": 622,
+      "publishedSHA256": "acdd6a0110e39975204aba8cf340372e3e694c86bd675d30273503192928aafb",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/journal_open/result.json",
+      "rawBytes": 297,
+      "rawSHA256": "b3ccd64f5e32dca904d360b3768c9becc755053b9d33476d72db0bc0a3ad2aae",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/journal_open/result.json.gz",
+      "publishedBytes": 230,
+      "publishedSHA256": "a4dfb082a9e5cd3ccdcf8ba411efee6b2f67973d89a8f7db5a37281675350c82",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/launch_after_spawn/result.json",
+      "rawBytes": 307,
+      "rawSHA256": "603881888e3f58f8c687e24daaa62d85dc76039e92add579b03a893948ba04cd",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/launch_after_spawn/result.json.gz",
+      "publishedBytes": 227,
+      "publishedSHA256": "2af16c81ad5c4c710619c1f60303dd16b05731246020f9b07028e4d99e4e4e4f",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/normal/journal.jsonl",
+      "rawBytes": 1388,
+      "rawSHA256": "df7b152a91dac437cfcbaa32398ead18f28901a511b6fbb641da70664a1b2479",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/normal/journal.jsonl.gz",
+      "publishedBytes": 361,
+      "publishedSHA256": "52f5248f8a9e9797e81a14ea67bdc9d3a14f1abf57da12dd508ed3e3da12b5f3",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/normal/process.json",
+      "rawBytes": 1353,
+      "rawSHA256": "280ded1e79c7ff720109c02ddb2164ff588e4eda91ce2e9ce297dab38e2cd203",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/normal/process.json.gz",
+      "publishedBytes": 622,
+      "publishedSHA256": "acdd6a0110e39975204aba8cf340372e3e694c86bd675d30273503192928aafb",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/normal/result.json",
+      "rawBytes": 266,
+      "rawSHA256": "b38463df2e8103fddeb896db3ee9d847723c0462d7e703ba6f3003a7cdfa12a2",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/normal/result.json.gz",
+      "publishedBytes": 204,
+      "publishedSHA256": "5b2afa47d3802fbaa8595e76e22e393cdaf6f5a0155003f535a935ff17077717",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/process_record_write/result.json",
+      "rawBytes": 289,
+      "rawSHA256": "f027107e1e87272a6522c17fa57ef3e440784d53483436ea2cbf70b9467b74ff",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/process_record_write/result.json.gz",
+      "publishedBytes": 223,
+      "publishedSHA256": "5f9524b5452290530e239680fc3c7a390f6a195c39c6641231ba3fb8d42c2520",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/results.json",
+      "rawBytes": 34794,
+      "rawSHA256": "449f1ba1658d93f22a0acf3a5f4380460b7797dd725018ad17405789a1642233",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/results.json.gz",
+      "publishedBytes": 2075,
+      "publishedSHA256": "a5a7116d5e23cb4062c3d62dbfc0b67f304dac37160b2e9954d09840312f11f3",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/stop_timeout/journal.jsonl",
+      "rawBytes": 1277,
+      "rawSHA256": "293883654043d9a1e2868e8915ada9e8b40c2b1d4c090453b12c3fe3bea74966",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/stop_timeout/journal.jsonl.gz",
+      "publishedBytes": 322,
+      "publishedSHA256": "bf722ab93d5f1665735a5e49e13c7c45598902c0b8d3d8df386cc512a56a4898",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/stop_timeout/process.json",
+      "rawBytes": 1353,
+      "rawSHA256": "280ded1e79c7ff720109c02ddb2164ff588e4eda91ce2e9ce297dab38e2cd203",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/stop_timeout/process.json.gz",
+      "publishedBytes": 622,
+      "publishedSHA256": "acdd6a0110e39975204aba8cf340372e3e694c86bd675d30273503192928aafb",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/stop_timeout/result.json",
+      "rawBytes": 135,
+      "rawSHA256": "292291b8aeda3f23b4f78a773e941714c757836a1efe74cc4fc73c1c0af5e778",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/stop_timeout/result.json.gz",
+      "publishedBytes": 132,
+      "publishedSHA256": "f5d1be6f0a6485ba60197d178b40c39d3e41412e0ead8e90025617209a07433a",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/transcript.txt",
+      "rawBytes": 1281,
+      "rawSHA256": "d49313e93d60e4f01bd951cf138930d92e1a51384c26faba66c7a7a64f47e0b0",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/transcript.txt.gz",
+      "publishedBytes": 318,
+      "publishedSHA256": "5f71d00c52bbca8d7ebf21802c7158a42cc28da12e06428b9cdb40d4aaadd5bf",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/verify_identity/journal.jsonl",
+      "rawBytes": 1386,
+      "rawSHA256": "42d40119168192e6cea1455826b687fa94d469c61e2f5315d27d58cf1391249a",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/verify_identity/journal.jsonl.gz",
+      "publishedBytes": 393,
+      "publishedSHA256": "be45f57f5fbe6cf2fa0abef19039149cf5a3a2e9bbb6a56a2277ea5dfe016f52",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/verify_identity/process.json",
+      "rawBytes": 1353,
+      "rawSHA256": "280ded1e79c7ff720109c02ddb2164ff588e4eda91ce2e9ce297dab38e2cd203",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/verify_identity/process.json.gz",
+      "publishedBytes": 622,
+      "publishedSHA256": "acdd6a0110e39975204aba8cf340372e3e694c86bd675d30273503192928aafb",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Identity-Offline-01/verify_identity/result.json",
+      "rawBytes": 298,
+      "rawSHA256": "38e01bd5c07c98b81755bc9c2d096a0e1a1e4eccc21cafbd290c14862059e424",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Identity-Offline-01/verify_identity/result.json.gz",
+      "publishedBytes": 229,
+      "publishedSHA256": "c6c2ad5683553bb4ad2057397c74821e72fbeea7f48f3597b05790af06466e48",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/actual_cursor_moved_before_click.journal.jsonl",
+      "rawBytes": 125959,
+      "rawSHA256": "d0deae9f7e9fc7a7430327e524206438fa1dbfbf9b9049e30a2f951b8acf5d53",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/actual_cursor_moved_before_click.journal.jsonl.gz",
+      "publishedBytes": 4696,
+      "publishedSHA256": "58d03b56b329797c37e72e5359fa20533f75b1c16509f7ef676bbebf3a054d42",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/cases.csv",
+      "rawBytes": 7077,
+      "rawSHA256": "9ef71ff190b7a8a5509ec467bd292cb9009d3ded7879b85e2c7112426be5d7e0",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/cases.csv.gz",
+      "publishedBytes": 1362,
+      "publishedSHA256": "720e1a79ad3f90d0d7ad83b73ca4f88a8985daed5fe0eee5cd9ab556735146cc",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/client_origin_changed.journal.jsonl",
+      "rawBytes": 116429,
+      "rawSHA256": "caea3e9460ec26b20352c22492e4c1e550742cb7486418ac69ce38b53f5503fa",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/client_origin_changed.journal.jsonl.gz",
+      "publishedBytes": 4400,
+      "publishedSHA256": "d4d20356efddfaace8b2880505711acdc9c749518e9189f9323caecd68bb682c",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/command.json",
+      "rawBytes": 1274,
+      "rawSHA256": "fdf34873d081f72c3627a26b697555b76bbccc61bbeb9c8eb70f1536846ec806",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/command.json.gz",
+      "publishedBytes": 608,
+      "publishedSHA256": "3416f3f3ce070fa40577dd02216101c20289985f787c3e80f43414d12e5fcc78",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/final.json",
+      "rawBytes": 324,
+      "rawSHA256": "de88008e7e643caa3012ebc150a12a2fbb1c0bcc06e8d1a468aef9faaf118995",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/final.json.gz",
+      "publishedBytes": 249,
+      "publishedSHA256": "66fe5ffceb5562962756dbd24c812cd259f68b923d5ccec1e8cadd8a1e77a567",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/journal.jsonl",
+      "rawBytes": 23314,
+      "rawSHA256": "f4208c634654754284fb957e7577a6d14de70429f3c579d79078d5d268c9be80",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/journal.jsonl.gz",
+      "publishedBytes": 1741,
+      "publishedSHA256": "b3c5fa63140a7333e0012f6a7529511001f06f87b6821122c9540300cc6c1a1a",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/process.json",
+      "rawBytes": 1879,
+      "rawSHA256": "703781fdd72c1415a5870dfbeb8a80860b5a8c62af67fd47378ffec0ec8ed84b",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/process.json.gz",
+      "publishedBytes": 751,
+      "publishedSHA256": "3e7cfec5812296e65eb8ccf6a959ec5feb79b3ef925d17e67912934a492f76e1",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/protected-after.json",
+      "rawBytes": 174,
+      "rawSHA256": "27c27924a80dd5c5d5533035ed00a6de5efa453fbe499fcf9bf4bd52b4b1aef1",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/protected-after.json.gz",
+      "publishedBytes": 161,
+      "publishedSHA256": "fd7ba81892cba418b3b4a5e3ae9983ff88f89893c5194117257ce8377afee029",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/protected-before.json",
+      "rawBytes": 174,
+      "rawSHA256": "27c27924a80dd5c5d5533035ed00a6de5efa453fbe499fcf9bf4bd52b4b1aef1",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/protected-before.json.gz",
+      "publishedBytes": 161,
+      "publishedSHA256": "fd7ba81892cba418b3b4a5e3ae9983ff88f89893c5194117257ce8377afee029",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/result.json",
+      "rawBytes": 324,
+      "rawSHA256": "de88008e7e643caa3012ebc150a12a2fbb1c0bcc06e8d1a468aef9faaf118995",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_failure/result.json.gz",
+      "publishedBytes": 249,
+      "publishedSHA256": "66fe5ffceb5562962756dbd24c812cd259f68b923d5ccec1e8cadd8a1e77a567",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_success/command.json",
+      "rawBytes": 1274,
+      "rawSHA256": "034a81a9d0c43c04f9e690b8a5ae43246eb60609b73b42f070e9b217cb567567",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_success/command.json.gz",
+      "publishedBytes": 606,
+      "publishedSHA256": "ac1658b584179d468c0141d3b3670d4170e524a1125e0143da08f3cf6906af52",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_success/final.json",
+      "rawBytes": 2833,
+      "rawSHA256": "4d69d1569dbc45e71f076a0bb2886aceee7bc9a58b4279b53ac425c3f43e8aae",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_success/final.json.gz",
+      "publishedBytes": 754,
+      "publishedSHA256": "ff97a3aa09fc9bbe29113af2d4ab84c446033c1149f1f3d6cb87ce18ae0aa020",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_success/journal.jsonl",
+      "rawBytes": 358372,
+      "rawSHA256": "8a49e73f95ca7bc6274ff2edbb10aad48f5591bf6ce8c4ac976c0af9e6b40fee",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_success/journal.jsonl.gz",
+      "publishedBytes": 11233,
+      "publishedSHA256": "ced297fe1e07a7cfa8af72e51da3a9dbdf050ea1d43ee2fa2654109af372fa5b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_success/process.json",
+      "rawBytes": 1879,
+      "rawSHA256": "3cd4dc86864b9694edd7bbfca07ac0c27c63feaf185248b92acb9f42c0740362",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_success/process.json.gz",
+      "publishedBytes": 749,
+      "publishedSHA256": "318a0735b558b97f5d7951dc113ef556c9fd68c60043bbc6962e8574b4515b40",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_success/protected-after.json",
+      "rawBytes": 174,
+      "rawSHA256": "27c27924a80dd5c5d5533035ed00a6de5efa453fbe499fcf9bf4bd52b4b1aef1",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_success/protected-after.json.gz",
+      "publishedBytes": 161,
+      "publishedSHA256": "fd7ba81892cba418b3b4a5e3ae9983ff88f89893c5194117257ce8377afee029",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_success/protected-before.json",
+      "rawBytes": 174,
+      "rawSHA256": "27c27924a80dd5c5d5533035ed00a6de5efa453fbe499fcf9bf4bd52b4b1aef1",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_success/protected-before.json.gz",
+      "publishedBytes": 161,
+      "publishedSHA256": "fd7ba81892cba418b3b4a5e3ae9983ff88f89893c5194117257ce8377afee029",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/entry_to_exit_success/result.json",
+      "rawBytes": 2833,
+      "rawSHA256": "4d69d1569dbc45e71f076a0bb2886aceee7bc9a58b4279b53ac425c3f43e8aae",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/entry_to_exit_success/result.json.gz",
+      "publishedBytes": 754,
+      "publishedSHA256": "ff97a3aa09fc9bbe29113af2d4ab84c446033c1149f1f3d6cb87ce18ae0aa020",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/guard_after_down_foreground_hwnd_mismatch.journal.jsonl",
+      "rawBytes": 22399,
+      "rawSHA256": "44a066dd41f5db05003ee390644475158b2c09e4d9a71a9c944bfa6522197a07",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/guard_after_down_foreground_hwnd_mismatch.journal.jsonl.gz",
+      "publishedBytes": 1584,
+      "publishedSHA256": "78cf80b0246809538ef9f570c04d9288782418888cdb04744394d227ad92549b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/guard_after_down_foreground_pid_mismatch.journal.jsonl",
+      "rawBytes": 22391,
+      "rawSHA256": "cbdbd20bb5c9ddbe771f3195069ea5bd9a2b97d87ca9925dd2625f87597672e1",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/guard_after_down_foreground_pid_mismatch.journal.jsonl.gz",
+      "publishedBytes": 1587,
+      "publishedSHA256": "74a6a468c4fd9d9f5dd48931ed35a470414062edf9390cf35d52284ba69a0bcc",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/guard_after_down_hwnd_invalid.journal.jsonl",
+      "rawBytes": 22381,
+      "rawSHA256": "3a58c3da3f9756e3ee58fd2cdc1575854945ea04bfe63e3c27f0a88bcb7ad0ef",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/guard_after_down_hwnd_invalid.journal.jsonl.gz",
+      "publishedBytes": 1582,
+      "publishedSHA256": "cae5a270c38444590d0dfbec5023c7d70da063e914e6b2e77fc97b0257a068f7",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/guard_after_down_hwnd_pid_mismatch.journal.jsonl",
+      "rawBytes": 22379,
+      "rawSHA256": "4c84aed02d917b75fc01095eb5eb6db8cf778dd453a21c02da242f8279792997",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/guard_after_down_hwnd_pid_mismatch.journal.jsonl.gz",
+      "publishedBytes": 1588,
+      "publishedSHA256": "32d73076ff507462fc72d88de3e4ce740ae06183d77b2b595d8fdfc1f8bbbba4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/guard_after_down_process_creation_mismatch.journal.jsonl",
+      "rawBytes": 22401,
+      "rawSHA256": "8ec15f8f46ed713f8ba5951dab00e3d278b31e8e39f428f96fb1801de2358d23",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/guard_after_down_process_creation_mismatch.journal.jsonl.gz",
+      "publishedBytes": 1588,
+      "publishedSHA256": "7586c482ae3c05fe4788b6c43faa5e0c5fffd086fe94e8756bfc21ef34f02ecd",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/guard_after_down_window_information_error.journal.jsonl",
+      "rawBytes": 22531,
+      "rawSHA256": "81d86b7d57032c33e472f20f0e7ff91f575673c726202d8d1051dbd81959db4e",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/guard_after_down_window_information_error.journal.jsonl.gz",
+      "publishedBytes": 1596,
+      "publishedSHA256": "578df39eb3b6dd59803f819d7b98f828b396673055af5c9a948b8a3ae78aa8c4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/journal_failure.jsonl",
+      "rawBytes": 18529,
+      "rawSHA256": "d775255f77860b8ce9402f57d5de0f5667c58c62a29c2687a500ae7c307ffc5b",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/journal_failure.jsonl.gz",
+      "publishedBytes": 1296,
+      "publishedSHA256": "9dabd8c1a20d891d09eb44f073e0116aa629b824e0bac9be51c47f644ddd82e3",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/loss_between_mouse_down_up.journal.jsonl",
+      "rawBytes": 130123,
+      "rawSHA256": "598c82fb1ffd0af0ff8e8abc3b9868b2239549a300222a54c153b52e29eb4ccf",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/loss_between_mouse_down_up.journal.jsonl.gz",
+      "publishedBytes": 4818,
+      "publishedSHA256": "75645c56d75c5ad0e8635dffa8b2cebc7fab07e4dd54db23c6a8013b315ab7ed",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/loss_between_w_down_up.journal.jsonl",
+      "rawBytes": 216178,
+      "rawSHA256": "4a9fc8406fdd74d8dd29304212e31ce55cbd9bc9994b5a019282eed512cc4e28",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/loss_between_w_down_up.journal.jsonl.gz",
+      "publishedBytes": 7238,
+      "publishedSHA256": "638535ec1d1aebbd57a9a0933a7ff1099aa891cfb4352291c4640e57ff0f95be",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/loss_during_ime.journal.jsonl",
+      "rawBytes": 359408,
+      "rawSHA256": "f0634258fe89cf80ea06bf6b46149e23093ca4691c56baec1ec2413739666b37",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/loss_during_ime.journal.jsonl.gz",
+      "publishedBytes": 11163,
+      "publishedSHA256": "689ca83ad2bb3333d9d549bfc4f84ab5cb89194b55962138220741bb227b1677",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/loss_mid_console_down.journal.jsonl",
+      "rawBytes": 56012,
+      "rawSHA256": "7e43120bb73f4590fe3befd4cf86a97b7276a0763cb629a1285ac80b85047bfa",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/loss_mid_console_down.journal.jsonl.gz",
+      "publishedBytes": 2459,
+      "publishedSHA256": "d20daa25d80a8445437000d46ada08f8e1465429c44d71e423953dee8a6b106f",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/overlap.journal.jsonl",
+      "rawBytes": 2164,
+      "rawSHA256": "32a71880e4bb20cb7591b760212a6b644ab73a70cab3efe64c4c61e0029180b5",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/overlap.journal.jsonl.gz",
+      "publishedBytes": 818,
+      "publishedSHA256": "d95de71df184d07f56d308d195a502cff2c9a59c46de1e17426ccf948b64ac8e",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/preexisting_partial_metrics_not_accepted.journal.jsonl",
+      "rawBytes": 537541,
+      "rawSHA256": "50260f0fcc53b1e21e94acef6070abc03039021ad3bbce660b45efb83cf1e472",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/preexisting_partial_metrics_not_accepted.journal.jsonl.gz",
+      "publishedBytes": 12033,
+      "publishedSHA256": "0dd893598332af7c0a12a79d8b44d0346ce03aea03563fe976ed0d50a0724b66",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_ambiguous.journal.jsonl",
+      "rawBytes": 4134,
+      "rawSHA256": "9059aced43661517dc5d6f51e4edf9089c38a292837db06ece0fc17aebbfe9c0",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_ambiguous.journal.jsonl.gz",
+      "publishedBytes": 989,
+      "publishedSHA256": "dfd6461862e7857705abbfc3e94f5588b122100ea015076cb53589b3a8a32159",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_cleanup_identity_changed.journal.jsonl",
+      "rawBytes": 357353,
+      "rawSHA256": "598c72bf0e44d939630e4d97f3fe1337da27c0bb33a85a433387c1376b6ebc29",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_cleanup_identity_changed.journal.jsonl.gz",
+      "publishedBytes": 11034,
+      "publishedSHA256": "b2020c64e8f9ec6c876d1459f7080b8a02ae9884d471c0db4fc02e934fe995fc",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_exit_timeout.journal.jsonl",
+      "rawBytes": 357346,
+      "rawSHA256": "ef8254bcc2131b5a5650948cc7c51664f2ec533f4e0368233ede36335b3eb24b",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_exit_timeout.journal.jsonl.gz",
+      "publishedBytes": 11030,
+      "publishedSHA256": "dd56386c77276b3efa4a997c2a22d44b5d01579791d9d2e197e8015a70c33983",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_focus_denied.journal.jsonl",
+      "rawBytes": 6909,
+      "rawSHA256": "0a2a1ca5174428566dbfa5374e13908f3437842cb164f36dca756511411f3e44",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_focus_denied.journal.jsonl.gz",
+      "publishedBytes": 1134,
+      "publishedSHA256": "12a78ef86fc441db6c3187e9eb5575b294858b70302d3f16ff7a8f7d3319400c",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_ime_current_none.journal.jsonl",
+      "rawBytes": 622213,
+      "rawSHA256": "03fb53fbd90c2b2a2bedc475819e7d8e3e321f93d242062967eb53de81b45058",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_ime_current_none.journal.jsonl.gz",
+      "publishedBytes": 18351,
+      "publishedSHA256": "e9c42b0da52dd39a7ab3683fc8566f99b11ad52667295045b82a94a857e4d0b7",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_ime_fails.journal.jsonl",
+      "rawBytes": 621113,
+      "rawSHA256": "e4589ee7439df4024a3f1e746c3f2319939a13f2bbb0f81bdb7fb147f75899c1",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_ime_fails.journal.jsonl.gz",
+      "publishedBytes": 18368,
+      "publishedSHA256": "58a58eb6fe4d32d1442564756281a4f3d03a66009b88c6d832867bda0820342b",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_lateral_motion.journal.jsonl",
+      "rawBytes": 356381,
+      "rawSHA256": "4b0f4f146e5e3d71c7473d9e698f0b254659cceb3af2ee95a02b5376fb1faa69",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_lateral_motion.journal.jsonl.gz",
+      "publishedBytes": 11083,
+      "publishedSHA256": "3ef6b10f1164c70e2326b9630eaec01db52f51f8c59c219e3621888f3a57c947",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_log_truncated.journal.jsonl",
+      "rawBytes": 113245,
+      "rawSHA256": "76ab4a4967fbee2c1c0403c9926b8a3dd2a012359294f435ab1df2574c34eea4",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_log_truncated.journal.jsonl.gz",
+      "publishedBytes": 3889,
+      "publishedSHA256": "4a7c070dfb29c0d723ae39d4a89f7bf058db84f64703c8e5592e803110b9ceca",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_malformed_metrics.journal.jsonl",
+      "rawBytes": 113281,
+      "rawSHA256": "da840d3c13704025e77bb5714d43665a7de64177888a3a6e5119109cceb18fd8",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_malformed_metrics.journal.jsonl.gz",
+      "publishedBytes": 3898,
+      "publishedSHA256": "f686a293d0e9508a5c5d5bae1e6c4b94eaf2182ab6438ffec71e05bf3cd4574c",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_menu.journal.jsonl",
+      "rawBytes": 492332,
+      "rawSHA256": "403d52447657cf2beb3c501b14c479877bde20277e45c9b17859417a83f1acf1",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_menu.journal.jsonl.gz",
+      "publishedBytes": 14873,
+      "publishedSHA256": "cc8f52e2ee8b73c9e377b430556b7caeaa936c8cf83bb9358e7388478cbe6207",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_menu_disabled.journal.jsonl",
+      "rawBytes": 115279,
+      "rawSHA256": "4a7b85024c91cae39103dac0e5cb7897a80a49240ba4f8ba6b26d6c3025cf1b2",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_menu_disabled.journal.jsonl.gz",
+      "publishedBytes": 4365,
+      "publishedSHA256": "73067d45e8fb1ddc43f32490e1cf47ee157eadb23eca909550b46390efb55b3a",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_menu_missing.journal.jsonl",
+      "rawBytes": 115212,
+      "rawSHA256": "6679c179643848dd48dfdec41796fb5065e120acefd6a25e83a4572c643dd582",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_menu_missing.journal.jsonl.gz",
+      "publishedBytes": 4333,
+      "publishedSHA256": "92e95a028c26c18096fdc9ef9a153898fac990697d0d47d604035b4270b0d435",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_menu_no_transition.journal.jsonl",
+      "rawBytes": 250005,
+      "rawSHA256": "0408cd352a85fc2a4455682e8214e37ca3a306931a36a3097403377a27a92caf",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_menu_no_transition.journal.jsonl.gz",
+      "publishedBytes": 8158,
+      "publishedSHA256": "ffadde2013f6c6fc1d8f019d5c74fb639a36a6788e146e89ace00a8468087ad9",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_menu_other_point.journal.jsonl",
+      "rawBytes": 117555,
+      "rawSHA256": "8bd3a6e704ae1f01bb5e40cf03329edaebb87e3738e0638dc1b6be8a2645709d",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_menu_other_point.journal.jsonl.gz",
+      "publishedBytes": 4472,
+      "publishedSHA256": "3e200e376d6deffb78dba61930056252134ef0209a6b3957e201337890679535",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_menu_outside.journal.jsonl",
+      "rawBytes": 116178,
+      "rawSHA256": "188229874aac715d8c378abcab414783a5cd643873a13a3f15a9a02f372f77f4",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_menu_outside.journal.jsonl.gz",
+      "publishedBytes": 4389,
+      "publishedSHA256": "4d600428ff29dad8cac772189401df6eab105c5548fa3c389d1ab1c6061bda18",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_menu_point_changed.journal.jsonl",
+      "rawBytes": 124899,
+      "rawSHA256": "250d1c4bfa3f8fd7d3dca3f46cb4af5c639652a2fdc918f560284bd5bd430b91",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_menu_point_changed.journal.jsonl.gz",
+      "publishedBytes": 4649,
+      "publishedSHA256": "f8f98c40c14dd21bc4552b8c167ff601d4d55096946281f063c69e29f26ca2fa",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_menu_rounded_outside.journal.jsonl",
+      "rawBytes": 116196,
+      "rawSHA256": "dd0319bbeee5b772e7ca76e25300b647dbd7f6063de112d2ce672e0c7a2d9e28",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_menu_rounded_outside.journal.jsonl.gz",
+      "publishedBytes": 4397,
+      "publishedSHA256": "d4c963dfefb9b435185f1a122cd12f5a2577e7b0d3f894cd6144c92bdbd647a0",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_missing_session.journal.jsonl",
+      "rawBytes": 113265,
+      "rawSHA256": "16603dfa3cee2316fb18ebb9d64bbebe3a3a9588cf3dd4951c83576c5d0299f3",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_missing_session.journal.jsonl.gz",
+      "publishedBytes": 3892,
+      "publishedSHA256": "b1ef1fa0e3a970a1e94405314ab578021c104cd3f2b81057f0c3448e269db881",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_no_motion.journal.jsonl",
+      "rawBytes": 356373,
+      "rawSHA256": "5175ce0c6d875bdbf8668ae40301ca8a748fb9d8038e7475ab74f741254749d6",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_no_motion.journal.jsonl.gz",
+      "publishedBytes": 11081,
+      "publishedSHA256": "bf7bcf1e90e1486db031bd263a57b174f8d177bc15214a3d08cba7969ad75d29",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_no_window.journal.jsonl",
+      "rawBytes": 276759,
+      "rawSHA256": "4a00f7a0b844d4f9298837f431d77b7ff23d31d82bb52b5b683de82dfa1b76a5",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_no_window.journal.jsonl.gz",
+      "publishedBytes": 6835,
+      "publishedSHA256": "80974fb2ae295ae190953da6d60c9ee07ae5bce1058eaad2f815ea25bf05bd0f",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_not_active.journal.jsonl",
+      "rawBytes": 115204,
+      "rawSHA256": "02832fa431b301ca5b51d990a0cabd06790c98f26f9be05b774ac4bb226f5552",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_not_active.journal.jsonl.gz",
+      "publishedBytes": 4328,
+      "publishedSHA256": "6b20cef9b2abc33c9d7f4320a8a5d35208e1a235d2b5eb34503b604ff9a310e4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_not_playing.journal.jsonl",
+      "rawBytes": 115203,
+      "rawSHA256": "d81acf13906c67acf2d279d63d1a7993fb128cf400f047e831beee18bb8bd943",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_not_playing.journal.jsonl.gz",
+      "publishedBytes": 4332,
+      "publishedSHA256": "342de0e118df5a5b605b72bdd34a65e57ccfa26bdadd0161c362a49e33e2eb2e",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_old_none.journal.jsonl",
+      "rawBytes": 356357,
+      "rawSHA256": "e059105c5893dae0d9297862e0b84c22fd017a5e65ccc3b1221c52ee20dfd2b7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_old_none.journal.jsonl.gz",
+      "publishedBytes": 11064,
+      "publishedSHA256": "82a86175ef8f123a0d6ef25b5de2ee24c90874cd2bd66cadde2a95646f10983a",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_partial_metrics.journal.jsonl",
+      "rawBytes": 537540,
+      "rawSHA256": "0e11625afe191a420a1cff5919736c50ae541388f0b8b9cc25ac0b29826cc44b",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_partial_metrics.journal.jsonl.gz",
+      "publishedBytes": 12031,
+      "publishedSHA256": "7afbfafe3500c9595584ac4bbf96549c6d84ed97c88496f2cd62e77508acb665",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_partial_then_complete.journal.jsonl",
+      "rawBytes": 357448,
+      "rawSHA256": "259f8ac9dfe7d0e02709129948cb37db3fbdc4ab31b9024ec48d3b866924dc15",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_partial_then_complete.journal.jsonl.gz",
+      "publishedBytes": 11052,
+      "publishedSHA256": "c493248ca49d8a6623e85e4407d6617fade4681529de4a061e023c54e1b637c0",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_pawn_changed.journal.jsonl",
+      "rawBytes": 352886,
+      "rawSHA256": "ab33779d5af5fa2213aaf3a0b603cb647d4feef5cb168e003acb35994d7a72b2",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_pawn_changed.journal.jsonl.gz",
+      "publishedBytes": 10511,
+      "publishedSHA256": "5afe3050370e8a181945510c7baf8c3fecbbac846ee6a7b7635b630a92e8165d",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_playing.journal.jsonl",
+      "rawBytes": 357448,
+      "rawSHA256": "259f8ac9dfe7d0e02709129948cb37db3fbdc4ab31b9024ec48d3b866924dc15",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_playing.journal.jsonl.gz",
+      "publishedBytes": 11052,
+      "publishedSHA256": "c493248ca49d8a6623e85e4407d6617fade4681529de4a061e023c54e1b637c0",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_reverse_motion.journal.jsonl",
+      "rawBytes": 356379,
+      "rawSHA256": "d3e4abb85fadae99e86544298fb6f0d6ba89f7f44369c2d1010d1acf0cc3c472",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_reverse_motion.journal.jsonl.gz",
+      "publishedBytes": 11083,
+      "publishedSHA256": "312fecffb946859f6f615d628ac5c357d08371cd5ceead1d7a6ac9c907c342cd",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_session_changed.journal.jsonl",
+      "rawBytes": 210860,
+      "rawSHA256": "6f646398c746ca610c4560e9c62b381b1397a32f1eb56bc5ab6e01a5f32e813e",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_session_changed.journal.jsonl.gz",
+      "publishedBytes": 6693,
+      "publishedSHA256": "abe5e649e58a902dfa9d456721469b918d53d749603392099f3afeaf3386fb93",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_short_send.journal.jsonl",
+      "rawBytes": 20922,
+      "rawSHA256": "01cdac054fd417fbd621c4646b4fb5f458a80521a13ae50ab72247aed1154606",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_short_send.journal.jsonl.gz",
+      "publishedBytes": 1533,
+      "publishedSHA256": "6f3eda199119c0e36ff9df6a9fb6d0f535a0395d5d113428caeea3d84acd4aaa",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_stale_metrics.journal.jsonl",
+      "rawBytes": 537541,
+      "rawSHA256": "5278ca096a60e94df88cc7c86599840ca962f14259963c0d8c3736305c191f1b",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_stale_metrics.journal.jsonl.gz",
+      "publishedBytes": 12034,
+      "publishedSHA256": "cda3346a52dd318c151cf223ecf95363b3b004b864749ef920702463c66cadc6",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_stale_w.journal.jsonl",
+      "rawBytes": 356354,
+      "rawSHA256": "5c84551fbcac1ffd33830e8bb45f9829b9e8d18ee42c398d21904afb3073b5aa",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_stale_w.journal.jsonl.gz",
+      "publishedBytes": 11065,
+      "publishedSHA256": "8ae525935383e0f47f3a132e4896964161dba9dc5108e25d1d13f501c80035f1",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_w_rejected.journal.jsonl",
+      "rawBytes": 356373,
+      "rawSHA256": "ce940fa14337ff2b78ab4f4c8d267bf48124e73f882f9f835fc3e3642bd2ea48",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_w_rejected.journal.jsonl.gz",
+      "publishedBytes": 11078,
+      "publishedSHA256": "e3de8689020b23b8b7f02b8247b0df6311a2ddaa66e9fabd95d04f10bc3655cf",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_world_time_still.journal.jsonl",
+      "rawBytes": 356286,
+      "rawSHA256": "015de9b31f23e27d8902b3cb4ce5e7e97dde0c169b5f5abc0f860fea9843cde0",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_world_time_still.journal.jsonl.gz",
+      "publishedBytes": 11064,
+      "publishedSHA256": "aac2348be0fa43407bcc432d18d5cf055569f84ff53f692917b72d024454a5d3",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_wrong_net.journal.jsonl",
+      "rawBytes": 113267,
+      "rawSHA256": "4b3b6d1d1c7e47fd2072d690fc45aaf4c6ea95b35dda5ee1dd80fb9ec2456faa",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_wrong_net.journal.jsonl.gz",
+      "publishedBytes": 3889,
+      "publishedSHA256": "d0d3e001798574611da8b08f4aaf3e22684d731897c84e7e6a83369233f70d74",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_wrong_owner.journal.jsonl",
+      "rawBytes": 113263,
+      "rawSHA256": "a9dd1d1ed28af494a379a6e5a34756cf04ba20a8fdb7b7509d8dbd66994bd7f5",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_wrong_owner.journal.jsonl.gz",
+      "publishedBytes": 3889,
+      "publishedSHA256": "97c8258cb481574a93025b91013142de11d3db5f0927de05c29f395f489c2a5a",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_wrong_pid.journal.jsonl",
+      "rawBytes": 113259,
+      "rawSHA256": "d074b7703a227ae8c5bf32a844b75fb0a8393d5f79aa3add2416347917e13c82",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_wrong_pid.journal.jsonl.gz",
+      "publishedBytes": 3886,
+      "publishedSHA256": "15e47824d9b3b946023a3242d03348a4d4fdc7b3ede6cdf55b14948af2990d96",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_wrong_source.journal.jsonl",
+      "rawBytes": 113271,
+      "rawSHA256": "05ae7fd756e3b175e635790a843ea46a3295fd8570604b16a6ee8f8bb4c37b19",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_wrong_source.journal.jsonl.gz",
+      "publishedBytes": 3891,
+      "publishedSHA256": "3959a1ac370d69b19742d8bde976d5df1bdc392ebe31b33159ffd31c43f47687",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_wrong_world.journal.jsonl",
+      "rawBytes": 113271,
+      "rawSHA256": "1d2bd6559dc64ed55b603b18b4908647c031850eb922ee6117115b27450183d4",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_wrong_world.journal.jsonl.gz",
+      "publishedBytes": 3892,
+      "publishedSHA256": "771b1614a9a7ce9c7211ae767f2b046a44d1b43a0d502331d8dc269760f06e75",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/replay_z_only.journal.jsonl",
+      "rawBytes": 356373,
+      "rawSHA256": "6bf3d0bfa2c4eb9397f36df7024c0c9b3e12f687fe4c44228595a36255d55ba7",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/replay_z_only.journal.jsonl.gz",
+      "publishedBytes": 11082,
+      "publishedSHA256": "02bf8a304bc7c8791b0c6d395865e4de65479a0c427941b330e7f34265dc0fd7",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/results.json",
+      "rawBytes": 117549,
+      "rawSHA256": "46ac7de2d5684f0d2733bdb88c2a1c438e3eca3dd282e3625ddf8f36fa63d165",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/results.json.gz",
+      "publishedBytes": 6071,
+      "publishedSHA256": "fb33c3363cdb41f314328c50d4d0ff6a2ed88ad76505f588307832c2daae5e53",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/transcript.txt",
+      "rawBytes": 5877,
+      "rawSHA256": "6113c1f2255c5ffb4220803e09d8fadc6f0252004e2ecdf663833e6e4ea8584e",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/transcript.txt.gz",
+      "publishedBytes": 922,
+      "publishedSHA256": "b7e756f5594f0047170c5f20b804079f0e4ef6c41fd3552d5acb92bb86664ed4",
+      "transformation": "identity;gzip"
+    },
+    {
+      "raw": "Stop-Verdict-Regression-Offline-01/win32_information_exception.journal.jsonl",
+      "rawBytes": 5153,
+      "rawSHA256": "53226b2ca1494b2dedd9e59246d8ee1f9950f85c107a3001e5968e79cc656169",
+      "published": "Docs/U04/C1/Stop-Verdict-Repair/Evidence/Stop-Verdict-Regression-Offline-01/win32_information_exception.journal.jsonl.gz",
+      "publishedBytes": 1058,
+      "publishedSHA256": "04a4e6cbd4d30f011f9d923a934b81c11cf224f1c491c7d3fd6036697094a277",
+      "transformation": "identity;gzip"
+    }
+  ],
+  "allGzipRoundTripsVerified": true,
+  "offlineSuites": {
+    "Stop-Verdict-Offline-01": 7,
+    "Stop-Verdict-Identity-Offline-01": 18,
+    "Stop-Verdict-Regression-Offline-01": 86
+  }
+}

@@ -221,7 +221,9 @@ class Backend:
         if self.stop_evidence is not None:return dict(self.stop_evidence)
         # Also handles initialization failure before a record or journal exists.
         # Provenance is Popen's original HANDLE, never a replacement found by PID.
-        try:info=self.capture_owned()
+        try:
+            info=self.capture_owned()
+            info['identityVerifiedAtStop']=True
         except OSError as e:
             # Identity remains INVALID. An OS metadata-read failure must not leak
             # a child we just created: this is still Popen's retained HANDLE,

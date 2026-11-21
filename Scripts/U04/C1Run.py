@@ -67,6 +67,8 @@ def run_owned_launch(backend,args,cwd,out,base,probe=None,writer=None,journal_fa
                 note('before_original_handle_stop')
                 stop=backend.stop_launched(timeout=30)
                 result.update(processExited=True,exitEvidence=stop)
+                if stop.get('identityVerifiedAtStop') is not True:
+                    result.update(status='INVALID',stopIdentityError='identity_not_verified_at_stop')
                 note('original_handle_process_exited',evidence=stop)
             except Exception as e:
                 result.update(status='INVALID',processExited=False,cleanupError=repr(e))
