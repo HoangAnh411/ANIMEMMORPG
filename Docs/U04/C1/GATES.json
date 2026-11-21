@@ -1,0 +1,47 @@
+{
+  "status": "INCOMPLETE",
+  "sourceSHA": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+  "mainBaseline": "e66670fbba7f39644b0571b703bb3341ac7c0108",
+  "methodology": "HALTED_READINESS_FAILURE",
+  "counterCorrectness": "NOT_RUN",
+  "timingMatrix": {
+    "valid": 0,
+    "required": 36
+  },
+  "memoryMatrix": {
+    "valid": 0,
+    "required": 12
+  },
+  "overheadPairs": {
+    "valid": 0,
+    "required": 3
+  },
+  "gpu": {
+    "startupTraceReadable": true,
+    "startupEvents": 14692,
+    "measurementWindowValid": false
+  },
+  "memoryCallstacks": "NOT_VERIFIED",
+  "traceCapacityForecast": "NOT_RUN_NO_VALID_PILOT",
+  "fullBuild": "PASS_BUILD_03",
+  "automation": {
+    "status": "PASS",
+    "expected": 144,
+    "discovered": 144,
+    "executed": 144,
+    "passed": 144,
+    "failed": 0
+  },
+  "mapSmoke": {
+    "status": "PASS",
+    "maps": 3
+  },
+  "normalLauncherRuntime": "NOT_RUN_STATIC_FLAGS_AND_SMOKE_ONLY",
+  "combatDodgeFocusRuntime": "NOT_RUN_READINESS_FAILURE",
+  "dedicatedEditorTwoClients": "NOT_RUN",
+  "illustrationMedia": "NOT_RUN",
+  "preservation": "PASS_ORIGINAL_HEAD_STATUS_114_HASHES_EDITOR_IDENTITY",
+  "u0404Complete": false,
+  "optimizationImplemented": false,
+  "mergePerformed": false
+}

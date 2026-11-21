@@ -65,6 +65,7 @@ def main():
     a=p.parse_args();index=read(a.build/'BUILD-IDENTITY.json');assert Path(index['clone']).resolve()==ROOT
     assert not subprocess.check_output(['git','-C',str(ROOT),'diff',index['sourceSHA'],'--','Source','Content','Config','Plugins','AnimeMMORPG.uproject'])
     if a.purpose in ('baseline','overhead'):assert a.warmup==30 and a.duration==60 and not a.single_action
+    if a.purpose=='baseline':assert read(ROOT/'Docs/U04/C1/GATES.json')['methodology']=='PASS','Methodology gate is not PASS; matrix must remain stopped'
     out=ROOT.parent/'Runs'/a.id;out.mkdir(parents=True,exist_ok=False);user=out/'User';user.mkdir();raw=out/'Raw';raw.mkdir()
     exe=a.build/'Archive/Windows/AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe';assert sha(exe)==index['gameSHA256']
     active=ps("Get-CimInstance Win32_Process -Filter \"Name='AnimeMMORPG.exe'\" | Select-Object ProcessId,ExecutablePath | ConvertTo-Json")
