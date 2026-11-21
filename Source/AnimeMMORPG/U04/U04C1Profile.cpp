@@ -55,7 +55,7 @@ struct FCapture
     TArray<TWeakObjectPtr<AU02LabDummy>> Targets;
     TArray<FFrame> Frames;TArray<TSharedPtr<FJsonValue>> Events;
     int32 Subjects=0,Boxes=0,DamageBegin=0;bool Inside=false,Closed=false;
-    double Start=0,End=0;uint64 QueriesBegin=0;TSharedPtr<FJsonObject> RegistrationBegin;
+    double Start=0,End=0,Duration=60;uint64 QueriesBegin=0;TSharedPtr<FJsonObject> RegistrationBegin;
 };
 TMap<UWorld*,TUniquePtr<FCapture>> Captures;
 AU01Character* Player(UWorld* W)
@@ -68,20 +68,22 @@ TSharedRef<FJsonObject> Counts(const FCounters& C)
     J->SetNumberField(TEXT("confirmedHits"),C.Confirmed);J->SetNumberField(TEXT("duplicateSuppression"),C.Suppressed);
     J->SetNumberField(TEXT("collectIntervals"),C.Intervals);J->SetNumberField(TEXT("actions"),C.Actions);return J;
 }
+void Command(const TArray<FString>& A,UWorld* W);
 void Sample(UWorld* W,ELevelTick Type,float Dt)
 {
     auto* F=Captures.Find(W);if(!F||Type==LEVELTICK_ViewportsOnly)return;
-    auto* S=W->GetSubsystem<UU02CollisionWorld>();if(!S||!S->C1.Active)return;
-    (*F)->Frames.Add({FPlatformTime::Seconds(),W->GetTimeSeconds(),Dt,GFrameCounter,S->C1,FApp::HasFocus()});
-    TRACE_COUNTER_SET(C1Visits,S->C1.Visits);TRACE_COUNTER_SET(C1Geometry,S->C1.Geometry);
-    TRACE_COUNTER_SET(C1Occlusion,S->C1.Occlusion);TRACE_COUNTER_SET(C1Candidates,S->C1.Candidates);
-    TRACE_COUNTER_SET(C1Hits,S->C1.Confirmed);TRACE_COUNTER_SET(C1Suppressed,S->C1.Suppressed);TRACE_COUNTER_SET(C1Actions,S->C1.Actions);
+    auto* S=W->GetSubsystem<UU02CollisionWorld>();if(!S||!S->C1Profile.Active)return;
+    (*F)->Frames.Add({FPlatformTime::Seconds(),W->GetTimeSeconds(),Dt,GFrameCounter,S->C1Profile,FApp::HasFocus()});
+    TRACE_COUNTER_SET(C1Visits,S->C1Profile.Visits);TRACE_COUNTER_SET(C1Geometry,S->C1Profile.Geometry);
+    TRACE_COUNTER_SET(C1Occlusion,S->C1Profile.Occlusion);TRACE_COUNTER_SET(C1Candidates,S->C1Profile.Candidates);
+    TRACE_COUNTER_SET(C1Hits,S->C1Profile.Confirmed);TRACE_COUNTER_SET(C1Suppressed,S->C1Profile.Suppressed);TRACE_COUNTER_SET(C1Actions,S->C1Profile.Actions);
+    if(FPlatformTime::Seconds()>=(*F)->Start+(*F)->Duration)Command({TEXT("end")},W);
 }
 void Command(const TArray<FString>& A,UWorld* W)
 {
     auto* F=Captures.Find(W);if(!F||A.IsEmpty())return;auto& C=**F;
     auto* S=W->GetSubsystem<UU02CollisionWorld>();auto* P=Player(W);if(!S||!P)return;
-    if(A[0]==TEXT("prepare")&&A.Num()==4&&!S->C1.Active&&!C.Closed)
+    if(A[0]==TEXT("prepare")&&A.Num()==4&&!S->C1Profile.Active&&!C.Closed)
     {
         const int32 N=FCString::Atoi(*A[1]),H=FCString::Atoi(*A[2]);
         if((N!=1&&N!=10&&N!=40)||(H!=1&&H!=3)||(A[3]!=TEXT("in")&&A[3]!=TEXT("out")))return;
@@ -110,16 +112,17 @@ void Command(const TArray<FString>& A,UWorld* W)
         }
         TRACE_BOOKMARK(TEXT("U04C1_WARMUP subjects=%d hurtboxes=%d placement=%s"),N,H,*A[3]);
     }
-    if(A[0]==TEXT("begin")&&A.Num()==1&&!S->C1.Active&&!C.Closed&&C.Subjects)
+    if(A[0]==TEXT("begin")&&A.Num()==2&&!S->C1Profile.Active&&!C.Closed&&C.Subjects)
     {
+        C.Duration=FCString::Atod(*A[1]);if(C.Duration<=0||C.Duration>60)return;
         C.Frames.Reserve(12000);C.Events.Reserve(512);C.DamageBegin=S->DamageResults.Num();C.QueriesBegin=S->Queries;C.RegistrationBegin=FU04C1Access::Registrations(S);
-        S->C1=FCounters{};S->C1.Enabled=true;S->C1.Active=true;C.Start=FPlatformTime::Seconds();
-        TRACE_BOOKMARK(TEXT("U04C1_START"));
+        S->C1Profile=FCounters{};S->C1Profile.Enabled=true;S->C1Profile.Active=true;C.Start=FPlatformTime::Seconds();
+        TRACE_BOOKMARK(TEXT("U04C1_START"));TRACE_BEGIN_REGION(TEXT("U04C1_WINDOW"));
     }
-    if(A[0]==TEXT("end")&&S->C1.Active)
+    if(A[0]==TEXT("end")&&S->C1Profile.Active)
     {
-        TRACE_BOOKMARK(TEXT("U04C1_END"));C.End=FPlatformTime::Seconds();S->C1.Active=false;C.Closed=true;
-        auto J=Counts(S->C1);J->SetObjectField(TEXT("registrationBegin"),C.RegistrationBegin);J->SetObjectField(TEXT("registrationEnd"),FU04C1Access::Registrations(S));J->SetNumberField(TEXT("startWall"),C.Start);J->SetNumberField(TEXT("endWall"),C.End);
+        TRACE_END_REGION(TEXT("U04C1_WINDOW"));TRACE_BOOKMARK(TEXT("U04C1_END"));C.End=FPlatformTime::Seconds();S->C1Profile.Active=false;C.Closed=true;
+        auto J=Counts(S->C1Profile);J->SetObjectField(TEXT("registrationBegin"),C.RegistrationBegin);J->SetObjectField(TEXT("registrationEnd"),FU04C1Access::Registrations(S));J->SetNumberField(TEXT("requestedSeconds"),C.Duration);J->SetNumberField(TEXT("startWall"),C.Start);J->SetNumberField(TEXT("endWall"),C.End);
         J->SetNumberField(TEXT("subjects"),C.Subjects);J->SetNumberField(TEXT("hurtboxesPerSubject"),C.Boxes);J->SetBoolField(TEXT("inside"),C.Inside);
         J->SetNumberField(TEXT("queriesPostContactDelta"),S->Queries-C.QueriesBegin);
         J->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());J->SetStringField(TEXT("world"),W->GetPathName());
@@ -175,8 +178,8 @@ void EndWorld(UWorld* W)
 {if(auto* F=Captures.Find(W)){FWorldDelegates::OnWorldPostActorTick.Remove((*F)->Tick);Captures.Remove(W);}}
 void Event(UWorld* W,const TCHAR* Kind,TSharedRef<FJsonObject> J)
 {
-    auto* F=Captures.Find(W);if(!F)return;auto* S=W->GetSubsystem<UU02CollisionWorld>();if(!S||!S->C1.Active)return;
-    if(FCString::Strcmp(Kind,TEXT("ActionStarted"))==0)++S->C1.Actions;
+    auto* F=Captures.Find(W);if(!F)return;auto* S=W->GetSubsystem<UU02CollisionWorld>();if(!S||!S->C1Profile.Active)return;
+    if(FCString::Strcmp(Kind,TEXT("ActionStarted"))==0)++S->C1Profile.Actions;
     J->SetStringField(TEXT("kind"),Kind);J->SetNumberField(TEXT("wall"),FPlatformTime::Seconds());(*F)->Events.Add(MakeShared<FJsonValueObject>(J));
 }
 }
