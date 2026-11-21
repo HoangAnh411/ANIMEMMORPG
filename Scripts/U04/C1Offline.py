@@ -27,7 +27,7 @@ def record():
     root=Path('D:/Probe With Spaces/Run-01')
     exe=Path('D:/Package With Spaces/AnimeMMORPG.exe')
     args=arguments(exe,root,'Run-01')
-    return dict(pid=1234,creationUTC=CREATED,executable=str(exe),binarySHA256='a'*64,sourceSHA=NATIVE,runId='Run-01',userDir=str(root/'User'),log=str(root/'Game.log'),arguments=args)
+    return dict(pid=1234,creationUTC=CREATED,creationTicks=creation_ticks(CREATED),executable=str(exe),binarySHA256='a'*64,sourceSHA=NATIVE,runId='Run-01',userDir=str(root/'User'),log=str(root/'Game.log'),arguments=args)
 
 class FakeLog:
     def __init__(self):self.data=b''
@@ -124,6 +124,7 @@ class FakeBackend:
         self.verify_calls+=1
         if self.mode=='cleanup_identity_changed':raise RuntimeError('process_creation_mismatch')
     def stop_owned(self,r,timeout):
+        self.verify_owned(r)
         self.stopped+=1
         if self.mode=='exit_timeout':raise RuntimeError('owned_exit_timeout')
         return dict(pid=r['pid'],creationUTC=r['creationUTC'],exitCode=0,wait='fake-signaled')
@@ -145,7 +146,7 @@ def main():
             command=json.loads((ROOT.parent/'Runs'/old/'command.json').read_text())['arguments']
             r['arguments']=command;r['executable']=command[0]
             r['runId']=old;r['userDir']=next(x.split('=',1)[1] for x in command if x.startswith('-UserDir='));r['log']=next(x.split('=',1)[1] for x in command if x.startswith('-abslog='))
-        live=dict(pid=r['pid'],creationUTC=CREATED,executable=r['executable'],commandLine=render_command(r['arguments']))
+        live=dict(pid=r['pid'],creationUTC=CREATED,creationTicks=creation_ticks(CREATED),executable=r['executable'],commandLine=render_command(r['arguments']))
         if mutate:mutate(r,live)
         try:identity=verify_identity(r,live);actual='PASS'
         except Exception as e:actual=str(e)
@@ -158,7 +159,7 @@ def main():
     def historical_raw():
         actual,details=identity_case(old='Method-Timing-01');r=details['record'];l=details['live']
         raw=json.loads((ROOT.parent/'Runs/Method-Timing-01/recovery-identity.json').read_text())
-        l.update(pid=raw['ProcessId'],creationUTC=raw['creationUTC'],executable=raw['ExecutablePath'],commandLine=raw['CommandLine']);r.update(pid=l['pid'],creationUTC=l['creationUTC'])
+        l.update(pid=raw['ProcessId'],creationUTC=raw['creationUTC'],executable=raw['ExecutablePath'],commandLine=raw['CommandLine']);r.update(pid=l['pid'],creationUTC=l['creationUTC'],creationTicks=creation_ticks(l['creationUTC']));l['creationTicks']=r['creationTicks']
         try:verify_identity(r,l);actual='PASS'
         except Exception as e:actual=str(e)
         return actual,dict(record=r,live=l)
@@ -176,7 +177,7 @@ def main():
     for name,mut,expected in mutations:add('identity_'+name,expected,lambda mut=mut:identity_case(lambda r,l:mutate_command(mut,r,l)))
     add('identity_wrong_exe','executable_mismatch',lambda:identity_case(lambda r,l:l.update(executable='D:/Other/AnimeMMORPG.exe')))
     add('identity_wrong_argv_exe','argv_executable_mismatch',lambda:identity_case(lambda r,l:l.update(commandLine=l['commandLine'].replace(r['executable'],'D:/Other/AnimeMMORPG.exe',1))))
-    add('identity_pid_reuse','process_creation_mismatch',lambda:identity_case(lambda r,l:l.update(creationUTC='2026-11-21T05:45:27.1662990Z')))
+    add('identity_pid_reuse','process_creation_mismatch',lambda:identity_case(lambda r,l:l.update(creationTicks=creation_ticks(CREATED)+10_000_000)))
     add('identity_wrong_pid','process_pid_mismatch',lambda:identity_case(lambda r,l:l.update(pid=1235)))
     def parser_roundtrip():
         cases=[['D:/With Spaces/app.exe','-Path=D:/Path With Spaces/','-Value=a"b'],['D:/app.exe','-Empty=','-Tail=D:\\Tail With Spaces\\']]
@@ -284,8 +285,13 @@ def main():
             protected=[dict(ProcessId=9999,ExecutablePath='D:/Engine/UnrealEditor.exe',CommandLine='original',creationUTC=CREATED)]
             backend.inventory=lambda:copy.deepcopy(protected)
             def fake_launch(arguments,cwd):
-                backend.launches+=1;backend.commands=arguments[:];return 1234,CREATED
+                backend.launches+=1;backend.commands=arguments[:];return 1234
             backend.launch=fake_launch
+            backend.closed=False
+            backend.has_owned=lambda:backend.launches>0 and not backend.closed
+            backend.capture_owned=lambda:dict(pid=1234,creationUTC=CREATED,creationTicks=creation_ticks(CREATED),executable=backend.commands[0])
+            backend.stop_launched=lambda timeout:backend.stop_owned(backend.capture_owned(),timeout)
+            backend.close_owned=lambda:setattr(backend,'closed',True)
             if mode=='entry_focus_loss':backend.after_send=lambda b,key,down:setattr(b,'fg',102)
             module=types.SimpleNamespace(Backend=lambda:backend)
             with patch.object(C1Run,'ROOT',fake_root),patch.object(C1Run,'FileLog',lambda path:log),patch.dict(sys.modules,{'C1Win32':module}),patch('subprocess.check_output',return_value=b''),patch('subprocess.Popen',side_effect=AssertionError('REAL PROCESS LAUNCH FORBIDDEN')) as popen:
@@ -307,20 +313,25 @@ def main():
     add('entry_game_hash_mismatch','Game hash mismatch',lambda:full_entry('entry_game_hash_mismatch',bad_hash=True))
 
     def stop_handle(mode):
-        # Exercise the actual adapter stop code using a fake kernel, no DLL construction.
+        # Actual adapter stop code with an original fake HANDLE. OpenProcess is
+        # forbidden here: cleanup must never find a termination target by PID.
         from C1Win32 import Backend
         r=record();events=[]
         class Kernel:
-            def OpenProcess(self,*a):events.append('open');return 44
-            def CloseHandle(self,h):events.append('close');return 1
+            def OpenProcess(self,*a):raise AssertionError('stop must not reopen by PID')
+            def GetProcessId(self,h):return r['pid']
             def QueryFullProcessImageNameW(self,h,flags,buffer,size):buffer.value='D:/Wrong/app.exe' if mode=='wrong_exe' else r['executable'];return 1
             def TerminateProcess(self,h,code):events.append('terminate');return 1
             def WaitForSingleObject(self,h,ms):events.append(['wait',ms]);return 258 if mode=='timeout' else 0
-            def GetExitCodeProcess(self,h,code):code._obj.value=0;return 1
-        b=Backend.__new__(Backend);b.k=Kernel();b.verify_owned=lambda r:events.append('verify_exact_argv')
-        b.ticks=lambda h:creation_ticks(CREATED)+(1 if mode=='reused_pid' else 0)
+            def GetExitCodeProcess(self,h,code):code._obj.value=0 if 'terminate' in events else 259;return 1
+        b=Backend.__new__(Backend);b.k=Kernel();b.owned_handle=44;b.owned_pid=r['pid'];b.stop_evidence=None
+        ticks=creation_ticks(CREATED)+(1 if mode=='reused_pid' else 0)
+        b.pinned_ticks=ticks;b.expected_executable='D:/Wrong/app.exe' if mode=='wrong_exe' else r['executable']
+        b.ticks=lambda h:ticks
+        b.process=types.SimpleNamespace(_handle=types.SimpleNamespace(Close=lambda:events.append('close')))
         try:b.stop_owned(r,30);actual='PASS'
         except Exception as e:actual=str(e)
+        finally:b.close_owned()  # Fake fixture only, including failure; no real child exists.
         assert events[-1]=='close'
         assert events.count('terminate')==(0 if mode in ('reused_pid','wrong_exe') else 1)
         return actual,dict(fakeKernelEvents=events,realProcessOperations=0)

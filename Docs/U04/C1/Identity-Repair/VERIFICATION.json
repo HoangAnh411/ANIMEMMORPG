@@ -1,0 +1,41 @@
+{
+  "status": "TOOLING_REVIEW_PENDING",
+  "c1Status": "INCOMPLETE",
+  "python": "3.13.9 (tags/v3.13.9:8183fa5, Oct 14 2025, 14:09:13) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "nativeInputsUnchangedFrom": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+  "nativeUntrackedInputs": [],
+  "gatesUnchanged": true,
+  "previousReadinessFilesVerified": 329,
+  "old86NamesAndExpectedUnchanged": true,
+  "offlinePassed": 86,
+  "additionalPassed": 18,
+  "windowsIdentitySamplesPassed": 5,
+  "realMetadataFailureRecoveryExited": true,
+  "normalWindowsCIMDeltas": [
+    5,
+    3,
+    0,
+    3,
+    7
+  ],
+  "allNormalWindowsHandleTicksExact": true,
+  "allFinalWindowsChildrenExited": true,
+  "protectedProcessesSnapshotsUnchanged": true,
+  "originalStatus": [
+    " M AnimeMMORPG.uproject",
+    " M Config/DefaultEngine.ini",
+    "?? Docs/Maintenance/",
+    "?? Scripts/Maintenance/"
+  ],
+  "originalDefaultEngineSHA256": "412b42b66583f9b6e4ecdc63cd2423457bf0b1a3d192f5b0f18375ee801f8161",
+  "gameReadinessRuns": 0,
+  "gameLaunches": 0,
+  "editorOperations": 0,
+  "inputCalls": 0,
+  "unrealBuilds": 0,
+  "unrealTests": 0,
+  "timingRuns": 0,
+  "memoryRuns": 0,
+  "overheadPairs": 0
+}

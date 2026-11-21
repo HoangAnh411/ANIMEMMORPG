@@ -7,7 +7,6 @@ import json
 import math
 import os
 import re
-from C1Identity import creation_ticks
 
 class ProbeError(RuntimeError):
     pass
@@ -47,7 +46,7 @@ class Session:
         self.failed=False;self.held=set();self.last_input=None;self.native_session=None
         self.pending_metrics=False;self.focus_attempted=False;self.resume_attempted=False
         self.click_anchor=None
-        self.j.context.update(expectedPID=record['pid'],expectedCreationUTC=record['creationUTC'],expectedCreationTicks=creation_ticks(record['creationUTC']))
+        self.j.context.update(expectedPID=record['pid'],expectedCreationUTC=record['creationUTC'],expectedCreationTicks=record['creationTicks'])
         self.j.append('session_created',record=record)
 
     def observe(self,operation):
@@ -55,7 +54,7 @@ class Session:
         except Exception as e:s=dict(errors=['inspect:'+repr(e)])
         # All journal rows carry the same shape, even when information is unavailable.
         data=dict(targetHWND=self.hwnd,expectedPID=self.record['pid'],actualPID=None,
-                  expectedCreationUTC=self.record['creationUTC'],expectedCreationTicks=creation_ticks(self.record['creationUTC']),
+                  expectedCreationUTC=self.record['creationUTC'],expectedCreationTicks=self.record['creationTicks'],
                   actualCreationTicks=None,isWindow=None,foregroundHWND=None,foregroundPID=None,
                   clientRect=None,clientOriginScreen=None,errors=[])
         data.update(s)
@@ -73,7 +72,7 @@ class Session:
         s=self.observe(operation)
         if s['isWindow'] is False:self.fail('hwnd_invalid',s)
         if s['actualPID'] is not None and s['actualPID']!=self.record['pid']:self.fail('hwnd_pid_mismatch',s)
-        if s['actualCreationTicks'] is not None and s['actualCreationTicks']!=creation_ticks(self.record['creationUTC']):self.fail('process_creation_mismatch',s)
+        if s['actualCreationTicks'] is not None and s['actualCreationTicks']!=self.record['creationTicks']:self.fail('process_creation_mismatch',s)
         if s['errors'] or any(s[k] is None for k in ('isWindow','actualPID','actualCreationTicks','clientRect','clientOriginScreen','foregroundHWND','foregroundPID')):
             self.fail('window_information_error',s)
         if foreground and s['foregroundHWND']!=self.hwnd:self.fail('foreground_hwnd_mismatch',s)
@@ -242,7 +241,7 @@ class Session:
         if self.held:self.fail('held_edges_at_success')
         self.j.append('readiness_pass',evidence=evidence);return evidence
 
-def run_probe(record,backend,log,journal):
+def run_probe(record,backend,log,journal,cleanup=True):
     """Both paths end here: identified process stop only, never keyboard cleanup."""
     session=None;result=dict(status='INVALID')
     def note(event,**data):
@@ -258,11 +257,11 @@ def run_probe(record,backend,log,journal):
         result.update(status='INVALID',error=repr(e),held=held)
     finally:
         # No finish(), release(), quit console, IME restore or focus reacquisition.
-        try:
-            note('before_owned_stop',held=sorted(session.held) if session else [],latched=session.failed if session else True)
-            backend.verify_owned(record)
-            stop=backend.stop_owned(record,timeout=30)
-            result.update(processExited=True,exitEvidence=stop);note('owned_process_exited',evidence=stop)
-        except Exception as e:
-            result.update(status='INVALID',processExited=False,cleanupError=repr(e));note('owned_stop_failed',error=repr(e))
+        if cleanup:
+            try:
+                note('before_owned_stop',held=sorted(session.held) if session else [],latched=session.failed if session else True)
+                stop=backend.stop_owned(record,timeout=30)
+                result.update(processExited=True,exitEvidence=stop);note('owned_process_exited',evidence=stop)
+            except Exception as e:
+                result.update(status='INVALID',processExited=False,cleanupError=repr(e));note('owned_stop_failed',error=repr(e))
     return result

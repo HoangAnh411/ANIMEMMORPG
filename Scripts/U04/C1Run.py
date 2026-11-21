@@ -41,6 +41,48 @@ def arguments(exe,out,run_id):
             f'-U01SourceSHA={NATIVE}',f'-U02RunId={run_id}',f'-UserDir={out/"User"}',
             f'-abslog={out/"Game.log"}',f'-ExecCmds={PROFILE}','-U01Trace']
 
+def run_owned_launch(backend,args,cwd,out,base,probe=None,writer=None,journal_factory=None):
+    """Own the original HANDLE across every post-launch initialization failure."""
+    writer=writer or write;journal_factory=journal_factory or Journal
+    result=dict(status='INVALID',processExited=False);journal=None;record=None
+    def note(event,**data):
+        if journal:
+            try:journal.append(event,**data);return True
+            except Exception as e:result.update(status='INVALID',journalError=repr(e));return False
+    try:
+        backend.launch(args,cwd)
+        pinned=backend.capture_owned()
+        record=dict(base,**pinned,arguments=args)
+        writer(out/'process.json',record)
+        journal=journal_factory(out/'journal.jsonl',backend.now)
+        proof=backend.verify_owned(record)
+        if not note('launch_identity_verified',identity=proof):raise RuntimeError('identity_journal_write_failed')
+        # No nested process stop: this outer lifecycle also covers failure before HWND selection.
+        result.update((probe or run_probe)(record,backend,FileLog(record['log']),journal,cleanup=False))
+    except BaseException as e:
+        result.update(status='INVALID',error=repr(e));note('launch_or_probe_invalid',error=repr(e))
+    finally:
+        if backend.has_owned():
+            try:
+                note('before_original_handle_stop')
+                stop=backend.stop_launched(timeout=30)
+                result.update(processExited=True,exitEvidence=stop)
+                note('original_handle_process_exited',evidence=stop)
+            except Exception as e:
+                result.update(status='INVALID',processExited=False,cleanupError=repr(e))
+                note('original_handle_stop_failed',error=repr(e))
+            finally:
+                if result['processExited']:
+                    try:backend.close_owned()
+                    except Exception as e:result.update(status='INVALID',handleCloseError=repr(e))
+        if journal:
+            try:journal.close()
+            except Exception as e:result.update(status='INVALID',journalError=repr(e))
+        # Best effort only; disk failure must never prevent original-HANDLE cleanup.
+        try:writer(out/'result.json',result)
+        except Exception as e:result.update(status='INVALID',resultWriteError=repr(e))
+    return result
+
 def main(argv=None):
     a=parse_args(argv)
     build=a.build.resolve()
@@ -52,26 +94,18 @@ def main(argv=None):
     if sha(exe)!=index['gameSHA256']:raise RuntimeError('Game hash mismatch')
     out=ROOT.parent/'Runs'/a.id;out.mkdir(exist_ok=False)
     for folder in ('User','Raw'):(out/folder).mkdir()
-    # No live adapter is constructed by offline tests, nor until all entry checks pass.
     from C1Win32 import Backend
     backend=Backend();protected=backend.inventory()
     if any(Path(p['ExecutablePath']).name.lower()=='animemmorpg.exe' for p in protected):raise RuntimeError('package already active; no retry/kill/start')
     write(out/'protected-before.json',protected)
     args=arguments(exe,out,a.id);write(out/'command.json',dict(arguments=args,purpose='readiness-only',trace='off',dpi=backend.dpi))
-    pid,created=backend.launch(args,exe.parent)
-    record=dict(role='U04C1Readiness',pid=pid,creationUTC=created,executable=str(exe),binarySHA256=index['gameSHA256'],sourceSHA=NATIVE,runId=a.id,userDir=str(out/'User'),log=str(out/'Game.log'),arguments=args)
-    write(out/'process.json',record)
-    journal=Journal(out/'journal.jsonl',backend.now)
+    base=dict(role='U04C1Readiness',executable=str(exe),binarySHA256=index['gameSHA256'],sourceSHA=NATIVE,runId=a.id,userDir=str(out/'User'),log=str(out/'Game.log'))
+    result=run_owned_launch(backend,args,exe.parent,out,base)
     try:
-        try:backend.verify_owned(record)
-        except Exception as e:
-            # Unverified identity means no input and no termination of that PID.
-            journal.append('launch_identity_invalid',error=repr(e));result=dict(status='INVALID',processExited=False,error=repr(e))
-        else:result=run_probe(record,backend,FileLog(record['log']),journal)
         after=backend.inventory();write(out/'protected-after.json',after)
-        preserved=all(p in after for p in protected)
-        if not preserved:result.update(status='INVALID',protectedIdentityChanged=True)
-        write(out/'result.json',result)
-        return 0 if result['status']=='PASS' else 1
-    finally:journal.close()  # Intentionally no global input cleanup.
+        if not all(p in after for p in protected):result.update(status='INVALID',protectedIdentityChanged=True)
+    except Exception as e:result.update(status='INVALID',protectedInventoryError=repr(e))
+    # result.json is immutable; final.json also records post-stop protection checks.
+    write(out/'final.json',result)
+    return 0 if result['status']=='PASS' else 1
 if __name__=='__main__':raise SystemExit(main())

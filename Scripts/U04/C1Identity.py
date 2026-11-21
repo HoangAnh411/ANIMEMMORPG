@@ -56,7 +56,11 @@ def creation_ticks(value):
 def verify_identity(record,live):
     if not live:raise IdentityError('process_missing')
     if live.get('pid')!=record['pid']:raise IdentityError('process_pid_mismatch')
-    if creation_ticks(live.get('creationUTC'))!=creation_ticks(record.get('creationUTC')):
+    # Only Win32 GetProcessTimes FILETIME is authoritative. CIM CreationDate
+    # can lose the final 100-ns digit and is retained as diagnostics only.
+    if type(record.get('creationTicks')) is not int or type(live.get('creationTicks')) is not int:
+        raise IdentityError('win32_creation_ticks_missing')
+    if live['creationTicks']!=record['creationTicks']:
         raise IdentityError('process_creation_mismatch')
     if path_key(live.get('executable'))!=path_key(record['executable']):raise IdentityError('executable_mismatch')
     argv=windows_argv(live.get('commandLine',''))
@@ -84,4 +88,5 @@ def verify_identity(record,live):
             planned_flags[name]=value if sep else None
         else:planned_positionals.append(arg)
     if flags!=planned_flags or positionals!=planned_positionals:raise IdentityError('planned_arguments_mismatch')
-    return dict(pid=live['pid'],creationUTC=live['creationUTC'],creationTicks=creation_ticks(live['creationUTC']),executable=live['executable'],argv=argv)
+    return dict(pid=live['pid'],creationUTC=record['creationUTC'],creationTicks=live['creationTicks'],
+                cimCreationUTC=live.get('cimCreationUTC',live.get('creationUTC')),executable=live['executable'],argv=argv)
