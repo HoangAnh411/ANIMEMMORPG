@@ -283,7 +283,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         auto Sample=[&](FVector Previous,FVector Current,double At)
         {return FMath::Lerp(Previous,Current,CurrentTime>PreviousTime?(At-PreviousTime)/(CurrentTime-PreviousTime):1.);};
         FVector F0=Sample(Source->Previous.Position,Source->Current.Position,Begin),F1=Sample(Source->Previous.Position,Source->Current.Position,End);
-        FVector C0=Sample(H.Previous.Position,H.Current.Position,Begin),C1Profile=Sample(H.Previous.Position,H.Current.Position,End);
+        FVector C0=Sample(H.Previous.Position,H.Current.Position,Begin),C1=Sample(H.Previous.Position,H.Current.Position,End);
         auto Planned=[&](AU01Character* Pawn,FVector Relative,FVector& P0,FVector& P1)
         {
             if(!Pawn)return;auto* M=Pawn->GetU01Movement();if(!M->HasDodgePlan())return;
@@ -309,7 +309,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         if(FParse::Param(FCommandLine::Get(),TEXT("U02Trace")))UE_LOG(LogU02Collision,Display,
             TEXT("U02D_QUERY world=%s source=%s:%llu action=%llu target=%s:%llu hurtbox=%u prev=%.17g now=%.17g activeBegin=%.17g activeEnd=%.17g alphaBegin=%.17g alphaEnd=%.17g feet0=(%s) feet1=(%s) yaw=%.17g half=100/60/90 originUp=90 target0=(%s) target1=(%s) radius=%.17g visible=%d unsupportedShapes=%u"),
             *GetWorld()->GetPathName(),*P.Action.Source.Pawn.ToString(),P.Action.Source.Generation,P.Action.Sequence,*H.Current.Life.Pawn.ToString(),H.Current.Life.Generation,Shape->StableHurtboxId,
-            PreviousTime,CurrentTime,P.Slice.BeginSeconds,P.Slice.EndSeconds,Range.Begin,Range.End,*F0.ToString(),*F1.ToString(),P.Yaw,*C0.ToString(),*C1Profile.ToString(),H.Current.Radius,Hit.IsSet(),UnsupportedObstructions);
+            PreviousTime,CurrentTime,P.Slice.BeginSeconds,P.Slice.EndSeconds,Range.Begin,Range.End,*F0.ToString(),*F1.ToString(),P.Yaw,*C0.ToString(),*C1.ToString(),H.Current.Radius,Hit.IsSet(),UnsupportedObstructions);
         if(!Hit.IsSet())
         {
             ++Blocked;

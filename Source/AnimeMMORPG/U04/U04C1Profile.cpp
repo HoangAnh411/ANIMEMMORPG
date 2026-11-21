@@ -30,8 +30,8 @@ struct FU04C1Access
 {
     static TSharedRef<FJsonObject> Registrations(UU02CollisionWorld* S)
     {
-        auto J=MakeShared<FJsonObject>();TSet<AnimeMMORPG::U02::FLifeId> Subjects;int32 Boxes=0;
-        for(const auto& R:S->Hurts)if(auto* H=R.Component.Get()){Subjects.Add(H->GetSubject());++Boxes;}
+        auto J=MakeShared<FJsonObject>();TArray<AnimeMMORPG::U02::FLifeId> Subjects;int32 Boxes=0;
+        for(const auto& R:S->Hurts)if(auto* H=R.Component.Get()){Subjects.AddUnique(H->GetSubject());++Boxes;}
         J->SetNumberField(TEXT("registeredSubjects"),Subjects.Num());J->SetNumberField(TEXT("registeredHurtboxes"),Boxes);return J;
     }
     static void Prepare(UU02VitalComponent* V)
