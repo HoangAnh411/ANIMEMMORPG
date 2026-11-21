@@ -5,6 +5,7 @@
 #include "U02CollisionGeometry.h"
 #include "U02VitalModel.h"
 #include "U03/U03ActionModel.h"
+#include "U04/U04C1Profile.h"
 #include "U02CollisionWorld.generated.h"
 
 class UU02CombatComponent;
@@ -46,6 +47,7 @@ public:
     double FixtureCritRoll=-1; // native fixture only, -1 production server roll
     bool SetLabCritRoll(double Roll);
     void ResetLabDummies();
+    mutable U04C1::FCounters C1;
     uint64 Queries=0,Blocked=0,Discontinuities=0;
     uint32 UnsupportedObstructions=0;
     bool bCharacterFixtureTargets=false; // Native test fixture only; normal lab attacks dummies.

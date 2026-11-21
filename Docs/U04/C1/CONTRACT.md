@@ -1,0 +1,13 @@
+﻿# U04-C1 measurement contract
+
+Status: IMPLEMENTING / INCOMPLETE. Base main e66670fbba7f39644b0571b703bb3341ac7c0108. Original checkout and Editor remain owned by the user. No optimization, merge, U04-D, product performance acceptance or 40-player/server claim.
+
+Frozen review-B profile: rendered Solo package, cap 60, viewport 1280x720, internal50%, VSync0, idle0, dilation1, no fixed timestep. Atlas2048, RT minimum128MiB, streaming256MiB, Lumen indirect/reflections0, virtual shadows0, shadow quality2. No baseline1080p. Windows buffered product input: 20 combos, LMB edges at 0/.32/.77 seconds of each three-second period. A valid workload has60 ActionStarted identities,20 sequences of damage60/70/90 per target in-range,0 hits out-of-range. Low actual FPS alone does not invalidate a workload.
+
+12 workloads in order: N in1/10/40, H in1/3, placement in/out. Timing three round-robin rounds, fresh process,30s warmup and60s measurement each (36 runs). Memory once per workload in separate fresh processes, same windows (12). No capture video during numeric runs. Preserve failed runs; at most one technical replacement; gameplay FAIL stops affected workload. Method gate precedes full matrix: counter verification for all12 with one action, reset/window/world isolation, trace readability with actual GPU events and allocation/free sizes plus resolved callstacks, and three60s overhead pairs10x3-in in alternating off/on then on/off then off/on order. Memory time is never timing baseline.
+
+Fixture opt-in -U04C1Profile only, standalone Game world L_CharacterCombatLab with U03Regression=1. Flat isolated floor inherited dimensions from B. Native lab actors, no AI/capsules; stable hurtbox IDs1/2/3 on one subject/life. Centers (x=70+12*(i%8), y=12*(floor(i/8)-2), z=70/90/100), radius4 relative to player feet; out placement x+530cm. HP1000000, no defense/shield, crit roll.5 before warmup only. No resolver invocation or synthetic hit/input.
+
+All C1 native changes must be committed before full Generate/Editor/Game/package build. New plain headers require full UBT build and cold restart for acceptance. The original Editor must not compile the separate C1 checkout via Live Coding. Final regression includes full native Automation expected/discovered/executed names, three-map smoke, normal launcher fixture-off, focused combat/dodge/focus and dedicated Editor plus two clients. Any missing gate is INCOMPLETE; C1 does not close U04.04.
+
+Deliver hashes, immutable runs, raw traces, CSV/JSON exports, per-process/build identity, symbols/receipts, counter definitions, separate illustration media, reproducible analysis and at most three evidence-backed proposals. Do not implement proposals. Commit/push branch, verify remote and stop for reviewer.

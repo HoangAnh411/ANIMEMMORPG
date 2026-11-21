@@ -1,5 +1,6 @@
 #include "U01NetworkProbe.h"
 #include "U04/U04BFPSFixture.h"
+#include "U04/U04C1Profile.h"
 #include "U01Character.h"
 #include "U01PlayerController.h"
 #include "U01AnimInstance.h"
@@ -41,6 +42,7 @@ void UU01NetworkProbe::OnWorldBeginPlay(UWorld& World)
 {
     Super::OnWorldBeginPlay(World);
     U04B::BeginWorld(World);
+    U04C1::BeginWorld(World);
 #if !UE_BUILD_SHIPPING
     Enabled=FParse::Param(FCommandLine::Get(),TEXT("U01FProbe"));
     FParse::Value(FCommandLine::Get(),TEXT("U01FPerfFile="),FrameFile);
@@ -67,7 +69,7 @@ void UU01NetworkProbe::FlushPerformanceFrames()
         UE_LOG(LogU01Network,Error,TEXT("Cannot flush buffered performance file %s"),*FrameFile);
     PendingFrames.Reset();LastFlushSeconds=FPlatformTime::Seconds();
 }
-void UU01NetworkProbe::Deinitialize(){U04B::EndWorld(GetWorld());FlushPerformanceFrames();Super::Deinitialize();}
+void UU01NetworkProbe::Deinitialize(){U04C1::EndWorld(GetWorld());U04B::EndWorld(GetWorld());FlushPerformanceFrames();Super::Deinitialize();}
 void UU01NetworkProbe::Tick(float Dt)
 {
     // Opt-in diagnosis only: sample every game frame, before the normal 5 Hz

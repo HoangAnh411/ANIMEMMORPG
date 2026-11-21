@@ -1,4 +1,5 @@
 #include "U02CollisionWorld.h"
+#include "ProfilingDebugging/CpuProfilerTrace.h"
 #include "U04/U04BFPSFixture.h"
 #include "U03/U03Encounter.h"
 #include "U02NetworkState.h"
@@ -97,7 +98,7 @@ void UU02CollisionWorld::TickDefenseFixture(double Now)
 static FAutoConsoleCommandWithWorldAndArgs B2FixtureCommand(TEXT("U03B2Fixture"),TEXT("Labelled enemy fixture: off/block/unparryable/bypass/slow/stun/knockdown/launch/grab/multi; no player defense input."),
     FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& Args,UWorld* W){if(W&&Args.Num()==1)if(auto* C=W->GetSubsystem<UU02CollisionWorld>())C->StartDefenseFixture(Args[0]);}));
 void UU02CollisionWorld::Initialize(FSubsystemCollectionBase& C)
-{Super::Initialize(C);TickHandle=FWorldDelegates::OnWorldPreActorTick.AddUObject(this,&UU02CollisionWorld::PreActorTick);}
+{Super::Initialize(C);C1.Enabled=U04C1::Enabled(GetWorld());TickHandle=FWorldDelegates::OnWorldPreActorTick.AddUObject(this,&UU02CollisionWorld::PreActorTick);}
 void UU02CollisionWorld::Deinitialize()
 {
     FWorldDelegates::OnWorldPreActorTick.Remove(TickHandle);
@@ -244,6 +245,8 @@ void UU02CollisionWorld::CaptureEnvironment()
 }
 bool UU02CollisionWorld::Unobstructed(FVector O,FVector C,double R) const
 {
+    TRACE_CPUPROFILER_EVENT_SCOPE_CONDITIONAL(U04C1_Occlusion,C1.Enabled);
+    if(C1.Active)++C1.Occlusion;
     const FVector End=SphereNearest(O,C,R);FBox Segment(ForceInit);Segment+=O;Segment+=End;
     for(const auto& E:Environment)
     {
@@ -260,9 +263,12 @@ bool UU02CollisionWorld::Unobstructed(FVector O,FVector C,double R) const
 }
 void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandidate>& Out)
 {
+    TRACE_CPUPROFILER_EVENT_SCOPE_CONDITIONAL(U04C1_CollectCandidates,this->C1.Enabled);
+    if(this->C1.Active)++this->C1.Intervals;
     const auto* Source=Sources.FindByPredicate([&](const FSource& S){return S.Component==P.Component;});if(!Source)return;
     for(const auto& H:Hurts)
     {
+        if(this->C1.Active)++this->C1.Visits;
         auto* Shape=H.Component.Get();if(!Shape||!Shape->IsQueryCollisionEnabled()||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
         const bool EncounterPair=AU03Encounter::ForSubject(P.Component->GetOwner())||AU03Encounter::ForSubject(Shape->GetOwner());
         if(EncounterPair&&!AU03Encounter::CanDamage(P.Component->GetOwner(),Shape->GetOwner()))continue;
@@ -294,7 +300,8 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
             if(CurrentTime<P.Slice.BeginSeconds||CurrentTime>P.Slice.EndSeconds||P.Slice.bEndExclusive)continue;
             A=B=1;F0=F1;C0=C1;
         }
-        auto Range=SphereAttackContact(F0,F1,P.Yaw,C0,C1,H.Current.Radius,A,B);
+        if(this->C1.Active)++this->C1.Geometry;
+        auto Range=[&](){TRACE_CPUPROFILER_EVENT_SCOPE_CONDITIONAL(U04C1_Geometry,this->C1.Enabled);return SphereAttackContact(F0,F1,P.Yaw,C0,C1,H.Current.Radius,A,B);}();
         if(!Range.bHit){RecordSelected(P,H.Current.Life,Shape->StableHurtboxId,FMath::Lerp(F0,F1,A),FMath::Lerp(C0,C1,A),H.Current.Radius,P.Slice.BeginSeconds,TEXT("OUTSIDE"));continue;}++Queries;
         const FVector Up(0,0,90);
         auto Valid=[&](double T){return Unobstructed(FMath::Lerp(F0,F1,T)+Up,FMath::Lerp(C0,C1,T),H.Current.Radius);};
@@ -318,6 +325,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
         const double T=Hit.GetValue();
         const double Timestamp=T==0?Begin:T==1?End:FMath::Lerp(Begin,End,T);
         if(Timestamp<P.Slice.BeginSeconds||Timestamp>P.Slice.EndSeconds||(P.Slice.bEndExclusive&&Timestamp>=P.Slice.EndSeconds))continue;
+        if(this->C1.Active)++this->C1.Candidates;
         Out.Add({{P.Action,H.Current.Life},Timestamp,Shape->StableHurtboxId,true,true,P.DefinitionId,P.DefinitionVersion,P.RawDamage});
         auto& Candidate=Out.Last();Candidate.ToSource=FMath::Lerp(F0,F1,T)-FMath::Lerp(C0,C1,T);Candidate.ToSource.Z=0;
         Candidate.AttackDirection=FRotator(0,P.Yaw,0).Vector();
@@ -334,6 +342,8 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
 }
 bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
 {
+    TRACE_CPUPROFILER_EVENT_SCOPE_CONDITIONAL(U04C1_ResolveDedup,C1.Enabled);
+    if(C1.Active&&Ledger.HasResolvedHit(C.Id))++C1.Suppressed;
     bool TargetCurrent=false;
     for(const auto& H:Hurts)if(auto* P=H.Component.Get())if(P->GetSubject()==C.Id.Target&&!P->GetOwner()->IsActorBeingDestroyed())TargetCurrent=true;
     UU02VitalComponent* TargetVital=nullptr;UU02VitalComponent* SourceVital=nullptr;
@@ -361,6 +371,7 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     else
     {
         Roll=FixtureCritRoll>=0?FixtureCritRoll:FMath::Min(double(FMath::FRand()),1.-DBL_EPSILON);++CritRolls;
+        TRACE_CPUPROFILER_EVENT_SCOPE_CONDITIONAL(U04C1_ApplyDamage,C1.Enabled);
         Result=TargetVital->ApplyResolved(C,SourceVital->GetAttackFactor(),Roll,Defense==EDefense::Block?.30:1.);
     }
     Result.Defense=uint8(Defense);
@@ -368,14 +379,17 @@ bool UU02CollisionWorld::ResolveHit(const FHitCandidate& C)
     DamageResults.Add({C,Result,Roll});
 
     if(const auto* Pawn=Cast<APawn>(SourceVital->GetOwner()))if(Pawn->IsPlayerControlled()&&Pawn->IsLocallyControlled())HUDTarget=TargetVital->GetOwner();
-    Confirmed.Add(C);
+    Confirmed.Add(C);if(C1.Active)++C1.Confirmed;
     for(auto& D:DebugHurts)if(D.Hit==C.Id&&D.Hurtbox==C.HurtboxId)D.Result=TEXT("CONFIRMED");
+    if(!C1.Enabled)
+    {
     FString SHA;FParse::Value(FCommandLine::Get(),TEXT("U02SourceSHA="),SHA);
     UE_LOG(LogU02Collision,Display,TEXT("U02D_CONFIRMED sourceSHA=%s world=%s time=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u damage=%d crit=%d roll=%.17g absorbed=%d hpBefore=%d hpAfter=%d death=%d"),
         *SHA,*GetWorld()->GetPathName(),C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,Result.Damage,Result.bCrit,Roll,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied);
     FString Order;for(uint64 Id:Result.ShieldOrder)Order+=FString::Printf(TEXT("%llu,"),Id);
     UE_LOG(LogU02Collision,Display,TEXT("U02E_DAMAGE sourceSHA=%s timestamp=%.17g source=%s:%llu action=%llu target=%s:%llu hurtbox=%u raw=%d attack=%.17g roll=%.17g crit=%d damage=%d absorbed=%d hpBefore=%d hpAfter=%d death=%d shieldOrder=%s"),
         *SHA,C.TimestampSeconds,*C.Id.Action.Source.Pawn.ToString(),C.Id.Action.Source.Generation,C.Id.Action.Sequence,*C.Id.Target.Pawn.ToString(),C.Id.Target.Generation,C.HurtboxId,C.RawDamage,SourceVital->GetAttackFactor(),Roll,Result.bCrit,Result.Damage,Result.Absorbed,Result.BeforeHP,Result.AfterHP,Result.bDied,*Order);
+    }
     // Native labelled fixture only: effect is attached to a real geometry-confirmed direct hit.
     if((C.bInterrupt||FixtureInterruptActions.Contains(C.Id.Action)) && !Result.bDied && Defense==EDefense::Hit)
         if(TargetCombat && TargetCombat->Model && TargetCombat->Model->Current())
@@ -436,7 +450,7 @@ void UU02CollisionWorld::CollectCurrent(double Through,TArray<FHitCandidate>& Ou
     }
     Out.RemoveAll([&](const FHitCandidate& Hit)
     {
-        if(!Ledger.CanResolveHit(Hit))return true;
+        if(!Ledger.CanResolveHit(Hit)){if(C1.Active&&Ledger.HasResolvedHit(Hit.Id))++C1.Suppressed;return true;}
         bool SourceAlive=false,TargetAlive=false;
         for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->GetLife()==Hit.Id.Action.Source)
             if(auto* V=C->GetOwner()->FindComponentByClass<UU02VitalComponent>())SourceAlive=V->IsAlive(Hit.Id.Action.Source)&&FMath::IsFinite(V->GetAttackFactor())&&V->GetAttackFactor()>=0;
@@ -468,6 +482,7 @@ bool UU02CollisionWorld::ApplyLifecycle(UU02CombatComponent* C,double At,AnimeMM
 }
 void UU02CollisionWorld::DrainAt(double Now)
 {
+    TRACE_CPUPROFILER_EVENT_SCOPE_CONDITIONAL(U04C1_WorldUpdate,C1.Enabled);
     if(bDraining||GetWorld()->GetNetMode()==NM_Client||!FMath::IsFinite(Now)||Now<CurrentTime||GetWorld()->bIsTearingDown)return;
     TGuardValue<bool> Draining(bDraining,true);
     Sources.Sort([](const auto& A,const auto& B){const auto* CA=A.Component.Get();const auto* CB=B.Component.Get();return CA&&CB?CA->GetCombatSnapshot().PawnId.ToString()<CB->GetCombatSnapshot().PawnId.ToString():CA!=nullptr;});

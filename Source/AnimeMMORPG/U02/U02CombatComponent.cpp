@@ -1,5 +1,6 @@
 #include "U02CombatComponent.h"
 #include "U04/U04BFPSFixture.h"
+#include "U04/U04C1Profile.h"
 #include "U02NetworkState.h"
 #include "U03/U03Encounter.h"
 #include <limits>
@@ -414,6 +415,7 @@ void UU02CombatComponent::Trace(const TCHAR* Event, double GameplaySeconds, cons
     J->SetNumberField(TEXT("localRole"),C?int32(C->GetLocalRole()):0); J->SetNumberField(TEXT("remoteRole"),C?int32(C->GetRemoteRole()):0);
     J->SetNumberField(TEXT("gameplaySeconds"),GameplaySeconds); J->SetNumberField(TEXT("observedSeconds"),GetWorld()->GetTimeSeconds());
     J->SetStringField(TEXT("detail"),Detail);
+    if(U04C1::Enabled(GetWorld())){U04C1::Event(GetWorld(),Event,J);return;}
     if(U04B::Enabled(GetWorld())){U04B::Event(GetWorld(),Event,J);return;}
     FString Text; FJsonSerializer::Serialize(J,TJsonWriterFactory<TCHAR,TCondensedJsonPrintPolicy<TCHAR>>::Create(&Text));
     UE_LOG(LogU02Combat,Display,TEXT("U02B_EVENT %s"),*Text);

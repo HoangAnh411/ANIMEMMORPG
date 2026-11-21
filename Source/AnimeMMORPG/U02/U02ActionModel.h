@@ -121,6 +121,7 @@ public:
     bool RegisterAction(FActionId Action, double ActiveStartSeconds, double ActiveEndSeconds);
     bool ResolveHit(const FHitCandidate& Candidate);
     bool CanResolveHit(const FHitCandidate& Candidate) const;
+    bool HasResolvedHit(const FHitId& Id) const { return Resolved.Contains(Id); } // read-only profiling observation
     bool MarkDead(FLifeId Life);
     bool InvalidateAction(FActionId Action, double AtSeconds);
     bool IsAlive(FLifeId Life) const;
