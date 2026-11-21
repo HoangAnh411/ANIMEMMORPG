@@ -61,6 +61,7 @@ public:
     void StartDefenseFixture(const FString& Label);
     void TickDefenseFixture(double Now);
 private:
+    friend struct FU04C1Access;
     friend struct FU03C2Access;
     friend struct FU03B2Access;
     friend struct FU03B1Access;

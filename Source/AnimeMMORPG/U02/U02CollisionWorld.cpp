@@ -450,6 +450,7 @@ void UU02CollisionWorld::CollectCurrent(double Through,TArray<FHitCandidate>& Ou
     }
     Out.RemoveAll([&](const FHitCandidate& Hit)
     {
+        TRACE_CPUPROFILER_EVENT_SCOPE_CONDITIONAL(U04C1_DedupFilter,C1.Enabled);
         if(!Ledger.CanResolveHit(Hit)){if(C1.Active&&Ledger.HasResolvedHit(Hit.Id))++C1.Suppressed;return true;}
         bool SourceAlive=false,TargetAlive=false;
         for(const auto& S:Sources)if(auto* C=S.Component.Get())if(C->Model&&C->Model->GetLife()==Hit.Id.Action.Source)

@@ -28,6 +28,12 @@
 // Only setup can mutate fixture vital state; damage still takes the product path.
 struct FU04C1Access
 {
+    static TSharedRef<FJsonObject> Registrations(UU02CollisionWorld* S)
+    {
+        auto J=MakeShared<FJsonObject>();TSet<AnimeMMORPG::U02::FLifeId> Subjects;int32 Boxes=0;
+        for(const auto& R:S->Hurts)if(auto* H=R.Component.Get()){Subjects.Add(H->GetSubject());++Boxes;}
+        J->SetNumberField(TEXT("registeredSubjects"),Subjects.Num());J->SetNumberField(TEXT("registeredHurtboxes"),Boxes);return J;
+    }
     static void Prepare(UU02VitalComponent* V)
     {V->State.MaxHP=V->State.HP=1000000;V->State.Defense=0;V->State.Shields.Empty();V->Publish(V->GetWorld()->GetTimeSeconds());}
 };
@@ -49,7 +55,7 @@ struct FCapture
     TArray<TWeakObjectPtr<AU02LabDummy>> Targets;
     TArray<FFrame> Frames;TArray<TSharedPtr<FJsonValue>> Events;
     int32 Subjects=0,Boxes=0,DamageBegin=0;bool Inside=false,Closed=false;
-    double Start=0,End=0;uint64 QueriesBegin=0;
+    double Start=0,End=0;uint64 QueriesBegin=0;TSharedPtr<FJsonObject> RegistrationBegin;
 };
 TMap<UWorld*,TUniquePtr<FCapture>> Captures;
 AU01Character* Player(UWorld* W)
@@ -106,14 +112,14 @@ void Command(const TArray<FString>& A,UWorld* W)
     }
     if(A[0]==TEXT("begin")&&A.Num()==1&&!S->C1.Active&&!C.Closed&&C.Subjects)
     {
-        C.Frames.Reserve(12000);C.Events.Reserve(512);C.DamageBegin=S->DamageResults.Num();C.QueriesBegin=S->Queries;
+        C.Frames.Reserve(12000);C.Events.Reserve(512);C.DamageBegin=S->DamageResults.Num();C.QueriesBegin=S->Queries;C.RegistrationBegin=FU04C1Access::Registrations(S);
         S->C1=FCounters{};S->C1.Enabled=true;S->C1.Active=true;C.Start=FPlatformTime::Seconds();
         TRACE_BOOKMARK(TEXT("U04C1_START"));
     }
     if(A[0]==TEXT("end")&&S->C1.Active)
     {
         TRACE_BOOKMARK(TEXT("U04C1_END"));C.End=FPlatformTime::Seconds();S->C1.Active=false;C.Closed=true;
-        auto J=Counts(S->C1);J->SetNumberField(TEXT("startWall"),C.Start);J->SetNumberField(TEXT("endWall"),C.End);
+        auto J=Counts(S->C1);J->SetObjectField(TEXT("registrationBegin"),C.RegistrationBegin);J->SetObjectField(TEXT("registrationEnd"),FU04C1Access::Registrations(S));J->SetNumberField(TEXT("startWall"),C.Start);J->SetNumberField(TEXT("endWall"),C.End);
         J->SetNumberField(TEXT("subjects"),C.Subjects);J->SetNumberField(TEXT("hurtboxesPerSubject"),C.Boxes);J->SetBoolField(TEXT("inside"),C.Inside);
         J->SetNumberField(TEXT("queriesPostContactDelta"),S->Queries-C.QueriesBegin);
         J->SetNumberField(TEXT("pid"),FPlatformProcess::GetCurrentProcessId());J->SetStringField(TEXT("world"),W->GetPathName());
