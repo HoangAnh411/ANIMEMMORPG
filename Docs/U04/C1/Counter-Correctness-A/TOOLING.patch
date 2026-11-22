@@ -1,0 +1,673 @@
+diff --git a/Scripts/U04/C1Validate.py b/Scripts/U04/C1Validate.py
+index 665ffa1..b1a6413 100644
+--- a/Scripts/U04/C1Validate.py
++++ b/Scripts/U04/C1Validate.py
+@@ -1,2 +1,3 @@
+-"""Reconcile counters with product damage identities and independently exported HP."""
+-import argparse,csv,json,math
++"""Compatibility CLI: only the reviewed single-action counter validator is supported."""
++import argparse
++import json
+@@ -4,2 +5,2 @@ from pathlib import Path
+-from collections import Counter,defaultdict
+-from C1Run import read,write
++from C1CounterValidate import validate
++from C1Run import write
+@@ -7,47 +8,4 @@ from C1Run import read,write
+-def validate(run,single=False):
+-    s=read(run/'Raw/summary.json');cmd=read(run/'command.json')['workload'];errors=[]
+-    def check(ok,text):
+-        if not ok:errors.append(text)
+-    n,h=cmd['subjects'],cmd['boxes'];inside=cmd['placement']=='in';count=1 if single else 60
+-    starts=[e for e in s['actionEvents'] if e['kind']=='ActionStarted']
+-    check(len(starts)==count,f'ActionStarted count {len(starts)} expected {count}')
+-    check(s['actions']==len(starts),'action counter vs product event mismatch')
+-    check(len({e['actionId'] for e in starts})==count,'action identities not unique')
+-    check([e['raw'] for e in starts]==([60] if single else [60,70,90]*20),'combo definitions/order differ')
+-    events=s['damageEvents'];expected=n*count if inside else 0
+-    check(len(events)==expected,f'Product damage events {len(events)} expected {expected}')
+-    check(s['confirmedHits']==len(events),'confirmed counter vs product damage event mismatch')
+-    identities=[(e['source'],e['sourceLife'],e['action'],e['target'],e['targetLife']) for e in events]
+-    check(len(set(identities))==len(identities),'multiple damage events per action/subject/life')
+-    subjects={t['subject']:t for t in s['targets']};check(len(subjects)==n,'target subject count differs')
+-    for t in subjects.values():
+-        check(sorted(t['stableHurtboxIds'])==([1] if h==1 else [1,2,3]),'stable hurtbox IDs differ')
+-        damage=[e for e in events if e['target']==t['subject']]
+-        check(len(damage)==(count if inside else 0),'per-subject event count differs')
+-        hp=1000000
+-        for e in damage:
+-            check(e['targetLife']==t['life'],'target life changed')
+-            check(e['beforeHP']==hp and e['afterHP']==hp-e['damage'],'HP transition differs from damage')
+-            check(not e['crit'] and not e['death'] and e['absorbed']==0,'unexpected crit/death/shield')
+-            hp=e['afterHP']
+-        check(hp==t['hp'] and not t['dead'] and t['deathCount']==0,'final actor HP differs from event reconstruction')
+-    check(s['registrationBegin']==s['registrationEnd'],'registration changed inside window')
+-    # Product attacker has its own hurtboxes; their actual count is kept, not assumed away.
+-    reg=s['registrationBegin'];check(reg['registeredSubjects']==n+1,'registered subjects include unexpected/missing actor')
+-    check(reg['registeredHurtboxes']>=n*h,'registered hurtbox gauge too small')
+-    check(s['hurtboxVisits']==s['collectIntervals']*reg['registeredHurtboxes'],'visits != collected intervals * actual registrations')
+-    check(s['geometryTests']==s['collectIntervals']*n*h,'geometry != collected intervals * eligible target hurtboxes')
+-    check(s['queriesPostContactDelta']==(s['geometryTests'] if inside else 0),'post-contact Queries differs from known geometry fixture')
+-    check(s['candidates']>=s['confirmedHits'],'candidate/hit ordering impossible')
+-    if not inside:check(s['occlusionCalls']==0 and s['candidates']==0,'out-of-range generated visibility/candidate work')
+-    check(not s['fixedTimeStep'] and not s['fixedFrameRate'] and s['dilation']==1,'time policy differs')
+-    expected_cv={'t.MaxFPS':60,'t.IdleWhenNotForeground':0,'r.VSync':0,'r.ScreenPercentage':50,'r.LumenScene.SurfaceCache.AtlasSize':2048,'r.RenderTargetPoolMin':128,'r.Streaming.PoolSize':256,'r.Lumen.DiffuseIndirect.Allow':0,'r.Lumen.Reflections.Allow':0,'r.Shadow.Virtual.Enable':0,'r.ShadowQuality':2}
+-    check(s['cvars']==expected_cv,'render/profile cvars differ')
+-    check(s['width']==1280 and s['height']==720,'viewport differs')
+-    rows=list(csv.DictReader((run/'Raw/frames.csv').open()));check(all(int(r['focus']) for r in rows),'focus lost')
+-    check(all(int(b['frame'])==int(a['frame'])+1 for a,b in zip(rows,rows[1:])),'frame counter gap')
+-    result=dict(status='PASS' if not errors else 'FAIL',errors=errors,actions=len(starts),productHits=len(events),registered=reg,counters={k:s[k] for k in ['collectIntervals','hurtboxVisits','geometryTests','occlusionCalls','queriesPostContactDelta','candidates','confirmedHits','duplicateSuppression']},candidateConfirmedRatio=s['candidates']/s['confirmedHits'] if s['confirmedHits'] else None,windowSeconds=s['endWall']-s['startWall'])
+-    return result
+-if __name__=='__main__':
+-    p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--single-action',action='store_true');a=p.parse_args()
+-    v=validate(a.run,a.single_action);write(a.run/'validation.json',v);print(json.dumps(v,indent=2));raise SystemExit(0 if v['status']=='PASS' else 1)
++if __name__ == '__main__':
++    p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--single-action',action='store_true')
++    a=p.parse_args();v=validate(a.run,a.single_action);write(a.run/'validation.json',v)
++    print(json.dumps(v,indent=2));raise SystemExit(0 if v['status']=='PASS' else 1)
+diff --git a/Scripts/U04/C1Counter.py b/Scripts/U04/C1Counter.py
+new file mode 100644
+index 0000000..ba69995
+--- /dev/null
++++ b/Scripts/U04/C1Counter.py
+@@ -0,0 +1,120 @@
++"""One-action counter diagnostic state machine. No OS operations at import."""
++import json
++from pathlib import Path
++from C1Readiness import Session
++from C1Run import sha, write
++
++
++class CounterSession(Session):
++    def __init__(self, *args, workload, output):
++        super().__init__(*args)
++        self.workload = workload
++        self.output = Path(output)
++        self.gameplay_edges = 0
++
++    def command(self, text):
++        w = self.workload
++        allowed = [f"u04c1 prepare {w['subjects']} {w['boxes']} {w['placement']}", 'u04c1 begin 5']
++        if text not in allowed:
++            self.fail('counter_command_forbidden')
++        self.j.append('counter_command_start', command=text)
++        self.tap('Console'); self.wait(.2)
++        for ch in text:
++            self.tap('CHAR:' + ch, .012)
++        self.tap('Enter'); self.wait(.25)
++        self.j.append('counter_command_sent', command=text)
++
++    def click_resume(self, x, y):
++        self.j.append('resume_click_start', purpose='Resume')
++        super().click_resume(x, y)
++        self.j.append('resume_click_end', purpose='Resume')
++
++    def gameplay_edge(self, down):
++        # Separate from Session.emit('LMB'), whose geometry checks are Resume-only.
++        # No cursor move, focus retry or release is permitted on this route.
++        if self.gameplay_edges != (0 if down else 1):
++            self.fail('counter_lmb_order_or_repeat')
++        self.guard('before_gameplay_lmb')
++        self.j.append('input_planned', key='LMB', down=down, purpose='counter-action')
++        if down:
++            self.held.add('LMB')
++        try:
++            sent = self.b.send('LMB', down)
++        except Exception as e:
++            self.fail('input_send_error:' + repr(e))
++        if sent != 1:
++            self.fail('input_short_send')
++        if not down:
++            self.held.discard('LMB')
++        self.gameplay_edges += 1
++        self.last_input = dict(key='LMB', down=down, monotonic=self.b.now(), purpose='counter-action')
++        self.j.append('input_sent', **self.last_input, held=sorted(self.held))
++        self.guard('after_gameplay_lmb')
++
++    def playing(self):
++        sample = self.fresh_metrics()
++        m = sample['metrics']
++        if m['controlState'] != 0 or m['windowActive'] is not True or m.get('motorLocked') or m.get('gateAttack') is not True:
++            self.fail('counter_not_playing')
++        if not m.get('combat', {}).get('pawnId'):
++            self.fail('counter_combat_identity_missing')
++        return sample
++
++    def capture(self):
++        readiness = self.setup()
++        before = self.playing()
++        if any(self.output.iterdir()):
++            self.fail('counter_output_not_empty_before_prepare')
++        w = self.workload
++        self.command(f"u04c1 prepare {w['subjects']} {w['boxes']} {w['placement']}")
++        self.wait(2)
++        prepared = self.playing()
++        if prepared['metrics']['combat']['pawnId'] != before['metrics']['combat']['pawnId'] or prepared['metrics']['combat']['life'] != before['metrics']['combat']['life']:
++            self.fail('counter_attacker_life_changed')
++        if any(self.output.iterdir()):
++            self.fail('counter_output_before_begin')
++        self.j.append('counter_empty_output_before_begin')
++        self.command('u04c1 begin 5')
++        self.guard('counter_before_action')
++        input_offset = self.log.size()
++        self.j.append('counter_action_log_boundary', offset=input_offset)
++        self.gameplay_edge(True); self.wait(.035); self.gameplay_edge(False)
++        # No console/input while the native five-second capture is active.
++        self.wait(5)
++        deadline = self.b.now() + 5
++        while True:
++            self.guard('counter_export_poll')
++            files = [self.output / name for name in ('summary.json', 'frames.csv')]
++            try:
++                json.loads(files[0].read_text(encoding='utf-8-sig'))
++                complete = files[1].read_bytes().endswith(b'\n')
++            except (OSError, ValueError):
++                complete = False
++            if complete:
++                break
++            if self.b.now() >= deadline:
++                self.fail('counter_summary_or_frames_timeout')
++            self.wait(.05)
++        after = self.playing()
++        receipt = dict(readiness=readiness, before=before, prepared=prepared, after=after,
++                       files={p.name: sha(p) for p in files}, process=self.record,
++                       workload=w, outputWasEmpty=True, inputOffset=input_offset, inputEndOffset=self.log.size())
++        self.j.append('counter_capture_complete', receipt=receipt)
++        return receipt
++
++
++def run_counter_probe(record, backend, log, journal, cleanup=False):
++    if cleanup:
++        raise RuntimeError('outer_original_handle_lifecycle_required')
++    s = CounterSession(record, backend, log, journal, workload=record['workload'], output=record['raw'])
++    try:
++        receipt = s.capture()
++        write(Path(record['raw']).parent / 'capture.json', receipt)
++        from C1Validate import validate
++        result = validate(Path(record['raw']).parent, single=True, require_stop=False)
++        journal.append('counter_validation', validation=result)
++        return result
++    except Exception as e:
++        s.failed = True
++        journal.append('counter_invalid', error=repr(e), held=sorted(s.held), lastInput=s.last_input)
++        return dict(status='INVALID', error=repr(e), held=sorted(s.held), lastInput=s.last_input)
+diff --git a/Scripts/U04/C1CounterRun.py b/Scripts/U04/C1CounterRun.py
+new file mode 100644
+index 0000000..198378b
+--- /dev/null
++++ b/Scripts/U04/C1CounterRun.py
+@@ -0,0 +1,71 @@
++"""Dedicated Build-03 counter correctness entry; one process, one action, no trace.
++
++CC-A authorizes fake-backend execution only. Live use needs separate CC-B approval.
++"""
++import argparse
++import re
++import subprocess
++from pathlib import Path
++from C1Run import ROOT, NATIVE, arguments, read, write, sha, run_owned_launch
++from C1Counter import run_counter_probe
++
++GAME_SHA = '282fcefc5156be5f5aa81caf2bc3a764949f2eaf76de081f9c62aa0e2e54e5a5'
++
++
++def parse_args(argv=None):
++    p = argparse.ArgumentParser(description=__doc__)
++    p.add_argument('--build', type=Path, required=True)
++    p.add_argument('--id', required=True)
++    p.add_argument('--subjects', type=int, choices=[1, 10, 40], required=True)
++    p.add_argument('--boxes', type=int, choices=[1, 3], required=True)
++    p.add_argument('--placement', choices=['in', 'out'], required=True)
++    a = p.parse_args(argv)
++    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,79}', a.id):
++        p.error('unsafe run ID')
++    return a
++
++
++def main(argv=None):
++    a = parse_args(argv)
++    build = a.build.resolve()
++    if build != ROOT.parent / 'Runs/Build-03':
++        raise RuntimeError('only Build-03 is allowed')
++    out = ROOT.parent / 'Runs' / a.id
++    if out.exists():
++        raise RuntimeError('run ID already used; no reuse or replacement')
++    index = read(build / 'BUILD-IDENTITY.json')
++    if index['sourceSHA'] != NATIVE or Path(index['clone']).resolve() != ROOT:
++        raise RuntimeError('build source mismatch')
++    if subprocess.check_output(['git', '-C', str(ROOT), 'diff', NATIVE, '--', 'Source', 'Content', 'Config', 'Plugins', 'AnimeMMORPG.uproject']):
++        raise RuntimeError('native inputs changed')
++    exe = build / 'Archive/Windows/AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe'
++    if index['gameSHA256'] != GAME_SHA or sha(exe) != GAME_SHA:
++        raise RuntimeError('Build-03 Game hash mismatch')
++    from C1Win32 import Backend
++    backend = Backend()
++    protected = backend.inventory()
++    if any(Path(p['ExecutablePath']).name.lower() == 'animemmorpg.exe' for p in protected):
++        raise RuntimeError('package already active')
++    out.mkdir(exist_ok=False)
++    for name in ('User', 'Raw'):
++        (out / name).mkdir()
++    workload = dict(subjects=a.subjects, boxes=a.boxes, placement=a.placement)
++    args = arguments(exe, out, a.id)
++    write(out / 'protected-before.json', protected)
++    write(out / 'command.json', dict(arguments=args, purpose='counter-correctness', trace='off', actions=1,
++                                    workload=workload, dpi=backend.dpi))
++    base = dict(role='U04C1Counter', executable=str(exe), binarySHA256=GAME_SHA, sourceSHA=NATIVE,
++                runId=a.id, userDir=str(out / 'User'), log=str(out / 'Game.log'), raw=str(out / 'Raw'), workload=workload)
++    result = run_owned_launch(backend, args, exe.parent, out, base, probe=run_counter_probe)
++    try:
++        after = backend.inventory(); write(out / 'protected-after.json', after)
++        if not all(p in after for p in protected):
++            result.update(status='INVALID', protectedIdentityChanged=True)
++    except Exception as e:
++        result.update(status='INVALID', protectedInventoryError=repr(e))
++    write(out / 'final.json', result)
++    return 0 if result['status'] == 'PASS' else 1
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())
+diff --git a/Scripts/U04/C1CounterValidate.py b/Scripts/U04/C1CounterValidate.py
+new file mode 100644
+index 0000000..e30442a
+--- /dev/null
++++ b/Scripts/U04/C1CounterValidate.py
+@@ -0,0 +1,172 @@
++"""Fail-closed, single-action checks of the actual Build-03 export schema.
++
++PASS covers exported assertions. Reopen, concurrent-world isolation and individual
++occlusion/suppression observations remain explicitly unproven dynamically.
++"""
++import csv
++import json
++import math
++import re
++from pathlib import Path
++from C1Run import NATIVE, PROFILE, arguments, read, sha
++
++COUNTERS = dict(visits='hurtboxVisits', geometry='geometryTests', occlusion='occlusionCalls',
++                candidates='candidates', confirmed='confirmedHits', suppressed='duplicateSuppression',
++                intervals='collectIntervals', actions='actions')
++LIMITS = ['reopen rejection: source only; no Closed/reopen export',
++          'two concurrent UWorld isolation: source only; no dynamic experiment',
++          'occlusion origin and individual suppression observations: aggregate only',
++          'initial target HP and registration identities: prepare/source plus final export, no initial target snapshot']
++
++
++def reconcile(s, w, record, prepared, after, rows):
++    invalid, failures = [], []
++    def require(ok, name):
++        if not ok: invalid.append(name)
++    def check(ok, name):
++        if not ok: failures.append(name)
++    try:
++        n, h, inside = w['subjects'], w['boxes'], w['placement'] == 'in'
++        require(n in (1,10,40) and h in (1,3) and w['placement'] in ('in','out'), 'workload')
++        require(s['pid'] == record['pid'] and s['world'] == prepared['world'] == after['world'], 'summary_pid_world')
++        require((s['subjects'],s['hurtboxesPerSubject'],s['inside']) == (n,h,inside), 'summary_workload')
++        require(s['requestedSeconds'] == 5 and all(math.isfinite(s[k]) for k in ('startWall','endWall')) and s['endWall'] >= s['startWall']+5, 'window_duration')
++        require(s['fixedTimeStep'] is False and s['fixedFrameRate'] is False and s['smoothing'] is False and s['dilation']==1, 'time_profile')
++        cv = {part.rsplit(' ',1)[0]:float(part.rsplit(' ',1)[1]) for part in PROFILE.split(',')}
++        require(s['cvars']==cv and (s['width'],s['height'])==(1280,720), 'profile_B')
++        require(bool(rows), 'frames_empty')
++        for row in rows:
++            require(int(row['focus'])==1, 'frame_focus')
++            require(s['startWall'] <= float(row['wall']) <= s['endWall'], 'frame_wall_outside_window')
++            require(prepared['worldSeconds'] <= float(row['world']) <= after['worldSeconds'], 'frame_world_outside_fresh_metrics')
++            require(math.isfinite(float(row['dt'])) and float(row['dt'])>0, 'frame_dt')
++            for k in COUNTERS:
++                require(float(row[k]).is_integer() and int(row[k])>=0, 'frame_counter_type:'+k)
++        for a,b in zip(rows,rows[1:]):
++            require(int(b['frame'])==int(a['frame'])+1, 'frame_gap')
++            require(float(b['wall'])>float(a['wall']) and float(b['world'])>float(a['world']), 'frame_time_not_increasing')
++            for k in COUNTERS:
++                require(int(b[k])>=int(a[k]), 'frame_counter_decreased:'+k)
++        if rows:
++            require(float(rows[0]['wall'])-s['startWall']<=float(rows[0]['dt'])+.02 and s['endWall']-float(rows[-1]['wall'])<=float(rows[-1]['dt'])+.02, 'frames_do_not_cover_window')
++        for k,exported in COUNTERS.items():
++            require(type(s[exported]) in (int,float) and math.isfinite(s[exported]) and s[exported]>=0 and int(s[exported])==s[exported], 'counter_type:'+exported)
++            if rows: check(int(rows[-1][k])==s[exported], 'last_frame_summary:'+exported)
++        reg = dict(registeredSubjects=n+1, registeredHurtboxes=n*h+2)
++        check(s['registrationBegin']==s['registrationEnd']==reg, 'registration_including_two_attacker_hurtboxes')
++        # Conditional on stable, settled fixture/source/registration; no invented
++        # interval count and no assumption that a call count equals target count.
++        check(s['collectIntervals']>0, 'no_collect_interval')
++        check(s['hurtboxVisits']==s['collectIntervals']*(n*h+2), 'hurtbox_visits_formula')
++        check(s['geometryTests']==s['collectIntervals']*n*h, 'eligible_geometry_formula')
++        check(s['queriesPostContactDelta']==(s['geometryTests'] if inside else 0), 'post_contact_queries_formula')
++        check(0<=s['confirmedHits']<=s['candidates']<=s['queriesPostContactDelta']<=s['geometryTests']<=s['hurtboxVisits'], 'counter_order')
++        check(s['occlusionCalls']>=s['candidates'], 'occlusion_below_candidates')
++        starts = [e for e in s['actionEvents'] if e['kind']=='ActionStarted']
++        check(len(starts)==1 and s['actions']==1, 'exactly_one_action')
++        for e in s['actionEvents']:
++            require(e['pid']==record['pid'] and e['world']==s['world'] and e['runId']==record['runId'] and e['sourceSHA']==NATIVE, 'event_origin')
++            require(e['worldType']==1 and e['netMode']==0 and e['localRole']==3 and e['pawn']==prepared['pawn'] and e['owner']==prepared['controller'], 'event_world_pawn_controller_authority')
++            require(s['startWall']<=e['wall']<=s['endWall'], 'event_wall_outside_window')
++            require(prepared['worldSeconds']<=e['observedSeconds']<=after['worldSeconds'], 'event_stale_world_time')
++        if len(starts)!=1:
++            return dict(status='INVALID' if invalid else 'FAIL',invalid=invalid,failures=failures,evidenceLimits=LIMITS)
++        action=starts[0]; combat=prepared['combat']
++        check(action['definition']==0 and action['raw']==60 and action['definitionVersion']==1, 'attack1_raw60')
++        require(action['pawnId']==combat['pawnId'] and action['life']==combat['life'], 'attacker_life')
++        require(after['combat']['pawnId']==combat['pawnId'] and after['combat']['life']==combat['life'], 'after_attacker_life')
++        check(action['action']==combat['action']+1, 'new_action_sequence')
++        check(after['combat']['action']==action['action'], 'after_action_sequence')
++        require(action['actionId']==f"{action['pawnId']}:{action['life']}:{action['action']}" and action['lifeId']==f"{action['pawnId']}:{action['life']}", 'action_identity_encoding')
++        require(action['start']==action['gameplaySeconds'] and prepared['worldSeconds']<=action['start']<=action['observedSeconds'], 'action_gameplay_window')
++        require(action['start']<=action['activeStart']<=action['activeEnd']<=action['end'], 'action_active_bounds')
++        if rows:
++            require(action['gameplaySeconds']>=float(rows[0]['world'])-float(rows[0]['dt']), 'action_before_capture_frame')
++            require(action['gameplaySeconds']<=float(rows[-1]['world']), 'action_after_capture_frame')
++        targets={t['subject']:t for t in s['targets']}
++        require(len(targets)==len(s['targets'])==n and action['pawnId'] not in targets, 'target_identity_set')
++        events=s['damageEvents']
++        check(len(events)==(n if inside else 0), 'damage_event_count')
++        check(s['confirmedHits']==len(events), 'confirmed_vs_product_damage')
++        check(after['combat']['damageResults']-combat['damageResults']==len(events), 'fresh_product_damage_results_delta')
++        check(after['combat']['geometryQueries']-combat['geometryQueries']==s['queriesPostContactDelta'], 'fresh_product_post_contact_query_delta')
++        for e in events:
++            check((e['source'],e['sourceLife'],e['action'])==(action['pawnId'],action['life'],action['action']), 'damage_wrong_action_or_attacker_life')
++            require(e['target'] in targets, 'damage_unknown_target')
++            if e['target'] not in targets: continue
++            t=targets[e['target']]
++            check(e['targetLife']==t['life'] and e['hurtboxId'] in t['stableHurtboxIds'], 'damage_target_life_or_hurtbox')
++            check(action['activeStart']<=e['at']<=action['activeEnd'], 'damage_outside_action_active_interval')
++            check(e['damage']==60 and e['beforeHP']==1000000 and e['afterHP']==999940, 'damage_independent_60_HP')
++            check(e['crit'] is False and e['death'] is False and e['absorbed']==0, 'crit_death_absorption')
++        hp=[]
++        for t in targets.values():
++            check(sorted(t['stableHurtboxIds'])==([1] if h==1 else [1,2,3]), 'stable_hurtbox_ids')
++            per_target=[e for e in events if e['target']==t['subject']]
++            check(len(per_target)==(1 if inside else 0), 'per_target_single_damage')
++            expected_hp=999940 if inside else 1000000
++            check(t['hp']==expected_hp and t['maxHP']==1000000 and t['shield']==0 and t['dead'] is False and t['deathCount']==0 and t['lifeGeneration']==t['life'], 'target_final_HP_life')
++            hp.append(dict(subject=t['subject'],life=t['life'],expected=expected_hp,actual=t['hp'],reconstructed=1000000-sum(e['damage'] for e in per_target)))
++        return dict(status='INVALID' if invalid else 'FAIL' if failures else 'PASS',invalid=invalid,failures=failures,
++                    evidenceLimits=LIMITS,pid=s['pid'],world=s['world'],actionIdentity=action['actionId'],workload=w,
++                    productHits=len(events),hp=hp,counters={k:s[k] for k in COUNTERS.values()},queriesPostContactDelta=s['queriesPostContactDelta'],
++                    candidateConfirmedRatio=s['candidates']/s['confirmedHits'] if s['confirmedHits'] else None)
++    except (KeyError,TypeError,ValueError,OverflowError) as e:
++        return dict(status='INVALID',invalid=invalid+['missing_or_malformed_link:'+str(e)],failures=failures,evidenceLimits=LIMITS)
++
++
++def validate(run, single=False, require_stop=True):
++    if not single: return dict(status='INVALID',invalid=['single-action CC diagnostics only'])
++    try:
++        receipt=read(run/'capture.json'); record=read(run/'process.json'); cmd=read(run/'command.json')
++        def must(ok, reason):
++            if not ok: raise ValueError(reason)
++        must(receipt['process']==record and receipt['workload']==cmd['workload'], 'receipt_process_command')
++        must(record['runId']==run.name and type(record['creationTicks']) is int and record['creationTicks']>0, 'run_creation_pin')
++        must(record['sourceSHA']==NATIVE and record['arguments']==cmd['arguments']==arguments(Path(record['executable']),run,run.name), 'exact_command')
++        must(cmd['purpose']=='counter-correctness' and cmd['trace']=='off' and cmd['actions']==1, 'command_scope')
++        for name,digest in receipt['files'].items():
++            must(name in ('summary.json','frames.csv') and sha(run/'Raw'/name)==digest, 'raw_file_hash')
++        must(set(receipt['files'])=={'summary.json','frames.csv'} and receipt['outputWasEmpty'] is True, 'raw_file_set')
++        journal=[json.loads(line) for line in (run/'journal.jsonl').read_text(encoding='utf-8').splitlines()]
++        must([r['seq'] for r in journal]==list(range(1,len(journal)+1)), 'journal_sequence')
++        must(not any(r['event']=='guard_failed' for r in journal), 'guard_failed')
++        launch=[r['identity'] for r in journal if r['event']=='launch_identity_verified']
++        must(len(launch)==1 and all(launch[0][k]==record[k] for k in ('pid','creationTicks','executable')) and launch[0]['argv']==record['arguments'], 'launch_identity_proof')
++        for handle in ('originalHandle','queryHandle'):
++            must(all(launch[0][handle][k]==record[k] for k in ('pid','creationTicks','executable')), 'handle_identity_proof')
++        guarded=[r for r in journal if r['event']=='before_gameplay_lmb']
++        must(len(guarded)==2 and all(r['actualPID']==record['pid'] and r['actualCreationTicks']==record['creationTicks'] and r['foregroundHWND']==r['targetHWND'] and r['foregroundPID']==record['pid'] for r in guarded), 'gameplay_edge_identity')
++        edges=[r for r in journal if r['event']=='input_sent' and r.get('purpose')=='counter-action']
++        must([r['down'] for r in edges]==[True,False] and edges[1]['monotonic']-edges[0]['monotonic']>=.035-1e-9, 'one_LMB_pair')
++        texts=[r['command'] for r in journal if r['event']=='counter_command_sent']; w=cmd['workload']
++        must(texts==[f"u04c1 prepare {w['subjects']} {w['boxes']} {w['placement']}",'u04c1 begin 5'], 'console_command_sequence')
++        sent=[r for r in journal if r['event']=='counter_command_sent']
++        begin_start=[r for r in journal if r['event']=='counter_command_start' and r['command']=='u04c1 begin 5']
++        must(len(begin_start)==1 and begin_start[0]['monotonic']-sent[0]['monotonic']>=2 and sent[1]['seq']<edges[0]['seq'], 'prepare_settle_begin_input_order')
++        must(any(r['event']=='counter_empty_output_before_begin' for r in journal), 'empty_output_journal')
++        log=Path(record['log']).read_bytes()
++        must(0<=receipt['inputOffset']<receipt['inputEndOffset']<=len(log), 'action_input_log_offsets')
++        physical=log[receipt['inputOffset']:receipt['inputEndOffset']]
++        must(re.findall(rb'PhysicalPress key=LeftMouseButton state=(\d+) accepted=(\d+)',physical)==[(b'0',b'1')] and physical.count(b'PhysicalRelease/Rearm key=LeftMouseButton')==1, 'current_physical_LMB_edges')
++        for key in ('before','prepared','after'):
++            sample=receipt[key]; m=sample['metrics']
++            must(sample['requestOffset']<=sample['lineOffset']<sample['endOffset']<=len(log), 'fresh_metrics_offset')
++            line=log[sample['lineOffset']:sample['endOffset']]
++            must(line.endswith(b'\n') and json.loads(line.split(b'Metrics ',1)[1])==m, 'fresh_metrics_raw')
++            must(m['pid']==record['pid'] and m['worldType']==1 and m['netMode']==0 and m['sourceSHA']==NATIVE and m['controlState']==0 and m['windowActive'] is True, 'metrics_identity_profile')
++            must(m['locallyControlled'] is True and m['localPlayers']==1 and m['owner']==m['controller'], 'metrics_local_ownership')
++            must(all(m[k]==receipt['prepared']['metrics'][k] for k in ('runID','world','worldContext','pawn','controller')), 'metrics_session')
++        must(receipt['before']['endOffset']<=receipt['prepared']['requestOffset'] and receipt['prepared']['endOffset']<=receipt['after']['requestOffset'], 'metrics_request_order')
++        must(receipt['after']['metrics']['worldSeconds']>receipt['prepared']['metrics']['worldSeconds'], 'metrics_world_progress')
++        with (run/'Raw/frames.csv').open(encoding='utf-8-sig',newline='') as f: rows=list(csv.DictReader(f))
++        result=reconcile(read(run/'Raw/summary.json'),w,record,receipt['prepared']['metrics'],receipt['after']['metrics'],rows)
++        if require_stop:
++            stopped=read(run/'result.json'); final=read(run/'final.json')
++            must(stopped['processExited'] is True and final['processExited'] is True and stopped['exitEvidence']==final['exitEvidence'], 'exit_proof')
++            proof=final['exitEvidence']
++            must(proof['identityVerifiedAtStop'] is True and proof['handleSource']=='original_Popen' and proof['wait']=='signaled', 'stop_identity_marker')
++            must(stopped['status']==final['status']==result['status'], 'final_verdict_mismatch')
++        return result
++    except (OSError,KeyError,ValueError,TypeError,IndexError) as e:
++        return dict(status='INVALID',invalid=['evidence:'+str(e)],evidenceLimits=LIMITS)
+diff --git a/Scripts/U04/C1CounterChecks.py b/Scripts/U04/C1CounterChecks.py
+new file mode 100644
+index 0000000..837de31
+--- /dev/null
++++ b/Scripts/U04/C1CounterChecks.py
+@@ -0,0 +1,219 @@
++"""CC-A offline replays. All process/clock/window/input/export producers are fake.
++
++Synthetic native-shaped data is explicitly not evidence that native counters work.
++"""
++import argparse
++from contextlib import nullcontext
++import copy
++import csv
++import io
++from contextlib import redirect_stderr
++import json
++from pathlib import Path
++import subprocess
++import sys
++import tempfile
++import types
++from unittest.mock import patch
++import C1CounterRun as entry
++from C1CounterValidate import reconcile, validate, COUNTERS
++from C1Offline import FakeBackend, FakeLog, record
++from C1Run import NATIVE, PROFILE, sha
++
++
++def fixture(n=1,h=1,placement='in',start=100.,world=30.,record_value=None):
++    r=record_value or record(); w=dict(subjects=n,boxes=h,placement=placement); inside=placement=='in'
++    m=dict(world='World_01',worldSeconds=world-.5,pawn='Pawn_01',controller='PC_01',combat=dict(pawnId='Attacker',life=1,action=0,damageResults=17,geometryQueries=29))
++    after=copy.deepcopy(m);after['worldSeconds']=world+6;after['combat']['action']=1
++    a=dict(kind='ActionStarted',event='ActionStarted',pid=r['pid'],world=m['world'],runId=r['runId'],sourceSHA=NATIVE,
++           worldType=1,netMode=0,pawn='Pawn_01',owner='PC_01',localRole=3,pawnId='Attacker',life=1,action=1,actionId='Attacker:1:1',lifeId='Attacker:1',
++           definition=0,definitionVersion=1,raw=60,wall=start+.3,start=world+.3,gameplaySeconds=world+.3,
++           observedSeconds=world+.3,activeStart=world+.46,activeEnd=world+.68,end=world+1.08)
++    targets=[dict(subject=f'Target{i}',life=1,lifeGeneration=1,stableHurtboxIds=[1] if h==1 else [1,2,3],
++                  hp=999940 if inside else 1000000,maxHP=1000000,shield=0,dead=False,deathCount=0) for i in range(n)]
++    hits=[dict(source='Attacker',sourceLife=1,action=1,target=t['subject'],targetLife=1,hurtboxId=1,
++               at=world+.5,damage=60,beforeHP=1000000,afterHP=999940,crit=False,death=False,absorbed=0) for t in targets] if inside else []
++    after['combat'].update(damageResults=17+len(hits),geometryQueries=29+(4*n*h if inside else 0))
++    s=dict(pid=r['pid'],world=m['world'],subjects=n,hurtboxesPerSubject=h,inside=inside,requestedSeconds=5,startWall=start,endWall=start+5,
++           fixedTimeStep=False,fixedFrameRate=False,smoothing=False,dilation=1,width=1280,height=720,
++           cvars={p.rsplit(' ',1)[0]:float(p.rsplit(' ',1)[1]) for p in PROFILE.split(',')},
++           registrationBegin=dict(registeredSubjects=n+1,registeredHurtboxes=n*h+2),registrationEnd=dict(registeredSubjects=n+1,registeredHurtboxes=n*h+2),
++           actionEvents=[a],damageEvents=hits,targets=targets,collectIntervals=4,hurtboxVisits=4*(n*h+2),geometryTests=4*n*h,
++           queriesPostContactDelta=4*n*h if inside else 0,candidates=4*n*h if inside else 0,confirmedHits=n if inside else 0,
++           duplicateSuppression=3*n*h if inside else 0,occlusionCalls=10*n*h+7,actions=1)
++    rows=[]
++    for i in range(1,301):
++        row=dict(wall=start+i/60,world=world+i/60,dt=1/60,frame=i,focus=1)
++        for k,v in COUNTERS.items():row[k]=s[v] if i>=45 else 0
++        rows.append(row)
++    return s,w,r,m,after,rows
++
++
++class CounterBackend(FakeBackend):
++    def __init__(self,log,mode='normal'):
++        super().__init__(log,mode='playing');self.case=mode;self.owned=False;self.launches=0;self.commands=[]
++        self.begin=None;self.exported=False;self.raw=None;self.rc=None;self.dpi={'offline':True}
++        self.gameplay_count=0
++    def inventory(self):return [dict(ProcessId=9999,ExecutablePath='D:/Fake/UnrealEditor.exe',creationTicks=99)]
++    def launch(self,args,cwd):
++        self.launches+=1;self.owned=True
++        self.raw=Path(next(a.split('=',1)[1] for a in args if a.startswith('-U04C1Output=')))
++    def capture_owned(self):
++        r=record();return {k:r[k] for k in ('pid','creationUTC','creationTicks')}
++    def verify_owned(self,r):
++        self.rc=r
++        info={k:r[k] for k in ('pid','creationTicks','executable')}
++        return dict(info,argv=r['arguments'],originalHandle=info,queryHandle=info)
++    def has_owned(self):return self.owned
++    def close_owned(self):self.owned=False
++    def stop_launched(self,timeout):
++        self.stopped+=1
++        proof=dict(identityVerifiedAtStop=self.case!='stop_oserror',handleSource='original_Popen',wait='signaled',pid=1234)
++        if self.case=='stop_oserror':proof['identityCaptureError']='offline stop-only OSError'
++        return proof
++    def metrics(self):
++        m=super().metrics();m['gateAttack']=True
++        n=self.w['subjects'] if hasattr(self,'w') else 1;h=self.w['boxes'] if hasattr(self,'w') else 1
++        inside=hasattr(self,'w') and self.w['placement']=='in' and self.exported
++        m['combat']=dict(pawnId='Attacker',life=1,action=1 if self.exported else 0,damageResults=17+(n if inside else 0),geometryQueries=29+(4*n*h if inside else 0))
++        return m
++    def send(self,key,down):
++        if key=='Enter' and not down and self.cmd.startswith('u04c1 '):
++            text=self.cmd;self.cmd='';self.commands.append(dict(text=text,time=self.t));self.sent.append(dict(key=key,down=down,time=self.t))
++            if text.startswith('u04c1 prepare '):
++                _,_,n,h,p=text.split();self.w=dict(subjects=int(n),boxes=int(h),placement=p)
++                if self.case=='old_output':(self.raw/'summary.json').write_text('{}')
++            elif text=='u04c1 begin 5':self.begin=self.t
++            else:raise AssertionError('unexpected command')
++            return 1
++        if key=='LMB' and self.begin is not None:
++            self.sent.append(dict(key=key,down=down,time=self.t));self.gameplay_count+=1
++            if down:
++                self.action_time=self.t
++                self.log.add('LogU01Control: PhysicalPress key=LeftMouseButton state=0 accepted=1 reason=Ready\n')
++            else:self.log.add('LogU01Control: PhysicalRelease/Rearm key=LeftMouseButton\n')
++            return 1
++        sent=super().send(key,down)
++        if self.case=='focus_during_prepare' and self.cmd.startswith('u04c1 pre'):self.fg=202
++        return sent
++    def sleep(self,seconds):
++        super().sleep(seconds)
++        if self.case=='focus_between_lmb' and self.gameplay_count==1 and self.t>=self.action_time+.01:self.fg=202
++        if self.begin is not None and self.t>=self.begin+5 and not self.exported and self.case!='missing_summary':
++            self.exported=True
++            s,w,r,m,a,rows=fixture(self.w['subjects'],self.w['boxes'],self.w['placement'],start=self.begin,world=self.begin,record_value=self.rc)
++            s['world']=m['world']=a['world']=self.metrics()['world']
++            e=s['actionEvents'][0];e['world']=s['world']
++            d=self.action_time-self.begin
++            e.update(wall=self.action_time,start=self.action_time,gameplaySeconds=self.action_time,observedSeconds=self.action_time,activeStart=self.action_time+.16,activeEnd=self.action_time+.38,end=self.action_time+.78)
++            for hit in s['damageEvents']:hit['at']=self.action_time+.2
++            if self.case=='wrong_damage':
++                s['damageEvents'][0].update(damage=50,afterHP=999950);s['targets'][0]['hp']=999950
++            (self.raw/'summary.json').write_text(json.dumps(s),encoding='utf-8')
++            with (self.raw/'frames.csv').open('w',newline='',encoding='utf-8') as f:
++                writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
++
++
++def main():
++    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);out=p.parse_args().out
++    out.mkdir(parents=True,exist_ok=False);results=[]
++    def save(name,expected,actual,details):
++        results.append(dict(case=name,expected=expected,actual=actual,passed=expected==actual,details=details))
++    def data_case(name,expected,mutate=lambda x:None,n=1,h=1,placement='in'):
++        args=list(fixture(n,h,placement));mutate(args);v=reconcile(*args)
++        dest=out/name;dest.mkdir()
++        (dest/'input.json').write_text(json.dumps(args,indent=2),encoding='utf-8')
++        (dest/'validation.json').write_text(json.dumps(v,indent=2),encoding='utf-8')
++        save(name,expected,v['status'],v)
++    for n in (1,10,40):
++        for h in (1,3):
++            for placement in ('in','out'):data_case(f'synthetic_{n}_{h}_{placement}','PASS',n=n,h=h,placement=placement)
++    data_case('damage_HP_self_consistent','FAIL',lambda x:(x[0]['damageEvents'][0].update(damage=50,afterHP=999950),x[0]['targets'][0].update(hp=999950)))
++    data_case('wrong_action','FAIL',lambda x:x[0]['damageEvents'][0].update(action=99))
++    data_case('wrong_source_life','FAIL',lambda x:x[0]['damageEvents'][0].update(sourceLife=2))
++    data_case('wrong_target_life','FAIL',lambda x:x[0]['damageEvents'][0].update(targetLife=2))
++    data_case('wrong_hurtbox','FAIL',lambda x:x[0]['damageEvents'][0].update(hurtboxId=99))
++    data_case('H3_multiplied_damage','FAIL',lambda x:(x[0]['damageEvents'].extend(copy.deepcopy(x[0]['damageEvents'])*2),x[0]['targets'][0].update(hp=999820)),h=3)
++    data_case('out_still_hit','FAIL',lambda x:x[0]['damageEvents'].append(fixture()[0]['damageEvents'][0]),placement='out')
++    data_case('frames_empty','INVALID',lambda x:x[5].clear())
++    data_case('frame_gap','INVALID',lambda x:x[5][1].update(frame=99))
++    data_case('frame_focus','INVALID',lambda x:x[5][1].update(focus=0))
++    data_case('old_pre_window_frame','INVALID',lambda x:x[5][0].update(wall=99))
++    data_case('action_outside_window','INVALID',lambda x:x[0]['actionEvents'][0].update(wall=99))
++    data_case('old_gameplay_action','INVALID',lambda x:x[0]['actionEvents'][0].update(start=1,gameplaySeconds=1))
++    data_case('other_PID','INVALID',lambda x:x[0].update(pid=999))
++    data_case('other_world','INVALID',lambda x:x[0].update(world='OtherWorld'))
++    data_case('wrong_runID','INVALID',lambda x:x[0]['actionEvents'][0].update(runId='old_run'))
++    data_case('missing_action_life','INVALID',lambda x:x[0]['actionEvents'][0].pop('life'))
++    data_case('profile_smoothing','INVALID',lambda x:x[0].update(smoothing=True))
++    data_case('wrong_registration','FAIL',lambda x:x[0]['registrationEnd'].update(registeredHurtboxes=99))
++    data_case('wrong_visits','FAIL',lambda x:x[0].update(hurtboxVisits=99))
++    data_case('wrong_post_contact_query','FAIL',lambda x:x[0].update(queriesPostContactDelta=1))
++    data_case('old_cumulative_data_excluded','PASS')
++    data_case('old_cumulative_data_included','FAIL',lambda x:x[0].update(queriesPostContactDelta=x[0]['queriesPostContactDelta']+29))
++    # Nonzero outside occlusion is intentional; no H-1 suppression expectation.
++    data_case('out_HUD_occlusion_allowed','PASS',placement='out')
++    data_case('suppression_not_H_minus_1','PASS',lambda x:(x[0].update(duplicateSuppression=100),[row.update(suppressed=100) for row in x[5][44:]]),h=3)
++    valid_cli=['--build','D:/Offline/Build-03','--id','Fresh-01','--subjects','1','--boxes','1','--placement','in']
++    for name,extra in [('trace_on',['--trace','on']),('trace_off_flag',['--trace','off']),('second_action',['--actions','2']),('unsafe_id',['--id','../old']),('bad_N',['--subjects','2']),('bad_H',['--boxes','2']),('bad_placement',['--placement','near'])]:
++        try:
++            with redirect_stderr(io.StringIO()):entry.parse_args(valid_cli+extra)
++            actual='ACCEPTED'
++        except SystemExit:actual='REJECTED'
++        save('parser_'+name,'REJECTED',actual,dict(realLaunches=0))
++    for case in ('normal','wrong_damage','focus_between_lmb','focus_during_prepare','missing_summary','old_output','stop_oserror','reused_id','stale_metrics'):
++        dest=out/('entry_'+case);dest.mkdir()
++        with nullcontext(str((dest/'Workspace').resolve())) as temporary:
++            root=Path(temporary)/'C1/Source';root.mkdir(parents=True)
++            build=root.parent/'Runs/Build-03';exe=build/'Archive/Windows/AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe'
++            exe.parent.mkdir(parents=True);exe.write_bytes(b'OFFLINE DATA - NOT EXECUTABLE')
++            (build/'BUILD-IDENTITY.json').write_text(json.dumps(dict(sourceSHA=NATIVE,clone=str(root),gameSHA256=sha(exe))))
++            log=FakeLog();b=CounterBackend(log,case)
++            if case=='stale_metrics':b.mode='stale_metrics'
++            run=root.parent/'Runs'/case
++            if case=='reused_id':run.mkdir();(run/'sentinel.txt').write_text('KEEP')
++            # FileLog is supplied by the accepted lifecycle; substitute in-memory
++            # producer, synchronizing its bytes before each validator invocation.
++            import C1Counter
++            actual_probe=entry.run_counter_probe
++            def probe(rec,backend,_log,journal,cleanup):
++                original= C1Counter.write
++                def sync_write(path,value):
++                    Path(rec['log']).write_bytes(log.data);original(path,value)
++                with patch.object(C1Counter,'write',sync_write):return actual_probe(rec,backend,log,journal,cleanup=cleanup)
++            module=types.SimpleNamespace(Backend=lambda:b)
++            caught=None
++            with patch.object(entry,'ROOT',root),patch.object(entry,'GAME_SHA',sha(exe)),patch.object(entry,'run_counter_probe',probe),patch.dict(sys.modules,{'C1Win32':module}),patch('subprocess.check_output',return_value=b''),patch('subprocess.Popen',side_effect=AssertionError('REAL LAUNCH FORBIDDEN')) as popen:
++                try:code=entry.main(['--build',str(build),'--id',case,'--subjects','1','--boxes','1','--placement','in'])
++                except RuntimeError as e:caught=str(e);code=1
++                assert popen.call_count==0
++            expected='PASS' if case=='normal' else 'FAIL' if case=='wrong_damage' else 'INVALID'
++            result=json.loads((run/'result.json').read_text()) if (run/'result.json').exists() else dict(status='INVALID')
++            final=json.loads((run/'final.json').read_text()) if (run/'final.json').exists() else result
++            rows=[json.loads(line) for line in (run/'journal.jsonl').read_text().splitlines()] if (run/'journal.jsonl').exists() else []
++            bad=next((r for r in rows if r['event']=='guard_failed'),None)
++            input_after=[r for r in rows if bad and r['seq']>bad['seq'] and r['event']=='input_sent']
++            assert not input_after
++            if case=='focus_between_lmb':assert result['held']==['LMB'] and b.gameplay_count==1
++            if case=='stop_oserror':assert result['processExited'] is True and result['exitEvidence']['identityVerifiedAtStop'] is False
++            assert final['status']==result['status'] and code==(0 if expected=='PASS' else 1)
++            assert b.launches==(0 if case=='reused_id' else 1)
++            if run.exists():(run/'Game.log').write_bytes(log.data)
++            post_stop=validate(run,True)
++            assert post_stop['status']==expected, post_stop
++            for f in run.rglob('*'):
++                if f.is_file():
++                    target=dest/f.relative_to(run);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(f.read_bytes())
++            detail=dict(cli=code,launches=b.launches,stopCalls=b.stopped,result=result,final=final,commands=b.commands,
++                        fakeInputs=b.sent,inputAfterGuardFailure=len(input_after),exception=caught,postStopValidation=post_stop,realLaunches=0,realInputs=0)
++            (dest/'replay.json').write_text(json.dumps(detail,indent=2),encoding='utf-8')
++            save('entry_'+case,expected,result['status'],detail)
++    with (out/'expected-actual.csv').open('w',newline='',encoding='utf-8') as f:
++        writer=csv.DictWriter(f,fieldnames=['case','expected','actual','passed']);writer.writeheader();writer.writerows({k:r[k] for k in writer.fieldnames} for r in results)
++    (out/'results.json').write_text(json.dumps(results,indent=2),encoding='utf-8')
++    failed=[r['case'] for r in results if not r['passed']]
++    print(json.dumps(dict(cases=len(results),passed=len(results)-len(failed),failed=failed,realLaunches=0,realInputs=0)))
++    return bool(failed)
++
++
++if __name__=='__main__':raise SystemExit(main())

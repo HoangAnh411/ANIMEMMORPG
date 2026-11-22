@@ -1,0 +1,102 @@
+{
+  "status": "READY_FOR_REVIEW_CC_A_ONLY",
+  "u04c1": "INCOMPLETE",
+  "toolingBase": "7ea50a770c296f2d52791c76642b2bdbee053fe0",
+  "nativeInputs": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+  "nativeDiffEmpty": true,
+  "acceptedReadinessFilesUnchanged": true,
+  "expectedBuild03GameSHA256": "282fcefc5156be5f5aa81caf2bc3a764949f2eaf76de081f9c62aa0e2e54e5a5",
+  "gameHashMeasuredThisOfflineTask": false,
+  "ccOffline": {
+    "passed": 53,
+    "total": 53,
+    "finalSuite": "Offline-06"
+  },
+  "regressions": [
+    {
+      "suite": "Regression-86-01",
+      "expected": 86,
+      "executed": 86,
+      "passed": 86,
+      "casesSHA256": "9ef71ff190b7a8a5509ec467bd292cb9009d3ded7879b85e2c7112426be5d7e0"
+    },
+    {
+      "suite": "Regression-18-01",
+      "expected": 18,
+      "executed": 18,
+      "passed": 18,
+      "casesSHA256": "a1919663fe2e79e3461e4c4c4fd57e271857215aea1c7bb0dbc483673948b0f2"
+    },
+    {
+      "suite": "Regression-7-01",
+      "expected": 7,
+      "executed": 7,
+      "passed": 7,
+      "casesSHA256": "351e374a9932ebc71eb489dbd2537b9a4e880fdccefaf2c4f6293ffe0f668b4d"
+    }
+  ],
+  "counterRuntime": {
+    "valid": 0,
+    "required": 12
+  },
+  "timing": {
+    "valid": 0,
+    "required": 36
+  },
+  "memory": {
+    "valid": 0,
+    "required": 12
+  },
+  "overhead": {
+    "valid": 0,
+    "required": 3
+  },
+  "realGameLaunches": 0,
+  "realWindowsInputs": 0,
+  "editorOperations": 0,
+  "builds": 0,
+  "unrealTests": 0,
+  "archiveRoundtrip": "PASS",
+  "archiveSHA256": "41fc42db3220d2bd2508f7923e2a668e4f0a3e63d90c0f48ab1985b625188c77",
+  "toolingSHA256": {
+    "Scripts/U04/C1Counter.py": "1941b2003ef53d6ff5b7c0b550ba4241b073cc4cd4d580fec0508e68d37651f7",
+    "Scripts/U04/C1CounterRun.py": "01a68aa3d4947a26e5318a4d4684dbd13792355c50bbd71ed1065761f5376fbb",
+    "Scripts/U04/C1CounterValidate.py": "bc9fd2a561533f1d637e94236ddae4719187f9e502bd7875588befd138a60220",
+    "Scripts/U04/C1CounterChecks.py": "7ee946219d77f30c7d250080d0576658350e8a49d0c14ed21ee12198041cd7f6",
+    "Scripts/U04/C1Validate.py": "fec45f04d055191af415dd9879730509d5558843b1e422ffbbda3a7ba6da100a",
+    "Scripts/U04/C1Run.py": "0b8ceaf4359100f32c9a08202c829358e34c11d13d89593f3d19f05dd4f42d2d",
+    "Scripts/U04/C1Readiness.py": "48760b871171ac50f0f9a3047f0153ad8775b52cdb809993510ff2527d3888c0",
+    "Scripts/U04/C1Win32.py": "7d8e7efeed250d4d089ba073cc548b400530ca50a58e807bcb51a4d3f4e7e32f",
+    "Scripts/U04/C1Identity.py": "95488b249d87ba800cbbfd50df57a77368aace46960506ca4bdc243fb8641f29",
+    "Scripts/U04/C1Offline.py": "7ff16159e9d1ede989237f793fb139d0ce2bbc1ac119b3b908b5eb962af201d8",
+    "Scripts/U04/C1IdentityChecks.py": "c22225b1de4419dbd73133f2b959f512c123d7b6174d22dcf85abbf875cd7bd6",
+    "Scripts/U04/C1StopVerdictChecks.py": "a48196616b09a4af80e9086e6bbbba98f34c35de34800411b1f427ec235dd1b6"
+  },
+  "unprovenDynamic": [
+    "reopen",
+    "two simultaneous worlds",
+    "individual occlusion/suppression observation ledger",
+    "initial per-target HP and per-registration identity snapshot"
+  ],
+  "ccB": "NOT_AUTHORIZED; review required",
+  "mergePerformed": false,
+  "postStopIndependentReopen": [
+    {
+      "case": "normal",
+      "expected": "PASS",
+      "actual": "PASS"
+    },
+    {
+      "case": "wrong_damage",
+      "expected": "FAIL",
+      "actual": "FAIL"
+    },
+    {
+      "case": "stop_oserror",
+      "expected": "INVALID",
+      "actual": "INVALID"
+    }
+  ],
+  "toolingPatchSHA256": "f5f82a02693ebb31c83933837e4baabf9d921e516ec1e5c408b5aae6f2476543",
+  "toolingPatchFormat": "unified=0; apply with git apply --unidiff-zero"
+}

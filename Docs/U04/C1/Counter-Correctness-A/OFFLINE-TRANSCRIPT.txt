@@ -1,0 +1,26 @@
+CC-A execution record; summaries captured from completed offline checker invocations.
+No Game/Editor/build/Unreal tests or live Windows input.
+
+python -B Scripts/U04/C1CounterChecks.py --out ../Counter-Correctness-A/Offline-01
+CLI exit code: 0
+{"cases": 43, "passed": 43, "failed": [], "realLaunches": 0, "realInputs": 0}
+
+python -B Scripts/U04/C1CounterChecks.py --out ../Counter-Correctness-A/Offline-02
+CLI exit code: 0
+{"cases": 43, "passed": 43, "failed": [], "realLaunches": 0, "realInputs": 0}
+
+python -B Scripts/U04/C1CounterChecks.py --out ../Counter-Correctness-A/Offline-03
+CLI exit code: 0
+{"cases": 51, "passed": 51, "failed": [], "realLaunches": 0, "realInputs": 0}
+
+python -B Scripts/U04/C1CounterChecks.py --out ../Counter-Correctness-A/Offline-04
+CLI exit code: 0
+{"cases": 53, "passed": 53, "failed": [], "realLaunches": 0, "realInputs": 0}
+
+python -B Scripts/U04/C1CounterChecks.py --out ../Counter-Correctness-A/Offline-05
+CLI exit code: 0
+{"cases": 53, "passed": 53, "failed": [], "realLaunches": 0, "realInputs": 0}
+
+python -B Scripts/U04/C1CounterChecks.py --out ../Counter-Correctness-A/Offline-06
+CLI exit code: 0
+{"cases": 53, "passed": 53, "failed": [], "realLaunches": 0, "realInputs": 0}

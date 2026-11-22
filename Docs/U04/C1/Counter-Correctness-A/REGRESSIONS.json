@@ -1,0 +1,23 @@
+[
+  {
+    "suite": "Regression-86-01",
+    "expected": 86,
+    "executed": 86,
+    "passed": 86,
+    "casesSHA256": "9ef71ff190b7a8a5509ec467bd292cb9009d3ded7879b85e2c7112426be5d7e0"
+  },
+  {
+    "suite": "Regression-18-01",
+    "expected": 18,
+    "executed": 18,
+    "passed": 18,
+    "casesSHA256": "a1919663fe2e79e3461e4c4c4fd57e271857215aea1c7bb0dbc483673948b0f2"
+  },
+  {
+    "suite": "Regression-7-01",
+    "expected": 7,
+    "executed": 7,
+    "passed": 7,
+    "casesSHA256": "351e374a9932ebc71eb489dbd2537b9a4e880fdccefaf2c4f6293ffe0f668b4d"
+  }
+]
