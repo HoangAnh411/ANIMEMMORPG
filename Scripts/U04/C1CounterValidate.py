@@ -9,6 +9,14 @@ import math
 import re
 from pathlib import Path
 from C1Run import NATIVE, PROFILE, arguments, read, sha
+from C1Identity import IdentityError, path_key
+
+
+def same_windows_path(left, right):
+    try:
+        return path_key(left)==path_key(right)
+    except IdentityError:
+        return False
 
 COUNTERS = dict(visits='hurtboxVisits', geometry='geometryTests', occlusion='occlusionCalls',
                 candidates='candidates', confirmed='confirmedHits', suppressed='duplicateSuppression',
@@ -163,9 +171,25 @@ def validate(run, single=False, require_stop=True):
         result=reconcile(read(run/'Raw/summary.json'),w,record,receipt['prepared']['metrics'],receipt['after']['metrics'],rows)
         if require_stop:
             stopped=read(run/'result.json'); final=read(run/'final.json')
-            must(stopped['processExited'] is True and final['processExited'] is True and stopped['exitEvidence']==final['exitEvidence'], 'exit_proof')
-            proof=final['exitEvidence']
+            must(stopped.get('processExited') is True and final.get('processExited') is True, 'exit_proof:processExited')
+            proof=final.get('exitEvidence'); stopped_proof=stopped.get('exitEvidence')
+            must(isinstance(proof,dict) and isinstance(stopped_proof,dict), 'exit_proof:missing')
+            for field in sorted(set(proof)|set(stopped_proof)):
+                must(field in proof and field in stopped_proof and type(proof[field]) is type(stopped_proof[field]) and proof[field]==stopped_proof[field], 'result_final_exit_proof:'+field)
             must(proof['identityVerifiedAtStop'] is True and proof['handleSource']=='original_Popen' and proof['wait']=='signaled', 'stop_identity_marker')
+            for field in ('pid','creationTicks'):
+                must(type(proof.get(field)) is int and proof[field]==record[field], 'exit_identity:'+field)
+            must(same_windows_path(proof.get('executable'),record['executable']), 'exit_identity:executable')
+            exits=[r for r in journal if r['event']=='original_handle_process_exited']
+            must(len(exits)==1, 'journal_exit_record_count:'+str(len(exits)))
+            journal_proof=exits[0].get('evidence')
+            must(isinstance(journal_proof,dict), 'journal_exit_proof:missing')
+            for field in sorted(set(proof)|set(journal_proof)):
+                must(field in proof and field in journal_proof, 'journal_exit_proof:missing:'+field)
+                if field=='executable':
+                    must(same_windows_path(journal_proof[field],proof[field]), 'journal_exit_proof:'+field)
+                else:
+                    must(type(journal_proof[field]) is type(proof[field]) and journal_proof[field]==proof[field], 'journal_exit_proof:'+field)
             must(stopped['status']==final['status']==result['status'], 'final_verdict_mismatch')
         return result
     except (OSError,KeyError,ValueError,TypeError,IndexError) as e:

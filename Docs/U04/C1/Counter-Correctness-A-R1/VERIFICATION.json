@@ -1,0 +1,38 @@
+{
+  "status": "READY_FOR_REVIEW_CC_A_R1_ONLY",
+  "base": "0d929c481a18f4e769b0550ce9b41f7f8db80381",
+  "native": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+  "nativeDiffEmpty": true,
+  "readinessAndLifecycleUnchanged": true,
+  "oldCounterEvidenceUnchanged": true,
+  "mutations": {
+    "passed": 14,
+    "total": 14,
+    "suite": "Exit-Link-02"
+  },
+  "regression": {
+    "passed": 53,
+    "total": 53,
+    "suite": "Regression-CC-A-02"
+  },
+  "sourceWorkspaceUnchanged": true,
+  "realGameLaunches": 0,
+  "realWindowsInputs": 0,
+  "editorOperations": 0,
+  "builds": 0,
+  "unrealTests": 0,
+  "archiveRoundtrip": "PASS",
+  "archiveSHA256": "d38c39dd15b536fd5ba64d8900b8dc3f9964aef23d9dabca2e1a6273f189fb1f",
+  "toolingSHA256": {
+    "Scripts/U04/C1CounterValidate.py": "58a88f294249966cf341050954fd72910d5f50b8a15863e7c64f5dd9b7fa3cf2",
+    "Scripts/U04/C1CounterChecks.py": "3ba832689342192c8b3af052c1676dda361c9ff8e481eaf2f3855934b61b7e58",
+    "Scripts/U04/C1CounterExitChecks.py": "33866d846ce8a63bd9fc066f0e39aee7f7e1c1ee7555238a7d518a90d84b5c4e"
+  },
+  "patchSHA256": "51b66e7479d4137b60b8a6855fe93607013cbee249fac4e819a1291065776d49",
+  "u04c1": "INCOMPLETE",
+  "counterRuntime": "0/12",
+  "timing": "0/36",
+  "memory": "0/12",
+  "overhead": "0/3",
+  "mergePerformed": false
+}

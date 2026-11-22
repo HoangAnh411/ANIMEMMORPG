@@ -68,7 +68,8 @@ class CounterBackend(FakeBackend):
     def close_owned(self):self.owned=False
     def stop_launched(self,timeout):
         self.stopped+=1
-        proof=dict(identityVerifiedAtStop=self.case!='stop_oserror',handleSource='original_Popen',wait='signaled',pid=1234)
+        proof=dict(identityVerifiedAtStop=self.case!='stop_oserror',handleSource='original_Popen',wait='signaled',
+                   **{k:self.rc[k] for k in ('pid','creationTicks','executable')})
         if self.case=='stop_oserror':proof['identityCaptureError']='offline stop-only OSError'
         return proof
     def metrics(self):
