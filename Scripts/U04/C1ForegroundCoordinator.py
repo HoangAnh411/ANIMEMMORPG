@@ -70,16 +70,30 @@ def coordinate(messages):
             f.write(json.dumps(dict(event=event, time=time.time(), **fields)) + "\n")
             f.flush()
             os.fsync(f.fileno())
-    def granted(args, out, err):
-        start = time.monotonic()
-        while foreground()[1] != os.getpid() and time.monotonic() - start < 5:
-            time.sleep(.05)
+    activation_notice = False
+    def wait_for_activation():
+        nonlocal activation_notice
         if foreground()[1] != os.getpid():
+            record("waiting_for_activation", foreground=foreground())
+            if not activation_notice:
+                messages.put("Ch?n c?a s? C1 Method Coordinator m?t l?n.")
+                activation_notice = True
+            while foreground()[1] != os.getpid():
+                time.sleep(.1)
+
+    def granted(args, out, err, created=None):
+        if sys.argv[1:2] == ["method"]:
+            wait_for_activation()
+        elif foreground()[1] != os.getpid():
             raise RuntimeError("coordinator_not_foreground_before_worker")
         b = Backend(input_enabled=False)
+        if sys.argv[1:2] == ["method"]:
+            wait_for_activation()
         with subprocess.Popen([sys.executable, "-B", str(HERE), "worker", *args],
                               stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=err, text=True,
                               creationflags=subprocess.CREATE_NO_WINDOW) as proc:
+            if created:
+                created(proc.pid)
             try:
                 if proc.stdout.readline().strip() != "READY":
                     raise RuntimeError("worker_not_ready")
@@ -110,7 +124,9 @@ def coordinate(messages):
         while foreground()[1] != os.getpid() and time.monotonic() < deadline:
             time.sleep(.05)
         record("return_after_child", sample=i, foreground=foreground())
-        if foreground()[1] != os.getpid():
+        if sys.argv[1:2] == ["method"]:
+            wait_for_activation()
+        elif foreground()[1] != os.getpid():
             raise RuntimeError("coordinator_did_not_regain_foreground")
     if sys.argv[1:2] == ["method"]:
         from C1ProfileBatch import run_batch

@@ -112,7 +112,7 @@ def validate(run, require_stop=True):
         times=sorted(float(row['dt'])*1000 for row in rows)
         return dict(status=status, failures=errors, startWall=start,endWall=end,actions=s['actions'],hits=s['confirmedHits'],
                     frames=len(rows),fps=len(rows)/(end-start),
-                    frameMs={key:times[math.ceil(len(times)*q)-1] for key,q in [('p50',.5),('p95',.95),('p99',.99),('max',1)]})
+                    frameMs=dict(mean=math.fsum(times)/len(times), **{key:times[math.ceil(len(times)*q)-1] for key,q in [('p50',.5),('p95',.95),('p99',.99),('max',1)]}))
     except (OSError, ValueError, KeyError, TypeError, RuntimeError, IndexError) as error:
         return dict(status='INVALID',error=str(error))
 
