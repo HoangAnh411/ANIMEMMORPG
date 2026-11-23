@@ -21,7 +21,7 @@ USER.GetForegroundWindow.restype = wt.HWND
 USER.AllowSetForegroundWindow.argtypes = [wt.DWORD]
 USER.SetForegroundWindow.argtypes = [wt.HWND]
 USER.GetWindowThreadProcessId.argtypes = [wt.HWND, ct.POINTER(wt.DWORD)]
-CONTROL = ROOT.parent / "CC-B-Foreground-Control"
+CONTROL = ROOT.parent / ("CC-B-Foreground-Control-" + time.strftime("%Y%m%d-%H%M%S"))
 OLD = ROOT.parent / "CC-B-Batch-Control"
 
 
@@ -35,6 +35,9 @@ def foreground():
 
 
 def worker(args):
+    msg = wt.MSG()
+    USER.PeekMessageW(ct.byref(msg), None, 0, 0, 0)
+    print('READY', flush=True)
     if sys.stdin.readline().strip() != "GRANTED":
         return 2
     if args == ["demo"]:
@@ -72,9 +75,11 @@ def coordinate(messages):
             raise RuntimeError("coordinator_not_foreground_before_worker")
         b = Backend(input_enabled=False)
         with subprocess.Popen([sys.executable, "-B", str(HERE), "worker", *args],
-                              stdin=subprocess.PIPE, stdout=out, stderr=err, text=True,
+                              stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=err, text=True,
                               creationflags=subprocess.CREATE_NO_WINDOW) as proc:
             try:
+                if proc.stdout.readline().strip() != "READY":
+                    raise RuntimeError("worker_not_ready")
                 identity = b.handle_identity(wt.HANDLE(int(proc._handle)))
                 if identity["pid"] != proc.pid or Path(identity["executable"]).resolve() != Path(sys.executable).resolve():
                     raise RuntimeError("worker_identity_mismatch")
@@ -90,6 +95,8 @@ def coordinate(messages):
                 proc.stdin.flush()
             finally:
                 proc.stdin.close()
+            for line in proc.stdout:
+                out.write(line)
             return proc.wait()
     for i in (1, 2):
         messages.put(f"Kiểm foreground {i}/2")
@@ -125,6 +132,7 @@ def gui():
     status = tk.StringVar(value="Sẵn sàng kiểm hai cửa sổ trước khi chạy Build-03")
     tk.Label(root, textvariable=status, padx=24, pady=14).pack()
     messages = queue.Queue()
+    errors = []
     def start():
         button.config(state="disabled")
         root.protocol("WM_DELETE_WINDOW", lambda: None)
@@ -133,6 +141,7 @@ def gui():
                 coordinate(messages)
             except Exception as error:
                 print(repr(error), file=sys.stderr, flush=True)
+                errors.append(str(error))
                 messages.put(str(error))
             finally:
                 messages.put(None)
@@ -167,4 +176,5 @@ if __name__ == "__main__":
         root.mainloop()
     else:
         gui()
+
 
