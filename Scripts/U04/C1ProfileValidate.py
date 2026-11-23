@@ -73,6 +73,15 @@ def gameplay(summary,capture,process,start,end):
     return errors
 
 
+def validate_stop(run, p, journal, status):
+    stopped=read(run/'result.json');final=read(run/'final.json')
+    proof=final['exitEvidence']
+    require(final['status']==stopped['status']==status and stopped['exitEvidence']==proof and final['processExited'] is True and stopped['processExited'] is True,'stop verdict')
+    require(proof['identityVerifiedAtStop'] is True and proof['wait']=='signaled' and proof['handleSource']=='original_Popen','stop markers')
+    require(type(proof['pid']) is int and type(proof['creationTicks']) is int and proof['pid']==p['pid'] and proof['creationTicks']==p['creationTicks'] and path_key(proof['executable'])==path_key(p['executable']),'stop process identity')
+    require([j.get('evidence') for j in journal if j['event']=='original_handle_process_exited']==[proof],'stop journal')
+
+
 def validate(run, require_stop=True):
     try:
         run=Path(run).resolve()
@@ -99,12 +108,7 @@ def validate(run, require_stop=True):
         errors.extend('frame counter '+field for key,field in counters.items() if int(rows[-1][key])!=s[field])
         status='FAIL' if errors else 'PASS'
         if require_stop:
-            stopped=read(run/'result.json');final=read(run/'final.json')
-            proof=final['exitEvidence']
-            require(final['status']==stopped['status']==status and stopped['exitEvidence']==proof and final['processExited'] is True and stopped['processExited'] is True,'stop verdict')
-            require(proof['identityVerifiedAtStop'] is True and proof['wait']=='signaled' and proof['handleSource']=='original_Popen','stop markers')
-            require(type(proof['pid']) is int and type(proof['creationTicks']) is int and proof['pid']==p['pid'] and proof['creationTicks']==p['creationTicks'] and path_key(proof['executable'])==path_key(p['executable']),'stop process identity')
-            require([j.get('evidence') for j in journal if j['event']=='original_handle_process_exited']==[proof],'stop journal')
+            validate_stop(run, p, journal, status)
         times=sorted(float(row['dt'])*1000 for row in rows)
         return dict(status=status, failures=errors, startWall=start,endWall=end,actions=s['actions'],hits=s['confirmedHits'],
                     frames=len(rows),fps=len(rows)/(end-start),

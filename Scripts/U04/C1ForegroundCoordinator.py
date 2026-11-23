@@ -165,8 +165,12 @@ def gui():
         root.after(100, poll)
     root.after(100, poll)
     def auto():
-        if foreground()[1] == os.getpid() and button["state"] != "disabled":
+        if button["state"] == "disabled":
+            return
+        if foreground()[1] == os.getpid():
             start()
+        elif method:
+            root.after(100, auto)
     root.after(600, auto)
     root.mainloop()
 

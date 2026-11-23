@@ -2,6 +2,11 @@
 import copy
 import json
 import sys
+import io
+from contextlib import redirect_stdout
+from unittest.mock import patch
+import C1ProfileRun as entry
+from C1ProfileValidate import validate_stop
 from pathlib import Path
 
 from C1ProfileRun import COMBO,QPC_BIAS
@@ -67,6 +72,35 @@ def main(out, startup):
     log.write_text('U04C1_START U04C1_END')
     (fixture/'allocations.csv').write_text('Size,AllocCallstack\n64,0x00012345\n')
     check('address-only stack',rejects(lambda:inspect(out,fixture,'memory'),'no resolved callstack'))
+    fake_root=out/'Source';fake_root.mkdir()
+    stale=out/'Runs/C1-Method-Stale';stale.mkdir(parents=True)
+    sentinel=stale/'capture.json';sentinel.write_text('original')
+    capture_stdout=io.StringIO()
+    with patch.object(entry,'ROOT',fake_root), patch('subprocess.Popen',side_effect=AssertionError('launch forbidden')) as popen, redirect_stdout(capture_stdout):
+        code=entry.main(['--id',stale.name,'--mode','timing'])
+    actual=json.loads(capture_stdout.getvalue())
+    check('stale run before launch',code==1 and actual==dict(status='INVALID',error='profile_stale_output') and popen.call_count==0 and sentinel.read_text()=='original')
+    rows[-1].update(expected='INVALID:profile_stale_output',actual=actual,launches=0)
+
+    proof=dict(pid=9,creationTicks=134000000000000001,executable='D:/Game/AnimeMMORPG.exe',
+               identityVerifiedAtStop=True,wait='signaled',handleSource='original_Popen')
+    good=dict(status='PASS',processExited=True,exitEvidence=proof)
+    journal=[dict(event='original_handle_process_exited',evidence=proof)]
+    for filename in ('result.json','final.json'):
+        (out/filename).write_text(json.dumps(good))
+    validate_stop(out,proof,journal,'PASS')
+    bad=copy.deepcopy(good);bad['exitEvidence']['creationTicks']+=1
+    for filename in ('result.json','final.json'):
+        (out/filename).write_text(json.dumps(bad))
+    # Reopen through the same stop gate used by the profiling validator.
+    try:
+        validate_stop(out,proof,journal,'PASS')
+    except ValueError as error:
+        actual=dict(status='INVALID',error=str(error))
+    else:
+        actual=dict(status='PASS')
+    check('reopened wrong stop proof',actual==dict(status='INVALID',error='stop process identity'))
+    rows[-1].update(expected='INVALID:stop process identity',actual=actual)
     (out/'cases.json').write_text(json.dumps(rows,indent=2))
     print(f'{len(rows)} method checks passed')
 

@@ -20,7 +20,7 @@ COMBO = tuple(3*i+t for i in range(20) for t in (0, .32, .77))
 
 class ProfileSession(CounterSession):
     def console(self, text):
-        if text not in ('u04c1 prepare 10 3 in', 'u04c1 begin 60', 'Trace.Stop'):
+        if text not in ('u04c1 prepare 10 3 in', 'u04c1 begin 60', 'trace.stop'):
             self.fail('profile_console_command')
         self.j.append('profile_command_start', command=text)
         self.tap('Console')
@@ -82,13 +82,13 @@ class ProfileSession(CounterSession):
         else:
             self.fail('profile_native_export_timeout')
         after = self.playing()
-        if self.record['mode'] != 'off':
-            self.console('Trace.Stop')
-            self.wait(1)
         receipt = dict(before=before, prepared=prepared, after=after, transition=transition,
                        warmupStart=warmup, begin=begin, anchor=anchor, edges=plan,
                        files={name:sha(self.output/name) for name in ('summary.json','frames.csv')})
         write(run/'capture.json', receipt)
+        if self.record['mode'] != 'off':
+            self.console('trace.stop')
+            self.wait(1)
         from C1ProfileValidate import validate
         return validate(run, require_stop=False)
 
@@ -96,6 +96,12 @@ class ProfileSession(CounterSession):
 def probe(record, backend, log, journal, cleanup=False):
     session = ProfileSession(record, backend, log, journal, workload=WORKLOAD, output=record['raw'])
     return session.capture()
+
+
+def invalid_preflight(reason):
+    import json
+    print(json.dumps(dict(status='INVALID', error=reason)))
+    return 1
 
 
 def main(argv=None):
@@ -107,6 +113,8 @@ def main(argv=None):
         parser.error('invalid method run ID')
     build = ROOT.parent/'Runs/Build-03'
     out = build.parent/a.id
+    if out.exists():
+        return invalid_preflight('profile_stale_output')
     exe = build/'Archive/Windows/AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe'
     pdb = exe.with_suffix('.pdb')
     index = read(build/'BUILD-IDENTITY.json')
@@ -119,7 +127,10 @@ def main(argv=None):
     before = backend.inventory()
     if any(Path(row['ExecutablePath']).name.lower()=='animemmorpg.exe' for row in before):
         raise RuntimeError('package already present')
-    out.mkdir()
+    try:
+        out.mkdir()
+    except FileExistsError:
+        return invalid_preflight('profile_stale_output')
     for name in ('User','Raw'):
         (out/name).mkdir()
     args = arguments(exe,out,a.id) + TRACE[a.mode]
