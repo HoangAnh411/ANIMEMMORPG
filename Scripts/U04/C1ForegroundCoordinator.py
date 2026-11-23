@@ -56,6 +56,9 @@ def worker(args):
                 if child.poll() is None:
                     child.terminate()
                 child.wait(10)
+    if args[:1] == ["method"]:
+        from C1ProfileRun import main
+        return main(args[1:])
     from C1CounterRun import main
     return main(args)
 
@@ -109,6 +112,10 @@ def coordinate(messages):
         record("return_after_child", sample=i, foreground=foreground())
         if foreground()[1] != os.getpid():
             raise RuntimeError("coordinator_did_not_regain_foreground")
+    if sys.argv[1:2] == ["method"]:
+        from C1ProfileBatch import run_batch
+        run_batch(CONTROL, granted, sys.argv[2], messages)
+        return
     # Reuse the reviewed per-cell preservation, validator and ledger procedure.
     batch = runpy.run_path(str(HERE.with_name("C1ForegroundBatch.py")))
     g = batch["main"].__globals__
