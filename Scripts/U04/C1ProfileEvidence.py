@@ -70,12 +70,18 @@ def inspect(run, out, mode):
     if 'U04C1_START' not in log or 'U04C1_END' not in log:
         raise ValueError('missing memory bookmarks')
     result={}
+    compact=(out/'stack-sample.csv').exists()
+    if compact:
+        sample=[row for row in table(out/'stack-sample.csv') if re.search(r'::[A-Za-z_]|![A-Za-z_]',row['AllocCallstack'])]
+        if not sample:
+            raise ValueError('no resolved allocation stack in bounded sample')
+        result['stackSample']=dict(resolvedRows=len(sample),example=sample[0])
     for name in ('allocations','frees','outstanding-start','outstanding-end'):
         count=size=resolved=resolved_bytes=0
         with (out/(name+'.csv')).open(encoding='utf-8-sig',newline='') as stream:
             for row in csv.DictReader(stream):
                 n=int(row['Size']);count+=1;size+=n
-                stack=row['FreeCallstack' if name=='frees' else 'AllocCallstack']
+                stack=row[('FreeFunction' if name=='frees' else 'AllocFunction') if compact else ('FreeCallstack' if name=='frees' else 'AllocCallstack')]
                 if re.search(r'::[A-Za-z_]|![A-Za-z_]',stack):
                     resolved+=1;resolved_bytes+=n
         if not count:

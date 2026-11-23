@@ -10,7 +10,7 @@ from C1ProfileValidate import validate
 from C1Run import ROOT, read, sha, write
 
 
-def run_batch(control, granted, commit, messages):
+def run_batch(control, granted, commit, messages, resume=None):
     runs=ROOT.parent/'Runs'
     if git('rev-parse','HEAD')!=commit or git('status','--porcelain'):
         raise RuntimeError('tooling preflight')
@@ -22,8 +22,28 @@ def run_batch(control, granted, commit, messages):
     protected=snap()
     write(control/'profile-preflight.json',dict(commit=commit,editors=initial,
           freeBytes=shutil.disk_usage(runs).free,workspace=protected))
+    if resume:
+        prior, memory_export = map(Path, resume)
+        saved=read(prior/'method-ledger.json')
+        if len(saved)!=8 or saved[0]['status']!='PASS' or any(r['status']!='NOT_RUN' for r in saved[2:]):
+            raise RuntimeError('ineligible method continuation')
+        for index,row in enumerate(saved[:2]):
+            run=Path(row['raw'])
+            post=validate(run)
+            if post['status']!='PASS' or row['launcherExit']!=0 or not all(row['preservation'][k] for k in ('workspace','editors','packageExited')):
+                raise RuntimeError('prior pilot raw/preservation failed')
+            folder=prior/row['id']
+            export=folder/'Exports' if index==0 else memory_export
+            if sha(run/'capture.utrace')!=row['trace']['sha256']:
+                raise RuntimeError('prior pilot trace hash mismatch')
+            if read(export/'exit.json')['exitCode']!=0 or read(export/'process.json')['traceSHA256']!=row['trace']['sha256']:
+                raise RuntimeError('prior pilot export process mismatch')
+            data=inspect(run,export,row['mode'])
+            retained=sum(f.stat().st_size for parent in (run,export) for f in parent.rglob('*') if f.is_file())
+            ledger[index]=dict(row,status='PASS',postcheck=post,export=data,exportPath=str(export.resolve()),retainedBytes=retained,
+                               priorLedger=str((prior/'method-ledger.json').resolve()))
     try:
-        for row in ledger:
+        for row in ledger[2 if resume else 0:]:
             run=runs/row['id']
             if run.exists():
                 raise RuntimeError('method run already exists')

@@ -114,7 +114,7 @@ def coordinate(messages):
             raise RuntimeError("coordinator_did_not_regain_foreground")
     if sys.argv[1:2] == ["method"]:
         from C1ProfileBatch import run_batch
-        run_batch(CONTROL, granted, sys.argv[2], messages)
+        run_batch(CONTROL, granted, sys.argv[2], messages, sys.argv[3:] or None)
         return
     # Reuse the reviewed per-cell preservation, validator and ledger procedure.
     batch = runpy.run_path(str(HERE.with_name("C1ForegroundBatch.py")))

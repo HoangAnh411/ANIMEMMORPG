@@ -3,7 +3,7 @@ import argparse,subprocess,json,os
 from pathlib import Path
 from C1Run import write,sha
 def main():
-    p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--memory',action='store_true');p.add_argument('--output',type=Path);a=p.parse_args();r=a.run.resolve()
+    p=argparse.ArgumentParser();p.add_argument('run',type=Path);p.add_argument('--memory',action='store_true');p.add_argument('--output',type=Path);p.add_argument('--compact-memory',action='store_true');p.add_argument('--stack-sample-start',type=float);a=p.parse_args();r=a.run.resolve()
     trace=r/'capture.utrace';assert trace.is_file();out=a.output.resolve() if a.output else r/'Exports';out.mkdir(exist_ok=False)
     commands=[f'TimingInsights.ExportThreads {out.as_posix()}/threads.csv',f'TimingInsights.ExportTimers {out.as_posix()}/timers.csv',f'TimingInsights.ExportTimingEvents {out.as_posix()}/events.csv -region=U04C1_WINDOW -columns=* -timers=U04C1_*,Frame* -threads=GameThread',f'TimingInsights.ExportTimingEvents {out.as_posix()}/gpu-{{region}}.csv -region=U04C1_WINDOW -columns=* -threads=GPU*',f'TimingInsights.ExportTimingEvents {out.as_posix()}/frames-{{region}}.csv -region=U04C1_WINDOW -columns=* -threads=*Frames',f'TimingInsights.ExportTimerStatistics {out.as_posix()}/statistics.csv -region=U04C1_WINDOW -threads=GameThread',f'TimingInsights.ExportCounters {out.as_posix()}/counters.csv']
     for name in ('HurtboxVisits','GeometryTests','OcclusionCalls','Candidates','ConfirmedHits','DuplicateSuppression','Actions'):
@@ -11,6 +11,12 @@ def main():
     if a.memory:
         commands=[f'MemoryInsights.ExportAllocs -Rule={rule} -BookmarkA=U04C1_START'+(' -BookmarkB=U04C1_END' if rule in ('AaB','AfB') else '')+f' -Columns=StartTime,EndTime,Size,Address,AllocCallstack,FreeCallstack -Output={out.as_posix()}/{name}.csv' for rule,name in [('AaB','allocations'),('AfB','frees'),('aAf','outstanding-start')]]
         commands.append(f'MemoryInsights.ExportAllocs -Rule=aAf -BookmarkA=U04C1_END -Columns=StartTime,EndTime,Size,Address,AllocCallstack,FreeCallstack -Output={out.as_posix()}/outstanding-end.csv')
+    if a.compact_memory:
+        if not a.memory or a.stack_sample_start is None:
+            p.error('--compact-memory requires --memory and --stack-sample-start')
+        commands=[command.replace('AllocCallstack,FreeCallstack','AllocFunction,FreeFunction') for command in commands]
+        start=a.stack_sample_start
+        commands.append(f'MemoryInsights.ExportAllocs -Rule=AaB -TimeA={start} -TimeB={start+.05} -Columns=StartTime,EndTime,Size,Address,AllocCallstack -Output={out.as_posix()}/stack-sample.csv')
     commandfile=out/'commands.txt';commandfile.write_text('\n'.join(commands)+'\n',encoding='utf-8')
     exe=Path('D:/Software/UE_5.8/Engine/Binaries/Win64/UnrealInsights.exe')
     command=f'"{exe}" -OpenTraceFile="{trace}" -ABSLOG="{out/"Insights.log"}" -AutoQuit -NoUI -ExecOnAnalysisCompleteCmd="@={commandfile}"'
@@ -18,6 +24,10 @@ def main():
     env=os.environ.copy();env['_NT_SYMBOL_PATH']='';env['UE_INSIGHTS_SYMBOL_PATH']=str(r.parent/'Build-03/Archive/Windows/AnimeMMORPG/Binaries/Win64')
     process=subprocess.Popen(command,creationflags=subprocess.CREATE_NO_WINDOW,env=env)
     write(out/'process.json',dict(pid=process.pid,command=command,traceSHA256=sha(trace),symbolPath=env['UE_INSIGHTS_SYMBOL_PATH']))
-    code=process.wait(timeout=600);write(out/'exit.json',dict(exitCode=code,exports=[dict(path=f.name,bytes=f.stat().st_size,sha256=sha(f)) for f in out.glob('*.csv')]))
+    try:
+        code=process.wait(timeout=1800 if a.memory else 600)
+    except subprocess.TimeoutExpired:
+        process.terminate();process.wait(timeout=30);raise
+    write(out/'exit.json',dict(exitCode=code,exports=[dict(path=f.name,bytes=f.stat().st_size,sha256=sha(f)) for f in out.glob('*.csv')]))
     assert code==0
 if __name__=='__main__':main()
