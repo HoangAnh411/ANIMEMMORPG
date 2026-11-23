@@ -1,5 +1,6 @@
 """Check real Insights exports; a successful CLI exit alone is insufficient."""
 import csv
+import gzip
 import re
 from pathlib import Path
 
@@ -12,8 +13,15 @@ SCOPES = ('WorldUpdate', 'CollectCandidates', 'Geometry', 'Occlusion',
           'ResolveDedup', 'ApplyDamage', 'DedupFilter')
 
 
+def open_csv(path):
+    """Read an exported CSV or its lossless gzip archive without materializing it."""
+    if path.is_file():
+        return path.open(encoding='utf-8-sig', newline='')
+    return gzip.open(path.with_suffix(path.suffix + '.gz'), 'rt', encoding='utf-8-sig', newline='')
+
+
 def table(path):
-    with path.open(encoding='utf-8-sig', newline='') as stream:
+    with open_csv(path) as stream:
         data = list(csv.DictReader(stream))
     if not data:
         raise ValueError('empty export: ' + path.name)
@@ -70,7 +78,7 @@ def inspect(run, out, mode):
     if 'U04C1_START' not in log or 'U04C1_END' not in log:
         raise ValueError('missing memory bookmarks')
     result={}
-    compact=(out/'stack-sample.csv').exists()
+    compact=any((out/name).is_file() for name in ('stack-sample.csv','stack-sample.csv.gz'))
     if compact:
         sample=[row for row in table(out/'stack-sample.csv') if re.search(r'::[A-Za-z_]|![A-Za-z_]',row['AllocCallstack'])]
         if not sample:
@@ -78,12 +86,21 @@ def inspect(run, out, mode):
         result['stackSample']=dict(resolvedRows=len(sample),example=sample[0])
     for name in ('allocations','frees','outstanding-start','outstanding-end'):
         count=size=resolved=resolved_bytes=0
-        with (out/(name+'.csv')).open(encoding='utf-8-sig',newline='') as stream:
-            for row in csv.DictReader(stream):
-                n=int(row['Size']);count+=1;size+=n
-                stack=row[('FreeFunction' if name=='frees' else 'AllocFunction') if compact else ('FreeCallstack' if name=='frees' else 'AllocCallstack')]
-                if re.search(r'::[A-Za-z_]|![A-Za-z_]',stack):
-                    resolved+=1;resolved_bytes+=n
+        with open_csv(out/(name+'.csv')) as stream:
+            reader = csv.reader(stream)
+            header = next(reader, [])
+            stack_column = (('FreeFunction' if name == 'frees' else 'AllocFunction') if compact
+                            else ('FreeCallstack' if name == 'frees' else 'AllocCallstack'))
+            size_index = header.index('Size')
+            stack_index = header.index(stack_column)
+            symbol = re.compile(r'::[A-Za-z_]|![A-Za-z_]').search
+            for row in reader:
+                n = int(row[size_index])
+                count += 1
+                size += n
+                if symbol(row[stack_index]):
+                    resolved += 1
+                    resolved_bytes += n
         if not count:
             raise ValueError('empty memory export '+name)
         if name in ('allocations','frees') and not resolved:
