@@ -34,12 +34,91 @@ def foreground():
     return hwnd, pid.value
 
 
+def process_identity(pid):
+    backend = Backend(input_enabled=False)
+    handle = backend.k.OpenProcess(0x1000, False, pid)
+    if not handle:
+        raise ct.WinError(ct.get_last_error())
+    try:
+        return backend.handle_identity(handle)
+    finally:
+        backend.k.CloseHandle(handle)
+
+
+def owner(hwnd):
+    pid = wt.DWORD()
+    USER.GetWindowThreadProcessId(hwnd, ct.byref(pid))
+    return pid.value
+
+
+def ready_target(run_id, target, hwnd):
+    message = dict(runId=run_id, worker=process_identity(os.getpid()), target=target, hwnd=hwnd)
+    print("TARGET_READY " + json.dumps(message), flush=True)
+    reply = queue.Queue()
+    threading.Thread(target=lambda: reply.put(sys.stdin.readline()), daemon=True).start()
+    try:
+        raw = reply.get(timeout=7)
+        result = json.loads(raw)
+    except (queue.Empty, ValueError) as error:
+        raise RuntimeError("target_ready_no_reply") from error
+    if result.get("runId") != run_id or result.get("hwnd") != hwnd or not result.get("ok"):
+        raise RuntimeError("target_ready_rejected:" + str(result.get("reason")))
+    return result
+
+
+def transfer_target(message, worker, expected_run, expected_exe, seen, coordinator_pid,
+                    identity_reader=process_identity, owner_reader=owner,
+                    current_foreground=foreground, focus=None):
+    from C1Identity import path_key
+    reply = dict(runId=message.get("runId"), hwnd=message.get("hwnd"), ok=False, calls=0)
+    target = message.get("target", {})
+    hwnd = reply["hwnd"]
+    try:
+        if seen or reply["runId"] != expected_run or message.get("worker") != worker or identity_reader(worker["pid"]) != worker:
+            raise ValueError("duplicate_or_wrong_worker_session")
+        if type(hwnd) is not int or owner_reader(hwnd) != target["pid"]:
+            raise ValueError("target_hwnd_owner")
+        if identity_reader(target["pid"]) != target or path_key(target["executable"]) != path_key(str(expected_exe)):
+            raise ValueError("target_process_identity")
+        actual = current_foreground()
+        reply["before"] = actual
+        if actual == (hwnd, target["pid"]):
+            reply.update(ok=True, branch="already_foreground")
+        elif actual[1] == coordinator_pid:
+            focus = focus or USER.SetForegroundWindow
+            reply.update(ok=True, branch="coordinator_direct", calls=1,
+                         apiResult=bool(focus(hwnd)), callerPID=coordinator_pid)
+        else:
+            raise ValueError("third_party_foreground")
+    except (OSError, KeyError, ValueError, RuntimeError) as error:
+        reply["reason"] = str(error)
+    return reply
+
+
 def worker(args):
     msg = wt.MSG()
     USER.PeekMessageW(ct.byref(msg), None, 0, 0, 0)
     print('READY', flush=True)
     if sys.stdin.readline().strip() != "GRANTED":
         return 2
+    if args == ["demo-target-ready"]:
+        started=time.monotonic()
+        with subprocess.Popen([sys.executable,"-B",str(HERE),"target-delayed"],stdout=subprocess.PIPE,text=True,
+                              creationflags=subprocess.CREATE_NO_WINDOW) as child:
+            try:
+                hwnd=int(child.stdout.readline())
+                result=ready_target("demo-target-ready",process_identity(child.pid),hwnd)
+                deadline=time.monotonic()+5
+                while foreground()!=(hwnd,child.pid) and time.monotonic()<deadline:time.sleep(.05)
+                stable=time.monotonic()+.25
+                while time.monotonic()<stable:
+                    if foreground()!=(hwnd,child.pid):return 1
+                    time.sleep(.02)
+                print(json.dumps(dict(handshake=result,child=child.pid,hwnd=hwnd,stable=True,elapsed=time.monotonic()-started)),flush=True)
+                return 0
+            finally:
+                if child.poll() is None:child.terminate()
+                child.wait(10)
     if args == ["demo"]:
         # Separate target process, as with the packaged game.
         with subprocess.Popen([sys.executable, "-B", str(HERE), "target"],
@@ -94,6 +173,8 @@ def coordinate(messages):
                               creationflags=subprocess.CREATE_NO_WINDOW) as proc:
             if created:
                 created(proc.pid)
+            handshake = args == ["demo-target-ready"] or "--continuation" in args
+            seen = False
             try:
                 if proc.stdout.readline().strip() != "READY":
                     raise RuntimeError("worker_not_ready")
@@ -103,23 +184,46 @@ def coordinate(messages):
                 hwnd, pid = foreground()
                 if pid != os.getpid():
                     raise RuntimeError("foreground_changed_before_grant")
-                ok = bool(USER.AllowSetForegroundWindow(proc.pid))
-                error = 0 if ok else ct.get_last_error()
-                record("grant", worker=identity, hwnd=hwnd, api=ok, error=error, args=args)
+                ok = True if handshake else bool(USER.AllowSetForegroundWindow(proc.pid))
+                record("worker_ready", worker=identity, hwnd=hwnd, api=ok, args=args, targetReady=handshake)
                 if not ok or foreground()[1] != os.getpid():
                     raise RuntimeError("grant_failed_or_foreground_changed")
                 proc.stdin.write("GRANTED\n")
                 proc.stdin.flush()
+                if not handshake:
+                    proc.stdin.close()
+                for line in proc.stdout:
+                    out.write(line)
+                    out.flush()
+                    if handshake and line.startswith("TARGET_READY "):
+                        payload=json.loads(line[len("TARGET_READY "):])
+                        demo=args==["demo-target-ready"]
+                        run_id="demo-target-ready" if demo else args[args.index("--id")+1]
+                        expected=Path(sys.executable) if demo else ROOT.parent/"Runs/Build-03/Archive/Windows/AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe"
+                        record("target_ready", message=payload)
+                        if not demo:
+                            from C1Run import read
+                            pinned=read(ROOT.parent/"Runs"/run_id/"process.json")
+                            if pinned["runId"]!=run_id or any(pinned[k]!=payload["target"].get(k) for k in ("pid","creationTicks","executable")):
+                                raise RuntimeError("target_ready_package_pin_mismatch")
+                        reply=transfer_target(payload,identity,run_id,expected,seen,os.getpid())
+                        seen=True
+                        record("target_focus_response", **reply)
+                        proc.stdin.write(json.dumps(reply)+"\n")
+                        proc.stdin.flush()
             finally:
                 proc.stdin.close()
-            for line in proc.stdout:
-                out.write(line)
             return proc.wait()
+    direct = 0
+    continuation = sys.argv[1:2] == ["baseline"] and len(sys.argv)>3
     for i in (1, 2):
         messages.put(f"Kiểm foreground {i}/2")
         with (CONTROL / f"child-{i}.json").open("x") as out:
-            if granted(["demo"], out, None):
+            if granted(["demo-target-ready" if continuation else "demo"], out, None):
                 raise RuntimeError("child_foreground_failed")
+        if continuation:
+            evidence=json.loads((CONTROL/f"child-{i}.json").read_text().splitlines()[-1])
+            direct+=int(evidence["handshake"]["branch"]=="coordinator_direct" and evidence["stable"])
         deadline = time.monotonic() + 5
         while foreground()[1] != os.getpid() and time.monotonic() < deadline:
             time.sleep(.05)
@@ -131,7 +235,12 @@ def coordinate(messages):
     if sys.argv[1:2] in (["method"], ["baseline"]):
         if sys.argv[1:2] == ["baseline"]:
             from C1Baseline import run_batch
-            run_batch(CONTROL, granted, sys.argv[2], messages)
+            if continuation:
+                if not direct:
+                    raise RuntimeError("direct_foreground_transfer_unproven")
+                from C1Run import write
+                write(CONTROL/"target-ready-gui.json",dict(tests=2,direct=direct,commit=sys.argv[2]))
+            run_batch(CONTROL, granted, sys.argv[2], messages, sys.argv[3] if continuation else None)
             return
         from C1ProfileBatch import run_batch
         run_batch(CONTROL, granted, sys.argv[2], messages, sys.argv[3:] or None)
@@ -199,9 +308,19 @@ def gui():
 if __name__ == "__main__":
     if sys.argv[1:2] == ["worker"]:
         raise SystemExit(worker(sys.argv[2:]))
-    if sys.argv[1:2] == ["target"]:
+    if sys.argv[1:2] in (["target"],["target-delayed"]):
         root = tk.Tk()
         root.title("CC-B · Child check")
+        delayed=sys.argv[1:2]==["target-delayed"]
+        if delayed:
+            root.withdraw()
+            root.update_idletasks()
+            time.sleep(5)
+            hwnd=int(root.tk.call("wm","frame",root),0)
+            USER.GetWindowLongW.argtypes=[wt.HWND,ct.c_int]
+            USER.SetWindowLongW.argtypes=[wt.HWND,ct.c_int,ct.c_long]
+            USER.SetWindowLongW(hwnd,-20,USER.GetWindowLongW(hwnd,-20)|0x08000000)
+            root.deiconify()
         root.update()
         print(int(root.tk.call("wm", "frame", root), 0), flush=True)
         root.after(10000, root.destroy)

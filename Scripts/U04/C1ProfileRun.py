@@ -19,6 +19,36 @@ COMBO = tuple(3*i+t for i in range(20) for t in (0, .32, .77))
 
 
 class ProfileSession(CounterSession):
+    def focus_once(self):
+        if not self.record.get('targetReady'):
+            return super().focus_once()
+        if self.focus_attempted:
+            self.fail('focus_retry_forbidden')
+        self.focus_attempted=True
+        from C1ForegroundCoordinator import process_identity, ready_target
+        state=self.guard('target_ready_identity',foreground=False)
+        target=process_identity(self.record['pid'])
+        if any(target[k]!=self.record[k] for k in ('pid','creationTicks','executable')):
+            self.fail('target_ready_pin_mismatch',state)
+        self.j.append('target_ready_sent',runId=self.record['runId'],target=target,hwnd=self.hwnd)
+        try:
+            reply=ready_target(self.record['runId'],target,self.hwnd)
+        except RuntimeError as error:
+            self.fail(str(error))
+        self.j.append('target_ready_reply',reply=reply,workerFocusCalls=0)
+        deadline=self.b.now()+5
+        while True:
+            state=self.guard('initial_foreground_sample',foreground=False)
+            if (state['foregroundHWND'],state['foregroundPID'])==(self.hwnd,self.record['pid']):
+                break
+            if self.b.now()>=deadline:
+                self.fail('initial_foreground_timeout',state)
+            self.b.sleep(.05)
+        self.j.append('initial_foreground_acquired')
+        self.guard('initial_foreground_stabilizing')
+        self.wait(.25)
+        self.j.append('initial_foreground_stable')
+
     def console(self, text):
         if text not in (self.prepare_command(), 'u04c1 begin 60', 'trace.stop'):
             self.fail('profile_console_command')
@@ -113,11 +143,15 @@ def main(argv=None):
     parser.add_argument('--id', required=True)
     parser.add_argument('--mode', required=True, choices=TRACE)
     parser.add_argument('--baseline',action='store_true')
+    parser.add_argument('--continuation',action='store_true')
     a = parser.parse_args(argv)
+    if a.continuation and not a.baseline:
+        parser.error('continuation requires baseline')
     workload=WORKLOAD
     if a.baseline:
         from C1Baseline import authorized_matrix
-        matches=[r for r in authorized_matrix() if r['id']==a.id and r['kind']==a.mode]
+        logical='Timing-r2-1x3-out' if a.continuation and a.id=='Timing-r2-1x3-out-R1' else a.id
+        matches=[r for r in authorized_matrix() if r['id']==logical and r['kind']==a.mode]
         if len(matches)!=1:parser.error('baseline ID or kind not in frozen matrix')
         workload={k:matches[0][k] for k in WORKLOAD}
     if not a.baseline and not re.fullmatch(r'C1-Method-[A-Za-z0-9_-]+', a.id):
@@ -151,7 +185,7 @@ def main(argv=None):
         args.append('-notrace')
     record = dict(role='U04C1Method', executable=str(exe), binarySHA256=GAME_SHA,
                   sourceSHA=NATIVE, runId=a.id, userDir=str(out/'User'), log=str(out/'Game.log'),
-                  raw=str(out/'Raw'), mode=a.mode, workload=workload)
+                  raw=str(out/'Raw'), mode=a.mode, workload=workload, targetReady=a.continuation)
     write(out/'command.json', dict(arguments=args, mode=a.mode, workload=workload,
                                    pdb=str(pdb), pdbSHA256=sha(pdb),
                                    tooling=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()))

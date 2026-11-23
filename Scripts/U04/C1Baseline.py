@@ -94,7 +94,38 @@ def export_run(run, folder, mode):
                 gzipBytes=sum(f['gzipBytes'] for f in records))
 
 
-def run_batch(control, granted, commit, messages):
+def load_continuation(path, matrix, verify=True):
+    path=Path(path)
+    if not path.is_absolute():
+        raise RuntimeError('continuation ledger must be absolute')
+    old=read(path)
+    if len(old)!=48 or any(a['id']!=b['id'] for a,b in zip(old,matrix)):
+        raise RuntimeError('continuation order differs from matrix')
+    if [r['status'] for r in old]!=['PASS']*15+['INVALID']+['NOT_RUN']*32:
+        raise RuntimeError('unexpected continuation history')
+    failed=old[15]
+    if failed['id']!='Timing-r2-1x3-out' or failed['final']['error']!="ProbeError('initial_foreground_timeout')" or not failed['final']['processExited']:
+        raise RuntimeError('replacement is not the reviewed failed attempt')
+    if verify:
+        for row in old[:15]:
+            run=Path(row['raw']); archive=Path(row['export']['archive'])
+            if run!=RUNS/row['id'] or not archive.is_absolute() or validate(run)['status']!='PASS':
+                raise RuntimeError('historical PASS invalid: '+row['id'])
+            receipt=read(archive/'receipt.json')
+            if sha(run/'capture.utrace')!=receipt['traceSHA256'] or receipt['traceSHA256']!=row['export']['traceSHA256']:
+                raise RuntimeError('historical trace mismatch: '+row['id'])
+            if read(run/'final.json')!=row['final'] or receipt['evidence']!=row['export']['evidence']:
+                raise RuntimeError('historical verdict/evidence mismatch: '+row['id'])
+            if any(sha(archive/f['archive'])!=f['gzipSHA256'] for f in receipt['files']):
+                raise RuntimeError('historical archive hash mismatch: '+row['id'])
+    rows=[dict(r,logicalId=r['id']) for r in old]
+    rows[15]=dict(matrix[15],id='Timing-r2-1x3-out-R1',logicalId=failed['id'],
+                  status='NOT_RUN',workerCreated=False,packageLaunched=False,
+                  invalidAttempt=failed,systemLedger=str(path))
+    return rows
+
+
+def run_batch(control, granted, commit, messages, continuation=None):
     rows=[dict(r,workerCreated=False,packageLaunched=False) for r in authorized_matrix()]
     if git('rev-parse','HEAD')!=commit or git('status','--porcelain'):
         raise RuntimeError('tooling commit/cleanliness')
@@ -108,7 +139,9 @@ def run_batch(control, granted, commit, messages):
         or identity['gameSHA256']!=gate['gameSHA256'] or sha(game)!=gate['gameSHA256']
         or sha(game.with_suffix('.pdb'))!=gate['pdbSHA256']):
         raise RuntimeError('Game/PDB/build identity')
-    if any((RUNS/r['id']).exists() for r in rows):
+    if continuation:
+        rows=load_continuation(continuation,rows)
+    if any((RUNS/r['id']).exists() for r in rows if r['status']!='PASS'):
         raise RuntimeError('baseline run ID already exists')
     initial,games=inventory()
     if games:raise RuntimeError('package already present')
@@ -116,6 +149,9 @@ def run_batch(control, granted, commit, messages):
     estimate=read(ROOT.parent/gate['evidence']['storage']['path'])
     rates={mode:estimate[mode+'PerRunBytes'] for mode in ('timing','memory')}
     staging=estimate['extraTemporaryPeakBytes']
+    for row in rows:
+        if row['status']=='PASS':
+            rates[row['kind']]=max(rates[row['kind']],row['retainedBytes'])
     def checkpoint():
         tmp=control/'baseline-ledger.pending.json'
         write(tmp,rows)
@@ -141,6 +177,7 @@ def run_batch(control, granted, commit, messages):
             if run.exists() or games or not identities(initial)<=identities(before):
                 raise RuntimeError('per-run identity/ID preflight')
             args=['method','--baseline','--id',row['id'],'--mode',row['kind']]
+            if continuation:args.append('--continuation')
             row.update(status='WAITING_FOR_ACTIVATION',raw=str(run),argv=args)
             checkpoint()
             messages.put(row['id'])
@@ -150,6 +187,8 @@ def run_batch(control, granted, commit, messages):
             with (folder/'launcher.stdout').open('x') as out,(folder/'launcher.stderr').open('x') as err:
                 row['launcherExit']=granted(args,out,err,created)
             row.update(status='INVALID',packageLaunched=(run/'process.json').is_file())
+            if row.get('invalidAttempt') and row['packageLaunched']:
+                row['remainingTechnicalReplacements']=0
             checkpoint()
             after,games=inventory()
             row['preservation']=dict(workspace=protected==snap(),editors=identities(before)<=identities(after),packageExited=not games)
