@@ -95,6 +95,49 @@ def transfer_target(message, worker, expected_run, expected_exe, seen, coordinat
     return reply
 
 
+def fixture_precondition(hidden, visible, coordinator):
+    if hidden['hwnd'] != visible['hwnd'] or hidden['target'] != visible['target']:
+        raise RuntimeError('fixture_hwnd_pin_mismatch')
+    if (hidden['visible'] or not visible['visible']
+            or tuple(hidden['foreground']) != coordinator
+            or tuple(visible['foreground']) != coordinator):
+        raise RuntimeError('fixture_precondition_not_met')
+
+
+def delayed_win32_target():
+    """Show a native top-level window without activating it or changing z-order."""
+    user = USER
+    user.CreateWindowExW.argtypes = [
+        wt.DWORD, wt.LPCWSTR, wt.LPCWSTR, wt.DWORD,
+        ct.c_int, ct.c_int, ct.c_int, ct.c_int,
+        wt.HWND, wt.HMENU, wt.HINSTANCE, wt.LPVOID,
+    ]
+    user.CreateWindowExW.restype = wt.HWND
+    user.IsWindowVisible.argtypes = [wt.HWND]
+    user.SetWindowPos.argtypes = [wt.HWND, wt.HWND, ct.c_int, ct.c_int, ct.c_int, ct.c_int, wt.UINT]
+    user.GetMessageW.argtypes = [ct.POINTER(wt.MSG), wt.HWND, wt.UINT, wt.UINT]
+    user.TranslateMessage.argtypes = [ct.POINTER(wt.MSG)]
+    user.DispatchMessageW.argtypes = [ct.POINTER(wt.MSG)]
+    hwnd = user.CreateWindowExW(0, "STATIC", "C1 foreground child", 0x00CF0000,
+                               180, 180, 380, 180, None, None, None, None)
+    if not hwnd:
+        raise ct.WinError(ct.get_last_error())
+    target = process_identity(os.getpid())
+    def report():
+        print(json.dumps(dict(hwnd=hwnd, target=target, visible=bool(user.IsWindowVisible(hwnd)),
+                              foreground=foreground(), monotonic=time.monotonic())), flush=True)
+    time.sleep(5)
+    report()
+    flags = 0x0040 | 0x0010 | 0x0004 | 0x0002 | 0x0001
+    if not user.SetWindowPos(hwnd, None, 0, 0, 0, 0, flags):
+        raise ct.WinError(ct.get_last_error())
+    report()
+    message = wt.MSG()
+    while user.GetMessageW(ct.byref(message), None, 0, 0) > 0:
+        user.TranslateMessage(ct.byref(message))
+        user.DispatchMessageW(ct.byref(message))
+
+
 def worker(args):
     msg = wt.MSG()
     USER.PeekMessageW(ct.byref(msg), None, 0, 0, 0)
@@ -103,16 +146,31 @@ def worker(args):
         return 2
     if args == ["demo-target-ready"]:
         started=time.monotonic()
+        coordinator=foreground()
+        if coordinator[1]!=os.getppid():
+            raise RuntimeError("fixture_precondition_not_met")
         with subprocess.Popen([sys.executable,"-B",str(HERE),"target-delayed"],stdout=subprocess.PIPE,text=True,
                               creationflags=subprocess.CREATE_NO_WINDOW) as child:
             try:
-                hwnd=int(child.stdout.readline())
-                result=ready_target("demo-target-ready",process_identity(child.pid),hwnd)
+                hidden=json.loads(child.stdout.readline())
+                visible=json.loads(child.stdout.readline())
+                print(json.dumps(dict(event="fixture_visibility",before=hidden,after=visible,coordinator=coordinator)),flush=True)
+                fixture_precondition(hidden,visible,coordinator)
+                hwnd=visible['hwnd']
+                target=process_identity(child.pid)
+                USER.IsWindowVisible.argtypes=[wt.HWND]
+                if target!=visible['target'] or owner(hwnd)!=child.pid or not USER.IsWindowVisible(hwnd):
+                    raise RuntimeError("fixture_hwnd_pin_mismatch")
+                if foreground()!=coordinator:
+                    raise RuntimeError("fixture_precondition_not_met")
+                result=ready_target("demo-target-ready",target,hwnd)
                 deadline=time.monotonic()+5
                 while foreground()!=(hwnd,child.pid) and time.monotonic()<deadline:time.sleep(.05)
                 stable=time.monotonic()+.25
                 while time.monotonic()<stable:
-                    if foreground()!=(hwnd,child.pid):return 1
+                    if foreground()!=(hwnd,child.pid):
+                        print(json.dumps(dict(error="direct_foreground_transfer_denied",handshake=result,after=foreground())),flush=True)
+                        return 1
                     time.sleep(.02)
                 print(json.dumps(dict(handshake=result,child=child.pid,hwnd=hwnd,stable=True,elapsed=time.monotonic()-started)),flush=True)
                 return 0
@@ -206,7 +264,12 @@ def coordinate(messages):
                             pinned=read(ROOT.parent/"Runs"/run_id/"process.json")
                             if pinned["runId"]!=run_id or any(pinned[k]!=payload["target"].get(k) for k in ("pid","creationTicks","executable")):
                                 raise RuntimeError("target_ready_package_pin_mismatch")
-                        reply=transfer_target(payload,identity,run_id,expected,seen,os.getpid())
+                        observed=foreground()
+                        if demo and observed!=(hwnd,os.getpid()):
+                            reply=dict(runId=run_id,hwnd=payload.get('hwnd'),ok=False,calls=0,
+                                       reason='fixture_precondition_not_met',before=observed)
+                        else:
+                            reply=transfer_target(payload,identity,run_id,expected,seen,os.getpid())
                         seen=True
                         record("target_focus_response", **reply)
                         proc.stdin.write(json.dumps(reply)+"\n")
@@ -220,6 +283,10 @@ def coordinate(messages):
         messages.put(f"Kiểm foreground {i}/2")
         with (CONTROL / f"child-{i}.json").open("x") as out:
             if granted(["demo-target-ready" if continuation else "demo"], out, None):
+                out.flush()
+                lines=(CONTROL/f"child-{i}.json").read_text().splitlines()
+                if continuation and lines and 'direct_foreground_transfer_denied' in lines[-1]:
+                    raise RuntimeError('direct_foreground_transfer_denied')
                 raise RuntimeError("child_foreground_failed")
         if continuation:
             evidence=json.loads((CONTROL/f"child-{i}.json").read_text().splitlines()[-1])
@@ -308,19 +375,11 @@ def gui():
 if __name__ == "__main__":
     if sys.argv[1:2] == ["worker"]:
         raise SystemExit(worker(sys.argv[2:]))
-    if sys.argv[1:2] in (["target"],["target-delayed"]):
+    if sys.argv[1:2] == ["target-delayed"]:
+        delayed_win32_target()
+    elif sys.argv[1:2] == ["target"]:
         root = tk.Tk()
-        root.title("CC-B · Child check")
-        delayed=sys.argv[1:2]==["target-delayed"]
-        if delayed:
-            root.withdraw()
-            root.update_idletasks()
-            time.sleep(5)
-            hwnd=int(root.tk.call("wm","frame",root),0)
-            USER.GetWindowLongW.argtypes=[wt.HWND,ct.c_int]
-            USER.SetWindowLongW.argtypes=[wt.HWND,ct.c_int,ct.c_long]
-            USER.SetWindowLongW(hwnd,-20,USER.GetWindowLongW(hwnd,-20)|0x08000000)
-            root.deiconify()
+        root.title("CC-B Child check")
         root.update()
         print(int(root.tk.call("wm", "frame", root), 0), flush=True)
         root.after(10000, root.destroy)

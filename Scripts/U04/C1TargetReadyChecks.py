@@ -5,7 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from C1Baseline import authorized_matrix, load_continuation, next_row
-from C1ForegroundCoordinator import transfer_target
+from C1ForegroundCoordinator import fixture_precondition, transfer_target
 from C1Offline import FakeBackend, FakeLog, record
 from C1ProfileRun import ProfileSession, WORKLOAD
 from C1Readiness import Journal, ProbeError
@@ -61,13 +61,28 @@ def main(out, ledger):
             assert not backend.sent and backend.focus_calls==0
         j.close()
         rows.append(dict(case=name+'_worker',inputs=0,workerFocusCalls=0))
+    coordinator=(70,7)
+    hidden=dict(hwnd=80,target=target,visible=False,foreground=coordinator)
+    shown=dict(hidden,visible=True)
+    fixture_precondition(hidden,shown,coordinator)
+    for name,visible,expected in (
+        ('fixture_self_activated',dict(shown,foreground=(80,8)),'fixture_precondition_not_met'),
+        ('fixture_changed_hwnd',dict(shown,hwnd=81),'fixture_hwnd_pin_mismatch'),
+    ):
+        try:
+            fixture_precondition(hidden,visible,coordinator)
+        except RuntimeError as error:
+            assert str(error)==expected
+        else:
+            raise AssertionError('unsafe fixture accepted')
+        rows.append(dict(case=name,expected=expected,packageLaunches=0))
     plan=load_continuation(ledger,authorized_matrix())
     assert [row['status'] for row in plan[:15]]==['PASS']*15
     assert len(plan[15:])==33 and next_row(plan)['id']=='Timing-r2-1x3-out-R1'
     assert [row['kind'] for row in plan[15:]]==['timing']*21+['memory']*12
     write(out/'receipt.json',dict(cases=rows,skipped=15,next=plan[15]['id'],launches=0,
           planned=[dict(logicalId=r['logicalId'],runId=r['id'],kind=r['kind']) for r in plan[15:]]))
-    print('11 TARGET_READY replays; 15 historic PASS verified; 33 planned launches')
+    print('13 TARGET_READY and fixture replays; 15 historic PASS verified; 33 planned launches')
 
 
 if __name__=='__main__':
