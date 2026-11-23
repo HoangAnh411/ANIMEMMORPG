@@ -1,7 +1,8 @@
 """One-action counter diagnostic state machine. No OS operations at import."""
 import json
+import math
 from pathlib import Path
-from C1Readiness import Session
+from C1Readiness import ProbeError, Session, vector
 from C1Run import sha, write
 
 
@@ -25,6 +26,36 @@ def prepare_transition(before, prepared):
 
 
 class CounterSession(Session):
+    def request_metrics(self):
+        # -U01Trace emits periodic metrics while the game runs.
+        pass
+
+    def before_w_metrics(self):
+        deadline = self.b.now() + 5
+        previous = None
+        cursor = None
+        pending = 'consecutive_samples'
+        while self.b.now() < deadline:
+            try:
+                sample = self.fresh_metrics(deadline - self.b.now(), offset=cursor)
+            except ProbeError:
+                self.j.append('counter_w_stability_interrupted', unmet=pending)
+                raise
+            cursor = sample['endOffset']
+            metrics = sample['metrics']
+            required = dict(controlState=0, menuVisible=False, windowActive=True,
+                            gateW=True, motorLocked=False, motorLockMask=0)
+            bad = [key for key, value in required.items() if metrics.get(key) != value]
+            if math.hypot(*vector(metrics['velocityCmPerSec'])[:2]) > 1:
+                bad.append('horizontalVelocity')
+            self.j.append('counter_w_stability_sample', sample=sample, unmet=bad)
+            if not bad and previous and previous['metrics']['worldSeconds'] < metrics['worldSeconds']:
+                self.j.append('counter_w_stable', first=previous, second=sample)
+                return sample
+            previous = None if bad else sample
+            pending = ','.join(bad) if bad else 'consecutive_samples_or_world_time'
+        self.fail('counter_w_not_stable:' + pending)
+
     def focus_once(self):
         if self.focus_attempted:
             self.fail('focus_retry_forbidden')

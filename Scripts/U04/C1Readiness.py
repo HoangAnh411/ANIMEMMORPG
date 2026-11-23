@@ -172,14 +172,15 @@ class Session:
         if not isinstance(m.get('worldSeconds'),(int,float)) or not math.isfinite(m['worldSeconds']):self.fail('metrics_world_time')
         vector(m.get('capsuleCenterWorldCm'))
 
-    def fresh_metrics(self,timeout=5):
+    def fresh_metrics(self,timeout=5,offset=None):
         if self.pending_metrics:self.fail('metrics_request_overlap')
         self.pending_metrics=True
         try:
-            offset=self.log.size();self.j.append('metrics_request',offset=offset)
+            offset=self.log.size() if offset is None else offset
+            self.j.append('metrics_request',offset=offset)
             # Ignore any line that was already partly written at the request boundary.
             boundary=(offset==0 or self.log.read(offset-1)[:1]==b'\n')
-            self.console_metrics();deadline=self.b.now()+timeout
+            self.request_metrics();deadline=self.b.now()+timeout
             while self.b.now()<deadline:
                 self.guard('metrics_poll')
                 if self.log.size()<offset:self.fail('log_truncated')
@@ -201,8 +202,14 @@ class Session:
             self.fail('metrics_timeout')
         finally:self.pending_metrics=False
 
+    def request_metrics(self):
+        self.console_metrics()
+
+    def before_w_metrics(self):
+        return self.fresh_metrics()
+
     def pulse_w(self):
-        before=self.fresh_metrics();m=before['metrics']
+        before=self.before_w_metrics();m=before['metrics']
         if m.get('controlState')!=0 or not m.get('windowActive') or not m.get('gateW') or m.get('motorLocked'):self.fail('before_w_not_playing')
         if math.hypot(*vector(m['velocityCmPerSec'])[:2])>1:self.fail('pawn_not_stationary_before_w')
         offset=self.log.size();down=self.b.now();self.j.append('w_log_boundary',offset=offset)

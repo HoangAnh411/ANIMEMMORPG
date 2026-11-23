@@ -14,7 +14,7 @@ def save(path,v):
 def read(path):return json.loads(path.read_text(encoding='utf-8'))
 def snap():
  files=set(old['hashes'])
- for name in ('CC-B-01-1x1-in','CC-B-01-1x1-in-R1','CC-B-Batch-01-1x1-in'):
+ for name in ('CC-B-01-1x1-in','CC-B-01-1x1-in-R1','CC-B-Batch-01-1x1-in','CC-B-FG-01-1x1-in','CC-B-FG-02-1x1-out','CC-B-FG-03-1x3-in'):
   files.update(str(f.resolve()) for f in (runs/name).rglob('*') if f.is_file())
  return dict(head=git('-C',str(root),'rev-parse','HEAD'),status=git('-C',str(root),'status','--porcelain'),hashes={f:sha(f) for f in sorted(files)})
 def inventory():
@@ -35,6 +35,25 @@ def invoke(folder,label,args):
  save(folder/(label+'-argv.json'),args)
  with (folder/(label+'.stdout')).open('xb') as o,(folder/(label+'.stderr')).open('xb') as e:code=subprocess.call(args,stdout=o,stderr=e)
  save(folder/(label+'-exit.json'),code);return code
+def continuation(cells):
+ prior = runs.parent / 'CC-B-Foreground-Control-20261123-082303'
+ from C1CounterValidate import validate
+ previous = read(prior / 'ledger.json')
+ imported = []
+ for cell, row in zip(cells[:2], previous[:2], strict=True):
+  run = Path(row['raw'])
+  if not run.is_absolute() or run.parent != runs or run.name != row['id']:
+   raise RuntimeError('prior raw path mismatch')
+  if (row['subjects'], row['boxes'], row['placement']) != cell:
+   raise RuntimeError('prior workload mismatch')
+  preserved = read(prior / row['id'] / 'preservation.json')
+  fresh = validate(run, single=True)
+  if fresh['status'] != 'PASS' or row['status'] != 'PASS' or row['launcherExit'] != 0 or not preserved['preserved'] or preserved['games']:
+   raise RuntimeError('prior cell did not revalidate: ' + row['id'])
+  imported.append(dict(row, postcheck='read-only absolute-path replay', validation=fresh,
+                       previousLedger=str(prior / 'ledger.json')))
+ return imported
+
 def main():
  commit=sys.argv[1]
  exe=runs/'Build-03/Archive/Windows/AnimeMMORPG/Binaries/Win64/AnimeMMORPG.exe'
@@ -42,36 +61,27 @@ def main():
  if git('rev-parse','HEAD')!=commit or git('status','--porcelain') or git('diff','13b4f34','--','Source','Content','Config','Plugins','AnimeMMORPG.uproject') or digest!='282fcefc5156be5f5aa81caf2bc3a764949f2eaf76de081f9c62aa0e2e54e5a5':
   raise RuntimeError('build/tooling preflight mismatch')
  cells=[(n,h,place) for n in (1,10,40) for h in (1,3) for place in ('in','out')]
- ids=[f'CC-B-FG-{i:02d}-{n}x{h}-{place}' for i,(n,h,place) in enumerate(cells,1)]
- ledger=[dict(id=id,subjects=n,boxes=h,placement=placement,status='NOT_RUN') for id,(n,h,placement) in zip(ids,cells)]
- existing=[id for id in ids if (runs/id).exists()]
- if existing!=[ids[0]]:raise RuntimeError(f'run IDs already exist: {existing}')
+ ledger=continuation(cells)
+ for i,(n,h,place) in enumerate(cells[2:],3):
+  ledger.append(dict(id=f'CC-B-Passive-{i:02d}-{n}x{h}-{place}',subjects=n,boxes=h,placement=place,status='NOT_RUN'))
+ existing=[row['id'] for row in ledger[2:] if (runs/row['id']).exists()]
+ if existing:raise RuntimeError(f'run IDs already exist: {existing}')
+ ledger[2]['replaces']='CC-B-FG-03-1x3-in'
  before=snap(); save(p/'workspace-before.json',before)
  initial,games=inventory()
  save(p/'preflight.json',dict(commit=commit,gameSHA256=digest,editors=initial,games=games))
  try:
-  for row in ledger:
+  for row in ledger[2:]:
    id=row['id'];run=runs/id; c=p/id;c.mkdir()
-   prior = runs.parent/'CC-B-Foreground-Control-20261123-082144'
-   if id==ids[0]:
-    from C1CounterValidate import validate
-    validation=validate(run,single=True)
-    previous=read(prior/id/'ledger-entry.json')
-    if validation['status']!='PASS' or previous['launcherExit']!=0 or not previous['preserved'] or read(prior/'absolute-path-postcheck.json')!=validation:
-     raise RuntimeError('previous cell lacks verified absolute-path postcheck')
-    code=0
-    row.update(raw=str(run),launcherExit=0,validation=validation,validatorExit=0,postcheck='absolute-path replay',replaces='CC-B-Batch-01-1x1-in')
-    editors=initial
-   else:
-    editors,games=inventory()
-    save(c/'inventory-before.json',dict(editors=editors,games=games))
-    if games or run.exists() or not identities(initial)<=identities(editors):raise RuntimeError('per-cell process or run ID preflight failed')
-    row.update(replaces='CC-B-Batch-01-1x1-in' if row is ledger[0] else None,status='INVALID',raw=str(run.resolve()))
-    code=invoke(c,'launcher',['python','-B','Scripts/U04/C1CounterRun.py','--build',r'..\Runs\Build-03','--id',id,'--subjects',str(row['subjects']),'--boxes',str(row['boxes']),'--placement',row['placement']])
-    row['launcherExit']=code
-    if all((run/f).exists() for f in ('capture.json','result.json','final.json')):
-     row['validatorExit']=invoke(c,'validator',['python','-B','Scripts/U04/C1Validate.py',str(run),'--single-action'])
-     row['validation']=read(run/'validation.json')
+   editors,games=inventory()
+   save(c/'inventory-before.json',dict(editors=editors,games=games))
+   if games or run.exists() or not identities(initial)<=identities(editors):raise RuntimeError('per-cell process or run ID preflight failed')
+   row.update(status='INVALID',raw=str(run.resolve()))
+   code=invoke(c,'launcher',['python','-B','Scripts/U04/C1CounterRun.py','--build',r'..\Runs\Build-03','--id',id,'--subjects',str(row['subjects']),'--boxes',str(row['boxes']),'--placement',row['placement']])
+   row['launcherExit']=code
+   if all((run/f).exists() for f in ('capture.json','result.json','final.json')):
+    row['validatorExit']=invoke(c,'validator',['python','-B','Scripts/U04/C1Validate.py',str(run),'--single-action'])
+    row['validation']=read(run/'validation.json')
    final=read(run/'final.json') if (run/'final.json').exists() else {}
    row['final']=final
    after,games=inventory(); preserved=identities(editors)<=identities(after) and snap()==before

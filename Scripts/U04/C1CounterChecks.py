@@ -73,7 +73,7 @@ class CounterBackend(FakeBackend):
         if self.case=='stop_oserror':proof['identityCaptureError']='offline stop-only OSError'
         return proof
     def metrics(self):
-        m=super().metrics();m['gateAttack']=True
+        m=super().metrics();m['gateAttack']=True;m['motorLockMask']=0
         n=self.w['subjects'] if hasattr(self,'w') else 1;h=self.w['boxes'] if hasattr(self,'w') else 1
         inside=hasattr(self,'w') and self.w['placement']=='in' and self.exported
         prepared=hasattr(self,'w')
@@ -103,6 +103,9 @@ class CounterBackend(FakeBackend):
         return sent
     def sleep(self,seconds):
         super().sleep(seconds)
+        if self.mode != 'stale_metrics' and self.t >= getattr(self, 'next_metrics', 0):
+            self.next_metrics = self.t + .2
+            self.log.add('Metrics ' + json.dumps(self.metrics()) + '\n')
         if self.case=='focus_between_lmb' and self.gameplay_count==1 and self.t>=self.action_time+.01:self.fg=202
         if self.begin is not None and self.t>=self.begin+5 and not self.exported and self.case!='missing_summary':
             self.exported=True
