@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 from C1Run import NATIVE, PROFILE, arguments, read, sha
 from C1Identity import IdentityError, path_key
+from C1Counter import prepare_transition
 
 
 def same_windows_path(left, right):
@@ -166,6 +167,8 @@ def validate(run, single=False, require_stop=True):
             must(m['locallyControlled'] is True and m['localPlayers']==1 and m['owner']==m['controller'], 'metrics_local_ownership')
             must(all(m[k]==receipt['prepared']['metrics'][k] for k in ('runID','world','worldContext','pawn','controller')), 'metrics_session')
         must(receipt['before']['endOffset']<=receipt['prepared']['requestOffset'] and receipt['prepared']['endOffset']<=receipt['after']['requestOffset'], 'metrics_request_order')
+        transition = prepare_transition(receipt['before'], receipt['prepared'])
+        must(receipt['prepareTransition'] == transition, 'prepare_transition_receipt')
         must(receipt['after']['metrics']['worldSeconds']>receipt['prepared']['metrics']['worldSeconds'], 'metrics_world_progress')
         with (run/'Raw/frames.csv').open(encoding='utf-8-sig',newline='') as f: rows=list(csv.DictReader(f))
         result=reconcile(read(run/'Raw/summary.json'),w,record,receipt['prepared']['metrics'],receipt['after']['metrics'],rows)

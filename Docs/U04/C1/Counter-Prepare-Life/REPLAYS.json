@@ -1,0 +1,236 @@
+{
+  "normal": {
+    "result": {
+      "status": "PASS",
+      "processExited": true,
+      "invalid": [],
+      "failures": [],
+      "evidenceLimits": [
+        "reopen rejection: source only; no Closed/reopen export",
+        "two concurrent UWorld isolation: source only; no dynamic experiment",
+        "occlusion origin and individual suppression observations: aggregate only",
+        "initial target HP and registration identities: prepare/source plus final export, no initial target snapshot"
+      ],
+      "pid": 1234,
+      "world": "/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab",
+      "actionIdentity": "Attacker:2:1",
+      "workload": {
+        "subjects": 1,
+        "boxes": 1,
+        "placement": "in"
+      },
+      "productHits": 1,
+      "hp": [
+        {
+          "subject": "Target0",
+          "life": 1,
+          "expected": 999940,
+          "actual": 999940,
+          "reconstructed": 999940
+        }
+      ],
+      "counters": {
+        "hurtboxVisits": 12,
+        "geometryTests": 4,
+        "occlusionCalls": 17,
+        "candidates": 4,
+        "confirmedHits": 1,
+        "duplicateSuppression": 3,
+        "collectIntervals": 4,
+        "actions": 1
+      },
+      "queriesPostContactDelta": 4,
+      "candidateConfirmedRatio": 4.0,
+      "exitEvidence": {
+        "identityVerifiedAtStop": true,
+        "handleSource": "original_Popen",
+        "wait": "signaled",
+        "pid": 1234,
+        "creationTicks": 134397135261662990,
+        "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\CC-B-Prepare-Offline\\Counter\\entry_normal\\Workspace\\C1\\Runs\\Build-03\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe"
+      }
+    },
+    "beginCount": 1,
+    "gameplayEdges": 2,
+    "inputAfterGuardFailure": 0
+  },
+  "life_unchanged": {
+    "result": {
+      "status": "INVALID",
+      "processExited": true,
+      "error": "ProbeError('prepare_life_increment')",
+      "held": [],
+      "lastInput": {
+        "key": "Enter",
+        "down": false,
+        "monotonic": 16.66000000000003
+      },
+      "exitEvidence": {
+        "identityVerifiedAtStop": true,
+        "handleSource": "original_Popen",
+        "wait": "signaled",
+        "pid": 1234,
+        "creationTicks": 134397135261662990,
+        "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\CC-B-Prepare-Offline\\Counter\\entry_life_unchanged\\Workspace\\C1\\Runs\\Build-03\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe"
+      }
+    },
+    "beginCount": 0,
+    "gameplayEdges": 0,
+    "inputAfterGuardFailure": 0
+  },
+  "life_double": {
+    "result": {
+      "status": "INVALID",
+      "processExited": true,
+      "error": "ProbeError('prepare_life_increment')",
+      "held": [],
+      "lastInput": {
+        "key": "Enter",
+        "down": false,
+        "monotonic": 16.66000000000003
+      },
+      "exitEvidence": {
+        "identityVerifiedAtStop": true,
+        "handleSource": "original_Popen",
+        "wait": "signaled",
+        "pid": 1234,
+        "creationTicks": 134397135261662990,
+        "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\CC-B-Prepare-Offline\\Counter\\entry_life_double\\Workspace\\C1\\Runs\\Build-03\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe"
+      }
+    },
+    "beginCount": 0,
+    "gameplayEdges": 0,
+    "inputAfterGuardFailure": 0
+  },
+  "pawn_changed_at_prepare": {
+    "result": {
+      "status": "INVALID",
+      "processExited": true,
+      "error": "ProbeError('prepare_identity:pawnId')",
+      "held": [],
+      "lastInput": {
+        "key": "Enter",
+        "down": false,
+        "monotonic": 16.66000000000003
+      },
+      "exitEvidence": {
+        "identityVerifiedAtStop": true,
+        "handleSource": "original_Popen",
+        "wait": "signaled",
+        "pid": 1234,
+        "creationTicks": 134397135261662990,
+        "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\CC-B-Prepare-Offline\\Counter\\entry_pawn_changed_at_prepare\\Workspace\\C1\\Runs\\Build-03\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe"
+      }
+    },
+    "beginCount": 0,
+    "gameplayEdges": 0,
+    "inputAfterGuardFailure": 0
+  },
+  "action_not_reset": {
+    "result": {
+      "status": "INVALID",
+      "processExited": true,
+      "error": "ProbeError('prepare_action_reset')",
+      "held": [],
+      "lastInput": {
+        "key": "Enter",
+        "down": false,
+        "monotonic": 16.66000000000003
+      },
+      "exitEvidence": {
+        "identityVerifiedAtStop": true,
+        "handleSource": "original_Popen",
+        "wait": "signaled",
+        "pid": 1234,
+        "creationTicks": 134397135261662990,
+        "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\CC-B-Prepare-Offline\\Counter\\entry_action_not_reset\\Workspace\\C1\\Runs\\Build-03\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe"
+      }
+    },
+    "beginCount": 0,
+    "gameplayEdges": 0,
+    "inputAfterGuardFailure": 0
+  },
+  "phase_not_idle": {
+    "result": {
+      "status": "INVALID",
+      "processExited": true,
+      "error": "ProbeError('prepare_phase_idle')",
+      "held": [],
+      "lastInput": {
+        "key": "Enter",
+        "down": false,
+        "monotonic": 16.66000000000003
+      },
+      "exitEvidence": {
+        "identityVerifiedAtStop": true,
+        "handleSource": "original_Popen",
+        "wait": "signaled",
+        "pid": 1234,
+        "creationTicks": 134397135261662990,
+        "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\CC-B-Prepare-Offline\\Counter\\entry_phase_not_idle\\Workspace\\C1\\Runs\\Build-03\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe"
+      }
+    },
+    "beginCount": 0,
+    "gameplayEdges": 0,
+    "inputAfterGuardFailure": 0
+  },
+  "old_capture_life": {
+    "result": {
+      "status": "INVALID",
+      "processExited": true,
+      "invalid": [
+        "attacker_life"
+      ],
+      "failures": [
+        "damage_wrong_action_or_attacker_life"
+      ],
+      "evidenceLimits": [
+        "reopen rejection: source only; no Closed/reopen export",
+        "two concurrent UWorld isolation: source only; no dynamic experiment",
+        "occlusion origin and individual suppression observations: aggregate only",
+        "initial target HP and registration identities: prepare/source plus final export, no initial target snapshot"
+      ],
+      "pid": 1234,
+      "world": "/Game/AnimeMMORPG/Maps/L_CharacterCombatLab.L_CharacterCombatLab",
+      "actionIdentity": "Attacker:1:1",
+      "workload": {
+        "subjects": 1,
+        "boxes": 1,
+        "placement": "in"
+      },
+      "productHits": 1,
+      "hp": [
+        {
+          "subject": "Target0",
+          "life": 1,
+          "expected": 999940,
+          "actual": 999940,
+          "reconstructed": 999940
+        }
+      ],
+      "counters": {
+        "hurtboxVisits": 12,
+        "geometryTests": 4,
+        "occlusionCalls": 17,
+        "candidates": 4,
+        "confirmedHits": 1,
+        "duplicateSuppression": 3,
+        "collectIntervals": 4,
+        "actions": 1
+      },
+      "queriesPostContactDelta": 4,
+      "candidateConfirmedRatio": 4.0,
+      "exitEvidence": {
+        "identityVerifiedAtStop": true,
+        "handleSource": "original_Popen",
+        "wait": "signaled",
+        "pid": 1234,
+        "creationTicks": 134397135261662990,
+        "executable": "D:\\Data\\AnimeMMORPG\\Artifacts\\U04\\C1\\CC-B-Prepare-Offline\\Counter\\entry_old_capture_life\\Workspace\\C1\\Runs\\Build-03\\Archive\\Windows\\AnimeMMORPG\\Binaries\\Win64\\AnimeMMORPG.exe"
+      }
+    },
+    "beginCount": 1,
+    "gameplayEdges": 2,
+    "inputAfterGuardFailure": 0
+  }
+}

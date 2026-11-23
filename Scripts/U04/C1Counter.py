@@ -5,6 +5,25 @@ from C1Readiness import Session
 from C1Run import sha, write
 
 
+def prepare_transition(before, prepared):
+    """Check the two fresh metrics samples around the single prepare."""
+    a, b = before['metrics'], prepared['metrics']
+    for key in ('pid', 'runID', 'world', 'worldContext', 'controller', 'pawn'):
+        if not a[key] or a[key] != b[key]:
+            raise ValueError('prepare_identity:' + key)
+    x, y = a['combat'], b['combat']
+    if not x['pawnId'] or x['pawnId'] != y['pawnId']:
+        raise ValueError('prepare_identity:pawnId')
+    if type(x['life']) is not int or type(y['life']) is not int or y['life'] != x['life'] + 1:
+        raise ValueError('prepare_life_increment')
+    if type(y['action']) is not int or y['action'] != 0:
+        raise ValueError('prepare_action_reset')
+    if type(y['phase']) is not int or y['phase'] != 0:
+        raise ValueError('prepare_phase_idle')
+    return dict(beforeLife=x['life'], preparedLife=y['life'],
+                beforeOffset=before['lineOffset'], preparedOffset=prepared['lineOffset'])
+
+
 class CounterSession(Session):
     def __init__(self, *args, workload, output):
         super().__init__(*args)
@@ -69,8 +88,11 @@ class CounterSession(Session):
         self.command(f"u04c1 prepare {w['subjects']} {w['boxes']} {w['placement']}")
         self.wait(2)
         prepared = self.playing()
-        if prepared['metrics']['combat']['pawnId'] != before['metrics']['combat']['pawnId'] or prepared['metrics']['combat']['life'] != before['metrics']['combat']['life']:
-            self.fail('counter_attacker_life_changed')
+        try:
+            transition = prepare_transition(before, prepared)
+        except (ValueError, KeyError, TypeError) as error:
+            self.fail(str(error))
+        self.j.append('counter_prepare_transition', **transition)
         if any(self.output.iterdir()):
             self.fail('counter_output_before_begin')
         self.j.append('counter_empty_output_before_begin')
@@ -96,7 +118,7 @@ class CounterSession(Session):
                 self.fail('counter_summary_or_frames_timeout')
             self.wait(.05)
         after = self.playing()
-        receipt = dict(readiness=readiness, before=before, prepared=prepared, after=after,
+        receipt = dict(readiness=readiness, before=before, prepared=prepared, after=after, prepareTransition=transition,
                        files={p.name: sha(p) for p in files}, process=self.record,
                        workload=w, outputWasEmpty=True, inputOffset=input_offset, inputEndOffset=self.log.size())
         self.j.append('counter_capture_complete', receipt=receipt)

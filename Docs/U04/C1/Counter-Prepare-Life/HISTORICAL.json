@@ -1,0 +1,11 @@
+{
+  "prepare": "PASS",
+  "transition": {
+    "beforeLife": 1,
+    "preparedLife": 2,
+    "beforeOffset": 370792,
+    "preparedOffset": 513790
+  },
+  "historicalVerdict": "INVALID",
+  "captureExists": false
+}

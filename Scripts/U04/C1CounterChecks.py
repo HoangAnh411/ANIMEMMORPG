@@ -23,15 +23,15 @@ from C1Run import NATIVE, PROFILE, sha
 
 def fixture(n=1,h=1,placement='in',start=100.,world=30.,record_value=None):
     r=record_value or record(); w=dict(subjects=n,boxes=h,placement=placement); inside=placement=='in'
-    m=dict(world='World_01',worldSeconds=world-.5,pawn='Pawn_01',controller='PC_01',combat=dict(pawnId='Attacker',life=1,action=0,damageResults=17,geometryQueries=29))
+    m=dict(world='World_01',worldSeconds=world-.5,pawn='Pawn_01',controller='PC_01',combat=dict(pawnId='Attacker',life=2,action=0,damageResults=17,geometryQueries=29))
     after=copy.deepcopy(m);after['worldSeconds']=world+6;after['combat']['action']=1
     a=dict(kind='ActionStarted',event='ActionStarted',pid=r['pid'],world=m['world'],runId=r['runId'],sourceSHA=NATIVE,
-           worldType=1,netMode=0,pawn='Pawn_01',owner='PC_01',localRole=3,pawnId='Attacker',life=1,action=1,actionId='Attacker:1:1',lifeId='Attacker:1',
+           worldType=1,netMode=0,pawn='Pawn_01',owner='PC_01',localRole=3,pawnId='Attacker',life=2,action=1,actionId='Attacker:2:1',lifeId='Attacker:2',
            definition=0,definitionVersion=1,raw=60,wall=start+.3,start=world+.3,gameplaySeconds=world+.3,
            observedSeconds=world+.3,activeStart=world+.46,activeEnd=world+.68,end=world+1.08)
     targets=[dict(subject=f'Target{i}',life=1,lifeGeneration=1,stableHurtboxIds=[1] if h==1 else [1,2,3],
                   hp=999940 if inside else 1000000,maxHP=1000000,shield=0,dead=False,deathCount=0) for i in range(n)]
-    hits=[dict(source='Attacker',sourceLife=1,action=1,target=t['subject'],targetLife=1,hurtboxId=1,
+    hits=[dict(source='Attacker',sourceLife=2,action=1,target=t['subject'],targetLife=1,hurtboxId=1,
                at=world+.5,damage=60,beforeHP=1000000,afterHP=999940,crit=False,death=False,absorbed=0) for t in targets] if inside else []
     after['combat'].update(damageResults=17+len(hits),geometryQueries=29+(4*n*h if inside else 0))
     s=dict(pid=r['pid'],world=m['world'],subjects=n,hurtboxesPerSubject=h,inside=inside,requestedSeconds=5,startWall=start,endWall=start+5,
@@ -76,7 +76,11 @@ class CounterBackend(FakeBackend):
         m=super().metrics();m['gateAttack']=True
         n=self.w['subjects'] if hasattr(self,'w') else 1;h=self.w['boxes'] if hasattr(self,'w') else 1
         inside=hasattr(self,'w') and self.w['placement']=='in' and self.exported
-        m['combat']=dict(pawnId='Attacker',life=1,action=1 if self.exported else 0,damageResults=17+(n if inside else 0),geometryQueries=29+(4*n*h if inside else 0))
+        prepared=hasattr(self,'w')
+        life=1 if not prepared or self.case=='life_unchanged' else 3 if self.case=='life_double' else 2
+        pawn_id='OtherAttacker' if prepared and self.case=='pawn_changed_at_prepare' else 'Attacker'
+        action=1 if self.exported or not prepared or self.case=='action_not_reset' else 0
+        m['combat']=dict(pawnId=pawn_id,life=life,action=action,phase=4 if action or self.case=='phase_not_idle' else 0,damageResults=17+(n if inside else 0),geometryQueries=29+(4*n*h if inside else 0))
         return m
     def send(self,key,down):
         if key=='Enter' and not down and self.cmd.startswith('u04c1 '):
@@ -108,6 +112,7 @@ class CounterBackend(FakeBackend):
             d=self.action_time-self.begin
             e.update(wall=self.action_time,start=self.action_time,gameplaySeconds=self.action_time,observedSeconds=self.action_time,activeStart=self.action_time+.16,activeEnd=self.action_time+.38,end=self.action_time+.78)
             for hit in s['damageEvents']:hit['at']=self.action_time+.2
+            if self.case=='old_capture_life':e.update(life=1,actionId='Attacker:1:1',lifeId='Attacker:1')
             if self.case=='wrong_damage':
                 s['damageEvents'][0].update(damage=50,afterHP=999950);s['targets'][0]['hp']=999950
             (self.raw/'summary.json').write_text(json.dumps(s),encoding='utf-8')
@@ -131,7 +136,7 @@ def main():
             for placement in ('in','out'):data_case(f'synthetic_{n}_{h}_{placement}','PASS',n=n,h=h,placement=placement)
     data_case('damage_HP_self_consistent','FAIL',lambda x:(x[0]['damageEvents'][0].update(damage=50,afterHP=999950),x[0]['targets'][0].update(hp=999950)))
     data_case('wrong_action','FAIL',lambda x:x[0]['damageEvents'][0].update(action=99))
-    data_case('wrong_source_life','FAIL',lambda x:x[0]['damageEvents'][0].update(sourceLife=2))
+    data_case('wrong_source_life','FAIL',lambda x:x[0]['damageEvents'][0].update(sourceLife=1))
     data_case('wrong_target_life','FAIL',lambda x:x[0]['damageEvents'][0].update(targetLife=2))
     data_case('wrong_hurtbox','FAIL',lambda x:x[0]['damageEvents'][0].update(hurtboxId=99))
     data_case('H3_multiplied_damage','FAIL',lambda x:(x[0]['damageEvents'].extend(copy.deepcopy(x[0]['damageEvents'])*2),x[0]['targets'][0].update(hp=999820)),h=3)
@@ -162,7 +167,10 @@ def main():
             actual='ACCEPTED'
         except SystemExit:actual='REJECTED'
         save('parser_'+name,'REJECTED',actual,dict(realLaunches=0))
-    for case in ('normal','wrong_damage','focus_between_lmb','focus_during_prepare','missing_summary','old_output','stop_oserror','reused_id','stale_metrics'):
+    prepare_cases=dict(life_unchanged='prepare_life_increment',life_double='prepare_life_increment',
+                       pawn_changed_at_prepare='prepare_identity:pawnId',action_not_reset='prepare_action_reset',
+                       phase_not_idle='prepare_phase_idle')
+    for case in (*prepare_cases,'old_capture_life','normal','wrong_damage','focus_between_lmb','focus_during_prepare','missing_summary','old_output','stop_oserror','reused_id','stale_metrics'):
         dest=out/('entry_'+case);dest.mkdir()
         with nullcontext(str((dest/'Workspace').resolve())) as temporary:
             root=Path(temporary)/'C1/Source';root.mkdir(parents=True)
@@ -197,6 +205,10 @@ def main():
             assert not input_after
             if case=='focus_between_lmb':assert result['held']==['LMB'] and b.gameplay_count==1
             if case=='stop_oserror':assert result['processExited'] is True and result['exitEvidence']['identityVerifiedAtStop'] is False
+            if case in prepare_cases:
+                assert bad['reason']==prepare_cases[case] and b.begin is None and b.gameplay_count==0
+            if case=='old_capture_life':
+                assert 'attacker_life' in result['invalid'] and b.gameplay_count==2
             assert final['status']==result['status'] and code==(0 if expected=='PASS' else 1)
             assert b.launches==(0 if case=='reused_id' else 1)
             if run.exists():(run/'Game.log').write_bytes(log.data)
@@ -206,7 +218,7 @@ def main():
                 if f.is_file():
                     target=dest/f.relative_to(run);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(f.read_bytes())
             detail=dict(cli=code,launches=b.launches,stopCalls=b.stopped,result=result,final=final,commands=b.commands,
-                        fakeInputs=b.sent,inputAfterGuardFailure=len(input_after),exception=caught,postStopValidation=post_stop,realLaunches=0,realInputs=0)
+                        gameplayEdges=b.gameplay_count,beginCount=int(b.begin is not None),fakeInputs=b.sent,inputAfterGuardFailure=len(input_after),exception=caught,postStopValidation=post_stop,realLaunches=0,realInputs=0)
             (dest/'replay.json').write_text(json.dumps(detail,indent=2),encoding='utf-8')
             save('entry_'+case,expected,result['status'],detail)
     with (out/'expected-actual.csv').open('w',newline='',encoding='utf-8') as f:

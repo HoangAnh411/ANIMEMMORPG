@@ -1,0 +1,83 @@
+diff --git a/Scripts/U04/C1Counter.py b/Scripts/U04/C1Counter.py
+index ba69995..d8446b9 100644
+--- a/Scripts/U04/C1Counter.py
++++ b/Scripts/U04/C1Counter.py
+@@ -7,0 +8,19 @@ from C1Run import sha, write
++def prepare_transition(before, prepared):
++    """Check the two fresh metrics samples around the single prepare."""
++    a, b = before['metrics'], prepared['metrics']
++    for key in ('pid', 'runID', 'world', 'worldContext', 'controller', 'pawn'):
++        if not a[key] or a[key] != b[key]:
++            raise ValueError('prepare_identity:' + key)
++    x, y = a['combat'], b['combat']
++    if not x['pawnId'] or x['pawnId'] != y['pawnId']:
++        raise ValueError('prepare_identity:pawnId')
++    if type(x['life']) is not int or type(y['life']) is not int or y['life'] != x['life'] + 1:
++        raise ValueError('prepare_life_increment')
++    if type(y['action']) is not int or y['action'] != 0:
++        raise ValueError('prepare_action_reset')
++    if type(y['phase']) is not int or y['phase'] != 0:
++        raise ValueError('prepare_phase_idle')
++    return dict(beforeLife=x['life'], preparedLife=y['life'],
++                beforeOffset=before['lineOffset'], preparedOffset=prepared['lineOffset'])
++
++
+@@ -72,2 +91,5 @@ class CounterSession(Session):
+-        if prepared['metrics']['combat']['pawnId'] != before['metrics']['combat']['pawnId'] or prepared['metrics']['combat']['life'] != before['metrics']['combat']['life']:
+-            self.fail('counter_attacker_life_changed')
++        try:
++            transition = prepare_transition(before, prepared)
++        except (ValueError, KeyError, TypeError) as error:
++            self.fail(str(error))
++        self.j.append('counter_prepare_transition', **transition)
+@@ -99 +121 @@ class CounterSession(Session):
+-        receipt = dict(readiness=readiness, before=before, prepared=prepared, after=after,
++        receipt = dict(readiness=readiness, before=before, prepared=prepared, after=after, prepareTransition=transition,
+diff --git a/Scripts/U04/C1CounterChecks.py b/Scripts/U04/C1CounterChecks.py
+index 59a7e2b..1620153 100644
+--- a/Scripts/U04/C1CounterChecks.py
++++ b/Scripts/U04/C1CounterChecks.py
+@@ -26 +26 @@ def fixture(n=1,h=1,placement='in',start=100.,world=30.,record_value=None):
+-    m=dict(world='World_01',worldSeconds=world-.5,pawn='Pawn_01',controller='PC_01',combat=dict(pawnId='Attacker',life=1,action=0,damageResults=17,geometryQueries=29))
++    m=dict(world='World_01',worldSeconds=world-.5,pawn='Pawn_01',controller='PC_01',combat=dict(pawnId='Attacker',life=2,action=0,damageResults=17,geometryQueries=29))
+@@ -29 +29 @@ def fixture(n=1,h=1,placement='in',start=100.,world=30.,record_value=None):
+-           worldType=1,netMode=0,pawn='Pawn_01',owner='PC_01',localRole=3,pawnId='Attacker',life=1,action=1,actionId='Attacker:1:1',lifeId='Attacker:1',
++           worldType=1,netMode=0,pawn='Pawn_01',owner='PC_01',localRole=3,pawnId='Attacker',life=2,action=1,actionId='Attacker:2:1',lifeId='Attacker:2',
+@@ -34 +34 @@ def fixture(n=1,h=1,placement='in',start=100.,world=30.,record_value=None):
+-    hits=[dict(source='Attacker',sourceLife=1,action=1,target=t['subject'],targetLife=1,hurtboxId=1,
++    hits=[dict(source='Attacker',sourceLife=2,action=1,target=t['subject'],targetLife=1,hurtboxId=1,
+@@ -79 +79,5 @@ class CounterBackend(FakeBackend):
+-        m['combat']=dict(pawnId='Attacker',life=1,action=1 if self.exported else 0,damageResults=17+(n if inside else 0),geometryQueries=29+(4*n*h if inside else 0))
++        prepared=hasattr(self,'w')
++        life=1 if not prepared or self.case=='life_unchanged' else 3 if self.case=='life_double' else 2
++        pawn_id='OtherAttacker' if prepared and self.case=='pawn_changed_at_prepare' else 'Attacker'
++        action=1 if self.exported or not prepared or self.case=='action_not_reset' else 0
++        m['combat']=dict(pawnId=pawn_id,life=life,action=action,phase=4 if action or self.case=='phase_not_idle' else 0,damageResults=17+(n if inside else 0),geometryQueries=29+(4*n*h if inside else 0))
+@@ -110,0 +115 @@ class CounterBackend(FakeBackend):
++            if self.case=='old_capture_life':e.update(life=1,actionId='Attacker:1:1',lifeId='Attacker:1')
+@@ -134 +139 @@ def main():
+-    data_case('wrong_source_life','FAIL',lambda x:x[0]['damageEvents'][0].update(sourceLife=2))
++    data_case('wrong_source_life','FAIL',lambda x:x[0]['damageEvents'][0].update(sourceLife=1))
+@@ -165 +170,4 @@ def main():
+-    for case in ('normal','wrong_damage','focus_between_lmb','focus_during_prepare','missing_summary','old_output','stop_oserror','reused_id','stale_metrics'):
++    prepare_cases=dict(life_unchanged='prepare_life_increment',life_double='prepare_life_increment',
++                       pawn_changed_at_prepare='prepare_identity:pawnId',action_not_reset='prepare_action_reset',
++                       phase_not_idle='prepare_phase_idle')
++    for case in (*prepare_cases,'old_capture_life','normal','wrong_damage','focus_between_lmb','focus_during_prepare','missing_summary','old_output','stop_oserror','reused_id','stale_metrics'):
+@@ -199,0 +208,4 @@ def main():
++            if case in prepare_cases:
++                assert bad['reason']==prepare_cases[case] and b.begin is None and b.gameplay_count==0
++            if case=='old_capture_life':
++                assert 'attacker_life' in result['invalid'] and b.gameplay_count==2
+@@ -209 +221 @@ def main():
+-                        fakeInputs=b.sent,inputAfterGuardFailure=len(input_after),exception=caught,postStopValidation=post_stop,realLaunches=0,realInputs=0)
++                        gameplayEdges=b.gameplay_count,beginCount=int(b.begin is not None),fakeInputs=b.sent,inputAfterGuardFailure=len(input_after),exception=caught,postStopValidation=post_stop,realLaunches=0,realInputs=0)
+diff --git a/Scripts/U04/C1CounterValidate.py b/Scripts/U04/C1CounterValidate.py
+index 5ec47ce..5cd4056 100644
+--- a/Scripts/U04/C1CounterValidate.py
++++ b/Scripts/U04/C1CounterValidate.py
+@@ -12,0 +13 @@ from C1Identity import IdentityError, path_key
++from C1Counter import prepare_transition
+@@ -168,0 +170,2 @@ def validate(run, single=False, require_stop=True):
++        transition = prepare_transition(receipt['before'], receipt['prepared'])
++        must(receipt['prepareTransition'] == transition, 'prepare_transition_receipt')

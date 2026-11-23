@@ -1,0 +1,15 @@
+case,expected,actual,expectedReason,actualReason,passed
+control,PASS,PASS,,,True
+windows_path_equivalent,PASS,PASS,,,True
+wrong_pid,INVALID,INVALID,exit_identity:pid,evidence:exit_identity:pid,True
+one_tick,INVALID,INVALID,exit_identity:creationTicks,evidence:exit_identity:creationTicks,True
+wrong_executable,INVALID,INVALID,exit_identity:executable,evidence:exit_identity:executable,True
+journal_disagrees,INVALID,INVALID,journal_exit_proof:pid,evidence:journal_exit_proof:pid,True
+journal_missing,INVALID,INVALID,journal_exit_record_count:0,evidence:journal_exit_record_count:0,True
+journal_duplicate,INVALID,INVALID,journal_exit_record_count:2,evidence:journal_exit_record_count:2,True
+proof_missing_ticks,INVALID,INVALID,exit_identity:creationTicks,evidence:exit_identity:creationTicks,True
+ticks_float,INVALID,INVALID,exit_identity:creationTicks,evidence:exit_identity:creationTicks,True
+executable_relative,INVALID,INVALID,exit_identity:executable,evidence:exit_identity:executable,True
+result_only_pid,INVALID,INVALID,result_final_exit_proof:pid,evidence:result_final_exit_proof:pid,True
+journal_wrong_executable,INVALID,INVALID,journal_exit_proof:executable,evidence:journal_exit_proof:executable,True
+journal_missing_proof,INVALID,INVALID,journal_exit_proof:missing,evidence:journal_exit_proof:missing,True
