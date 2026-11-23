@@ -2,8 +2,8 @@
   "status": "INCOMPLETE",
   "sourceSHA": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
   "mainBaseline": "e66670fbba7f39644b0571b703bb3341ac7c0108",
-  "methodology": "HALTED_READINESS_FAILURE",
-  "counterCorrectness": "NOT_RUN",
+  "methodology": "ACCEPTED_SINGLE_PROCESS_SINGLE_GAME_WORLD_SINGLE_WINDOW",
+  "counterCorrectness": "ACCEPTED_12_OF_12",
   "timingMatrix": {
     "valid": 0,
     "required": 36
@@ -13,16 +13,16 @@
     "required": 12
   },
   "overheadPairs": {
-    "valid": 0,
+    "valid": 3,
     "required": 3
   },
   "gpu": {
     "startupTraceReadable": true,
     "startupEvents": 14692,
-    "measurementWindowValid": false
+    "measurementWindowValid": true
   },
-  "memoryCallstacks": "NOT_VERIFIED",
-  "traceCapacityForecast": "NOT_RUN_NO_VALID_PILOT",
+  "memoryCallstacks": "PASS_TOP_FUNCTION_AND_50MS_FULL_STACK_SAMPLE",
+  "traceCapacityForecast": "ACCEPTED_GZIP_ON_D",
   "fullBuild": "PASS_BUILD_03",
   "automation": {
     "status": "PASS",
@@ -43,5 +43,40 @@
   "preservation": "PASS_ORIGINAL_HEAD_STATUS_114_HASHES_EDITOR_IDENTITY",
   "u0404Complete": false,
   "optimizationImplemented": false,
-  "mergePerformed": false
+  "mergePerformed": false,
+  "baselineAuthorization": {
+    "state": "AUTHORIZED",
+    "matrixSHA256": "2c01ccebbe0b7e241e318397ddc1b0fe35c230d07a6c5ca6a4fafab63ef4f689",
+    "evidence": {
+      "readiness": {
+        "path": "Readiness-Probe-Control/Readiness-Build03-20261122-01/handoff-verification.json",
+        "sha256": "96be6c881088b1bdcff436738e9845bdb13c9c3f887340bbbe91eec943dda0c5"
+      },
+      "counter": {
+        "path": "CC-B-Foreground-Control-20261123-082921/handoff.json",
+        "sha256": "124e4238a28ab0dffcf57f88bb20491d6d81d4d9636520f838223ee737624b87"
+      },
+      "pilots": {
+        "path": "CC-B-Foreground-Control-20261123-091739/method-ledger.json",
+        "sha256": "f723929d73c5053580a19655b03167df04824f6834db5f492644470839dee781"
+      },
+      "overhead": {
+        "path": "CC-B-Foreground-Control-20261123-091739/overhead.json",
+        "sha256": "69a141aa7475c6c07766707142eb1516d1c562e5e411ec99502519e4c346c9be"
+      },
+      "storage": {
+        "path": "C1-Storage-Review-01/review.json",
+        "sha256": "ae3be6765ac61e55534489f986d7adff178a6768bac68f09392526febb8edc25"
+      }
+    },
+    "pilots": 2,
+    "gameSHA256": "282fcefc5156be5f5aa81caf2bc3a764949f2eaf76de081f9c62aa0e2e54e5a5",
+    "pdbSHA256": "99ef5c2314ee3e022e19a4988814ee9431a7cae0ada892ab735e4946fb139943",
+    "limits": [
+      "reopen source only",
+      "simultaneous world isolation source only",
+      "occlusion/suppression aggregate"
+    ]
+  },
+  "historicalMethodGate": "HALTED_READINESS_FAILURE"
 }

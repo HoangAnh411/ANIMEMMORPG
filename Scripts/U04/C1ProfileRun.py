@@ -20,7 +20,7 @@ COMBO = tuple(3*i+t for i in range(20) for t in (0, .32, .77))
 
 class ProfileSession(CounterSession):
     def console(self, text):
-        if text not in ('u04c1 prepare 10 3 in', 'u04c1 begin 60', 'trace.stop'):
+        if text not in (self.prepare_command(), 'u04c1 begin 60', 'trace.stop'):
             self.fail('profile_console_command')
         self.j.append('profile_command_start', command=text)
         self.tap('Console')
@@ -40,12 +40,16 @@ class ProfileSession(CounterSession):
             self.b.sleep(max(0, min(.01, deadline-self.b.now())))
         self.guard('profile_deadline')
 
+    def prepare_command(self):
+        w = self.workload
+        return f"u04c1 prepare {w['subjects']} {w['boxes']} {w['placement']}"
+
     def capture(self):
         self.setup()
         before = self.playing()
         if any(self.output.iterdir()):
             self.fail('profile_stale_output')
-        self.console('u04c1 prepare 10 3 in')
+        self.console(self.prepare_command())
         prepared = self.playing()
         transition = prepare_transition(before, prepared)
         warmup = self.b.now()
@@ -94,7 +98,7 @@ class ProfileSession(CounterSession):
 
 
 def probe(record, backend, log, journal, cleanup=False):
-    session = ProfileSession(record, backend, log, journal, workload=WORKLOAD, output=record['raw'])
+    session = ProfileSession(record, backend, log, journal, workload=record.get('workload', WORKLOAD), output=record['raw'])
     return session.capture()
 
 
@@ -108,8 +112,15 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--id', required=True)
     parser.add_argument('--mode', required=True, choices=TRACE)
+    parser.add_argument('--baseline',action='store_true')
     a = parser.parse_args(argv)
-    if not re.fullmatch(r'C1-Method-[A-Za-z0-9_-]+', a.id):
+    workload=WORKLOAD
+    if a.baseline:
+        from C1Baseline import authorized_matrix
+        matches=[r for r in authorized_matrix() if r['id']==a.id and r['kind']==a.mode]
+        if len(matches)!=1:parser.error('baseline ID or kind not in frozen matrix')
+        workload={k:matches[0][k] for k in WORKLOAD}
+    if not a.baseline and not re.fullmatch(r'C1-Method-[A-Za-z0-9_-]+', a.id):
         parser.error('invalid method run ID')
     build = ROOT.parent/'Runs/Build-03'
     out = build.parent/a.id
@@ -140,8 +151,8 @@ def main(argv=None):
         args.append('-notrace')
     record = dict(role='U04C1Method', executable=str(exe), binarySHA256=GAME_SHA,
                   sourceSHA=NATIVE, runId=a.id, userDir=str(out/'User'), log=str(out/'Game.log'),
-                  raw=str(out/'Raw'), mode=a.mode)
-    write(out/'command.json', dict(arguments=args, mode=a.mode, workload=WORKLOAD,
+                  raw=str(out/'Raw'), mode=a.mode, workload=workload)
+    write(out/'command.json', dict(arguments=args, mode=a.mode, workload=workload,
                                    pdb=str(pdb), pdbSHA256=sha(pdb),
                                    tooling=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()))
     write(out/'protected-before.json', before)

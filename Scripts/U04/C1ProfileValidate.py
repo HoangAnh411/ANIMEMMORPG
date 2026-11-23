@@ -20,7 +20,8 @@ def require(condition, message):
 def window(run, summary, capture, process, rows):
     start, end = summary['startWall'], summary['endWall']
     require(summary['pid']==process['pid'] and summary['world']==capture['prepared']['metrics']['world'], 'summary process/world mismatch')
-    require((summary['subjects'],summary['hurtboxesPerSubject'],summary['inside'])==(10,3,True), 'workload mismatch')
+    w=process.get('workload', WORKLOAD)
+    require((summary['subjects'],summary['hurtboxesPerSubject'],summary['inside'])==(w['subjects'],w['boxes'],w['placement']=='in'), 'workload mismatch')
     require(summary['requestedSeconds']==60 and 60 <= end-start <= 61, 'native window duration')
     require((summary['width'],summary['height'],summary['dilation'],summary['smoothing'],summary['fixedTimeStep'],summary['fixedFrameRate'])==(1280,720,1,False,False,False), 'time/render profile')
     require(summary['cvars']==dict((k,float(v)) for k,v in (part.split() for part in PROFILE.split(','))), 'profile cvars')
@@ -37,6 +38,10 @@ def window(run, summary, capture, process, rows):
 
 def gameplay(summary,capture,process,start,end):
     errors = []
+    w=process.get('workload', WORKLOAD)
+    n,h,inside=w['subjects'],w['boxes'],w['placement']=='in'
+    expected_hits=60*n if inside else 0
+    expected_hp=995600 if inside else 1000000
     def check(ok, reason):
         if not ok and reason not in errors:
             errors.append(reason)
@@ -47,9 +52,9 @@ def gameplay(summary,capture,process,start,end):
     events=[a for a in summary['actionEvents'] if a['kind']=='ActionStarted']
     check([a['raw'] for a in events]==[60,70,90]*20 and summary['actions']==60,'action count or sequence')
     targets={t['subject']:t for t in summary['targets']}
-    check(len(targets)==len(summary['targets'])==10,'target cardinality')
+    check(len(targets)==len(summary['targets'])==n,'target cardinality')
     for t in targets.values():
-        check(sorted(t['stableHurtboxIds'])==[1,2,3] and t['hp']==995600 and not t['dead'] and t['shield']==0,'target topology or HP')
+        check(sorted(t['stableHurtboxIds'])==list(range(1,h+1)) and t['hp']==expected_hp and not t['dead'] and t['shield']==0,'target topology or HP')
     identities={}
     for index,(a,edge) in enumerate(zip(events,capture['edges'])):
         require(start<=a['wall']<=end and 0<=a['wall']-(edge['down']+QPC_BIAS)<=.40, 'action outside window or input attribution')
@@ -68,8 +73,8 @@ def gameplay(summary,capture,process,start,end):
         damage=identities[action]
         check(d['damage']==damage and d['beforeHP']==hp[target] and d['afterHP']==hp[target]-damage and not d['crit'] and not d['death'] and d['absorbed']==0,'damage or HP transition')
         hp[target]-=damage
-    check(len(identities)==60 and len(seen)==600 and all(v==1 for v in seen.values()) and summary['confirmedHits']==len(summary['damageEvents'])==600 and all(hp[k]==t['hp'] for k,t in targets.items()),'damage coverage')
-    check(summary['registrationBegin']==summary['registrationEnd']==dict(registeredSubjects=11,registeredHurtboxes=32),'registration')
+    check(len(identities)==60 and len(seen)==expected_hits and all(v==1 for v in seen.values()) and summary['confirmedHits']==len(summary['damageEvents'])==expected_hits and all(hp[k]==t['hp'] for k,t in targets.items()),'damage coverage')
+    check(summary['registrationBegin']==summary['registrationEnd']==dict(registeredSubjects=n+1,registeredHurtboxes=n*h+2),'registration')
     return errors
 
 

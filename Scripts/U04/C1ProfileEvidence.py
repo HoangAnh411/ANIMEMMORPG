@@ -48,14 +48,29 @@ def inspect(run, out, mode):
         if not gpu or not frames or not cpu or not any(r['ThreadName'].startswith('GPU') for r in gpu):
             raise ValueError('missing positive duration frame/CPU/GPU events')
         counters = {}
+        zeros = []
+        with open_csv(run/'Raw/frames.csv') as stream:
+            native_frames=list(csv.DictReader(stream))
+        native_columns=dict(hurtboxVisits='visits',geometryTests='geometry',occlusionCalls='occlusion',
+                            candidates='candidates',confirmedHits='confirmed',duplicateSuppression='suppressed',actions='actions')
         for name, key in COUNTERS.items():
-            values=[(float(r['Time']),int(r['Value'])) for r in table(out/f'counter-{name}.csv')]
-            if len(values)<2 or values[-1][1]!=summary[key] or any(not start<=t<=end for t,_ in values):
+            path=out/f'counter-{name}.csv'
+            with open_csv(path) as stream:
+                reader=csv.DictReader(stream)
+                if reader.fieldnames!=['Time','Value']:
+                    raise ValueError('counter schema: '+name)
+                values=[(float(r['Time']),int(r['Value'])) for r in reader]
+            if not values and summary[key]==0 and native_frames and all(int(r[native_columns[key]])==0 for r in native_frames):
+                # Checked native counters emit only on change. Preserve explicit
+                # zero proof from every sampled native frame and the final summary.
+                zeros.append(key)
+            elif not values or values[-1][1]!=summary[key] or any(not start<=t<=end for t,_ in values):
                 raise ValueError('counter samples or final value: '+name)
             counters[key]=len(values)
         stats=table(out/'statistics.csv')
         scopes={r['Name']:r for r in stats if r['Name'].startswith('U04C1_')}
-        if not all('U04C1_'+name in scopes for name in SCOPES[:-1]):
+        required=SCOPES[:-1] if summary['inside'] else ('WorldUpdate','CollectCandidates','Geometry')
+        if not all('U04C1_'+name in scopes for name in required):
             raise ValueError('missing CPU statistics')
         cpu_cost={}
         frame_count=sum(r['ThreadName']=='Game Frames' for r in frames)
@@ -67,13 +82,18 @@ def inspect(run, out, mode):
                                 exclusiveSeconds=exclusive, inclusivePerFrame=inclusive/frame_count,
                                 exclusivePerFrame=exclusive/frame_count,
                                 inclusivePerAction=inclusive/60, exclusivePerAction=exclusive/60)
+        for name in SCOPES:
+            if not summary['inside']:
+                cpu_cost.setdefault('U04C1_'+name, dict(count=0,inclusiveSeconds=0,exclusiveSeconds=0,
+                    inclusivePerFrame=0,exclusivePerFrame=0,inclusivePerAction=0,exclusivePerAction=0))
         gpu_pass={}
         for row in gpu:
             key=row['ThreadName']+'/'+row['TimerName']
             gpu_pass[key]=gpu_pass.get(key,0)+min(float(row['EndTime']),end)-max(float(row['StartTime']),start)
         return dict(region=[start,end],gpuEvents=len(gpu),frameEvents=len(frames),counterSamples=counters,
                     cpu=cpu_cost,cpuFrameDenominator=frame_count,gpuSecondsByTrackAndPass=gpu_pass,
-                    boundaryPolicy='GPU durations clipped to region; CPU aggregation from Insights')
+                    boundaryPolicy='GPU durations clipped to region; CPU aggregation from Insights',
+                    **({'zeroCountersWithoutTraceChanges':zeros} if zeros else {}))
     # Engine query rules use inclusive boundaries. Retain every lifetime row.
     if 'U04C1_START' not in log or 'U04C1_END' not in log:
         raise ValueError('missing memory bookmarks')

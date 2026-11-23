@@ -44,6 +44,33 @@ def main(out, startup):
         hp-=raw
     frames=[dict(frame=i,wall=start+i/60,dt=1/60,focus=1) for i in range(3601)]
     check('20 combos',window(out,summary,capture,process,frames)==(start,end) and not gameplay(summary,capture,process,start,end))
+    from C1Baseline import authorized_matrix,next_row
+    matrix=authorized_matrix()
+    for row in matrix[:12]:
+        n,h,place=(row[k] for k in ('subjects','boxes','placement'))
+        workload=dict(subjects=n,boxes=h,placement=place)
+        p=dict(process,workload=workload)
+        measured=copy.deepcopy(summary)
+        inside=place=='in'
+        measured.update(subjects=n,hurtboxesPerSubject=h,inside=inside,confirmedHits=60*n if inside else 0,
+                        registrationBegin=dict(registeredSubjects=n+1,registeredHurtboxes=n*h+2))
+        measured['registrationEnd']=measured['registrationBegin']
+        measured['targets']=[dict(summary['targets'][0],subject=str(j),stableHurtboxIds=list(range(1,h+1)),
+                                  hp=995600 if inside else 1000000) for j in range(n)]
+        measured['damageEvents']=[dict(summary['damageEvents'][i*10],target=str(j)) for i in range(60) for j in range(n)] if inside else []
+        check(f'{n}x{h}/{place} {len(measured["damageEvents"])} hits',
+              window(out,measured,capture,p,frames)==(start,end) and not gameplay(measured,capture,p,start,end))
+    matrix[0]['status']='PASS'
+    check('resume after PASS',next_row(json.loads(json.dumps(matrix)))['id']==matrix[1]['id'])
+    matrix[1].update(status='WAITING_FOR_ACTIVATION',packageLaunched=False,workerCreated=False)
+    check('foreground wait zero launch',next_row(matrix) is matrix[1] and not matrix[1]['packageLaunched'])
+    matrix[1].update(status='INVALID',packageLaunched=True)
+    try:
+        next_row(matrix)
+    except RuntimeError:
+        check('artifact failure cannot relaunch',True)
+    else:
+        raise AssertionError('artifact failure allowed relaunch')
     target=copy.deepcopy(summary);target['damageEvents'][0]['targetLife']=9
     check('wrong target life','target life or hurtbox' in gameplay(target,capture,process,start,end))
     missing=copy.deepcopy(summary);missing['actionEvents'].pop()
@@ -68,6 +95,7 @@ def main(out, startup):
     log.write_text("Detected 1 regions\nfor region 'U04C1_WINDOW' [1.0 .. 61.01]\n")
     for name,thread in [('gpu-U04C1_WINDOW','GPU0'),('frames-U04C1_WINDOW','Game Frames'),('events','GameThread')]:
         (fixture/(name+'.csv')).write_text(f'ThreadName,TimerName,StartTime,EndTime\n{thread},Frame,2,3\n')
+    (out/'Raw/frames.csv').write_text('visits\n1\n')
     check('missing counter samples',rejects(lambda:inspect(out,fixture,'timing'),'counter-HurtboxVisits.csv'))
     log.write_text('U04C1_START U04C1_END')
     (fixture/'allocations.csv').write_text('Size,AllocCallstack\n64,0x00012345\n')

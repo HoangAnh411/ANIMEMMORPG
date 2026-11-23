@@ -1,4 +1,4 @@
-﻿"""Foreground coordinator for the C1 counter batch. Workers wait for a PID-specific grant."""
+"""Foreground coordinator for the C1 counter batch. Workers wait for a PID-specific grant."""
 import ctypes as ct
 from ctypes import wintypes as wt
 import json
@@ -82,12 +82,12 @@ def coordinate(messages):
                 time.sleep(.1)
 
     def granted(args, out, err, created=None):
-        if sys.argv[1:2] == ["method"]:
+        if sys.argv[1:2] in (["method"], ["baseline"]):
             wait_for_activation()
         elif foreground()[1] != os.getpid():
             raise RuntimeError("coordinator_not_foreground_before_worker")
         b = Backend(input_enabled=False)
-        if sys.argv[1:2] == ["method"]:
+        if sys.argv[1:2] in (["method"], ["baseline"]):
             wait_for_activation()
         with subprocess.Popen([sys.executable, "-B", str(HERE), "worker", *args],
                               stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=err, text=True,
@@ -124,11 +124,15 @@ def coordinate(messages):
         while foreground()[1] != os.getpid() and time.monotonic() < deadline:
             time.sleep(.05)
         record("return_after_child", sample=i, foreground=foreground())
-        if sys.argv[1:2] == ["method"]:
+        if sys.argv[1:2] in (["method"], ["baseline"]):
             wait_for_activation()
         elif foreground()[1] != os.getpid():
             raise RuntimeError("coordinator_did_not_regain_foreground")
-    if sys.argv[1:2] == ["method"]:
+    if sys.argv[1:2] in (["method"], ["baseline"]):
+        if sys.argv[1:2] == ["baseline"]:
+            from C1Baseline import run_batch
+            run_batch(CONTROL, granted, sys.argv[2], messages)
+            return
         from C1ProfileBatch import run_batch
         run_batch(CONTROL, granted, sys.argv[2], messages, sys.argv[3:] or None)
         return
@@ -151,7 +155,7 @@ def coordinate(messages):
 
 def gui():
     root = tk.Tk()
-    method = sys.argv[1:2] == ["method"]
+    method = sys.argv[1:2] in (["method"], ["baseline"])
     root.title("C1 Method Coordinator" if method else "CC-B " + chr(183) + " Foreground")
     status = tk.StringVar(value="Sẵn sàng kiểm hai cửa sổ trước khi chạy Build-03")
     tk.Label(root, textvariable=status, padx=24, pady=14).pack()
