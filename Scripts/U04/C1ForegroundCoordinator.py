@@ -135,7 +135,8 @@ def coordinate(messages):
 
 def gui():
     root = tk.Tk()
-    root.title("CC-B · Foreground")
+    method = sys.argv[1:2] == ["method"]
+    root.title("C1 Method Coordinator" if method else "CC-B " + chr(183) + " Foreground")
     status = tk.StringVar(value="Sẵn sàng kiểm hai cửa sổ trước khi chạy Build-03")
     tk.Label(root, textvariable=status, padx=24, pady=14).pack()
     messages = queue.Queue()
