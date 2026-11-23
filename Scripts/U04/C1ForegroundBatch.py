@@ -1,11 +1,11 @@
-﻿import sys,json,subprocess,hashlib
+import sys,json,subprocess,hashlib
 from pathlib import Path
 sys.path.insert(0,'Scripts/U04')
 from C1Win32 import Backend
 from C1Run import sha
 from C1Identity import path_key
 p=Path('../CC-B-Batch-Control')
-runs=Path('../Runs')
+runs=Path('../Runs').resolve()
 root=Path.cwd().parents[3]
 old=json.loads(Path('../CC-B-01-Control/before.json').read_text())
 def git(*a):return subprocess.check_output(['git',*a]).decode().strip()
@@ -45,22 +45,33 @@ def main():
  ids=[f'CC-B-FG-{i:02d}-{n}x{h}-{place}' for i,(n,h,place) in enumerate(cells,1)]
  ledger=[dict(id=id,subjects=n,boxes=h,placement=placement,status='NOT_RUN') for id,(n,h,placement) in zip(ids,cells)]
  existing=[id for id in ids if (runs/id).exists()]
- if existing:raise RuntimeError(f'run IDs already exist: {existing}')
+ if existing!=[ids[0]]:raise RuntimeError(f'run IDs already exist: {existing}')
  before=snap(); save(p/'workspace-before.json',before)
  initial,games=inventory()
  save(p/'preflight.json',dict(commit=commit,gameSHA256=digest,editors=initial,games=games))
  try:
   for row in ledger:
    id=row['id'];run=runs/id; c=p/id;c.mkdir()
-   editors,games=inventory()
-   save(c/'inventory-before.json',dict(editors=editors,games=games))
-   if games or run.exists() or not identities(initial)<=identities(editors):raise RuntimeError('per-cell process or run ID preflight failed')
-   row.update(replaces='CC-B-Batch-01-1x1-in' if row is ledger[0] else None,status='INVALID',raw=str(run.resolve()))
-   code=invoke(c,'launcher',['python','-B','Scripts/U04/C1CounterRun.py','--build',r'..\Runs\Build-03','--id',id,'--subjects',str(row['subjects']),'--boxes',str(row['boxes']),'--placement',row['placement']])
-   row['launcherExit']=code
-   if all((run/f).exists() for f in ('capture.json','result.json','final.json')):
-    row['validatorExit']=invoke(c,'validator',['python','-B','Scripts/U04/C1Validate.py',str(run),'--single-action'])
-    row['validation']=read(run/'validation.json')
+   prior = runs.parent/'CC-B-Foreground-Control-20261123-082144'
+   if id==ids[0]:
+    from C1CounterValidate import validate
+    validation=validate(run,single=True)
+    previous=read(prior/id/'ledger-entry.json')
+    if validation['status']!='PASS' or previous['launcherExit']!=0 or not previous['preserved'] or read(prior/'absolute-path-postcheck.json')!=validation:
+     raise RuntimeError('previous cell lacks verified absolute-path postcheck')
+    code=0
+    row.update(raw=str(run),launcherExit=0,validation=validation,validatorExit=0,postcheck='absolute-path replay',replaces='CC-B-Batch-01-1x1-in')
+    editors=initial
+   else:
+    editors,games=inventory()
+    save(c/'inventory-before.json',dict(editors=editors,games=games))
+    if games or run.exists() or not identities(initial)<=identities(editors):raise RuntimeError('per-cell process or run ID preflight failed')
+    row.update(replaces='CC-B-Batch-01-1x1-in' if row is ledger[0] else None,status='INVALID',raw=str(run.resolve()))
+    code=invoke(c,'launcher',['python','-B','Scripts/U04/C1CounterRun.py','--build',r'..\Runs\Build-03','--id',id,'--subjects',str(row['subjects']),'--boxes',str(row['boxes']),'--placement',row['placement']])
+    row['launcherExit']=code
+    if all((run/f).exists() for f in ('capture.json','result.json','final.json')):
+     row['validatorExit']=invoke(c,'validator',['python','-B','Scripts/U04/C1Validate.py',str(run),'--single-action'])
+     row['validation']=read(run/'validation.json')
    final=read(run/'final.json') if (run/'final.json').exists() else {}
    row['final']=final
    after,games=inventory(); preserved=identities(editors)<=identities(after) and snap()==before
