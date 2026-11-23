@@ -12,7 +12,7 @@ import threading
 import time
 import tkinter as tk
 
-from C1Run import ROOT, sha
+from C1Run import ROOT
 from C1Win32 import Backend
 
 HERE = Path(__file__).resolve()
@@ -23,7 +23,7 @@ USER.SetForegroundWindow.argtypes = [wt.HWND]
 USER.GetWindowThreadProcessId.argtypes = [wt.HWND, ct.POINTER(wt.DWORD)]
 CONTROL = ROOT.parent / "CC-B-Foreground-Control"
 OLD = ROOT.parent / "CC-B-Batch-Control"
-LEDGER = OLD / "batch.py"
+
 
 
 def foreground():
@@ -103,7 +103,7 @@ def coordinate(messages):
         if foreground()[1] != os.getpid():
             raise RuntimeError("coordinator_did_not_regain_foreground")
     # Reuse the reviewed per-cell preservation, validator and ledger procedure.
-    batch = runpy.run_path(str(CONTROL.parent / "CC-B-Foreground-Batch.py"))
+    batch = runpy.run_path(str(HERE.with_name("C1ForegroundBatch.py")))
     g = batch["main"].__globals__
     original_invoke = g["invoke"]
     def invoke(folder, label, args):
@@ -167,3 +167,4 @@ if __name__ == "__main__":
         root.mainloop()
     else:
         gui()
+
