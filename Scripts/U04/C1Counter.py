@@ -25,6 +25,33 @@ def prepare_transition(before, prepared):
 
 
 class CounterSession(Session):
+    def focus_once(self):
+        if self.focus_attempted:
+            self.fail('focus_retry_forbidden')
+        self.focus_attempted = True
+
+        def matches(state):
+            return state['foregroundHWND'] == self.hwnd and state['foregroundPID'] == self.record['pid']
+
+        state = self.guard('initial_foreground_sample', foreground=False)
+        if not matches(state):
+            requested_at = self.b.now()
+            accepted = self.b.focus(self.hwnd)
+            self.j.append('initial_focus_request', requestedAt=requested_at, apiResult=accepted)
+            deadline = requested_at + 5
+            while True:
+                state = self.guard('initial_foreground_sample', foreground=False)
+                now = self.b.now()
+                if matches(state) and now <= deadline:
+                    break
+                if now >= deadline:
+                    self.fail('initial_foreground_timeout', state)
+                self.b.sleep(min(.05, deadline - now))
+        self.j.append('initial_foreground_acquired')
+        self.guard('initial_foreground_stabilizing')
+        self.wait(.25)
+        self.j.append('initial_foreground_stable')
+
     def __init__(self, *args, workload, output):
         super().__init__(*args)
         self.workload = workload
