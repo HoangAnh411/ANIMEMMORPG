@@ -193,6 +193,9 @@ def worker(args):
                 if child.poll() is None:
                     child.terminate()
                 child.wait(10)
+    if args[:1] == ["acceptance-launch"]:
+        from C1AcceptanceLaunch import worker as launch
+        return launch(args[args.index("--id")+1])
     if args[:1] == ["method"]:
         from C1ProfileRun import main
         return main(args[1:])
@@ -219,12 +222,12 @@ def coordinate(messages):
                 time.sleep(.1)
 
     def granted(args, out, err, created=None):
-        if sys.argv[1:2] in (["method"], ["baseline"]):
+        if sys.argv[1:2] in (["method"], ["baseline"], ["acceptance"]):
             wait_for_activation()
         elif foreground()[1] != os.getpid():
             raise RuntimeError("coordinator_not_foreground_before_worker")
         b = Backend(input_enabled=False)
-        if sys.argv[1:2] in (["method"], ["baseline"]):
+        if sys.argv[1:2] in (["method"], ["baseline"], ["acceptance"]):
             wait_for_activation()
         with subprocess.Popen([sys.executable, "-B", str(HERE), "worker", *args],
                               stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=err, text=True,
@@ -278,7 +281,7 @@ def coordinate(messages):
                 proc.stdin.close()
             return proc.wait()
     direct = 0
-    continuation = sys.argv[1:2] == ["baseline"] and len(sys.argv)>3
+    continuation = (sys.argv[1:2] == ["baseline"] and len(sys.argv)>3) or sys.argv[1:2]==["acceptance"]
     for i in (1, 2):
         messages.put(f"Kiểm foreground {i}/2")
         with (CONTROL / f"child-{i}.json").open("x") as out:
@@ -295,11 +298,20 @@ def coordinate(messages):
         while foreground()[1] != os.getpid() and time.monotonic() < deadline:
             time.sleep(.05)
         record("return_after_child", sample=i, foreground=foreground())
-        if sys.argv[1:2] in (["method"], ["baseline"]):
+        if sys.argv[1:2] in (["method"], ["baseline"], ["acceptance"]):
             wait_for_activation()
         elif foreground()[1] != os.getpid():
             raise RuntimeError("coordinator_did_not_regain_foreground")
-    if sys.argv[1:2] in (["method"], ["baseline"]):
+    if sys.argv[1:2] in (["method"], ["baseline"], ["acceptance"]):
+        if sys.argv[1:2] == ["acceptance"]:
+            if not direct:
+                raise RuntimeError("direct_foreground_transfer_unproven")
+            run_id=sys.argv[2]
+            with (CONTROL/'launcher.stdout').open('x') as out,(CONTROL/'launcher.stderr').open('x') as err:
+                code=granted(["acceptance-launch","--id",run_id,"--continuation"],out,err)
+            from C1Run import write
+            write(CONTROL/'launcher-result.json',dict(runId=run_id,exitCode=code,guiDirect=direct))
+            return
         if sys.argv[1:2] == ["baseline"]:
             from C1Baseline import run_batch
             if continuation:
@@ -331,8 +343,8 @@ def coordinate(messages):
 
 def gui():
     root = tk.Tk()
-    method = sys.argv[1:2] in (["method"], ["baseline"])
-    root.title("C1 Method Coordinator" if method else "CC-B " + chr(183) + " Foreground")
+    method = sys.argv[1:2] in (["method"], ["baseline"], ["acceptance"])
+    root.title("C1 Regression Coordinator" if sys.argv[1:2]==["acceptance"] else "C1 Method Coordinator" if method else "CC-B " + chr(183) + " Foreground")
     status = tk.StringVar(value="Sẵn sàng kiểm hai cửa sổ trước khi chạy Build-03")
     tk.Label(root, textvariable=status, padx=24, pady=14).pack()
     messages = queue.Queue()

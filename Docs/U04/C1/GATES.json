@@ -36,7 +36,7 @@
     "status": "PASS",
     "maps": 3
   },
-  "normalLauncherRuntime": "NOT_RUN_STATIC_FLAGS_AND_SMOKE_ONLY",
+  "normalLauncherRuntime": "WAITING_FOR_ACTIVATION",
   "combatDodgeFocusRuntime": "NOT_RUN_READINESS_FAILURE",
   "dedicatedEditorTwoClients": "NOT_RUN",
   "illustrationMedia": "NOT_RUN",
@@ -80,7 +80,7 @@
   },
   "historicalMethodGate": "HALTED_READINESS_FAILURE",
   "baselineReview": {
-    "status": "BASELINE_READY_FOR_REVIEW",
+    "status": "BASELINE_ACCEPTED",
     "technicalReplacementsRemaining": 0,
     "runtimeTooling": "c55e31b16bea2ff4bb41d1e492b73767e585ec80",
     "evidence": {
@@ -105,6 +105,33 @@
       "reopen source only",
       "simultaneous world isolation source only",
       "occlusion/suppression aggregate"
-    ]
+    ],
+    "historicalVerdict": "BASELINE_READY_FOR_REVIEW",
+    "acceptanceScope": "Review B: one process, one Game world, one measurement window",
+    "nativeBuildSource": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
+    "reviewedRecordCommit": "7bfc4c8719ffa670a8c27eb7eda0f989cca96cad"
+  },
+  "acceptanceAudit": {
+    "build": "PASS_BUILD_03_REHASHED",
+    "automation": "PASS_144_EXACT_NAMES_FROM_RAW",
+    "smoke": "PASS_3_PACKAGE_WORLD_LOADS",
+    "evidence": [
+      {
+        "path": "C1-Acceptance-Offline-01/offline-audit.json",
+        "sha256": "6b8bd7fd9e363bc97a7beec80609e951fc434890437e4f3d2d8c5cbcc6d0c65a"
+      },
+      {
+        "path": "C1-Acceptance-Offline-01/BaselineReport/BASELINE.md",
+        "sha256": "3584cd55095c0127812d50f49078ff2f9bebc5a9de2850c6b90c712f736b7713"
+      },
+      {
+        "path": "C1-Acceptance-Offline-01/BaselineReport/matched-comparisons.json",
+        "sha256": "7a71d5011b073a35f3dd39f30551d5d03ea8991a44a1188f5e2df3f031fa3210"
+      }
+    ],
+    "manifest": {
+      "path": "C1-Acceptance-Offline-01/manifest.json",
+      "sha256": "69c3d5b617571e11140e5c91f2db1dd13afe9b64c5c7b4d62b5807848845090d"
+    }
   }
 }
