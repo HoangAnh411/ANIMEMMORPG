@@ -25,6 +25,7 @@
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
 #include "Misc/Paths.h"
+#include "Misc/FileHelper.h"
 #include "DrawDebugHelpers.h"
 #include "HAL/IConsoleManager.h"
 #include "GameFramework/PlayerController.h"
@@ -99,11 +100,15 @@ static FAutoConsoleCommandWithWorldAndArgs B2FixtureCommand(TEXT("U03B2Fixture")
     FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& Args,UWorld* W){if(W&&Args.Num()==1)if(auto* C=W->GetSubsystem<UU02CollisionWorld>())C->StartDefenseFixture(Args[0]);}));
 void UU02CollisionWorld::Initialize(FSubsystemCollectionBase& C)
 {
-    if(GetWorld()->GetNetMode()==NM_DedicatedServer && FParse::Param(FCommandLine::Get(),TEXT("U04IsolationObserver")))
+    if(FParse::Param(FCommandLine::Get(),TEXT("U04IsolationObserver")))
     {
         FString Run;
         FParse::Value(FCommandLine::Get(),TEXT("U02RunId="),Run);
-        if(!Run.IsEmpty() && Run.StartsWith(TEXT("C1-Isolation-"))) IsolationRun=MoveTemp(Run);
+        if(!Run.IsEmpty() && Run.StartsWith(TEXT("C1-Isolation-")))
+        {
+            IsolationRun=MoveTemp(Run);
+            FParse::Value(FCommandLine::Get(),TEXT("U04IsolationReady="),IsolationReadyFile);
+        }
     }
     Super::Initialize(C);C1Profile.Enabled=U04C1::Enabled(GetWorld());TickHandle=FWorldDelegates::OnWorldPreActorTick.AddUObject(this,&UU02CollisionWorld::PreActorTick);}
 void UU02CollisionWorld::Deinitialize()
@@ -116,7 +121,7 @@ void UU02CollisionWorld::Deinitialize()
 }
 void UU02CollisionWorld::PreActorTick(UWorld* W,ELevelTick Type,float Dt)
 {
-    if(W==GetWorld()&&W->GetNetMode()!=NM_Client&&Type!=LEVELTICK_ViewportsOnly){DrainAt(W->GetTimeSeconds());TickDefenseFixture(W->GetTimeSeconds());DrawSelectedAction();FlushIsolation(W->GetTimeSeconds());}
+    if(W==GetWorld()&&W->GetNetMode()!=NM_Client&&Type!=LEVELTICK_ViewportsOnly){DrainAt(W->GetTimeSeconds());if(!IsolationReadyFile.IsEmpty()&&!bIsolationArmed)ArmIsolation();TickDefenseFixture(W->GetTimeSeconds());DrawSelectedAction();FlushIsolation(W->GetTimeSeconds());}
 }
 void UU02CollisionWorld::RegisterCombat(UU02CombatComponent* C)
 {
@@ -269,6 +274,33 @@ bool UU02CollisionWorld::Unobstructed(FVector O,FVector C,double R) const
     for(const auto& Weak:IgnoredObstructionComponents)if(auto* Cmp=Weak.Get())Params.AddIgnoredComponent(Cmp);
     return !GetWorld()->LineTraceTestByChannel(O,End,ECC_GameTraceChannel2,Params);
 }
+void UU02CollisionWorld::ArmIsolation()
+{
+    if(GetWorld()->GetNetMode()!=NM_DedicatedServer || !FPaths::FileExists(IsolationReadyFile)) return;
+    FString Ready;
+    if(!FFileHelper::LoadFileToString(Ready,*IsolationReadyFile)||Ready.TrimStartAndEnd()!=IsolationRun) return;
+    AU01Character* Players[2]={};
+    AU01Character* Monster=nullptr;
+    for(TActorIterator<AU03Encounter> It(GetWorld());It;++It)
+    {
+        const auto& E=It->GetSnapshot();
+        if(!E.bClosed&&E.Station>=0&&E.Station<2)
+        {
+            Players[E.Station]=E.Player;
+            if(E.Station==1) Monster=E.Monster;
+        }
+    }
+    if(!Players[0]||!Players[1]||!Monster) return;
+    const FVector B=Players[1]->GetActorLocation();
+    const FVector Right=FRotator(0,Monster->GetActorRotation().Yaw,0).RotateVector(FVector::RightVector);
+    const FVector A=B+86*Right;
+    if(!Players[0]->TeleportTo(A,Players[0]->GetActorRotation())) return;
+    bIsolationArmed=true;
+    UE_LOG(LogU02Collision,Display,TEXT("U04_ISOLATION_ARM run=%s worldSeconds=%.17g A=%s B=%s monster=%s"),
+        *IsolationRun,GetWorld()->GetTimeSeconds(),*Players[0]->GetActorLocation().ToString(),
+        *B.ToString(),*Monster->GetActorLocation().ToString());
+}
+
 void UU02CollisionWorld::FlushIsolation(double Now)
 {
     if(IsolationRows.IsEmpty() || Now<IsolationFlushAt) return;
@@ -347,7 +379,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
     {
         if(this->C1Profile.Active)++this->C1Profile.Visits;
         auto* Shape=H.Component.Get();if(!Shape||!Shape->IsQueryCollisionEnabled()||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
-        if(!IsolationRun.IsEmpty()&&!bIsolationCaptured) ObserveIsolation(P,*Source,H);
+        if(bIsolationArmed&&!bIsolationCaptured) ObserveIsolation(P,*Source,H);
         const bool EncounterPair=AU03Encounter::ForSubject(P.Component->GetOwner())||AU03Encounter::ForSubject(Shape->GetOwner());
         if(EncounterPair&&!AU03Encounter::CanDamage(P.Component->GetOwner(),Shape->GetOwner()))continue;
         if(!EncounterPair&&Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets && !DefenseEnemies.ContainsByPredicate([&](const FDefenseEnemy& E){return (E.Actor.Get()==P.Component->GetOwner()&&E.Target.Get()==Shape->GetOwner())||(E.Actor.Get()==Shape->GetOwner()&&E.Target.Get()==P.Component->GetOwner());}))continue;

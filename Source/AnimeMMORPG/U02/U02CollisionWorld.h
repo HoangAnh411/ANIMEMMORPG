@@ -106,6 +106,9 @@ private:
     };
     void ObserveIsolation(const FPending& P, const FSource& Source, const FHurt& Hurt);
     void FlushIsolation(double Now);
+    void ArmIsolation();
+    FString IsolationReadyFile;
+    bool bIsolationArmed = false;
     FString IsolationRun;
     TArray<FString> IsolationRows;
     double IsolationFlushAt = -1;
