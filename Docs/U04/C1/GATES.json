@@ -1,5 +1,5 @@
 {
-  "status": "INCOMPLETE",
+  "status": "READY_FOR_REVIEW",
   "sourceSHA": "13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7",
   "mainBaseline": "e66670fbba7f39644b0571b703bb3341ac7c0108",
   "methodology": "ACCEPTED_SINGLE_PROCESS_SINGLE_GAME_WORLD_SINGLE_WINDOW",
@@ -135,10 +135,10 @@
     }
   },
   "regressionContinuation": {
-    "status": "INCOMPLETE",
+    "status": "READY_FOR_REVIEW",
     "solo": "ACCEPTED",
-    "combatDodgeFocus": "PASS",
-    "dedicated": "REPLICATED_DAMAGE_ACCEPTED_ISOLATION_NOT_PROVEN_ON_BUILD_03",
+    "combatDodgeFocus": "FOCUS_ACCEPTED_COMBO_DODGE_PASS",
+    "dedicated": "REPLICATED_DAMAGE_ACCEPTED_ISOLATION_DIAGNOSTIC_PASS",
     "media": "PASS",
     "manifest": "../C1-Acceptance-Regression-Offline-02/manifest.json",
     "manifestSHA256": "bd0e29ce51d81ccb2019f7e61690a6ae47176c58c6c8eabafe3ea1e7b279113c",
@@ -147,6 +147,15 @@
     "runtimeLedger": "C1-Focused-Runtime-20261124-03\\ledger.json",
     "runtimeManifestSHA256": "d7caf09deedbec788a82615bac46326fe6e324d6c4237ebfd509f26d8dbca560",
     "latestRuntimeLedger": "C1-Focus-Isolation-Review-05\\ledger.json",
-    "latestRuntimeManifestSHA256": "09e37ea2a6f36f257dca42fc6a820dce3eacc6efa3f4f4a845b3fc134fddb9fa"
+    "latestRuntimeManifestSHA256": "09e37ea2a6f36f257dca42fc6a820dce3eacc6efa3f4f4a845b3fc134fddb9fa",
+    "build03Isolation": "ISOLATION_NOT_PROVEN_ON_BUILD_03",
+    "diagnosticIsolation": {
+      "verdict": "PASS",
+      "run": "C1-Isolation-03",
+      "nativeSHA": "80858ed6f9ed1e9dc13e18fe41f42cf9e3f256dc",
+      "moduleSHA256": "a644e0b4066df7d4b7f02b524ba61db379a53860eee5a1b0b49feb30dfba7145",
+      "manifest": "../IsolationDiagnostic-01/manifest.json",
+      "manifestSHA256": "6e04b8742b92c38adcab97daf37dff1867831fc286b6804ca51b8ee737b6f638"
+    }
   }
 }
