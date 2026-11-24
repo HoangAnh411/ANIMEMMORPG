@@ -195,6 +195,10 @@ def worker(args):
                 child.wait(10)
     if args[:1] == ["acceptance-launch"]:
         run_id = args[args.index("--id")+1]
+        if run_id.startswith("C1-Dedicated-"):
+            from C1Dedicated import start_roles, ROLES
+            result=start_roles(ROOT.parent/"Runs"/run_id,19642,ROLES)
+            return int(result["status"]=="INVALID")
         if run_id.startswith(("C1-Media-", "C1-FocusedCombo-", "C1-FocusedDodge-", "C1-FocusedFocus-")):
             from C1MediaRun import worker as launch
         else:
@@ -268,7 +272,11 @@ def coordinate(messages):
                         record("target_ready", message=payload)
                         if not demo:
                             from C1Run import read
-                            pinned=read(ROOT.parent/"Runs"/run_id/"process.json")
+                            if run_id.startswith("C1-Dedicated-"):
+                                expected=Path(read(ROOT.parent/"Runs"/"Build-03"/"BUILD-IDENTITY.json")["engineExecutable"])
+                                pinned=read(ROOT.parent/"Runs"/run_id/"ClientA"/"process.json")
+                            else:
+                                pinned=read(ROOT.parent/"Runs"/run_id/"process.json")
                             if pinned["runId"]!=run_id or any(pinned[k]!=payload["target"].get(k) for k in ("pid","creationTicks","executable")):
                                 raise RuntimeError("target_ready_package_pin_mismatch")
                         observed=foreground()

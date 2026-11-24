@@ -11,6 +11,9 @@ from C1ForegroundBatch import git, identities, inventory, snap
 from C1Identity import path_key
 from C1Run import ROOT, NATIVE, read, sha, write
 from C1Win32 import Backend
+from C1Readiness import FileLog, Journal
+from C1ProfileRun import ProfileSession
+from C1FocusedProof import replicated_damage
 
 MAP = '/Game/AnimeMMORPG/Maps/L_NetworkLab'
 ROLES = ('Server', 'ClientA', 'ClientB')
@@ -46,8 +49,8 @@ def plan(run, role, port, exe, module, build):
     project = ROOT/'AnimeMMORPG.uproject'
     server = role == 'Server'
     mode = [MAP, '-server', f'-port={port}', '-NullRHI', '-nosound'] if server else [
-        f'127.0.0.1:{port}', '-game', '-windowed', '-ResX=900', '-ResY=540',
-        '-WinX=' + ('0' if role == 'ClientA' else '940'), '-WinY=100']
+        f'127.0.0.1:{port}', '-game', '-windowed', '-ResX=1280', '-ResY=720',
+        '-WinX=' + ('0' if role == 'ClientA' else '150'), '-WinY=100']
     cvars = 't.MaxFPS 30,t.IdleWhenNotForeground 0' if server else (
         't.MaxFPS 60,t.IdleWhenNotForeground 0,r.ScreenPercentage 50,'
         'r.LumenScene.SurfaceCache.AtlasSize 2048,r.RenderTargetPoolMin 128,r.Streaming.PoolSize 256,'
@@ -81,6 +84,15 @@ def fresh_state(record, offset):
         stream.seek(offset)
         raw = stream.read()
     offset_now = offset
+    if offset:
+        with Path(record['log']).open('rb') as stream:
+            stream.seek(offset-1)
+            if stream.read(1)!=b'\n':
+                cut=raw.find(b'\n')+1
+                if not cut:
+                    return None,offset
+                raw=raw[cut:]
+                offset_now+=cut
     match = None
     for line in raw.splitlines(keepends=True):
         if not line.endswith(b'\n'):
@@ -161,6 +173,91 @@ def verify_owners(server_sample, readiness):
     return owners
 
 
+def capture_gameplay(run, owned, owners):
+    handles = {role: (backend, record) for role,backend,record in owned}
+    backend, client = handles['ClientA']
+
+    class ClientSession(ProfileSession):
+        def validate_metrics(self, metrics):
+            if metrics.get('netMode')!=3 or not metrics.get('map','').endswith('/L_NetworkLab'):
+                self.fail('dedicated_metrics_world')
+            adapted=dict(metrics,netMode=0,map='/L_CharacterCombatLab')
+            super().validate_metrics(adapted)
+            target=owners['ClientA']
+            if metrics['combat']['pawnId']!=target['pawn'] or metrics['combat']['life']!=target['life']:
+                self.fail('dedicated_metrics_owner')
+
+    journal=Journal(run/'gameplay-journal.jsonl',backend.now)
+    try:
+        session=ClientSession(dict(client,targetReady=True),backend,FileLog(client['log']),journal,
+                              workload={},output=run)
+        session.select()
+        session.focus_once()
+        metrics=session.fresh_metrics()['metrics']
+        if metrics['controlState'] in (1,2):
+            resume=metrics['menuButtons']['Resume']
+            session.click_resume(resume['x'],resume['y'])
+            session.wait(.25)
+        session.playing()
+        before={}
+        for role,(live,record) in handles.items():
+            live.verify_owned(record)
+            sample,_=fresh_state(record,0)
+            if not sample:
+                raise ValueError('before_state_missing:'+role)
+            before[role]=sample
+        write(run/'gameplay-before.json',before)
+        offsets={role:Path(record['log']).stat().st_size for role,(_,record) in handles.items()}
+        journal.append('network_action_boundary',offsets=offsets)
+        session.tap('CHAR:e')
+        deadline=time.monotonic()+8
+        authority=handles['Server'][1]
+        action=None
+        matches={}
+        receipt=None
+        while time.monotonic()<deadline:
+            session.guard('network_collect')
+            for live,record in handles.values():
+                live.require_alive(live.owned_handle)
+            with Path(authority['log']).open('rb') as stream:
+                stream.seek(offsets['Server'])
+                block=stream.read()
+            for line in block.splitlines(keepends=True):
+                if b'U02B_EVENT {' not in line or not line.endswith(b'\n'):
+                    continue
+                event=json.loads(line.split(b'U02B_EVENT ',1)[1])
+                a=owners['ClientA']
+                if (event.get('event')=='ActionStarted' and event.get('pawnId')==a['pawn']
+                        and event.get('life')==a['life'] and event.get('definition')==4):
+                    if any(event.get(k)!=v for k,v in [('pid',authority['pid']),('sourceSHA',NATIVE),
+                            ('runId',run.name),('netMode',1),('worldType',1),('world',MAP+'.L_NetworkLab')]):
+                        raise ValueError('authority_action_identity')
+                    action=dict(source=a['pawn'],sourceLife=a['life'],action=event['action'],at=event['gameplaySeconds'])
+                    break
+            if action:
+                for role,(_,record) in handles.items():
+                    if role in matches:
+                        continue
+                    sample,_=fresh_state(record,offsets[role])
+                    if sample and any((r['source'],r['sourceLife'],r['action'])==
+                            (action['source'],action['sourceLife'],action['action']) for r in sample['state']['results']):
+                        matches[role]=sample
+                if len(matches)==3:
+                    receipt=replicated_damage(before['Server']['state'],
+                        {role:s['state'] for role,s in matches.items()},owners['ClientA'],action)
+                    prior=[p for p in before['Server']['state']['pawns'] if p['id']==receipt['target']]
+                    if len(prior)!=1 or prior[0]['life']!=receipt['targetLife'] or prior[0]['vital']['hp']-receipt['damage']!=receipt['hp']:
+                        raise ValueError('authority_hp_delta')
+                    return dict(replicatedDamage='PASS',ownerIsolation='ISOLATION_NOT_PROVEN',
+                                isolationReason='Build-03 logs lack contemporaneous attack geometry, hurtbox poses and LOS for A',
+                                action=action,receipt=receipt,before=before,replicated=matches,offsets=offsets)
+            session.wait(.05)
+        write(run/'gameplay-partial.json',dict(action=action, matches=matches, offsets=offsets))
+        raise TimeoutError('new_action_or_replicated_receipt_timeout')
+    finally:
+        journal.close()
+
+
 def start_roles(run, port, roles):
     exe, module, build = pins()
     check_port(port)
@@ -172,10 +269,10 @@ def start_roles(run, port, roles):
     owned = []
     verdict = dict(status='INCOMPLETE', readiness={}, stops={}, tooling=git('rev-parse', 'HEAD'))
     try:
-        for role in roles:
+        for role in (("Server","ClientB","ClientA") if tuple(roles)==ROLES else roles):
             record = plan(run, role, port, exe, module, build)
             Path(record['userDir']).mkdir(parents=True)
-            backend = Backend(input_enabled=False)
+            backend = Backend(input_enabled=role=="ClientA")
             owned.append((role, backend, record))
             write(run/role/'command.json', record)
             backend.launch(record['arguments'], ROOT)
@@ -188,6 +285,7 @@ def start_roles(run, port, roles):
             server_backend.verify_owned(server_record)
             server_sample, _ = fresh_state(server_record, 0)
             verdict['connection'] = verify_owners(server_sample, verdict['readiness'])
+            verdict['gameplay'] = capture_gameplay(run, owned, verdict['connection'])
     except Exception as exc:
         verdict.update(status='INVALID', error=f'{type(exc).__name__}: {exc}')
     finally:
