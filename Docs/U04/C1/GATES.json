@@ -133,5 +133,14 @@
       "path": "C1-Acceptance-Offline-01/manifest.json",
       "sha256": "69c3d5b617571e11140e5c91f2db1dd13afe9b64c5c7b4d62b5807848845090d"
     }
+  },
+  "regressionContinuation": {
+    "status": "INCOMPLETE",
+    "solo": "PASS",
+    "combatDodgeFocus": "NOT_RUN",
+    "dedicated": "CONNECTION_ONLY",
+    "media": "NOT_CAPTURED",
+    "manifest": "../C1-Acceptance-Regression-Offline-02/manifest.json",
+    "manifestSHA256": "bd0e29ce51d81ccb2019f7e61690a6ae47176c58c6c8eabafe3ea1e7b279113c"
   }
 }
