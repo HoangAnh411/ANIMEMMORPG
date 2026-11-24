@@ -1,6 +1,11 @@
-# C1 regression continuation
+# C1 regression ? ACCEPTED
 
-C1 remains **INCOMPLETE**. Build-03 baseline remains **BASELINE_ACCEPTED**, with 36 timing and 12 memory windows. Existing 144/144 Automation results and all three smoke maps were verified against raw before this continuation.
+- Build-03 d?ng native `13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7` v? Game SHA-256 `282fcefc5156be5f5aa81caf2bc3a764949f2eaf76de081f9c62aa0e2e54e5a5`. Baseline 36 timing v? 12 memory thu?c Build-03. Verdict isolation l? `ISOLATION_NOT_PROVEN_ON_BUILD_03`. [Build identity](../../../../Runs/Build-03/BUILD-IDENTITY.json)
+- Build ch?n ?o?n t?ch t? native Build-03, d?ng native `80858ed6f9ed1e9dc13e18fe41f42cf9e3f256dc` v? checkout `b315ad4a42eac5ec6bd2a600f91b52d380bc99ab`. Full UBT Development Editor tr?n UE 5.8.4, MSVC 14.51.36260, Windows SDK 10.0.26100.0. SHA-256 module `a644e0b4066df7d4b7f02b524ba61db379a53860eee5a1b0b49feb30dfba7145`. C?ng cu?i PASS trong `C1-Isolation-03`. [Build identity](../../../../IsolationDiagnostic-01/BUILD-IDENTITY-02.json) ? [Contact/LOS, HP v? exit proof](../../../../IsolationDiagnostic-01/contact-recheck.json) ? [Manifest](../../../../IsolationDiagnostic-01/manifest.json)
+
+## L?ch s? h?i quy
+
+At the start of this continuation, C1 was **INCOMPLETE**. Build-03 baseline remains **BASELINE_ACCEPTED**, with 36 timing and 12 memory windows. Existing 144/144 Automation results and all three smoke maps were verified against raw before this continuation.
 
 | Gate | Evidence | State |
 |---|---|---|
@@ -56,7 +61,7 @@ No new trio was launched. C1 is INCOMPLETE with only owner isolation outstanding
 
 ## Dedicated owner isolation on a separate diagnostic build
 
-C1 is READY_FOR_REVIEW. Build-03 retains ISOLATION_NOT_PROVEN_ON_BUILD_03 and remains the source of all baseline performance results. Focus quarantine and replicated damage are ACCEPTED.
+C1 is ACCEPTED. Build-03 retains ISOLATION_NOT_PROVEN_ON_BUILD_03 and remains the source of all baseline performance results. Focus quarantine and replicated damage are ACCEPTED.
 
 The isolated UE 5.8.4 Development Editor build used MSVC 14.51.36260 and Windows SDK 10.0.26100.0. The two native files, source and module pins, UBT receipts, analyzer replay 9/9, and raw logs remain under IsolationDiagnostic-01. The opt-in observer queries overlap and visibility before the encounter filter. Its records are buffered and emitted after the attack. A separate opt-in fixture places A beside B after both roles are verified and before the observed attack starts.
 

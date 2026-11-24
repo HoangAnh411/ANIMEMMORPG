@@ -1,4 +1,11 @@
-﻿# U04-C1 — INCOMPLETE
+# U04-C1 ? ACCEPTED
+
+H? s? C1 ?? ???c reviewer nghi?m thu. Ph?m vi nghi?m thu k?t th?c ? C1.
+
+- Build-03 d?ng native `13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7` v? Game SHA-256 `282fcefc5156be5f5aa81caf2bc3a764949f2eaf76de081f9c62aa0e2e54e5a5`. Baseline 36 timing v? 12 memory thu?c Build-03. Verdict isolation l? `ISOLATION_NOT_PROVEN_ON_BUILD_03`. [Build identity](../../../../Runs/Build-03/BUILD-IDENTITY.json)
+- Build ch?n ?o?n t?ch t? native Build-03, d?ng native `80858ed6f9ed1e9dc13e18fe41f42cf9e3f256dc` v? checkout `b315ad4a42eac5ec6bd2a600f91b52d380bc99ab`. Full UBT Development Editor tr?n UE 5.8.4, MSVC 14.51.36260, Windows SDK 10.0.26100.0. SHA-256 module `a644e0b4066df7d4b7f02b524ba61db379a53860eee5a1b0b49feb30dfba7145`. C?ng cu?i PASS trong `C1-Isolation-03`. [Build identity](../../../../IsolationDiagnostic-01/BUILD-IDENTITY-02.json) ? [Contact/LOS, HP v? exit proof](../../../../IsolationDiagnostic-01/contact-recheck.json) ? [Manifest](../../../../IsolationDiagnostic-01/manifest.json)
+
+## B?o c?o l?ch s? tr??c nghi?m thu
 
 Không READY_FOR_REVIEW. Chưa có baseline CPU/GPU/cấp phát hợp lệ; không khép U04.04. Không triển khai tối ưu, không merge, không chuyển U04-D. Ma trận36 timing +12 memory đã định trước nhưng0/48 lượt baseline được chạy.
 
