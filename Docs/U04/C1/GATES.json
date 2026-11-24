@@ -5,11 +5,11 @@
   "methodology": "ACCEPTED_SINGLE_PROCESS_SINGLE_GAME_WORLD_SINGLE_WINDOW",
   "counterCorrectness": "ACCEPTED_12_OF_12",
   "timingMatrix": {
-    "valid": 0,
+    "valid": 36,
     "required": 36
   },
   "memoryMatrix": {
-    "valid": 0,
+    "valid": 12,
     "required": 12
   },
   "overheadPairs": {
@@ -78,5 +78,33 @@
       "occlusion/suppression aggregate"
     ]
   },
-  "historicalMethodGate": "HALTED_READINESS_FAILURE"
+  "historicalMethodGate": "HALTED_READINESS_FAILURE",
+  "baselineReview": {
+    "status": "BASELINE_READY_FOR_REVIEW",
+    "technicalReplacementsRemaining": 0,
+    "runtimeTooling": "c55e31b16bea2ff4bb41d1e492b73767e585ec80",
+    "evidence": {
+      "baseline-ledger.json": {
+        "path": "CC-B-Foreground-Control-20261124-111304/baseline-ledger.json",
+        "sha256": "8d9d43091e964349082a5e4fd6e604b17cbb9f61fe2aeac38f507bbc7ec433fe"
+      },
+      "baseline-review.json": {
+        "path": "CC-B-Foreground-Control-20261124-111304/baseline-review.json",
+        "sha256": "d75fdabf7d224f079029a23a6201c986060e31d003c0b5c9ccfbce4106fd0d69"
+      },
+      "comparison.json": {
+        "path": "CC-B-Foreground-Control-20261124-111304/comparison.json",
+        "sha256": "f3d5a7acf7c9968d67fbd214bb47dd443b2f303e3ec8b2612e5682f67e8e014f"
+      },
+      "audit.json": {
+        "path": "CC-B-Foreground-Control-20261124-111304/audit.json",
+        "sha256": "4defbcc98fe4fb03b89731906aefeb710b49b1f7970b6be0170fb94b41545659"
+      }
+    },
+    "limits": [
+      "reopen source only",
+      "simultaneous world isolation source only",
+      "occlusion/suppression aggregate"
+    ]
+  }
 }
