@@ -163,7 +163,8 @@ def worker(run_id):
     match = re.fullmatch(r'C1-Media-[0-9]+-H([13])', run_id)
     combo = re.fullmatch(r'C1-FocusedCombo-[0-9]+', run_id)
     dodge_run = re.fullmatch(r'C1-FocusedDodge-[0-9]+', run_id)
-    if not any((match,combo,dodge_run)):
+    focus_run = re.fullmatch(r"C1-FocusedFocus-[0-9]+",run_id)
+    if not any((match,combo,dodge_run,focus_run)):
         raise ValueError('invalid media run ID')
     runs = ROOT.parent/'Runs'
     out = runs/run_id
@@ -189,7 +190,9 @@ def worker(run_id):
     write(out/'command.json',dict(arguments=argv, workload=workload, purpose='focused combat' if combo else 'fixture illustration'))
     record = dict(runId=run_id, sourceSHA=NATIVE, executable=str(exe), binarySHA256=GAME_SHA,
                   userDir=str(out/'User'), log=str(out/'Game.log'), targetReady=True, workload=workload)
-    result = run_owned_launch(Backend(),argv,exe.parent,out,record,probe=capture_dodge if dodge_run else capture_combo if combo else capture)
+    if focus_run:
+        from C1FocusCapture import capture as focus_capture
+    result = run_owned_launch(Backend(),argv,exe.parent,out,record,probe=focus_capture if focus_run else capture_dodge if dodge_run else capture_combo if combo else capture)
     after,games = inventory()
     result['preservation'] = dict(workspace=protected==snap(), editors=identities(before)<=identities(after), noPackage=not games)
     if not all(result['preservation'].values()):

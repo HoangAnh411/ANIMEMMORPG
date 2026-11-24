@@ -195,7 +195,7 @@ def worker(args):
                 child.wait(10)
     if args[:1] == ["acceptance-launch"]:
         run_id = args[args.index("--id")+1]
-        if run_id.startswith(("C1-Media-", "C1-FocusedCombo-", "C1-FocusedDodge-")):
+        if run_id.startswith(("C1-Media-", "C1-FocusedCombo-", "C1-FocusedDodge-", "C1-FocusedFocus-")):
             from C1MediaRun import worker as launch
         else:
             from C1AcceptanceLaunch import worker as launch
