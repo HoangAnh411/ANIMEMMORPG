@@ -33,3 +33,15 @@ The run IDs below identify the C1 package evidence. The runtime ledger and manif
 
 All four processes have original-handle, signaled exit evidence checked against PID, FILETIME and executable. Their workspace and Editor preservation checks passed. Controlled focus quarantine and dedicated replicated damage/isolation remain open.
 
+
+## Focus and dedicated gameplay continuation
+
+C1 remains INCOMPLETE. Control-flow checks verified that focus retains W through Resume and that the dedicated entry runs capture_gameplay between verify_owners and owned stop. Runtime artifacts and SHA-256 manifest are in C1-Focus-Dedicated-Review-04.
+
+| Gate | Verdict | Evidence |
+|---|---|---|
+| Focus quarantine | INVALID | C1-FocusedFocus-2026112404 recorded accepted held W and inactive AwaitingResume. An empty foreground HWND interrupted return before Resume. The recovered handoff tooling preserved that run. Attempts 05 and 06 hit the initial gateW guard before a new W edge. The Windows key-state check observed W still down. Quarantine after Resume and subsequent rearm remain unverified. |
+| Dedicated replicated damage | PASS | C1-Dedicated-Gameplay-04. Client A issued E. Authority action 1, receipt serial 15, definition 4, 80 damage, HP 600 to 520. The same receipt first appears at Game.log byte offsets 3128789 on server, 3561117 on ClientA and 11568098 on ClientB. |
+| Dedicated owner isolation | ISOLATION_NOT_PROVEN | Build-03 evidence lacks an independently reconstructible same-attack opportunity for A, including active attack geometry, hurtbox poses and LOS for that interval. |
+
+All recorded children signaled on their original handles with matching identities. Editor and workspace preservation passed. Earlier CONNECTION_ONLY and INVALID records are retained. Reproduction entry is python -B Scripts/U04/C1ForegroundCoordinator.py acceptance followed by a new C1-FocusedFocus numeric ID or new C1-Dedicated ID. The latter uses UDP 19642.
