@@ -110,7 +110,15 @@ def wait_ready(record, backend, timeout=180):
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         backend.require_alive(backend.owned_handle)
-        if Path(record['log']).exists():
+        if Path(record['log']).exists() and record['role'] == 'Server':
+            # No client is connected yet. The NetDriver listen line is startup
+            # evidence only. Require a fresh Game-world sample after clients join.
+            with Path(record['log']).open('rb') as stream:
+                for line in stream:
+                    if re.search(rb'IpNetDriver listening on port ' + str(record['port']).encode() + rb'\s', line):
+                        return dict(listen=line.decode().strip(), identity=backend.verify_owned(record),
+                                    loadedModule=loaded_module(record))
+        if Path(record['log']).exists() and record['role'] != 'Server':
             sample, offset = fresh_state(record, offset)
             if sample and (record['role'] == 'Server' or any(
                     p['local'] and p['role'] == 2 and p['owner'] != 'None' for p in sample['state']['pawns'])):
@@ -120,6 +128,34 @@ def wait_ready(record, backend, timeout=180):
                 return dict(sample=sample, identity=identity, loadedModule=module)
         time.sleep(.25)
     raise TimeoutError('ready_timeout:' + record['role'])
+
+
+def verify_owners(server_sample, readiness):
+    if not server_sample:
+        raise ValueError('authority_game_world_missing')
+    server = server_sample['state']
+    players = {pawn['id']: pawn for pawn in server['pawns']}
+    owners = {}
+    for role in ROLES[1:]:
+        state = readiness[role]['sample']['state']
+        pawns = [pawn for pawn in state['pawns'] if pawn['local']]
+        if len(pawns) != 1 or pawns[0]['role'] != 2:
+            raise ValueError('client_local_pawn_missing:' + role)
+        pawn = pawns[0]
+        identity = pawn['id']
+        authority = players.get(identity)
+        if (not authority or authority['role'] != 3 or
+                str(authority['owner']).rsplit('.', 1)[-1] != str(pawn['owner']).rsplit('.', 1)[-1] or
+                authority['life'] != pawn['life']):
+            raise ValueError('authority_owner_life_mismatch:' + role)
+        matches = [e for e in server['encounters'] if e['player'] == identity and not e['closed']]
+        if len(matches) != 1:
+            raise ValueError('authority_encounter_mismatch:' + role)
+        owners[role] = dict(pawn=identity, life=pawn['life'], owner=pawn['owner'], encounter=matches[0])
+    if (owners['ClientA']['pawn'] == owners['ClientB']['pawn'] or
+            owners['ClientA']['encounter']['id'] == owners['ClientB']['encounter']['id']):
+        raise ValueError('shared_client_identity')
+    return owners
 
 
 def start_roles(run, port, roles):
@@ -144,6 +180,11 @@ def start_roles(run, port, roles):
             write(run/role/'process.json', record)
             verdict['readiness'][role] = wait_ready(record, backend)
             write(run/role/'readiness.json', verdict['readiness'][role])
+        if tuple(roles) == ROLES:
+            _, server_backend, server_record = owned[0]
+            server_backend.verify_owned(server_record)
+            server_sample, _ = fresh_state(server_record, 0)
+            verdict['connection'] = verify_owners(server_sample, verdict['readiness'])
     except Exception as exc:
         verdict.update(status='INVALID', error=f'{type(exc).__name__}: {exc}')
     finally:
