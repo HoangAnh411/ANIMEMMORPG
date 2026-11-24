@@ -28,13 +28,13 @@ if(@(Get-CimInstance Win32_Process | Where-Object {$_.CommandLine -and $_.Name -
 New-Item -ItemType Directory -Path $settings | Out-Null
 $raw=Join-Path $out 'Raw';New-Item -ItemType Directory -Path $raw | Out-Null
 $log=Join-Path $out 'Game.log'
-$cmds='t.MaxFPS '+$FPS+',t.IdleWhenNotForeground 0,r.VSync 0,r.ScreenPercentage 50,r.LumenScene.SurfaceCache.AtlasSize 2048,r.RenderTargetPoolMin 128,r.Streaming.PoolSize 256,r.Lumen.DiffuseIndirect.Allow 0,r.Lumen.Reflections.Allow 0,r.Shadow.Virtual.Enable 0,r.ShadowQuality 2'
-$map='/Game/AnimeMMORPG/Maps/L_CharacterCombatLab'+$(if($Fixture){'?U03Regression=1'}else{''})
-$arguments=@($map,'-windowed','-ResX=1280','-ResY=720','-WinX=0','-WinY=30','-nosplash','-NoLiveCoding','-U01Trace',('-U01SourceSHA='+$m.sourceSHA),('-U02SourceSHA='+$m.sourceSHA),('-U02RunId='+$RunId),('-UserDir="'+$settings+'"'),('-abslog="'+$log+'"'),('-ExecCmds="'+$cmds+'"'))
-if($Fixture){$arguments+=@('-U04BFPSFixture',('-U04BOutput="'+$raw+'"'))}
-if($InputDiagnostic){$arguments+='-U04BInputDiagnostic'}
-if($TimingDiagnostic){$arguments+='-U04BDiagnosticTiming'}
-$p=Start-Process -FilePath $exe -ArgumentList $arguments -WorkingDirectory $package -WindowStyle Normal -PassThru
+. (Join-Path $PSScriptRoot 'SoloLaunchSpec.ps1')
+$spec=New-U04SoloLaunchSpec -Package $package -Output $out -SourceSHA $m.sourceSHA -RunId $RunId -FPS $FPS -Fixture:$Fixture -InputDiagnostic:$InputDiagnostic -TimingDiagnostic:$TimingDiagnostic
+# Preserve the Windows command-line form accepted by the packaged launcher.
+$arguments=@($spec.arguments | ForEach-Object {
+ if($_ -match '^(-(?:UserDir|abslog|ExecCmds|U04BOutput)=)(.*)$'){$Matches[1]+'"'+$Matches[2]+'"'}else{$_}
+})
+$p=Start-Process -FilePath $spec.executable -ArgumentList $arguments -WorkingDirectory $spec.workingDirectory -WindowStyle Normal -PassThru
 $live=Get-CimInstance Win32_Process -Filter ('ProcessId='+$p.Id)
 @{role='U04BPackage';pid=$p.Id;creationUTC=$live.CreationDate.ToUniversalTime().ToString('o');executable=$exe;binarySHA256=$m.gameSHA256;sourceSHA=$m.sourceSHA;toolSHA=(git -C $clone rev-parse HEAD);isolationRoot=$isolation;buildManifest=[IO.Path]::GetFullPath($Manifest);buildManifestSHA256=(Get-FileHash $Manifest).Hash;userDir=$settings;log=$log;arguments=$arguments;targetFPS=$FPS;fixture=[bool]$Fixture;startedUTC=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $out 'process.json')
 Write-Output (Join-Path $out 'process.json')

@@ -1,10 +1,11 @@
 """Fixture-off packaged traversal using the reviewed B launcher options."""
-import sys
+import json
+import subprocess
 from pathlib import Path
 
 from C1ForegroundBatch import git, identities, inventory, snap
 from C1ProfileRun import ProfileSession
-from C1Run import ROOT, NATIVE, arguments, read, run_owned_launch, sha, write
+from C1Run import ROOT, NATIVE, read, run_owned_launch, sha, write
 from C1Win32 import Backend
 
 
@@ -31,14 +32,19 @@ def worker(run_id):
     out=root/run_id
     out.mkdir()
     (out/'User').mkdir()
-    argv=[arg for arg in arguments(exe,out,run_id) if not arg.startswith('-U04C1')]
-    argv[1]=argv[1].split('?')[0]
+    spec=json.loads(subprocess.check_output([
+        'powershell.exe','-NoProfile','-File',str(ROOT/'Scripts/U04/ReadSoloLaunchSpec.ps1'),
+        '-Package',str(build/'Archive/Windows'),'-Output',str(out),
+        '-SourceSHA',NATIVE,'-RunId',run_id,'-FPS','60']))
+    if Path(spec['executable']).resolve()!=exe.resolve():
+        raise RuntimeError('Solo spec executable mismatch')
+    argv=[str(exe),*spec['arguments']]
     if any('fixture' in a.casefold() or 'regression=' in a.casefold() or 'u04c1' in a.casefold() for a in argv):
         raise RuntimeError('fixture argument present')
     record=dict(runId=run_id,sourceSHA=NATIVE,executable=str(exe),binarySHA256=m['gameSHA256'],
                 log=str(out/'Game.log'),userDir=str(out/'User'),targetReady=True)
-    write(out/'command.json',dict(arguments=argv,entry='Build-03 packaged Game executable; StartB.ps1 rendered solo, Fixture absent'))
-    result=run_owned_launch(Backend(),argv,exe.parent,out,record,probe=probe)
+    write(out/'command.json',dict(arguments=argv,entry='StartB.ps1 / SoloLaunchSpec.ps1',spec=spec))
+    result=run_owned_launch(Backend(),argv,spec['workingDirectory'],out,record,probe=probe)
     after,games=inventory()
     preserved=dict(workspace=protected==snap(),editors=identities(before)<=identities(after),packageExited=not games)
     write(out/'preservation.json',preserved)
