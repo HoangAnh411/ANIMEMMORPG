@@ -14,3 +14,11 @@ Artifacts are under C1-Acceptance-Regression-Offline-02, with hashes in manifest
 The Solo entry and harness share SoloLaunchSpec.ps1. The harness owns the launched handle and uses U01Trace for observation. Reproduce the reviewed Solo spec without launch using ReadSoloLaunchSpec.ps1 with the Build-03 Archive/Windows directory, a new output directory, native SHA 13b4f34f07bd1cb8e7402984d9479fd5eb9fe2e7, a new run ID and FPS 60. The runtime entry is `python -B Scripts/U04/C1ForegroundCoordinator.py acceptance C1-Launcher-<new-numeric-id>`. Dedicated startup is `python -B Scripts/U04/C1Dedicated.py --id C1-Dedicated-<new-id> --port <free-udp-port>`. Image validation is `python -B Scripts/U04/C1MediaVerify.py <image> <summary.json> --build Build-03`.
 
 Reopen and simultaneous world isolation are source-only for the C1 measurement fixture. Full callstack coverage is a 50 ms sample. Occlusion and suppression are aggregate counters. Review profile B covers one process, one Game world and one measurement window.
+
+## Focused proof tooling
+
+Solo is ACCEPTED by the reviewer. The local offline dossier at `../C1-Regression-Proof-Offline-03` contains 12 matching expected/actual results and a SHA-256 manifest. Its two images are synthetic verifier inputs.
+
+The dodge helper requires the same native dispatch frame and stationary velocity at authority admission. The dedicated helper requires a new authority action and matching damage receipt, target life and HP across all three roles. The media verifier decodes the image and checks its receipt against the process record, Build-03 and native summary. Run it with `python -B Scripts/U04/C1MediaVerify.py <image> <summary> --process <process.json> --receipt <receipt.json>`.
+
+Combat, controlled focus and dedicated gameplay still need capture integration and runtime evidence. Dedicated encounter isolation requires an active attack by B with a demonstrated damage opportunity and a positive control. The two fixture illustrations still need a real capture producer on Build-03. C1 remains INCOMPLETE.

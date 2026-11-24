@@ -136,11 +136,13 @@
   },
   "regressionContinuation": {
     "status": "INCOMPLETE",
-    "solo": "PASS",
-    "combatDodgeFocus": "NOT_RUN",
+    "solo": "ACCEPTED",
+    "combatDodgeFocus": "OFFLINE_PRECONDITIONS_ONLY",
     "dedicated": "CONNECTION_ONLY",
-    "media": "NOT_CAPTURED",
+    "media": "OFFLINE_RECEIPT_ONLY",
     "manifest": "../C1-Acceptance-Regression-Offline-02/manifest.json",
-    "manifestSHA256": "bd0e29ce51d81ccb2019f7e61690a6ae47176c58c6c8eabafe3ea1e7b279113c"
+    "manifestSHA256": "bd0e29ce51d81ccb2019f7e61690a6ae47176c58c6c8eabafe3ea1e7b279113c",
+    "latestOfflineManifest": "../C1-Regression-Proof-Offline-03/manifest.json",
+    "latestOfflineManifestSHA256": "931466b5a65122ecdb136f4f0b83fb58bfbf52ea702c11853d147060ab42202d"
   }
 }
