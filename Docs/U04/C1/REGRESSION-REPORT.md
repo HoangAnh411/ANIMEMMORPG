@@ -45,3 +45,11 @@ C1 remains INCOMPLETE. Control-flow checks verified that focus retains W through
 | Dedicated owner isolation | ISOLATION_NOT_PROVEN | Build-03 evidence lacks an independently reconstructible same-attack opportunity for A, including active attack geometry, hurtbox poses and LOS for that interval. |
 
 All recorded children signaled on their original handles with matching identities. Editor and workspace preservation passed. Earlier CONNECTION_ONLY and INVALID records are retained. Reproduction entry is python -B Scripts/U04/C1ForegroundCoordinator.py acceptance followed by a new C1-FocusedFocus numeric ID or new C1-Dedicated ID. The latter uses UDP 19642.
+
+## Focus recheck and Build-03 isolation observability
+
+Focus PASS in C1-FocusedFocus-2026112407. Two consecutive W-up samples preceded package launch. The same pawn/life went from accepted W and movement through inactive and active AwaitingResume, then Playing with W physically down, gateW=false and zero position change. W-up rearmed the gate. A new accepted W press moved the pawn 138.326 cm forward, and final W-up was observed while the game held foreground. Original-handle exit and preservation passed. The three prior INVALID runs remain in the previous dossier.
+
+Dedicated replicated damage is ACCEPTED. The Build-03 owner-isolation gate is ISOLATION_NOT_PROVEN_ON_BUILD_03. The authority log contains monster B action 1 and an associated visible query and hit on B. Attack interval and geometry are observable for B. The same slice has no independently observable A hurtbox endpoints/radius or LOS for A. The encounter filter runs before span, geometry and visibility logging. The B regression verifies separate encounters and Retry preservation, with a different evidence scope.
+
+No new trio was launched. C1 is INCOMPLETE with only owner isolation outstanding. Review decision needed on a separate opt-in diagnostic build to record both owners' hurtbox poses and obstruction evidence, keyed to the same authority attack slice. Build-03 verdicts stay tied to Build-03. Ledger, source/raw audit and SHA-256 manifest are in C1-Focus-Isolation-Review-05.

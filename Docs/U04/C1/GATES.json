@@ -137,8 +137,8 @@
   "regressionContinuation": {
     "status": "INCOMPLETE",
     "solo": "ACCEPTED",
-    "combatDodgeFocus": "COMBO_DODGE_PASS_FOCUS_INVALID",
-    "dedicated": "REPLICATED_DAMAGE_PASS_ISOLATION_NOT_PROVEN",
+    "combatDodgeFocus": "PASS",
+    "dedicated": "REPLICATED_DAMAGE_ACCEPTED_ISOLATION_NOT_PROVEN_ON_BUILD_03",
     "media": "PASS",
     "manifest": "../C1-Acceptance-Regression-Offline-02/manifest.json",
     "manifestSHA256": "bd0e29ce51d81ccb2019f7e61690a6ae47176c58c6c8eabafe3ea1e7b279113c",
@@ -146,7 +146,7 @@
     "latestOfflineManifestSHA256": "931466b5a65122ecdb136f4f0b83fb58bfbf52ea702c11853d147060ab42202d",
     "runtimeLedger": "C1-Focused-Runtime-20261124-03\\ledger.json",
     "runtimeManifestSHA256": "d7caf09deedbec788a82615bac46326fe6e324d6c4237ebfd509f26d8dbca560",
-    "latestRuntimeLedger": "C1-Focus-Dedicated-Review-04\\ledger.json",
-    "latestRuntimeManifestSHA256": "cc49d2e763dc9e2123a9bfabb27faac55d73f8025adf4dc37e4055c8e2c64fb5"
+    "latestRuntimeLedger": "C1-Focus-Isolation-Review-05\\ledger.json",
+    "latestRuntimeManifestSHA256": "09e37ea2a6f36f257dca42fc6a820dce3eacc6efa3f4f4a845b3fc134fddb9fa"
   }
 }
