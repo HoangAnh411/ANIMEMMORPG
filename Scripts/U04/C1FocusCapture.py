@@ -82,6 +82,15 @@ def capture(record, backend, log, journal, cleanup=False):
         api=backend.focus(session.hwnd)
         session.watch_auxiliary=False
         journal.append('focus_return_to_game',api=api,offset=log.size())
+        deadline=backend.now()+2
+        while True:
+            state=session.guard('focus_return_observation',foreground=False)
+            observed=(state['foregroundHWND'],state['foregroundPID'])
+            if observed==(session.hwnd,record['pid']):
+                break
+            if observed not in ((0,0),(None,0),(aux,pid)) or backend.now()>=deadline:
+                session.fail('focus_return_not_observed',state)
+            backend.sleep(.025)
         session.wait(.25)
         returned,physical=phase('awaiting_resume_active')
         if returned['controlState']!=2 or not returned['windowActive'] or not physical:
