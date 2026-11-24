@@ -1,6 +1,7 @@
 """Drive the opt-in diagnostic with the C1 owned-process adapter."""
 import argparse
 import json
+import os
 from pathlib import Path
 import re
 import sys
@@ -11,9 +12,14 @@ from AnalyzeC1Isolation import evaluate
 ROOT = Path(__file__).resolve().parents[2]
 C1 = ROOT.parents[1]
 sys.path.insert(0, str(C1/'Source/Scripts/U04'))
-import C1Dedicated as adapter
-from C1ForegroundBatch import identities, inventory, snap
-from C1Run import read, sha, write
+original_directory = Path.cwd()
+try:
+    os.chdir(C1/'Source')
+    import C1Dedicated as adapter
+    from C1ForegroundBatch import identities, inventory, snap
+    from C1Run import read, sha, write
+finally:
+    os.chdir(original_directory)
 
 
 def log_records(path, marker):
@@ -87,7 +93,7 @@ def capture(run, owned, owners):
                 replication[role]=offset
                 break
     status,reason=evaluate(rows,identity,hp_before,hp_after,receipts,
-        not receipts or min(r['serial'] for r in receipts)==watermark+1,
+        bool(receipts) and sorted(r['serial'] for r in receipts)==list(range(watermark+1,max(r['serial'] for r in receipts)+1)),
         len(replication)==2)
     return dict(verdict=status,reason=reason,identity=identity,observerOffsets=[o for o,_ in observed],
                 authorityOffsets=[before[0],after[0]],replicationOffsets=replication,watermark=watermark,
