@@ -62,3 +62,37 @@ def replicated_damage(before, samples, owner, action):
     if any(event(samples[role]) != authority for role in ('ClientA', 'ClientB')):
         raise ValueError('replication_diverged')
     return authority
+
+
+def combo_receipt(summary, prepared, after, edges, bias, process):
+    actions = [item for item in summary['actionEvents'] if item['kind'] == 'ActionStarted']
+    hits = summary['damageEvents']
+    target, = summary['targets']
+    actor = prepared['combat']
+    if after['combat']['pawnId'] != actor['pawnId'] or after['combat']['life'] != actor['life']:
+        raise ValueError('combo_pawn_or_life_changed')
+    if any(not (summary['startWall'] <= item['wall'] <= summary['endWall']
+                and 0 <= item['wall']-stamp-bias <= .40) for item,stamp in zip(actions,edges)):
+        raise ValueError('combo_event_outside_input_window')
+    problems = []
+    if ([item['raw'] for item in actions] != [60,70,90] or summary['actions'] != 3
+            or len(hits) != 3 or summary['confirmedHits'] != 3):
+        problems.append('action_or_hit_count')
+    hp = 1000000
+    for number,(action,hit,damage) in enumerate(zip(actions,hits,(60,70,90)),1):
+        if (action['action'] != number or action['pawnId'] != actor['pawnId']
+                or action['life'] != actor['life'] or action['pid'] != process['pid']
+                or action['runId'] != process['runId'] or action['sourceSHA'] != process['sourceSHA']
+                or action['world'] != summary['world'] or action['owner'] != prepared['controller']):
+            problems.append('action_identity')
+        if (hit['source'] != actor['pawnId'] or hit['sourceLife'] != actor['life']
+                or hit['action'] != action['action'] or hit['target'] != target['subject']
+                or hit['targetLife'] != target['life'] or hit['hurtboxId'] != 1):
+            problems.append('hit_identity')
+        if (hit['damage'] != damage or hit['beforeHP'] != hp or hit['afterHP'] != hp-damage
+                or hit['crit'] or hit['death'] or hit['absorbed']):
+            problems.append('damage_hp')
+        hp -= damage
+    if target['hp'] != 999780 or target['dead'] or target['stableHurtboxIds'] != [1]:
+        problems.append('target_end_state')
+    return dict(status='FAIL' if problems else 'PASS', problems=problems, actions=actions, damage=hits, target=target)

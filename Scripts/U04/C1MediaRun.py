@@ -8,7 +8,7 @@ from C1Counter import prepare_transition
 from C1CounterRun import GAME_SHA
 from C1ForegroundBatch import git, identities, inventory, snap
 from C1MediaVerify import verify_receipt
-from C1ProfileRun import ProfileSession
+from C1ProfileRun import ProfileSession, QPC_BIAS
 from C1Run import ROOT, NATIVE, arguments, read, write, sha, run_owned_launch
 from C1Win32 import Backend
 
@@ -52,9 +52,41 @@ def capture(record, backend, log, journal, cleanup=False):
     return dict(status='PASS', decode=validated, transition=transition)
 
 
+def capture_combo(record, backend, log, journal, cleanup=False):
+    out = Path(record['log']).parent
+    raw = out/'Raw'
+    session = ProfileSession(record, backend, log, journal, workload=record['workload'], output=raw)
+    session.setup()
+    before = session.playing()
+    session.command(session.prepare_command())
+    session.wait(2)
+    prepared = session.playing()
+    transition = prepare_transition(before, prepared)
+    session.command('u04c1 begin 5')
+    anchor = backend.now()
+    edges = []
+    for offset in (0, .32, .77):
+        session.until(anchor+offset)
+        if backend.now()-anchor-offset > .08:
+            session.fail('focused_combo_dispatch_late')
+        session.gameplay_edges = 0
+        session.gameplay_edge(True)
+        edges.append(session.last_input['monotonic'])
+        session.wait(.035)
+        session.gameplay_edge(False)
+    session.until(anchor+5.25)
+    summary = read(raw/'summary.json')
+    after = session.playing()
+    write(out/'combo-receipt.json',dict(before=before,prepared=prepared,after=after,edges=edges,transition=transition,
+                                       summarySHA256=sha(raw/'summary.json')))
+    from C1FocusedProof import combo_receipt
+    return combo_receipt(summary, prepared['metrics'], after['metrics'], edges, QPC_BIAS, record)
+
+
 def worker(run_id):
     match = re.fullmatch(r'C1-Media-[0-9]+-H([13])', run_id)
-    if not match:
+    combo = re.fullmatch(r'C1-FocusedCombo-[0-9]+', run_id)
+    if not match and not combo:
         raise ValueError('invalid media run ID')
     runs = ROOT.parent/'Runs'
     out = runs/run_id
@@ -72,12 +104,12 @@ def worker(run_id):
     out.mkdir()
     (out/'Raw').mkdir()
     (out/'User').mkdir()
-    workload = dict(subjects=1, boxes=int(match[1]), placement='in')
+    workload = dict(subjects=1, boxes=1 if combo else int(match[1]), placement='in')
     argv = arguments(exe,out,run_id)
-    write(out/'command.json',dict(arguments=argv, workload=workload, purpose='fixture illustration'))
+    write(out/'command.json',dict(arguments=argv, workload=workload, purpose='focused combat' if combo else 'fixture illustration'))
     record = dict(runId=run_id, sourceSHA=NATIVE, executable=str(exe), binarySHA256=GAME_SHA,
                   userDir=str(out/'User'), log=str(out/'Game.log'), targetReady=True, workload=workload)
-    result = run_owned_launch(Backend(),argv,exe.parent,out,record,probe=capture)
+    result = run_owned_launch(Backend(),argv,exe.parent,out,record,probe=capture_combo if combo else capture)
     after,games = inventory()
     result['preservation'] = dict(workspace=protected==snap(), editors=identities(before)<=identities(after), noPackage=not games)
     if not all(result['preservation'].values()):
