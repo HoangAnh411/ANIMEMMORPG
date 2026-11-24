@@ -145,13 +145,16 @@ def verify_owners(server_sample, readiness):
         identity = pawn['id']
         authority = players.get(identity)
         if (not authority or authority['role'] != 3 or
-                str(authority['owner']).rsplit('.', 1)[-1] != str(pawn['owner']).rsplit('.', 1)[-1] or
+                authority['owner'] == 'None' or pawn['owner'] == 'None' or
                 authority['life'] != pawn['life']):
             raise ValueError('authority_owner_life_mismatch:' + role)
         matches = [e for e in server['encounters'] if e['player'] == identity and not e['closed']]
-        if len(matches) != 1:
+        local_matches = [e for e in state['encounters'] if e['player'] == identity and not e['closed']]
+        keys = ('id', 'owner', 'player', 'monster')
+        if len(matches) != 1 or len(local_matches) != 1 or any(matches[0][k] != local_matches[0][k] for k in keys):
             raise ValueError('authority_encounter_mismatch:' + role)
-        owners[role] = dict(pawn=identity, life=pawn['life'], owner=pawn['owner'], encounter=matches[0])
+        owners[role] = dict(pawn=identity, life=pawn['life'], clientOwner=pawn['owner'],
+                            authorityOwner=authority['owner'], encounter=matches[0])
     if (owners['ClientA']['pawn'] == owners['ClientB']['pawn'] or
             owners['ClientA']['encounter']['id'] == owners['ClientB']['encounter']['id']):
         raise ValueError('shared_client_identity')
