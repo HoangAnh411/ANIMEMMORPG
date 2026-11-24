@@ -99,15 +99,26 @@ def load_continuation(path, matrix, verify=True):
     if not path.is_absolute():
         raise RuntimeError('continuation ledger must be absolute')
     old=read(path)
-    if len(old)!=48 or any(a['id']!=b['id'] for a,b in zip(old,matrix)):
+    if len(old)!=48 or any(a.get('logicalId',a['id'])!=b['id'] for a,b in zip(old,matrix)):
         raise RuntimeError('continuation order differs from matrix')
-    if [r['status'] for r in old]!=['PASS']*15+['INVALID']+['NOT_RUN']*32:
+    for row, planned in zip(old,matrix):
+        if any(row.get(k)!=planned.get(k) for k in ('kind','round','subjects','boxes','placement','warmup','seconds')):
+            raise RuntimeError('continuation workload differs from matrix')
+        if row['id']!=planned['id'] and (planned['id'],row['id'])!=('Timing-r2-1x3-out','Timing-r2-1x3-out-R1'):
+            raise RuntimeError('unrecognized execution ID')
+    statuses=[r['status'] for r in old]
+    replace=statuses==['PASS']*15+['INVALID']+['NOT_RUN']*32
+    prefix=next((i for i,v in enumerate(statuses) if v!='PASS'),48)
+    failed=old[15] if replace else old[15].get('invalidAttempt',{})
+    if failed.get('id')!='Timing-r2-1x3-out' or failed.get('final',{}).get('error')!="ProbeError('initial_foreground_timeout')" or not failed['final']['processExited']:
+        raise RuntimeError('reviewed failed attempt missing')
+    if not replace and (prefix<16 or statuses[prefix:]!=['NOT_RUN']*(48-prefix)
+                        or old[15]['id']!='Timing-r2-1x3-out-R1'
+                        or old[15].get('remainingTechnicalReplacements')!=0
+                        or any(r.get('packageLaunched') or r.get('workerCreated') for r in old[prefix:])):
         raise RuntimeError('unexpected continuation history')
-    failed=old[15]
-    if failed['id']!='Timing-r2-1x3-out' or failed['final']['error']!="ProbeError('initial_foreground_timeout')" or not failed['final']['processExited']:
-        raise RuntimeError('replacement is not the reviewed failed attempt')
     if verify:
-        for row in old[:15]:
+        for row in old[:prefix]:
             run=Path(row['raw']); archive=Path(row['export']['archive'])
             if run!=RUNS/row['id'] or not archive.is_absolute() or validate(run)['status']!='PASS':
                 raise RuntimeError('historical PASS invalid: '+row['id'])
@@ -118,7 +129,9 @@ def load_continuation(path, matrix, verify=True):
                 raise RuntimeError('historical verdict/evidence mismatch: '+row['id'])
             if any(sha(archive/f['archive'])!=f['gzipSHA256'] for f in receipt['files']):
                 raise RuntimeError('historical archive hash mismatch: '+row['id'])
-    rows=[dict(r,logicalId=r['id']) for r in old]
+    rows=[dict(r,logicalId=r.get('logicalId',r['id'])) for r in old]
+    if not replace:
+        return rows
     rows[15]=dict(matrix[15],id='Timing-r2-1x3-out-R1',logicalId=failed['id'],
                   status='NOT_RUN',workerCreated=False,packageLaunched=False,
                   invalidAttempt=failed,systemLedger=str(path))
