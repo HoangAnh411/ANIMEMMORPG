@@ -194,8 +194,12 @@ def worker(args):
                     child.terminate()
                 child.wait(10)
     if args[:1] == ["acceptance-launch"]:
-        from C1AcceptanceLaunch import worker as launch
-        return launch(args[args.index("--id")+1])
+        run_id = args[args.index("--id")+1]
+        if run_id.startswith("C1-Media-"):
+            from C1MediaRun import worker as launch
+        else:
+            from C1AcceptanceLaunch import worker as launch
+        return launch(run_id)
     if args[:1] == ["method"]:
         from C1ProfileRun import main
         return main(args[1:])
@@ -307,6 +311,19 @@ def coordinate(messages):
             if not direct:
                 raise RuntimeError("direct_foreground_transfer_unproven")
             run_id=sys.argv[2]
+            if run_id.startswith("C1-Media-") and run_id.removeprefix("C1-Media-").isdigit():
+                from C1Run import write
+                results = []
+                for boxes in (1, 3):
+                    run = f"{run_id}-H{boxes}"
+                    wait_for_activation()
+                    with (CONTROL/f"media-H{boxes}.stdout").open("x") as out, (CONTROL/f"media-H{boxes}.stderr").open("x") as err:
+                        code = granted(["acceptance-launch","--id",run,"--continuation"],out,err)
+                    results.append(dict(runId=run,exitCode=code))
+                    write(CONTROL/f"media-H{boxes}-result.json",results[-1])
+                    if code:
+                        break
+                return
             with (CONTROL/'launcher.stdout').open('x') as out,(CONTROL/'launcher.stderr').open('x') as err:
                 code=granted(["acceptance-launch","--id",run_id,"--continuation"],out,err)
             from C1Run import write
