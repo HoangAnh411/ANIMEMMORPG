@@ -98,9 +98,17 @@ void UU02CollisionWorld::TickDefenseFixture(double Now)
 static FAutoConsoleCommandWithWorldAndArgs B2FixtureCommand(TEXT("U03B2Fixture"),TEXT("Labelled enemy fixture: off/block/unparryable/bypass/slow/stun/knockdown/launch/grab/multi; no player defense input."),
     FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& Args,UWorld* W){if(W&&Args.Num()==1)if(auto* C=W->GetSubsystem<UU02CollisionWorld>())C->StartDefenseFixture(Args[0]);}));
 void UU02CollisionWorld::Initialize(FSubsystemCollectionBase& C)
-{Super::Initialize(C);C1Profile.Enabled=U04C1::Enabled(GetWorld());TickHandle=FWorldDelegates::OnWorldPreActorTick.AddUObject(this,&UU02CollisionWorld::PreActorTick);}
+{
+    if(GetWorld()->GetNetMode()==NM_DedicatedServer && FParse::Param(FCommandLine::Get(),TEXT("U04IsolationObserver")))
+    {
+        FString Run;
+        FParse::Value(FCommandLine::Get(),TEXT("U02RunId="),Run);
+        if(!Run.IsEmpty() && Run.StartsWith(TEXT("C1-Isolation-"))) IsolationRun=MoveTemp(Run);
+    }
+    Super::Initialize(C);C1Profile.Enabled=U04C1::Enabled(GetWorld());TickHandle=FWorldDelegates::OnWorldPreActorTick.AddUObject(this,&UU02CollisionWorld::PreActorTick);}
 void UU02CollisionWorld::Deinitialize()
 {
+    FlushIsolation(TNumericLimits<double>::Max());
     FWorldDelegates::OnWorldPreActorTick.Remove(TickHandle);
     for(auto& S:Sources)if(auto* C=S.Component.Get())
     {C->OnActiveInterval.Remove(S.IntervalHandle);if(C->BeforeActionMutation.IsBoundToObject(this))C->BeforeActionMutation.Unbind();}
@@ -108,7 +116,7 @@ void UU02CollisionWorld::Deinitialize()
 }
 void UU02CollisionWorld::PreActorTick(UWorld* W,ELevelTick Type,float Dt)
 {
-    if(W==GetWorld()&&W->GetNetMode()!=NM_Client&&Type!=LEVELTICK_ViewportsOnly){DrainAt(W->GetTimeSeconds());TickDefenseFixture(W->GetTimeSeconds());DrawSelectedAction();}
+    if(W==GetWorld()&&W->GetNetMode()!=NM_Client&&Type!=LEVELTICK_ViewportsOnly){DrainAt(W->GetTimeSeconds());TickDefenseFixture(W->GetTimeSeconds());DrawSelectedAction();FlushIsolation(W->GetTimeSeconds());}
 }
 void UU02CollisionWorld::RegisterCombat(UU02CombatComponent* C)
 {
@@ -261,6 +269,75 @@ bool UU02CollisionWorld::Unobstructed(FVector O,FVector C,double R) const
     for(const auto& Weak:IgnoredObstructionComponents)if(auto* Cmp=Weak.Get())Params.AddIgnoredComponent(Cmp);
     return !GetWorld()->LineTraceTestByChannel(O,End,ECC_GameTraceChannel2,Params);
 }
+void UU02CollisionWorld::FlushIsolation(double Now)
+{
+    if(IsolationRows.IsEmpty() || Now<IsolationFlushAt) return;
+    for(const FString& Row:IsolationRows) UE_LOG(LogU02Collision,Display,TEXT("U04_ISOLATION %s"),*Row);
+    IsolationRows.Reset();
+    bIsolationCaptured=true;
+}
+
+void UU02CollisionWorld::ObserveIsolation(const FPending& P,const FSource& Source,const FHurt& H)
+{
+    if(GetWorld()->GetNetMode()!=NM_DedicatedServer || !H.Component.IsValid()) return;
+    auto* SourceActor=P.Component->GetOwner();
+    auto* TargetActor=H.Component->GetOwner();
+    auto* SourceEncounter=AU03Encounter::ForSubject(SourceActor);
+    auto* TargetEncounter=AU03Encounter::ForSubject(TargetActor);
+    if(!SourceEncounter||!TargetEncounter) return;
+    const auto& S=SourceEncounter->GetSnapshot();
+    const auto& T=TargetEncounter->GetSnapshot();
+    if(S.Station!=1||S.Monster!=SourceActor||T.Player!=TargetActor||T.Station>1) return;
+    if(IsolationRows.Num()>=512) return;
+
+    const double Begin=FMath::Max(P.Slice.BeginSeconds,H.AvailableFrom),End=P.Slice.EndSeconds;
+    const bool Continuous=Source.Previous.Life==Source.Current.Life&&Source.Previous.Epoch==Source.Current.Epoch
+        &&H.Previous.Life==H.Current.Life&&H.Previous.Epoch==H.Current.Epoch&&H.Previous.Radius==H.Current.Radius;
+    auto Sample=[&](FVector A,FVector B,double At)
+    {return FMath::Lerp(A,B,CurrentTime>PreviousTime?(At-PreviousTime)/(CurrentTime-PreviousTime):1.);};
+    FVector F0=Sample(Source.Previous.Position,Source.Current.Position,Begin);
+    FVector F1=Sample(Source.Previous.Position,Source.Current.Position,End);
+    FVector C0=Sample(H.Previous.Position,H.Current.Position,Begin);
+    FVector C1=Sample(H.Previous.Position,H.Current.Position,End);
+    auto Planned=[&](AU01Character* Pawn,FVector Relative,FVector& A,FVector& B)
+    {
+        if(Pawn && Pawn->GetU01Movement()->HasDodgePlan())
+        {
+            A=Pawn->GetU01Movement()->DodgePositionAt(Begin)+Relative;
+            B=Pawn->GetU01Movement()->DodgePositionAt(End)+Relative;
+        }
+    };
+    if(auto* Pawn=Cast<AU01Character>(SourceActor))
+        Planned(Pawn,FVector(0,0,-Pawn->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()),F0,F1);
+    if(auto* Pawn=Cast<AU01Character>(TargetActor))
+        Planned(Pawn,H.Component->GetComponentLocation()-Pawn->GetActorLocation(),C0,C1);
+    double Alpha=-1;
+    FVector Origin=FVector::ZeroVector,Nearest=FVector::ZeroVector;
+    bool Visible=false;
+    const FVector Up(0,0,90);
+    if(Continuous&&Begin<=End)
+    {
+        const auto Range=SphereAttackContact(F0,F1,P.Yaw,C0,C1,H.Current.Radius,0,1);
+        if(Range.bHit)
+        {
+            const auto Visibility=FirstVisible(F0+Up,F1+Up,C0,C1,H.Current.Radius,Range,Triangles,
+                [&](double X){return Unobstructed(FMath::Lerp(F0,F1,X)+Up,FMath::Lerp(C0,C1,X),H.Current.Radius);});
+            Alpha=Visibility.IsSet()?Visibility.GetValue():Range.Begin;
+            Origin=FMath::Lerp(F0,F1,Alpha)+Up;
+            Nearest=SphereNearest(Origin,FMath::Lerp(C0,C1,Alpha),H.Current.Radius);
+            Visible=Visibility.IsSet();
+        }
+    }
+    static const auto Vec=[](FVector V){return FString::Printf(TEXT("[%.17g,%.17g,%.17g]"),V.X,V.Y,V.Z);};
+    IsolationRows.Add(FString::Printf(TEXT("{"run":"%s","world":"%s","source":"%s","sourceLife":%llu,"action":%llu,"definition":%u,"version":%u,"sourceEncounter":"%s","targetEncounter":"%s","target":"%s","targetLife":%llu,"hurtbox":%u,"station":%d,"previous":%.17g,"now":%.17g,"sliceBegin":%.17g,"sliceEnd":%.17g,"begin":%.17g,"end":%.17g,"exclusive":%d,"continuous":%d,"sourceEpoch":[%llu,%llu],"targetEpoch":[%llu,%llu],"yaw":%.17g,"half":[100,60,90],"radius":%.17g,"feet0":%s,"feet1":%s,"center0":%s,"center1":%s,"alpha":%.17g,"losTime":%.17g,"origin":%s,"nearest":%s,"visible":%d,"unsupported":%u}"),
+        *IsolationRun,*GetWorld()->GetPathName(),*P.Action.Source.Pawn.ToString(),P.Action.Source.Generation,P.Action.Sequence,P.DefinitionId,P.DefinitionVersion,
+        *S.Id.ToString(),*T.Id.ToString(),*H.Current.Life.Pawn.ToString(),H.Current.Life.Generation,H.Component->StableHurtboxId,T.Station,
+        PreviousTime,CurrentTime,P.Slice.BeginSeconds,P.Slice.EndSeconds,Begin,End,P.Slice.bEndExclusive,Continuous,
+        Source.Previous.Epoch,Source.Current.Epoch,H.Previous.Epoch,H.Current.Epoch,P.Yaw,H.Current.Radius,
+        *Vec(F0),*Vec(F1),*Vec(C0),*Vec(C1),Alpha,Alpha<0?-1.:FMath::Lerp(Begin,End,Alpha),*Vec(Origin),*Vec(Nearest),Visible,UnsupportedObstructions));
+    if(IsolationFlushAt<0) IsolationFlushAt=CurrentTime+.75;
+}
+
 void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandidate>& Out)
 {
     TRACE_CPUPROFILER_EVENT_SCOPE_CONDITIONAL(U04C1_CollectCandidates,this->C1Profile.Enabled);
@@ -270,6 +347,7 @@ void UU02CollisionWorld::CollectHitCandidates(const FPending& P,TArray<FHitCandi
     {
         if(this->C1Profile.Active)++this->C1Profile.Visits;
         auto* Shape=H.Component.Get();if(!Shape||!Shape->IsQueryCollisionEnabled()||Shape->GetOwner()->IsActorBeingDestroyed()||H.Current.Life.Pawn==P.Action.Source.Pawn)continue;
+        if(!IsolationRun.IsEmpty()&&!bIsolationCaptured) ObserveIsolation(P,*Source,H);
         const bool EncounterPair=AU03Encounter::ForSubject(P.Component->GetOwner())||AU03Encounter::ForSubject(Shape->GetOwner());
         if(EncounterPair&&!AU03Encounter::CanDamage(P.Component->GetOwner(),Shape->GetOwner()))continue;
         if(!EncounterPair&&Cast<AU01Character>(Shape->GetOwner())&&!bCharacterFixtureTargets && !DefenseEnemies.ContainsByPredicate([&](const FDefenseEnemy& E){return (E.Actor.Get()==P.Component->GetOwner()&&E.Target.Get()==Shape->GetOwner())||(E.Actor.Get()==Shape->GetOwner()&&E.Target.Get()==P.Component->GetOwner());}))continue;

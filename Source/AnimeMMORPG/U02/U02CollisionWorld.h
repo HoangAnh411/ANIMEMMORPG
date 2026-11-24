@@ -104,6 +104,13 @@ private:
         int32 FirstTriangle=0,TriangleCount=0;
         FBox Bounds=FBox(ForceInit);
     };
+    void ObserveIsolation(const FPending& P, const FSource& Source, const FHurt& Hurt);
+    void FlushIsolation(double Now);
+    FString IsolationRun;
+    TArray<FString> IsolationRows;
+    double IsolationFlushAt = -1;
+    bool bIsolationCaptured = false;
+
     TArray<FSource> Sources;
     TArray<FHurt> Hurts;
     TArray<FPending> Pending;
