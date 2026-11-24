@@ -3,10 +3,36 @@ import ctypes
 from ctypes import wintypes
 import math
 import os
+import time
 from pathlib import Path
 
 from C1ProfileRun import ProfileSession
 from C1Readiness import vector
+
+
+def w_down():
+    read_key = ctypes.WinDLL('user32').GetAsyncKeyState
+    read_key.argtypes = [ctypes.c_int]
+    read_key.restype = ctypes.c_short
+    return bool(read_key(0x57) & 0x8000)
+
+
+def wait_for_w_up(sample, active, waiting, required):
+    consecutive=0
+    while consecutive<2:
+        if not active():
+            consecutive=0
+            time.sleep(.1)
+            continue
+        down=w_down()
+        consecutive=0 if down else consecutive+1
+        sample(down,consecutive)
+        if down:
+            waiting()
+            if not required:
+                raise RuntimeError('WAITING_FOR_KEY_RELEASE')
+        if consecutive<2:
+            time.sleep(.1)
 
 
 def capture(record, backend, log, journal, cleanup=False):
@@ -27,6 +53,8 @@ def capture(record, backend, log, journal, cleanup=False):
             return state
 
     session=FocusSession(record, backend, log, journal, workload={}, output=Path(record["log"]).parent/"Raw")
+    wait_for_w_up(lambda down,n: journal.append('focus_pre_setup_key',down=down,consecutive=n),
+                  lambda: True, lambda: None, required=False)
     session.setup()
     user=backend.u
     user.GetAsyncKeyState.argtypes=[ctypes.c_int]
@@ -115,7 +143,18 @@ def capture(record, backend, log, journal, cleanup=False):
         status,new=session.pulse_w()
         if status!='PASS':
             session.fail('focus_new_edge_unrecognized')
-        phase('new_edge_pawn',new['after'])
+        _,physical=phase('new_edge_pawn',new['after'])
+        session.guard('focus_final_key_up')
+        if physical:
+            session.fail('focus_final_key_still_down')
         return dict(status='PASS',heldDeltaCm=motion(blocked,still),newEdge=new)
+    except Exception:
+        state=session.observe('focus_error_key_observation')
+        journal.append('focus_error_key',physicalW=w_down(),held=sorted(session.held),
+                       lastInput=session.last_input,snapshot=state)
+        if 'W' in session.held and not session.failed and (state.get('foregroundHWND'),state.get('foregroundPID'))==(session.hwnd,record['pid']):
+            session.watch_auxiliary=False
+            session.emit('W',False)
+        raise
     finally:
         user.DestroyWindow(aux)

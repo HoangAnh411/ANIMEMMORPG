@@ -319,6 +319,17 @@ def coordinate(messages):
             if not direct:
                 raise RuntimeError("direct_foreground_transfer_unproven")
             run_id=sys.argv[2]
+            if run_id.startswith("C1-FocusedFocus-"):
+                from C1FocusCapture import wait_for_w_up
+                notified=False
+                def waiting_for_w():
+                    nonlocal notified
+                    if not notified:
+                        record("WAITING_FOR_KEY_RELEASE",runId=run_id,packageLaunched=False)
+                        messages.put("Press and release W once while this coordinator is active.")
+                        notified=True
+                wait_for_w_up(lambda down,n: record("focus_prelaunch_key",runId=run_id,down=down,consecutive=n),
+                              lambda: foreground()[1]==os.getpid(),waiting_for_w,required=True)
             if run_id.startswith("C1-Media-") and run_id.removeprefix("C1-Media-").isdigit():
                 from C1Run import write
                 results = []

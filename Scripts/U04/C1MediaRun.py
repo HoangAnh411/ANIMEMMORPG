@@ -179,6 +179,10 @@ def worker(run_id):
     if games:
         raise ValueError('package_active')
     protected = snap()
+    if focus_run:
+        from C1FocusCapture import wait_for_w_up
+        wait_for_w_up(lambda down,n: print(f"focus_worker_prelaunch_key down={down} consecutive={n}",flush=True),
+                      lambda: True,lambda: None,required=False)
     out.mkdir()
     (out/'Raw').mkdir()
     (out/'User').mkdir()
