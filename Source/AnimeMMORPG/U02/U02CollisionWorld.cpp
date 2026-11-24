@@ -295,6 +295,7 @@ void UU02CollisionWorld::ArmIsolation()
     const FVector Right=FRotator(0,Monster->GetActorRotation().Yaw,0).RotateVector(FVector::RightVector);
     const FVector A=B+86*Right;
     if(!Players[0]->TeleportTo(A,Players[0]->GetActorRotation())) return;
+    IsolationActionAtArm=Monster->Combat->GetCombatSnapshot().ActionSequence;
     bIsolationArmed=true;
     UE_LOG(LogU02Collision,Display,TEXT("U04_ISOLATION_ARM run=%s worldSeconds=%.17g A=%s B=%s monster=%s"),
         *IsolationRun,GetWorld()->GetTimeSeconds(),*Players[0]->GetActorLocation().ToString(),
@@ -320,7 +321,7 @@ void UU02CollisionWorld::ObserveIsolation(const FPending& P,const FSource& Sourc
     const auto& S=SourceEncounter->GetSnapshot();
     const auto& T=TargetEncounter->GetSnapshot();
     if(S.Station!=1||S.Monster!=SourceActor||T.Player!=TargetActor||T.Station>1) return;
-    if(IsolationRows.Num()>=512) return;
+    if(P.Action.Sequence<=IsolationActionAtArm || IsolationRows.Num()>=512) return;
 
     const double Begin=FMath::Max(P.Slice.BeginSeconds,H.AvailableFrom),End=P.Slice.EndSeconds;
     const bool Continuous=Source.Previous.Life==Source.Current.Life&&Source.Previous.Epoch==Source.Current.Epoch

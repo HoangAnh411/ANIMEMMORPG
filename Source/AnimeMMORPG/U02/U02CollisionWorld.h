@@ -109,6 +109,7 @@ private:
     void ArmIsolation();
     FString IsolationReadyFile;
     bool bIsolationArmed = false;
+    uint64 IsolationActionAtArm = 0;
     FString IsolationRun;
     TArray<FString> IsolationRows;
     double IsolationFlushAt = -1;
