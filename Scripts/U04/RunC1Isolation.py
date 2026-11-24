@@ -39,6 +39,12 @@ def capture(run, owned, owners):
         if not anchor[role]:
             raise ValueError('fresh_prearm_state_missing')
     write(run/'prearm.json',anchor)
+    players={pawn['id']:pawn for pawn in anchor['Server']['state']['pawns']}
+    for owner in owners.values():
+        pawn=players[owner['pawn']]
+        vital=pawn['vital']
+        if pawn['life']!=owner['life'] or vital['dead'] or vital['hp']<=0 or vital['shield']!=0:
+            raise ValueError('prearm_owner_ineligible')
     watermark=max((r['serial'] for r in anchor['Server']['state']['results']),default=0)
     (run/'ready.txt').write_text(run.name,encoding='ascii')
     deadline=time.monotonic()+12
@@ -102,7 +108,7 @@ def capture(run, owned, owners):
 
 def run_session(run, port, build):
     native=adapter.git('rev-parse','HEAD')
-    if build['sourceSHA']!=native or adapter.git('status','--porcelain'):
+    if adapter.git('diff',build['sourceSHA'],'--','Source','Content','Config','Plugins','AnimeMMORPG.uproject') or adapter.git('status','--porcelain'):
         raise ValueError('dirty or wrong diagnostic source')
     exe,module=Path(build['engineExecutable']),Path(build['module'])
     for path,key in ((exe,'engineSHA256'),(module,'moduleSHA256'),
@@ -114,10 +120,10 @@ def run_session(run, port, build):
     if games:
         raise ValueError('package active')
     preserved=snap()
-    adapter.ROOT,adapter.NATIVE=ROOT,native
+    adapter.ROOT,adapter.NATIVE=ROOT,build['sourceSHA']
     run.mkdir()
     owned={}
-    verdict=dict(status='INVALID',readiness={},stops={},build=build)
+    verdict=dict(status='INVALID',readiness={},stops={},build=build,toolSHA=native)
     try:
         for role in adapter.ROLES:
             planned=adapter.plan(run,role,port,exe,module,build)
@@ -130,6 +136,12 @@ def run_session(run, port, build):
             backend.launch(planned['arguments'],ROOT)
             planned.update(backend.capture_owned())
             write(run/role/'process.json',planned)
+            if role=='Server':
+                verdict['readiness'][role]=adapter.wait_ready(planned,backend)
+            elif role=='ClientA':
+                time.sleep(2)
+        for role in adapter.ROLES[1:]:
+            backend,planned=owned[role]
             verdict['readiness'][role]=adapter.wait_ready(planned,backend)
         server,_=adapter.fresh_state(owned['Server'][1],0)
         owners=adapter.verify_owners(server,verdict['readiness'])
