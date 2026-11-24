@@ -175,8 +175,10 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--id',required=True)
     parser.add_argument('--port',required=True,type=int)
+    parser.add_argument('--build-number',choices=(1,2),type=int,default=1)
     args=parser.parse_args()
     if not re.fullmatch(r'C1-Isolation-[0-9]+',args.id):
         parser.error('invalid run ID')
-    result=run_session(ROOT.parent/'Runs'/args.id,args.port,read(ROOT.parent/'BUILD-IDENTITY.json'))
+    name='BUILD-IDENTITY.json' if args.build_number==1 else 'BUILD-IDENTITY-02.json'
+    result=run_session(ROOT.parent/'Runs'/args.id,args.port,read(ROOT.parent/name))
     raise SystemExit(0 if result=='PASS' else 1)
