@@ -22,3 +22,14 @@ Solo is ACCEPTED by the reviewer. The local offline dossier at `../C1-Regression
 The dodge helper requires the same native dispatch frame and stationary velocity at authority admission. The dedicated helper requires a new authority action and matching damage receipt, target life and HP across all three roles. The media verifier decodes the image and checks its receipt against the process record, Build-03 and native summary. Run it with `python -B Scripts/U04/C1MediaVerify.py <image> <summary> --process <process.json> --receipt <receipt.json>`.
 
 Combat, controlled focus and dedicated gameplay still need capture integration and runtime evidence. Dedicated encounter isolation requires an active attack by B with a demonstrated damage opportunity and a positive control. The two fixture illustrations still need a real capture producer on Build-03. C1 remains INCOMPLETE.
+
+## Build-03 focused runtime
+
+The run IDs below identify the C1 package evidence. The runtime ledger and manifest are under `../C1-Focused-Runtime-20261124-03`.
+
+- C1-FocusedCombo-2026112403 PASS. Native summary joins actions 1/2/3 to 60/70/90 damage. Authority target HP fell from 1,000,000 to 999,780.
+- C1-FocusedDodge-2026112403 PASS for both ordered pairs. Native dispatch frames and command IDs are in the ledger. Forward and fallback backward both traveled 300.000 cm to rounding. Both satisfied stationary admission, 250 ms motion and 350 ms release deadlines.
+- C1-Media-2026112403-H1 and H3 PASS. Both 1280 by 720 PNGs decoded and show the same player/dummy framing. The images show placement. The native summaries establish stable hurtbox IDs [1] and [1,2,3] for one subject/life per process.
+
+All four processes have original-handle, signaled exit evidence checked against PID, FILETIME and executable. Their workspace and Editor preservation checks passed. Controlled focus quarantine and dedicated replicated damage/isolation remain open.
+
